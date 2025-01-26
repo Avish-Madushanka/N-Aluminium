@@ -1,6 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
-import '../../Components/Homecomponents/Homemain.css'; 
+import React, { useState, useRef, useEffect } from 'react'; 
 import Homemain from '../Homecomponents/Homemain'; 
+import axios from "axios";
 
 const HomeSliding = ({ movies }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
