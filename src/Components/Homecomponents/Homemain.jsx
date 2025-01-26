@@ -1,7 +1,7 @@
 import React from "react";
 import { Play, Ticket } from "lucide-react";
 import 'bootstrap/dist/css/bootstrap.css';
-import '../../css/Homemain.css'
+import '../../Components/Homecomponents/Homemain.css'
 import { Link } from 'react-router-dom';
 
 function createSlug(title) {
@@ -10,7 +10,7 @@ function createSlug(title) {
   }
   return title
     .toLowerCase()
-    .replace(/ /g, '-') 
+    .replace(/ /g, '-')
     .replace(/[^\w-]+/g, '');
 }
 

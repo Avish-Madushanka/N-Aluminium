@@ -1,58 +1,48 @@
-import React, { useState, useEffect } from "react";
-import Homemain from "./Homemain";
-import axios from "axios";
+import React, { useState, useRef, useEffect } from 'react';
+import '../../Components/Homecomponents/Homemain.css'; 
+import Homemain from '../Homecomponents/Homemain'; 
 
-const HomeSliding = () => {
-    const [movies, setMovies] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [activeSlide, setActiveSlide] = useState(0);
+const HomeSliding = ({ movies }) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const sliderRef = useRef(null);
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
-
-    useEffect(() => {
-        const fetchFeaturedMovies = async () => {
-            setLoading(true);
-            setError(null);
-          try {
-            const response = await axios.get('http://localhost:27017/api/movies/now-showing');
-            if (response.data && response.data.length > 0) {
-               setMovies(response.data);
-            } else {
-                setError('No movies found')
-            }
-          } catch (err) {
-            setError(err.message);
-          } finally {
-             setLoading(false);
-          }
-        };
-         fetchFeaturedMovies();
-    }, []);
+  const nextSlide = () => {
+    if(isTransitioning) return;
+    setIsTransitioning(true);
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % movies.length);
+      setTimeout(() => {
+        setIsTransitioning(false);
+      }, 300);
+    };
+  
+  const prevSlide = () => {
+    if(isTransitioning) return;
+    setIsTransitioning(true);
+    setCurrentIndex((prevIndex) => (prevIndex - 1 + movies.length) % movies.length);
+      setTimeout(() => {
+        setIsTransitioning(false);
+      }, 300);
+  };
 
   useEffect(() => {
-        if(movies.length > 0) {
-            const interval = setInterval(() => {
-                setActiveSlide((prevSlide) => (prevSlide + 1) % movies.length);
-            }, 5000);
-            return () => clearInterval(interval);
-        }
-  }, [movies]);
-
-    
-
-    if (error) {
-       return <div>Error: {error}</div>
+    if (sliderRef.current) {
+      sliderRef.current.style.transform = `translateX(-${currentIndex * 100}%)`;
+       sliderRef.current.style.transition = 'transform 0.3s ease-in-out';
     }
+  }, [currentIndex, isTransitioning]);
 
   return (
-    <div className="home-container">
-      {movies.map((movie, index) => (
-        <Homemain
-          key={movie._id}
-          movie={movie}
-          isActive={index === activeSlide}
-        />
-      ))}
+    <div className="slider-container">
+      <div className="slider" ref={sliderRef}>
+        {movies.map((movie, index) => (
+            <div key={index} className='slide'>
+             <Homemain movie={movie} isActive={index === currentIndex} />
+            </div>
+        ))}
+      </div>
+      <button className="slider-button prev" onClick={prevSlide} ></button>
+      <button className="slider-button next" onClick={nextSlide} ></button>
     </div>
   );
 };

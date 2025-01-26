@@ -7,8 +7,6 @@ const Home = () => {
     <>
       <Homemain />
       <HomeSliding/>
-      <Homenowshowing/>
-      <Homecomingsoon/>
     </>
   )
 }
