@@ -1,29 +1,29 @@
-import React, { useState, useRef, useEffect } from 'react'; 
-import Homemain from '../Homecomponents/Homemain'; 
-import axios from "axios";
+import React, { useState, useRef, useEffect } from 'react';
+import '../../css/Homemain.css'; 
 
-const HomeSliding = ({ movies }) => {
+const HomeSliding = ({ children }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const sliderRef = useRef(null);
   const [isTransitioning, setIsTransitioning] = useState(false);
 
   const nextSlide = () => {
     if(isTransitioning) return;
-    setIsTransitioning(true);
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % movies.length);
+      setIsTransitioning(true);
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % children.length);
       setTimeout(() => {
-        setIsTransitioning(false);
-      }, 300);
-    };
-  
-  const prevSlide = () => {
-    if(isTransitioning) return;
-    setIsTransitioning(true);
-    setCurrentIndex((prevIndex) => (prevIndex - 1 + movies.length) % movies.length);
-      setTimeout(() => {
-        setIsTransitioning(false);
+          setIsTransitioning(false);
       }, 300);
   };
+
+  const prevSlide = () => {
+      if(isTransitioning) return;
+    setIsTransitioning(true);
+      setCurrentIndex((prevIndex) => (prevIndex - 1 + children.length) % children.length);
+    setTimeout(() => {
+        setIsTransitioning(false);
+    }, 300);
+  };
+
 
   useEffect(() => {
     if (sliderRef.current) {
@@ -33,12 +33,12 @@ const HomeSliding = ({ movies }) => {
   }, [currentIndex, isTransitioning]);
 
   return (
-    <div className="slider-container">
+    <div className="slider-container1">
       <div className="slider" ref={sliderRef}>
-        {movies.map((movie, index) => (
-            <div key={index} className='slide'>
-             <Homemain movie={movie} isActive={index === currentIndex} />
-            </div>
+        {React.Children.map(children, (child, index) => (
+          <div key={index} className="slide">
+            {child}
+          </div>
         ))}
       </div>
       <button className="slider-button prev" onClick={prevSlide} ></button>
