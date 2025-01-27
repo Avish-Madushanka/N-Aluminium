@@ -7,19 +7,13 @@ function App() {
     <div className="App">
       <Slider>
         <div className='slide1'>
-          <h1>Slide 1</h1>
-          <p>This is the first slide.</p>
-          <img src="https://placekitten.com/600/400" alt="Cat 1" />
+          <img src="https://www.bramptonwindows.co.uk/wp-content/uploads/2023/08/Aluminium-Slider-Doors-Black.jpg" alt="Cat 1" />
         </div>
         <div className='slide2'>
-          <h1>Slide 2</h1>
-          <p>This is the second slide.</p>
-            <img src="https://placekitten.com/600/401" alt="Cat 2" />
+            <img src="https://www.swisstekaluminium.com/wp-content/uploads/2022/11/Door-Banner.jpg" alt="Cat 2" />
         </div>
         <div className='slide3'>
-          <h1>Slide 3</h1>
-            <p>This is the third slide.</p>
-             <img src="https://placekitten.com/600/402" alt="Cat 3" />
+             <img src="https://www.bradnams.com.au/wp-content/uploads/2020/02/Two-White-Double-Hinged-Doors.jpg" alt="Cat 3" />
         </div>
       </Slider>
     </div>

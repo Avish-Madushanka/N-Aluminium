@@ -1,9 +1,9 @@
 .slider-container1 {
     width: 100%; 
     max-width: 2500px; 
-    height: 600px; /* Height for the container */
+    height: 500px;
     margin: 50px auto;
-    overflow: hidden; /* Ensures only one slider is visible */
+    overflow: hidden; 
     position: relative;
     border: 1px solid #ccc;
     border-radius: 10px;
@@ -15,8 +15,8 @@
     transition: transform 0.3s ease-in-out;
     will-change: transform;
     height: 100%;
-    position: relative; /* Make sure it doesn't stack duplicates */
-    z-index: 1; /* Ensure it's above other elements */
+    position: relative;
+    z-index: 1;
 }
 
 .slide {
@@ -27,7 +27,7 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    background-color: transparent; /* Set background appropriately */
+    background-color: transparent; 
 }
 
 .slider-button {
@@ -39,7 +39,7 @@
     border: none;
     padding: 15px 20px;
     cursor: pointer;
-    z-index: 2; /* Ensure buttons are above the slider */
+    z-index: 2; 
     transition: background-color 0.3s ease;
     border-radius: 50%;
     font-size: 1.2rem;
@@ -75,9 +75,9 @@
 }
 
 .slide1 img, .slide2 img, .slide3 img {
-    max-width: 70%;
-    height: auto;
-    object-fit: cover;
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
