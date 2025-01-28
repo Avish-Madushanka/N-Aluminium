@@ -1,5 +1,5 @@
 .navbar {
-    background-color: #333;
+    background-color: #101422;
     color: white;
     padding: 1rem;
     width: 100%;
@@ -55,16 +55,16 @@
   }
   
   .btn-primary {
-    background-color: #007bff;
+    background-color: #08A300;
     color: white;
   }
   
   .btn-primary:hover {
-    background-color: #0056b3;
+    background-color: #5a6268;
   }
   
   .btn-secondary {
-    background-color: #6c757d;
+    background-color: #464040;
     color: white;
   }
   
