@@ -1,36 +1,50 @@
 import React, { useState, useRef, useEffect } from 'react';
-import '../../css/Homemain.css'; 
+import '../../css/Homemain.css';
 
-const HomeSliding = ({ children }) => {
+const HomeSliding = ({ children = [] }) => { 
   const [currentIndex, setCurrentIndex] = useState(0);
-  const sliderRef = useRef(null);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const sliderRef = useRef(null);
+  const intervalRef = useRef(null);
+
 
   const nextSlide = () => {
-    if(isTransitioning) return;
-      setIsTransitioning(true);
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % children.length);
-      setTimeout(() => {
-          setIsTransitioning(false);
-      }, 300);
+    if (isTransitioning || children.length === 0) return;
+    setIsTransitioning(true);
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % children.length);
+    setTimeout(() => setIsTransitioning(false), 300); 
   };
 
+
   const prevSlide = () => {
-      if(isTransitioning) return;
+    if (isTransitioning || children.length === 0) return;
     setIsTransitioning(true);
-      setCurrentIndex((prevIndex) => (prevIndex - 1 + children.length) % children.length);
-    setTimeout(() => {
-        setIsTransitioning(false);
-    }, 300);
+    setCurrentIndex((prevIndex) => (prevIndex - 1 + children.length) % children.length);
+    setTimeout(() => setIsTransitioning(false), 300); 
   };
 
 
   useEffect(() => {
     if (sliderRef.current) {
       sliderRef.current.style.transform = `translateX(-${currentIndex * 100}%)`;
-       sliderRef.current.style.transition = 'transform 0.3s ease-in-out';
+      sliderRef.current.style.transition = isTransitioning ? 'transform 0.3s ease-in-out' : 'none';
     }
   }, [currentIndex, isTransitioning]);
+
+ 
+  useEffect(() => {
+    if (children.length > 1) {
+      intervalRef.current = setInterval(nextSlide, 5000); 
+    }
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    };
+  }, [children.length, currentIndex]); 
+
+ 
+  if (children.length === 0) {
+    return <div className="slider-container1">No slides to display.</div>;
+  }
 
   return (
     <div className="slider-container1">
@@ -41,8 +55,16 @@ const HomeSliding = ({ children }) => {
           </div>
         ))}
       </div>
-      <button className="slider-button prev" onClick={prevSlide} ></button>
-      <button className="slider-button next" onClick={nextSlide} ></button>
+      {children.length > 1 && ( 
+        <>
+          <button className="slider-button prev" onClick={prevSlide} disabled={isTransitioning}>
+            &#10094;
+          </button>
+          <button className="slider-button next" onClick={nextSlide} disabled={isTransitioning}>
+            &#10095;
+          </button>
+        </>
+      )}
     </div>
   );
 };
