@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import '../../Components/Navbar/Navbar.css'; 
+import './Navbar.css'; // Import your CSS file for styling
+
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -18,6 +19,10 @@ const Navbar = () => {
           <a href="/about">About</a>
           <a href="/services">Services</a>
           <a href="/contact">Contact</a>
+        </div>
+        <div className="navbar-buttons">
+          <button className="btn-primary">Login</button>
+          <button className="btn-secondary">Sign Up</button>
         </div>
         <div className="navbar-toggle" onClick={toggleMenu}>
           <span className="bar"></span>
