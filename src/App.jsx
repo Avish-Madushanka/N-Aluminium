@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation, Navigate } from 'react-router-dom';
 import { ClipLoader } from 'react-spinners'; 
+import Navbar from './Components/Navbar/Navbar';
 import HomePage from './Pages/HomePage';
 import Footer from './Components/Footer/Footer';
 
@@ -81,10 +82,9 @@ function App() {
 
     return (
       <div>
-
+        <Navbar isLoggedIn={isLoggedIn} handleLogout={handleLogout} setIsLoggedIn={setIsLoggedIn} />
         <Routes>
           <Route path="/" element={<HomePage />} />
-
         </Routes>
         <Footer />
       </div>

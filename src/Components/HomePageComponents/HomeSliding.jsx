@@ -10,19 +10,19 @@ const HomeSliding = ({ children = [] }) => {
     if (isTransitioning || children.length === 0) return;
     setIsTransitioning(true);
     setCurrentIndex((prevIndex) => (prevIndex + 1) % children.length);
-    setTimeout(() => setIsTransitioning(false), 500); // Adjust timing to match CSS transition
+    setTimeout(() => setIsTransitioning(false), 500); 
   };
 
   const prevSlide = () => {
     if (isTransitioning || children.length === 0) return;
     setIsTransitioning(true);
     setCurrentIndex((prevIndex) => (prevIndex - 1 + children.length) % children.length);
-    setTimeout(() => setIsTransitioning(false), 500); // Adjust timing to match CSS transition
+    setTimeout(() => setIsTransitioning(false), 500); 
   };
 
   useEffect(() => {
     if (children.length > 1) {
-      intervalRef.current = setInterval(nextSlide, 5000); // Auto-slide every 5 seconds
+      intervalRef.current = setInterval(nextSlide, 5000);
     }
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
