@@ -7,7 +7,7 @@ function App() {
     <div className="App">
       <Slider>
         <div className='slide1'>
-        <img src="https://www.bradnams.com.au/wp-content/uploads/2020/02/Two-White-Double-Hinged-Doors.jpg" alt="Cat 1" />
+            <img src="https://www.bradnams.com.au/wp-content/uploads/2020/02/Two-White-Double-Hinged-Doors.jpg" alt="Cat 1" />
         </div>
         <div className='slide2'>
             <img src="https://www.swisstekaluminium.com/wp-content/uploads/2022/11/Door-Banner.jpg" alt="Cat 2" />
