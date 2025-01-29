@@ -11,8 +11,7 @@
     justify-content: space-between;
     align-items: center;
     max-width: 1200px;
-    margin: 0 auto;
-    
+    margin: 0 auto; 
   }
   
   .navbar-logo a {
@@ -31,8 +30,9 @@
   .navbar-links a {
     color: white;
     text-decoration: none;
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 1.5rem;
     transition: background-color 0.3s;
+    
   }
   
   .navbar-links a:hover {
