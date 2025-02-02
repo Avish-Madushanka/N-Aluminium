@@ -4,6 +4,7 @@ import { ClipLoader } from 'react-spinners';
 import Navbar from './Components/Navbar/Navbar';
 import HomePage from './Pages/HomePage';
 import Footer from './Components/Footer/Footer';
+import RegistrationForm from './Components/RegistrationForm/RegistrationForm';
 
 
 function App() {
@@ -82,11 +83,12 @@ function App() {
 
     return (
       <div>
-        <Navbar isLoggedIn={isLoggedIn} handleLogout={handleLogout} setIsLoggedIn={setIsLoggedIn} />
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-        </Routes>
-        <Footer />
+       <Navbar isLoggedIn={isLoggedIn} handleLogout={handleLogout} setIsLoggedIn={setIsLoggedIn} />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/RegistrationForm" element={<RegistrationForm />} /> 
+      </Routes>
+      <Footer />
       </div>
     );
   };
