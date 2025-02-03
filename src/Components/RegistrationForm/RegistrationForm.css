@@ -1,5 +1,5 @@
 .background-container {
-    background-image: url('https://scrapmetalservices.com/wp-content/uploads/2021/07/AdobeStock_313165512geo-scaled-e1625760012531.jpeg'); 
+    background-image: url('https://researchleap.com/wp-content/uploads/2021/04/Maximize-Construction-Recycling-Efforts_HERO.jpeg'); 
     background-size: cover; 
     background-position: center; 
     height: 100vh;  
@@ -28,4 +28,25 @@
   
   .button:hover {
     background-color: #00121e;
+  }
+
+  .button1-row {
+    display: flex; 
+    justify-content: center; 
+    gap: 60px; 
+  }
+  
+  .button1 {
+    padding: 15px 40px;
+    background-color: #af1414;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-size: large;
+  }
+  
+  .button1:hover {
+    background-color: #550000;
   }

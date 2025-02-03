@@ -8,7 +8,7 @@ const RegistrationForm = () => {
         <button className="button">Button 1</button>
         <button className="button">Button 2</button>
         <button className="button">Button 3</button>
-        <button className="button">Button 4</button>
+        <button className="button1">Sign Up</button>
       </div>
     </div>
   );
