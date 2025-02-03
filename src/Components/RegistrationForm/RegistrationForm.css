@@ -6,24 +6,26 @@
     display: flex; 
     justify-content: center; 
     align-items: center; 
+    
   }
   
   .button-row {
     display: flex; 
     justify-content: center; 
-    gap: 20px; 
+    gap: 30px; 
   }
   
   .button {
-    padding: 10px 20px;
-    background-color: #3498db;
+    padding: 15px 40px;
+    background-color: #003457;
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 10px;
     cursor: pointer;
     transition: background-color 0.3s;
+    font-size: large;
   }
   
   .button:hover {
-    background-color: #2980b9;
+    background-color: #00121e;
   }
