@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation, Navigate } from 'react-router-dom';
 import { ClipLoader } from 'react-spinners'; 
-import jwt_decode from 'jwt-decode'; // Import jwt-decode
+import { jwtDecode } from 'jwt-decode'; 
 import Navbar from './Components/Navbar/Navbar';
 import HomePage from './Pages/HomePage';
 import Footer from './Components/Footer/Footer';
@@ -16,7 +16,7 @@ const ProtectedRoute = ({ children }) => {
   }
 
   try {
-    const decoded = jwt_decode(token);
+    const decoded = jwtDecode(token);
     const currentTime = Date.now() / 1000;
 
     if (decoded.exp < currentTime) {

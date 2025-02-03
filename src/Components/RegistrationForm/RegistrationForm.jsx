@@ -1,7 +1,7 @@
 import React from 'react';
-import '../RegistrationForm/RegistrationForm.css'; // Import CSS file for styling
+import '../RegistrationForm/RegistrationForm.css'; 
 
-const HomePage = () => {
+const RegistrationForm = () => {
   return (
     <div className="background-container">
       <div className="button-row">
@@ -14,4 +14,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default RegistrationForm;
