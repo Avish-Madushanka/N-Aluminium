@@ -1,0 +1,42 @@
+.services-bar {
+    background-color: #38761D;
+    padding: 20px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.services-container {
+    display: flex;
+    align-items: center;
+    width: 90%;
+    justify-content: space-around;
+}
+
+.service-item {
+  text-align: center;
+  color: #FFFFFF; /* Sets default text color to white */
+}
+
+.service-icon {
+    font-size: 48px;
+    color: #FFC857;
+}
+
+.service-title {
+    margin: 10px 0;
+    font-weight: bold;
+    color: #FFFFFF;
+}
+
+.service-description {
+  font-size: 14px;
+  margin: 0;
+    color: #FFFFFF;
+}
+
+.vertical-divider {
+    height: 80px;
+    width: 1px;
+    background-color: white;
+}
