@@ -21,7 +21,7 @@ const Navbar = () => {
           <a href="/contact">Contact</a>
         </div>
         <div className="navbar-buttons">
-          <button className="btn-primary">Login</button>
+          <button className="btn-primary"><a href="/SignUp">Login</a></button>
           <button className="btn-secondary">Sign Up</button>
         </div>
         <div className="navbar-toggle" onClick={toggleMenu}>
