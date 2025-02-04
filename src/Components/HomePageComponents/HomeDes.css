@@ -1,0 +1,144 @@
+.hero-section {
+    background-color: #FAF5EB;
+    padding: 60px 0;
+    font-family: 'Arial', sans-serif; 
+  }
+  
+  .hero-container {
+    display: flex;
+    align-items: flex-start;  
+    justify-content: space-between;
+    width: 88%;  
+    margin: 0 auto;
+  }
+  
+  .hero-left {
+    width: 43%; 
+    position: relative;
+  }
+  
+  .hero-right {
+    width: 53%; 
+    padding-left: 40px; 
+  }
+  
+  .rating-box {
+    position: absolute;
+    top: 15px; 
+    left: 15px;  
+    background-color: #FFFFFF;
+    padding: 12px 18px;
+    border-radius: 8px; 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08); 
+    text-align: center;
+  }
+  
+  .rating-value {
+    font-size: 22px;  
+    font-weight: bold;
+    color: #38761D;
+    line-height: 1.1;  
+  }
+  
+  .stars {
+    margin: 3px 0; 
+  }
+  
+  .star {
+    color: #FFC857;
+    font-size: 14px;  
+  }
+  
+  .total-rating {
+    font-size: 13px; 
+    color: #777777;
+  }
+  
+  .image-container {
+    border-radius: 12px;  
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); 
+    border: 1px solid #E0D6C3;
+  }
+  
+  .image-container img {
+    width: 100%;
+    display: block;
+  }
+  
+  .why-choose-us {
+    color: #38761D;
+    font-size: 17px; 
+    margin-bottom: 8px; 
+    font-weight: 500;
+  }
+  
+  .sustainable-choice {
+    font-size: 34px; 
+    font-weight: bold;
+    margin-bottom: 18px; 
+    color: #333333;
+    line-height: 1.2; 
+  }
+  
+  .hero-description {
+    color: #666666;
+    font-size: 15px; 
+    line-height: 1.5;
+    margin-bottom: 28px; 
+  }
+  
+  .learn-more-button {
+    background-color: #38761D;
+    color: #FFFFFF;
+    padding: 11px 28px; 
+    border: none;
+    border-radius: 4px; 
+    font-size: 15px; 
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .learn-more-button:hover {
+    background-color: #2A5214;
+  }
+  
+  .services-container {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 45px; 
+    width: 88%; 
+    margin: 45px auto 0 auto;
+  }
+  
+  .service-card {
+    text-align: center;
+    background-color: #FFFFFF;
+    padding: 18px; 
+    border-radius: 8px;  
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08); 
+    width: 21%; 
+    transition: transform 0.3s ease;
+  }
+  
+  .service-card:hover {
+    transform: translateY(-4px); 
+  }
+  
+  .service-icon {
+    font-size: 34px; 
+    color: #38761D;
+    margin-bottom: 8px; 
+  }
+  
+  .service-title {
+    font-size: 17px; 
+    font-weight: bold;
+    color: #333333;
+    margin-bottom: 8px; 
+  }
+  
+  .service-description {
+    color: #777777;
+    font-size: 13px;
+  }
