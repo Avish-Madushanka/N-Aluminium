@@ -1,42 +1,102 @@
-.services-bar {
-    background-color: #190b44;
-    padding: 20px 0;
+/* WasteDisposalServices.css */
+
+.waste-disposal-container {
+    background-color: #f0f8ff;
+    font-family: sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 50px;
+    min-height: 100vh;
+  }
+  
+  .waste-disposal-heading {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 30px;
+    color: #003366;
+    text-align: center;
+  }
+  
+  .waste-disposal-services {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    width: 100%;
+    max-width: 1200px;
+    flex-wrap: wrap;
+  }
+  
+  .service-card {
+    background-color: #ffffff;
+    border-radius: 20px;
+    padding: 20px;
+    width: 300px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease-in-out;
+    cursor: pointer;
+  }
+  
+  .service-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .service-image-container {
+    border-radius: 20px;
+    overflow: hidden;
+    margin-bottom: 15px;
+  }
+  
+  .service-image {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  
+  .service-icon-container {
+    background-color: #f0f8ff;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
     display: flex;
     justify-content: center;
     align-items: center;
-}
-
-.services-container {
-    display: flex;
-    align-items: center;
-    width: 90%;
-    justify-content: space-around;
-}
-
-.service-item {
-  text-align: center;
-  color: #FFFFFF; /* Sets default text color to white */
-}
-
-.service-icon {
-    font-size: 48px;
-    color: #FFC857;
-}
-
-.service-title {
-    margin: 10px 0;
+    margin: 0 auto 15px;
+  }
+  
+  .service-icon {
+    font-size: 24px;
+    color: green;
+  }
+  
+  .service-title {
+    font-size: 1.4rem;
     font-weight: bold;
-    color: #FFFFFF;
-}
-
-.service-description {
-  font-size: 14px;
-  margin: 0;
-    color: #FFFFFF;
-}
-
-.vertical-divider {
-    height: 80px;
-    width: 1px;
-    background-color: white;
-}
+    margin-bottom: 10px;
+    color: #333;
+  }
+  
+  .service-description {
+    font-size: 0.9rem;
+    color: #666;
+    line-height: 1.5;
+    margin-bottom: 20px;
+  }
+  
+  .service-link {
+    background-color: #ffffff;
+    border: 2px solid #ddd;
+    border-radius: 50%;
+    padding: 8px 12px;
+    text-decoration: none;
+    color: #007bff;
+    font-size: 1.2rem;
+    display: inline-block;
+    margin-top: 10px;
+    transition: background-color 0.3s;
+  }
+  
+  .service-link:hover {
+    background-color: #f0f0f0;
+  }
