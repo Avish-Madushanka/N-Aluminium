@@ -1,13 +1,12 @@
-/* WasteDisposalServices.css */
-
 .waste-disposal-container {
     background-color: #f0f8ff;
     font-family: sans-serif;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     align-items: center;
     padding: 50px;
-    min-height: 100vh;
+    min-height: 80vh;
   }
   
   .waste-disposal-heading {
