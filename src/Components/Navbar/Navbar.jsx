@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './Navbar.css'; // Import your CSS file for styling
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -9,25 +9,45 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="navbar">
-      <div className="navbar-container">
-        <div className="navbar-logo">
-          <a href="/">MyLogo</a>
-        </div>
-        <div className={`navbar-links ${isOpen ? 'active' : ''}`}>
-          <a href="/">Home</a>
-          <a href="/about">About</a>
-          <a href="/services">Services</a>
-          <a href="/contact">Contact</a>
-        </div>
-        <div className="navbar-buttons">
-          <button className="btn-primary"><a href="/SignUp">Login</a></button>
-          <button className="btn-secondary">Sign Up</button>
-        </div>
-        <div className="navbar-toggle" onClick={toggleMenu}>
-          <span className="bar"></span>
-          <span className="bar"></span>
-          <span className="bar"></span>
+    <nav className="navbar navbar-expand-lg bg-light">
+      <div className="container-fluid">
+        {/* Logo */}
+        <a className="navbar-brand" href="/">MyLogo</a>
+
+        {/* Toggle button for mobile */}
+        <button 
+          className="navbar-toggler" 
+          type="button" 
+          onClick={toggleMenu}
+          aria-controls="navbarNav"
+          aria-expanded={isOpen}
+          aria-label="Toggle navigation"
+        >
+          <span className="navbar-toggler-icon"></span>
+        </button>
+
+        {/* Navbar links */}
+        <div className={`collapse navbar-collapse ${isOpen ? 'show' : ''}`} id="navbarNav">
+          <ul className="navbar-nav ms-auto">
+            <li className="nav-item">
+              <a className="nav-link" href="/">Home</a>
+            </li>
+            <li className="nav-item">
+              <a className="nav-link" href="/about">About</a>
+            </li>
+            <li className="nav-item">
+              <a className="nav-link" href="/services">Services</a>
+            </li>
+            <li className="nav-item">
+              <a className="nav-link" href="/contact">Contact</a>
+            </li>
+          </ul>
+
+          {/* Buttons */}
+          <div className="d-flex ms-lg-3">
+            <a href="/SignUp" className="btn btn-primary me-2">Login</a>
+            <button className="btn btn-outline-secondary">Sign Up</button>
+          </div>
         </div>
       </div>
     </nav>

@@ -1,66 +1,47 @@
-import React, { useState, useRef, useEffect } from 'react';
-import '../../css/Homemain.css';
+import React, { useState, useEffect } from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './HomeSliding.css';
 
-const HomeSliding = ({ children = [] }) => {
+
+const HomeSliding = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isTransitioning, setIsTransitioning] = useState(false);
-  const intervalRef = useRef(null);
-
-  const nextSlide = () => {
-    if (isTransitioning || children.length === 0) return;
-    setIsTransitioning(true);
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % children.length);
-    setTimeout(() => setIsTransitioning(false), 500); 
-  };
-
-  const prevSlide = () => {
-    if (isTransitioning || children.length === 0) return;
-    setIsTransitioning(true);
-    setCurrentIndex((prevIndex) => (prevIndex - 1 + children.length) % children.length);
-    setTimeout(() => setIsTransitioning(false), 500); 
-  };
+  const [images] = useState([
+    'https://www.recycling-magazine.com/wp-content/uploads/2021/09/Clean-aluminum-at-Centro-Rottami.jpg_web-scaled.jpg',
+    'https://wallpapers.com/images/hd/4k-black-3840-x-2400-background-8vni70ald9b912fb.jpg',
+    'https://wallpapers.com/images/hd/4k-black-3840-x-2400-background-8vni70ald9b912fb.jpg',
+  ]);
 
   useEffect(() => {
-    if (children.length > 1) {
-      intervalRef.current = setInterval(nextSlide, 5000);
-    }
-    return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current);
-    };
-  }, [children.length, currentIndex]);
+    const intervalId = setInterval(() => {
+      setCurrentIndex((currentIndex + 1) % images.length);
+    }, 5000); // Change the interval time as needed
 
-  useEffect(() => {
-    if (sliderRef.current) {
-      sliderRef.current.style.transform = `translateX(-${currentIndex * 100}%)`;
-      sliderRef.current.style.transition = isTransitioning ? 'transform 0.5s ease-in-out' : 'none';
-    }
-  }, [currentIndex, isTransitioning]);
+    return () => clearInterval(intervalId);
+  }, [images, currentIndex]);
 
-  const sliderRef = useRef(null);
-
-  if (children.length === 0) {
-    return <div className="slider-container1"></div>;
-  }
+  const handleButtonClick = (url) => {
+    // Handle button click, e.g., navigate to a specific page
+    window.location.href = url;
+  };
 
   return (
-    <div className="slider-container1">
-      <div className="slider" ref={sliderRef}>
-        {React.Children.map(children, (child, index) => (
-          <div key={index} className="slide">
-            {child}
-          </div>
-        ))}
+    <div className="home-banner-container">
+      <img
+        src={images[currentIndex]}
+        alt={`Banner Image ${currentIndex + 1}`}
+        className="home-banner-image"
+      />
+      <div className="home-banner-text">
+        <h1>Discover Rare Gemstones. Bid, Buy, and Learn with Confidence</h1>
+        <p>
+            Explore our trusted gemstone auctions, authenticate your treasures,<br />
+             and access expert education.
+        </p>
+        <div className="home-banner-buttons">
+          <button onClick={() => handleButtonClick('/start-bidding')}>Start Bidding</button>
+          <button onClick={() => handleButtonClick('/learn-about-gemstones')}>Learn About Gemstones</button>
+        </div>
       </div>
-      {children.length > 1 && (
-        <>
-          <button className="slider-button prev" onClick={prevSlide} disabled={isTransitioning}>
-            &#10094;
-          </button>
-          <button className="slider-button next" onClick={nextSlide} disabled={isTransitioning}>
-            &#10095;
-          </button>
-        </>
-      )}
     </div>
   );
 };
