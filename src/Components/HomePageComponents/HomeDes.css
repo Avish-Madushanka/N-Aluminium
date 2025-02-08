@@ -43,14 +43,17 @@
   }
   
   .service-image-container {
-    border-radius: 20px;
     overflow: hidden;
     margin-bottom: 15px;
+    height: 200px;
+    width: 100%;
+    border-radius: 10px 10px 100px 100px;
+    transition: all 500msease;
   }
   
   .service-image {
     width: 100%;
-    height: auto;
+    height: 200px;
     display: block;
   }
   
@@ -63,6 +66,7 @@
     justify-content: center;
     align-items: center;
     margin: 0 auto 15px;
+    
   }
   
   .service-icon {
