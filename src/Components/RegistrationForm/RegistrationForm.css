@@ -1,52 +1,66 @@
+
 .background-container {
-    background-image: url('https://researchleap.com/wp-content/uploads/2021/04/Maximize-Construction-Recycling-Efforts_HERO.jpeg'); 
-    background-size: cover; 
-    background-position: center; 
-    height: 100vh;  
-    display: flex; 
-    justify-content: center; 
-    align-items: center; 
-    
-  }
-  
+  background-image: url('https://static.vecteezy.com/system/resources/previews/013/148/796/non_2x/protection-personal-data-against-hackers-security-internet-access-of-personal-data-identification-information-security-and-encryption-man-typing-login-and-password-on-virtual-screen-free-photo.jpg'); 
+  background-size: cover; 
+  background-position: center; 
+  height: 100vh;  
+  display: flex; 
+  justify-content: center; 
+  align-items: center; 
+  padding: 20px; 
+}
+
+
+.button-row {
+  display: flex; 
+  flex-wrap: wrap; 
+  justify-content: center; 
+  gap: 20px;
+}
+
+
+.button, .button1 {
+  padding: 20px 80px; 
+  font-size: 18px;
+  font-weight: bold;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+
+.button {
+  background-color: #003457;
+  color: white;
+}
+
+.button:hover {
+  background-color: #00121e;
+  transform: scale(1.05); 
+}
+
+
+.button1 {
+  background-color: #af1414;
+  color: white;
+}
+
+.button1:hover {
+  background-color: #550000;
+  transform: scale(1.05);
+}
+
+
+@media (max-width: 768px) {
   .button-row {
-    display: flex; 
-    justify-content: center; 
-    gap: 30px; 
-  }
-  
-  .button {
-    padding: 15px 40px;
-    background-color: #003457;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    font-size: large;
-  }
-  
-  .button:hover {
-    background-color: #00121e;
+      flex-direction: column; 
+      gap: 15px; 
   }
 
-  .button1-row {
-    display: flex; 
-    justify-content: center; 
-    gap: 60px; 
+  .button, .button1 {
+      width: 100%; 
+      padding: 15px 0; 
+      text-align: center;
   }
-  
-  .button1 {
-    padding: 15px 40px;
-    background-color: #af1414;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    font-size: large;
-  }
-  
-  .button1:hover {
-    background-color: #550000;
-  }
+}
