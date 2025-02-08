@@ -13,14 +13,13 @@ const HomeSliding = () => {
 
   useEffect(() => {
     const intervalId = setInterval(() => {
-      setCurrentIndex((currentIndex + 1) % images.length);
-    }, 5000); // Change the interval time as needed
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
+    }, 5000); 
 
     return () => clearInterval(intervalId);
-  }, [images, currentIndex]);
+  }, [images.length]);
 
   const handleButtonClick = (url) => {
-    // Handle button click, e.g., navigate to a specific page
     window.location.href = url;
   };
 
