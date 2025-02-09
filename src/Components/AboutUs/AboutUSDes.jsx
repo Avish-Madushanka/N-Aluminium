@@ -1,9 +1,5 @@
 import React from 'react';
-import './WebsiteContent.css'; // Import the CSS file
-import logo from './your-logo.png'; // Replace with your actual logo
-import landfillImage from './landfill.jpg'; // Replace with your actual image
-import beachCleanupImage from './beach-cleanup.jpg'; // Replace with your actual image
-
+import '../AboutUs/AboutUsDes.css'; 
 
 function AboutUsDes() {
   return (
