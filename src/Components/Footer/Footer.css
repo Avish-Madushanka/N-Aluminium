@@ -2,7 +2,7 @@
   background-color: #101422;
   padding: 4rem 0 0;
   color: #ffffff;
-  margin-top: 4rem;
+  margin-top: 10rem;
 }
 .footer-content {
   display: grid;
@@ -75,6 +75,7 @@
   .footer-content {
     grid-template-columns: 1fr;
     text-align: center;
+    margin-top: 10rem;
   }
   .footer-links {
     flex-direction: column;
