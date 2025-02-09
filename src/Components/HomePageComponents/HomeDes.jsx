@@ -13,7 +13,7 @@ const HomeDes = () => {
         <div className="service-card">
           <div className="service-image-container">
             <img
-              src="https://media.licdn.com/dms/image/v2/C5612AQHBxjn-2FxKAQ/article-cover_image-shrink_600_2000/article-cover_image-shrink_600_2000/0/1520141306016?e=2147483647&v=beta&t=pTEHH6x79QwqFIUbEM8KfFbyb8axCwV1IKRUT-PR54E"
+              src="https://media.istockphoto.com/id/181874893/photo/recycling-bin-aluminum.jpg?s=612x612&w=0&k=20&c=Hj7pb0jn33l35Aoeac3HScYzOPXI29uq_75HheDyn5c="
               alt="Garbage Pickup"
               className="service-image"
             />
@@ -35,7 +35,7 @@ const HomeDes = () => {
         <div className="service-card">
           <div className="service-image-container">
             <img
-              src="https://via.placeholder.com/300x200/90EE90/FFFFFF?text=Dumpster+Rental+Image"
+              src="https://media.istockphoto.com/id/181874893/photo/recycling-bin-aluminum.jpg?s=612x612&w=0&k=20&c=Hj7pb0jn33l35Aoeac3HScYzOPXI29uq_75HheDyn5c="
               alt="Dumpster Rental"
               className="service-image"
             />
@@ -57,7 +57,7 @@ const HomeDes = () => {
         <div className="service-card">
           <div className="service-image-container">
             <img
-              src="https://via.placeholder.com/300x200/ADD8E6/FFFFFF?text=Waste+Collection+Image"
+              src="https://media.istockphoto.com/id/181874893/photo/recycling-bin-aluminum.jpg?s=612x612&w=0&k=20&c=Hj7pb0jn33l35Aoeac3HScYzOPXI29uq_75HheDyn5c="
               alt="Waste Collection"
               className="service-image"
             />

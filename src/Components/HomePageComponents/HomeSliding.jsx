@@ -7,8 +7,8 @@ const HomeSliding = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [images] = useState([
     'https://www.recycling-magazine.com/wp-content/uploads/2021/09/Clean-aluminum-at-Centro-Rottami.jpg_web-scaled.jpg',
-    'https://wallpapers.com/images/hd/4k-black-3840-x-2400-background-8vni70ald9b912fb.jpg',
-    'https://wallpapers.com/images/hd/4k-black-3840-x-2400-background-8vni70ald9b912fb.jpg',
+    'https://img.freepik.com/premium-photo/pile-many-aluminum-waste-construction-material-scraps-ground-recycling_43514-2863.jpg',
+    'https://www.gme-recycling.com/wp-content/uploads/2023/05/aluminum-recycling.jpg',
   ]);
 
   useEffect(() => {
