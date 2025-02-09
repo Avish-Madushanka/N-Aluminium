@@ -6,6 +6,7 @@ import Navbar from './Components/Navbar/Navbar';
 import HomePage from './Pages/HomePage';
 import Footer from './Components/Footer/Footer';
 import SignUp from './Pages/SignUp';
+import AboutUs from './Pages/AboutUS';
 
 const ProtectedRoute = ({ children }) => {
   const location = useLocation();
@@ -86,6 +87,7 @@ const AppContent = () => {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/SignUp" element={<SignUp />} />
+        <Route path="/AboutUs" element={<AboutUs />} />
       </Routes>
       <Footer />
     </div>
