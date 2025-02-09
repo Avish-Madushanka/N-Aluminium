@@ -24,23 +24,12 @@ const AboutUsHeader = () => {
   };
 
   return (
-    <div className="home-banner-container">
+    <div className="aboutus-banner-container">
       <img
         src={images[currentIndex]}
         alt={`Banner Image ${currentIndex + 1}`}
-        className="home-banner-image"
+        className="aboutus-banner-image"
       />
-      <div className="home-banner-text">
-        <h1>Discover Rare Gemstones. Bid, Buy, and Learn with Confidence</h1>
-        <p>
-            Explore our trusted gemstone auctions, authenticate your treasures,<br />
-             and access expert education.
-        </p>
-        <div className="home-banner-buttons">
-          <button onClick={() => handleButtonClick('/start-bidding')}>Start Bidding</button>
-          <button onClick={() => handleButtonClick('/learn-about-gemstones')}>Learn About Gemstones</button>
-        </div>
-      </div>
     </div>
   );
 };
