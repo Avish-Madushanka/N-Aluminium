@@ -25,6 +25,9 @@ const AboutUsHeader = () => {
 
   return (
     <div className="aboutus-banner-container">
+        <div className='aboutus-title'>
+        <h1>What We Do</h1>
+    </div>
       <img
         src={images[currentIndex]}
         alt={`Banner Image ${currentIndex + 1}`}

@@ -1,3 +1,14 @@
+.aboutus-title {
+    text-align: center;
+    font-size: 24px; 
+    font-weight: bolder;
+    color: #333; 
+    margin-bottom: 20px; 
+    text-transform: uppercase; 
+    letter-spacing: 1.5px; 
+    padding-top: 20px;
+}
+
 .aboutus-banner-container {
     position: relative;
     width: 100%;

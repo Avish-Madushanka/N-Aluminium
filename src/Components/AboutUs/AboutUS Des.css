@@ -1,0 +1,135 @@
+/* WebsiteContent.css */
+
+/*  General Styles */
+body {
+    font-family: sans-serif; /* Or your preferred font */
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9; /* Light background */
+  }
+  
+  /* Placeholder Browser Bar */
+  .browser-bar-placeholder {
+      background-color: #f0f0f0;
+      padding: 5px;
+      text-align: center;
+      font-size: 0.8em;
+      color: #888;
+  }
+  
+  /* Header Styles */
+  header {
+    background-color: #fff;
+    padding: 20px;
+    border-bottom: 1px solid #ddd;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Subtle shadow */
+  }
+  
+  header div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  /* Logo */
+  .logo {
+      height: 50px; /* Example size. adjust as needed */
+  }
+  
+  header nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+  }
+  
+  header nav ul li {
+    margin-left: 15px;
+  }
+  
+  header nav ul li a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+    transition: color 0.2s ease-in-out; /* Smooth color transition on hover */
+  }
+  
+  header nav ul li a:hover {
+    color: #007bff; /* Example hover color */
+  }
+  
+  header nav ul li a.global-link {
+    background-color: green;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+  
+  /* Main Content Styles */
+  main {
+    display: flex;
+    padding: 20px;
+    max-width: 1200px; /* Limit width for readability */
+    margin: 0 auto; /* Center the content */
+  }
+  
+  main > div:first-child {
+    flex: 1;
+    padding-right: 20px;
+  }
+  
+  main img {
+    width: 100%;
+    border-radius: 5px; /* Slightly rounded corners */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    margin-bottom: 15px;
+  }
+  
+  main h2 {
+    color: #224477;  /* Darker color for headings */
+    font-size: 2.2em;
+    margin-bottom: 0.5em; /* Smaller bottom margin */
+  }
+  
+  main h3 {
+      color: #336699;
+      font-size: 1.5em;
+      margin-bottom: 1em;
+  }
+  
+  main p {
+    line-height: 1.6; /* Improved readability */
+    color: #555; /* Slightly lighter text */
+  }
+  
+  /* Translate Button Styles */
+  .translate-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+  }
+  
+  .translate-button button {
+    background-color: green;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer; /* Indicate it's clickable */
+    transition: background-color 0.2s ease-in-out; /* Smooth transition */
+  }
+  
+  .translate-button button:hover {
+    background-color: #009900; /* Darker shade of green */
+  }
+  
+  /* Responsive Design (Example) */
+  @media (max-width: 768px) {
+    main {
+      flex-direction: column; /* Stack sections vertically on smaller screens */
+    }
+  
+    main > div:first-child {
+      padding-right: 0;
+    }
+  }
