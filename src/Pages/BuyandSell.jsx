@@ -1,9 +1,10 @@
 import React from 'react';
+import BSHeader from '../Components/BuyandSell/BSHeader';
 
 const BuyandSell = () => {
   return (
     <div>
-      <BSHeader
+      <BSHeader />
     </div>
   );
 };
