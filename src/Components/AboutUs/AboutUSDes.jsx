@@ -4,31 +4,6 @@ import '../AboutUs/AboutUsDes.css';
 function AboutUsDes() {
   return (
     <div>
-      {/*  Browser Tabs/Address Bar (Placeholder) */}
-      <div className="browser-bar-placeholder">
-        [Browser Tabs and Address Bar Placeholder]
-      </div>
-
-      {/* Website Header */}
-      <header>
-        <div>
-          {/* Replace with your actual logo */}
-          <img src={logo} alt="Global Waste Cleaning Network" className="logo" />
-          <nav>
-            <ul>
-              <li><a href="#">Home</a></li>
-              <li><a href="#">About +</a></li>
-              <li><a href="#">Members +</a></li>
-              <li><a href="#">ENRC +</a></li>
-              <li><a href="#">Blog</a></li>
-              <li><a href="#">Contact +</a></li>
-              <li><a href="#" className="global-link">Global</a></li>
-            </ul>
-          </nav>
-        </div>
-      </header>
-
-      {/* Main Content */}
       <main>
         <div>
           <section>
@@ -44,15 +19,8 @@ function AboutUsDes() {
               research, and spread environment related information.</p>
           </section>
         </div>
-
-        <div>
-          {/* Image Area */}
-          <img src={landfillImage} alt="Landfill" />
-          <img src={beachCleanupImage} alt="Beach Cleanup" />
-        </div>
       </main>
 
-      {/* Translate Button */}
       <div className="translate-button">
         <button>
           Translate »
