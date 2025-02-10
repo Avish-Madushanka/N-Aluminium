@@ -7,6 +7,7 @@ import HomePage from './Pages/HomePage';
 import Footer from './Components/Footer/Footer';
 import SignUp from './Pages/SignUp';
 import AboutUs from './Pages/AboutUS';
+import BuyandSell from './Pages/BuyandSell';
 
 const ProtectedRoute = ({ children }) => {
   const location = useLocation();
@@ -88,6 +89,7 @@ const AppContent = () => {
         <Route path="/" element={<HomePage />} />
         <Route path="/SignUp" element={<SignUp />} />
         <Route path="/AboutUs" element={<AboutUs />} />
+        <Route path="/BuyandSell" element={<BuyandSell />} />
       </Routes>
       <Footer />
     </div>
