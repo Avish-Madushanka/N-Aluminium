@@ -1,0 +1,154 @@
+/* DoorListing.css */
+
+/* General Styles */
+.door-listing-container {
+    background-color: #282c34; /* Dark background color */
+    min-height: 100vh; /* Full viewport height */
+    color: white; /* White text */
+    padding: 20px;
+    font-family: sans-serif;
+  }
+  
+  /* Search and Filter Styles */
+  .search-filter-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .search-input {
+    padding: 10px;
+    border-radius: 20px;
+    border: none;
+    margin-right: 10px;
+    background-color: #eee;
+    color: #333;
+    width: 300px; /* Adjust width as needed */
+    max-width: 100%; /* Ensure it doesn't overflow on small screens */
+  }
+  
+  .filter-dropdown {
+    position: relative;
+    display: inline-block;
+    margin-right: 10px;
+  }
+  
+  .filter-button {
+    background-color: #ddd;
+    color: #333;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    white-space: nowrap; /* Prevent text from wrapping */
+  }
+  
+  .filter-options {
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 120px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    border-radius: 5px;
+    display: none; /* Hidden by default */
+    right: 0; /* Aligns to the right edge of the button */
+    top: 100%; /* Position below the button */
+  }
+  
+  .filter-dropdown:hover .filter-options {
+    display: block; /* Show on hover */
+  }
+  
+  .filter-options a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+  }
+  
+  .filter-options a:hover {
+    background-color: #ddd;
+  }
+  
+  .main-button {
+    background-color: #333;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    white-space: nowrap; /*Prevent text from wrapping*/
+  }
+  
+  /* Door Grid Styles */
+  .door-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive grid */
+    gap: 20px;
+  }
+  
+  .door-item {
+    background-color: #333740;
+    border-radius: 10px;
+    padding: 15px;
+    text-align: left;
+  }
+  
+  .door-image {
+    width: 100%;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    object-fit: cover;
+    height: 200px; /* Adjust height as needed */
+  }
+  
+  .door-title {
+    font-size: 1.2em;
+    margin-bottom: 5px;
+  }
+  
+  .door-description,
+  .door-location,
+  .door-phone {
+    color: #ddd;
+    margin-bottom: 5px;
+  }
+  
+  /* Media Queries for Responsiveness */
+  @media (max-width: 600px) {
+    .search-filter-container {
+      flex-direction: column; /* Stack search and filter on smaller screens */
+      align-items: stretch; /* Stretch items to full width */
+    }
+  
+    .search-input,
+    .filter-dropdown,
+    .main-button {
+      margin-bottom: 10px;
+      width: 100%; /* Full width on small screens */
+      box-sizing: border-box; /* Include padding and border in element's total width and height */
+    }
+  
+    .filter-options {
+      position: static; /* Remove absolute positioning */
+      box-shadow: none; /* Remove shadow */
+      border-radius: 0; /* Remove border radius */
+      border: 1px solid #ddd; /* Add border */
+      display: block; /* Always show */
+      background-color: transparent; /* Transparent background */
+    }
+  
+    .filter-options a {
+        color: #fff; /* Set text color to white */
+        padding: 8px 12px; /* Adjust padding */
+        border-bottom: 1px solid #ddd; /* Add a separator line */
+    }
+  
+    .filter-options a:last-child {
+        border-bottom: none; /* Remove border for last item */
+    }
+  
+      .filter-button {
+          display: none; /* Hide the filter button */
+      }
+  }
