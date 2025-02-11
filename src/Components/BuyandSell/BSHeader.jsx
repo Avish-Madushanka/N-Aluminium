@@ -7,7 +7,6 @@ function BSHeader() {
   return (
 
       <div className="door-listing-container">
-        {/* Search and Filter */}
         <div className="search-filter-container">
           <input type="text" placeholder="Search" className="search-input" />
           <div className="filter-dropdown">
@@ -18,12 +17,10 @@ function BSHeader() {
               <a href="#">Filter 3</a>
             </div>
           </div>
-          <button className="main-button">Button</button>
+          <button className="main-button">Sell</button>
         </div>
-  
-        {/* Door Listings */}
+
         <div className="door-grid">
-          {/* Single Door Listing (Repeat this block for each door) */}
           <div className="door-item">
             <img src={imageUrl} alt="Aluminum Door" className="door-image" />
             <h3 className="door-title">Aluminum Door</h3>
@@ -55,7 +52,22 @@ function BSHeader() {
             <p className="door-location">colombo, srilanka</p>
             <p className="door-phone">0785728115</p>
           </div>
-          {/* End Single Door Listing */}
+
+          <div className="door-item">
+            <img src={imageUrl} alt="Aluminum Door" className="door-image" />
+            <h3 className="door-title">Aluminum Door</h3>
+            <p className="door-description">Use, good quality blue color</p>
+            <p className="door-location">colombo, srilanka</p>
+            <p className="door-phone">0785728115</p>
+          </div>
+
+          <div className="door-item">
+            <img src={imageUrl} alt="Aluminum Door" className="door-image" />
+            <h3 className="door-title">Aluminum Door</h3>
+            <p className="door-description">Use, good quality blue color</p>
+            <p className="door-location">colombo, srilanka</p>
+            <p className="door-phone">0785728115</p>
+          </div>
         </div>
       </div>
     );
