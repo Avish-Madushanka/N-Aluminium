@@ -1,76 +1,151 @@
 
-.search-bar {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  max-width: 600px; 
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  padding: 4px; 
-  margin: 0 auto; 
-  background-color: #fff; 
-
-  &__icon-container {
+.door-listing-container {
+    background-color: #282c34; 
+    min-height: 100vh; 
+    color: white; 
+    padding: 20px;
+    font-family: sans-serif;
+  }
+  
+  .search-filter-container {
     display: flex;
     align-items: center;
-    margin-right: 8px; 
+    margin-bottom: 20px;
+    justify-content: center;
   }
-
-  &__search-icon {
-    color: #777; 
-    width: 20px;  
-    height: 20px;
-  }
-
-  &__input {
-    flex: 1;
+  
+  .search-input {
+    padding: 10px;
+    border-radius: 20px;
     border: none;
-    padding: 8px; 
-    font-size: 16px;
-    outline: none;
+    margin-right: 10px;
+    background-color: #eee;
     color: #333;
-
-    &::placeholder {
-      color: #999;
-    }
-  }
-
-  &__clear-button {
-    background: none;
-    border: none;
-    padding: 4px;
-    cursor: pointer;
-    color: #777; 
-
-    svg {
-      width: 20px;  
-      height: 20px;
-    }
-
-    &:hover {
-      color: #333;
-    }
-  }
-
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-
-  @media (max-width: 768px) {
+    width: 300px; 
     max-width: 100%; 
-    padding: 2px;
-    &__input {
-      font-size: 14px;
-      padding: 6px;
-    }
-    &__icon-container{
-      margin-right: 4px;
-    }
-    &__search-icon{
-      width: 16px;
-      height: 16px;
-    }
-    &__clear-button svg {
-      width: 16px;
-      height: 16px;
-    }
   }
-}
+  
+  .filter-dropdown {
+    position: relative;
+    display: inline-block;
+    margin-right: 10px;
+  }
+  
+  .filter-button {
+    background-color: #ddd;
+    color: #333;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    white-space: nowrap; 
+  }
+  
+  .filter-options {
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 120px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    border-radius: 5px;
+    display: none; 
+    right: 0; 
+    top: 100%; 
+  }
+  
+  .filter-dropdown:hover .filter-options {
+    display: block;
+  }
+  
+  .filter-options a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+  }
+  
+  .filter-options a:hover {
+    background-color: #ddd;
+  }
+  
+  .main-button {
+    background-color: #333;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    white-space: nowrap; 
+  }
+  
+  .door-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive grid */
+    gap: 20px;
+  }
+  
+  .door-item {
+    background-color: #333740;
+    border-radius: 10px;
+    padding: 15px;
+    text-align: left;
+  }
+  
+  .door-image {
+    width: 100%;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    object-fit: cover;
+    height: 200px; 
+  }
+  
+  .door-title {
+    font-size: 1.2em;
+    margin-bottom: 5px;
+  }
+  
+  .door-description,
+  .door-location,
+  .door-phone {
+    color: #ddd;
+    margin-bottom: 5px;
+  }
+  
+
+  @media (max-width: 600px) {
+    .search-filter-container {
+      flex-direction: column; 
+      align-items: stretch; 
+    }
+  
+    .search-input,
+    .filter-dropdown,
+    .main-button {
+      margin-bottom: 10px;
+      width: 100%;
+      box-sizing: border-box; 
+    }
+  
+    .filter-options {
+      position: static; 
+      box-shadow: none;
+      border-radius: 0;
+      border: 1px solid #ddd;
+      display: block;
+      background-color: transparent;
+    }
+  
+    .filter-options a {
+        color: #fff;
+        padding: 8px 12px;
+        border-bottom: 1px solid #ddd;
+    }
+  
+    .filter-options a:last-child {
+        border-bottom: none;
+    }
+  
+      .filter-button {
+          display: none;
+      }
+  }
