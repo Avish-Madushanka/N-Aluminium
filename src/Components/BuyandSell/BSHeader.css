@@ -1,19 +1,17 @@
-/* DoorListing.css */
 
-/* General Styles */
 .door-listing-container {
-    background-color: #282c34; /* Dark background color */
-    min-height: 100vh; /* Full viewport height */
-    color: white; /* White text */
+    background-color: #282c34; 
+    min-height: 100vh; 
+    color: white; 
     padding: 20px;
     font-family: sans-serif;
   }
   
-  /* Search and Filter Styles */
   .search-filter-container {
     display: flex;
     align-items: center;
     margin-bottom: 20px;
+    justify-content: center;
   }
   
   .search-input {
@@ -23,8 +21,8 @@
     margin-right: 10px;
     background-color: #eee;
     color: #333;
-    width: 300px; /* Adjust width as needed */
-    max-width: 100%; /* Ensure it doesn't overflow on small screens */
+    width: 300px; 
+    max-width: 100%; 
   }
   
   .filter-dropdown {
@@ -40,7 +38,7 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    white-space: nowrap; /* Prevent text from wrapping */
+    white-space: nowrap; 
   }
   
   .filter-options {
@@ -50,13 +48,13 @@
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     z-index: 1;
     border-radius: 5px;
-    display: none; /* Hidden by default */
-    right: 0; /* Aligns to the right edge of the button */
-    top: 100%; /* Position below the button */
+    display: none; 
+    right: 0; 
+    top: 100%; 
   }
   
   .filter-dropdown:hover .filter-options {
-    display: block; /* Show on hover */
+    display: block;
   }
   
   .filter-options a {
@@ -77,10 +75,9 @@
     border: none;
     border-radius: 20px;
     cursor: pointer;
-    white-space: nowrap; /*Prevent text from wrapping*/
+    white-space: nowrap; 
   }
   
-  /* Door Grid Styles */
   .door-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive grid */
@@ -99,7 +96,7 @@
     border-radius: 8px;
     margin-bottom: 10px;
     object-fit: cover;
-    height: 200px; /* Adjust height as needed */
+    height: 200px; 
   }
   
   .door-title {
@@ -114,41 +111,41 @@
     margin-bottom: 5px;
   }
   
-  /* Media Queries for Responsiveness */
+
   @media (max-width: 600px) {
     .search-filter-container {
-      flex-direction: column; /* Stack search and filter on smaller screens */
-      align-items: stretch; /* Stretch items to full width */
+      flex-direction: column; 
+      align-items: stretch; 
     }
   
     .search-input,
     .filter-dropdown,
     .main-button {
       margin-bottom: 10px;
-      width: 100%; /* Full width on small screens */
-      box-sizing: border-box; /* Include padding and border in element's total width and height */
+      width: 100%;
+      box-sizing: border-box; 
     }
   
     .filter-options {
-      position: static; /* Remove absolute positioning */
-      box-shadow: none; /* Remove shadow */
-      border-radius: 0; /* Remove border radius */
-      border: 1px solid #ddd; /* Add border */
-      display: block; /* Always show */
-      background-color: transparent; /* Transparent background */
+      position: static; 
+      box-shadow: none;
+      border-radius: 0;
+      border: 1px solid #ddd;
+      display: block;
+      background-color: transparent;
     }
   
     .filter-options a {
-        color: #fff; /* Set text color to white */
-        padding: 8px 12px; /* Adjust padding */
-        border-bottom: 1px solid #ddd; /* Add a separator line */
+        color: #fff;
+        padding: 8px 12px;
+        border-bottom: 1px solid #ddd;
     }
   
     .filter-options a:last-child {
-        border-bottom: none; /* Remove border for last item */
+        border-bottom: none;
     }
   
       .filter-button {
-          display: none; /* Hide the filter button */
+          display: none;
       }
   }
