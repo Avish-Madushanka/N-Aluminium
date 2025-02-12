@@ -17,7 +17,7 @@ function BSHeader() {
               <a href="#">Filter 3</a>
             </div>
           </div>
-          <button className="main-button">Sell</button>
+          <a href="/SaleForm" className="main-button">Sell</a>
         </div>
 
         <div className="door-grid">
