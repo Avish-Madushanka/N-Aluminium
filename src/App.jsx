@@ -9,7 +9,7 @@ import SignUp from './Pages/SignUp';
 import AboutUs from './Pages/AboutUS';
 import BuyandSell from './Pages/BuyandSell';
 import SaleForm from './Components/SaleForm/SaleForm';
-import { LogIn } from 'lucide-react';
+import Login from './Components/Login/Login'
 
 const ProtectedRoute = ({ children }) => {
   const location = useLocation();
@@ -93,7 +93,7 @@ const AppContent = () => {
         <Route path="/AboutUs" element={<AboutUs />} />
         <Route path="/BuyandSell" element={<BuyandSell />} />
         <Route path="/SaleForm" element={<SaleForm />} />
-        <Route path="/Login" element={<LogIn />} />
+        <Route path="/Login" element={<Login />} />
       </Routes>
       <Footer />
     </div>
