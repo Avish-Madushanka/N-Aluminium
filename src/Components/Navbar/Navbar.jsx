@@ -14,7 +14,6 @@ const Navbar = () => {
         {/* Logo */}
         <a className="navbar-brand" href="/">MyLogo</a>
 
-        {/* Toggle button for mobile */}
         <button 
           className="navbar-toggler" 
           type="button" 
@@ -26,7 +25,6 @@ const Navbar = () => {
           <span className="navbar-toggler-icon"></span>
         </button>
 
-        {/* Navbar links */}
         <div className={`collapse navbar-collapse ${isOpen ? 'show' : ''}`} id="navbarNav">
           <ul className="navbar-nav ms-auto">
             <li className="nav-item">
@@ -43,10 +41,9 @@ const Navbar = () => {
             </li>
           </ul>
 
-          {/* Buttons */}
           <div className="d-flex ms-lg-3">
-            <a href="/SignUp" className="btn btn-primary me-2">Login</a>
-            <button className="btn btn-outline-secondary">Sign Up</button>
+            <a href="/Login" className="btn btn-primary me-2">Login</a>
+            <a href="/SignUp" className="btn btn-outline-secondary">Sign Up</a>
           </div>
         </div>
       </div>
