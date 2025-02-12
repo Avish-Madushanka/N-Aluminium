@@ -8,7 +8,7 @@ import Footer from './Components/Footer/Footer';
 import SignUp from './Pages/SignUp';
 import AboutUs from './Pages/AboutUS';
 import BuyandSell from './Pages/BuyandSell';
-import SellForm from './Components/SaleForm/SaleForm';
+import SaleForm from './Components/SaleForm/SaleForm';
 
 const ProtectedRoute = ({ children }) => {
   const location = useLocation();
@@ -91,7 +91,7 @@ const AppContent = () => {
         <Route path="/SignUp" element={<SignUp />} />
         <Route path="/AboutUs" element={<AboutUs />} />
         <Route path="/BuyandSell" element={<BuyandSell />} />
-        <Route path="/SellForm" element={<SellForm />} />
+        <Route path="/SaleForm" element={<SaleForm />} />
       </Routes>
       <Footer />
     </div>

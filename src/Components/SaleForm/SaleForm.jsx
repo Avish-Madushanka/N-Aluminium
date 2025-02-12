@@ -1,64 +1,113 @@
-import { useState } from "react";
-import './SaleForm.css';
+import React, { useState } from 'react';
+import './SaleForm.css'; 
 
-export default function SaleForm() {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    message: "",
-  });
+function SaleForm() {
+  const [district, setDistrict] = useState('');
+  const [province, setProvince] = useState('');
+  const [type, setType] = useState('');
+  const [image, setImage] = useState(null);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+  const handleDistrictChange = (event) => {
+    setDistrict(event.target.value);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Form Data Submitted:", formData);
-    alert("Form submitted successfully!");
+  const handleProvinceChange = (event) => {
+    setProvince(event.target.value);
+  };
+
+  const handleTypeChange = (event) => {
+    setType(event.target.value);
+  };
+
+  const handleImageUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      setImage(imageUrl);
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-md mx-auto p-4 border rounded shadow-md">
-      <div className="mb-4">
-        <label className="block text-gray-700">Name:</label>
+    <div className="item-form-container">
+      <h2 className="form-title">Add Item</h2>
+
+      <div className="form-group">
+        <label htmlFor="itemName">Item Name</label>
+        <input type="text" id="itemName" placeholder="Item Name" />
+      </div>
+
+      <div className="form-group">
+        <label htmlFor="itemDescription">Description about item</label>
+        <textarea id="itemDescription" placeholder="Description about item" rows="4"></textarea>
+      </div>
+
+      <div className="form-group">
+        <label htmlFor="itemAddress">Address</label>
+        <textarea id="itemAddress" placeholder="Address" rows="4"></textarea>
+      </div>
+
+      <div className="form-group horizontal">
+        <div>
+          <label htmlFor="district">District</label>
+          <select id="district" value={district} onChange={handleDistrictChange}>
+            <option value="">Select District</option>
+            <option value="colombo">Colombo</option>
+            <option value="kandy">Kandy</option>
+            {/* Add more districts */}
+          </select>
+        </div>
+
+        <div>
+          <label htmlFor="province">Province</label>
+          <select id="province" value={province} onChange={handleProvinceChange}>
+            <option value="">Select Province</option>
+            <option value="western">Western</option>
+            <option value="central">Central</option>
+            {/* Add more provinces */}
+          </select>
+        </div>
+      </div>
+
+      <div className="form-group">
+        <label htmlFor="itemPrice">Price</label>
+        <input type="number" id="itemPrice" placeholder="Price" />
+      </div>
+
+      <div className="form-group">
+        <label htmlFor="contactNumber">Contact Number</label>
+        <input type="tel" id="contactNumber" placeholder="Contact Number" />
+      </div>
+
+      <div className="form-group">
+        <label htmlFor="imageUpload">Upload a photo in your device</label>
         <input
-          type="text"
-          name="name"
-          value={formData.name}
-          onChange={handleChange}
-          className="w-full px-3 py-2 border rounded"
-          required
+          type="file"
+          id="imageUpload"
+          accept="image/*"
+          onChange={handleImageUpload}
+          style={{ display: 'none' }}
         />
+        <label htmlFor="imageUpload" className="upload-button">
+          Choose File
+        </label>
+        {image && (
+          <img src={image} alt="Uploaded Item" className="uploaded-image" />
+        )}
       </div>
-      <div className="mb-4">
-        <label className="block text-gray-700">Email:</label>
-        <input
-          type="email"
-          name="email"
-          value={formData.email}
-          onChange={handleChange}
-          className="w-full px-3 py-2 border rounded"
-          required
-        />
+
+      <div className="form-group">
+        <label htmlFor="itemType">Type</label>
+        <select id="itemType" value={type} onChange={handleTypeChange}>
+          <option value="">Select Type</option>
+          <option value="electronics">Electronics</option>
+          <option value="furniture">Furniture</option>
+          {/* Add more types */}
+        </select>
       </div>
-      <div className="mb-4">
-        <label className="block text-gray-700">Message:</label>
-        <textarea
-          name="message"
-          value={formData.message}
-          onChange={handleChange}
-          className="w-full px-3 py-2 border rounded"
-          required
-        ></textarea>
-      </div>
-      <button type="submit" className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600">
-        Submit
-      </button>
-    </form>
+
+      <button type="submit" className="submit-button">Submit</button>
+    </div>
   );
 }
+
+export default SaleForm;
