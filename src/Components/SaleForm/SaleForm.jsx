@@ -29,7 +29,7 @@ function SaleForm() {
 
   return (
     <div className="item-form-container">
-      <h2 className="form-title">Add Item</h2>
+      <h2 className="form-title">Add Sale Items</h2>
 
       <div className="form-group">
         <label htmlFor="itemName">Item Name</label>
