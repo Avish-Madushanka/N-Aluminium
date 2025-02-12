@@ -1,6 +1,7 @@
 import { useState } from "react";
+import './SaleForm.css';
 
-export default function SellForm() {
+export default function SaleForm() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
