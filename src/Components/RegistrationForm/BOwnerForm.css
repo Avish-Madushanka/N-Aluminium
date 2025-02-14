@@ -1,0 +1,118 @@
+.business-form-container {
+    background-color: #282c34;
+    min-height: 100vh;
+    color: white;
+    padding: 20px;
+    font-family: sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .form-title {
+    font-size: 2em;
+    margin-bottom: 20px;
+    color: #eee;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+    width: 100%;
+    max-width: 600px;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #ddd;
+  }
+  
+  .form-group input[type="text"],
+  .form-group input[type="email"],
+  .form-group input[type="tel"],
+  .form-group input[type="password"],
+  .form-group textarea,
+  .form-group select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+    background-color: #eee;
+    color: #333;
+    font-size: 1em;
+    box-sizing: border-box;
+  }
+  
+  .form-group textarea {
+    resize: vertical;
+  }
+  
+  .form-group select {
+    appearance: none;
+    background-image: url('data:image/svg+xml;charset=UTF-8,<svg viewBox="0 0 24 24" fill="%23333" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 10px top 50%;
+    background-size: 16px;
+    padding-right: 30px;
+  }
+  
+  .form-group horizontal {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+  }
+  
+  .form-group horizontal > div {
+    width: 48%;
+  }
+  
+  .upload-button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: inline-block;
+    margin-top: 5px;
+  }
+  
+  .uploaded-image {
+    max-width: 200px;
+    max-height: 150px;
+    border-radius: 5px;
+    object-fit: cover;
+    margin-top: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .submit-button {
+    background-color: #333;
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 1.1em;
+    transition: background-color 0.3s ease;
+  }
+  
+  .submit-button:hover {
+    background-color: #555;
+  }
+  
+  /* Media Queries for Responsiveness */
+  @media (max-width: 600px) {
+    .form-group {
+      max-width: 100%;
+    }
+  
+    .form-group horizontal {
+      flex-direction: column;
+      gap: 10px;
+    }
+  
+    .form-group horizontal > div {
+      width: 100%;
+    }
+  }
