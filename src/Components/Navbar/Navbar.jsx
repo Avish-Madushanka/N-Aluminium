@@ -22,12 +22,12 @@ const Navbar = () => {
           <a href="/AboutUs" className="nav-item">About</a>
           <a href="/services" className="nav-item">Services</a>
           <a href="/contact" className="nav-item">Contact</a>
-
+        </div>
+        
           <div className="auth-buttons">
             <a href="/Login" className="login-btn">Login</a>
             <a href="/SignUp" className="signup-btn">Sign Up</a>
           </div>
-        </div>
       </div>
     </nav>
   );

@@ -25,6 +25,7 @@
   font-weight: bold;
   text-decoration: none;
   color: white;
+  padding-left: 50px;
 }
 
 .nav-links {
@@ -38,6 +39,7 @@
   color: white;
   font-size: 1rem;
   transition: color 0.3s;
+  font-weight: 700;
 }
 
 .nav-item:hover {
