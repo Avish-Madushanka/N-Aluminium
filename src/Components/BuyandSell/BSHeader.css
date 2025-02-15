@@ -76,12 +76,14 @@
     border-radius: 20px;
     cursor: pointer;
     white-space: nowrap; 
+    text-decoration: none;
   }
   
   .door-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive grid */
     gap: 20px;
+    padding-top: 20px;
   }
   
   .door-item {
