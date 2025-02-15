@@ -32,12 +32,13 @@
   line-height: 1.6;
   text-align: left;
   padding: 20px;
+  text-align: justify;
 }
 
 .grid-container {
   display: flex;
   align-items: center;
-  margin-bottom: 30px;
+  padding-top: 10px;
 }
 
 .grid-item {
