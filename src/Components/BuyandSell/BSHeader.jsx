@@ -11,7 +11,7 @@ const BSHeader = () => {
           <option value="Kalutara">Kalutara</option>
           <option value="Western">Western</option>
         </select>
-        <button className="button">Button</button>
+        <a href='/SaleForm' className="button">Sell</a>
       </div>
 
       <div className="product-grid">

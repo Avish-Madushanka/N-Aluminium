@@ -38,6 +38,7 @@
   color: white;
   border: none;
   cursor: pointer;
+  text-decoration: none;
 }
 
 .product-grid {
