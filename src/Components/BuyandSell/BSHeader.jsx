@@ -3,7 +3,7 @@ import './BSheader.css';
 
 
 function BSHeader() {
-    const imageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTz2aMzWJxHdWx3rNbTDBR3KXXL0kClJwPSjg&s";
+    const imageUrl = "https://i.redd.it/rturazpmucha1.jpg";
   return (
 
       <div className="door-listing-container">
