@@ -2,7 +2,6 @@
   background-color: #282c34;
   color: white;
   font-family: sans-serif;
-  padding: 20px;
   text-align: center;
 }
 
@@ -13,14 +12,13 @@
 
 .main-image {
   width: 100%;
-  border-radius: 8px;
   margin-bottom: 20px;
+  height: 400px;
 }
 
 .section {
   margin-bottom: 30px;
   padding: 20px;
-  background-color: #333740;
   border-radius: 8px;
 }
 
@@ -33,6 +31,7 @@
   font-size: 1em;
   line-height: 1.6;
   text-align: left;
+  padding: 20px;
 }
 
 .grid-container {
@@ -51,8 +50,10 @@
 }
 
 .grid-image {
-  width: 100%;
-  border-radius: 8px;
+  width: 80%;
+  height: auto;
+
+  border-radius: 20px;
   object-fit: cover;
   
 }
@@ -74,7 +75,6 @@
 .grid-text {
   flex: 1;
   padding: 20px;
-  background-color: #333740;
   border-radius: 8px;
 }
 
