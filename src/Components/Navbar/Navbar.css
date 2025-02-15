@@ -3,7 +3,7 @@
   top: 0;
   left: 0;
   width: 100%;
-  background: #222; /* Dark background */
+  background: #222;
   color: white;
   padding: 12px 20px;
   display: flex;
@@ -18,7 +18,6 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  justify-content: space-around;
 }
 
 .navbar-brand {
