@@ -3,6 +3,7 @@ import './BSHeader.css'; // Create styles.css for styling
 
 const BSHeader = () => {
   return (
+    <div>
     <div className="container">
       <div className="top-bar">
         <input type="text" placeholder="Search" className="search-bar" />
@@ -62,6 +63,7 @@ const BSHeader = () => {
         </div>
 
       </div>
+    </div>
     </div>
   );
 };
