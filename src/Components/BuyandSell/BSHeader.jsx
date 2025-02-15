@@ -1,76 +1,47 @@
 import React from 'react';
-import './BSheader.css'; 
+import './BSHeader.css'; // Create styles.css for styling
 
-
-function BSHeader() {
-    const imageUrl = "https://i.redd.it/rturazpmucha1.jpg";
+const BSHeader = () => {
   return (
-
-      <div className="door-listing-container">
-        <div className="search-filter-container">
-          <input type="text" placeholder="Search" className="search-input" />
-          <div className="filter-dropdown">
-            <button className="filter-button">Filter</button>
-            <div className="filter-options">
-              <a href="#">Filter 1</a>
-              <a href="#">Filter 2</a>
-              <a href="#">Filter 3</a>
-            </div>
-          </div>
-          <a href="/SaleForm" className="main-button">Sell</a>
-        </div>
-
-        <div className="door-grid">
-          <div className="door-item">
-            <img src={imageUrl} alt="Aluminum Door" className="door-image" />
-            <h3 className="door-title">Aluminum Door</h3>
-            <p className="door-description">Use, good quality blue color</p>
-            <p className="door-location">colombo, srilanka</p>
-            <p className="door-phone">0785728115</p>
-          </div>
-  
-          <div className="door-item">
-            <img src={imageUrl} alt="Aluminum Door" className="door-image" />
-            <h3 className="door-title">Aluminum Door</h3>
-            <p className="door-description">Use, good quality blue color</p>
-            <p className="door-location">colombo, srilanka</p>
-            <p className="door-phone">0785728115</p>
-          </div>
-  
-          <div className="door-item">
-            <img src={imageUrl} alt="Aluminum Door" className="door-image" />
-            <h3 className="door-title">Aluminum Door</h3>
-            <p className="door-description">Use, good quality blue color</p>
-            <p className="door-location">colombo, srilanka</p>
-            <p className="door-phone">0785728115</p>
-          </div>
-  
-          <div className="door-item">
-            <img src={imageUrl} alt="Aluminum Door" className="door-image" />
-            <h3 className="door-title">Aluminum Door</h3>
-            <p className="door-description">Use, good quality blue color</p>
-            <p className="door-location">colombo, srilanka</p>
-            <p className="door-phone">0785728115</p>
-          </div>
-
-          <div className="door-item">
-            <img src={imageUrl} alt="Aluminum Door" className="door-image" />
-            <h3 className="door-title">Aluminum Door</h3>
-            <p className="door-description">Use, good quality blue color</p>
-            <p className="door-location">colombo, srilanka</p>
-            <p className="door-phone">0785728115</p>
-          </div>
-
-          <div className="door-item">
-            <img src={imageUrl} alt="Aluminum Door" className="door-image" />
-            <h3 className="door-title">Aluminum Door</h3>
-            <p className="door-description">Use, good quality blue color</p>
-            <p className="door-location">colombo, srilanka</p>
-            <p className="door-phone">0785728115</p>
-          </div>
-        </div>
+    <div className="container">
+      <div className="top-bar">
+        <input type="text" placeholder="Search" className="search-bar" />
+        <select className="filter-dropdown">
+          <option value="">Filter by Location</option>
+          <option value="Kalutara">Kalutara</option>
+          <option value="Western">Western</option>
+        </select>
+        <button className="button">Button</button>
       </div>
-    );
-  }
+
+      <div className="product-grid">
+        {/* Product Card 1 */}
+        <div className="product-card">
+          <img src="https://i.redd.it/rturazpmucha1.jpg" alt="Product" className="product-image" />
+          <div className="product-details">
+            <h3>Aluminum Door</h3>
+            <p>An aluminum door is strong, lightweight, weather-resistant, durable, low-maintenance, and modern-looking.</p>
+            <p className="price">Rs: 10,000.00</p>
+            <p className="location">Kaluthara Western</p>
+            <button className="buy-button">Buy</button>
+          </div>
+        </div>
+
+        {/* Product Card 2 (Example - You'd map over your product data here) */}
+        <div className="product-card">
+          <img src="https://i.redd.it/rturazpmucha1.jpg" alt="Product" className="product-image" />
+          <div className="product-details">
+            <h3>Aluminum Door</h3>
+            <p>An aluminum door is strong, lightweight, weather-resistant, durable, low-maintenance, and modern-looking.</p>
+            <p className="price">Rs: 10,000.00</p>
+            <p className="location">Kaluthara Western</p>
+            <button className="buy-button">Buy</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  );
+};
 
 export default BSHeader;
