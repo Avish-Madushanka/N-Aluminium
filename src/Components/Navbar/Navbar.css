@@ -40,7 +40,7 @@
 }
 
 .nav-item:hover {
-  color: #f0a500;
+  color: #0054f0;
 }
 
 .auth-buttons {
@@ -63,11 +63,11 @@
 }
 
 .signup-btn {
-  background-color: #f0a500;
+  background-color: #0026fc;
 }
 
 .signup-btn:hover {
-  background-color: #d68f00;
+  background-color: #00158a;
 }
 
 .menu-toggle {
