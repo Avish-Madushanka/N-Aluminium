@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
-import './BSHeader.css'; 
+import './BSHeader.css';
+import BuyCard from '../BuyCard/BuyCard'; 
 
 const BSHeader = () => {
   const [isBuyCardOpen, setIsBuyCardOpen] = useState(false); 
 
   const openBuyCard = () => {
+    console.log("Opening BuyCard");
     setIsBuyCardOpen(true);
   };
 
   const closeBuyCard = () => {
+    console.log("Closing BuyCard");
     setIsBuyCardOpen(false);
   };
 
@@ -73,7 +76,12 @@ const BSHeader = () => {
         </div>
       </div>
 
-      {isBuyCardOpen && <BuyCard onClose={closeBuyCard} />}
+      {isBuyCardOpen && (
+        <>
+          {console.log("closeBuyCard is a function:", typeof closeBuyCard === 'function')}
+          <BuyCard onClose={closeBuyCard} />
+        </>
+      )}
     </div>
   );
 };
