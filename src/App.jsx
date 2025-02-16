@@ -10,6 +10,7 @@ import AboutUs from './Pages/AboutUS';
 import BuyandSell from './Pages/BuyandSell';
 import SaleForm from './Components/SaleForm/SaleForm';
 import Login from './Components/Login/Login'
+import BuyCard from './Components/BuyCard/BuyCard';
 
 const ProtectedRoute = ({ children }) => {
   const location = useLocation();
@@ -94,6 +95,7 @@ const AppContent = () => {
         <Route path="/BuyandSell" element={<BuyandSell />} />
         <Route path="/SaleForm" element={<SaleForm />} />
         <Route path="/Login" element={<Login />} />
+        <Route path="/BuyCard" element={<BuyCard />} />
       </Routes>
       <Footer />
     </div>

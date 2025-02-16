@@ -24,7 +24,7 @@ const BSHeader = () => {
             <p>An aluminum door is strong, lightweight, weather-resistant, durable, low-maintenance, and modern-looking.</p>
             <p className="price">Rs: 10,000.00</p>
             <p className="location">Kaluthara Western</p>
-            <button className="buy-button">Buy</button>
+            <a href='/BuyCard' className="buy-button">Buy</a>
           </div>
         </div>
 
@@ -36,7 +36,7 @@ const BSHeader = () => {
             <p>An aluminum door is strong, lightweight, weather-resistant, durable, low-maintenance, and modern-looking.</p>
             <p className="price">Rs: 10,000.00</p>
             <p className="location">Kaluthara Western</p>
-            <button className="buy-button">Buy</button>
+            <a href='/BuyCard' className="buy-button">Buy</a>
           </div>
         </div>
 
@@ -47,7 +47,7 @@ const BSHeader = () => {
             <p>An aluminum door is strong, lightweight, weather-resistant, durable, low-maintenance, and modern-looking.</p>
             <p className="price">Rs: 10,000.00</p>
             <p className="location">Kaluthara Western</p>
-            <button className="buy-button">Buy</button>
+            <a href='/BuyCard' className="buy-button">Buy</a>
           </div>
         </div>
 
@@ -58,7 +58,7 @@ const BSHeader = () => {
             <p>An aluminum door is strong, lightweight, weather-resistant, durable, low-maintenance, and modern-looking.</p>
             <p className="price">Rs: 10,000.00</p>
             <p className="location">Kaluthara Western</p>
-            <button className="buy-button">Buy</button>
+            <a href='/BuyCard' className="buy-button">Buy</a>
           </div>
         </div>
 
