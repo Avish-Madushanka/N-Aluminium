@@ -1,0 +1,56 @@
+.product1-card {
+    width: 800px; /* Adjust as needed */
+    margin: 20px auto; /* Centers the card horizontally */
+    background-color: #f8f8f8;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex; /* Use flexbox for image and info layout */
+  }
+  
+  .product1-image-container {
+    width: 40%; /* Image takes up 40% of the card width */
+  }
+  
+  .product1-image {
+    width: 100%;
+    height: auto; /* Maintain aspect ratio */
+    display: block;
+  }
+  
+  .product1-info {
+    padding: 20px;
+    width: 60%; 
+  }
+  
+  .product1-title {
+    font-size: 24px;
+    margin-bottom: 10px;
+    color: #333;
+  }
+  
+  .product1-description {
+    font-size: 16px;
+    line-height: 1.4;
+    color: #555;
+    margin-bottom: 15px;
+  }
+  
+  .product1-address {
+    font-size: 14px;
+    color: #777;
+    margin-bottom: 15px;
+  }
+  
+  .product1-price {
+    font-size: 20px;
+    font-weight: bold;
+    color: #e44d26; 
+    margin-bottom: 20px;
+  }
+  
+  .contact1-info p {
+    margin: 5px 0;
+    font-size: 14px;
+    color: #333;
+  }
