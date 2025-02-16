@@ -1,117 +1,112 @@
 .navbar {
+  width: 100%;
+  background-color: #101422;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px 20px;
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  background: #222;
-  color: white;
-  padding: 12px 20px;
-  display: flex;
-  justify-content: center;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   z-index: 1000;
 }
 
 .nav-container {
-  width: 90%;
-  max-width: 1200px;
+  width: 100%;
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
+  padding-left: 30px;
+  padding-right: 30px;
 }
 
-.navbar-brand {
-  font-size: 1.5rem;
-  font-weight: bold;
-  text-decoration: none;
-  color: white;
-  padding-left: 50px;
+.nav-logo {
+  height: 50px;
 }
 
 .nav-links {
   display: flex;
-  align-items: center;
-  gap: 20px;
+  justify-content: center;
+  flex-grow: 1;
+  gap: 30px;
+  font-weight: bold;
 }
 
 .nav-item {
-  text-decoration: none;
   color: white;
+  text-decoration: none;
   font-size: 1rem;
-  transition: color 0.3s;
-  font-weight: 700;
+  transition: 0.3s;
 }
 
 .nav-item:hover {
-  color: #007bff;
+  color: #f0a500;
 }
 
 .auth-buttons {
   display: flex;
-  gap: 10px;
-  margin-left: 20px;
+  gap: 15px;
 }
 
 .login-btn,
 .signup-btn {
+  color: white;
   text-decoration: none;
   padding: 8px 16px;
   border-radius: 5px;
-  font-weight: bold;
+  transition: 0.3s;
 }
 
 .login-btn {
-  background-color: #007bff;
-  color: white;
+  background-color: transparent;
+  border: 1px solid white;
 }
 
 .signup-btn {
-  background-color: white;
-  color: #007bff;
-  border: 1px solid #007bff;
+  background-color: #f0a500;
 }
 
 .signup-btn:hover {
-  background-color: #007bff;
-  color: white;
+  background-color: #d68f00;
 }
 
 .menu-toggle {
   display: none;
   background: none;
   border: none;
+  font-size: 1.5rem;
   color: white;
-  font-size: 24px;
-  cursor: pointer;
+}
+
+.mobile-menu {
+  display: none;
+  flex-direction: column;
+  position: absolute;
+  top: 70px;
+  left: 0;
+  width: 100%;
+  background-color: #101422;
+  padding: 15px;
+  gap: 15px;
+}
+
+.auth-buttons-mobile {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 @media (max-width: 768px) {
-  .nav-links {
-    display: none;
-    flex-direction: column;
-    position: absolute;
-    top: 50px;
-    left: 0;
-    width: 100%;
-    background: #222;
-    padding: 10px 0;
-  }
-
-  .nav-links.open {
-    display: flex;
-  }
-
-  .nav-item {
-    text-align: center;
-    padding: 10px 0;
-  }
-
+  .nav-links,
   .auth-buttons {
-    flex-direction: column;
-    align-items: center;
+    display: none;
   }
 
   .menu-toggle {
     display: block;
+  }
+
+  .mobile-menu {
+    display: flex;
   }
 }
