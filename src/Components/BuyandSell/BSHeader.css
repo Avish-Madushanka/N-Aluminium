@@ -20,6 +20,7 @@
   gap: 10px;
   margin-bottom: 20px;
   align-items: center; 
+  padding-top: 30px;
 }
 
 .search-bar {
@@ -54,6 +55,7 @@
   width: 100%;
   max-width: 1200px; 
   margin: 0 auto; 
+  padding-top: 40px;
 }
 
 .product-card {
