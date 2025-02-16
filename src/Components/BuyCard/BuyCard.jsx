@@ -15,7 +15,7 @@ const BuyCard = ({ onClose }) => {
             if (onClose) onClose(); 
           }}
         >
-          ✖ 
+          x 
         </button>
 
         <div className="product1-image-container">
