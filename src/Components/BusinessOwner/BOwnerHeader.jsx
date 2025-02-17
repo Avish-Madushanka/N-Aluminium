@@ -6,7 +6,7 @@ const BOwnerHeader = () => {
     <div className="business-card">
       <div className="cover-photo">
         <img
-          src="https://via.placeholder.com/1200x300/3498db/fff" // Replace with cover photo
+          src="https://via.placeholder.com/1200x300/3498db/fff" 
           alt="Cover"
           className="cover-image"
         />
@@ -15,7 +15,7 @@ const BOwnerHeader = () => {
       <div className="profile-section">
         <div className="profile-photo">
           <img
-            src="https://via.placeholder.com/150x150/e74c3c/fff" // Replace with profile photo
+            src="https://via.placeholder.com/150x150/e74c3c/fff"
             alt="Profile"
             className="profile-image"
           />
