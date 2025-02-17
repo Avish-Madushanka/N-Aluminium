@@ -7,7 +7,7 @@ const RegistrationForm = () => {
       <div className="button-row">
         <button className="button">Admin</button>
         <a href='/BOwnerForm' className="button">Business Owners</a>
-        <button className="button">Clients</button>
+        <a href='/ClientForm' className="button">Clients</a>
         <button className="button1">Login</button>
       </div>
     </div>
