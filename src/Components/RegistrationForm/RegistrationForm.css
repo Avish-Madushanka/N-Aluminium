@@ -21,12 +21,14 @@
 
 .button, .button1 {
   padding: 20px 80px; 
-  font-size: 18px;
+  font-size: 25px;
   font-weight: bold;
   border: none;
   border-radius: 10px;
   cursor: pointer;
   transition: background-color 0.3s, transform 0.2s;
+  width: 300px;
+  height: 80px;
 }
 
 
