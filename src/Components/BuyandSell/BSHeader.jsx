@@ -21,9 +21,11 @@ const BSHeader = () => {
         <div className="top-bar">
           <input type="text" placeholder="Search" className="search-bar" />
           <select className="filter-dropdown">
-            <option value="">Filter by Location</option>
-            <option value="Kalutara">Kalutara</option>
-            <option value="Western">Western</option>
+            <option value="">Filter by Type</option>
+            <option value="Doors">Doors</option>
+            <option value="Windows">Windows</option>
+            <option value="Pan-Light">Pan Light</option>
+            <option value="Others">Others</option>
           </select>
           <a href="/SaleForm" className="button">Sell</a>
         </div>
