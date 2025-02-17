@@ -11,6 +11,8 @@ import BuyandSell from './Pages/BuyandSell';
 import SaleForm from './Components/SaleForm/SaleForm';
 import Login from './Components/Login/Login'
 import BuyCard from './Components/BuyCard/BuyCard';
+import BOwnerForm from './Components/RegistrationForm/BOwnerForm';
+import ClientForm from './Components/RegistrationForm/ClientForm';
 
 const ProtectedRoute = ({ children }) => {
   const location = useLocation();
@@ -97,6 +99,8 @@ const AppContent = () => {
         <Route path="/SaleForm" element={<SaleForm />} />
         <Route path="/Login" element={<Login />} />
         <Route path="/BuyCard" element={<BuyCard />} />
+        <Route path="/BOwnerForm" element={<BOwnerForm />} />
+        <Route path="/ClientForm" element={<ClientForm />} />
       </Routes>
       <Footer />
     </div>
