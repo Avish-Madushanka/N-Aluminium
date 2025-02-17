@@ -3,12 +3,12 @@ import './BOwnerHeader.css';
 
 const BOwnerHeader = () => {
   return (
-    <div className="business-card">
-      <div className="cover-photo">
+    <div className="business1-card">
+      <div className="cover1-photo">
         <img
-          src="https://via.placeholder.com/1200x300/3498db/fff" 
+          src="https://images.hdqwalls.com/download/view-from-here-4k-09-1366x768.jpg" 
           alt="Cover"
-          className="cover-image"
+          className="cover1-image"
         />
       </div>
 
