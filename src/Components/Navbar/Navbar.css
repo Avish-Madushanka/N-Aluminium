@@ -21,7 +21,8 @@
 }
 
 .nav-logo {
-  height: 50px;
+  height: 40px; 
+  width: auto; 
 }
 
 .nav-links {
@@ -100,6 +101,10 @@
   .nav-links,
   .auth-buttons {
     display: none;
+  }
+
+  .nav-logo {
+    height: 30px; 
   }
 
   .menu-toggle {
