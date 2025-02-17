@@ -14,7 +14,7 @@ function ClientForm() {
 
     return (
         <div className="clientreg-form-container">
-            <h2 className="form-title">Registration</h2>
+            <h2 className="form-title">Client Registration Form</h2>
             <div className="form-group">
                 <label htmlFor="username">Username</label>
                 <input type="text" id="username" placeholder="Username" />

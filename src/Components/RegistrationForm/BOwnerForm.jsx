@@ -33,7 +33,7 @@ function BOwnerForm() {
 
   return (
     <div className="business-form-container">
-      <h2 className="form-title">Business Registration</h2>
+      <h2 className="form-title">Business Registration Form</h2>
 
       <div className="form-group">
         <label htmlFor="businessId">Business ID</label>
