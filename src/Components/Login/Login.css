@@ -1,5 +1,5 @@
 .login-container {
-    background-image: url(''); 
+    background-image: url('https://media.licdn.com/dms/image/v2/D5612AQFllua-KW1K2Q/article-cover_image-shrink_720_1280/article-cover_image-shrink_720_1280/0/1672884356078?e=2147483647&v=beta&t=RzavoIg4yKwEhp4OKuDj2cgQOiSVPHaccACsPTuf5kM'); 
     background-size: cover; 
     background-position: center; 
     display: flex;
@@ -7,6 +7,7 @@
     align-items: center; 
     font-family: sans-serif;
     color: #eee;
+    height: 600px;
   }
   
   .login-form {
