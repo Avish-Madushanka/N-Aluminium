@@ -6,7 +6,7 @@ const BOwnerHeader = () => {
     <div className="business1-card">
       <div className="cover1-photo">
         <img
-          src="https://images.hdqwalls.com/download/view-from-here-4k-09-1366x768.jpg" 
+          src="https://www.techgrapple.com/wp-content/uploads/2016/03/John-Lennon-Quote-FaceBook-Cover.jpg" 
           alt="Cover"
           className="cover1-image"
         />

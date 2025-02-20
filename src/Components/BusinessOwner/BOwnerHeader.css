@@ -9,6 +9,7 @@
   .cover1-photo {
     height: 300px;
     overflow: hidden; 
+    width: fit-content;
   }
   
   .cover-image {
