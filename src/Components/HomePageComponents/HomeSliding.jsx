@@ -6,9 +6,9 @@ import './HomeSliding.css';
 const HomeSliding = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [images] = useState([
-    'https://www.recycling-magazine.com/wp-content/uploads/2021/09/Clean-aluminum-at-Centro-Rottami.jpg_web-scaled.jpg',
-    'https://img.freepik.com/premium-photo/pile-many-aluminum-waste-construction-material-scraps-ground-recycling_43514-2863.jpg',
-    'https://www.gme-recycling.com/wp-content/uploads/2023/05/aluminum-recycling.jpg',
+    'https://www.shutterstock.com/image-vector/water-surface-magic-neon-glow-600nw-2483884465.jpg',
+    'https://wallpapers.com/images/hd/dark-nature-1920-x-1080-background-lqtolhf1sfr3ve5s.jpg',
+    'https://wallpapercave.com/wp/wp13639453.png',
   ]);
 
   useEffect(() => {
@@ -31,11 +31,7 @@ const HomeSliding = () => {
         className="home-banner-image"
       />
       <div className="home-banner-text">
-        <h1>Discover Rare Gemstones. Bid, Buy, and Learn with Confidence</h1>
-        <p>
-            Explore our trusted gemstone auctions, authenticate your treasures,<br />
-             and access expert education.
-        </p>
+        <h1>"Collect. Recycle. Renew."</h1>
         <div className="home-banner-buttons">
           <button onClick={() => handleButtonClick('/start-bidding')}>Start Bidding</button>
           <button onClick={() => handleButtonClick('/learn-about-gemstones')}>Learn About Gemstones</button>
