@@ -1,14 +1,14 @@
 import React from 'react';
 import './BOwnerBody.css';
 
-const Card = ({ imageUrl, title, description }) => {
+const BOCard = ({ imageUrl, title, description }) => {
   return (
-    <div className="card">
-      <img src={imageUrl} alt={title} className="card-image" />
-      <div className="card-content">
-        <h2 className="card-title">{title}</h2>
-        <p className="card-description">{description}</p>
-        <button className="card-button">Button</button>
+    <div className="BO-card">
+      <img src={imageUrl} alt={title} className="BO-card-image" />
+      <div className="BO-card-content">
+        <h2 className="BO-card-title">{title}</h2>
+        <p className="BO-card-description">{description}</p>
+        <button className="BO-card-button">Button</button>
       </div>
     </div>
   );
@@ -34,9 +34,9 @@ const BOwnerBody = () => {
   ];
 
   return (
-    <div className="card-container">
+    <div className="BO-container">
       {cardData.map((card, index) => (
-        <Card
+        <BOCard
           key={index}
           imageUrl={card.imageUrl}
           title={card.title}
