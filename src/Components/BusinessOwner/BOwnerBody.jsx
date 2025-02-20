@@ -28,7 +28,7 @@ const BOwnerBody = () => {
       button: "/doors",
     },
     {
-      imageUrl: "https://gratisography.com/wp-content/uploads/2024/11/gratisography-augmented-reality-800x525.jpg",
+      imageUrl: "https://www.gettheedgeuk.co.uk/wp-content/uploads/capitalism-sign-buy-and-sell-buying-selling-marketplace-symbolism_4diueg65e__F0000.png",
       title: "Buy Reuse Items",
       description: "An aluminum door is strong, lightweight, weather-resistant, durable and modern-looking.",
       button: "/BuyandSell",
