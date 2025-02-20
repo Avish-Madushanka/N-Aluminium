@@ -2,8 +2,10 @@
     display: flex;
     justify-content: center; 
     align-items: center; 
+    flex-wrap: wrap;
     min-height: 90vh; 
     background-color: #2c3e50; 
+    padding: 20px;
 }
 
 .BO-card {
@@ -58,4 +60,55 @@
 
 .BO-card-button:hover {
     background-color: #ddd;
+}
+
+/* Media Queries */
+@media screen and (max-width: 1024px) {
+    .BO-container {
+        flex-direction: row;
+        justify-content: center;
+    }
+    
+    .BO-card {
+        width: 250px;
+    }
+    
+    .BO-card-title {
+        font-size: 22px;
+    }
+    
+    .BO-card-description {
+        font-size: 14px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .BO-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .BO-card {
+        width: 90%;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .BO-card {
+        width: 100%;
+        margin: 5px;
+    }
+
+    .BO-card-title {
+        font-size: 20px;
+    }
+
+    .BO-card-description {
+        font-size: 13px;
+    }
+
+    .BO-card-button {
+        font-size: 14px;
+        padding: 8px 16px;
+    }
 }
