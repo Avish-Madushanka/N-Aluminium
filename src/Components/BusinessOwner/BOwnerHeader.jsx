@@ -15,8 +15,8 @@ const BOwnerHeader = () => {
       <div className="profile1-section">
         <div className="profile1-photo">
           <img
-            src="https://images.contentstack.io/v3/assets/blt62d40591b3650da3/blt6e45b29467f5954d/635fc000cde6e8109cc3d111/full-coverage-car-insurance_card-image.svg://via.placeholder.com/150x150/e74c3c/fff"
-            alt="Profile"
+            src="https://i.pinimg.com/736x/71/b3/e4/71b3e4159892bb319292ab3b76900930.jpg"
+            alt="Profile1"
             className="profile1-image"
           />
         </div>
