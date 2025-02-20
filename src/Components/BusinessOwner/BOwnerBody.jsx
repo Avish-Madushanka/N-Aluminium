@@ -17,17 +17,17 @@ const Card = ({ imageUrl, title, description }) => {
 const BOwnerBody = () => {
   const cardData = [
     {
-      imageUrl: "https://via.placeholder.com/400x250/3498db/fff",
+      imageUrl: "https://gratisography.com/wp-content/uploads/2024/11/gratisography-augmented-reality-800x525.jpg",
       title: "DOORS Doors",
       description: "An aluminum door is strong, lightweight, weather-resistant, durable and modern-looking.",
     },
     {
-      imageUrl: "https://via.placeholder.com/400x250/e74c3c/fff",
+      imageUrl: "https://gratisography.com/wp-content/uploads/2024/11/gratisography-augmented-reality-800x525.jpg",
       title: "DOORS Doors",
       description: "An aluminum door is strong, lightweight, weather-resistant, durable and modern-looking.",
     },
     {
-      imageUrl: "https://via.placeholder.com/400x250/2ecc71/fff",
+      imageUrl: "https://gratisography.com/wp-content/uploads/2024/11/gratisography-augmented-reality-800x525.jpg",
       title: "DOORS Doors",
       description: "An aluminum door is strong, lightweight, weather-resistant, durable and modern-looking.",
     },
