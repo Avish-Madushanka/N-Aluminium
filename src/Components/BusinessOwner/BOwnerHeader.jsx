@@ -5,31 +5,17 @@ const BOwnerHeader = () => {
   return (
     <div className="business1-card">
       <div className="cover1-photo">
-        <img
-          src="https://images.contentstack.io/v3/assets/blt62d40591b3650da3/blt1839306f808bbba3/636ad0b31beb7169c79be8e7/does-car-insurance-cover-theft_hero-block-image.svg" 
-          alt="Cover"
-          className="cover1-image"
-        />
-      </div>
-
-      <div className="profile1-section">
+        <img src="https://assets.turbologo.com/blog/en/2019/11/19084917/puma-logo-cover-958x575.png" alt="Cover1" className="cover1-image" />
         <div className="profile1-photo">
-          <img
-            src="https://i.pinimg.com/736x/71/b3/e4/71b3e4159892bb319292ab3b76900930.jpg"
-            alt="Profile1"
-            className="profile1-image"
-          />
-        </div>
-
-        <div className="business1-info">
-          <h1 className="business1-name">N. Aluminum</h1>
-          <p className="owner1-name">Nimal Nimal</p>
-          <p className="contact1-number">0777-123456</p>
-          <p className="email1">NimalNimal@email.com</p>
+          <img src="https://i.pinimg.com/736x/71/b3/e4/71b3e4159892bb319292ab3b76900930.jpg" alt="Profile1" className="profile1-image" />
         </div>
       </div>
-
-      <div className="divider1"></div>
+      <div className="business1-info">
+        <h2 className="business1-name">N. Aluminum</h2>
+        <p className="owner1-name">Nimal Nimal</p>
+        <p className="contact1-number">0777-123456</p>
+        <p className="email1">NimalNimal@email.com</p>
+      </div>
     </div>
   );
 };
