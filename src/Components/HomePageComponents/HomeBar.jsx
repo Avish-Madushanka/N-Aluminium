@@ -3,8 +3,8 @@ import '../HomePageComponents/HomeBar.css'
 
 const HomeBar = () => {
     return (
-        <div className="services-bar">
-          <div className="services-container">
+        <div className="HBservices-bar">
+          <div className="HBservices-container">
             <ServiceItem
               icon="🗑️"
               title="Safe Disposal"
@@ -29,16 +29,16 @@ const HomeBar = () => {
     
     const ServiceItem = ({ icon, title, description }) => {
         return (
-          <div className="service-item">
-            <span className="service-icon">{icon}</span>
-            <h3 className="service-title">{title}</h3>
-            <p className="service-description">{description}</p>
+          <div className="HBservice-item">
+            <span className="HBservice-icon">{icon}</span>
+            <h3 className="HBservice-title">{title}</h3>
+            <p className="HBservice-description">{description}</p>
           </div>
         );
       };
     
       const VerticalDivider = () => {
-        return <div className="vertical-divider" />;
+        return <div className="HBvertical-divider" />;
       };
     
 
