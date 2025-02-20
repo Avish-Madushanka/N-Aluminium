@@ -33,12 +33,11 @@
   }
   .home-banner-buttons {
     margin-top: 20px;
-    display: flex;
     justify-content: space-evenly;
   }
   
   .home-banner-buttons button {
-    background-color: #000000;
+    background-color: #7e2b01;
     border: none;
     color: #ffffff;
     padding: 15px 32px;
