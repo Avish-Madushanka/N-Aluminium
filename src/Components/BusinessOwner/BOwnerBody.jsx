@@ -8,7 +8,7 @@ const BOCard = ({ imageUrl, title, description }) => {
       <div className="BO-card-content">
         <h2 className="BO-card-title">{title}</h2>
         <p className="BO-card-description">{description}</p>
-        <button className="BO-card-button">Button</button>
+        <button className="BO-card-button">View More...</button>
       </div>
     </div>
   );
