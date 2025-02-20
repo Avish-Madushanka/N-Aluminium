@@ -6,7 +6,8 @@
     justify-content: space-between;
     height: 300px;
     align-items: center;
-    min-height: 80vh;
+    min-height: 100vh;
+    padding-bottom: 50px;
   }
   
   .waste-disposal-heading {
@@ -104,3 +105,4 @@
   .service-link:hover {
     background-color: #f0f0f0;
   }
+  
