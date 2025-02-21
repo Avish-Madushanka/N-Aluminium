@@ -27,7 +27,7 @@ const BSHeader = () => {
             <option value="Pan-Light">Pan Light</option>
             <option value="Others">Others</option>
           </select>
-          <a href="/SaleForm" className="button">Sell</a>
+          <a href="/SaleForm" className="Sellbutton">Sell</a>
         </div>
 
         <div className="product-grid">

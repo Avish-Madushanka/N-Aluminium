@@ -23,22 +23,21 @@
   padding-top: 30px;
 }
 
-.search-bar {
+.search-bar,
+.filter-dropdown {
   padding: 8px;
   border-radius: 5px;
   border: 1px solid #ccc;
   width: 200px;
   color: black;
+  background-color: white;
+  font-size: 14px;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease-in-out;
 }
 
-.filter-dropdown {
-  padding: 8px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  color: black;
-}
-
-.button {
+.Sellbutton {
   padding: 8px 16px;
   border-radius: 5px;
   background-color: #4CAF50;
@@ -46,6 +45,9 @@
   border: none;
   cursor: pointer;
   text-decoration: none;
+  font-size: 18px;
+  font-weight: bold;
+  transition: background-color 0.3s ease-in-out, transform 0.2s;
 }
 
 .product-grid {
@@ -56,6 +58,7 @@
   max-width: 1200px; 
   margin: 0 auto; 
   padding-top: 40px;
+  padding-bottom: 60px;
 }
 
 .product-card {
