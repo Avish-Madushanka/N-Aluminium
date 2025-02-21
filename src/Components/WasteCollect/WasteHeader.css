@@ -1,6 +1,8 @@
 .latest-projects-container {
     display: flex;
-    background-color: #1a1a2e;
+    background-image: url("https://visualparadox.com/images/no_linking_allowed_/facebook/hideaway-fb.jpg");
+    background-size: cover;
+    background-position: center;
     padding: 20px;
     color: white;
     align-items: center;
