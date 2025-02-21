@@ -22,19 +22,19 @@ const BOCard = ({ imageUrl, title, description, button }) => {
 const BOwnerBody = () => {
   const cardData = [
     {
-      imageUrl: "https://gratisography.com/wp-content/uploads/2024/11/gratisography-augmented-reality-800x525.jpg",
-      title: "DOORS Doors",
-      description: "An aluminum door is strong, lightweight, weather-resistant, durable, and modern-looking.",
+      imageUrl: "https://images.jdmagicbox.com/quickquotes/images_main/2160mm-height-aluminium-door-2217860786-443b5uch.jpg",
+      title: "Projects",
+      description: "Innovative aluminum design—strong, sleek, and built for the future!",
       button: "/doors",
     },
     {
       imageUrl: "https://www.gettheedgeuk.co.uk/wp-content/uploads/capitalism-sign-buy-and-sell-buying-selling-marketplace-symbolism_4diueg65e__F0000.png",
       title: "Buy Reuse Items",
-      description: "An aluminum door is strong, lightweight, weather-resistant, durable and modern-looking.",
+      description: "Buy smart, sell fast—maximize your profits with the best deals at the right time!",
       button: "/BuyandSell",
     },
     {
-      imageUrl: "https://gratisography.com/wp-content/uploads/2024/11/gratisography-augmented-reality-800x525.jpg",
+      imageUrl: "https://a1scrapmetalrecyclers.com.au/wp-content/uploads/2023/10/A1-Scrap-metal.jpg",
       title: "DOORS Doors",
       description: "An aluminum door is strong, lightweight, weather-resistant, durable, and modern-looking.",
       button: "/doors",
