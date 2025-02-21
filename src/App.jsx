@@ -16,6 +16,7 @@ import ClientForm from './Components/RegistrationForm/ClientForm';
 import BOwnerHome from './Pages/BOwnerHome';
 import BOwnerHeader from './Components/BusinessOwner/BOwnerHeader';
 import Project from './Pages/Project';
+import Collection from './Pages/Collection';
 
 const ProtectedRoute = ({ children }) => {
   const location = useLocation();
@@ -107,6 +108,7 @@ const AppContent = () => {
         <Route path="/BOwnerHome" element={<BOwnerHome />} />
         <Route path="/BOwnerHeader" element={<BOwnerHeader />} />
         <Route path="/Project" element={<Project />} />
+        <Route path="/Collection" element={<Collection />} />
       </Routes>
       <Footer />
     </div>
