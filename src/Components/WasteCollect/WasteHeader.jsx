@@ -14,7 +14,6 @@ const WasteHeader = () => {
         </div>
         <div className="right-section">
           <div className="image-container">
-            <div className="image image-1"></div>
             <div className="image image-2"></div>
           </div>
         </div>
