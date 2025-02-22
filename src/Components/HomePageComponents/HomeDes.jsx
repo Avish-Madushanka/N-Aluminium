@@ -34,7 +34,7 @@ const HomeDes = () => {
         <div className="service-card">
           <div className="service-image-container">
             <img
-              src="https://media.istockphoto.com/id/181874893/photo/recycling-bin-aluminum.jpg?s=612x612&w=0&k=20&c=Hj7pb0jn33l35Aoeac3HScYzOPXI29uq_75HheDyn5c="
+              src="https://img.freepik.com/premium-vector/businessman-hold-buy-sell-signs_140689-4467.jpg"
               alt="Dumpster Rental"
               className="service-image"
             />
@@ -43,11 +43,12 @@ const HomeDes = () => {
             <i className="fas fa-dumpster service-icon"></i>
           </div>
 
-          <h3 className="service-title">Dumpster Rental</h3>
+          <h3 className="service-title">Reuse items Buy & Sell</h3>
 
-          <p className="service-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Dolor nunc tincidun tempor dignisime faucibus molestie.</p>
+          <p className="service-description">Buy and sell reusable items effortlessly! Give pre-owned goods a second life while saving money and reducing waste. Sustainable trading for a greener future!
+          </p>
 
-          <a href="#" className="service-link">
+          <a href="/BuyandSell" className="service-link">
             →
           </a>
         </div>
@@ -56,7 +57,7 @@ const HomeDes = () => {
         <div className="service-card">
           <div className="service-image-container">
             <img
-              src="https://media.istockphoto.com/id/181874893/photo/recycling-bin-aluminum.jpg?s=612x612&w=0&k=20&c=Hj7pb0jn33l35Aoeac3HScYzOPXI29uq_75HheDyn5c="
+              src="https://qph.cf2.quoracdn.net/main-qimg-c9d420c785f4e90372abc836d2ac8f45-lq"
               alt="Waste Collection"
               className="service-image"
             />
@@ -65,7 +66,7 @@ const HomeDes = () => {
             <i className="fas fa-recycle service-icon"></i>
           </div>
 
-          <h3 className="service-title">Waste Collection</h3>
+          <h3 className="service-title">Latest Projects</h3>
 
           <p className="service-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Dolor nunc tincidun tempor dignisime faucibus molestie.</p>
 
