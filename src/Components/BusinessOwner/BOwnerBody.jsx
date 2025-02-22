@@ -10,7 +10,6 @@ const BOCard = ({ imageUrl, title, description, button }) => {
         <h2 className="BO-card-title">{title}</h2>
         <p className="BO-card-description">{description}</p>
         
-        {/* Button as a Link */}
         <Link to={button} className="BO-card-button">
           View More
         </Link>
@@ -25,7 +24,7 @@ const BOwnerBody = () => {
       imageUrl: "https://images.jdmagicbox.com/quickquotes/images_main/2160mm-height-aluminium-door-2217860786-443b5uch.jpg",
       title: "Projects",
       description: "Innovative aluminum design—strong, sleek, and built for the future!",
-      button: "/doors",
+      button: "/Project",
     },
     {
       imageUrl: "https://www.gettheedgeuk.co.uk/wp-content/uploads/capitalism-sign-buy-and-sell-buying-selling-marketplace-symbolism_4diueg65e__F0000.png",
