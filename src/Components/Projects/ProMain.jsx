@@ -20,22 +20,22 @@ const ProjectCard = ({ imageUrl, title, description }) => {
 const ProMain = () => {
   const projectsData = [
     {
-      imageUrl: "https://via.placeholder.com/400x250/3498db/fff",
+      imageUrl: "https://www.akamai.com/site/im-demo/perceptual-standard.jpg?imbypass=true",
       title: "Aluminum Door",
       description: "You can only see your pickup schedule if you are a current customer. You can only see your pickup schedule if you are a current customer.",
     },
     {
-      imageUrl: "https://via.placeholder.com/400x250/e74c3c/fff",
+      imageUrl: "https://www.akamai.com/site/im-demo/perceptual-standard.jpg?imbypass=true",
       title: "Aluminum Door",
       description: "You can only see your pickup schedule if you are a current customer. You can only see your pickup schedule if you are a current customer.",
     },
     {
-      imageUrl: "https://via.placeholder.com/400x250/2ecc71/fff",
+      imageUrl: "https://www.akamai.com/site/im-demo/perceptual-standard.jpg?imbypass=true",
       title: "Aluminum Door",
       description: "You can only see your pickup schedule if you are a current customer. You can only see your pickup schedule if you are a current customer.",
     },
     {
-      imageUrl: "https://via.placeholder.com/400x250/f39c12/fff",
+      imageUrl: "https://www.akamai.com/site/im-demo/perceptual-standard.jpg?imbypass=true",
       title: "Aluminum Door",
       description: "You can only see your pickup schedule if you are a current customer. You can only see your pickup schedule if you are a current customer.",
     },
