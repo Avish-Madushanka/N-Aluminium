@@ -29,6 +29,7 @@
   }
   
   .btn {
+    width: 250px;
     padding: 10px 20px;
     background-color: white;
     color: black;
