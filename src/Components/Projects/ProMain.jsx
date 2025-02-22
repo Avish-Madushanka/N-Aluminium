@@ -51,7 +51,7 @@ const ProMain = () => {
           <option value="category1">Category 1</option>
           <option value="category2">Category 2</option>
         </select>
-        <button className="top-button">Button</button>
+        <a href="/ProAddForm" className="top-button">Add Projects</a>
       </div>
 
       <div className="projects-grid">
