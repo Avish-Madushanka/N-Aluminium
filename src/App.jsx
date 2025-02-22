@@ -17,6 +17,7 @@ import BOwnerHome from './Pages/BOwnerHome';
 import BOwnerHeader from './Components/BusinessOwner/BOwnerHeader';
 import Project from './Pages/Project';
 import Collection from './Pages/Collection';
+import ProAddForm from './Components/Projects/ProAddForm';
 
 const ProtectedRoute = ({ children }) => {
   const location = useLocation();
@@ -105,6 +106,7 @@ const AppContent = () => {
         <Route path="/BuyCard" element={<BuyCard />} />
         <Route path="/BOwnerForm" element={<BOwnerForm />} />
         <Route path="/ClientForm" element={<ClientForm />} />
+        <Route path="/ProAddForm" element={<ProAddForm />} />
         <Route path="/BOwnerHome" element={<BOwnerHome />} />
         <Route path="/BOwnerHeader" element={<BOwnerHeader />} />
         <Route path="/Project" element={<Project />} />

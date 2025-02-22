@@ -11,13 +11,13 @@
   
   .projects-title {
     font-size: 48px;
-    margin-bottom: 30px;
+    margin-bottom: 10px;
   }
   
   .top-bar {
     display: flex;
     gap: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 50px;
   }
   
   .search-bar {
