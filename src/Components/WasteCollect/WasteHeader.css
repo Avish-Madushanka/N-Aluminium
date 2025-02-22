@@ -1,11 +1,12 @@
 .latest-projects-container {
     display: flex;
-    background-image: url("https://visualparadox.com/images/no_linking_allowed_/facebook/hideaway-fb.jpg");
+    background-image: url("https://p4.wallpaperbetter.com/wallpaper/408/845/307/music-cover-monstercat-droeloe-wallpaper-preview.jpg");
     background-size: cover;
     background-position: center;
     padding: 20px;
     color: white;
     align-items: center;
+    height: 400px;
   }
   
   .left-section {
