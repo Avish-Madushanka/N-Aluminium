@@ -9,11 +9,10 @@ const HomeDes = () => {
       </h1>
 
       <div className="waste-disposal-services">
-        {/* Garbage Pickup Service */}
         <div className="service-card">
           <div className="service-image-container">
             <img
-              src="https://media.istockphoto.com/id/181874893/photo/recycling-bin-aluminum.jpg?s=612x612&w=0&k=20&c=Hj7pb0jn33l35Aoeac3HScYzOPXI29uq_75HheDyn5c="
+              src="https://www.sjcfl.us/wp-content/uploads/2024/07/recycling-truck-1024x684.png"
               alt="Garbage Pickup"
               className="service-image"
             />
@@ -22,11 +21,11 @@ const HomeDes = () => {
             <i className="fas fa-trash-alt service-icon"></i>
           </div>
 
-          <h3 className="service-title">Garbage Pickup</h3>
+          <h3 className="service-title">Scraps Pickup</h3>
 
-          <p className="service-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Dolor nunc tincidun tempor dignisime faucibus molestie.</p>
+          <p className="service-description">Effortless scrap pickup—recycle aluminum waste with ease! Fast, reliable, and eco-friendly collection services to keep your space clean while supporting sustainability.</p>
 
-          <a href="#" className="service-link">
+          <a href="/Collection" className="service-link">
             →
           </a>
         </div>
