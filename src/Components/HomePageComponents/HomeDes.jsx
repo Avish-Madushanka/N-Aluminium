@@ -70,7 +70,7 @@ const HomeDes = () => {
 
           <p className="service-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Dolor nunc tincidun tempor dignisime faucibus molestie.</p>
 
-          <a href="#" className="service-link">
+          <a href="/Project" className="service-link">
             →
           </a>
         </div>
