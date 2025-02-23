@@ -1,0 +1,56 @@
+.recycling-container {
+    text-align: center;
+    background-color: #111c3b; /* Dark blue background */
+    color: white;
+    padding: 50px;
+  }
+  
+  .title {
+    font-size: 2.5rem;
+    font-weight: bold;
+  }
+  
+  .highlight {
+    color: white;
+  }
+  
+  .process-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 40px 0;
+  }
+  
+  .process-box {
+    width: 100px;
+    height: 100px;
+    background-color: #d1d1d1; /* Light gray */
+    border-radius: 5px;
+  }
+  
+  .process-line {
+    width: 80px;
+    height: 5px;
+    background-color: white;
+  }
+  
+  .description {
+    font-size: 1.2rem;
+    max-width: 800px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .process-container {
+      flex-direction: column;
+      gap: 20px;
+    }
+  
+    .process-line {
+      width: 5px;
+      height: 40px;
+    }
+  }
+  
