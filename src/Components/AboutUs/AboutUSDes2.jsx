@@ -2,25 +2,39 @@ import React from "react";
 import "./AboutUSDes2.css"; 
 
 const AboutUSDes2 = () => {
-  return (
-    <div className="recycling-container">
-      <h2 className="title">Why Need To Recycling <span className="highlight">AlumiAluminum</span></h2>
-
-      <div className="process-container">
-        <div className="process-box"></div>
-        <div className="process-line"></div>
-        <div className="process-box"></div>
-        <div className="process-line"></div>
-        <div className="process-box"></div>
-      </div>
-
-      <p className="description">
-        An aluminum door is strong, lightweight, weather-resistant, durable, and modern-looking.
-        Recycling aluminum helps conserve natural resources, reduce waste, and support a sustainable future.
-        Join us in making a positive environmental impact by recycling aluminum efficiently.
-      </p>
-    </div>
-  );
-};
+    const steps = [
+        {
+          number: "1",
+          title: "Test-Test-Test",
+          description: "Test-Test-TestTest-Test-TestTest-Test-TestTest-Test-TestTest-Test-Test",
+        },
+        {
+          number: "2",
+          title: "Test-Test-Test",
+          description: "Test-Test-TestTest-Test-TestTest-Test-TestTest-Test-TestTest-Test-Test",
+        },
+        {
+          number: "3",
+          title: "Test-Test-Test",
+          description: "Test-Test-TestTest-Test-TestTest-Test-TestTest-Test-TestTest-Test-Test",
+        },
+      ];
+    
+      return (
+        <div className="bulk-container">
+          <h2 className="bulk-title">Request Bulk Pickup</h2>
+    
+          <div className="steps-container">
+            {steps.map((step, index) => (
+              <div key={index} className="step">
+                <div className="step-icon">{step.number}</div>
+                <h3 className="step-title">{step.title}</h3>
+                <p className="step-description">{step.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    };
 
 export default AboutUSDes2;

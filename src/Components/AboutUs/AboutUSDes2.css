@@ -1,56 +1,70 @@
-.recycling-container {
+.bulk-container {
     text-align: center;
-    background-color: #111c3b; /* Dark blue background */
-    color: white;
     padding: 50px;
+    background-color: #111c3b;
   }
   
-  .title {
+  .bulk-title {
     font-size: 2.5rem;
     font-weight: bold;
+    color: #ffffff; 
+    margin-bottom: 100px;
   }
   
-  .highlight {
-    color: white;
-  }
-  
-  .process-container {
+  .steps-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 40px 0;
+    position: relative;
   }
   
-  .process-box {
-    width: 100px;
-    height: 100px;
-    background-color: #d1d1d1; /* Light gray */
-    border-radius: 5px;
+  .step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    width: 350px;
+    text-align: center;
   }
   
-  .process-line {
-    width: 80px;
-    height: 5px;
-    background-color: white;
+  .step-icon {
+    width: 90px;
+    height: 60px;
+    background: linear-gradient(to bottom, #4CAF50, #2196F3); /* Green to Blue Gradient */
+    color: white;
+    font-size: 1.8rem;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
   }
   
-  .description {
+  .step-title {
     font-size: 1.2rem;
-    max-width: 800px;
-    margin: 0 auto;
-    line-height: 1.6;
+    font-weight: bold;
+    color: #ffffff;
+    margin-top: 20px;
   }
   
-  /* Responsive Design */
+  .step-description {
+    font-size: 1rem;
+    color: #6c6c6c;
+    max-width: 200px;
+    margin-top: 5px;
+  }
+  
   @media (max-width: 768px) {
-    .process-container {
+    .steps-container {
       flex-direction: column;
-      gap: 20px;
     }
   
-    .process-line {
-      width: 5px;
-      height: 40px;
+    .step-line {
+      width: 4px;
+      height: 50px;
+      left: 50%;
+      top: 60px;
     }
   }
   
