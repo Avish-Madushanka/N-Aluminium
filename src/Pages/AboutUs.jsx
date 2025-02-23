@@ -1,11 +1,11 @@
 import React from 'react';
-import AboutUsDes from '../Components/AboutUs/AboutUSDes';
+import AboutUsHeader from '../Components/AboutUs/AboutUsHeader';
 
 
 const AboutUs = () => {
   return (
     <div>
-      <AboutUsDes />
+      <AboutUsHeader />
     </div>
   );
 };

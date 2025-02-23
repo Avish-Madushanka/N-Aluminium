@@ -1,25 +1,55 @@
-.aboutus-title {
-    text-align: center;
-    font-size: 24px; 
-    font-weight: bolder;
-    color: #333; 
-    margin-bottom: 20px; 
-    text-transform: uppercase; 
-    letter-spacing: 1.5px; 
-    padding-top: 20px;
-    font-weight: bold;
+.what-we-do-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: url("https://www.samarthinc.net/images/contact-us-and-support-concept-and-digital-network-with-blue-space-background.webp") no-repeat center center;
+  background-size: cover;
+  padding: 40px;
+  gap: 30px;
+  min-height: 30vh;
 }
 
-.aboutus-banner-container {
-    position: relative;
-    width: 100%;
-    height: 400px; 
-    overflow: hidden; 
+.what-we-do-content {
+  background-color: rgba(51, 51, 51, 0.9); 
+  padding: 30px;
+  border-radius: 10px;
+  max-width: 400px;
+  color: #fff;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.description {
+  font-size: 1.1rem;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.cta-button {
+  background-color: #f4f4f4;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.cta-button:hover {
+  background-color: #ddd;
+}
+
+@media (max-width: 768px) {
+  .what-we-do-container {
+    flex-direction: column;
+    text-align: center;
   }
-  
-  .aboutus-banner-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: opacity 0.5s ease-in-out;
+
+  .what-we-do-content {
+    max-width: 100%;
   }
+
+}
