@@ -37,7 +37,7 @@
   }
   
   .home-banner-buttons button {
-    background-color: #7e2b01;
+    background-color: #061944;
     border: none;
     color: #ffffff;
     padding: 15px 32px;
@@ -49,4 +49,5 @@
     cursor: pointer;
     width: 240px;
     border-radius: 8px;
+    font-weight: 600;
   }
