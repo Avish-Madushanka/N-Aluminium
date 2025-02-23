@@ -7,9 +7,9 @@ const AboutUsHeader = () => {
       <div className="what-we-do-content">
         <h2 className="title">What We Do ?</h2>
         <p className="description">
-          An aluminum door is strong, lightweight, weather-resistant, durable, low-maintenance, and modern-looking.
+        "An innovative aluminum scraps collection and trading platform that enhances communication between clients and aluminum businesses, making it easy to buy, sell, and reuse aluminum items. Promoting sustainability, reducing waste, and fostering a circular economy for a greener future."
         </p>
-        <button className="cta-button">Button</button>
+        <a href="/Services" className="cta-button">View All Services</a>
       </div>
     </div>
   );
