@@ -39,6 +39,97 @@
   }
   
   .xaluminum-text {
-    margin-top: 10px;
-    font-size: 20px;
+    margin-top: 25px;
+    font-size: 21px;
+    font-weight: bold;
   }
+
+  @media (max-width: 1024px) {
+    .xrecycling-title {
+      font-size: 36px;
+    }
+  
+    .xrecycling-description {
+      font-size: 18px;
+    }
+  
+    .ximage-grid {
+      gap: 20px;
+    }
+  
+    .ximage-item {
+      width: 200px;
+    }
+  
+    .xaluminum-image {
+      height: 180px;
+    }
+  
+    .xaluminum-text {
+      font-size: 18px;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .xrecycling-container {
+      padding: 30px;
+    }
+  
+    .xrecycling-title {
+      font-size: 30px;
+    }
+  
+    .xrecycling-description {
+      font-size: 16px;
+    }
+  
+    .ximage-grid {
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+    }
+  
+    .ximage-item {
+      width: 180px;
+    }
+  
+    .xaluminum-image {
+      height: 160px;
+    }
+  
+    .xaluminum-text {
+      font-size: 16px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .xrecycling-container {
+      padding: 20px;
+    }
+  
+    .xrecycling-title {
+      font-size: 26px;
+    }
+  
+    .xrecycling-description {
+      font-size: 14px;
+    }
+  
+    .ximage-grid {
+      gap: 10px;
+    }
+  
+    .ximage-item {
+      width: 150px;
+    }
+  
+    .xaluminum-image {
+      height: 140px;
+      width: 140px;
+    }
+  
+    .xaluminum-text {
+      font-size: 14px;
+    }
+  }
+  
