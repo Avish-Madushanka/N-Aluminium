@@ -2,28 +2,28 @@ import React from 'react';
 import './AboutUSDes3.css';
 
 const AboutUSDes3 = () => {
-  const imageUrl1 = 'https://i.imgur.com/4Nn9C9f.jpg';
-  const imageUrl2 = 'https://i.imgur.com/4Nn9C9f.jpg';
+  const imageUrl1 = 'https://media.istockphoto.com/id/133993685/photo/scrap-metal-pieces-laying-in-a-pile.jpg?s=612x612&w=0&k=20&c=255eq6JeJao2iO5w-pXhmFkBGDHLabXH5Kn9SaA1lxw=';
+  const imageUrl2 = 'https://s.alicdn.com/@sc04/kf/H72424df1f0d749e3bf5ce42a8e3ebac5y.png';
   const imageUrl3 = 'https://i.imgur.com/4Nn9C9f.jpg';
 
   return (
-    <div className="recycling-container">
-      <h1 className="recycling-title">Why Need To Recycling AlumiAluminum</h1>
-      <p className="recycling-description">
+    <div className="xrecycling-container">
+      <h1 className="xrecycling-title">Why Need To Recycling AlumiAluminum</h1>
+      <p className="xrecycling-description">
         An aluminum door is strong, lightweight, weather-resistant, durable, nce, and modern-looking. An aluminum door is strong, lightweight, weather-resistant, durable, low
       </p>
-      <div className="image-grid">
-        <div className="image-item">
-          <img src={imageUrl1} alt="Aluminum" className="aluminum-image" />
-          <p className="aluminum-text">Aluminum</p>
+      <div className="ximage-grid">
+        <div className="ximage-item">
+          <img src={imageUrl1} alt="Aluminum" className="xaluminum-image" />
+          <p className="xaluminum-text">Aluminum Scraps</p>
         </div>
-        <div className="image-item">
-          <img src={imageUrl2} alt="Aluminum" className="aluminum-image" />
-          <p className="aluminum-text">Aluminum</p>
+        <div className="ximage-item">
+          <img src={imageUrl2} alt="Aluminum" className="xaluminum-image" />
+          <p className="xaluminum-text">Glass Scraps</p>
         </div>
-        <div className="image-item">
-          <img src={imageUrl3} alt="Aluminum" className="aluminum-image" />
-          <p className="aluminum-text">Aluminum</p>
+        <div className="ximage-item">
+          <img src={imageUrl3} alt="Aluminum" className="xaluminum-image" />
+          <p className="xaluminum-text">Aluminum</p>
         </div>
       </div>
     </div>
