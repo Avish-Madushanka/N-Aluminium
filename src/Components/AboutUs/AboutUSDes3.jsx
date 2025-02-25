@@ -8,9 +8,9 @@ const AboutUSDes3 = () => {
 
   return (
     <div className="xrecycling-container">
-      <h1 className="xrecycling-title">Why Need To Recycling AlumiAluminum</h1>
+      <h1 className="xrecycling-title">What We Collect to Recycle</h1>
       <p className="xrecycling-description">
-        An aluminum door is strong, lightweight, weather-resistant, durable, nce, and modern-looking. An aluminum door is strong, lightweight, weather-resistant, durable, low
+      "Transforming aluminum and glass scraps into valuable resources—reducing environmental waste, promoting sustainability, and fostering a circular economy. Our platform connects businesses and clients, encouraging efficient recycling, responsible reuse, and a cleaner, greener future for all."
       </p>
       <div className="ximage-grid">
         <div className="ximage-item">
