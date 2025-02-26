@@ -1,4 +1,4 @@
-.service-container {
+.serviceX-container {
     font-family: 'Arial', sans-serif;
     background-color: #2F4550;
     color: #fff;
@@ -7,7 +7,7 @@
     min-height: 100vh;
   }
   
-  .service-header {
+  .serviceX-header {
     margin-bottom: 50px;
     background-image: url('https://boldergroup.com/wp-content/uploads/2024/08/Blog-Header-Independent-Directors-2.jpg');
     background-size: cover;
@@ -18,19 +18,19 @@
     align-items: center;
   }
   
-  .service-title {
+  .serviceX-title {
     font-size: 48px;
     color: #fff;
   }
   
-  .service-list {
+  .serviceX-list {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 30px;
   }
   
-  .service-card {
+  .serviceX-card {
     background-color: #f0f0f0;
     border-radius: 15px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -40,37 +40,38 @@
     display: flex;
   }
   
-  .image-side {
+  .imageX-side {
     width: 40%;
     overflow: hidden;
     border-radius: 15px 0 0 15px;
   }
   
-  .content-side {
+  .contentX-side {
     width: 60%;
     padding: 20px;
     text-align: left;
   }
   
-  .service-image {
+  .serviceX-image {
     width: 100%;
-    height: auto;
+    height: 250px;
     object-fit: cover;
     display: block;
   }
   
-  .card-title {
+  .cardX-title {
     font-size: 28px;
     margin-bottom: 10px;
+    font-weight: bold;
   }
   
-  .card-description {
+  .cardX-description {
     font-size: 16px;
     line-height: 1.4;
-    margin-bottom: 20px;
+    margin-bottom: 40px;
   }
   
-  .card-button {
+  .cardX-button {
     padding: 10px 20px;
     background-color: #ddd;
     color: #333;

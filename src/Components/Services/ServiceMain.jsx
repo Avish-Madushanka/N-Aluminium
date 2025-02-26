@@ -21,21 +21,21 @@ const ServiceMain = () => {
   ];
 
   return (
-    <div className="service-container">
-      <div className="service-header">
-        <h1 className="service-title">Our Service</h1>
+    <div className="serviceX-container">
+      <div className="serviceX-header">
+        <h1 className="serviceX-title">Our Service</h1>
       </div>
 
-      <div className="service-list">
+      <div className="serviceX-list">
         {servicesData.map((service, index) => (
-          <div className="service-card" key={index}>
-            <div className="image-side">
-              <img src={service.imageUrl} alt={service.title} className="service-image" />
+          <div className="serviceX-card" key={index}>
+            <div className="imageX-side">
+              <img src={service.imageUrl} alt={service.title} className="serviceX-image" />
             </div>
-            <div className="content-side">
-              <h2 className="card-title">{service.title}</h2>
-              <p className="card-description">{service.description}</p>
-              <button className="card-button">Button 1</button>
+            <div className="contentX-side">
+              <h2 className="cardX-title">{service.title}</h2>
+              <p className="cardX-description">{service.description}</p>
+              <button className="cardX-button">Button 1</button>
             </div>
           </div>
         ))}
