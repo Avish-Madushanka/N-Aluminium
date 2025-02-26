@@ -81,3 +81,95 @@
     cursor: pointer;
     text-decoration: none;
   }
+
+  @media (max-width: 1024px) {
+    .serviceX-card {
+      width: 90%;
+      max-width: 700px;
+    }
+  
+    .contentX-side {
+      padding: 15px;
+    }
+  
+    .cardX-title {
+      font-size: 24px;
+    }
+  
+    .cardX-description {
+      font-size: 14px;
+    }
+  
+    .cardX-button {
+      padding: 8px 15px;
+      font-size: 14px;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .serviceX-header {
+      height: 200px;
+      padding: 10px;
+    }
+  
+    .serviceX-title {
+      font-size: 36px;
+    }
+  
+    .serviceX-card {
+      flex-direction: column;
+      width: 95%;
+    }
+  
+    .imageX-side {
+      width: 100%;
+      border-radius: 15px 15px 0 0;
+    }
+  
+    .contentX-side {
+      width: 100%;
+      padding: 20px;
+      text-align: center;
+    }
+  
+    .cardX-title {
+      font-size: 22px;
+    }
+  
+    .cardX-description {
+      font-size: 14px;
+    }
+  
+    .cardX-button {
+      width: 100%;
+      padding: 10px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .serviceX-header {
+      height: 150px;
+    }
+  
+    .serviceX-title {
+      font-size: 28px;
+    }
+  
+    .serviceX-card {
+      width: 100%;
+    }
+  
+    .cardX-title {
+      font-size: 20px;
+    }
+  
+    .cardX-description {
+      font-size: 13px;
+    }
+  
+    .cardX-button {
+      font-size: 12px;
+      padding: 8px;
+    }
+  }
+  
