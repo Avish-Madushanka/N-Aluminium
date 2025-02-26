@@ -20,7 +20,7 @@ const Navbar = () => {
         <div className="nav-links">
           <a href="/" className="nav-item">Home</a>
           <a href="/AboutUs" className="nav-item">About</a>
-          <a href="/services" className="nav-item">Services</a>
+          <a href="/Service" className="nav-item">Services</a>
           <a href="/contact" className="nav-item">Contact</a>
         </div>
 
@@ -38,7 +38,7 @@ const Navbar = () => {
         <div className="mobile-menu">
           <a href="/" className="nav-item">Home</a>
           <a href="/AboutUs" className="nav-item">About</a>
-          <a href="/services" className="nav-item">Services</a>
+          <a href="/Service" className="nav-item">Services</a>
           <a href="/contact" className="nav-item">Contact</a>
           <div className="auth-buttons-mobile">
             <a href="/Login" className="login-btn">Login</a>
