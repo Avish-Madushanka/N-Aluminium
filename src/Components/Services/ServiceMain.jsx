@@ -4,17 +4,17 @@ import './ServiceMain.css';
 const ServiceMain = () => {
   const servicesData = [
     {
-      imageUrl: "https://www.sjcfl.us/wp-content/uploads/2024/07/recycling-truck-1024x684.png",
+      imageUrl: "https://willoughbyohio.com/wp-content/uploads/2019/08/refuse.jpg",
       title: "Our Service",
       description: "An aluminum door is strong, lightweight, weather-resistant, durable, nce, and modern-looking. An aluminum door is strong, lightweight, weather-resistant",
     },
     {
-      imageUrl: "https://img.freepik.com/premium-vector/businessman-hold-buy-sell-signs_140689-4467.jpg",
+      imageUrl: "https://www.shutterstock.com/image-illustration/buy-sell-gold-stock-market-600nw-2394746603.jpg",
       title: "Our Service",
       description: "An aluminum door is strong, lightweight, weather-resistant, durable, nce, and modern-looking. An aluminum door is strong, lightweight, weather-resistant",
     },
     {
-      imageUrl: "https://qph.cf2.quoracdn.net/main-qimg-c9d420c785f4e90372abc836d2ac8f45-lq",
+      imageUrl: "https://www.bifoldingdoorssussex.co.uk/wp-content/uploads/2020/06/2389a06_50P-01.jpg",
       title: "Our Service",
       description: "An aluminum door is strong, lightweight, weather-resistant, durable, nce, and modern-looking. An aluminum door is strong, lightweight, weather-resistant",
     },
