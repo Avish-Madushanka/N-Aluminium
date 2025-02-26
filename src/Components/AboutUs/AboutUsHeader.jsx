@@ -9,7 +9,7 @@ const AboutUsHeader = () => {
         <p className="description">
         "An innovative aluminum scraps collection and trading platform that enhances communication between clients and aluminum businesses, making it easy to buy, sell, and reuse aluminum items. Promoting sustainability, reducing waste, and fostering a circular economy for a greener future."
         </p>
-        <a href="/Services" className="cta-button">View All Services</a>
+        <a href="/Service" className="cta-button">View All Services</a>
       </div>
     </div>
   );
