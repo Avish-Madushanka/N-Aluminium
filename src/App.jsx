@@ -19,6 +19,7 @@ import Project from './Pages/Project';
 import Collection from './Pages/Collection';
 import ProAddForm from './Components/Projects/ProAddForm';
 import Service from './Pages/Service';
+import WastePickForm from './Components/WasteCollect/WastePickForm';
 
 const ProtectedRoute = ({ children }) => {
   const location = useLocation();
@@ -109,6 +110,7 @@ const AppContent = () => {
         <Route path="/ClientForm" element={<ClientForm />} />
         <Route path="/ProAddForm" element={<ProAddForm />} />
         <Route path="/BOwnerHome" element={<BOwnerHome />} />
+        <Route path="/WastePickForm" element={<WastePickForm />} />
         <Route path="/BOwnerHeader" element={<BOwnerHeader />} />
         <Route path="/Project" element={<Project />} />
         <Route path="/Collection" element={<Collection />} />

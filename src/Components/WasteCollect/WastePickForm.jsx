@@ -26,7 +26,7 @@ const WastePickForm = () => {
           <textarea id="address" rows="3"></textarea>
         </div>
         <div className="form-group">
-          <label htmlFor="contact">Contact No</label>
+          <label htmlFor="contact">Contact-No</label>
           <input type="text" id="contact" />
         </div>
         <div className="form-group">
