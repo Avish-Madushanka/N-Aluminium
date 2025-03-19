@@ -1,98 +1,99 @@
 import React, { useState } from 'react';
-import './WastePickForm.css';
+import './WastePickForm.css'; 
 
-const WastePickForm = () => {
-  const [selectedFile, setSelectedFile] = useState(null);
+function WastePickForm() {
+  const [district, setDistrict] = useState('');
+  const [province, setProvince] = useState('');
+  const [type, setType] = useState('');
+  const [photos, setPhotos] = useState([]); // Array to hold multiple photos
 
-  const handleFileChange = (event) => {
-    setSelectedFile(event.target.files[0]);
+  const handleDistrictChange = (event) => {
+    setDistrict(event.target.value);
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    console.log('Submitting form');
+  const handleProvinceChange = (event) => {
+    setProvince(event.target.value);
+  };
+
+  const handleTypeChange = (event) => {
+    setType(event.target.value);
+  };
+
+  const handlePhotoUpload = (event) => {
+    const files = Array.from(event.target.files); // Convert FileList to Array
+    const photoUrls = files.map((file) => URL.createObjectURL(file));
+    setPhotos(photoUrls); // Store URLs of all selected photos
   };
 
   return (
     <div className="waste-form-container">
-      <h1 className="form-title">Fill the form for waste items</h1>
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label htmlFor="name">Name</label>
-          <input type="text" id="name" />
-        </div>
-        <div className="form-group">
-          <label htmlFor="address">Address</label>
-          <textarea id="address" rows="3"></textarea>
-        </div>
-        <div className="form-group">
-          <label htmlFor="contact">Contact-No</label>
-          <input type="text" id="contact" />
-        </div>
-        <div className="form-group">
-          <label htmlFor="upload-photo">Upload a photo</label>
-          <input
-            type="file"
-            id="upload-photo"
-            accept="image/*"
-            onChange={handleFileChange}
-          />
-        </div>
-        <div className="form-group">
+      <h2 className="form-title">Fill the form for waste items</h2>
+      <div className="form-group">
+        <label htmlFor="name">Name</label>
+        <input type="text" id="name" placeholder="Name" />
+      </div>
+      <div className="form-group">
+        <label htmlFor="contactNo">Contact no</label>
+        <input type="tel" id="contactNo" placeholder="Contact no" />
+      </div>
+      <div className="form-group horizontal">
+        <div>
           <label htmlFor="district">District</label>
-          <select id="district">
+          <select id="district" value={district} onChange={handleDistrictChange}>
             <option value="">Select District</option>
-            <option value="district1">District 1</option>
-            <option value="district2">District 2</option>
+            <option value="kalutara">Kalutara</option>
+            <option value="colombo">Colombo</option>
           </select>
         </div>
-        <div className="form-group">
+        <div>
           <label htmlFor="province">Province</label>
-          <select id="province">
+          <select id="province" value={province} onChange={handleProvinceChange}>
             <option value="">Select Province</option>
-            <option value="province1">Province 1</option>
-            <option value="province2">Province 2</option>
+            <option value="western">Western</option>
+            <option value="central">Central</option>
           </select>
         </div>
-        <div className="form-group">
-          <label>Scraps</label>
-          <div className="radio-group">
-            <label>
-              <input type="radio" name="scraps" value="scraps1" />
-              Scraps
-            </label>
-            <label>
-              <input type="radio" name="scraps" value="scraps2" />
-              Scraps
-            </label>
-            <label>
-              <input type="radio" name="scraps" value="scraps3" />
-              Scraps
-            </label>
-            <label>
-              <input type="radio" name="scraps" value="scraps4" />
-              Scraps
-            </label>
-          </div>
+      </div>
+      <div className="form-group">
+        <label htmlFor="address">Address</label>
+        <textarea id="address" rows="4" placeholder="Address"></textarea>
+      </div>
+      <div className="form-group">
+        <label htmlFor="message">Message</label>
+        <textarea id="message" rows="4" placeholder="Message"></textarea>
+      </div>
+      <div className="form-group">
+        <label htmlFor="type">Type</label>
+        <select id="type" value={type} onChange={handleTypeChange}>
+          <option value="">Select Type</option>
+          <option value="plastic">Plastic</option>
+          <option value="metal">Metal</option>
+        </select>
+      </div>
+
+       <div className="form-group">
+        <label htmlFor="photoUpload">Upload a photo</label>
+        <input
+          type="file"
+          id="photoUpload"
+          accept="image/*"
+          multiple // Enable multiple file selection
+          onChange={handlePhotoUpload}
+          style={{ display: 'none' }}
+        />
+        <label htmlFor="photoUpload" className="upload-button">
+          Choose Photos
+        </label>
+        <div className="photo-preview">
+          {photos.map((photoUrl, index) => (
+            <img key={index} src={photoUrl} alt={`Uploaded ${index + 1}`} className="preview-image" />
+          ))}
         </div>
-        <div className="form-group">
-          <label htmlFor="type">Select the type</label>
-          <select id="type">
-            <option value="">Select Type</option>
-            <option value="type1">Type 1</option>
-            <option value="type2">Type 2</option>
-          </select>
-        </div>
-        <div className="form-group">
-          <label htmlFor="weight">Enter the weight</label>
-          <input type="text" id="weight" />
-        </div>
-        <button type="submit" className="submit-button">
-          Submit
-        </button>
-      </form>
+      </div>
+
+      <button type="submit" className="submit-button">Submit</button>
     </div>
   );
-};
+}
 
 export default WastePickForm;

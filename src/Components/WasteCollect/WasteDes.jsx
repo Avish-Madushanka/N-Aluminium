@@ -9,6 +9,8 @@ const WasteDes = () => {
       <p className="WAschedule-description">
         You can only see your pickup schedule if you are a current customer.
       </p>
+
+      
     </div>
   );
 };
