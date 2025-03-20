@@ -29,10 +29,6 @@ function ClientForm() {
                 <label htmlFor="profilePhoto" className="upload-button">Choose File</label>
             </div>
             <div className="form-group">
-                <label htmlFor="anotherAddress">Another Address</label>
-                <textarea id="anotherAddress" rows="4" placeholder="Address"></textarea>
-            </div>
-            <div className="form-group">
                 <label htmlFor="contactNumber">Contact Number</label>
                 <input type="tel" id="contactNumber" placeholder="Contact Number" />
             </div>

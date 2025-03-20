@@ -93,7 +93,6 @@
     background-color: #555;
 }
 
-/* Media Queries for Responsiveness */
 @media (max-width: 600px) {
     .registration-form-container {
         padding: 10px;
