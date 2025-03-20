@@ -9,7 +9,7 @@ import SignUp from './Pages/SignUp';
 import AboutUs from './Pages/AboutUS';
 import BuyandSell from './Pages/BuyandSell';
 import SaleForm from './Components/SaleForm/SaleForm';
-import Login from './Components/Login/Login'
+import Login from './Components/Login/Login';
 import BuyCard from './Components/BuyCard/BuyCard';
 import BOwnerForm from './Components/RegistrationForm/BOwnerForm';
 import ClientForm from './Components/RegistrationForm/ClientForm';
@@ -20,29 +20,27 @@ import Collection from './Pages/Collection';
 import ProAddForm from './Components/Projects/ProAddForm';
 import Service from './Pages/Service';
 import WastePickForm from './Components/WasteCollect/WastePickForm';
+import BSHeader from './Components/BuyandSell/BSHeader'
 
 const ProtectedRoute = ({ children }) => {
   const location = useLocation();
   const token = localStorage.getItem('token');
 
   if (!token) {
-    return <Navigate to="/SignInform" state={{ from: location }} replace />;
+    return <Navigate to="/Login" state={{ from: location }} replace />;
   }
 
   try {
     const decoded = jwtDecode(token);
-    const currentTime = Date.now() / 1000;
-
-    if (decoded.exp < currentTime) {
+    if (decoded.exp < Date.now() / 1000) {
       localStorage.removeItem('token');
-      return <Navigate to="/SignInform" state={{ from: location }} replace />;
+      return <Navigate to="/Login" state={{ from: location }} replace />;
     }
   } catch (error) {
     localStorage.removeItem('token');
-    return <Navigate to="/SignInform" state={{ from: location }} replace />;
+    return <Navigate to="/Login" state={{ from: location }} replace />;
   }
 
-  
   return children;
 };
 
@@ -58,9 +56,8 @@ const AppContent = () => {
     const token = localStorage.getItem('token');
     if (token) {
       try {
-        const decoded = jwt_decode(token);
-        const currentTime = Date.now() / 1000;
-        if (decoded.exp > currentTime) {
+        const decoded = jwtDecode(token);
+        if (decoded.exp > Date.now() / 1000) {
           setIsLoggedIn(true);
         } else {
           handleLogout();
@@ -103,18 +100,19 @@ const AppContent = () => {
         <Route path="/SignUp" element={<SignUp />} />
         <Route path="/AboutUs" element={<AboutUs />} />
         <Route path="/BuyandSell" element={<BuyandSell />} />
-        <Route path="/SaleForm" element={<SaleForm />} />
+        <Route path="/SaleForm" element={<ProtectedRoute><SaleForm /></ProtectedRoute>} />
         <Route path="/Login" element={<Login />} />
-        <Route path="/BuyCard" element={<BuyCard />} />
+        <Route path="/BuyCard" element={<ProtectedRoute><BuyCard /></ProtectedRoute>} />
         <Route path="/BOwnerForm" element={<BOwnerForm />} />
         <Route path="/ClientForm" element={<ClientForm />} />
-        <Route path="/ProAddForm" element={<ProAddForm />} />
-        <Route path="/BOwnerHome" element={<BOwnerHome />} />
-        <Route path="/WastePickForm" element={<WastePickForm />} />
-        <Route path="/BOwnerHeader" element={<BOwnerHeader />} />
+        <Route path="/ProAddForm" element={<ProtectedRoute><ProAddForm /></ProtectedRoute>} />
+        <Route path="/BOwnerHome" element={<ProtectedRoute><BOwnerHome /></ProtectedRoute>} />
+        <Route path="/WastePickForm" element={<ProtectedRoute><WastePickForm /></ProtectedRoute>} />
+        <Route path="/BOwnerHeader" element={<ProtectedRoute><BOwnerHeader /></ProtectedRoute>} />
         <Route path="/Project" element={<Project />} />
         <Route path="/Collection" element={<Collection />} />
         <Route path="/Service" element={<Service />} />
+        <Route path="/BSHeader" element={<BSHeader />} />
       </Routes>
       <Footer />
     </div>

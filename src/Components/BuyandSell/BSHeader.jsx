@@ -1,9 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './BSHeader.css';
-import BuyCard from '../BuyCard/BuyCard'; 
+import BuyCard from '../BuyCard/BuyCard';
 
 const BSHeader = () => {
-  const [isBuyCardOpen, setIsBuyCardOpen] = useState(false); 
+  const [isBuyCardOpen, setIsBuyCardOpen] = useState(false);
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    const savedProducts = JSON.parse(localStorage.getItem('products')) || [];
+    setProducts(savedProducts);
+  }, []);
 
   const openBuyCard = () => {
     console.log("Opening BuyCard");
@@ -31,59 +37,26 @@ const BSHeader = () => {
         </div>
 
         <div className="product-grid">
-          <div className="product-card">
-            <img src="https://i.redd.it/rturazpmucha1.jpg" alt="Product" className="product-image" />
-            <div className="product-details">
-              <h3>Aluminum Door</h3>
-              <p>An aluminum door is strong, lightweight, weather-resistant, durable, low-maintenance, and modern-looking.</p>
-              <p className="price">Rs: 10,000.00</p>
-              <p className="location">Kaluthara Western</p>
-              <button className="buy-button" onClick={openBuyCard}>Buy</button>
-            </div>
-          </div>
-
-          <div className="product-card">
-            <img src="https://i.redd.it/rturazpmucha1.jpg" alt="Product" className="product-image" />
-            <div className="product-details">
-              <h3>Aluminum </h3>
-              <p>An aluminum door is strong, lightweight, weather-resistant, durable, low-maintenance, and modern-looking.</p>
-              <p className="price">Rs: 10,000.00</p>
-              <p className="location">Kaluthara Western</p>
-              <button className="buy-button" onClick={openBuyCard}>Buy</button>
-            </div>
-          </div>
-
-          <div className="product-card">
-            <img src="https://i.redd.it/rturazpmucha1.jpg" alt="Product" className="product-image" />
-            <div className="product-details">
-              <h3>Aluminum Door</h3>
-              <p>An aluminum door is strong, lightweight, weather-resistant, durable, low-maintenance, and modern-looking.</p>
-              <p className="price">Rs: 10,000.00</p>
-              <p className="location">Kaluthara Western</p>
-              <button className="buy-button" onClick={openBuyCard}>Buy</button>
-            </div>
-          </div>
-
-          <div className="product-card">
-            <img src="https://i.redd.it/rturazpmucha1.jpg" alt="Product" className="product-image" />
-            <div className="product-details">
-              <h3>Aluminum Door</h3>
-              <p>An aluminum door is strong, lightweight, weather-resistant, durable, low-maintenance, and modern-looking.</p>
-              <p className="price">Rs: 10,000.00</p>
-              <p className="location">Kaluthara Western</p>
-              <button className="buy-button" onClick={openBuyCard}>Buy</button>
-            </div>
-          </div>
-
+          {products.length > 0 ? (
+            products.map((product, index) => (
+              <div key={index} className="product-card">
+                <img src={product.image || "https://via.placeholder.com/150"} alt="Product" className="product-image" />
+                <div className="product-details">
+                  <h3>{product.name}</h3>
+                  <p>{product.description}</p>
+                  <p className="price">Rs: {product.price}</p>
+                  <p className="location">{product.location}</p>
+                  <button className="buy-button" onClick={openBuyCard}>Buy</button>
+                </div>
+              </div>
+            ))
+          ) : (
+            <p>No products available. Add a new listing!</p>
+          )}
         </div>
       </div>
 
-      {isBuyCardOpen && (
-        <>
-          {console.log("closeBuyCard is a function:", typeof closeBuyCard === 'function')}
-          <BuyCard onClose={closeBuyCard} />
-        </>
-      )}
+      {isBuyCardOpen && <BuyCard onClose={closeBuyCard} />}
     </div>
   );
 };
