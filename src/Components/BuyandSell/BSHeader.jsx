@@ -9,7 +9,6 @@ const BSHeader = () => {
   const [selectedFilter, setSelectedFilter] = useState("");
 
   useEffect(() => {
-    // Load saved products from localStorage when the component mounts
     const savedProducts = JSON.parse(localStorage.getItem("products")) || [];
     setProducts(savedProducts);
   }, []);
@@ -17,10 +16,9 @@ const BSHeader = () => {
   const openBuyCard = () => setIsBuyCardOpen(true);
   const closeBuyCard = () => setIsBuyCardOpen(false);
 
-  // Filter products based on search and selected category
   const filteredProducts = products.filter((product) => {
     const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesFilter = selectedFilter ? product.category === selectedFilter : true;
+    const matchesFilter = selectedFilter ? product.type === selectedFilter : true;
     return matchesSearch && matchesFilter;
   });
 
@@ -61,7 +59,7 @@ const BSHeader = () => {
                 <h3>{product.name}</h3>
                 <p>{product.description}</p>
                 <p className="price">Rs: {product.price}</p>
-                <p className="location">{product.location}</p>
+                <p className="location">{product.address}</p>
                 <button className="buy-button" onClick={openBuyCard}>Buy</button>
               </div>
             </div>

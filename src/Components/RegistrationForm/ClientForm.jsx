@@ -1,68 +1,56 @@
-import React, { useState } from 'react';
-import './ClientForm.css'; 
+import React, { useState } from "react";
+import "./ClientForm.css";
+
 function ClientForm() {
-    const [district, setDistrict] = useState('');
-    const [province, setProvince] = useState('');
+  const [district, setDistrict] = useState("");
+  const [province, setProvince] = useState("");
 
-    const handleDistrictChange = (event) => {
-        setDistrict(event.target.value);
-    };
+  return (
+    <div className="client-form-container">
+      <h2 className="form-title">Fill the form for waste items</h2>
+      <div className="form-group-row">
+        <input type="text" placeholder="Name" className="form-input small" />
+        <input
+          type="tel"
+          placeholder="Contact no"
+          className="form-input small"
+        />
+      </div>
+      <input type="text" placeholder="Address" className="form-input" />
+      <textarea placeholder="Message" className="form-input textarea" />
 
-    const handleProvinceChange = (event) => {
-        setProvince(event.target.value);
-    };
+      <div className="form-group-row">
+        <input type="text" placeholder="Type" className="form-input small" />
+        <select
+          className="form-input small"
+          value={district}
+          onChange={(e) => setDistrict(e.target.value)}
+        >
+          <option value="">District</option>
+          <option value="colombo">Colombo</option>
+          <option value="kandy">Kandy</option>
+        </select>
+        <select
+          className="form-input small"
+          value={province}
+          onChange={(e) => setProvince(e.target.value)}
+        >
+          <option value="">Province</option>
+          <option value="western">Western</option>
+          <option value="central">Central</option>
+        </select>
+      </div>
 
-    return (
-        <div className="clientreg-form-container">
-            <h2 className="form-title">Client Registration Form</h2>
-            <div className="form-group">
-                <label htmlFor="username">Username</label>
-                <input type="text" id="username" placeholder="Username" />
-            </div>
-            <div className="form-group">
-                <label htmlFor="address">Address</label>
-                <textarea id="address" rows="4" placeholder="Address"></textarea>
-            </div>
-            <div className="form-group">
-                <label htmlFor="profilePhoto">Upload a Profile photo</label>
-                <input type="file" id="profilePhoto" style={{ display: 'none' }} />
-                <label htmlFor="profilePhoto" className="upload-button">Choose File</label>
-            </div>
-            <div className="form-group">
-                <label htmlFor="contactNumber">Contact Number</label>
-                <input type="tel" id="contactNumber" placeholder="Contact Number" />
-            </div>
-            <div className="form-group horizontal">
-                <div>
-                    <label htmlFor="district">District</label>
-                    <select id="district" value={district} onChange={handleDistrictChange}>
-                        <option value="">Select District</option>
-                        <option value="colombo">Colombo</option>
-                        <option value="kandy">Kandy</option>
-                        {/* Add more districts as needed */}
-                    </select>
-                </div>
-                <div>
-                    <label htmlFor="province">Province</label>
-                    <select id="province" value={province} onChange={handleProvinceChange}>
-                        <option value="">Select Province</option>
-                        <option value="western">Western</option>
-                        <option value="central">Central</option>
-                        {/* Add more provinces as needed */}
-                    </select>
-                </div>
-            </div>
-            <div className="form-group">
-                <label htmlFor="email">Email</label>
-                <input type="email" id="email" placeholder="Email" />
-            </div>
-            <div className="form-group">
-                <label htmlFor="password">Password</label>
-                <input type="password" id="password" placeholder="Password" />
-            </div>
-            <button type="submit" className="submit-button">Register</button>
-        </div>
-    );
+      <label className="file-upload">
+        Upload a photo
+        <input type="file" className="hidden-file-input" />
+      </label>
+
+      <button type="submit" className="submit-button">
+        Submit
+      </button>
+    </div>
+  );
 }
 
 export default ClientForm;
