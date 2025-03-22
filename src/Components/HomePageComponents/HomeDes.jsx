@@ -17,9 +17,6 @@ const HomeDes = () => {
               className="service-image"
             />
           </div>
-          <div className="service-icon-container">
-            <i className="fas fa-trash-alt service-icon"></i>
-          </div>
 
           <h3 className="service-title">Scraps Pickup</h3>
 
@@ -30,7 +27,6 @@ const HomeDes = () => {
           </a>
         </div>
 
-        {/* Dumpster Rental Service */}
         <div className="service-card">
           <div className="service-image-container">
             <img
@@ -39,10 +35,6 @@ const HomeDes = () => {
               className="service-image"
             />
           </div>
-          <div className="service-icon-container">
-            <i className="fas fa-dumpster service-icon"></i>
-          </div>
-
           <h3 className="service-title">Reuse items Buy & Sell</h3>
 
           <p className="service-description">Buy and sell reusable items effortlessly! Give pre-owned goods a second life while saving money and reducing waste. Sustainable trading for a greener future!
@@ -53,7 +45,6 @@ const HomeDes = () => {
           </a>
         </div>
 
-        {/* Waste Collection Service */}
         <div className="service-card">
           <div className="service-image-container">
             <img
@@ -62,10 +53,6 @@ const HomeDes = () => {
               className="service-image"
             />
           </div>
-          <div className="service-icon-container">
-            <i className="fas fa-recycle service-icon"></i>
-          </div>
-
           <h3 className="service-title">Latest Projects</h3>
 
           <p className="service-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Dolor nunc tincidun tempor dignisime faucibus molestie.</p>

@@ -21,12 +21,27 @@ import ProAddForm from './Components/Projects/ProAddForm';
 import Service from './Pages/Service';
 import WastePickForm from './Components/WasteCollect/WastePickForm';
 import BSHeader from './Components/BuyandSell/BSHeader'
+import Calendar from './Components/WasteCollect/Calendar';
 
 const ProtectedRoute = ({ children }) => {
   const location = useLocation();
   const token = localStorage.getItem('token');
 
- 
+  if (!token) {
+    return <Navigate to="/Login" state={{ from: location }} replace />;
+  }
+
+  try {
+    const decoded = jwtDecode(token);
+    if (decoded.exp < Date.now() / 1000) {
+      localStorage.removeItem('token');
+      return <Navigate to="/Login" state={{ from: location }} replace />;
+    }
+  } catch (error) {
+    localStorage.removeItem('token');
+    return <Navigate to="/Login" state={{ from: location }} replace />;
+  }
+
   return children;
 };
 
@@ -99,6 +114,7 @@ const AppContent = () => {
         <Route path="/Collection" element={<Collection />} />
         <Route path="/Service" element={<Service />} />
         <Route path="/BSHeader" element={<BSHeader />} />
+        <Route path="/Calendar" element={<Calendar />} />
       </Routes>
       <Footer />
     </div>
