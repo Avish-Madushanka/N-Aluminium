@@ -3,7 +3,7 @@ import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import "./Calendar.css";
 
-const CalendarComponent = () => { // ✅ Renamed component
+const CalendarComponent = () => { 
   const [date, setDate] = useState(new Date());
   const [events, setEvents] = useState({});
   const [eventText, setEventText] = useState("");
@@ -48,4 +48,4 @@ const CalendarComponent = () => { // ✅ Renamed component
   );
 };
 
-export default CalendarComponent; // ✅ Export with new name
+export default CalendarComponent; 

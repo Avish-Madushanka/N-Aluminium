@@ -1,0 +1,114 @@
+.Wrecycling-section {
+    font-family: sans-serif;
+    padding: 40px;
+}
+
+.Wheader-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 40px;
+}
+
+.Wmain-heading {
+    font-size: 2.5em;
+    font-weight: bold;
+    max-width: 60%;
+}
+
+.Wdescription {
+    font-size: 1.1em;
+    line-height: 1.6;
+    color: #555;
+    max-width: 35%;
+}
+
+.Wcard-container {
+    display: flex;
+    justify-content: space-around;
+    gap: 20px;
+}
+
+.Wcard {
+    background-color: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    width: 48%; /* Ensure they fit side by side */
+}
+
+.Wcard:hover {
+    transform: translateY(-5px);
+}
+
+.Wcard-image {
+    width: 100%;
+    height: 250px; /* Adjust as needed */
+    object-fit: cover;
+    display: block; /* Fixes extra bottom margin */
+}
+
+.Wcard-content {
+    padding: 20px;
+    text-align: left;
+    color: #333;
+}
+
+.Wcard-title {
+    font-size: 1.6em;
+    margin-bottom: 10px;
+}
+
+.Wcard-description {
+    font-size: 1em;
+    line-height: 1.4;
+    margin-bottom: 15px;
+}
+
+.Wlearn-more {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.1);
+    color: #333;
+    text-decoration: none;
+    font-size: 1.2em;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.Wlearn-more:hover {
+    background-color: #333;
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .Wheader-content {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .Wmain-heading {
+        max-width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .Wdescription {
+        max-width: 100%;
+    }
+
+    .Wcard-container {
+        flex-direction: column; /* Stack cards on smaller screens */
+    }
+
+    .Wcard {
+        width: 100%; /* Cards take full width */
+    }
+
+    .Wcard-image {
+        height: 200px; /* Adjust image height for smaller screens */
+    }
+}
