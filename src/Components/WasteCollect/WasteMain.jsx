@@ -2,8 +2,8 @@ import React from 'react';
 import './WasteMain.css';
 
 function WasteMain() {
-    const imageUrlSell = "https://images.unsplash.com/photo-1587339404866-ef0484c240c5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTh8fHNjcmFwJTIwbWV0YWx8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60";
-    const imageUrlBuy = "https://images.unsplash.com/photo-1584272955353-56f991b5d8f8?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OXx8c2NyYXAlMjBtZXRhbHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"; 
+    const imageUrlSell = "https://salvage.jksalvageco.com/wp-content/uploads/2021/06/image-1.jpg";
+    const imageUrlBuy = "https://t4.ftcdn.net/jpg/09/48/95/49/360_F_948954917_QggcaJkTcmvaxNlK5nU2cZjfS7NRxBlD.jpg"; 
 
     return (
         <div className="Wrecycling-section">
@@ -18,7 +18,7 @@ function WasteMain() {
                     <div className="Wcard-content">
                         <h3 className="Wcard-title">Sell to Us</h3>
                         <p className="Wcard-description">Metal Source is a buyer of all scrap metal grades including aluminum, steel, copper, stainless, and all ferrous and nonferrous metals.</p>
-                        <a href="#" className="Wlearn-more">→</a>
+                        <a href="/WastePickForm" className="Wlearn-more">→</a>
                     </div>
                 </div>
 
