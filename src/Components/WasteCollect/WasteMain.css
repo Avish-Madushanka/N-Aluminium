@@ -1,3 +1,18 @@
+.waste-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+    background-color: #f5f5f5;
+}
+
+.waste-card-container {
+    display: flex;
+    gap: 20px;
+    width: 90%;
+    max-width: 1200px;
+}
+
 .Wrecycling-section {
     font-family: sans-serif;
     padding: 40px;
@@ -5,110 +20,115 @@
 
 .Wheader-content {
     display: flex;
-    justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: 80px;
+    justify-content: space-between;
+    margin-bottom: 40px; 
 }
 
 .Wmain-heading {
     font-size: 2.5em;
     font-weight: bold;
-    max-width: 60%;
+    max-width: 45%;
+    margin-bottom: 5px; 
+    margin-left: 75px;
 }
 
 .Wdescription {
     font-size: 1.1em;
     line-height: 1.6;
     color: #555;
-    max-width: 35%;
+    max-width: 45%;
+    margin-top: 5px;
+    margin-right:75px ;
 }
 
-.Wcard-container {
-    display: flex;
-    justify-content: space-around;
-    gap: 20px;
-}
 
-.Wcard {
-    background-color: #fff;
-    border-radius: 12px;
+.waste-card {
+    position: relative;
+    flex: 1;
+    border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease;
-    width: 48%;
+    cursor: pointer;
 }
 
-.Wcard:hover {
-    transform: translateY(-5px);
-}
-
-.Wcard-image {
+.waste-card-image {
     width: 100%;
-    height: 250px; 
+    height: 300px;
     object-fit: cover;
-    display: block; 
+    transition: transform 0.3s ease;
 }
 
-.Wcard-content {
+.waste-card:hover .waste-card-image {
+    transform: scale(1.05);
+}
+
+.waste-card-content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
     padding: 20px;
-    text-align: left;
-    color: #333;
+    color: white;
 }
 
-.Wcard-title {
-    font-size: 1.6em;
+.waste-card-title {
+    font-size: 1.8em;
+    font-weight: bold;
     margin-bottom: 10px;
 }
 
-.Wcard-description {
+.waste-card-description {
     font-size: 1em;
     line-height: 1.4;
-    margin-bottom: 15px;
+    opacity: 0.9;
 }
 
-.Wlearn-more {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+.waste-learn-more {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    font-size: 1.5em;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
     width: 40px;
     height: 40px;
-    border-radius: 50%;
-    background-color: rgba(0, 0, 0, 0.1);
-    color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
     text-decoration: none;
-    font-size: 1.2em;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    transition: background 0.3s ease;
 }
 
-.Wlearn-more:hover {
-    background-color: #333;
-    color: white;
+.waste-learn-more:hover {
+    background: white;
+    color: black;
 }
 
 @media (max-width: 768px) {
     .Wheader-content {
         flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .Wmain-heading {
-        max-width: 100%;
+        align-items: center;
+        text-align: center;
         margin-bottom: 20px;
     }
 
+    .Wmain-heading,
     .Wdescription {
         max-width: 100%;
     }
 
-    .Wcard-container {
-        flex-direction: column; 
+    .waste-card-container {
+        flex-direction: column;
+        gap: 10px;
     }
 
-    .Wcard {
-        width: 100%; 
+    .waste-card {
+        width: 100%;
     }
 
-    .Wcard-image {
-        height: 200px; 
+    .waste-card-image {
+        height: 250px;
     }
 }
