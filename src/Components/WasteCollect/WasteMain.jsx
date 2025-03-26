@@ -3,9 +3,9 @@ import "./WasteMain.css";
 
 const WasteMain = () => {
   const imageUrlSell =
-    "https://salvage.jksalvageco.com/wp-content/uploads/2021/06/image-1.jpg";
+    "https://ewasa.org/wp-content/uploads/2022/12/post-scrap-metal-export-prohibition-1024x576.png";
   const imageUrlBuy =
-    "https://t4.ftcdn.net/jpg/09/48/95/49/360_F_948954917_QggcaJkTcmvaxNlK5nU2cZjfS7NRxBlD.jpg";
+    "https://assets.bwbx.io/images/users/iqjWHBFdfxIU/iBHFOg_qyaAU/v1/-1x-1.webp";
 
   return (
     <div className="Wrecycling-section">
@@ -41,7 +41,7 @@ const WasteMain = () => {
                 <a href="#" className="waste-learn-more">→</a>
             </div>
             </div>
-        </div>
+            </div>
         </div>
     </div>
   );
