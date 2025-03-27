@@ -1,0 +1,58 @@
+.Collect-map-section {
+    position: relative;
+    width: 100%; 
+    height: 400px;
+    background: url('https://t3.ftcdn.net/jpg/10/19/40/44/360_F_1019404480_QWIBZ9GNgjmp0jN6hmw0AV8bo4SBMs3K.jpg') center/cover no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin: 0; 
+    border-radius: 0%;
+}
+
+.Collect-map-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%; 
+    background: rgba(0, 0, 0, 0.5); 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    border-radius: 0%;
+}
+
+.Collect-map-title {
+    font-size: 2em;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.Collect-map-description {
+    font-size: 1.2em;
+    line-height: 1.5;
+    font-weight: bold;
+    text-align: center;
+}
+
+.Collect-map-button {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 10px 20px;
+    font-size: 1.2em;
+    font-weight: bold;
+    background: white;
+    color: black;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.Collect-map-button:hover {
+    background: black;
+    color: white;
+}
