@@ -96,10 +96,10 @@ function AdNav() {
                 </div>
             </aside>
 
-            {/* Main Content Area (Placeholder) */}
+           
             <main className="main-content">
                 <h2>Dashboard</h2>
-                {/* Placeholder for the rest of the content */}
+
             </main>
         </div>
     );
