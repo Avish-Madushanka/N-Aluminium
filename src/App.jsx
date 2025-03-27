@@ -22,6 +22,7 @@ import Service from './Pages/Service';
 import WastePickForm from './Components/WasteCollect/WastePickForm';
 import BSHeader from './Components/BuyandSell/BSHeader'
 import Calendar from './Components/WasteCollect/Calendar';
+import Admin from './Pages/Admin';
 
 const ProtectedRoute = ({ children }) => {
   const location = useLocation();
@@ -115,6 +116,7 @@ const AppContent = () => {
         <Route path="/Service" element={<Service />} />
         <Route path="/BSHeader" element={<BSHeader />} />
         <Route path="/Calendar" element={<Calendar />} />
+        <Route path="/Admin" element={<Admin />} />
       </Routes>
       <Footer />
     </div>

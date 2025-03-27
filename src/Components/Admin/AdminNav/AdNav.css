@@ -1,0 +1,138 @@
+.dashboard-container {
+    display: flex;
+    min-height: 100vh;
+    font-family: sans-serif;
+    color: #ddd;
+  }
+  
+  .sidebar {
+    background-color: #222;
+    width: 250px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+  }
+  
+  .logo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 30px;
+  }
+  
+  .logo-icon {
+    color: #61dafb;
+  }
+  
+  .menu-toggle {
+    cursor: pointer;
+  }
+  
+  .menu-section {
+    margin-bottom: 30px;
+  }
+  
+  .menu-section:first-child {
+    margin-top: 20px;
+  }
+  
+  .menu-section:last-child {
+    margin-bottom: 0;
+  }
+  
+  .menu-section > div {
+    font-size: 0.8em;
+    text-transform: uppercase;
+    color: #888;
+    margin-bottom: 10px;
+  }
+  
+  .menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .menu li {
+    margin-bottom: 10px;
+  }
+  
+  .menu li:last-child {
+    margin-bottom: 0;
+  }
+  
+  .menu a {
+    display: flex;
+    align-items: center;
+    color: #ddd;
+    text-decoration: none;
+    padding: 10px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .menu a:hover,
+  .menu a.active {
+    background-color: #333;
+    color: white;
+  }
+  
+  .menu-icon {
+    margin-right: 10px;
+    width: 20px;
+    text-align: center;
+  }
+  
+  .badge {
+    background-color: #61dafb;
+    color: #222;
+    padding: 3px 6px;
+    border-radius: 5px;
+    font-size: 0.7em;
+    margin-left: auto;
+  }
+  
+  .logout {
+    margin-top: auto;
+    padding-top: 20px;
+    border-top: 1px solid #333;
+  }
+  
+  .logout a {
+    color: #ddd;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .logout a:hover {
+    background-color: #333;
+    color: white;
+  }
+  
+  .main-content {
+    flex: 1;
+    padding: 30px;
+    background-color: #f0f0f0;
+    color: #333;
+  }
+  
+  @media (max-width: 768px) {
+    .dashboard-container {
+      flex-direction: column;
+    }
+  
+    .sidebar {
+      width: 100%;
+      padding: 10px;
+      box-shadow: none;
+      margin-bottom: 20px;
+    }
+  }
