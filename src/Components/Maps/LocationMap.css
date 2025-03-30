@@ -1,0 +1,124 @@
+
+body {
+    font-family: sans-serif;
+}
+
+.store-locator-container {
+    padding: 20px;
+    background-color: #f8f8f8;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.locator-title {
+    font-size: 1.75em;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.search-container {
+    display: flex;
+    align-items: center; 
+    margin-bottom: 50px;
+}
+
+.search-input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%;
+    max-width: 250px; 
+    margin-right: 10px;
+    font-size: 1em;
+}
+
+.search-button {
+    background-color: #ddd;
+    color: #333;
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1em;
+    white-space: nowrap;
+}
+
+.content-area {
+    display: flex;
+    gap: 20px; 
+}
+
+.store-list {
+    flex: 1; 
+}
+
+.store-item {
+    background-color: #fff;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.store-name {
+    font-size: 1.1em;
+    margin-bottom: 5px;
+    color: #222;
+}
+
+.store-address,
+.store-phone,
+.store-hours,
+.store-additional,
+.store-distance {
+    font-size: 0.85em;
+    color: #666;
+    margin-bottom: 5px;
+    line-height: 1.4;
+}
+
+.store-actions {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 10px;
+}
+
+.view-map-button,
+.directions-button {
+    background-color: #e67e22;
+    color: white;
+    padding: 7px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 8px;
+    font-size: 0.8em;
+    white-space: nowrap;
+}
+
+.map-area {
+    flex: 2; 
+    min-height: 400px;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+@media (max-width: 768px) {
+    .search-container {
+        flex-direction: column;
+        align-items: stretch; 
+    }
+
+    .search-input {
+        margin-bottom: 10px;
+        max-width: 100%;
+    }
+
+    .content-area {
+        flex-direction: column;
+    }
+}

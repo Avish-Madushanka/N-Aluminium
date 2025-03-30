@@ -10,7 +10,7 @@ const CollectMap = () => {
           View our fully interactive map of all of our locations. <br />
           Find phone numbers, hours, and get directions to a facility near you.
         </p>
-        <button className="Collect-map-button">Find a location near me</button>
+        <a href="/LocationMap" className="Collect-map-button">Find a location near me</a>
       </div>
     </section>
   );

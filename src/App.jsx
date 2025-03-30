@@ -23,6 +23,8 @@ import WastePickForm from './Components/WasteCollect/WastePickForm';
 import BSHeader from './Components/BuyandSell/BSHeader'
 import Calendar from './Components/WasteCollect/Calendar';
 import Admin from './Pages/Admin';
+import Map from './Pages/Map';
+import LocationMap from './Components/Maps/LocationMap';
 
 const ProtectedRoute = ({ children }) => {
   const location = useLocation();
@@ -117,6 +119,8 @@ const AppContent = () => {
         <Route path="/BSHeader" element={<BSHeader />} />
         <Route path="/Calendar" element={<Calendar />} />
         <Route path="/Admin" element={<Admin />} />
+        <Route path="/Map" element={<Map />} />
+        <Route path="/LocationMap" element={<LocationMap />} />
       </Routes>
       <Footer />
     </div>
