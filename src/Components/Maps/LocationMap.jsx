@@ -39,7 +39,7 @@ function LocationMap() {
     },
     {
       id: 3,
-      name: "Vitamin Shoppe Kandy",
+      name: "ABCD Kandy",
       address: "Kandy, Sri Lanka",
       phone: "+94 123 123 123",
       hours: "M-F 7:30-8 Sat 10-7 Sun 11-6",
@@ -66,7 +66,7 @@ function LocationMap() {
       <div className="search-container">
         <input
           type="text"
-          placeholder="Search in Sri Lanka"
+          placeholder="Search the location"
           className="search-input"
           value={searchTerm}
           onChange={handleSearch}

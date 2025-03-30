@@ -6,7 +6,7 @@
 .locator-title {
     font-size: 24px;
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 50px;
 }
 
 .search-container {
@@ -14,6 +14,7 @@
     justify-content: center;
     gap: 10px;
     margin-bottom: 20px;
+    width: 32%;
 }
 
 .search-input {
@@ -30,6 +31,7 @@
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    height: 45px;
 }
 
 .content-area {
