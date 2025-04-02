@@ -25,6 +25,7 @@ import Calendar from './Components/WasteCollect/Calendar';
 import Admin from './Pages/Admin';
 import Map from './Pages/Map';
 import LocationMap from './Components/Maps/LocationMap';
+import Calculate from './Components/Calculate/Calculate';
 
 const ProtectedRoute = ({ children }) => {
   const location = useLocation();
@@ -121,6 +122,7 @@ const AppContent = () => {
         <Route path="/Admin" element={<Admin />} />
         <Route path="/Map" element={<Map />} />
         <Route path="/LocationMap" element={<LocationMap />} />
+        <Route path="/Calculate" element={<Calculate />} />
       </Routes>
       <Footer />
     </div>

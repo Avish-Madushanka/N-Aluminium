@@ -1,51 +1,72 @@
-import React, { useState } from "react";
-import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css";
+import React, { useState, useEffect } from "react";
+import FullCalendar from "@fullcalendar/react";
+import dayGridPlugin from "@fullcalendar/daygrid";
+import interactionPlugin from "@fullcalendar/interaction";
+import timeGridPlugin from "@fullcalendar/timegrid";
 import "./Calendar.css";
 
-const CalendarComponent = () => { 
-  const [date, setDate] = useState(new Date());
-  const [events, setEvents] = useState({});
-  const [eventText, setEventText] = useState("");
+const Calendar = () => {
+  const [events, setEvents] = useState([]);
 
-  const handleAddEvent = () => {
-    if (eventText.trim() === "") return;
-    const dateString = date.toDateString();
+  useEffect(() => {
+    fetch("/api/get-pickup-dates")
+      .then((res) => res.json())
+      .then((data) => setEvents(data));
+  }, []);
 
-    setEvents((prevEvents) => ({
-      ...prevEvents,
-      [dateString]: [...(prevEvents[dateString] || []), eventText],
-    }));
 
-    setEventText("");
+  const handleDateClick = async (info) => {
+    const location = prompt(`Enter pickup location for ${info.dateStr}:`);
+    if (location) {
+      const newEvent = { title: location, start: info.dateStr };
+      
+
+      await fetch("/api/add-pickup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ date: info.dateStr, location }),
+      });
+
+      setEvents([...events, newEvent]);
+    }
+  };
+
+  const handleEventClick = (clickInfo) => {
+    const newLocation = prompt("Edit location:", clickInfo.event.title);
+    if (newLocation === null) {
+
+      return;
+    } else if (newLocation === "") {
+
+      if (window.confirm("Delete this pickup schedule?")) {
+        fetch(`/api/delete-pickup/${clickInfo.event.id}`, { method: "DELETE" });
+        clickInfo.event.remove();
+      }
+    } else {
+      fetch(`/api/update-pickup/${clickInfo.event.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ location: newLocation }),
+      });
+
+      clickInfo.event.setProp("title", newLocation);
+    }
   };
 
   return (
     <div className="calendar-container">
-      <h2 className="calendar-title">Event Calendar</h2>
-      <Calendar onChange={setDate} value={date} className="custom-calendar" />
-      
-      <div className="event-form">
-        <input
-          type="text"
-          placeholder="Add event..."
-          value={eventText}
-          onChange={(e) => setEventText(e.target.value)}
-          className="event-input"
-        />
-        <button onClick={handleAddEvent} className="add-event-button">Add</button>
-      </div>
-
-      <div className="event-list">
-        <h3>Events on {date.toDateString()}:</h3>
-        <ul>
-          {events[date.toDateString()]?.map((event, index) => (
-            <li key={index} className="event-item">{event}</li>
-          )) || <p>No events</p>}
-        </ul>
-      </div>
+      <h2>Admin Pickup Schedule</h2>
+      <FullCalendar
+        plugins={[dayGridPlugin, interactionPlugin, timeGridPlugin]}
+        initialView="dayGridMonth"
+        selectable={true}
+        editable={true}
+        events={events}
+        dateClick={handleDateClick}
+        eventClick={handleEventClick}
+      />
     </div>
   );
 };
 
-export default CalendarComponent; 
+export default Calendar;

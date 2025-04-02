@@ -2,6 +2,7 @@ import React from 'react';
 import WasteHeader from '../Components/WasteCollect/WasteHeader';
 import WasteMain from '../Components/WasteCollect/WasteMain';
 import CollectMap from '../Components/Maps/CollectMap';
+import Calculator from '../Components/Calculate/Calculate';
 
 
 const Collection = () => {
@@ -10,6 +11,7 @@ const Collection = () => {
       <WasteHeader />
       \<WasteMain />
       <CollectMap />
+      <Calculator />
     </div>
   );
 };

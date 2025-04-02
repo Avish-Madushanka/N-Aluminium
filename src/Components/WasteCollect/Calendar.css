@@ -1,61 +1,65 @@
 .calendar-container {
-    text-align: center;
-    background-color: #1a1d2e;
-    padding: 20px;
-    color: white;
-    margin: auto;
-    justify-items: center;
+  max-width: 90%;
+  margin: 30px auto;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out;
+}
+
+.calendar-container:hover {
+  transform: scale(1.01);
+}
+
+h2 {
+  text-align: center;
+  font-size: 28px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.fc-daygrid-event {
+  background-color: #007bff !important;
+  border: none !important;
+  color: #ffffff !important;
+  padding: 6px;
+  font-size: 14px;
+  border-radius: 8px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.fc-daygrid-event:hover {
+  background-color: #0056b3 !important;
+  transform: scale(1.05);
+}
+
+.fc-daygrid-day {
+  cursor: pointer;
+  transition: background 0.3s ease-in-out;
+}
+
+.fc-daygrid-day:hover {
+  background: #f1f1f1;
+}
+
+.fc-day-today {
+  background: #ffeb3b40 !important;
+  border-radius: 8px;
+}
+
+@media (max-width: 768px) {
+  .calendar-container {
+    max-width: 100%;
+    padding: 15px;
   }
-  
-  .calendar-title {
-    font-size: 22px;
-    font-weight: bold;
-    margin-bottom: 10px;
+  h2 {
+    font-size: 24px;
   }
-  
-  .custom-calendar {
-    height: 400px;
-    width: 650px;
-    background: white;
-    border-radius: 10px;
-    padding: 10px;
-    box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.1);
+  .fc-daygrid-event {
+    font-size: 12px;
+    padding: 4px;
   }
-  
-  .event-form {
-    
-    margin-top: 25px;
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-  }
-  
-  .event-input {
-    padding: 8px;
-    border-radius: 5px;
-    border: none;
-    width: 60%;
-  }
-  
-  .add-event-button {
-    background-color: #00aaff;
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .event-list {
-    margin-top: 15px;
-    text-align: left;
-  }
-  
-  .event-item {
-    background: #00aaff;
-    padding: 5px;
-    border-radius: 5px;
-    margin: 5px 0;
-    color: white;
-  }
-  
+}
