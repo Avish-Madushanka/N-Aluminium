@@ -3,7 +3,7 @@ import './Calculate.css';
 
 const Calculate = () => {
   const [weight, setWeight] = useState('');
-  const [pricePerPound, setPricePerPound] = useState('0.50');
+  const [selectedScrap, setSelectedScrap] = useState({ name: 'Clean Aluminum', price: 0.50 });
   const [unit, setUnit] = useState('lbs');
   const [result, setResult] = useState(null);
 
@@ -21,7 +21,7 @@ const Calculate = () => {
   const handleCalculate = (e) => {
     e.preventDefault();
     const weightValue = parseFloat(weight);
-    const priceValue = parseFloat(pricePerPound);
+    const priceValue = selectedScrap.price;
     
     if (!isNaN(weightValue) && !isNaN(priceValue)) {
       const weightInLbs = unit === 'kg' ? weightValue * kgToLbs : weightValue;
@@ -69,7 +69,7 @@ const Calculate = () => {
       
       <form onSubmit={handleCalculate} className="calculator-form">
         <label>Scrap Type</label>
-        <select onChange={(e) => setPricePerPound(e.target.value)}>
+        <select onChange={(e) => setSelectedScrap(scrapTypes[e.target.selectedIndex])}>
           {scrapTypes.map((type, index) => (
             <option key={index} value={type.price}>
               {type.name} (${type.price.toFixed(2)}/lb)
@@ -88,12 +88,11 @@ const Calculate = () => {
           <button type="button" onClick={toggleUnit} className="unit-toggle">Switch to {unit === 'lbs' ? 'kg' : 'lbs'}</button>
         </div>
         
-        <label>Custom Price Per Pound ($)</label>
+        <label>Price Per Pound ($)</label>
         <input 
-          type="number" 
-          value={pricePerPound} 
-          onChange={(e) => setPricePerPound(e.target.value)}
-          step="0.01"
+          type="text" 
+          value={selectedScrap.price.toFixed(2)} 
+          readOnly
         />
         
         <button type="submit" className="calculate-btn">Calculate Value</button>
