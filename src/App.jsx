@@ -26,6 +26,7 @@ import Admin from './Pages/Admin';
 import Map from './Pages/Map';
 import LocationMap from './Components/Maps/LocationMap';
 import Calculate from './Components/Calculate/Calculate';
+import AdCalendar from './Components/Admin/AdMinCalendar/AdCalendar';
 
 const ProtectedRoute = ({ children }) => {
   const location = useLocation();
@@ -123,6 +124,7 @@ const AppContent = () => {
         <Route path="/Map" element={<Map />} />
         <Route path="/LocationMap" element={<LocationMap />} />
         <Route path="/Calculate" element={<Calculate />} />
+        <Route path="/AdCalendar" element={<AdCalendar />} />
       </Routes>
       <Footer />
     </div>
