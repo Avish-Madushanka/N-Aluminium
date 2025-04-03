@@ -3,20 +3,16 @@ import './Calculate.css';
 
 const Calculate = () => {
   const [weight, setWeight] = useState('');
-  const [selectedScrap, setSelectedScrap] = useState({ name: 'Clean Aluminum', price: 0.50 });
-  const [unit, setUnit] = useState('lbs');
+  const [selectedScrap, setSelectedScrap] = useState({ name: 'Clean Aluminum', price: 1.10 });
   const [result, setResult] = useState(null);
 
   const scrapTypes = [
-    { name: 'Clean Aluminum', price: 0.50 },
-    { name: 'Cast Aluminum', price: 0.40 },
-    { name: 'Aluminum Cans', price: 0.45 },
-    { name: 'Aluminum Siding', price: 0.48 },
-    { name: 'Aluminum Wheels', price: 0.60 }
+    { name: 'Clean Aluminum', price: 1.10 },
+    { name: 'Cast Aluminum', price: 0.90 },
+    { name: 'Aluminum Cans', price: 1.00 },
+    { name: 'Aluminum Siding', price: 1.05 },
+    { name: 'Aluminum Wheels', price: 1.20 }
   ];
-
-  const kgToLbs = 2.20462;
-  const lbsToKg = 0.453592;
 
   const handleCalculate = (e) => {
     e.preventDefault();
@@ -24,36 +20,12 @@ const Calculate = () => {
     const priceValue = selectedScrap.price;
     
     if (!isNaN(weightValue) && !isNaN(priceValue)) {
-      const weightInLbs = unit === 'kg' ? weightValue * kgToLbs : weightValue;
-      const totalValue = weightInLbs * priceValue;
-      
+      const totalValue = weightValue * priceValue;
       setResult({
         weight: weightValue,
-        unit: unit,
-        weightInLbs: unit === 'kg' ? weightInLbs : weightValue,
-        weightInKg: unit === 'lbs' ? weightValue * lbsToKg : weightValue,
-        pricePerPound: priceValue,
+        pricePerKg: priceValue,
         totalValue: totalValue
       });
-    }
-  };
-
-  const toggleUnit = () => {
-    if (weight && !isNaN(parseFloat(weight))) {
-      const weightValue = parseFloat(weight);
-      let newWeight;
-      
-      if (unit === 'lbs') {
-        newWeight = (weightValue * lbsToKg).toFixed(2);
-        setUnit('kg');
-      } else {
-        newWeight = (weightValue * kgToLbs).toFixed(2);
-        setUnit('lbs');
-      }
-      
-      setWeight(newWeight);
-    } else {
-      setUnit(unit === 'lbs' ? 'kg' : 'lbs');
     }
   };
 
@@ -72,23 +44,21 @@ const Calculate = () => {
         <select onChange={(e) => setSelectedScrap(scrapTypes[e.target.selectedIndex])}>
           {scrapTypes.map((type, index) => (
             <option key={index} value={type.price}>
-              {type.name} (${type.price.toFixed(2)}/lb)
+              {type.name} (${type.price.toFixed(2)}/kg)
             </option>
           ))}
         </select>
+
+        <label>Weight (kg)</label>
+        <input 
+          type="number" 
+          value={weight} 
+          onChange={(e) => setWeight(e.target.value)}
+          required
+          placeholder="Enter weight in kg"
+        />
         
-        <label>Weight ({unit})</label>
-        <div className="input-group">
-          <input 
-            type="number" 
-            value={weight} 
-            onChange={(e) => setWeight(e.target.value)}
-            required
-          />
-          <button type="button" onClick={toggleUnit} className="unit-toggle">Switch to {unit === 'lbs' ? 'kg' : 'lbs'}</button>
-        </div>
-        
-        <label>Price Per Pound ($)</label>
+        <label>Price Per Kg ($)</label>
         <input 
           type="text" 
           value={selectedScrap.price.toFixed(2)} 
