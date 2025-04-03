@@ -24,9 +24,9 @@ function AdNav() {
                                 </a>
                             </li>
                             <li>
-                                <a href="#">
+                                <a href="/AdCalendar">
                                     <FontAwesomeIcon icon={faBox} className="menu-icon" />
-                                    Product
+                                    Pick Up Calendar
                                 </a>
                             </li>
                             <li>
