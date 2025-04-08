@@ -2,13 +2,16 @@ import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './HomeSliding.css';
 
+import Image1 from '../../assets/Main1.png';
+import Image2 from '../../assets/Main1.png';
+import Image3 from '../../assets/Main1.png';
 
 const HomeSliding = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [images] = useState([
-    'https://www.shutterstock.com/image-vector/water-surface-magic-neon-glow-600nw-2483884465.jpg',
-    'https://wallpapers.com/images/hd/dark-nature-1920-x-1080-background-lqtolhf1sfr3ve5s.jpg',
-    'https://wallpapercave.com/wp/wp13639453.png',
+    Image1,
+    Image2,
+    Image3,
   ]);
 
   useEffect(() => {

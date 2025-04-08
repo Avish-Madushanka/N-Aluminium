@@ -5,7 +5,7 @@ const HomeDes = () => {
   return (
     <div className="waste-disposal-container">
       <h1 className="waste-disposal-heading">
-        A wide range of waste disposal services
+        Our Features & services
       </h1>
 
       <div className="waste-disposal-services">

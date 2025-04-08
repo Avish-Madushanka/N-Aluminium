@@ -8,19 +8,19 @@ const HomeBar = () => {
             <ServiceItem
               icon="🗑️"
               title="Safe Disposal"
-              description="Lorem ipsum dolor sit amet consectetur neque id"
+              description="Safe disposal protects health and the environment."
             />
             <VerticalDivider />
             <ServiceItem
               icon="🚛"
               title="Scheduled Pickup"
-              description="Lorem ipsum dolor sit amet consectetur. Neque id"
+              description="Timely pickups for a cleaner, greener community."
             />
             <VerticalDivider />
             <ServiceItem
               icon="♻️"
               title="Extensive Recycling"
-              description="Lorem ipsum dolor sit amet consectetur. Neque id"
+              description="Extensive recycling for a cleaner, greener planet."
             />
           </div>
         </div>
