@@ -3,58 +3,103 @@ import { Link } from 'react-router-dom';
 import './ServiceMain.css';
 
 const ServiceMain = () => {
-  const servicesData = [
-    {
-      imageUrl: "https://willoughbyohio.com/wp-content/uploads/2019/08/refuse.jpg",
-      title: "Recycling Service",
-      description: "We offer efficient aluminum recycling to reduce waste and promote sustainability.",
-      buttons: [
-        { text: "Get Tips", link: "/Collection" }
-      ]
-    },
-    {
-      imageUrl: "https://www.shutterstock.com/image-illustration/buy-sell-gold-stock-market-600nw-2394746603.jpg",
-      title: "Buy & Sell Scrap",
-      description: "Connect with aluminum businesses to buy and sell scrap materials easily.",
-      buttons: [
-        { text: "Sell Your Scrap", link: "/BuyandSell" }
-      ]
-    },
-    {
-      imageUrl: "https://www.bifoldingdoorssussex.co.uk/wp-content/uploads/2020/06/2389a06_50P-01.jpg",
-      title: "Aluminum Products",
-      description: "Browse high-quality aluminum products for construction and industrial use.",
-      buttons: [
-        { text: "Get a Sample", link: "/Project" }
-      ]
-    },
-  ];
 
   return (
-    <div className="serviceX-container">
-      <div className="serviceX-header">
-        <h1 className="serviceX-title">Our Services</h1>
-      </div>
-
-      <div className="serviceX-list">
-        {servicesData.map((service, index) => (
-          <div className="serviceX-card" key={index}>
-            <div className="imageX-side">
-              <img src={service.imageUrl} alt={service.title} className="serviceX-image" />
-            </div>
-            <div className="contentX-side">
-              <h2 className="cardX-title">{service.title}</h2>
-              <p className="cardX-description">{service.description}</p>
-              <div className="cardX-buttons">
-                {service.buttons.map((button, btnIndex) => (
-                  <Link to={button.link} key={btnIndex} className="cardX-button">
-                    {button.text}
-                  </Link>
-                ))}
+    <div className="service-container">
+      <div className="service-header">
+        <div className="service-content">
+          <div className="service-left">
+            <h1 className="service-title">
+              We Provide Competitive & Reliable Business Waste Collection Solutions
+            </h1>
+            <p className="service-description">
+              With strategically located operations across US, Wastia provides customers with an extensive range of innovative environmental services, all from one efficient company.
+            </p>
+            <p className="service-secondary-description">
+              We've made huge strides in our sustainability journey by investing in plastic recycling and energy-from-waste infrastructure. Our carbon initiatives offer reliable, low-cost commercial waste collection services to meet all your waste requirements.
+            </p>
+            <div className="service-cta">
+              <Link to="/about" className="service-button">More About Us</Link>
+              <div className="service-founder">
+                <div className="founder-image"></div>
               </div>
             </div>
           </div>
-        ))}
+          <div className="service-right">
+            <div className="service-image">
+              <img
+                src="https://www.dcw.co.uk/wp-content/uploads/2021/09/The-Benefits-of-Waste-Collection-Services-for-Your-Business-scaled.jpg"
+                alt="Waste collection worker"
+                className="main-image"
+              />
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+
+      <div className="service-header">
+        <div className="service-content">
+          <div className="service-right">
+            <div className="service-image">
+              <img
+                src="https://www.dcw.co.uk/wp-content/uploads/2021/09/The-Benefits-of-Waste-Collection-Services-for-Your-Business-scaled.jpg"
+                alt="Waste collection worker"
+                className="main-image"
+                />
+              </div>
+              </div>
+              <div className="service-left">
+                <h1 className="service-title">
+                  We Provide Competitive & Reliable Business Waste Collection Solutions
+              </h1>
+              <p className="service-description">
+                  With strategically located operations across US, Wastia provides customers with an extensive range of innovative environmental services, all from one efficient company.
+              </p>
+              <p className="service-secondary-description">
+                We've made huge strides in our sustainability journey by investing in plastic recycling and energy-from-waste infrastructure. Our carbon initiatives offer reliable, low-cost commercial waste collection services to meet all your waste requirements.
+              </p>
+              <div className="service-cta">
+                <Link to="/about" className="service-button">More About Us</Link>
+                <div className="service-founder">
+                    <div className="founder-image"></div>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div className="service-header">
+        <div className="service-content">
+          <div className="service-left">
+            <h1 className="service-title">
+              We Provide Competitive & Reliable Business Waste Collection Solutions
+            </h1>
+            <p className="service-description">
+              With strategically located operations across US, Wastia provides customers with an extensive range of innovative environmental services, all from one efficient company.
+            </p>
+            <p className="service-secondary-description">
+              We've made huge strides in our sustainability journey by investing in plastic recycling and energy-from-waste infrastructure. Our carbon initiatives offer reliable, low-cost commercial waste collection services to meet all your waste requirements.
+            </p>
+            <div className="service-cta">
+              <Link to="/about" className="service-button">More About Us</Link>
+              <div className="service-founder">
+                <div className="founder-image"></div>
+              </div>
+            </div>
+          </div>
+          <div className="service-right">
+            <div className="service-image">
+              <img
+                src="https://www.dcw.co.uk/wp-content/uploads/2021/09/The-Benefits-of-Waste-Collection-Services-for-Your-Business-scaled.jpg"
+                alt="Waste collection worker"
+                className="main-image"
+              />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
