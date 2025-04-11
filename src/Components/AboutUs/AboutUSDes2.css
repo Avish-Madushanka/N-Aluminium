@@ -1,70 +1,66 @@
 .bulk-container {
-    text-align: center;
-    padding: 50px;
-    background-color: #2F4550;
-  }
-  
-  .bulk-title {
-    font-size: 2.5rem;
-    font-weight: bold;
-    color: #ffffff; 
-    margin-bottom: 100px;
-  }
-  
+  text-align: center;
+  padding: 50px;
+  background-color: #ffffff;
+}
+
+.bulk-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #000000;
+  margin-bottom: 100px;
+}
+
+.steps-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  width: 350px;
+  text-align: center;
+}
+
+.step-icon {
+  width: 90px;
+  height: 60px;
+  background: linear-gradient(to bottom, #4CAF50, #2196F3);
+  color: white;
+  font-size: 1.8rem;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.step-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #000000;
+  margin-top: 20px;
+}
+
+.step-description {
+  font-size: 1rem;
+  color: #333333;
+  max-width: 200px;
+  margin-top: 5px;
+}
+
+@media (max-width: 768px) {
   .steps-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
+    flex-direction: column;
   }
   
   .step {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
-    width: 350px;
-    text-align: center;
+    margin-bottom: 40px;
   }
-  
-  .step-icon {
-    width: 90px;
-    height: 60px;
-    background: linear-gradient(to bottom, #4CAF50, #2196F3); /* Green to Blue Gradient */
-    color: white;
-    font-size: 1.8rem;
-    font-weight: bold;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-  }
-  
-  .step-title {
-    font-size: 1.2rem;
-    font-weight: bold;
-    color: #ffffff;
-    margin-top: 20px;
-  }
-  
-  .step-description {
-    font-size: 1rem;
-    color: #6c6c6c;
-    max-width: 200px;
-    margin-top: 5px;
-  }
-  
-  @media (max-width: 768px) {
-    .steps-container {
-      flex-direction: column;
-    }
-  
-    .step-line {
-      width: 4px;
-      height: 50px;
-      left: 50%;
-      top: 60px;
-    }
-  }
-  
+}
