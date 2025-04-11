@@ -1,56 +1,146 @@
-.what-we-do-container {
+.about-container {
+  width: 100%;
+  font-family: 'Inter', sans-serif;
+  color: #333;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.hero-section {
+  position: relative;
+  height: 60vh;
+  background-image: url('../../assets/about.png'); 
+  background-size: cover;
+  background-position: center;
   display: flex;
   align-items: center;
-  justify-content: center;
-  background: url("https://www.way2webworld.com/images/aboutbanner.jpg") no-repeat center center;
-  background-size: cover;
-  padding: 40px;
-  gap: 30px;
-  min-height: 30vh;
+  justify-content: flex-start;
+  padding-left: 10%;
+  color: white;
+  overflow: hidden;
 }
 
-.what-we-do-content {
-  background-color: rgba(0, 0, 0, 0.9); 
-  padding: 30px;
-  border-radius: 10px;
-  max-width: 600px;
-  color: #fff;
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 1;
 }
 
-.title {
-  font-size: 2rem;
-  font-weight: bold;
-  margin-bottom: 15px;
+.hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 40%;
 }
 
-.description {
+.hero-title {
+  font-size: 4rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.hero-text {
   font-size: 1.1rem;
-  margin-bottom: 30px;
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
-.cta-button {
-  background-color: #f4f4f4;
-  border: none;
-  padding: 10px 20px;
+.wave-divider {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 80px;
+  background-color: white;
+  border-radius: 100% 100% 0 0;
+  z-index: 3;
+}
+
+.content-section {
+  padding: 4rem 10%;
+  background-color: white;
+}
+
+.two-column-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  margin-bottom: 3rem;
+}
+
+.column {
+  max-width: 100%;
+}
+
+.section-title {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: #2d3748;
+}
+
+.section-text {
   font-size: 1rem;
-  border-radius: 8px;
-  cursor: pointer;
-  text-decoration: none;
+  line-height: 1.7;
+  color: #4a5568;
+  margin-bottom: 1.5rem;
 }
 
-.cta-button:hover {
-  background-color: #ddd;
+.accent-divider {
+  width: 3rem;
+  height: 4px;
+  background-color: #e53e3e;
+  margin-bottom: 1.5rem;
+}
+
+.full-width {
+  width: 100%;
+}
+
+@media (max-width: 1200px) {
+  .hero-content {
+    max-width: 50%;
+  }
+}
+
+@media (max-width: 992px) {
+  .hero-title {
+    font-size: 3.5rem;
+  }
+  
+  .two-column-grid {
+    gap: 3rem;
+  }
 }
 
 @media (max-width: 768px) {
-  .what-we-do-container {
-    flex-direction: column;
-    text-align: center;
+  .hero-content {
+    max-width: 80%;
   }
-
-  .what-we-do-content {
-    max-width: 100%;
+  
+  .hero-title {
+    font-size: 3rem;
   }
+  
+  .two-column-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}
 
+@media (max-width: 576px) {
+  .hero-content {
+    max-width: 90%;
+  }
+  
+  .hero-title {
+    font-size: 2.5rem;
+  }
+  
+  .content-section {
+    padding: 3rem 5%;
+  }
 }

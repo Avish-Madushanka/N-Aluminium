@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./Navbar.css"; 
-import n from "../../assets/n.png";
+import logo from "../../assets/logo.png";
 
 
 const Navbar = () => {
@@ -14,14 +14,14 @@ const Navbar = () => {
     <nav className="navbar">
       <div className="nav-container">
         <a className="navbar-brand" href="/">
-        <img src={n} alt="nav-Logo" className="nav-logo" />
+        <img src={logo} alt="nav-Logo" className="nav-logo" />
         </a>
 
         <div className="nav-links">
           <a href="/" className="nav-item">Home</a>
-          <a href="/AboutUs" className="nav-item">About</a>
+          <a href="/AboutUs" className="nav-item">About Us</a>
           <a href="/Service" className="nav-item">Services</a>
-          <a href="/contact" className="nav-item">Contact</a>
+          <a href="/contact" className="nav-item">Contact Us</a>
         </div>
 
         <div className="auth-buttons">

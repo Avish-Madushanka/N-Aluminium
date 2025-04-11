@@ -1,59 +1,98 @@
 .ABrecycling-container {
   display: flex;
-  background-color: #2F4550; 
-  color: white;
-  padding: 50px;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
+  padding: 60px 30px;
+  background: linear-gradient(to right, #ffffff, #ffffff);
+  gap: 40px;
+  transition: all 0.3s ease;
 }
 
 .ABimage-section {
   flex: 1;
   display: flex;
   justify-content: center;
+  animation: fadeInLeft 1s ease-in-out;
 }
 
 .ABrecycling-image {
   width: 100%;
   max-width: 500px;
   height: auto;
-  border-radius: 10px;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0);
+  transition: transform 0.3s ease;
+}
+
+.ABrecycling-image:hover {
+  transform: scale(1.03);
 }
 
 .ABtext-section {
   flex: 1;
-  padding: 20px;
-  text-align: left;
+  padding: 10px 20px;
+  animation: fadeInRight 1s ease-in-out;
 }
 
 .ABtitle {
-  font-size: 2.5rem;
-  font-weight: bold;
-  padding-bottom: 20px;
+  font-size: 2.75rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 20px;
+}
+
+.ABtitle .highlight {
+  background: linear-gradient(45deg, #000000, #000000);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .ABdescription {
-  font-size: 1.2rem;
-  line-height: 1.6;
+  font-size: 1.15rem;
+  color: #333;
+  line-height: 1.8;
   text-align: justify;
 }
-
 
 @media (max-width: 768px) {
   .ABrecycling-container {
     flex-direction: column;
+    padding: 40px 20px;
     text-align: center;
   }
 
   .ABtext-section {
-    padding: 20px;
+    padding: 0;
   }
 
   .ABtitle {
-    font-size: 1.8rem;
+    font-size: 2rem;
   }
 
   .ABdescription {
     font-size: 1rem;
+  }
+}
+
+@keyframes fadeInLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInRight {
+  0% {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
   }
 }

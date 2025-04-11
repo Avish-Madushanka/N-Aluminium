@@ -36,8 +36,8 @@ const HomeSliding = () => {
       <div className="home-banner-text">
         <h1>"Collect. Recycle. Renew."</h1>
         <div className="home-banner-buttons">
-          <button onClick={() => handleButtonClick('/start-bidding')}>Start Bidding</button>
-          <button onClick={() => handleButtonClick('/learn-about-gemstones')}>Learn About Gemstones</button>
+          <button onClick={() => handleButtonClick('/Collection')}>Check Pickup Dates</button>
+          <button onClick={() => handleButtonClick('/WastePickForm')}>Sell Scraps</button>
         </div>
       </div>
     </div>
