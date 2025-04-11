@@ -18,7 +18,7 @@ const HomeDes = () => {
             />
           </div>
 
-          <h3 className="service-title">Scraps Pickup</h3>
+          <h3 className="service-title">Aluminum Scraps Pickup</h3>
 
           <p className="service-description">Effortless scrap pickup—recycle aluminum waste with ease! Fast, reliable, and eco-friendly collection services to keep your space clean while supporting sustainability.</p>
 
@@ -55,7 +55,7 @@ const HomeDes = () => {
           </div>
           <h3 className="service-title">Latest Projects</h3>
 
-          <p className="service-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Dolor nunc tincidun tempor dignisime faucibus molestie.</p>
+          <p className="service-description">Explore our recent work where innovation meets sustainability. From custom aluminum solutions to eco-friendly scrap pickups, each project reflects our commitment to quality, efficiency, and a greener future.</p>
 
           <a href="/Project" className="service-link">
             →
