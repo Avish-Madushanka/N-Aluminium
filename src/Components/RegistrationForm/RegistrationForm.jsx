@@ -3,23 +3,45 @@ import './RegistrationForm.css';
 
 const RegistrationForm = () => {
   return (
-    <div className="Regsignup-container">
-      <h1 className="Regsignup-title">Signup</h1>
-      <div className="Regadmin-buttons">
-        <div className="Regadmin-button">
-          <img src="https://img.freepik.com/free-vector/people-loading-garbage-into-truck-trash-pickup-with-recycling-sign-flat-vector-illustration-garbage-disposal-volunteering-trash-collection_74855-13197.jpg" alt="Admin 1" />
-          <a href="/admin1" className="Regbutton-1">Admin</a>
+    <div className="signup-container">
+      <div className="signup-card">
+        <h1 className="signup-title">Sign Up</h1>
+        <p className="signup-subtitle">Choose your account type</p>
+        
+        <div className="account-options">
+          <div className="account-option">
+            <div className="icon-container admin-icon">
+              <i className="fas fa-user-shield"></i>
+            </div>
+            <h3>Admin</h3>
+            <p>Manage system and users</p>
+            <a href="/AdminForm" className="option-button">Select</a>
+          </div>
+          
+          <div className="account-option">
+            <div className="icon-container business-icon">
+              <i className="fas fa-briefcase"></i>
+            </div>
+            <h3>Business Owner</h3>
+            <p>Register your company</p>
+            <a href="/BOwnerForm" className="option-button">Select</a>
+          </div>
+          
+          <div className="account-option">
+            <div className="icon-container client-icon">
+              <i className="fas fa-user"></i>
+            </div>
+            <h3>Client</h3>
+            <p>Access services</p>
+            <a href="/ClientForm" className="option-button">Select</a>
+          </div>
         </div>
-        <div className="Regadmin-button">
-          <img src="https://media.istockphoto.com/id/688587628/photo/aluminium-and-pvc-industry-worker.jpg?s=612x612&w=0&k=20&c=j3W5LQbi0yV0RH0-DLqGs6VeFGlV60Vm_OaiIAMPoTo=" alt="BOwnerForm" />
-          <a href="/BOwnerForm" className="Regbutton-2">Business Owners</a>
-        </div>
-        <div className="Regadmin-button">
-          <img src="https://media.istockphoto.com/id/910835860/photo/you-can-reach-me-via-text.jpg?s=170667a&w=0&k=20&c=upFKf6tl_UrSMhJ_FOkhuFD9fgW2jFCUtgCLRgF7QDU=" alt="ClientForm" />
-          <a href="/ClientForm" className="Regbutton-3">Clients</a>
+        
+        <div className="login-section">
+          <p>Already have an account?</p>
+          <a href="/Login" className="login-button">Log In</a>
         </div>
       </div>
-      <a href="/Login" className="Reglogin-button">Login</a>
     </div>
   );
 };
