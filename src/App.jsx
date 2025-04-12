@@ -32,21 +32,7 @@ const ProtectedRoute = ({ children }) => {
   const location = useLocation();
   const token = localStorage.getItem('token');
 
-  if (!token) {
-    return <Navigate to="/Login" state={{ from: location }} replace />;
-  }
-
-  try {
-    const decoded = jwtDecode(token);
-    if (decoded.exp < Date.now() / 1000) {
-      localStorage.removeItem('token');
-      return <Navigate to="/Login" state={{ from: location }} replace />;
-    }
-  } catch (error) {
-    localStorage.removeItem('token');
-    return <Navigate to="/Login" state={{ from: location }} replace />;
-  }
-
+  
   return children;
 };
 
