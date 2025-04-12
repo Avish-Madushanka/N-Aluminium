@@ -1,98 +1,157 @@
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css');
+
 .login-container {
-    background-image: url('https://media.licdn.com/dms/image/v2/D5612AQFllua-KW1K2Q/article-cover_image-shrink_720_1280/article-cover_image-shrink_720_1280/0/1672884356078?e=2147483647&v=beta&t=RzavoIg4yKwEhp4OKuDj2cgQOiSVPHaccACsPTuf5kM'); 
-    background-size: cover; 
-    background-position: center; 
-    display: flex;
-    justify-content: center; 
-    align-items: center; 
-    font-family: sans-serif;
-    color: #eee;
-    height: 600px;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url('https://media.licdn.com/dms/image/v2/D4E12AQE5OCze_M5zcg/article-cover_image-shrink_720_1280/article-cover_image-shrink_720_1280/0/1731505047842?e=2147483647&v=beta&t=7KWJOqPiQkngfPqcEdVbN_AzpwfLqY25hoGEOKtLuuQ');
+  background-size: cover;
+  background-position: center;
+  overflow: hidden;
+  padding: 20px;
+}
+
+.login-content {
+  width: 100%;
+  max-width: 1200px;
+  height: 600px;
+  display: flex;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+  color: white;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.left-section {
+  width: 50%;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.welcome-title {
+  font-size: 48px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  line-height: 1.1;
+}
+
+.subtitle {
+  font-size: 14px;
+  line-height: 1.6;
+  opacity: 0.8;
+  margin-bottom: 30px;
+}
+
+.social-icons {
+  display: flex;
+  gap: 15px;
+}
+
+.social-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.social-icon:hover {
+  background-color: rgba(255, 255, 255, 0.4);
+}
+
+.right-section {
+  width: 50%;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.signin-title {
+  font-size: 24px;
+  margin-bottom: 30px;
+  color: white;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 4px;
+  background-color: white;
+}
+
+.remember-me {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.signin-button {
+  background-color: #68696d;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 12px;
+  font-size: 14px;
+  cursor: pointer;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.forgot-password {
+  margin-bottom: 20px;
+}
+
+.forgot-password a {
+  color: white;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.terms {
+  font-size: 12px;
+  opacity: 0.8;
+  line-height: 1.6;
+}
+
+.terms a {
+  color: white;
+  text-decoration: none;
+}
+
+@media (max-width: 768px) {
+  .login-content {
+    flex-direction: column;
+    height: auto;
   }
-  
-  .login-form {
-    background-color: rgba(40, 44, 52, 0.8); 
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    width: 400px;
-    max-width: 90%; 
-  }
-  
-  .login-title {
-    font-size: 2em;
-    text-align: center;
-    margin-bottom: 30px;
-    color: #fff;
-  }
-  
-  .form-group {
-    margin-bottom: 20px;
-  }
-  
-  .form-group label {
-    display: block;
-    margin-bottom: 8px;
-    font-size: 1.1em;
-    color: #ddd;
-  }
-  
-  .form-group input {
+
+  .left-section,
+  .right-section {
     width: 100%;
-    padding: 12px;
-    border-radius: 8px;
-    border: none;
-    background-color: rgba(255, 255, 255, 0.1);
-    color: #fff;
-    font-size: 1em;
-    box-sizing: border-box; 
-    transition: background-color 0.3s ease;
+    padding: 40px;
   }
-  
-  .form-group input::placeholder {
-    color: #bbb;
-  }
-  
-  .form-group input:focus {
-    background-color: rgba(255, 255, 255, 0.2);
-    outline: none; 
-  }
-  
-  .login-button {
-    width: 100%;
-    padding: 14px;
-    border-radius: 8px;
-    border: none;
-    background-color: #61dafb;
-    color: #282c34;
-    font-size: 1.1em;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .login-button:hover {
-    background-color: #47c6e8;
-  }
-  
-  @media (max-width: 600px) {
-    .login-form {
-      padding: 20px;
-    }
-  
-    .login-title {
-      font-size: 1.8em;
-    }
-  
-    .form-group label {
-      font-size: 1em;
-    }
-  
-    .form-group input {
-      padding: 10px;
-      font-size: 0.9em;
-    }
-  
-    .login-button {
-      font-size: 1em;
-    }
-  }
+}
