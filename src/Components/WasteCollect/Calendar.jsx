@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, Calendar, Recycle, Clock, MapPin, Truck, CheckCircle, AlertTriangle, Info } from 'lucide-react';
-import './Calendar.css'
+import { ChevronLeft, ChevronRight, Calendar, Recycle, Clock, MapPin, Truck, CheckCircle, AlertTriangle, Info, Plus } from 'lucide-react';
+import './Calendar.css';
+
 const UserCalendar = ({ adminSettings }) => {
   const defaultSettings = {
     availableDays: {

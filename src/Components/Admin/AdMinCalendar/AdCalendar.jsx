@@ -3,7 +3,7 @@ import {
   ChevronLeft, ChevronRight, Calendar, Clock, MapPin, 
   Save, Plus, Trash, Edit, Check, X, Settings
 } from 'lucide-react';
-import './AdCalendar.css'
+import './AdCalendar.css';
 
 const AdCalendar = ({ onSaveSettings }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
