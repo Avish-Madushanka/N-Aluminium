@@ -27,6 +27,7 @@ import Map from './Pages/Map';
 import LocationMap from './Components/Maps/LocationMap';
 import Calculate from './Components/Calculate/Calculate';
 import AdCalendar from './Components/Admin/AdMinCalendar/AdCalendar';
+import FloatingChatbot from './Components/Chatbot/ChatBox';
 
 const ProtectedRoute = ({ children }) => {
   const location = useLocation();
@@ -112,6 +113,7 @@ const AppContent = () => {
         <Route path="/Calculate" element={<Calculate />} />
         <Route path="/AdCalendar" element={<AdCalendar />} />
       </Routes>
+      <FloatingChatbot />
       <Footer />
     </div>
   );
