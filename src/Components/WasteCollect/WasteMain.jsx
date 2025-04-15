@@ -4,8 +4,8 @@ import "./WasteMain.css";
 const WasteMain = () => {
   const imageUrlSell =
     "https://ewasa.org/wp-content/uploads/2022/12/post-scrap-metal-export-prohibition-1024x576.png";
-  const imageUrlBuy =
-    "https://assets.bwbx.io/images/users/iqjWHBFdfxIU/iBHFOg_qyaAU/v1/-1x-1.webp";
+  const imageUrlValue =
+    "https://bsmedia.business-standard.com/_media/bs/img/article/2016-12/12/full/1481562212-9804.jpg?im=FeatureCrop,size=(826,465)";
 
   return (
     <div className="Wrecycling-section">
@@ -21,24 +21,20 @@ const WasteMain = () => {
             <div className="waste-card-content">
                 <h3 className="waste-card-title">Sell to Us</h3>
                 <p className="waste-card-description">
-                Metal Source is a buyer of all scrap metal grades including
-                aluminum, steel, copper, stainless, and all ferrous and nonferrous
-                metals.
+                Metal Source is a buyer of all scrap metal grades including aluminum, steel, copper, stainless, and all ferrous and nonferrous metals, offering competitive prices and reliable service.
                 </p>
                 <a href="/WastePickForm" className="waste-learn-more">→</a>
             </div>
             </div>
 
             <div className="waste-card">
-            <img src={imageUrlBuy} alt="Buy From Us" className="waste-card-image" />
+            <img src={imageUrlValue} alt="Scrap Value" className="waste-card-image" />
             <div className="waste-card-content">
-                <h3 className="waste-card-title">Buy From Us</h3>
+                <h3 className="waste-card-title">Know Your Scrap Value</h3>
                 <p className="waste-card-description">
-                Contact our Commercial Team for your ferrous and nonferrous
-                recycled metal requirements, and we can assist you in obtaining
-                the metal you need.
+                Know your scrap value in seconds. Enter the weight, get an instant estimate, and see how much cash you’ll earn for recycling your aluminum. It’s fast, accurate, and helps the planet too!
                 </p>
-                <a href="#" className="waste-learn-more">→</a>
+                <a href="/Calculate" className="waste-learn-more">→</a>
             </div>
             </div>
             </div>

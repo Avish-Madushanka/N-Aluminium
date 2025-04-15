@@ -5,7 +5,7 @@ function WastePickForm() {
   const [district, setDistrict] = useState('');
   const [province, setProvince] = useState('');
   const [type, setType] = useState('');
-  const [photos, setPhotos] = useState([]); // Array to hold multiple photos
+  const [photos, setPhotos] = useState([]);
 
   const handleDistrictChange = (event) => {
     setDistrict(event.target.value);
@@ -20,9 +20,9 @@ function WastePickForm() {
   };
 
   const handlePhotoUpload = (event) => {
-    const files = Array.from(event.target.files); // Convert FileList to Array
+    const files = Array.from(event.target.files); 
     const photoUrls = files.map((file) => URL.createObjectURL(file));
-    setPhotos(photoUrls); // Store URLs of all selected photos
+    setPhotos(photoUrls); 
   };
 
   return (
@@ -77,7 +77,7 @@ function WastePickForm() {
           type="file"
           id="photoUpload"
           accept="image/*"
-          multiple // Enable multiple file selection
+          multiple 
           onChange={handlePhotoUpload}
           style={{ display: 'none' }}
         />

@@ -2,7 +2,7 @@
     max-width: 400px;
     margin: auto;
     padding: 20px;
-    background: #f9f9f9;
+    background: rgba(249, 249, 249, 0.9);
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     display: flex;

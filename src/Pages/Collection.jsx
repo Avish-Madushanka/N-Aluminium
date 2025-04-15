@@ -9,7 +9,7 @@ const Collection = () => {
   return (
     <div>
       <WasteHeader />
-      \<WasteMain />
+      <WasteMain />
       <CollectMap />
       <Calculator />
     </div>
