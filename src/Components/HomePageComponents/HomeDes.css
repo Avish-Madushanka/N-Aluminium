@@ -1,111 +1,300 @@
 .waste-disposal-container {
-    background-color: #ffffff;
-    font-family: sans-serif;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    min-height: 100vh;
-    padding-bottom: 50px;
+  background-color: #ffffff;
+  font-family: sans-serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 100vh;
+  padding-bottom: 50px;
+  overflow: hidden;
+}
+
+.waste-disposal-heading {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 30px;
+  color: #000000;
+  text-align: center;
+  margin-top: 80px;
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.waste-disposal-heading.fade-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.waste-disposal-services {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  width: 100%;
+  max-width: 1200px;
+  flex-wrap: wrap;
+}
+
+.service-card {
+  background-color: #dddddd;
+  border-radius: 20px;
+  padding: 20px;
+  width: 380px;
+  text-align: center;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  transition: all 0.4s ease;
+  cursor: pointer;
+  position: relative;
+  opacity: 0;
+  transform: translateY(40px);
+}
+
+.service-card.slide-up {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.service-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+  background-color: #f0f0f0;
+}
+
+.service-image-container {
+  overflow: hidden;
+  margin-bottom: 15px;
+  height: 250px;
+  width: 340px;
+  border-radius: 10px 10px 70px 70px;
+  position: relative;
+}
+
+.service-image {
+  width: 340px;
+  height: 250px;
+  object-fit: cover;
+  transform: scale(1);
+  transition: transform 0.7s ease;
+}
+
+.service-card:hover .service-image {
+  transform: scale(1.08);
+}
+
+.image-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.5s ease, background-color 0.5s ease;
+}
+
+.service-card:hover .image-overlay {
+  background-color: rgba(0, 0, 0, 0.2);
+  opacity: 1;
+}
+
+.overlay-icon {
+  position: relative;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pulse-circle {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.7);
+  position: absolute;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
   }
-  
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(1.2);
+    opacity: 0;
+  }
+}
+
+.service-title {
+  font-size: 1.4rem;
+  font-weight: bold;
+  padding-top: 20px;
+  margin-bottom: 15px;
+  color: #333;
+  position: relative;
+  display: inline-block;
+}
+
+.service-title::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 3px;
+  bottom: -5px;
+  left: 50%;
+  background-color: #007bff;
+  transition: width 0.4s ease, left 0.4s ease;
+}
+
+.service-card:hover .service-title::after {
+  width: 80%;
+  left: 10%;
+}
+
+.service-description {
+  font-size: 0.9rem;
+  color: #555;
+  line-height: 1.6;
+  margin-bottom: 25px;
+}
+
+.service-link {
+  background-color: #ffffff;
+  border: 2px solid #ddd;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  text-decoration: none;
+  color: #007bff;
+  font-size: 1.2rem;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.arrow-icon {
+  position: relative;
+  z-index: 2;
+  transition: transform 0.3s ease;
+}
+
+.service-card:hover .arrow-icon {
+  transform: translateX(3px);
+}
+
+.service-link::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #3a3a3a;
+  transform: scale(0);
+  border-radius: 50%;
+  transition: transform 0.3s ease;
+  z-index: 1;
+}
+
+.service-link:hover {
+  color: white;
+  border-color: #000000;
+}
+
+.service-link:hover::before {
+  transform: scale(1);
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+
+@media (max-width: 768px) {
   .waste-disposal-heading {
-    font-size: 2.5rem;
-    font-weight: bold;
-    margin-bottom: 30px;
-    color: #000000;
-    text-align: center;
-    margin-top: 80px;
+    font-size: 1.8rem;
+    margin-top: 50px;
+    padding: 0 15px;
   }
-  
+
   .waste-disposal-services {
-    display: flex;
-    justify-content: center;
-    gap: 30px;
-    width: 100%;
-    max-width: 1200px;
-    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
   }
-  
+
   .service-card {
-    background-color: #c7c7c7;
-    border-radius: 20px;
-    padding: 20px;
-    width: 350px;
-    text-align: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-    transition: transform 0.2s ease-in-out;
-    cursor: pointer;
+    width: 90%;
+    max-width: 360px;
+    padding: 15px;
   }
-  
-  .service-card:hover {
-    transform: translateY(-5px);
+
+  .service-title {
+    font-size: 1.2rem;
   }
-  
+
+  .service-description {
+    font-size: 0.85rem;
+  }
+
   .service-image-container {
-    overflow: hidden;
-    margin-bottom: 15px;
-    height: 250px;
     width: 100%;
-    border-radius: 10px 10px 100px 100px;
-    transition: all 500msease;
+    height: auto;
   }
-  
+
   .service-image {
     width: 100%;
-    height: 250px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    overflow: hidden;
+    height: 180px;
   }
-  
-  .service-icon-container {
-    background-color: #f0f8ff;
-    border-radius: 50%;
-    width: 60px;
-    height: 60px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 0 auto 15px;
-    
+}
+
+@media (max-width: 480px) {
+  .waste-disposal-heading {
+    font-size: 1.6rem;
   }
-  
-  .service-icon {
-    font-size: 24px;
-    color: green;
+
+  .service-card {
+    padding: 12px;
   }
-  
+
   .service-title {
-    font-size: 1.4rem;
-    font-weight: bold;
-    padding-top: 30px;
-    margin-bottom: 10px;
-    color: #333;
+    font-size: 1rem;
   }
-  
+
   .service-description {
-    font-size: 0.9rem;
-    color: #666;
-    line-height: 1.5;
-    margin-bottom: 20px;
+    font-size: 0.8rem;
   }
-  
+
+  .service-image {
+    height: 160px;
+  }
+
   .service-link {
-    background-color: #ffffff;
-    border: 2px solid #ddd;
-    border-radius: 50%;
-    padding: 8px 12px;
-    text-decoration: none;
-    color: #007bff;
-    font-size: 1.2rem;
-    display: inline-block;
-    margin-top: 10px;
-    transition: background-color 0.3s;
+    width: 32px;
+    height: 32px;
+    font-size: 1rem;
   }
-  
-  .service-link:hover {
-    background-color: #f0f0f0;
+
+  .arrow-icon {
+    transform: scale(0.9);
   }
-  
+}
