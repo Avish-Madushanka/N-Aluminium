@@ -1,98 +1,51 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, Calendar, Recycle, Clock, MapPin, Truck, CheckCircle, AlertTriangle, Info } from 'lucide-react';
-import './AdCalendar.css';
+import { 
+  ChevronLeft, ChevronRight, Calendar, Clock, MapPin, 
+  Save, Plus, Trash, Edit, Check, X, Settings
+} from 'lucide-react';
+import './AdCalendar.css'
 
-const AdCalendar = () => {
+const AdCalendar = ({ onSaveSettings }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [selectedDate, setSelectedDate] = useState(null);
-  const [bookingStep, setBookingStep] = useState(0);
-  const [timeSlot, setTimeSlot] = useState(null);
-  const [materialType, setMaterialType] = useState(null);
-  const [estimatedWeight, setEstimatedWeight] = useState("");
-  const [pickupLocation, setPickupLocation] = useState("");
-  const [contactDetails, setContactDetails] = useState({
-    name: "",
-    phone: "",
-    email: ""
+  
+  const [availableDays, setAvailableDays] = useState({
+    0: false, 
+    1: true,  
+    2: false, 
+    3: true,  
+    4: false, 
+    5: true,  
+    6: false  
   });
-  const [bookingConfirmed, setBookingConfirmed] = useState(false);
-  const [bookingId, setBookingId] = useState("");
+  
+  const [timeSlots, setTimeSlots] = useState([
+    { id: "morning", time: "8:00 AM - 11:00 AM", label: "Morning", active: true },
+    { id: "midday", time: "11:00 AM - 2:00 PM", label: "Midday", active: true },
+    { id: "afternoon", time: "2:00 PM - 5:00 PM", label: "Afternoon", active: true },
+    { id: "evening", time: "5:00 PM - 7:00 PM", label: "Evening", active: true }
+  ]);
+  
+  const [serviceAreas, setServiceAreas] = useState([
+    { id: "downtown", name: "Downtown", active: true },
+    { id: "north", name: "North Side", active: true },
+    { id: "south", name: "South Side", active: true },
+    { id: "east", name: "East Side", active: true },
+    { id: "west", name: "West Side", active: true }
+  ]);
 
-  const materialTypes = [
-    {
-      id: "cans",
-      name: "Aluminum Cans",
-      rate: "$0.55/lb",
-      description: "Beverage cans, food cans",
-      icon: "🥫"
-    },
-    {
-      id: "extrusions",
-      name: "Extrusions",
-      rate: "$0.65/lb",
-      description: "Window frames, door frames",
-      icon: "🪟"
-    },
-    {
-      id: "siding",
-      name: "Siding & Gutters",
-      rate: "$0.70/lb",
-      description: "Home siding, gutters, downspouts",
-      icon: "🏠"
-    },
-    {
-      id: "industrial",
-      name: "Industrial Scrap",
-      rate: "$0.85/lb",
-      description: "Machine parts, industrial offcuts",
-      icon: "⚙️"
-    },
-    {
-      id: "wheels",
-      name: "Wheels & Rims",
-      rate: "$0.75/lb",
-      description: "Aluminum wheels, automotive rims",
-      icon: "🛞"
-    },
-    {
-      id: "mixed",
-      name: "Mixed Aluminum",
-      rate: "$0.60/lb",
-      description: "Assorted aluminum items",
-      icon: "🔄"
-    }
-  ];
-
-  const timeSlots = [
-    { id: "morning", time: "8:00 AM - 11:00 AM", label: "Morning" },
-    { id: "midday", time: "11:00 AM - 2:00 PM", label: "Midday" },
-    { id: "afternoon", time: "2:00 PM - 5:00 PM", label: "Afternoon" },
-    { id: "evening", time: "5:00 PM - 7:00 PM", label: "Evening" }
-  ];
-
-  useEffect(() => {
-    if (bookingConfirmed) {
-      setBookingId(`AL${Math.floor(100000 + Math.random() * 900000)}`);
-    }
-  }, [bookingConfirmed]);
-
+  const [specialDates, setSpecialDates] = useState([]);
+  
+  const [activeTab, setActiveTab] = useState('calendar');
+  const [editingTimeSlot, setEditingTimeSlot] = useState(null);
+  const [newTimeSlot, setNewTimeSlot] = useState({ label: '', time: '', active: true });
+  const [newServiceArea, setNewServiceArea] = useState({ name: '', active: true });
+  const [editingServiceArea, setEditingServiceArea] = useState(null);
+  
   const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   const monthNames = [
     'January', 'February', 'March', 'April', 'May', 'June',
     'July', 'August', 'September', 'October', 'November', 'December'
   ];
-
-  const getMonthData = () => {
-    const year = currentDate.getFullYear();
-    const month = currentDate.getMonth();
-    
-    const firstDay = new Date(year, month, 1);
-    const startingDay = firstDay.getDay();
-    
-    const daysInMonth = new Date(year, month + 1, 0).getDate();
-    
-    return { year, month, startingDay, daysInMonth };
-  };
 
   const goToPrevMonth = () => {
     const newDate = new Date(currentDate);
@@ -106,6 +59,18 @@ const AdCalendar = () => {
     setCurrentDate(newDate);
   };
 
+  const getMonthData = () => {
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
+    
+    const firstDay = new Date(year, month, 1);
+    const startingDay = firstDay.getDay();
+    
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    
+    return { year, month, startingDay, daysInMonth };
+  };
+
   const isPastDate = (day) => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -113,81 +78,152 @@ const AdCalendar = () => {
     return checkDate < today;
   };
 
-  const isCollectionDay = (day) => {
+  const isRegularCollectionDay = (day) => {
     const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
     const dayOfWeek = date.getDay();
-    return dayOfWeek === 1 || dayOfWeek === 3 || dayOfWeek === 5; // Mon, Wed, Fri
+    return availableDays[dayOfWeek];
   };
 
-  const handleDateSelect = (day) => {
-    if (isPastDate(day) || !isCollectionDay(day)) return;
+  const getSpecialDateStatus = (day) => {
+    const dateStr = `${currentDate.getFullYear()}-${(currentDate.getMonth() + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+    const specialDate = specialDates.find(d => d.date === dateStr);
+    return specialDate ? specialDate.status : null;
+  };
+
+  const toggleDayAvailability = (dayIndex) => {
+    setAvailableDays(prev => ({
+      ...prev,
+      [dayIndex]: !prev[dayIndex]
+    }));
+  };
+
+  const toggleSpecificDay = (day) => {
+    if (isPastDate(day)) return;
+
+    const dateStr = `${currentDate.getFullYear()}-${(currentDate.getMonth() + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+    const existingIndex = specialDates.findIndex(d => d.date === dateStr);
     
-    const newDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
-    setSelectedDate(newDate);
-    setBookingStep(1);
+    if (existingIndex >= 0) {
+      setSpecialDates(specialDates.filter((_, i) => i !== existingIndex));
+    } else {
+
+      const regularStatus = isRegularCollectionDay(day);
+      setSpecialDates([...specialDates, { 
+        date: dateStr, 
+        status: !regularStatus ? 'available' : 'unavailable'
+      }]);
+    }
   };
 
-  const formatDate = (date) => {
-    if (!date) return '';
-    return `${daysOfWeek[date.getDay()]}, ${monthNames[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
+
+  const isCollectionDay = (day) => {
+    const specialStatus = getSpecialDateStatus(day);
+    if (specialStatus === 'available') return true;
+    if (specialStatus === 'unavailable') return false;
+    return isRegularCollectionDay(day);
   };
 
-  const resetForm = () => {
-    setSelectedDate(null);
-    setTimeSlot(null);
-    setMaterialType(null);
-    setEstimatedWeight("");
-    setPickupLocation("");
-    setContactDetails({
-      name: "",
-      phone: "",
-      email: ""
-    });
-    setBookingStep(0);
-    setBookingConfirmed(false);
-    setBookingId("");
+  const addTimeSlot = () => {
+    if (!newTimeSlot.label || !newTimeSlot.time) return;
+    
+    const id = newTimeSlot.label.toLowerCase().replace(/\s+/g, '-');
+    setTimeSlots([...timeSlots, { ...newTimeSlot, id }]);
+    setNewTimeSlot({ label: '', time: '', active: true });
   };
 
-  const confirmBooking = () => {
-    setBookingConfirmed(true);
+  const deleteTimeSlot = (id) => {
+    setTimeSlots(timeSlots.filter(slot => slot.id !== id));
   };
 
-  const nextStep = () => {
-    setBookingStep(bookingStep + 1);
+  const toggleTimeSlotActive = (id) => {
+    setTimeSlots(timeSlots.map(slot => 
+      slot.id === id ? { ...slot, active: !slot.active } : slot
+    ));
   };
 
-  const prevStep = () => {
-    setBookingStep(bookingStep - 1);
+  const startEditTimeSlot = (slot) => {
+    setEditingTimeSlot({ ...slot });
+  };
+
+  const saveEditTimeSlot = () => {
+    if (!editingTimeSlot.label || !editingTimeSlot.time) return;
+    
+    setTimeSlots(timeSlots.map(slot => 
+      slot.id === editingTimeSlot.id ? editingTimeSlot : slot
+    ));
+    setEditingTimeSlot(null);
+  };
+
+  const addServiceArea = () => {
+    if (!newServiceArea.name) return;
+    
+    const id = newServiceArea.name.toLowerCase().replace(/\s+/g, '-');
+    setServiceAreas([...serviceAreas, { ...newServiceArea, id }]);
+    setNewServiceArea({ name: '', active: true });
+  };
+
+  const deleteServiceArea = (id) => {
+    setServiceAreas(serviceAreas.filter(area => area.id !== id));
+  };
+
+  const toggleServiceAreaActive = (id) => {
+    setServiceAreas(serviceAreas.map(area => 
+      area.id === id ? { ...area, active: !area.active } : area
+    ));
+  };
+
+  const startEditServiceArea = (area) => {
+    setEditingServiceArea({ ...area });
+  };
+
+  const saveEditServiceArea = () => {
+    if (!editingServiceArea.name) return;
+    
+    setServiceAreas(serviceAreas.map(area => 
+      area.id === editingServiceArea.id ? editingServiceArea : area
+    ));
+    setEditingServiceArea(null);
+  };
+
+  const saveSettings = () => {
+    const settings = {
+      availableDays,
+      timeSlots,
+      serviceAreas,
+      specialDates
+    };
+    
+    onSaveSettings(settings);
   };
 
   const renderCalendar = () => {
     const { startingDay, daysInMonth } = getMonthData();
     const calendarDays = [];
-    
-    // Empty cells for days before first day of month
+
     for (let i = 0; i < startingDay; i++) {
       calendarDays.push(<div key={`empty-${i}`} className="calendar-empty"></div>);
     }
     
-    // Days of month
     for (let day = 1; day <= daysInMonth; day++) {
-      const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
-      const isSelected = selectedDate && 
-        selectedDate.getDate() === day && 
-        selectedDate.getMonth() === currentDate.getMonth() &&
-        selectedDate.getFullYear() === currentDate.getFullYear();
-      
       const isPast = isPastDate(day);
       const isCollection = isCollectionDay(day);
+      const specialStatus = getSpecialDateStatus(day);
       
       calendarDays.push(
         <div 
           key={`day-${day}`}
-          className={`calendar-day ${isPast ? 'past' : ''} ${!isCollection ? 'no-collection' : ''} ${isSelected ? 'selected' : ''}`}
-          onClick={() => (!isPast && isCollection) && handleDateSelect(day)}
+          className={`
+            calendar-day 
+            ${isPast ? 'past' : ''} 
+            ${isCollection ? 'collection' : 'no-collection'}
+            ${specialStatus ? 'special' : ''}
+          `}
+          onClick={() => !isPast && toggleSpecificDay(day)}
         >
           <span className="day-number">{day}</span>
-          {isCollection && !isPast && <span className="collection-dot"></span>}
+          {specialStatus && (
+            <span className={`special-indicator ${specialStatus}`}></span>
+          )}
         </div>
       );
     }
@@ -195,345 +231,260 @@ const AdCalendar = () => {
     return calendarDays;
   };
 
-  const renderBookingStep = () => {
-    switch (bookingStep) {
-      case 0:
-        return (
-          <div className="calendar-container">
-            <div className="calendar-header">
-              <button onClick={goToPrevMonth} className="nav-button">
-                <ChevronLeft size={20} />
-              </button>
-              <h2 className="current-month">{monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}</h2>
-              <button onClick={goToNextMonth} className="nav-button">
-                <ChevronRight size={20} />
-              </button>
-            </div>
-            
-            <div className="weekday-header">
-              {daysOfWeek.map(day => (
-                <div key={day} className="weekday">{day}</div>
-              ))}
-            </div>
-            
-            <div className="calendar-grid">
-              {renderCalendar()}
-            </div>
-            
-            <div className="calendar-legend">
-              <div className="legend-item">
-                <span className="legend-dot collection"></span>
-                <span>Collection Available</span>
-              </div>
-              <div className="legend-item">
-                <span className="legend-dot no-collection"></span>
-                <span>No Collection</span>
-              </div>
-            </div>
-            
-            <div className="calendar-info">
-              <AlertTriangle size={16} className="info-icon" />
-              <p>Collections are available on Monday, Wednesday, and Friday</p>
-            </div>
-          </div>
-        );
-        
-      case 1:
-        return (
-          <div className="step-container">
-            <h2 className="step-title">Select Time Slot</h2>
-            <p className="selected-date">{formatDate(selectedDate)}</p>
-            
-            <div className="time-slots">
-              {timeSlots.map(slot => (
-                <div 
-                  key={slot.id}
-                  className={`time-slot ${timeSlot === slot.id ? 'selected' : ''}`}
-                  onClick={() => setTimeSlot(slot.id)}
-                >
-                  <Clock size={18} className="slot-icon" />
-                  <div className="slot-details">
-                    <h3>{slot.label}</h3>
-                    <p>{slot.time}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-            
-            <div className="step-navigation">
-              <button className="back-button" onClick={prevStep}>Back</button>
-              <button 
-                className="next-button" 
-                onClick={nextStep}
-                disabled={!timeSlot}
-              >
-                Continue
-              </button>
-            </div>
-          </div>
-        );
-        
-      case 2:
-        return (
-          <div className="step-container">
-            <h2 className="step-title">Select Material Type</h2>
-            
-            <div className="material-grid">
-              {materialTypes.map(material => (
-                <div 
-                  key={material.id}
-                  className={`material-card ${materialType === material.id ? 'selected' : ''}`}
-                  onClick={() => setMaterialType(material.id)}
-                >
-                  <span className="material-icon">{material.icon}</span>
-                  <h3>{material.name}</h3>
-                  <p className="material-rate">{material.rate}</p>
-                  <p className="material-desc">{material.description}</p>
-                </div>
-              ))}
-            </div>
-            
-            <div className="step-navigation">
-              <button className="back-button" onClick={prevStep}>Back</button>
-              <button 
-                className="next-button" 
-                onClick={nextStep}
-                disabled={!materialType}
-              >
-                Continue
-              </button>
-            </div>
-          </div>
-        );
-        
-      case 3:
-        return (
-          <div className="step-container">
-            <h2 className="step-title">Collection Details</h2>
-            
-            <div className="form-container">
-              <div className="form-group">
-                <label>Estimated Weight (lbs)</label>
-                <input 
-                  type="number" 
-                  value={estimatedWeight}
-                  onChange={(e) => setEstimatedWeight(e.target.value)}
-                  placeholder="Enter estimated weight in pounds"
-                  className="form-input"
-                />
-              </div>
-              
-              <div className="form-group">
-                <label>Pickup Location</label>
-                <textarea 
-                  value={pickupLocation}
-                  onChange={(e) => setPickupLocation(e.target.value)}
-                  placeholder="Address or description of pickup location"
-                  className="form-textarea"
-                ></textarea>
-              </div>
-              
-              <div className="form-info">
-                <Info size={16} className="info-icon" />
-                <p>Our team will provide more accurate pricing upon pickup based on actual weight</p>
-              </div>
-            </div>
-            
-            <div className="step-navigation">
-              <button className="back-button" onClick={prevStep}>Back</button>
-              <button 
-                className="next-button" 
-                onClick={nextStep}
-                disabled={!estimatedWeight || !pickupLocation}
-              >
-                Continue
-              </button>
-            </div>
-          </div>
-        );
-        
-      case 4:
-        return (
-          <div className="step-container">
-            <h2 className="step-title">Contact Information</h2>
-            
-            <div className="form-container">
-              <div className="form-group">
-                <label>Full Name</label>
-                <input 
-                  type="text" 
-                  value={contactDetails.name}
-                  onChange={(e) => setContactDetails({...contactDetails, name: e.target.value})}
-                  placeholder="Enter your full name"
-                  className="form-input"
-                />
-              </div>
-              
-              <div className="form-group">
-                <label>Phone Number</label>
-                <input 
-                  type="tel" 
-                  value={contactDetails.phone}
-                  onChange={(e) => setContactDetails({...contactDetails, phone: e.target.value})}
-                  placeholder="Enter your phone number"
-                  className="form-input"
-                />
-              </div>
-              
-              <div className="form-group">
-                <label>Email Address</label>
-                <input 
-                  type="email" 
-                  value={contactDetails.email}
-                  onChange={(e) => setContactDetails({...contactDetails, email: e.target.value})}
-                  placeholder="Enter your email address"
-                  className="form-input"
-                />
-              </div>
-            </div>
-            
-            <div className="step-navigation">
-              <button className="back-button" onClick={prevStep}>Back</button>
-              <button 
-                className="next-button" 
-                onClick={nextStep}
-                disabled={!contactDetails.name || !contactDetails.phone || !contactDetails.email}
-              >
-                Review Details
-              </button>
-            </div>
-          </div>
-        );
-        
-      case 5:
-        return (
-          <div className="step-container">
-            <h2 className="step-title">Review & Confirm</h2>
-            
-            <div className="booking-summary">
-              <div className="summary-item">
-                <Calendar size={20} className="summary-icon" />
-                <div>
-                  <h3>Collection Date & Time</h3>
-                  <p>{formatDate(selectedDate)}</p>
-                  <p>{timeSlots.find(slot => slot.id === timeSlot)?.time}</p>
-                </div>
-              </div>
-              
-              <div className="summary-item">
-                <Recycle size={20} className="summary-icon" />
-                <div>
-                  <h3>Material Details</h3>
-                  <p>{materialTypes.find(mat => mat.id === materialType)?.name}</p>
-                  <p>Estimated weight: {estimatedWeight} lbs</p>
-                  <p>Estimated value: {(parseFloat(estimatedWeight || 0) * parseFloat(materialTypes.find(mat => mat.id === materialType)?.rate.replace('$', '') || 0)).toFixed(2)}</p>
-                </div>
-              </div>
-              
-              <div className="summary-item">
-                <MapPin size={20} className="summary-icon" />
-                <div>
-                  <h3>Pickup Location</h3>
-                  <p>{pickupLocation}</p>
-                </div>
-              </div>
-              
-              <div className="summary-item">
-                <Info size={20} className="summary-icon" />
-                <div>
-                  <h3>Contact Information</h3>
-                  <p>{contactDetails.name}</p>
-                  <p>{contactDetails.phone}</p>
-                  <p>{contactDetails.email}</p>
-                </div>
-              </div>
-            </div>
-            
-            <div className="step-navigation">
-              <button className="back-button" onClick={prevStep}>Edit Details</button>
-              <button className="confirm-button" onClick={confirmBooking}>
-                Confirm Collection
-              </button>
-            </div>
-          </div>
-        );
-        
-      default:
-        return null;
-    }
-  };
-
-  if (bookingConfirmed) {
-    return (
-      <div className="booking-confirmed">
-        <div className="confirmation-icon">
-          <CheckCircle size={64} />
+  return (
+    <div className="admin-calendar-container">
+      <div className="admin-header">
+        <div className="header-icon-container">
+          <Settings size={24} className="header-icon" />
         </div>
-        <h2>Collection Scheduled!</h2>
-        <p className="booking-id">Booking ID: {bookingId}</p>
-        
-        <div className="confirmation-details">
-          <div className="confirmation-item">
-            <Calendar size={20} className="confirmation-icon" />
-            <div>
-              <h3>Date & Time</h3>
-              <p>{formatDate(selectedDate)}</p>
-              <p>{timeSlots.find(slot => slot.id === timeSlot)?.time}</p>
-            </div>
-          </div>
-          
-          <div className="confirmation-item">
-            <Truck size={20} className="confirmation-icon" />
-            <div>
-              <h3>Collection Details</h3>
-              <p>{materialTypes.find(mat => mat.id === materialType)?.name}</p>
-              <p>Estimated weight: {estimatedWeight} lbs</p>
-            </div>
-          </div>
-          
-          <div className="confirmation-item">
-            <MapPin size={20} className="confirmation-icon" />
-            <div>
-              <h3>Pickup Location</h3>
-              <p>{pickupLocation}</p>
-            </div>
-          </div>
-        </div>
-        
-        <div className="confirmation-message">
-          <p>We have sent a confirmation email to {contactDetails.email} with all the details.</p>
-          <p>Our team will arrive during the scheduled time window. Please ensure your aluminum scrap is readily accessible.</p>
-        </div>
-        
-        <button className="new-booking-button" onClick={resetForm}>
-          Schedule Another Collection
+        <h1>Admin Collection Management</h1>
+      </div>
+      
+      <div className="admin-tabs">
+        <button 
+          className={`admin-tab ${activeTab === 'calendar' ? 'active' : ''}`}
+          onClick={() => setActiveTab('calendar')}
+        >
+          <Calendar size={16} />
+          <span>Calendar Settings</span>
+        </button>
+        <button 
+          className={`admin-tab ${activeTab === 'timeslots' ? 'active' : ''}`}
+          onClick={() => setActiveTab('timeslots')}
+        >
+          <Clock size={16} />
+          <span>Time Slots</span>
+        </button>
+        <button 
+          className={`admin-tab ${activeTab === 'areas' ? 'active' : ''}`}
+          onClick={() => setActiveTab('areas')}
+        >
+          <MapPin size={16} />
+          <span>Service Areas</span>
         </button>
       </div>
-    );
-  }
-
-  return (
-    <div className="scrap-calendar-container">
-      <div className="header">
-        <div className="header-icon-container">
-          <Recycle size={24} className="header-icon" />
-        </div>
-        <h1>Aluminum Scrap Collection</h1>
-      </div>
       
-      <div className="progress-tracker">
-        {[...Array(6)].map((_, i) => (
-          <div 
-            key={i} 
-            className={`progress-step ${i === bookingStep ? 'active' : i < bookingStep ? 'completed' : ''}`}
-          >
-            {i < bookingStep ? <CheckCircle size={16} /> : i === bookingStep ? <span className="step-number">{i + 1}</span> : ''}
+      <div className="admin-content">
+        {activeTab === 'calendar' && (
+          <div className="calendar-settings">
+            <h2>Collection Days</h2>
+            
+            <div className="day-toggles">
+              {daysOfWeek.map((day, index) => (
+                <button 
+                  key={day}
+                  className={`day-toggle ${availableDays[index] ? 'active' : ''}`}
+                  onClick={() => toggleDayAvailability(index)}
+                >
+                  {day}
+                </button>
+              ))}
+            </div>
+            
+            <div className="admin-calendar">
+              <div className="calendar-header">
+                <button onClick={goToPrevMonth} className="nav-button">
+                  <ChevronLeft size={20} />
+                </button>
+                <h2 className="current-month">{monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}</h2>
+                <button onClick={goToNextMonth} className="nav-button">
+                  <ChevronRight size={20} />
+                </button>
+              </div>
+              
+              <div className="weekday-header">
+                {daysOfWeek.map(day => (
+                  <div key={day} className="weekday">{day}</div>
+                ))}
+              </div>
+              
+              <div className="calendar-grid">
+                {renderCalendar()}
+              </div>
+              
+              <div className="calendar-legend">
+                <div className="legend-item">
+                  <span className="legend-dot collection"></span>
+                  <span>Regular Collection Day</span>
+                </div>
+                <div className="legend-item">
+                  <span className="legend-dot no-collection"></span>
+                  <span>No Collection</span>
+                </div>
+                <div className="legend-item">
+                  <span className="legend-dot special available"></span>
+                  <span>Special Collection Day Added</span>
+                </div>
+                <div className="legend-item">
+                  <span className="legend-dot special unavailable"></span>
+                  <span>Collection Day Removed</span>
+                </div>
+              </div>
+              
+              <div className="calendar-info">
+                <p>Click on a day to toggle its collection status. Past dates cannot be modified.</p>
+              </div>
+            </div>
           </div>
-        ))}
+        )}
+        
+        {activeTab === 'timeslots' && (
+          <div className="time-slot-settings">
+            <h2>Time Slot Management</h2>
+            
+            <div className="time-slot-list">
+              {timeSlots.map(slot => (
+                <div key={slot.id} className="admin-time-slot">
+                  {editingTimeSlot && editingTimeSlot.id === slot.id ? (
+                    <div className="time-slot-edit-form">
+                      <input 
+                        type="text" 
+                        value={editingTimeSlot.label} 
+                        onChange={(e) => setEditingTimeSlot({...editingTimeSlot, label: e.target.value})}
+                        placeholder="Label (e.g. Morning)"
+                      />
+                      <input 
+                        type="text" 
+                        value={editingTimeSlot.time} 
+                        onChange={(e) => setEditingTimeSlot({...editingTimeSlot, time: e.target.value})}
+                        placeholder="Time Range (e.g. 9:00 AM - 12:00 PM)"
+                      />
+                      <div className="edit-actions">
+                        <button onClick={saveEditTimeSlot} className="save-button">
+                          <Check size={16} />
+                        </button>
+                        <button onClick={() => setEditingTimeSlot(null)} className="cancel-button">
+                          <X size={16} />
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="time-slot-info">
+                        <span className={`time-slot-status ${slot.active ? 'active' : 'inactive'}`}></span>
+                        <div>
+                          <h3>{slot.label}</h3>
+                          <p>{slot.time}</p>
+                        </div>
+                      </div>
+                      <div className="time-slot-actions">
+                        <button 
+                          onClick={() => toggleTimeSlotActive(slot.id)}
+                          className={`toggle-button ${slot.active ? 'active' : 'inactive'}`}
+                        >
+                          {slot.active ? 'Active' : 'Inactive'}
+                        </button>
+                        <button onClick={() => startEditTimeSlot(slot)} className="edit-button">
+                          <Edit size={16} />
+                        </button>
+                        <button onClick={() => deleteTimeSlot(slot.id)} className="delete-button">
+                          <Trash size={16} />
+                        </button>
+                      </div>
+                    </>
+                  )}
+                </div>
+              ))}
+            </div>
+            
+            <div className="add-time-slot">
+              <h3>Add New Time Slot</h3>
+              <div className="add-form">
+                <input 
+                  type="text" 
+                  value={newTimeSlot.label} 
+                  onChange={(e) => setNewTimeSlot({...newTimeSlot, label: e.target.value})}
+                  placeholder="Label (e.g. Evening)"
+                />
+                <input 
+                  type="text" 
+                  value={newTimeSlot.time} 
+                  onChange={(e) => setNewTimeSlot({...newTimeSlot, time: e.target.value})}
+                  placeholder="Time Range (e.g. 5:00 PM - 8:00 PM)"
+                />
+                <button onClick={addTimeSlot} className="add-button">
+                  <Plus size={16} />
+                  <span>Add Time Slot</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+        
+        {activeTab === 'areas' && (
+          <div className="service-area-settings">
+            <h2>Service Area Management</h2>
+            
+            <div className="service-area-list">
+              {serviceAreas.map(area => (
+                <div key={area.id} className="admin-service-area">
+                  {editingServiceArea && editingServiceArea.id === area.id ? (
+                    <div className="service-area-edit-form">
+                      <input 
+                        type="text" 
+                        value={editingServiceArea.name} 
+                        onChange={(e) => setEditingServiceArea({...editingServiceArea, name: e.target.value})}
+                        placeholder="Area Name"
+                      />
+                      <div className="edit-actions">
+                        <button onClick={saveEditServiceArea} className="save-button">
+                          <Check size={16} />
+                        </button>
+                        <button onClick={() => setEditingServiceArea(null)} className="cancel-button">
+                          <X size={16} />
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="service-area-info">
+                        <span className={`service-area-status ${area.active ? 'active' : 'inactive'}`}></span>
+                        <h3>{area.name}</h3>
+                      </div>
+                      <div className="service-area-actions">
+                        <button 
+                          onClick={() => toggleServiceAreaActive(area.id)}
+                          className={`toggle-button ${area.active ? 'active' : 'inactive'}`}
+                        >
+                          {area.active ? 'Active' : 'Inactive'}
+                        </button>
+                        <button onClick={() => startEditServiceArea(area)} className="edit-button">
+                          <Edit size={16} />
+                        </button>
+                        <button onClick={() => deleteServiceArea(area.id)} className="delete-button">
+                          <Trash size={16} />
+                        </button>
+                      </div>
+                    </>
+                  )}
+                </div>
+              ))}
+            </div>
+            
+            <div className="add-service-area">
+              <h3>Add New Service Area</h3>
+              <div className="add-form">
+                <input 
+                  type="text" 
+                  value={newServiceArea.name} 
+                  onChange={(e) => setNewServiceArea({...newServiceArea, name: e.target.value})}
+                  placeholder="Area Name (e.g. Northwest District)"
+                />
+                <button onClick={addServiceArea} className="add-button">
+                  <Plus size={16} />
+                  <span>Add Service Area</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
       
-      <div className="booking-content">
-        {renderBookingStep()}
+      <div className="admin-footer">
+        <button onClick={saveSettings} className="save-settings-button">
+          <Save size={16} />
+          <span>Save All Settings</span>
+        </button>
       </div>
     </div>
   );
