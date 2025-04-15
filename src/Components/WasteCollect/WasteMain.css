@@ -155,7 +155,6 @@
     color: white;
 }
 
-
 @media (max-width: 768px) {
     .Wheader-content {
         flex-direction: column;
@@ -163,22 +162,90 @@
         text-align: center;
         margin-bottom: 20px;
     }
+    
+    .waste-section {
+        padding: 0;
+    }
 
     .Wmain-heading,
     .Wdescription {
         max-width: 100%;
+        margin: 10px 0;
+        padding: 0 15px;
     }
 
     .waste-card-container {
         flex-direction: column;
-        gap: 10px;
+        align-items: center;
+        gap: 20px;
+        width: 100%;
+        padding: 0 15px;
     }
 
     .waste-card {
         width: 100%;
+        max-width: 500px;
+        height: 350px;
+        position: relative;
+        overflow: hidden;
+        border-radius: 10px;
     }
 
     .waste-card-image {
-        height: 250px;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    .waste-card-content {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(0, 0, 0, 0.7);
+        padding: 15px;
+        color: #fff;
+    }
+
+    .waste-card-title {
+        font-size: 1.3em;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .waste-card-description {
+        font-size: 1em;
+        line-height: 1.4;
+        opacity: 0.95;
+        max-width: 100%;
+    }
+
+    .waste-learn-more {
+        bottom: 15px;
+        right: 15px;
+    }
+
+    .Collect-map-section {
+        height: auto;
+        padding: 30px 15px;
+        background-position: center;
+    }
+
+    .Collect-map-overlay {
+        padding: 15px;
+    }
+
+    .Collect-map-title {
+        font-size: 1.5em;
+    }
+
+    .Collect-map-description {
+        font-size: 1em;
+    }
+
+    .Collect-map-button {
+        font-size: 1em;
+        padding: 8px 16px;
     }
 }
