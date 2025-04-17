@@ -5,17 +5,17 @@ const AboutUSDes2 = () => {
     const steps = [
         {
           number: "1",
-          title: "Test-Test-Test",
+          title: "Fill the Pickup Request Form",
           description: "Test-Test-TestTest-Test-TestTest-Test-TestTest-Test-TestTest-Test-Test",
         },
         {
           number: "2",
-          title: "Test-Test-Test",
+          title: "Confirm and Submit",
           description: "Test-Test-TestTest-Test-TestTest-Test-TestTest-Test-TestTest-Test-Test",
         },
         {
           number: "3",
-          title: "Test-Test-Test",
+          title: " Wait for Confirmation and Pickup",
           description: "Test-Test-TestTest-Test-TestTest-Test-TestTest-Test-TestTest-Test-Test",
         },
       ];
