@@ -1,10 +1,13 @@
 .business1-card {
   font-family: 'Arial', sans-serif;
-  background-color: #232323;
-  color: #fff;
+  background-color: #282c34;
+  color: #e0e0e0;
   text-align: center;
-  padding-bottom: 20px;
+  padding-bottom: 30px;
   position: relative;
+  width: 100%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
 }
 
 .cover1-photo {
@@ -41,16 +44,39 @@
 
 .business1-info {
   padding-top: 30px;
+  padding-left: 20px;
+  padding-right: 20px;
 }
 
 .business1-name {
-  font-size: 40px;
+  font-size: 2.2rem;
   font-weight: bold;
+  margin-top: 0;
+  margin-bottom: 8px;
+  color: #ffffff;
 }
 
 .owner1-name,
 .contact1-number,
 .email1 {
-  font-size: 16px;
-  margin: 3px 0;
+  font-size: 1.1rem;
+  margin: 5px 0;
+  opacity: 0.85;
+  line-height: 1.5;
+}
+
+.contact1-number::before {
+  content: "\f095";
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  margin-right: 8px;
+  opacity: 0.7;
+}
+
+.email1::before {
+  content: "\f0e0";
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  margin-right: 8px;
+  opacity: 0.7;
 }
