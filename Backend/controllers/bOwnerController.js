@@ -1,4 +1,3 @@
-// --- START OF FILE controllers/bOwnerController.js ---
 const BusinessOwner = require('../models/bOwnerModel');
 const bcrypt = require('bcryptjs');
 const fs = require('fs');
@@ -10,10 +9,10 @@ const deleteUploadedFilesOnError = (files) => {
         Object.values(files).forEach(fileArray => {
             if (Array.isArray(fileArray)) {
                 fileArray.forEach(file => {
-                    const filePath = file.path;
-                    if (fs.existsSync(filePath)) {
+                    const filePath = file?.path;
+                    if (filePath && fs.existsSync(filePath)) {
                         try { fs.unlinkSync(filePath); deletedPaths.push(filePath); }
-                        catch (err) { console.error(`Error deleting file ${filePath} on reg failure:`, err); }
+                        catch (err) { console.error(`Error deleting file ${filePath}:`, err); }
                     }
                 });
             }
@@ -31,11 +30,9 @@ exports.registerBOwner = async (req, res) => {
        deleteUploadedFilesOnError(req.files);
        return res.status(400).json({ success: false, message: 'Please provide all required fields' });
     }
-    const existingOwner = await BusinessOwner.findOne({ $or: [{ email }, { businessId }] });
-    if (existingOwner) {
+    if (await BusinessOwner.findOne({ $or: [{ email }, { businessId }] })) {
         deleteUploadedFilesOnError(req.files);
-        const duplicateField = existingOwner.email === email ? 'Email' : 'Business ID';
-        return res.status(400).json({ success: false, message: `${duplicateField} already exists.` });
+        return res.status(400).json({ success: false, message: `Email or Business ID already exists.` });
     }
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
@@ -49,23 +46,15 @@ exports.registerBOwner = async (req, res) => {
   } catch (error) {
       deleteUploadedFilesOnError(req.files);
       console.error("Business Owner Registration Error:", error);
-      if (error.name === 'ValidationError') {
-            const messages = Object.values(error.errors).map(val => val.message);
-            return res.status(400).json({ success: false, message: messages.join('. ') });
-      }
-      if (error.code === 11000) {
-           const field = Object.keys(error.keyValue)[0];
-           return res.status(400).json({ success: false, message: `Duplicate value entered for ${field}.` });
-       }
+      if (error.name === 'ValidationError') { return res.status(400).json({ success: false, message: Object.values(error.errors).map(val => val.message).join('. ') }); }
+      if (error.code === 11000) { return res.status(400).json({ success: false, message: `Duplicate value entered.` }); }
       res.status(500).json({ success: false, message: 'Server error during registration.' });
   }
 };
 
 exports.getBOwnerProfile = async (req, res) => {
     try {
-        if (!req.user || (req.user.id !== req.params.id && req.user.role !== 'admin')) {
-             return res.status(403).json({ success: false, message: 'Not authorized' });
-        }
+        if (!req.user || (req.user.id !== req.params.id && req.user.role !== 'admin')) { return res.status(403).json({ success: false, message: 'Not authorized' }); }
         const bOwner = await BusinessOwner.findById(req.params.id).select('-password');
         if (!bOwner) { return res.status(404).json({ success: false, message: 'Business Owner not found' }); }
         res.status(200).json({ success: true, data: bOwner });
@@ -76,11 +65,5 @@ exports.getBOwnerProfile = async (req, res) => {
     }
 };
 
-exports.updateBOwner = async (req, res) => {
-    res.status(501).json({ success: false, message: 'Update function not implemented yet.' });
-};
-
-exports.deleteBOwner = async (req, res) => {
-    res.status(501).json({ success: false, message: 'Delete function not implemented yet.' });
-};
-// --- END OF FILE controllers/bOwnerController.js ---
+exports.updateBOwner = async (req, res) => { res.status(501).json({ success: false, message: 'Not implemented.' }); };
+exports.deleteBOwner = async (req, res) => { res.status(501).json({ success: false, message: 'Not implemented.' }); };

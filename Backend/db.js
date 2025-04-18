@@ -1,4 +1,3 @@
-// --- START OF FILE db.js ---
 const mongoose = require('mongoose');
 const config = require('./config');
 
@@ -13,4 +12,3 @@ const connectDB = async () => {
 };
 
 module.exports = connectDB;
-// --- END OF FILE db.js ---

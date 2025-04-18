@@ -1,4 +1,3 @@
-// --- START OF FILE models/bOwnerModel.js ---
 const mongoose = require('mongoose');
 
 const businessOwnerSchema = new mongoose.Schema({
@@ -13,9 +12,8 @@ const businessOwnerSchema = new mongoose.Schema({
   province: { type: String, required: [true, 'Province is required'], trim: true },
   profilePhoto: { type: String, default: '' },
   coverPhoto: { type: String, default: '' },
-  role: { type: String, enum: ['bowner', 'admin'], default: 'bowner' } // Example role field
+  role: { type: String, enum: ['bowner', 'admin'], default: 'bowner' }
 }, { timestamps: true });
 
 const BusinessOwner = mongoose.model('BusinessOwner', businessOwnerSchema);
 module.exports = BusinessOwner;
-// --- END OF FILE models/bOwnerModel.js ---

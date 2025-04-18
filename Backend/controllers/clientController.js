@@ -1,16 +1,14 @@
-// --- START OF FILE controllers/clientController.js ---
 const Client = require('../models/clientModel');
 const bcrypt = require('bcryptjs');
 const fs = require('fs');
 const path = require('path');
 
 const deletePhoto = (photoPath) => {
-    if (photoPath && photoPath !== '') {
-        const fullPath = path.join(__dirname, '..', photoPath);
-        if (fs.existsSync(fullPath)) {
-            try { fs.unlinkSync(fullPath); console.log(`Deleted photo: ${fullPath}`); }
-            catch (err) { console.error(`Error deleting photo ${fullPath}:`, err); }
-        }
+    if (!photoPath) return;
+    const fullPath = path.join(__dirname, '..', photoPath);
+    if (fs.existsSync(fullPath)) {
+        try { fs.unlinkSync(fullPath); console.log(`Deleted photo: ${fullPath}`); }
+        catch (err) { console.error(`Error deleting photo ${fullPath}:`, err); }
     }
 };
 
@@ -22,8 +20,7 @@ exports.registerClient = async (req, res) => {
             if (photoFile) deletePhoto(`/uploads/profiles/${photoFile.filename}`);
             return res.status(400).json({ success: false, message: 'Please provide all required fields' });
         }
-        const clientExists = await Client.findOne({ email });
-        if (clientExists) {
+        if (await Client.findOne({ email })) {
             if (photoFile) deletePhoto(`/uploads/profiles/${photoFile.filename}`);
             return res.status(400).json({ success: false, message: 'Client with this email already exists' });
         }
@@ -38,25 +35,20 @@ exports.registerClient = async (req, res) => {
     } catch (error) {
         if (photoFile) deletePhoto(`/uploads/profiles/${photoFile.filename}`);
         console.error("Register Client Error:", error);
-         if (error.name === 'ValidationError') {
-            const messages = Object.values(error.errors).map(val => val.message);
-            return res.status(400).json({ success: false, message: messages.join('. ') });
-        }
+        if (error.name === 'ValidationError') { return res.status(400).json({ success: false, message: Object.values(error.errors).map(val => val.message).join('. ') }); }
         res.status(500).json({ success: false, message: 'Server Error during registration' });
     }
 };
 
 exports.getClientById = async (req, res) => {
   try {
-    if (!req.user || (req.user.id !== req.params.id && req.user.role !== 'admin')) {
-         return res.status(403).json({ success: false, message: 'Not authorized' });
-    }
+    if (!req.user || (req.user.id !== req.params.id && req.user.role !== 'admin')) { return res.status(403).json({ success: false, message: 'Not authorized' }); }
     const client = await Client.findById(req.params.id).select('-password');
     if (!client) { return res.status(404).json({ success: false, message: 'Client not found' }); }
     res.status(200).json({ success: true, data: client });
   } catch (error) {
     console.error("Get Client By ID Error:", error);
-     if (error.kind === 'ObjectId') { return res.status(400).json({ success: false, message: 'Invalid client ID format' }); }
+    if (error.kind === 'ObjectId') { return res.status(400).json({ success: false, message: 'Invalid client ID format' }); }
     res.status(500).json({ success: false, message: 'Server Error' });
   }
 };
@@ -96,10 +88,7 @@ exports.updateClient = async (req, res) => {
     } catch (error) {
         if (photoFile) deletePhoto(`/uploads/profiles/${photoFile.filename}`);
         console.error("Update Client Error:", error);
-        if (error.name === 'ValidationError') {
-            const messages = Object.values(error.errors).map(val => val.message);
-            return res.status(400).json({ success: false, message: messages.join('. ') });
-        }
+        if (error.name === 'ValidationError') { return res.status(400).json({ success: false, message: Object.values(error.errors).map(val => val.message).join('. ') }); }
         if (error.code === 11000) { return res.status(400).json({ success: false, message: 'Email already in use.' }); }
         res.status(500).json({ success: false, message: 'Server Error during update' });
     }
@@ -107,9 +96,7 @@ exports.updateClient = async (req, res) => {
 
 exports.deleteClient = async (req, res) => {
   try {
-     if (!req.user || (req.user.id !== req.params.id && req.user.role !== 'admin')) {
-        return res.status(403).json({ success: false, message: 'Not authorized' });
-    }
+     if (!req.user || (req.user.id !== req.params.id && req.user.role !== 'admin')) { return res.status(403).json({ success: false, message: 'Not authorized' }); }
     const client = await Client.findById(req.params.id);
     if (!client) { return res.status(404).json({ success: false, message: 'Client not found' }); }
     const photoPathToDelete = client.profilePhoto;
@@ -118,8 +105,7 @@ exports.deleteClient = async (req, res) => {
     res.status(200).json({ success: true, message: 'Client deleted successfully' });
   } catch (error) {
     console.error("Delete Client Error:", error);
-     if (error.kind === 'ObjectId') { return res.status(400).json({ success: false, message: 'Invalid client ID format' }); }
+    if (error.kind === 'ObjectId') { return res.status(400).json({ success: false, message: 'Invalid client ID format' }); }
     res.status(500).json({ success: false, message: 'Server Error' });
   }
 };
-// --- END OF FILE controllers/clientController.js ---

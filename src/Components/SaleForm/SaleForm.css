@@ -72,3 +72,19 @@ textarea {
 .submit-button:hover {
   background-color: #555;
 }
+
+/* ✅ New: image preview */
+.image-preview {
+  width: 100%;
+  max-height: 250px;
+  object-fit: contain;
+  margin-bottom: 15px;
+  border-radius: 8px;
+}
+
+/* Optional: Error message styling */
+.error-message {
+  color: #ff4d4d;
+  margin-bottom: 10px;
+  font-weight: bold;
+}

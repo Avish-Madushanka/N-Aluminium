@@ -1,4 +1,3 @@
-// --- START OF FILE models/clientModel.js ---
 const mongoose = require('mongoose');
 
 const clientSchema = new mongoose.Schema({
@@ -10,9 +9,8 @@ const clientSchema = new mongoose.Schema({
   district: { type: String, required: [true, 'District is required'], trim: true },
   province: { type: String, required: [true, 'Province is required'], trim: true },
   profilePhoto: { type: String, default: '' },
-  role: { type: String, enum: ['client'], default: 'client' } // Example role field
+  role: { type: String, enum: ['client'], default: 'client' }
 }, { timestamps: true });
 
 const Client = mongoose.model('Client', clientSchema);
 module.exports = Client;
-// --- END OF FILE models/clientModel.js ---

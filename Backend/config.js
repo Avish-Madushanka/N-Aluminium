@@ -1,4 +1,3 @@
-// --- START OF FILE config.js ---
 require('dotenv').config();
 
 const config = {
@@ -9,14 +8,9 @@ const config = {
   nodeEnv: process.env.NODE_ENV || 'development'
 };
 
-if (!config.mongoURI) {
-  console.error("FATAL ERROR: MONGO_URI is not defined in the .env file.");
-  process.exit(1);
-}
-if (!config.jwtSecret) {
-  console.error("FATAL ERROR: JWT_SECRET is not defined in the .env file.");
+if (!config.mongoURI || !config.jwtSecret) {
+  console.error("FATAL ERROR: MONGO_URI or JWT_SECRET is not defined in .env");
   process.exit(1);
 }
 
 module.exports = config;
-// --- END OF FILE config.js ---
