@@ -1,0 +1,98 @@
+.TS-container {
+    max-width: 800px;
+    margin: auto;
+    padding: 24px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.08);
+    font-family: 'Segoe UI', sans-serif;
+  }
+  
+  .TS-header {
+    margin-bottom: 24px;
+  }
+  
+  .TS-header h2 {
+    font-size: 1.5rem;
+    margin-bottom: 12px;
+  }
+  
+  .TS-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  
+  .TS-card {
+    background: #f2f2f2;
+    padding: 16px;
+    border-radius: 10px;
+    text-align: center;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+  }
+  
+  .TS-card h3 {
+    margin-top: 8px;
+    font-size: 1rem;
+  }
+  
+  .TS-card p {
+    margin-top: 4px;
+    color: #555;
+    font-size: 0.9rem;
+  }
+  
+  .TS-card.selected {
+    border-color: #1976d2;
+    background-color: #e3f2fd;
+  }
+  
+  .TS-card:hover {
+    background-color: #e0e0e0;
+  }
+  
+  .TS-navigation {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .TS-back,
+  .TS-next {
+    padding: 10px 16px;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .TS-back {
+    background-color: #e0e0e0;
+    color: #333;
+  }
+  
+  .TS-back:hover {
+    background-color: #d5d5d5;
+  }
+  
+  .TS-next {
+    background-color: #1976d2;
+    color: white;
+  }
+  
+  .TS-next:hover {
+    background-color: #1565c0;
+  }
+  
+  .TS-next:disabled {
+    background-color: #90caf9;
+    cursor: not-allowed;
+  }
+  

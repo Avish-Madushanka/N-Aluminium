@@ -1,0 +1,106 @@
+.DS-container {
+  max-width: 700px;
+  margin: auto;
+  background-color: #ffffff;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.08);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.DS-header {
+  margin-bottom: 24px;
+}
+
+.DS-title {
+  font-size: 1.75rem;
+  margin-bottom: 16px;
+}
+
+.DS-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.DS-section {
+  border: 1px solid #e0e0e0;
+  padding: 16px;
+  border-radius: 8px;
+}
+
+.DS-section-title {
+  font-size: 1.2rem;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #333;
+}
+
+.DS-field {
+  margin-bottom: 16px;
+}
+
+.DS-field label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 500;
+  color: #555;
+}
+
+.DS-field input {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.DS-field input:focus {
+  border-color: #4caf50;
+  outline: none;
+}
+
+.DS-navigation {
+  margin-top: 24px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.DS-back,
+.DS-next {
+  padding: 10px 16px;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.3s ease;
+}
+
+.DS-back {
+  background-color: #e0e0e0;
+  color: #333;
+}
+
+.DS-back:hover {
+  background-color: #d5d5d5;
+}
+
+.DS-next {
+  background-color: #4caf50;
+  color: white;
+}
+
+.DS-next:hover {
+  background-color: #388e3c;
+}
+
+.DS-next:disabled {
+  background-color: #a5d6a7;
+  cursor: not-allowed;
+}

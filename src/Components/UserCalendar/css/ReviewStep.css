@@ -1,0 +1,84 @@
+.RS-container {
+  max-width: 800px;
+  margin: auto;
+  padding: 24px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.08);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.RS-header {
+  margin-bottom: 24px;
+}
+
+.RS-title {
+  font-size: 1.75rem;
+  margin-bottom: 8px;
+}
+
+.RS-subtitle {
+  color: #555;
+  font-size: 0.95rem;
+}
+
+.RS-details {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.RS-section {
+  padding: 16px;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.RS-section h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.1rem;
+  margin-bottom: 12px;
+  color: #333;
+}
+
+.RS-navigation {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.RS-back,
+.RS-confirm {
+  padding: 10px 16px;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.RS-back {
+  background-color: #e0e0e0;
+  color: #333;
+}
+
+.RS-back:hover {
+  background-color: #d5d5d5;
+}
+
+.RS-confirm {
+  background-color: #4caf50;
+  color: white;
+}
+
+.RS-confirm:hover {
+  background-color: #388e3c;
+}

@@ -1,0 +1,85 @@
+.CS2-container {
+  max-width: 700px;
+  margin: auto;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.08);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.CS2-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.CS2-icon {
+  color: #4caf50;
+  margin-bottom: 8px;
+}
+
+.CS2-title {
+  font-size: 1.75rem;
+  margin: 0;
+}
+
+.CS2-id {
+  font-size: 1rem;
+  color: #555;
+  margin-top: 4px;
+}
+
+.CS2-details {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.CS2-section {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.CS2-section-title {
+  font-size: 1.2rem;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #333;
+}
+
+.CS2-instructions {
+  background-color: #fff8e1;
+  color: #8d6e63;
+  border-left: 4px solid #ff9800;
+  padding: 12px 16px;
+  margin-top: 20px;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 6px;
+}
+
+.CS2-button {
+  margin-top: 24px;
+  padding: 10px 16px;
+  background-color: #4caf50;
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.CS2-button:hover {
+  background-color: #388e3c;
+}
