@@ -1,19 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import './Login.css';
+// Remove useNavigate from here, navigation is handled by App.js via onLoginSuccess
+// import { useNavigate } from 'react-router-dom';
+import './Login.css'; // Ensure this CSS file exists and is styled
 
-function Login() {
-  // State Variables - Remove userType state
+// Accept onLoginSuccess as a prop
+function Login({ onLoginSuccess }) {
+  // State Variables
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  // No userType state needed anymore
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-  const navigate = useNavigate();
+  // Remove navigate as it's handled by the prop
+  // const navigate = useNavigate();
 
-  // Clear messages on component unmount
+  // Clear messages on component mount or when props change (optional)
   useEffect(() => {
     return () => {
       setError('');
@@ -24,17 +26,15 @@ function Login() {
   // --- Event Handlers ---
   const handleEmailChange = (e) => setEmail(e.target.value);
   const handlePasswordChange = (e) => setPassword(e.target.value);
-  // No handleUserTypeChange needed anymore
 
   // --- Form Submission ---
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError('');
-    setSuccess('');
+    setSuccess(''); // Clear previous success message
 
-    // --- Use the single unified login endpoint ---
-    const apiUrl = 'http://localhost:5002/api/auth/login'; // *** Use the new unified route ***
+    const apiUrl = 'http://localhost:5002/api/auth/login'; // Unified login endpoint
 
     try {
       // --- API Call ---
@@ -45,53 +45,52 @@ function Login() {
       );
 
       // --- Success Handling ---
-      // Check structure AND the userType returned from backend
-      if (response.data && response.data.success && response.data.token && response.data.data?.userType) {
-
-        const receivedUserType = response.data.data.userType; // Get type from response
-        const tokenKey = receivedUserType === 'client' ? 'clientToken' : 'bOwnerToken';
-        const infoKey = receivedUserType === 'client' ? 'clientInfo' : 'bOwnerInfo';
-        // *** Adjust redirect paths as needed ***
-        const redirectPath = receivedUserType === 'client' ? '/' : '/BOwnerHome';
-
+      // Check for standard success response and token
+      if (response.data && response.data.success && response.data.token) {
+        const receivedUserType = response.data.data?.userType || 'unknown'; // Get user type if available
         console.log(`Login successful as ${receivedUserType}:`, response.data); // Log success
-
-        // Store token and user info using type-specific keys
-        localStorage.setItem(tokenKey, response.data.token);
-        localStorage.setItem(infoKey, JSON.stringify(response.data.data));
 
         setSuccess('Login successful! Redirecting...');
 
-        // Navigate after delay
-        setTimeout(() => {
-          navigate(redirectPath); // Redirect to appropriate path
-        }, 1500);
+        // *** CRITICAL CHANGE: Call the onLoginSuccess prop ***
+        // Pass the token to the App component to handle state update, storage, and navigation
+        onLoginSuccess(response.data.token);
+
+        // Do NOT navigate directly from here anymore.
+        // setTimeout(() => {
+        //   navigate(redirectPath);
+        // }, 1500);
 
       } else {
         // Handle unexpected success response format
         console.error("Login succeeded but received unexpected or incomplete data:", response.data);
-        setError('Login failed: Invalid response from server.');
-        setLoading(false);
+        throw new Error(response.data?.message || 'Login failed: Invalid response from server.'); // Throw error to be caught below
       }
     } catch (err) {
       // --- Error Handling ---
       setLoading(false); // Stop loading on error
 
       console.error("Login error!");
+      let errorMessage = 'An unknown error occurred during login.'; // Default message
       if (err.response) {
+        // Error response from server (e.g., 400, 401, 500)
         console.error("Server Response:", err.response.status, err.response.data);
-        setError(err.response.data?.message || `Login failed (${err.response.status}). Please check credentials.`);
+        errorMessage = err.response.data?.message || `Login failed (${err.response.status}). Please check credentials.`;
       } else if (err.request) {
+        // No response received from server
         console.error("No response received:", err.request);
-        setError('Network Error: Unable to reach server.');
+        errorMessage = 'Network Error: Unable to reach the server. Please check your connection.';
       } else {
-        console.error('Request Setup Error:', err.message);
-        setError(`An error occurred: ${err.message}`);
+        // Error setting up the request or other client-side error
+        console.error('Request Setup/Other Error:', err.message);
+        errorMessage = `An error occurred: ${err.message}`;
       }
+      setError(errorMessage);
     }
+    // Removed finally block setting loading=false, as success case now relies on navigation triggered by parent
   };
 
-  // --- JSX Rendering ---
+  // --- JSX Rendering (Structure mostly unchanged) ---
   return (
     <div className="login-container">
       <div className="login-content">
@@ -102,6 +101,7 @@ function Login() {
              Log in to access your N-Aluminium account. Manage pickups, track history, and contribute to sustainable practices.
           </p>
           <div className="social-icons">
+            {/* Add actual links or functionality if needed */}
             <a href="#" className="social-icon" aria-label="Facebook"><i className="fab fa-facebook-f"></i></a>
             <a href="#" className="social-icon" aria-label="Twitter"><i className="fab fa-twitter"></i></a>
             <a href="#" className="social-icon" aria-label="Instagram"><i className="fab fa-instagram"></i></a>
@@ -111,7 +111,6 @@ function Login() {
 
         {/* Right Section */}
         <div className="right-section">
-          {/* --- Title is now static --- */}
           <h2 className="signin-title">Sign in</h2>
 
           {/* Feedback Messages */}
@@ -119,8 +118,6 @@ function Login() {
           {success && <div className="success-message">{success}</div>}
 
           <form onSubmit={handleSubmit}>
-            {/* --- User Type Selection REMOVED --- */}
-
             {/* Email Input */}
             <div className="form-group">
               <label htmlFor="email">Email Address</label>
@@ -129,6 +126,7 @@ function Login() {
                 id="email"
                 value={email}
                 onChange={handleEmailChange}
+                placeholder="you@example.com" // Added placeholder
                 autoComplete="email"
                 required
                 disabled={loading}
@@ -143,6 +141,7 @@ function Login() {
                 id="password"
                 value={password}
                 onChange={handlePasswordChange}
+                placeholder="Enter your password" // Added placeholder
                 autoComplete="current-password"
                 required
                 disabled={loading}
