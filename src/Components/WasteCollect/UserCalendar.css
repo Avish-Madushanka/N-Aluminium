@@ -616,7 +616,6 @@
 
 .review-details {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 20px;
   margin-bottom: 30px;
 }
@@ -689,7 +688,7 @@
 
 .confirmation-section {
   padding: 20px;
-  background-color: rgba(213, 213, 213, 0.9); /* Slightly transparent gray */
+  background-color: rgba(213, 213, 213, 0.9); 
   border-radius: var(--border-radius);
   border: 1px solid var(--border-color);
 }
@@ -702,13 +701,13 @@
   color: var(--text-secondary);
   font-size: 0.875rem;
   padding: 14px 18px;
-  background-color: rgba(254, 249, 195, 0.9); /* Slightly transparent yellow */
+  background-color: rgb(197 254 195 / 90%);
   border-radius: var(--border-radius);
-  border: 1px solid var(--warning-color);
+  border: 1px solid #15fa38;
   text-align: left;
 }
 .confirmation-instructions svg {
-  color: var(--warning-color);
+  color: #000;
   flex-shrink: 0;
 }
 
