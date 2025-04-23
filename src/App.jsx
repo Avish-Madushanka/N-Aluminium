@@ -21,14 +21,13 @@ import ProAddForm from './Components/Projects/ProAddForm';
 import Service from './Pages/Service';
 import WastePickForm from './Components/WasteCollect/WastePickForm';
 import BSHeader from './Components/BuyandSell/BSHeader'
+import UserCalendar from './Components/WasteCollect/UserCalendar';
 import Admin from './Pages/Admin';
 import Map from './Pages/Map';
 import LocationMap from './Components/Maps/LocationMap';
 import Calculate from './Components/Calculate/Calculate';
 import AdCalendar from './Components/Admin/AdMinCalendar/AdCalendar';
 import FloatingChatbot from './Components/Chatbot/ChatBox';
-import UserCalendar from './Components/UserCalendar/UserCalendar';
-import SummaryItem from './Components/UserCalendar/Utils/SummaryItem';
 
 const ProtectedRoute = ({ children }) => {
   const location = useLocation();
@@ -107,13 +106,12 @@ const AppContent = () => {
         <Route path="/Collection" element={<Collection />} />
         <Route path="/Service" element={<Service />} />
         <Route path="/BSHeader" element={<BSHeader />} />
+        <Route path="/UserCalendar" element={<UserCalendar />} />
         <Route path="/Admin" element={<Admin />} />
         <Route path="/Map" element={<Map />} />
         <Route path="/LocationMap" element={<LocationMap />} />
         <Route path="/Calculate" element={<Calculate />} />
-        <Route path="/UserCalendar" element={<UserCalendar />} />
         <Route path="/AdCalendar" element={<AdCalendar />} />
-        <Route path="/SummaryItem" element={<SummaryItem />}/>
       </Routes>
       <FloatingChatbot />
       <Footer />
