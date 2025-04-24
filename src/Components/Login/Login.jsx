@@ -1,107 +1,131 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-// Remove useNavigate from here, navigation is handled by App.js via onLoginSuccess
-// import { useNavigate } from 'react-router-dom';
-import './Login.css'; // Ensure this CSS file exists and is styled
+import { useNavigate } from 'react-router-dom'; // Use navigate for admin redirect
+import './Login.css'; // Ensure this CSS file exists and is correctly styled
 
-// Accept onLoginSuccess as a prop
+// Accept onLoginSuccess prop from App.jsx
 function Login({ onLoginSuccess }) {
-  // State Variables
+  // --- State Variables ---
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
-  // Remove navigate as it's handled by the prop
-  // const navigate = useNavigate();
+  const [loading, setLoading] = useState(false); // Loading state for API call
+  const [error, setError] = useState('');       // Error message display
+  const [success, setSuccess] = useState('');     // Success message display
+  const navigate = useNavigate();                 // Hook for programmatic navigation (used for Admin)
 
-  // Clear messages on component mount or when props change (optional)
+  // --- Effect to clear messages on unmount ---
   useEffect(() => {
+    // Cleanup function runs when component unmounts
     return () => {
       setError('');
       setSuccess('');
     };
-  }, []);
+  }, []); // Empty dependency array ensures this runs only on mount and unmount
 
   // --- Event Handlers ---
   const handleEmailChange = (e) => setEmail(e.target.value);
   const handlePasswordChange = (e) => setPassword(e.target.value);
 
-  // --- Form Submission ---
+  // --- Form Submission Logic ---
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError('');
-    setSuccess(''); // Clear previous success message
+    e.preventDefault(); // Prevent default form submission behavior
+    setLoading(true);   // Set loading state to true
+    setError('');       // Clear any previous errors
+    setSuccess('');     // Clear any previous success messages
 
-    const apiUrl = 'http://localhost:5002/api/auth/login'; // Unified login endpoint
+    // Backend API endpoint for unified login
+    const apiUrl = 'http://localhost:5002/api/auth/login'; // Adjust if your port/URL differs
+
+    // --- Frontend check for Admin email ---
+    // NOTE: Password validation is still done ONLY by the backend.
+    const isAdminEmailEntered = email === 'Admin@gmail.com';
 
     try {
-      // --- API Call ---
+      // --- API Call using Axios ---
       const response = await axios.post(
         apiUrl,
-        { email, password },
-        { headers: { 'Content-Type': 'application/json' } }
+        { email, password }, // Data payload sent to the backend
+        { headers: { 'Content-Type': 'application/json' } } // Specify content type
       );
 
-      // --- Success Handling ---
-      // Check for standard success response and token
+      // --- Handle Successful API Response ---
+      // Check if backend indicates success and provides a token
       if (response.data && response.data.success && response.data.token) {
-        const receivedUserType = response.data.data?.userType || 'unknown'; // Get user type if available
-        console.log(`Login successful as ${receivedUserType}:`, response.data); // Log success
 
-        setSuccess('Login successful! Redirecting...');
+        // --- Special Handling for Admin Login ---
+        if (isAdminEmailEntered) {
+          // This block executes ONLY if the entered email was the admin's
+          // AND the backend successfully authenticated the credentials.
+          console.log('Admin login successful (Backend Verified). Redirecting to /Admin...');
+          setSuccess('Admin login successful! Redirecting...'); // Show success message
 
-        // *** CRITICAL CHANGE: Call the onLoginSuccess prop ***
-        // Pass the token to the App component to handle state update, storage, and navigation
-        onLoginSuccess(response.data.token);
+          // Store token and user info locally for the admin session
+          localStorage.setItem('token', response.data.token);
+          // Store the full user data object returned by the backend
+          localStorage.setItem('userInfo', JSON.stringify(response.data.data));
 
-        // Do NOT navigate directly from here anymore.
-        // setTimeout(() => {
-        //   navigate(redirectPath);
-        // }, 1500);
+          // Directly navigate the admin after a short delay
+          setTimeout(() => {
+            navigate('/Admin', { replace: true }); // Redirect to Admin Dashboard
+          }, 1000); // 1-second delay to allow user to see the success message
+
+        } else {
+          // --- Handling for Regular Users (Client or BOwner) ---
+          const receivedUserType = response.data.data?.userType || 'unknown'; // Get type from response data
+          console.log(`Login successful as ${receivedUserType}:`, response.data);
+          setSuccess('Login successful! Redirecting...'); // Show success message
+
+          // *** Call the callback function passed from App.jsx ***
+          // This delegates token storage, state update, and navigation logic to the parent
+          onLoginSuccess(response.data.token);
+        }
 
       } else {
-        // Handle unexpected success response format
-        console.error("Login succeeded but received unexpected or incomplete data:", response.data);
-        throw new Error(response.data?.message || 'Login failed: Invalid response from server.'); // Throw error to be caught below
+        // Handle cases where the API call succeeded (status 2xx) but the backend logic failed
+        // or returned an unexpected format (e.g., success: false, or missing token)
+        console.error("Login API success, but invalid data received:", response.data);
+        throw new Error(response.data?.message || 'Login failed: Invalid response from server.');
       }
     } catch (err) {
-      // --- Error Handling ---
-      setLoading(false); // Stop loading on error
+      // --- Handle API Call Errors ---
+      setLoading(false); // Ensure loading stops on error
 
-      console.error("Login error!");
-      let errorMessage = 'An unknown error occurred during login.'; // Default message
+      console.error("Login error encountered:", err); // Log the full error object
+      let errorMessage = 'An unknown error occurred during login.'; // Default error message
+
       if (err.response) {
-        // Error response from server (e.g., 400, 401, 500)
-        console.error("Server Response:", err.response.status, err.response.data);
-        errorMessage = err.response.data?.message || `Login failed (${err.response.status}). Please check credentials.`;
+        // The request was made and the server responded with a status code outside the 2xx range
+        console.error("Server Error Response:", err.response.status, err.response.data);
+        // Use the error message from the backend response if available
+        errorMessage = err.response.data?.message || `Login failed (${err.response.status}). Please check your credentials.`;
       } else if (err.request) {
-        // No response received from server
+        // The request was made but no response was received (e.g., network issue, server down)
         console.error("No response received:", err.request);
-        errorMessage = 'Network Error: Unable to reach the server. Please check your connection.';
+        errorMessage = 'Network Error: Could not connect to the server. Please check your connection or try again later.';
       } else {
-        // Error setting up the request or other client-side error
-        console.error('Request Setup/Other Error:', err.message);
-        errorMessage = `An error occurred: ${err.message}`;
+        // Something happened in setting up the request that triggered an Error
+        console.error('Request Setup Error:', err.message);
+        errorMessage = `An unexpected error occurred: ${err.message}`;
       }
-      setError(errorMessage);
+      setError(errorMessage); // Set the error state to display the message to the user
     }
-    // Removed finally block setting loading=false, as success case now relies on navigation triggered by parent
+    // setLoading(false) is primarily needed in the catch block.
+    // In success cases, navigation will typically unmount the component or change state causing re-render.
   };
 
-  // --- JSX Rendering (Structure mostly unchanged) ---
+  // --- JSX Rendering ---
   return (
-    <div className="login-container">
-      <div className="login-content">
-        {/* Left Section */}
+    <div className="login-container"> {/* Main container for the login page */}
+      <div className="login-content"> {/* Container for the two sections */}
+
+        {/* Left Section (Informational/Branding) */}
         <div className="left-section">
           <h1 className="welcome-title">Welcome</h1>
           <p className="subtitle">
              Log in to access your N-Aluminium account. Manage pickups, track history, and contribute to sustainable practices.
           </p>
+          {/* Placeholder social icons */}
           <div className="social-icons">
-            {/* Add actual links or functionality if needed */}
             <a href="#" className="social-icon" aria-label="Facebook"><i className="fab fa-facebook-f"></i></a>
             <a href="#" className="social-icon" aria-label="Twitter"><i className="fab fa-twitter"></i></a>
             <a href="#" className="social-icon" aria-label="Instagram"><i className="fab fa-instagram"></i></a>
@@ -109,16 +133,17 @@ function Login({ onLoginSuccess }) {
           </div>
         </div>
 
-        {/* Right Section */}
+        {/* Right Section (Login Form) */}
         <div className="right-section">
           <h2 className="signin-title">Sign in</h2>
 
-          {/* Feedback Messages */}
+          {/* Display Error and Success Messages */}
           {error && <div className="error-message">{error}</div>}
           {success && <div className="success-message">{success}</div>}
 
+          {/* Login Form */}
           <form onSubmit={handleSubmit}>
-            {/* Email Input */}
+            {/* Email Input Field */}
             <div className="form-group">
               <label htmlFor="email">Email Address</label>
               <input
@@ -126,14 +151,14 @@ function Login({ onLoginSuccess }) {
                 id="email"
                 value={email}
                 onChange={handleEmailChange}
-                placeholder="you@example.com" // Added placeholder
-                autoComplete="email"
-                required
-                disabled={loading}
+                placeholder="you@example.com"
+                autoComplete="email" // Helps browser autofill
+                required // HTML5 validation
+                disabled={loading} // Disable input while loading
               />
             </div>
 
-            {/* Password Input */}
+            {/* Password Input Field */}
             <div className="form-group">
               <label htmlFor="password">Password</label>
               <input
@@ -141,10 +166,10 @@ function Login({ onLoginSuccess }) {
                 id="password"
                 value={password}
                 onChange={handlePasswordChange}
-                placeholder="Enter your password" // Added placeholder
-                autoComplete="current-password"
-                required
-                disabled={loading}
+                placeholder="Enter your password"
+                autoComplete="current-password" // Helps browser autofill
+                required // HTML5 validation
+                disabled={loading} // Disable input while loading
               />
             </div>
 
@@ -152,13 +177,14 @@ function Login({ onLoginSuccess }) {
             <button
               type="submit"
               className="signin-button"
-              disabled={loading}
+              disabled={loading} // Disable button while loading
             >
+              {/* Show different text based on loading state */}
               {loading ? 'Signing in...' : 'Sign in now'}
             </button>
           </form>
 
-          {/* Terms */}
+          {/* Terms and Policy Links */}
           <div className="terms">
             By clicking on "Sign in now" you agree to <br />
             <a href="#">Terms of Service</a> | <a href="#">Privacy Policy</a>

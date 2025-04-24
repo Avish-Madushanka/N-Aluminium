@@ -1,170 +1,260 @@
-import React, { useState, useEffect } from 'react';
+// src/App.jsx
+
+import React, { useState, useEffect, useCallback } from 'react';
 import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation, Navigate } from 'react-router-dom';
 import { ClipLoader } from 'react-spinners';
 import { jwtDecode } from 'jwt-decode';
+
+// --- Core & Helper Component Imports ---
 import Navbar from './Components/Navbar/Navbar';
-import HomePage from './Pages/HomePage';
 import Footer from './Components/Footer/Footer';
+import FloatingChatbot from './Components/Chatbot/ChatBox';
+import ProtectedRoute from './routes/ProtectedRoute'; // Assuming path is src/routes/ProtectedRoute.js
+
+// --- Page Imports ---
+import HomePage from './Pages/HomePage';
 import SignUp from './Pages/SignUp';
 import AboutUs from './Pages/AboutUS';
 import BuyandSell from './Pages/BuyandSell';
-import SaleForm from './Components/SaleForm/SaleForm';
-import Login from './Components/Login/Login'; 
-import BuyCard from './Components/BuyCard/BuyCard';
+import Login from './Components/Login/Login'; // Login Page Component
 import BOwnerForm from './Components/RegistrationForm/BOwnerForm';
 import ClientForm from './Components/RegistrationForm/ClientForm';
-import BOwnerHome from './Pages/BOwnerHome';
-import BOwnerHeader from './Components/BusinessOwner/BOwnerHeader';
 import Project from './Pages/Project';
 import Collection from './Pages/Collection';
-import ProAddForm from './Components/Projects/ProAddForm';
 import Service from './Pages/Service';
-import WastePickForm from './Components/WasteCollect/WastePickForm';
-import BSHeader from './Components/BuyandSell/BSHeader';
-import UserCalendar from './Components/WasteCollect/UserCalendar'; 
-import Admin from './Pages/Admin';
 import Map from './Pages/Map';
-import LocationMap from './Components/Maps/LocationMap';
 import Calculate from './Components/Calculate/Calculate';
-import AdCalendar from './Components/Admin/AdMinCalendar/AdCalendar';
-import FloatingChatbot from './Components/Chatbot/ChatBox';
-import ProtectedRoute from './Components/ProtectedRoute/ProtectedRoute';
 
+// --- Protected Page Imports ---
+import SaleForm from './Components/SaleForm/SaleForm';
+import BuyCard from './Components/BuyCard/BuyCard';
+import BOwnerHome from './Pages/BOwnerHome';          // Business Owner Dashboard/Profile
+import ProAddForm from './Components/Projects/ProAddForm';
+import WastePickForm from './Components/WasteCollect/WastePickForm';
+import UserCalendar from './Components/WasteCollect/UserCalendar';
+import Admin from './Pages/Admin';    // Admin Dashboard Page (Ensure this component exists)
+{/* import ClientProfile from './Pages/ClientProfile';      // Client Profile Page (Ensure this component exists) */}
+import AdCalendar from './Components/Admin/AdMinCalendar/AdCalendar'; // Admin's Calendar view
+
+// --- Specific Component Imports (Used as standalone pages/sections) ---
+import BOwnerHeader from './Components/BusinessOwner/BOwnerHeader';
+import BSHeader from './Components/BuyandSell/BSHeader';
+import LocationMap from './Components/Maps/LocationMap';
+
+// --- Main App Content Component ---
 const AppContent = () => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userId, setUserId] = useState(null); // Optional: Store user ID
+  // --- State ---
+  const [isLoading, setIsLoading] = useState(true); // Loading state for initial auth check
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // User authentication status
+  const [userInfo, setUserInfo] = useState(null); // Decoded user information from JWT
+
+  // --- React Router Hooks ---
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Check token validity on initial load and location change
-  useEffect(() => {
-    console.log("AppContent Effect: Checking token...");
-    const token = localStorage.getItem('token');
+  // --- Authentication Check Function ---
+  // Memoized with useCallback to maintain stable identity across renders
+  const checkAuthStatus = useCallback(() => {
+    console.log("Running checkAuthStatus...");
+    const token = localStorage.getItem('token'); // Get token from storage
     let authenticated = false;
-    let currentUserId = null;
+    let currentUserInfo = null;
 
     if (token) {
       try {
-        const decoded = jwtDecode(token);
-        console.log("Decoded Token:", decoded); // Log decoded token
-        if (decoded.exp > Date.now() / 1000) {
+        const decoded = jwtDecode(token); // Decode the JWT
+        // Check if the token expiration time (in seconds) is in the future
+        if (decoded.exp * 1000 > Date.now()) {
           authenticated = true;
-          // Assuming your JWT payload has user ID in 'id' or 'userId' field
-          currentUserId = decoded.id || decoded.userId || null;
-          console.log("Token valid, User ID:", currentUserId);
+          // --- Extract User Info from Token Payload ---
+          // **IMPORTANT**: Adjust these fields based on the actual payload your backend sends!
+          currentUserInfo = {
+            id: decoded.id || null, // MongoDB _id
+            name: decoded.name || decoded.ownerName || 'User', // Client name or BOwner ownerName
+            email: decoded.email || null,
+            userType: decoded.userType || 'unknown', // 'client' or 'bowner' from backend
+            // Determine role: Check 'role' field first, then infer from 'userType' as fallback
+            role: decoded.role || (decoded.userType === 'bowner' ? 'bowner' : (decoded.userType === 'client' ? 'client' : 'unknown')),
+            businessName: decoded.businessName || null, // Specific to BOwner
+          };
+          // console.log("Token valid. User Info:", currentUserInfo);
         } else {
+          // Token is expired
           console.log("Token expired.");
-          handleLogout(false); // Logout without navigating immediately if needed elsewhere
+          localStorage.removeItem('token'); // Remove the expired token
+          localStorage.removeItem('userInfo'); // Clear any stale stored user info
         }
       } catch (error) {
-        console.error("Token decode/check error:", error);
-        handleLogout(false); // Logout without navigating immediately
+        // Token is invalid or corrupted
+        console.error("Invalid token:", error);
+        localStorage.removeItem('token'); // Remove the invalid token
+        localStorage.removeItem('userInfo');
       }
     } else {
-        console.log("No token found.");
+      // No token found in local storage
+      // console.log("No token found.");
     }
 
+    // Update component state
     setIsLoggedIn(authenticated);
-    setUserId(currentUserId); // Set the user ID state
+    setUserInfo(currentUserInfo);
+    // Set loading to false only after the *initial* check
+    if (isLoading) {
+        setIsLoading(false);
+    }
+  }, [isLoading]); // Dependency array includes isLoading
 
-     // Only run the loading indicator once on initial mount
-     const timer = setTimeout(() => setIsLoading(false), 800); // Slightly shorter delay
-     return () => clearTimeout(timer);
+  // --- Effect for Initial Auth Check ---
+  // Runs once on mount and whenever location changes (to re-verify auth state after navigation)
+  useEffect(() => {
+    checkAuthStatus();
+  }, [location.key, checkAuthStatus]); // location.key changes reliably on navigation
 
-  // Re-run check when location changes, useful after login/logout actions trigger navigation
-  }, [location.key]); // Use location.key to re-trigger on navigation
+  // --- Login Handler Callback ---
+  // Passed down to the Login component
+  const handleLoginSuccess = useCallback((token) => {
+    console.log("handleLoginSuccess called in App.jsx");
+    localStorage.setItem('token', token); // Store the fresh token
 
+    let currentUserInfo = null;
+    let defaultRedirectPath = '/'; // Default redirect path after login
 
-  const handleLoginSuccess = (token) => {
-    console.log("handleLoginSuccess called");
-    localStorage.setItem('token', token);
     try {
         const decoded = jwtDecode(token);
-        const currentUserId = decoded.id || decoded.userId || null;
-        setUserId(currentUserId); // Set user ID on login
-         if (currentUserId) {
-            localStorage.setItem('userId', currentUserId); // Store userId too if needed elsewhere
-         }
-    } catch (e) { console.error("Error decoding token on login:", e); }
-    setIsLoggedIn(true);
-    // Redirect back to the page the user was trying to access, or default to '/'
-    const from = location.state?.from?.pathname || '/';
-    console.log("Navigating to:", from);
-    navigate(from, { replace: true });
-  };
+        // Extract info - **ADJUST FIELDS BASED ON YOUR JWT PAYLOAD**
+         currentUserInfo = {
+            id: decoded.id || null,
+            name: decoded.name || decoded.ownerName || 'User',
+            email: decoded.email || null,
+            userType: decoded.userType || 'unknown',
+            role: decoded.role || (decoded.userType === 'bowner' ? 'bowner' : (decoded.userType === 'client' ? 'client' : 'unknown')),
+            businessName: decoded.businessName || null,
+         };
+        // Optionally store basic info stringified in localStorage (token is the source of truth)
+        localStorage.setItem('userInfo', JSON.stringify(currentUserInfo));
 
-  // Updated handleLogout to accept navigation flag
-  const handleLogout = (shouldNavigate = true) => {
-    console.log("handleLogout called, navigate:", shouldNavigate);
-    localStorage.removeItem('token');
-    localStorage.removeItem('userId'); // Remove user ID on logout
-    setIsLoggedIn(false);
-    setUserId(null);
-    if (shouldNavigate) {
-        navigate('/'); // Navigate to home page on manual logout
+        // --- Determine Default Redirect Path Based on Role/Type ---
+        if (currentUserInfo.role === 'admin') {
+            defaultRedirectPath = '/Admin'; // Admin dashboard route
+        } else if (currentUserInfo.userType === 'bowner') {
+            defaultRedirectPath = '/BOwnerHome'; // Business owner home/profile
+        } else if (currentUserInfo.userType === 'client') {
+            defaultRedirectPath = '/ClientProfile'; // Client profile page (ensure component exists)
+        }
+        // Add more specific role/type checks if needed
+
+    } catch (e) {
+        console.error("Error decoding token on login:", e);
+        localStorage.removeItem('token'); // Remove bad token if decode fails
+        localStorage.removeItem('userInfo');
+        // Keep defaultRedirectPath as '/' or maybe show an error
     }
-  };
 
+    // Update application state
+    setIsLoggedIn(true);
+    setUserInfo(currentUserInfo);
+
+    // --- Navigation Logic ---
+    // Where was the user trying to go before being redirected to Login?
+    const fromPath = location.state?.from?.pathname;
+    // Redirect to original destination unless it was the login page itself, otherwise use default role-based path
+    const finalRedirect = (fromPath && fromPath !== '/Login') ? fromPath : defaultRedirectPath;
+
+    console.log(`Navigating post-login to: ${finalRedirect} (Role: ${currentUserInfo?.role}, From: ${fromPath})`);
+    navigate(finalRedirect, { replace: true }); // `replace: true` prevents Login page in browser history
+
+  }, [navigate, location.state]); // Dependencies
+
+  // --- Logout Handler Callback ---
+  // Passed down to the Navbar component
+  const handleLogout = useCallback(() => {
+    console.log("handleLogout called in App.jsx");
+    // Clear authentication state and stored data
+    localStorage.removeItem('token');
+    localStorage.removeItem('userInfo');
+    setIsLoggedIn(false);
+    setUserInfo(null);
+    navigate('/'); // Redirect to the home page after logout
+  }, [navigate]); // Dependency
+
+  // --- Loading State ---
+  // Show a spinner during the initial authentication check
   if (isLoading) {
     return (
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-        <ClipLoader size={60} color="#f97316" /> {/* Use accent color */}
+        <ClipLoader size={60} color="#f97316" /> {/* Or your theme color */}
       </div>
     );
   }
 
+  // --- Render Application Structure ---
   return (
     <div>
-      {/* Pass userId to Navbar if it needs it */}
-      <Navbar isLoggedIn={isLoggedIn} handleLogout={() => handleLogout(true)} /* Pass true to navigate on Navbar logout */ />
+      {/* Render Navbar, passing authentication state and handlers */}
+      <Navbar
+        isLoggedIn={isLoggedIn}
+        userInfo={userInfo}
+        handleLogout={handleLogout}
+      />
+
+      {/* --- Define Application Routes --- */}
       <Routes>
-        {/* Public Routes */}
+        {/* == Public Routes == */}
         <Route path="/" element={<HomePage />} />
+        <Route path="/Login" element={<Login onLoginSuccess={handleLoginSuccess} />} />
         <Route path="/SignUp" element={<SignUp />} />
         <Route path="/AboutUs" element={<AboutUs />} />
+        <Route path="/Service" element={<Service />} />
+        <Route path="/Collection" element={<Collection />} />
+        <Route path="/Project" element={<Project />} />
         <Route path="/BuyandSell" element={<BuyandSell />} />
-         {/* Pass handleLoginSuccess to the Login component */}
-        <Route path="/Login" element={<Login onLoginSuccess={handleLoginSuccess} />} />
         <Route path="/BOwnerForm" element={<BOwnerForm />} />
         <Route path="/ClientForm" element={<ClientForm />} />
-        <Route path="/Project" element={<Project />} />
-        <Route path="/Collection" element={<Collection />} />
-        <Route path="/Service" element={<Service />} />
-        <Route path="/BSHeader" element={<BSHeader />} />
         <Route path="/Map" element={<Map />} />
         <Route path="/LocationMap" element={<LocationMap />} />
         <Route path="/Calculate" element={<Calculate />} />
-        <Route path="/ProtectedRoute" element={<ProtectedRoute />} />
+        {/* Standalone component routes (check if they should be public/protected) */}
+        <Route path="/BSHeader" element={<BSHeader />} />
 
-        {/* Protected Routes */}
+        {/* == Protected Routes (Require Login) == */}
+        {/* Use the ProtectedRoute component to wrap elements */}
+
+        {/* General Protected Routes (Accessible by any logged-in user type unless further restricted) */}
+        <Route path="/UserCalendar" element={<ProtectedRoute><UserCalendar userInfo={userInfo} /></ProtectedRoute>} />
         <Route path="/SaleForm" element={<ProtectedRoute><SaleForm /></ProtectedRoute>} />
         <Route path="/BuyCard" element={<ProtectedRoute><BuyCard /></ProtectedRoute>} />
-        <Route path="/ProAddForm" element={<ProtectedRoute><ProAddForm /></ProtectedRoute>} />
-        <Route path="/BOwnerHome" element={<ProtectedRoute><BOwnerHome /></ProtectedRoute>} />
         <Route path="/WastePickForm" element={<ProtectedRoute><WastePickForm /></ProtectedRoute>} />
-        <Route path="/BOwnerHeader" element={<ProtectedRoute><BOwnerHeader /></ProtectedRoute>} />
-        <Route path="/UserCalendar" element={
-            <ProtectedRoute>
-              {/* Pass userId or other props if UserCalendar needs them */}
-              <UserCalendar userId={userId} />
-            </ProtectedRoute>
-          } />
-        <Route path="/Admin" element={<ProtectedRoute>{/* Add Role Check Here if Needed */}<Admin /></ProtectedRoute>} />
-        <Route path="/AdCalendar" element={<ProtectedRoute>{/* Add Role Check Here if Needed */}<AdCalendar /></ProtectedRoute>} />
 
-         {/* Fallback Route - Optional */}
-         <Route path="*" element={<Navigate to="/" replace />} />
+        {/* Client Specific Profile/Dashboard */}
+        {/* <Route path="/ClientProfile" element={<ProtectedRoute><ClientProfile userInfo={userInfo}/></ProtectedRoute>} /> */}
+
+        {/* Business Owner Specific Routes */}
+        <Route path="/BOwnerHome" element={<ProtectedRoute><BOwnerHome userInfo={userInfo} /></ProtectedRoute>} />
+        <Route path="/ProAddForm" element={<ProtectedRoute><ProAddForm /></ProtectedRoute>} />
+        <Route path="/BOwnerHeader" element={<ProtectedRoute><BOwnerHeader /></ProtectedRoute>} />
+
+        {/* Admin Specific Routes */}
+        {/* Note: ProtectedRoute only checks login. Enhance it or add checks here/in component for role='admin' */}
+        <Route path="/Admin" element={<ProtectedRoute><Admin userInfo={userInfo}/></ProtectedRoute>} />
+        <Route path="/AdCalendar" element={<ProtectedRoute><AdCalendar /></ProtectedRoute>} />
+
+        {/* == Fallback Route == */}
+        {/* Redirects any unmatched URL to the home page */}
+        <Route path="*" element={<Navigate to="/" replace />} />
 
       </Routes>
+
+      {/* --- Other Global Components --- */}
       <FloatingChatbot />
       <Footer />
     </div>
   );
 };
 
+// --- Root App Component ---
 function App() {
   return (
+    // BrowserRouter enables routing capabilities
     <Router>
       <AppContent />
     </Router>

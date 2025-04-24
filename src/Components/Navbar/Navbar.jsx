@@ -1,137 +1,133 @@
+// src/Components/Navbar/Navbar.jsx (Relevant parts updated)
+
 import React, { useState, useEffect } from "react";
-import { useNavigate, useLocation } from 'react-router-dom';
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'; // Import Link & useNavigate
+import { User } from 'lucide-react';
 import "./Navbar.css";
 import logo from "../../assets/logo.png";
 
-const Navbar = () => {
+const Navbar = ({ isLoggedIn, userInfo, handleLogout }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userType, setUserType] = useState(null);
-  const navigate = useNavigate();
   const location = useLocation();
+  const navigate = useNavigate(); // Use navigate for programmatic navigation
 
-  // Check Login Status on mount and route change
   useEffect(() => {
-    const clientToken = localStorage.getItem('clientToken');
-    const bOwnerToken = localStorage.getItem('bOwnerToken');
-
-    if (clientToken) {
-      setIsLoggedIn(true);
-      setUserType('client');
-    } else if (bOwnerToken) {
-      setIsLoggedIn(true);
-      setUserType('bowner');
-    } else {
-      setIsLoggedIn(false);
-      setUserType(null);
-    }
-    setIsOpen(false); // Close mobile menu on navigation
+    setIsOpen(false);
   }, [location]);
 
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
-  };
+  const toggleMenu = () => setIsOpen(!isOpen);
 
-  // Handle Logout with Confirmation
-  const handleLogout = () => {
-    // --- Add Confirmation Step ---
-    const confirmLogout = window.confirm("Are you sure you want to log out?"); // Browser confirm dialog
-
-    // Proceed only if the user clicks "OK" (confirmLogout is true)
+  const triggerLogout = () => {
+    const confirmLogout = window.confirm("Are you sure you want to log out?");
     if (confirmLogout) {
-      console.log("User confirmed logout."); // Optional log
-
-      // --- Perform Logout Actions ---
-      // Remove tokens and user info
-      if (userType === 'client') {
-        localStorage.removeItem('clientToken');
-        localStorage.removeItem('clientInfo');
-      } else if (userType === 'bowner') {
-        localStorage.removeItem('bOwnerToken');
-        localStorage.removeItem('bOwnerInfo');
-      } else {
-        // Fallback cleanup
-        localStorage.removeItem('clientToken');
-        localStorage.removeItem('clientInfo');
-        localStorage.removeItem('bOwnerToken');
-        localStorage.removeItem('bOwnerInfo');
-      }
-
-      // Update component state
-      setIsLoggedIn(false);
-      setUserType(null);
-      setIsOpen(false); // Close mobile menu
-
-      // Redirect to home page
-      navigate('/');
-    } else {
-      // User clicked "Cancel" - do nothing
-      console.log("User cancelled logout."); // Optional log
+      handleLogout();
+      setIsOpen(false);
     }
   };
+
+  const getInitials = (name) => {
+    // ... (keep existing getInitials logic) ...
+     if (!name) return '?';
+    const words = name.trim().split(' ');
+    if (words.length > 1 && words[0] && words[words.length - 1]) {
+      return (words[0][0] + words[words.length - 1][0]).toUpperCase();
+    } else if (words.length === 1 && name.length > 0 && words[0]) {
+      return name[0].toUpperCase();
+    }
+    return '?';
+  };
+
+  // Determine user type AND profile path
+  const userRole = userInfo?.role; // Prioritize role if available
+  const userType = userInfo?.userType;
+  let profilePath = '/'; // Default
+
+  if (userRole === 'admin') {
+      profilePath = '/Admin'; // Or '/AdminDashboard'
+  } else if (userType === 'bowner-login') {
+      profilePath = '/BOwnerHome';
+  } else if (userType === 'client') {
+      profilePath = '/ClientProfile'; // Link to the new client profile page
+  }
 
   return (
     <nav className="navbar">
       <div className="nav-container">
-        {/* Logo */}
-        <a className="navbar-brand" href="/">
+        <Link className="navbar-brand" to="/">
           <img src={logo} alt="N-Aluminium Logo" className="nav-logo" />
-        </a>
+        </Link>
 
         {/* Desktop Links */}
         <div className="nav-links">
-          <a href="/" className="nav-item">Home</a>
-          <a href="/AboutUs" className="nav-item">About Us</a>
-          <a href="/Service" className="nav-item">Services</a>
-          <a href="/contact" className="nav-item">Contact Us</a>
-          {/* Conditional Dashboard Links */}
-          {isLoggedIn && userType === 'client' && (
-            <a href="/client-dashboard" className="nav-item">Dashboard</a>
-          )}
-           {isLoggedIn && userType === 'bowner' && (
-            <a href="/bowner-home" className="nav-item">Dashboard</a>
-          )}
+          {/* ... other NavLinks ... */}
+           <NavLink to="/" className={({ isActive }) => `nav-item ${isActive ? 'active-nav-item' : ''}`}>Home</NavLink>
+           <NavLink to="/AboutUs" className={({ isActive }) => `nav-item ${isActive ? 'active-nav-item' : ''}`}>About Us</NavLink>
+           <NavLink to="/Service" className={({ isActive }) => `nav-item ${isActive ? 'active-nav-item' : ''}`}>Services</NavLink>
+           <NavLink to="/ContactUs" className={({ isActive }) => `nav-item ${isActive ? 'active-nav-item' : ''}`}>ContactUs</NavLink>
+          
+          {/* No need for separate dashboard links here if profile serves that purpose */}
         </div>
 
-        {/* Desktop Auth/Logout Buttons */}
+        {/* Desktop Auth/Profile Section */}
         <div className="auth-buttons">
           {isLoggedIn ? (
-            <button onClick={handleLogout} className="logout-btn">Logout</button>
+            <>
+              {/* --- Profile Link --- */}
+              <Link to={profilePath} className="profile-link" title={userInfo?.name || 'View Profile'}>
+                <div className="profile-indicator">
+                  <span className="profile-initials">
+                    {getInitials(userInfo?.name)}
+                  </span>
+                </div>
+              </Link>
+              {/* Logout Button */}
+              <button onClick={triggerLogout} className="logout-btn nav-button-style">Logout</button>
+            </>
           ) : (
             <>
-              <a href="/Login" className="login-btn">Login</a>
-              <a href="/SignUp" className="signup-btn">Sign Up</a>
+              <Link to="/Login" className="login-btn nav-button-style">Login</Link>
+              <Link to="/SignUp" className="signup-btn nav-button-style">Sign Up</Link>
             </>
           )}
         </div>
 
         {/* Mobile Menu Toggle */}
-        <button className="menu-toggle" onClick={toggleMenu}>
-          ☰
+        <button className="menu-toggle" onClick={toggleMenu} aria-label="Toggle menu">
+          {isOpen ? '✕' : '☰'}
         </button>
       </div>
 
-      {/* Mobile Menu */}
+      {/* --- Mobile Menu --- */}
       {isOpen && (
         <div className="mobile-menu">
-          <a href="/" className="nav-item">Home</a>
-          <a href="/AboutUs" className="nav-item">About Us</a>
-          <a href="/Service" className="nav-item">Services</a>
-          <a href="/contact" className="nav-item">Contact Us</a>
-           {/* Conditional Dashboard Links - Mobile */}
-           {isLoggedIn && userType === 'client' && (
-            <a href="/client-dashboard" className="nav-item">Dashboard</a>
+          {/* ... Repeat public NavLinks ... */}
+           <NavLink to="/" className={({ isActive }) => `nav-item ${isActive ? 'active-nav-item' : ''}`}>Home</NavLink>
+           <NavLink to="/AboutUs" className={({ isActive }) => `nav-item ${isActive ? 'active-nav-item' : ''}`}>About Us</NavLink>
+           <NavLink to="/Service" className={({ isActive }) => `nav-item ${isActive ? 'active-nav-item' : ''}`}>Services</NavLink>
+           <NavLink to="/ContactUs" className={({ isActive }) => `nav-item ${isActive ? 'active-nav-item' : ''}`}>ContactUs</NavLink>
+        
+          {/* Link to profile page in mobile */}
+          {isLoggedIn && (
+            <NavLink to={profilePath} className={({ isActive }) => `nav-item ${isActive ? 'active-nav-item' : ''}`}>
+              My Profile ({userInfo?.name?.split(' ')[0] || 'User'}) {/* Show first name */}
+            </NavLink>
           )}
-           {isLoggedIn && userType === 'bowner' && (
-            <a href="/bowner-home" className="nav-item">Dashboard</a>
-          )}
+
+
+          {/* Auth Buttons Mobile */}
           <div className="auth-buttons-mobile">
             {isLoggedIn ? (
-              <button onClick={handleLogout} className="logout-btn">Logout</button>
+              <>
+                {/* You can remove mobile-profile-info if the profile link is enough */}
+                {/* <div className="mobile-profile-info">
+                  Signed in as: {userInfo?.name || 'User'}
+                </div> */}
+                 <button onClick={triggerLogout} className="logout-btn nav-button-style">Logout</button>
+              </>
             ) : (
               <>
-                <a href="/Login" className="login-btn">Login</a>
-                <a href="/SignUp" className="signup-btn">Sign Up</a>
+                <Link to="/Login" className="login-btn nav-button-style">Login</Link>
+                <Link to="/SignUp" className="signup-btn nav-button-style">Sign Up</Link>
               </>
             )}
           </div>

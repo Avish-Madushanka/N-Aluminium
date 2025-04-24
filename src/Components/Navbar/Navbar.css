@@ -1,11 +1,12 @@
+/* --- Existing styles remain --- */
 .navbar {
   width: 100%;
-  background-color: #161a1a;
+  background-color: #161a1a; /* Dark background */
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 10px 20px;
-  position: fixed;
+  padding: 10px 20px; /* Vertical padding */
+  position: fixed; /* Make it stick */
   top: 0;
   left: 0;
   z-index: 1000;
@@ -14,36 +15,45 @@
 
 .nav-container {
   width: 100%;
-  max-width: 1400px;
+  max-width: 1400px; /* Max width for content */
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-left: 30px;
+  padding-left: 30px; /* Side padding */
   padding-right: 30px;
 }
 
+.navbar-brand { /* Style for the logo link */
+  display: flex; /* Allow image alignment */
+  align-items: center;
+}
+
 .nav-logo {
-  height: 45px;
+  height: 45px; /* Logo height */
   width: auto;
+  display: block; /* Remove extra space below image */
 }
 
 .nav-links {
   display: flex;
-  justify-content: center;
+  justify-content: center; /* Center links */
   align-items: center;
-  flex-grow: 1;
-  gap: 35px;
-  margin: 0 30px;
+  flex-grow: 1; /* Allow links to take up space */
+  gap: 35px; /* Spacing between links */
+  margin: 0 30px; /* Margin around the links section */
+  flex-wrap: nowrap; /* Prevent wrapping on slightly smaller screens */
+  overflow: hidden; /* Hide overflow if needed */
 }
 
 .nav-item {
-  color: #e0e0e0;
+  color: #e0e0e0; /* Light grey text */
   text-decoration: none;
-  font-size: 1.1rem;
+  font-size: 1rem; /* Adjusted size */
   font-weight: 500;
-  padding: 5px 0;
+  padding: 5px 0; /* Vertical padding for underline space */
   position: relative;
   transition: color 0.3s ease;
+  white-space: nowrap; /* Prevent link text wrapping */
 }
 
 .nav-item::after {
@@ -54,73 +64,116 @@
   display: block;
   margin-top: 4px;
   right: 0;
-  background: #0054f0;
+  background: #0054f0; /* Underline color */
   transition: width 0.3s ease;
   -webkit-transition: width 0.3s ease;
 }
 
 .nav-item:hover {
-  color: #ffffff;
+  color: #ffffff; /* White on hover */
 }
 
 .nav-item:hover::after {
   width: 100%;
   left: 0;
-  background: #0054f0;
+  background: #0054f0; /* Underline color */
 }
 
+/* --- Style for Active NavLink --- */
+.nav-item.active-nav-item {
+    color: #ffffff; /* White text for active */
+    font-weight: 600; /* Bolder active link */
+}
+.nav-item.active-nav-item::after {
+    width: 100%; /* Full underline for active */
+    left: 0;
+    background: #0054f0; /* Underline color */
+}
+
+
+/* --- Auth Buttons & Profile Section --- */
 .auth-buttons {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 15px; /* Spacing */
 }
 
-.login-btn,
-.signup-btn,
-.logout-btn {
+/* General Button Style (applied via class) */
+.nav-button-style {
   color: white;
   text-decoration: none;
   padding: 8px 18px;
-  border-radius: 5px;
+  border-radius: 5px; /* Slightly rounded */
   font-size: 0.95rem;
   font-weight: 500;
   cursor: pointer;
   transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease, opacity 0.3s ease;
   white-space: nowrap;
+  border: 1px solid transparent; /* Base border */
+  background: none; /* Make buttons transparent by default */
 }
 
+/* Specific Button Styles */
 .login-btn {
-  background-color: transparent;
-  border: 1px solid #ffffff;
+  border-color: #ffffff;
 }
-
 .login-btn:hover {
   background-color: #ffffff;
-  color: #161a1a;
+  color: #161a1a; /* Dark text on hover */
 }
 
 .signup-btn {
-  background-color: #0054f0;
-  border: 1px solid #0054f0;
+  background-color: #0054f0; /* Blue background */
+  border-color: #0054f0;
 }
-
 .signup-btn:hover {
-  background-color: #003bb0;
+  background-color: #003bb0; /* Darker blue */
   border-color: #003bb0;
 }
 
 .logout-btn {
-  background-color: #e74c3c;
-  border: 1px solid #e74c3c;
+  background-color: transparent;
+  border-color: #e74c3c; /* Red border */
+  color: #e74c3c; /* Red text */
 }
-
 .logout-btn:hover {
-  background-color: #c0392b;
-  border-color: #c0392b;
+  background-color: #e74c3c; /* Red background */
+  border-color: #e74c3c;
+  color: white; /* White text */
 }
 
+/* Profile Indicator */
+.profile-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px; /* Size */
+  height: 38px;
+  border-radius: 50%;
+  background-color: #e0e0e0; /* Light grey */
+  color: #161a1a; /* Dark text */
+  font-weight: 600;
+  font-size: 0.9rem; /* Initials size */
+  border: 1px solid #bdbdbd;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+  user-select: none;
+  line-height: 36px; /* Center vertically */
+  text-align: center;
+  overflow: hidden;
+}
+.profile-indicator:hover {
+  background-color: #bdbdbd; /* Darker grey */
+  border-color: #9e9e9e;
+}
+.profile-initials {
+    /* Text styling handled by parent */
+}
+
+
+/* --- Mobile Menu --- */
 .menu-toggle {
-  display: none;
+  display: none; /* Hidden by default */
   background: none;
   border: none;
   font-size: 2rem;
@@ -130,41 +183,53 @@
 }
 
 .mobile-menu {
-  display: flex;
+  display: flex; /* Use flex for column layout */
   flex-direction: column;
   position: absolute;
-  top: 100%;
+  top: 100%; /* Position below navbar */
   left: 0;
   width: 100%;
-  background-color: #1a1f24;
+  background-color: #1a1f24; /* Slightly different dark background */
   padding: 20px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   border-top: 1px solid #333;
-  gap: 15px;
+  gap: 10px; /* Spacing between mobile items */
   text-align: center;
+  max-height: calc(100vh - 65px); /* Limit height, adjust 65px based on navbar height */
+  overflow-y: auto; /* Allow scrolling if content exceeds height */
 }
 
 .mobile-menu .nav-item {
-  font-size: 1.3rem;
-  padding: 10px 0;
+  font-size: 1.2rem; /* Larger font for mobile */
+  padding: 12px 0; /* More vertical padding */
   width: 100%;
+  border-bottom: 1px solid #333; /* Separator */
+}
+.mobile-menu .nav-item:last-of-type {
+    border-bottom: none; /* No border on last nav item */
 }
 
 .mobile-menu .nav-item::after {
-  display: none;
+  display: none; /* No underlines needed in mobile */
 }
+
+.mobile-menu .nav-item.active-nav-item {
+    background-color: #333; /* Highlight active mobile item */
+    border-radius: 4px;
+}
+
 
 .auth-buttons-mobile {
   display: flex;
   flex-direction: column;
   gap: 15px;
-  margin-top: 15px;
+  margin-top: 20px; /* Space above buttons */
+  padding-top: 15px; /* Space inside button area */
+  border-top: 1px solid #333; /* Separator */
   align-items: center;
 }
 
-.auth-buttons-mobile .login-btn,
-.auth-buttons-mobile .signup-btn,
-.auth-buttons-mobile .logout-btn {
+.auth-buttons-mobile .nav-button-style { /* Apply general style */
   width: 80%;
   max-width: 250px;
   text-align: center;
@@ -172,14 +237,27 @@
   font-size: 1rem;
 }
 
-@media (max-width: 992px) {
+.mobile-profile-info {
+    color: #bdbdbd;
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #333;
+}
+
+
+/* --- Responsive Breakpoints --- */
+@media (max-width: 1024px) { /* Adjust breakpoint as needed */
   .nav-links,
   .auth-buttons {
-    display: none;
+    display: none; /* Hide desktop links and buttons */
   }
 
   .menu-toggle {
-    display: block;
+    display: block; /* Show hamburger menu */
+  }
+  .nav-container {
+      justify-content: space-between; /* Ensure logo and toggle are spaced */
   }
 }
 
@@ -188,22 +266,16 @@
     padding-left: 15px;
     padding-right: 15px;
   }
-
   .nav-logo {
-    height: 40px;
+    height: 40px; /* Smaller logo */
   }
-
   .menu-toggle {
     font-size: 1.8rem;
   }
-
   .mobile-menu .nav-item {
-    font-size: 1.2rem;
+    font-size: 1.1rem; /* Slightly smaller mobile font */
   }
-
-  .auth-buttons-mobile .login-btn,
-  .auth-buttons-mobile .signup-btn,
-  .auth-buttons-mobile .logout-btn {
-    width: 90%;
+  .auth-buttons-mobile .nav-button-style {
+    width: 90%; /* Wider buttons on small screens */
   }
 }

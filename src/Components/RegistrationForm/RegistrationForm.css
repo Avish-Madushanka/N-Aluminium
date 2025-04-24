@@ -60,7 +60,7 @@
   backdrop-filter: blur(3px);
   border-radius: 12px;
   padding: 30px 20px;
-  width: 220px;
+  width: 300px;
   transition: all 0.3s ease;
   border: 2px solid transparent;
 }

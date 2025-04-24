@@ -9,14 +9,6 @@ const RegistrationForm = () => {
         <p className="signup-subtitle">Choose your account type</p>
         
         <div className="account-options">
-          <div className="account-option">
-            <div className="icon-container admin-icon">
-              <i className="fas fa-user-shield"></i>
-            </div>
-            <h3>Admin</h3>
-            <p>Manage system and users</p>
-            <a href="/AdminForm" className="option-button">Select</a>
-          </div>
           
           <div className="account-option">
             <div className="icon-container business-icon">
