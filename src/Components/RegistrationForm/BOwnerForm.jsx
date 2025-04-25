@@ -1,10 +1,13 @@
+// src/Components/RegistrationForm/BOwnerForm.jsx
+
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom'; // Ensure you have react-router-dom installed and setup
-import './BOwnerForm.css'; // Ensure this CSS file exists at the correct relative path
+import { useNavigate } from 'react-router-dom'; // For navigation after success
+import './BOwnerForm.css'; // Make sure this CSS file exists and styles correctly
 
 function BOwnerForm() {
-  // State for form data fields
+  // --- State Management ---
+  // Form text/select data
   const [formData, setFormData] = useState({
     businessId: '',
     businessName: '',
@@ -16,165 +19,183 @@ function BOwnerForm() {
     email: '',
     password: '',
   });
-  // State to hold the actual File objects
+  // Actual File objects for upload
   const [profilePhotoFile, setProfilePhotoFile] = useState(null);
   const [coverPhotoFile, setCoverPhotoFile] = useState(null);
-  // State for temporary preview URLs generated from files
+  // Temporary URLs for image previews
   const [profilePreview, setProfilePreview] = useState(null);
   const [coverPreview, setCoverPreview] = useState(null);
-  // State for loading and feedback messages
+  // UI feedback state
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-  // Hook for programmatic navigation
-  const navigate = useNavigate();
+
+  const navigate = useNavigate(); // Hook for navigation
 
   // --- Event Handlers ---
 
-  // Handles changes in text inputs, textareas, and selects
+  // Generic handler for text inputs, textareas, selects
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prevData => ({ ...prevData, [name]: value }));
   };
 
-  // Generic file input change handler
+  // Generic handler for file inputs
   const handleFileChange = (e, setFileState, setPreviewState, currentPreviewUrl) => {
-    const file = e.target.files?.[0] || null; // Get the first file selected, or null
-    setFileState(file); // Store the File object
+    const file = e.target.files?.[0] || null; // Get the selected file (or null)
 
-    // Revoke the previous object URL to prevent memory leaks
+    // Revoke previous preview URL to free memory
     if (currentPreviewUrl) {
       URL.revokeObjectURL(currentPreviewUrl);
+      console.log("Revoked previous preview URL:", currentPreviewUrl);
     }
 
-    // Create a new object URL for preview if a file is selected
+    setFileState(file); // Update state with the new File object (or null)
+
+    // Create and set new preview URL if a file was selected
     if (file) {
-      setPreviewState(URL.createObjectURL(file));
+      const newPreviewUrl = URL.createObjectURL(file);
+      setPreviewState(newPreviewUrl);
+      console.log("Created new preview URL:", newPreviewUrl);
     } else {
-      setPreviewState(null); // Clear preview if no file is selected/file is removed
+      setPreviewState(null); // Clear preview if no file or selection cancelled
     }
   };
 
-  // Specific handlers using the generic one
-      const handleProfilePhotoChange = (e) => {
-        handleFileChange(e, setProfilePhotoFile, setProfilePreview, profilePreview);
-      };
+  // Specific file change handlers using the generic one
+  const handleProfilePhotoChange = (e) => {
+    handleFileChange(e, setProfilePhotoFile, setProfilePreview, profilePreview);
+  };
 
-      const handleCoverPhotoChange = (e) => {
-        handleFileChange(e, setCoverPhotoFile, setCoverPreview, coverPreview);
-      };
+  const handleCoverPhotoChange = (e) => {
+    handleFileChange(e, setCoverPhotoFile, setCoverPreview, coverPreview);
+  };
 
-      // --- Lifecycle Effect for Cleanup ---
-
-      // Clean up object URLs when the component unmounts or previews change
-      useEffect(() => {
-        return () => {
-          if (profilePreview) {
-            URL.revokeObjectURL(profilePreview);
-          }
-          if (coverPreview) {
-            URL.revokeObjectURL(coverPreview);
-          }
-        };
-      }, [profilePreview, coverPreview]); // Dependencies ensure cleanup if previews are replaced
-
-
-      // --- Form Submission Logic ---
-      const handleSubmit = async (e) => {
-        e.preventDefault(); // Prevent default browser form submission
-        setLoading(true);
-        setError('');
-        setSuccess('');
-
-        const submissionData = new FormData();
-      Object.keys(formData).forEach(key => {
-        submissionData.append(key, formData[key]); // Append text/select data
-      });
-      if (profilePhotoFile) {
-        submissionData.append('profilePhoto', profilePhotoFile); // Append profile photo if exists
+  // --- Cleanup Effect ---
+  // This effect runs when the component unmounts to prevent memory leaks
+  // by revoking any existing object URLs created for previews.
+  useEffect(() => {
+    return () => {
+      if (profilePreview) {
+        URL.revokeObjectURL(profilePreview);
+        console.log("Cleaned up profile preview URL on unmount");
       }
-      if (coverPhotoFile) {
-        submissionData.append('coverPhoto', coverPhotoFile);     // Append cover photo if exists
+      if (coverPreview) {
+        URL.revokeObjectURL(coverPreview);
+        console.log("Cleaned up cover preview URL on unmount");
       }
+    };
+  }, [profilePreview, coverPreview]); // Re-run if previews change (though unmount cleanup is key)
 
-      // --- API Call ---
-      try {
-        // Send POST request to backend registration endpoint
-        await axios.post('http://localhost:5002/api/bowners/register', submissionData);
-        // Note: No need to explicitly set 'Content-Type': 'multipart/form-data', Axios handles it for FormData
 
-        setSuccess('Business registration successful! Redirecting to login...');
+  // --- Form Submission ---
+  const handleSubmit = async (e) => {
+    e.preventDefault(); // Prevent default page reload
+    setLoading(true);
+    setError('');
+    setSuccess('');
 
-        // Navigate to login page after a short delay
-        setTimeout(() => {
-          navigate('/bowner-login'); // **IMPORTANT: Verify '/bowner-login' is the correct route path**
-        }, 1500); // 1.5 second delay
+    // Create FormData to handle multipart/form-data (needed for files)
+    const submissionData = new FormData();
 
-      } catch (err) {
-        // --- Error Handling ---
-        setLoading(false); // Stop loading indicator on error
+    // Append all text/select data from the formData state
+    Object.keys(formData).forEach(key => {
+      submissionData.append(key, formData[key]);
+    });
 
-        // Log detailed error info
-        console.error("Registration failed!");
-        if (err.response) {
-          // Server responded with a status code outside the 2xx range
-          console.error("Server Response:", err.response.status, err.response.data);
-          setError(err.response.data?.message || `Server error (${err.response.status}). Please try again.`);
-        } else if (err.request) {
-          // Request was made but no response received
-          console.error("No response received:", err.request);
-          setError('Network error: Could not reach the server. Please check connection.');
-        } else {
-          // Error occurred in setting up the request
-          console.error('Request Setup Error:', err.message);
-          setError(`An unexpected error occurred: ${err.message}`);
-      }
+    // Append files only if they have been selected
+    if (profilePhotoFile) {
+      submissionData.append('profilePhoto', profilePhotoFile); // Backend expects 'profilePhoto'
     }
-    // No setLoading(false) in the success path as navigation will unmount the component
+    if (coverPhotoFile) {
+      submissionData.append('coverPhoto', coverPhotoFile);     // Backend expects 'coverPhoto'
+    }
+
+     // Optional: Log FormData contents (for debugging, not directly viewable in console)
+     // for (let [key, value] of submissionData.entries()) {
+     //   console.log(`${key}:`, value);
+     // }
+
+    // --- API Call to Backend ---
+    try {
+      // Send POST request to the registration endpoint
+      // Axios automatically sets Content-Type to multipart/form-data for FormData
+      await axios.post('http://localhost:5002/api/bowners/register', submissionData);
+
+      setSuccess('Business registration successful! Redirecting to login...');
+      setLoading(false); // Stop loading on success
+
+      // Redirect to the appropriate login page after a delay
+      setTimeout(() => {
+        // ** IMPORTANT: Ensure '/Login' is your unified login route **
+        // If you still have separate login pages, adjust this path (e.g., '/bowner-login')
+        navigate('/Login');
+      }, 2000); // 2-second delay
+
+    } catch (err) {
+      // --- Error Handling ---
+      setLoading(false); // Stop loading indicator on error
+
+      console.error("Registration failed!", err); // Log the full error
+
+      // Extract and display user-friendly error message
+      if (err.response) {
+        console.error("Server Response:", err.response.status, err.response.data);
+        setError(err.response.data?.message || `Server error (${err.response.status}). Please check details and try again.`);
+      } else if (err.request) {
+        console.error("No response received:", err.request);
+        setError('Network error: Could not reach the server. Please check your connection.');
+      } else {
+        console.error('Request Setup Error:', err.message);
+        setError(`An unexpected error occurred: ${err.message}`);
+    }
+    }
   };
 
   // --- JSX Rendering ---
   return (
-    <div className="business-form-container">
-      <h2 className="form-title">Business Registration Form</h2>
+    <div className="business-form-container"> {/* Ensure CSS class matches */}
+      <h2 className="form-title">Business Owner Registration</h2>
 
-            {/* Display Feedback Messages */}
-        {error && <div className="error-message">{error}</div>}
-        {success && <div className="success-message">{success}</div>}
+      {/* Display Feedback Messages */}
+      {error && <div className="error-message">{error}</div>}
+      {success && <div className="success-message">{success}</div>}
 
-        <form onSubmit={handleSubmit}>
-          {/* --- Form Inputs --- */}
-          <div className="form-group">
-            <label htmlFor="businessId">Business ID</label>
-            <input type="text" id="businessId" name="businessId" value={formData.businessId} onChange={handleChange} placeholder="Enter Business Registration ID" required disabled={loading}/>
-          </div>
+      <form onSubmit={handleSubmit} encType="multipart/form-data"> {/* encType is handled by FormData/Axios */}
+        {/* --- Form Input Fields --- */}
 
-          <div className="form-group">
-            <label htmlFor="businessName">Business Name</label>
-            <input type="text" id="businessName" name="businessName" value={formData.businessName} onChange={handleChange} placeholder="Enter Business Name" required disabled={loading}/>
-          </div>
+        <div className="form-group">
+          <label htmlFor="businessId">Business ID*</label>
+          <input type="text" id="businessId" name="businessId" value={formData.businessId} onChange={handleChange} placeholder="Enter Business Registration ID" required disabled={loading}/>
+        </div>
 
-          <div className="form-group">
-            <label htmlFor="ownerName">Owner Name</label>
-            <input type="text" id="ownerName" name="ownerName" value={formData.ownerName} onChange={handleChange} placeholder="Enter Owner's Full Name" required disabled={loading}/>
-          </div>
+        <div className="form-group">
+          <label htmlFor="businessName">Business Name*</label>
+          <input type="text" id="businessName" name="businessName" value={formData.businessName} onChange={handleChange} placeholder="Enter Official Business Name" required disabled={loading}/>
+        </div>
 
-          <div className="form-group">
-            <label htmlFor="address">Address</label>
-            <textarea id="address" name="address" value={formData.address} onChange={handleChange} placeholder="Enter Full Business Address" rows="4" required disabled={loading}></textarea>
-          </div>
+        <div className="form-group">
+          <label htmlFor="ownerName">Owner's Full Name*</label>
+          <input type="text" id="ownerName" name="ownerName" value={formData.ownerName} onChange={handleChange} placeholder="Enter Owner's Full Name" required disabled={loading}/>
+        </div>
 
-          <div className="form-group">
-            <label htmlFor="contactNumber">Contact Number</label>
-            <input type="tel" id="contactNumber" name="contactNumber" value={formData.contactNumber} onChange={handleChange} placeholder="Enter Contact Number" required disabled={loading}/>
-          </div>
+        <div className="form-group">
+          <label htmlFor="address">Business Address*</label>
+          <textarea id="address" name="address" value={formData.address} onChange={handleChange} placeholder="Enter Full Business Address" rows="3" required disabled={loading}></textarea>
+        </div>
 
-          <div className="form-group horizontal">
-            <div>
-              <label htmlFor="district">District</label>
-              <select id="district" name="district" value={formData.district} onChange={handleChange} required disabled={loading}>
-                <option value="">Select District</option>
-                {/* Add all options... */}
+        <div className="form-group">
+          <label htmlFor="contactNumber">Contact Number*</label>
+          <input type="tel" id="contactNumber" name="contactNumber" value={formData.contactNumber} onChange={handleChange} placeholder="e.g., 07XXXXXXXX" required disabled={loading}/>
+        </div>
+
+        {/* District and Province side-by-side */}
+        <div className="form-group horizontal">
+          <div className="input-group">
+             <label htmlFor="district">District*</label>
+             <select id="district" name="district" value={formData.district} onChange={handleChange} required disabled={loading}>
+               <option value="" disabled>Select District</option>
+                {/* Add all Sri Lankan districts */}
                 <option value="colombo">Colombo</option>
                 <option value="gampaha">Gampaha</option>
                 <option value="kalutara">Kalutara</option>
@@ -200,13 +221,13 @@ function BOwnerForm() {
                 <option value="monaragala">Monaragala</option>
                 <option value="ratnapura">Ratnapura</option>
                 <option value="kegalle">Kegalle</option>
-              </select>
-            </div>
-            <div>
-              <label htmlFor="province">Province</label>
-              <select id="province" name="province" value={formData.province} onChange={handleChange} required disabled={loading}>
-                <option value="">Select Province</option>
-                {/* Add all options... */}
+             </select>
+          </div>
+          <div className="input-group">
+             <label htmlFor="province">Province*</label>
+             <select id="province" name="province" value={formData.province} onChange={handleChange} required disabled={loading}>
+               <option value="" disabled>Select Province</option>
+                {/* Add Sri Lankan provinces */}
                 <option value="western">Western</option>
                 <option value="central">Central</option>
                 <option value="southern">Southern</option>
@@ -216,45 +237,73 @@ function BOwnerForm() {
                 <option value="north-central">North Central</option>
                 <option value="uva">Uva</option>
                 <option value="sabaragamuwa">Sabaragamuwa</option>
-              </select>
+             </select>
+          </div>
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="email">Email Address*</label>
+          <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} placeholder="Enter Business Login Email" required disabled={loading}/>
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="password">Password*</label>
+          <input type="password" id="password" name="password" value={formData.password} onChange={handleChange} placeholder="Create a Secure Password (min 6 chars)" required minLength="6" disabled={loading}/>
+        </div>
+
+        {/* --- File Inputs with Previews --- */}
+        <div className="form-group file-input-group">
+          <label>Profile Photo (Optional)</label>
+          {/* Hidden actual file input */}
+          <input
+            type="file"
+            id="profilePhotoUpload"
+            accept="image/jpeg, image/png, image/gif" // Be specific with accepted types
+            onChange={handleProfilePhotoChange}
+            style={{ display: 'none' }} // Hide the default input
+            disabled={loading}
+          />
+          {/* Custom-styled button acting as the label */}
+          <label htmlFor="profilePhotoUpload" className={`upload-button ${loading ? 'disabled' : ''}`}>
+            {profilePhotoFile ? `Selected: ${profilePhotoFile.name}` : 'Choose Profile Photo'}
+          </label>
+          {/* Display preview if a profile preview URL exists */}
+          {profilePreview && (
+            <div className="image-preview-container">
+              <img src={profilePreview} alt="Profile Preview" className="image-preview profile-preview" />
             </div>
-          </div>
+           )}
+        </div>
 
-          <div className="form-group">
-            <label htmlFor="email">Email</label>
-            <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} placeholder="Enter Business Email" required disabled={loading}/>
-          </div>
+        <div className="form-group file-input-group">
+          <label>Cover Photo (Optional)</label>
+          {/* Hidden actual file input */}
+          <input
+            type="file"
+            id="coverPhotoUpload"
+            accept="image/jpeg, image/png, image/gif"
+            onChange={handleCoverPhotoChange}
+            style={{ display: 'none' }} // Hide the default input
+            disabled={loading}
+            />
+          {/* Custom-styled button acting as the label */}
+          <label htmlFor="coverPhotoUpload" className={`upload-button ${loading ? 'disabled' : ''}`}>
+            {coverPhotoFile ? `Selected: ${coverPhotoFile.name}` : 'Choose Cover Photo'}
+          </label>
+          {/* Display preview if a cover preview URL exists */}
+          {coverPreview && (
+            <div className="image-preview-container">
+                <img src={coverPreview} alt="Cover Preview" className="image-preview cover-preview" />
+            </div>
+           )}
+        </div>
 
-          <div className="form-group">
-            <label htmlFor="password">Password</label>
-            <input type="password" id="password" name="password" value={formData.password} onChange={handleChange} placeholder="Create a Password (min 6 chars)" required minLength="6" disabled={loading}/>
-          </div>
-
-          {/* File Inputs with Previews */}
-          <div className="form-group">
-            <label>Profile Photo</label>
-            <input type="file" id="profilePhotoUpload" accept="image/*" onChange={handleProfilePhotoChange} style={{ display: 'none' }} disabled={loading}/>
-            <label htmlFor="profilePhotoUpload" className={`upload-button ${loading ? 'disabled' : ''}`}>
-              {profilePhotoFile ? profilePhotoFile.name : 'Choose Profile Photo'}
-            </label>
-            {profilePreview && <img src={profilePreview} alt="Profile Preview" className="uploaded-image" />}
-          </div>
-
-          <div className="form-group">
-            <label>Cover Photo</label>
-            <input type="file" id="coverPhotoUpload" accept="image/*" onChange={handleCoverPhotoChange} style={{ display: 'none' }} disabled={loading}/>
-            <label htmlFor="coverPhotoUpload" className={`upload-button ${loading ? 'disabled' : ''}`}>
-              {coverPhotoFile ? coverPhotoFile.name : 'Choose Cover Photo'}
-            </label>
-            {coverPreview && <img src={coverPreview} alt="Cover Preview" className="uploaded-image" />}
-          </div>
-
-          {/* Submit Button */}
-          <button type="submit" className="submit-button" disabled={loading}>
-            {loading ? 'Registering...' : 'Register'}
-          </button>
-        </form>
-      </div>
+        {/* --- Submit Button --- */}
+        <button type="submit" className="submit-button" disabled={loading}>
+          {loading ? 'Registering...' : 'Register Business'}
+        </button>
+      </form>
+    </div>
   );
 }
 

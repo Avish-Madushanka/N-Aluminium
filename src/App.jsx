@@ -40,6 +40,7 @@ import AdCalendar from './Components/Admin/AdMinCalendar/AdCalendar'; // Admin's
 import BOwnerHeader from './Components/BusinessOwner/BOwnerHeader';
 import BSHeader from './Components/BuyandSell/BSHeader';
 import LocationMap from './Components/Maps/LocationMap';
+import ClientProfile from './Components/Profile/ClientProfile';
 
 // --- Main App Content Component ---
 const AppContent = () => {
@@ -227,6 +228,7 @@ const AppContent = () => {
 
         {/* Client Specific Profile/Dashboard */}
         {/* <Route path="/ClientProfile" element={<ProtectedRoute><ClientProfile userInfo={userInfo}/></ProtectedRoute>} /> */}
+        <Route path="/ClientProfile" element={<ProtectedRoute><ClientProfile /></ProtectedRoute>} />
 
         {/* Business Owner Specific Routes */}
         <Route path="/BOwnerHome" element={<ProtectedRoute><BOwnerHome userInfo={userInfo} /></ProtectedRoute>} />
