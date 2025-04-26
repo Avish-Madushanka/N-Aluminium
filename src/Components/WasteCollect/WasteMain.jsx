@@ -23,7 +23,7 @@ const WasteMain = () => {
                 <p className="waste-card-description">
                 Metal Source is a buyer of all scrap metal grades including aluminum, steel, copper, stainless, and all ferrous and nonferrous metals, offering competitive prices and reliable service.
                 </p>
-                <a href="/WastePickForm" className="waste-learn-more">→</a>
+                <a href="/UserCalendar" className="waste-learn-more">→</a>
             </div>
             </div>
 

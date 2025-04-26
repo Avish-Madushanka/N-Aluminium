@@ -41,6 +41,7 @@ import BOwnerHeader from './Components/BusinessOwner/BOwnerHeader';
 import BSHeader from './Components/BuyandSell/BSHeader';
 import LocationMap from './Components/Maps/LocationMap';
 import ClientProfile from './Components/Profile/ClientProfile';
+import CalendarDisplay from './Components/UserCalendar/CalendarDisplay';
 
 // --- Main App Content Component ---
 const AppContent = () => {
@@ -216,6 +217,7 @@ const AppContent = () => {
         <Route path="/Calculate" element={<Calculate />} />
         {/* Standalone component routes (check if they should be public/protected) */}
         <Route path="/BSHeader" element={<BSHeader />} />
+        <Route path="/CalendarDisplay" element={<CalendarDisplay />} />
 
         {/* == Protected Routes (Require Login) == */}
         {/* Use the ProtectedRoute component to wrap elements */}
