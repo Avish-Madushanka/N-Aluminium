@@ -42,6 +42,7 @@ import BSHeader from './Components/BuyandSell/BSHeader';
 import LocationMap from './Components/Maps/LocationMap';
 import ClientProfile from './Components/Profile/ClientProfile';
 import CalendarDisplay from './Components/UserCalendar/CalendarDisplay';
+import BOwnerProfile from './Components/Profile/BOwnerProfile';
 
 // --- Main App Content Component ---
 const AppContent = () => {
@@ -236,6 +237,7 @@ const AppContent = () => {
         <Route path="/BOwnerHome" element={<ProtectedRoute><BOwnerHome userInfo={userInfo} /></ProtectedRoute>} />
         <Route path="/ProAddForm" element={<ProtectedRoute><ProAddForm /></ProtectedRoute>} />
         <Route path="/BOwnerHeader" element={<ProtectedRoute><BOwnerHeader /></ProtectedRoute>} />
+        <Route path="/BOwnerProfile" element={<ProtectedRoute><BOwnerProfile /></ProtectedRoute>} />
 
         {/* Admin Specific Routes */}
         {/* Note: ProtectedRoute only checks login. Enhance it or add checks here/in component for role='admin' */}
