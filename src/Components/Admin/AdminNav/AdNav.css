@@ -1,138 +1,194 @@
+/* Global settings to prevent default scrolling */
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* Prevent body scrolling */
+}
+
 .dashboard-container {
-    display: flex;
-    min-height: 100vh;
-    font-family: sans-serif;
-    color: #ddd;
-  }
-  
-  .sidebar {
-    background-color: #222;
-    width: 250px;
-    padding: 20px;
-    display: flex;
+  display: flex;
+  height: 100vh; /* Full viewport height */
+  font-family: sans-serif;
+  color: #ddd;
+  overflow: hidden; /* Prevent container scrolling */
+}
+
+.sidebar {
+  background-color: #222;
+  width: 250px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+  flex-shrink: 0; /* Prevent sidebar from shrinking */
+  z-index: 100; /* Ensure it stays above other content */
+}
+
+.logo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-bottom: 30px;
+}
+
+.logo-icon {
+  color: #61dafb;
+}
+
+.menu-toggle {
+  cursor: pointer;
+}
+
+.menu-section {
+  margin-bottom: 30px;
+}
+
+.menu-section:first-child {
+  margin-top: 20px;
+}
+
+.menu-section:last-child {
+  margin-bottom: 0;
+}
+
+.menu-section > div {
+  font-size: 0.8em;
+  text-transform: uppercase;
+  color: #888;
+  margin-bottom: 10px;
+}
+
+.menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menu li {
+  margin-bottom: 10px;
+}
+
+.menu li:last-child {
+  margin-bottom: 0;
+}
+
+.menu a {
+  display: flex;
+  align-items: center;
+  color: #ddd;
+  text-decoration: none;
+  padding: 10px;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+  cursor: pointer; /* Added to show it's clickable */
+}
+
+.menu a:hover,
+.menu a.active {
+  background-color: #333;
+  color: white;
+}
+
+.menu-icon {
+  margin-right: 10px;
+  width: 20px;
+  text-align: center;
+}
+
+.badge {
+  background-color: #61dafb;
+  color: #222;
+  padding: 3px 6px;
+  border-radius: 5px;
+  font-size: 0.7em;
+  margin-left: auto;
+}
+
+.logout {
+  margin-top: auto;
+  padding-top: 20px;
+  border-top: 1px solid #333;
+}
+
+.logout a {
+  color: #ddd;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+  cursor: pointer; /* Added to show it's clickable */
+}
+
+.logout a:hover {
+  background-color: #333;
+  color: white;
+}
+
+/* Content area layout */
+.content-wrapper {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden; /* Hide overflow at this level */
+}
+
+/* Top navigation bar (if you have one) */
+.top-navbar {
+  background-color: #fff;
+  height: 60px; /* Adjust based on your top navbar height */
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  flex-shrink: 0; /* Prevent it from shrinking */
+}
+
+/* Main content area - THIS IS THE SCROLLABLE PART */
+.main-content {
+  flex: 1;
+  padding: 30px;
+  background-color: #f0f0f0;
+  color: #333;
+  overflow-y: auto; /* Only this area is scrollable */
+}
+
+/* Footer (if you have one) */
+.footer {
+  background-color: #222;
+  padding: 15px 20px;
+  color: #ddd;
+  flex-shrink: 0; /* Prevent it from shrinking */
+}
+
+/* Custom scrollbar styling */
+.main-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.main-content::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 5px;
+}
+
+/* Mobile responsive behavior */
+@media (max-width: 768px) {
+  .dashboard-container {
     flex-direction: column;
-    justify-content: space-between;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
   }
-  
-  .logo {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 1.5em;
-    font-weight: bold;
-    margin-bottom: 30px;
-  }
-  
-  .logo-icon {
-    color: #61dafb;
-  }
-  
-  .menu-toggle {
-    cursor: pointer;
-  }
-  
-  .menu-section {
-    margin-bottom: 30px;
-  }
-  
-  .menu-section:first-child {
-    margin-top: 20px;
-  }
-  
-  .menu-section:last-child {
-    margin-bottom: 0;
-  }
-  
-  .menu-section > div {
-    font-size: 0.8em;
-    text-transform: uppercase;
-    color: #888;
-    margin-bottom: 10px;
-  }
-  
-  .menu ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .menu li {
-    margin-bottom: 10px;
-  }
-  
-  .menu li:last-child {
-    margin-bottom: 0;
-  }
-  
-  .menu a {
-    display: flex;
-    align-items: center;
-    color: #ddd;
-    text-decoration: none;
+
+  .sidebar {
+    width: 100%;
     padding: 10px;
-    border-radius: 8px;
-    transition: background-color 0.3s ease;
+    box-shadow: none;
   }
   
-  .menu a:hover,
-  .menu a.active {
-    background-color: #333;
-    color: white;
+  .content-wrapper {
+    width: 100%;
   }
-  
-  .menu-icon {
-    margin-right: 10px;
-    width: 20px;
-    text-align: center;
-  }
-  
-  .badge {
-    background-color: #61dafb;
-    color: #222;
-    padding: 3px 6px;
-    border-radius: 5px;
-    font-size: 0.7em;
-    margin-left: auto;
-  }
-  
-  .logout {
-    margin-top: auto;
-    padding-top: 20px;
-    border-top: 1px solid #333;
-  }
-  
-  .logout a {
-    color: #ddd;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    padding: 10px;
-    border-radius: 8px;
-    transition: background-color 0.3s ease;
-  }
-  
-  .logout a:hover {
-    background-color: #333;
-    color: white;
-  }
-  
-  .main-content {
-    flex: 1;
-    padding: 30px;
-    background-color: #f0f0f0;
-    color: #333;
-  }
-  
-  @media (max-width: 768px) {
-    .dashboard-container {
-      flex-direction: column;
-    }
-  
-    .sidebar {
-      width: 100%;
-      padding: 10px;
-      box-shadow: none;
-      margin-bottom: 20px;
-    }
-  }
+}

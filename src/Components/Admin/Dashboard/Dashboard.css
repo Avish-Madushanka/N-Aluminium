@@ -1,0 +1,318 @@
+/* --- Global Styles & Variables --- */
+:root {
+  --primary-blue: rgb(53, 162, 235);
+  --light-blue-bg: rgba(53, 162, 235, 0.1);
+  --light-gray-bg: #f8f9fa;
+  --border-color: #e9ecef;
+  --text-color: #495057;
+  --text-muted: #6c757d;
+  --white: #ffffff;
+  --green-paid: #28a745;
+  --orange-pending: #fd7e14;
+  --gauge-green: rgb(75, 192, 192);
+  --gauge-orange: rgb(255, 159, 64);
+
+  --widget-padding: 1.2rem;
+  --widget-radius: 8px;
+  --widget-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+
+/* --- Dashboard Grid Layout --- */
+.dashboard-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Adjust columns as needed */
+  grid-template-rows: auto auto auto;    /* Adjust rows based on content */
+  gap: 20px;
+  max-width: 1400px; /* Limit max width */
+  margin: auto;      /* Center the dashboard */
+}
+
+/* --- General Widget Styling --- */
+.widget {
+  background-color: var(--white);
+  border-radius: var(--widget-radius);
+  padding: var(--widget-padding);
+  box-shadow: var(--widget-shadow);
+  border: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+}
+
+.widget h2 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.chart-container {
+  position: relative; /* Needed for chart.js responsiveness */
+  flex-grow: 1;      /* Allow chart container to fill space */
+  min-height: 200px; /* Ensure minimum height for charts */
+  width: 100%;
+}
+
+
+/* --- Specific Widget Layout & Styling --- */
+
+/* Row 1 */
+.widget-income {
+  grid-column: 1 / span 2; /* Span 2 columns */
+}
+
+.widget-balance {
+  grid-column: 3 / span 1;
+  align-items: center; /* Center content vertically */
+  justify-content: center; /* Center content horizontally */
+  text-align: center;
+}
+.balance-value {
+  font-size: 2.8rem;
+  font-weight: 300;
+  color: var(--primary-blue);
+  margin-bottom: 0.2rem;
+}
+.balance-value .currency {
+  font-size: 1.8rem;
+  margin-right: 5px;
+  vertical-align: super; /* Align $ sign better */
+}
+.balance-weight {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+}
+.history-button {
+  background-color: var(--primary-blue);
+  color: var(--white);
+  border: none;
+  padding: 8px 15px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+.history-button:hover {
+  background-color: rgb(40, 130, 190);
+}
+
+/* Row 2 */
+.widget-growth {
+  grid-column: 1 / span 1;
+}
+
+.widget-expense {
+  grid-column: 2 / span 1;
+}
+.gauges-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-grow: 1; /* Fill vertical space */
+  padding-top: 1rem;
+}
+.gauge-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.gauge-chart-container {
+  position: relative; /* For positioning the percentage text */
+  width: 80px; /* Adjust size */
+  height: 80px; /* Adjust size */
+  margin-bottom: 0.5rem;
+}
+.gauge-percentage {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text-color);
+}
+.gauge-label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+
+.widget-most-viewed {
+  grid-column: 3 / span 1;
+}
+.item-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex-grow: 1;
+  overflow-y: auto; /* Add scroll if list is long */
+}
+.item-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 0.9rem;
+}
+.item-list li:last-child {
+  border-bottom: none;
+}
+.item-detail {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  background-color: var(--light-blue-bg);
+  padding: 3px 8px;
+  border-radius: 10px;
+  margin-left: 10px; /* Space between name and detail */
+}
+
+
+/* Row 3 */
+.widget-invoices {
+  grid-column: 1 / span 2; /* Span 2 columns */
+}
+.invoice-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex-grow: 1;
+  overflow-y: auto; /* Add scroll if list is long */
+}
+.invoice-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 0.9rem;
+}
+.invoice-list li:last-child {
+  border-bottom: none;
+}
+.invoice-id {
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-right: 10px; /* Space before status tag */
+}
+.status-tag {
+  padding: 4px 10px;
+  border-radius: 15px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.status-paid {
+  background-color: rgba(40, 167, 69, 0.15);
+  color: var(--green-paid);
+}
+.status-pending {
+  background-color: rgba(253, 126, 20, 0.15);
+  color: var(--orange-pending);
+}
+
+.widget-message {
+  grid-column: 3 / span 1; /* Span 1 column */
+}
+.message-list {
+   list-style: none;
+  padding: 0;
+  margin: 0;
+  flex-grow: 1;
+  overflow-y: auto; /* Add scroll if list is long */
+}
+.message-list li {
+  padding: 0.6rem 0;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 0.9rem;
+  display: grid; /* Use grid for better alignment within the message */
+  grid-template-columns: auto 1fr; /* Source | Type & Detail */
+  grid-template-rows: auto auto;
+  column-gap: 8px;
+  row-gap: 2px;
+}
+.message-list li:last-child {
+  border-bottom: none;
+}
+.message-source {
+  font-weight: 600;
+  color: var(--primary-blue);
+  grid-row: 1 / span 2; /* Span both rows */
+  align-self: center; /* Center vertically */
+}
+.message-type {
+  font-weight: 500;
+   grid-column: 2;
+   grid-row: 1;
+}
+.message-detail {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  grid-column: 2;
+  grid-row: 2;
+}
+
+/* --- Responsive Adjustments (Example) --- */
+@media (max-width: 1200px) {
+  .dashboard-container {
+      grid-template-columns: repeat(2, 1fr); /* Stack to 2 columns */
+  }
+  /* Adjust spans for 2-column layout */
+  .widget-income,
+  .widget-invoices {
+      grid-column: 1 / span 2; /* Full width */
+  }
+   .widget-balance,
+   .widget-growth,
+   .widget-expense,
+   .widget-most-viewed,
+   .widget-message {
+      grid-column: span 1; /* Take one column */
+   }
+   /* Reorder or adjust as needed */
+   .widget-balance { grid-row: 1; grid-column: 2; }
+   .widget-growth { grid-row: 2; grid-column: 1; }
+   .widget-expense { grid-row: 2; grid-column: 2; }
+   .widget-most-viewed { grid-row: 3; grid-column: 1; }
+   .widget-message { grid-row: 3; grid-column: 2; }
+   .widget-invoices { grid-row: 4; grid-column: 1 / span 2; }
+
+}
+
+@media (max-width: 768px) {
+  .dashboard-container {
+      grid-template-columns: 1fr; /* Stack everything into 1 column */
+      gap: 15px;
+  }
+  /* Reset all spans to 1 column */
+  .widget,
+  .widget-income,
+  .widget-balance,
+  .widget-growth,
+  .widget-expense,
+  .widget-most-viewed,
+  .widget-invoices,
+  .widget-message {
+      grid-column: 1 / span 1;
+      grid-row: auto; /* Let them stack naturally */
+  }
+
+  .gauges-container {
+      flex-wrap: wrap; /* Allow gauges to wrap if needed */
+      justify-content: center;
+      gap: 15px;
+  }
+  .gauge-item {
+      flex-basis: 45%; /* Approximately two per row */
+  }
+
+   .message-list li {
+       grid-template-columns: 80px 1fr; /* Adjust grid for smaller screens */
+   }
+}

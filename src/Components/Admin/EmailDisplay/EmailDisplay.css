@@ -1,0 +1,128 @@
+/* --- KEEP EXISTING EmailDisplay STYLES from previous answer --- */
+/* These are for showing the FULL email content if you implement that later */
+/* .email-display-container { ... } */
+/* .email-header { ... } */
+/* etc... */
+
+
+/* --- NEW STYLES for Email List --- */
+
+.email-list-container {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    border: 1px solid #d1d5db; /* Light grey border */
+    border-radius: 8px;
+    background-color: #ffffff; /* White background */
+    overflow: hidden; /* Apply border-radius correctly */
+    max-width: 700px; /* Example max-width */
+    margin: 20px auto; /* Center */
+}
+
+/* Style when the list is empty */
+.no-emails-message {
+    text-align: center;
+    padding: 40px 20px;
+    color: #6b7280; /* Medium grey */
+}
+
+.no-emails-message svg {
+    margin-bottom: 10px;
+    color: #9ca3af; /* Lighter grey for icon */
+}
+
+.no-emails-message p {
+    margin: 5px 0 0;
+    font-size: 1rem;
+}
+
+
+/* --- Email List Item Styles --- */
+.email-list-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    border: none; /* Reset button default border */
+    border-bottom: 1px solid #e5e7eb; /* Separator */
+    width: 100%;
+    background-color: #ffffff;
+    cursor: pointer;
+    text-align: left;
+    transition: background-color 0.15s ease-in-out;
+    gap: 15px; /* Space between main content and meta */
+}
+
+.email-list-item:last-child {
+    border-bottom: none; /* No border for the last item */
+}
+
+.email-list-item:hover {
+    background-color: #f9fafb; /* Subtle hover */
+}
+
+.email-list-item.selected {
+    background-color: #eff6ff; /* Light blue background for selected */
+    border-left: 3px solid #3b82f6; /* Blue indicator */
+    padding-left: 13px; /* Adjust padding to account for border */
+}
+
+/* Read/Unread Styles */
+.email-list-item.unread .item-sender,
+.email-list-item.unread .item-subject {
+    font-weight: 600; /* Bold for unread */
+    color: #111827; /* Darker text */
+}
+
+.email-list-item.read .item-sender,
+.email-list-item.read .item-subject {
+    font-weight: 400; /* Normal weight for read */
+    color: #4b5563; /* Slightly muted text */
+}
+.email-list-item.read .item-subject {
+     color: #6b7280; /* Even more muted for read subject */
+}
+
+
+/* Content arrangement within item */
+.item-main-content {
+    display: flex;
+    flex-direction: column; /* Stack sender and subject */
+    overflow: hidden; /* Needed for text truncation */
+    flex-grow: 1; /* Allow content to take available space */
+}
+
+.item-sender {
+    font-size: 0.875rem; /* 14px */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.item-subject {
+    font-size: 0.875rem; /* 14px */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-top: 2px;
+}
+
+.item-meta {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0; /* Prevent meta section from shrinking */
+    gap: 8px;
+    font-size: 0.75rem; /* 12px */
+    color: #6b7280; /* Grey for date/icons */
+    white-space: nowrap; /* Keep date on one line */
+}
+
+.item-icon {
+    color: #9ca3af; /* Lighter grey for icons */
+    flex-shrink: 0;
+}
+
+.attachment-indicator {
+     color: #6b7280; /* Make attachment icon slightly more prominent */
+}
+
+/* --- Add styles from original EmailDisplay.css below if needed --- */
+/* ... (styles for .email-display-container, .email-header, etc.) ... */
