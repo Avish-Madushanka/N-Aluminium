@@ -1,40 +1,43 @@
-// src/Layouts/AdminLayout.jsx (Example Path)
+// src/Layouts/AdminLayout.jsx (Example Path - Updated)
 import React from 'react';
-import { Outlet, useNavigate } from 'react-router-dom'; // Use Outlet to render nested routes
-import AdNav from '../Components/Admin/AdminNav/AdNav'; // Adjust path to AdNav.jsx
-import '../Components/Admin/AdminNav/AdNav.css'; // Import layout CSS
+import { Outlet, useNavigate } from 'react-router-dom';
+import AdNav from '../Components/Admin/AdminNav/AdNav'; // Adjust path
+import Footer from '../Components/Footer/Footer'; // --- IMPORT YOUR FOOTER ---
+import '../Components/Admin/AdminNav/AdNav.css'; // Import layout CSS (contains .content-wrapper, .main-content)
+// import '../Components/Footer/Footer.css'; // Footer's own styles (optional here if imported in Footer.jsx)
 
 function AdminLayout() {
     const navigate = useNavigate();
 
-    // Define the logout handler function HERE
     const handleLogout = () => {
         console.log("Admin logging out...");
-        // Clear authentication tokens/user info from localStorage
         localStorage.removeItem('token');
         localStorage.removeItem('userInfo');
-        // Redirect to the login page
-        navigate('/login', { replace: true }); // Use replace to prevent going back to admin pages
+        navigate('/login', { replace: true });
     };
 
     return (
-        <div className="dashboard-container"> {/* Defined in AdNav.css */}
-            <AdNav handleLogout={handleLogout} /> {/* Pass the logout handler */}
+        <div className="dashboard-container"> {/* From AdNav.css */}
+            <AdNav handleLogout={handleLogout} /> {/* Sidebar */}
 
-            <div className="content-wrapper"> {/* Defined in AdNav.css */}
-                {/* Optional Top Navbar can go here */}
-                {/* <div className="top-navbar">Admin Top Bar</div> */}
+            {/* Content Wrapper takes remaining space and handles column layout */}
+            <div className="content-wrapper"> {/* From AdNav.css */}
 
-                <main className="main-content"> {/* Defined in AdNav.css - THIS PART SCROLLS */}
-                    <Outlet /> {/* Child routes (Dashboard, AdCheckReq, etc.) render here */}
+                {/* Optional Top Navbar */}
+                {/* <header className="top-navbar">Admin Top Bar</header> */}
+
+                {/* Main Scrollable Content Area */}
+                <main className="main-content"> {/* From AdNav.css */}
+                    <Outlet /> {/* Child admin pages render here */}
                 </main>
 
-                {/* Optional Footer can go here */}
-                {/* <footer className="footer">Admin Footer © 2024</footer> */}
-            </div>
-        </div>
+                {/* --- FOOTER PLACED HERE --- */}
+                {/* It's inside content-wrapper but AFTER main-content */}
+                <Footer /> {/* Render the Footer component */}
+
+            </div> {/* End content-wrapper */}
+        </div> /* End dashboard-container */
     );
 }
 
 export default AdminLayout;
-// END OF FILE AdminLayout.jsx (Example)

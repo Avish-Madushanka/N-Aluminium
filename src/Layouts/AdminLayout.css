@@ -1,101 +1,75 @@
-/* Reset body to prevent unwanted scrolling */
-body {
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  font-family: sans-serif;
-}
+/* FROM AdNav.css - Relevant Layout Parts */
 
-/* Main container - full viewport */
-.admin-layout-container {
+/* body { */
+  /* margin: 0; */
+  /* padding: 0; */
+  /* NO overflow: hidden here */
+/* } */
+
+.dashboard-container {
   display: flex;
-  height: 100vh;
-  width: 100vw;
-  overflow: hidden;
+  height: 100vh; /* Full viewport height */
+  font-family: sans-serif;
+  color: #ddd;
+  overflow: hidden; /* Prevent container scrolling */
 }
 
-/* Sidebar container */
-.sidebar-container {
-  height: 100vh;
-  overflow-y: auto; /* Make sidebar scrollable if content is too tall */
-  flex-shrink: 0;
-}
-
-/* Content wrapper - contains header, main content, and footer */
-.content-wrapper {
-  flex: 1;
+.sidebar {
+  background-color: #222;
+  width: 250px;
+  padding: 20px;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  /* ... other sidebar styles ... */
+  flex-shrink: 0; /* Prevent sidebar from shrinking */
+  z-index: 100;
+  overflow-y: auto;
 }
 
-/* Admin header - fixed at top */
-.admin-header {
+/* Content area layout */
+.content-wrapper {
+  display: flex;
+  flex-direction: column; /* IMPORTANT: Stack items vertically */
+  flex: 1; /* Take remaining width */
+  overflow: hidden; /* Prevent wrapper itself from scrolling */
+  background-color: #f0f0f0; /* Example background for content area */
+}
+
+/* Top navigation bar (if you have one) */
+.top-navbar {
   background-color: #fff;
-  padding: 15px 30px;
+  height: 60px;
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  z-index: 10;
-  flex-shrink: 0; /* Prevent header from shrinking */
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  flex-shrink: 0; /* Prevent navbar from shrinking */
 }
 
-/* Main content area - this is the scrollable part */
-.admin-main-content {
-  flex: 1;
-  overflow-y: auto; /* This makes the content area scrollable */
-  padding: 30px;
-  background-color: #f0f0f0;
+/* Main content area - THIS IS THE SCROLLABLE PART */
+.main-content {
+  flex: 1; /* IMPORTANT: Takes up available vertical space */
+  padding: 20px;
+  color: #333;
+  overflow-y: auto; /* Only this area scrolls vertically */
 }
 
-/* Admin footer - fixed at bottom */
-.admin-footer {
-  background-color: #222;
-  color: #ddd;
-  padding: 15px 30px;
-  text-align: center;
-  flex-shrink: 0; /* Prevent footer from shrinking */
+/* Footer Styling WITHIN the Layout Context */
+.footer { /* Target the footer element when it's used in this layout */
+  background-color: #1a1a1a; /* Match your Footer.css */
+  color: #b0b0b0;          /* Match your Footer.css */
+  padding: 30px 0;          /* Match your Footer.css */
+  flex-shrink: 0; /* IMPORTANT: Prevent footer from shrinking */
+  position: relative; /* Ensure z-index works if needed, often not required here */
+  z-index: 10; /* Keep above main content background just in case */
 }
 
-/* Custom scrollbar styling for sidebar */
-.sidebar-container::-webkit-scrollbar {
-  width: 5px;
-}
+/* --- Rest of AdNav.css (menu, logo, etc.) --- */
+/* ... */
 
-.sidebar-container::-webkit-scrollbar-thumb {
-  background-color: #444;
-  border-radius: 5px;
-}
+/* --- Custom scrollbar styling --- */
+/* ... */
 
-/* Custom scrollbar styling for main content */
-.admin-main-content::-webkit-scrollbar {
-  width: 8px;
-}
-
-.admin-main-content::-webkit-scrollbar-thumb {
-  background-color: #ccc;
-  border-radius: 5px;
-}
-
-/* Media query for responsive design */
-@media (max-width: 768px) {
-  .admin-layout-container {
-    flex-direction: column;
-  }
-  
-  .sidebar-container {
-    width: 100%;
-    height: auto;
-    overflow-y: visible;
-  }
-  
-  .admin-header {
-    padding: 10px 15px;
-  }
-  
-  .admin-main-content {
-    padding: 15px;
-  }
-  
-  .admin-footer {
-    padding: 10px 15px;
-  }
-}
+/* --- Responsive adjustments --- */
+/* ... */

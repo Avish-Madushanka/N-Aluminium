@@ -1,33 +1,33 @@
 import React from 'react';
-import './Footer.css'; 
-import { FaFacebookF, FaTwitter, FaLinkedinIn, FaInstagram } from 'react-icons/fa'; 
-import logo from '../../assets/logo.png'; 
+import './Footer.css';
+import { FaFacebookF, FaTwitter, FaLinkedinIn, FaInstagram } from 'react-icons/fa';
+import logo from '../../assets/logo.png';
 
 const Footer = () => {
-  const currentYear = new Date().getFullYear(); 
+  const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="footer">
-      <div className="footer-content">
-        <div className="footer-section footer-section-logo">
+    <footer className="footer1">
+      <div className="footer1-content">
+        <div className="footer1-section footer1-section-logo">
           <img
             src={logo}
-            alt="Avo Company Logo" 
-            className="footer-logo" 
+            alt="Avo Company Logo"
+            className="footer1-logo"
           />
         </div>
 
-        <div className="footer-section">
+        <div className="footer1-section">
           <h4>Quick Links</h4>
           <ul>
             <li><a href="/">Home</a></li>
-            <li><a href="/about">About Us</a></li> 
-            <li><a href="/careers">Services</a></li> 
+            <li><a href="/about">About Us</a></li>
+            <li><a href="/careers">Services</a></li>
             <li><a href="/docs">Contact Us</a></li>
           </ul>
         </div>
 
-        <div className="footer-section">
+        <div className="footer1-section">
           <h4>Legal</h4>
           <ul>
             <li><a href="/terms">Terms and Conditions</a></li>
@@ -36,12 +36,12 @@ const Footer = () => {
           </ul>
         </div>
 
-        <div className="footer-section footer-section-contact">
+        <div className="footer1-section footer1-section-contact">
           <h4>Let's chat!</h4>
           <p>
-            <a href="mailto:hi@avo.app" className="footer-email-link">hi@avo.app</a>
+            <a href="mailto:hi@avo.app" className="footer1-email-link">hi@avo.app</a>
           </p>
-          <div className="social-links">
+          <div className="footer1-social-links">
             <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Follow us on Facebook">
               <FaFacebookF />
             </a>
@@ -58,7 +58,7 @@ const Footer = () => {
         </div>
       </div>
 
-      <div className="footer-copyright">
+      <div className="footer1-copyright">
         © {currentYear} Avo.app. All rights reserved.
       </div>
     </footer>
