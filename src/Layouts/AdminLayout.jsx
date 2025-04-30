@@ -2,7 +2,7 @@
 import React from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import AdNav from '../Components/Admin/AdminNav/AdNav'; // Adjust path
-import Footer from '../Components/Footer/Footer'; // --- IMPORT YOUR FOOTER ---
+import Footer from '../Components/Footer1/Footer'; // --- IMPORT YOUR FOOTER ---
 import '../Components/Admin/AdminNav/AdNav.css'; // Import layout CSS (contains .content-wrapper, .main-content)
 // import '../Components/Footer/Footer.css'; // Footer's own styles (optional here if imported in Footer.jsx)
 

@@ -7,7 +7,7 @@ import { jwtDecode } from 'jwt-decode';
 
 // --- Core Components ---
 import Navbar from './Components/Navbar/Navbar';
-import Footer from './Components/Footer/Footer';
+import Footer1 from './Components/Footer1/Footer';
 import ProtectedRoute from './routes/ProtectedRoute';
 import AdminLayout from './Layouts/AdminLayout';
 
@@ -202,7 +202,7 @@ const AppContent = () => {
                 <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
 
-            {!isAdmin && <Footer />}
+            {!isAdmin && <Footer1 />}
         </div>
     );
 };
