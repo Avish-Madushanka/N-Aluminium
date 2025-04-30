@@ -1,75 +1,135 @@
-/* FROM AdNav.css - Relevant Layout Parts */
+/* START OF FILE AdNav.css */
 
-/* body { */
-  /* margin: 0; */
-  /* padding: 0; */
-  /* NO overflow: hidden here */
-/* } */
+/* --- Global Reset --- */
+/* Ensure body allows scrolling and has no extra margin/padding */
 
+
+/* --- Admin Layout Structure --- */
+
+/* The main container for the entire admin view (Sidebar + Content) */
 .dashboard-container {
-  display: flex;
-  height: 100vh; /* Full viewport height */
-  font-family: sans-serif;
-  color: #ddd;
-  overflow: hidden; /* Prevent container scrolling */
+  display: flex;         /* Use Flexbox for horizontal layout */
+  height: 100vh;        /* Make the container fill the full viewport height */
+  overflow: hidden;      /* Prevent the *container itself* from scrolling */
 }
 
+/* The Sidebar */
 .sidebar {
-  background-color: #222;
-  width: 250px;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  /* ... other sidebar styles ... */
-  flex-shrink: 0; /* Prevent sidebar from shrinking */
-  z-index: 100;
-  overflow-y: auto;
+  width: 250px;           /* Fixed width for the sidebar */
+  flex-shrink: 0;        /* Prevent the sidebar from shrinking */
+  background-color: #222; /* Sidebar background color */
+  color: #ddd;            /* Default text color for sidebar */
+  padding: 20px;          /* Internal padding */
+  display: flex;         /* Use Flexbox to arrange items vertically */
+  flex-direction: column;/* Stack logo, menu, logout vertically */
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2); /* Optional shadow */
+  z-index: 100;          /* Keep sidebar above other potential layers */
+  overflow-y: auto;      /* Allow the *sidebar itself* to scroll if its content is too long */
 }
 
-/* Content area layout */
+/* Wrapper for the main content area (everything to the right of the sidebar) */
 .content-wrapper {
-  display: flex;
-  flex-direction: column; /* IMPORTANT: Stack items vertically */
-  flex: 1; /* Take remaining width */
-  overflow: hidden; /* Prevent wrapper itself from scrolling */
-  background-color: #f0f0f0; /* Example background for content area */
+  display: flex;         /* Use Flexbox to arrange children (like topbar, main, footer) */
+  flex-direction: column;/* Stack children vertically */
+  flex: 1;               /* Allow this wrapper to grow and take remaining horizontal space */
+  overflow: hidden;      /* Prevent the *wrapper itself* from scrolling */
+  background-color: #f0f0f0; /* Default background for the content area */
 }
 
-/* Top navigation bar (if you have one) */
+/* Optional Top Navigation Bar inside the content wrapper */
 .top-navbar {
-  background-color: #fff;
-  height: 60px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  z-index: 50;
+  height: 60px;           /* Example fixed height */
+  flex-shrink: 0;        /* Prevent the topbar from shrinking vertically */
+  background-color: #fff; /* Example background */
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Optional shadow */
   display: flex;
   align-items: center;
   padding: 0 20px;
-  flex-shrink: 0; /* Prevent navbar from shrinking */
+  z-index: 50;           /* Ensure it's below sidebar if overlapping is possible */
 }
 
-/* Main content area - THIS IS THE SCROLLABLE PART */
+/* The Main Content Area where pages are rendered via <Outlet> */
 .main-content {
-  flex: 1; /* IMPORTANT: Takes up available vertical space */
-  padding: 20px;
-  color: #333;
-  overflow-y: auto; /* Only this area scrolls vertically */
+  flex: 1;               /* Allow this area to grow and take available *vertical* space within the wrapper */
+  overflow-y: auto;      /* !!! CRITICAL: Enable vertical scrolling ONLY for this area */
+  padding: 20px;          /* Padding around the content */
+  color: #333;            /* Default text color for main content */
 }
 
-/* Footer Styling WITHIN the Layout Context */
-.footer { /* Target the footer element when it's used in this layout */
-  background-color: #1a1a1a; /* Match your Footer.css */
-  color: #b0b0b0;          /* Match your Footer.css */
-  padding: 30px 0;          /* Match your Footer.css */
-  flex-shrink: 0; /* IMPORTANT: Prevent footer from shrinking */
-  position: relative; /* Ensure z-index works if needed, often not required here */
-  z-index: 10; /* Keep above main content background just in case */
+/* --- Footer Styling --- */
+/* This rule will NOT apply within AdminLayout because Footer is not rendered there. */
+/* It's kept here in case this CSS file is used elsewhere or for reference. */
+/* If this CSS is *only* for AdNav/AdminLayout, you can safely delete this block. */
+.footer {
+  background-color: #1a1a1a;
+  color: #b0b0b0;
+  padding: 30px 0;
+  flex-shrink: 0; /* Prevent footer from shrinking if it *were* present */
+  /* position: relative; */ /* Usually not needed */
+  /* z-index: 10; */       /* Usually not needed */
 }
 
-/* --- Rest of AdNav.css (menu, logo, etc.) --- */
-/* ... */
+/* --- Styles for Sidebar Internals (Keep your existing styles) --- */
+/* .logo { ... } */
+/* .logo-text { ... } */
+/* .menu { ... } */
+/* .menu-section { ... } */
+/* .menu-section-title { ... } */
+/* .menu ul { ... } */
+/* .menu li { ... } */
+/* .menu a { ... } */
+/* .menu a:hover, .menu a.active { ... } */
+/* .menu-icon { ... } */
+/* .badge { ... } */
+/* .logout { ... } */
+/* .logout a { ... } */
+/* .logout a:hover { ... } */
 
-/* --- Custom scrollbar styling --- */
-/* ... */
+/* --- Custom Scrollbar Styling (Optional but Recommended) --- */
+.main-content::-webkit-scrollbar {
+  width: 8px;
+}
+.main-content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+.main-content::-webkit-scrollbar-thumb {
+  background-color: #aaa;
+  border-radius: 4px;
+}
+.main-content::-webkit-scrollbar-thumb:hover {
+  background-color: #888;
+}
 
-/* --- Responsive adjustments --- */
-/* ... */
+/* --- Responsive Adjustments (Keep your existing or adapt as needed) --- */
+@media (max-width: 768px) {
+  .dashboard-container {
+    flex-direction: column; /* Stack sidebar and content on mobile */
+    height: auto;         /* Allow height to be determined by content */
+    overflow: visible;    /* Allow the whole page to scroll naturally */
+  }
+
+  .sidebar {
+    width: 100%;          /* Sidebar takes full width */
+    height: auto;         /* Height adjusts to content */
+    box-shadow: none;
+    overflow-y: visible;  /* Disable internal sidebar scroll */
+    position: static;     /* Reset position if it was fixed */
+    z-index: auto;
+  }
+
+  .content-wrapper {
+    overflow: visible;    /* Allow content to determine height */
+  }
+
+  .main-content {
+    overflow-y: visible;  /* Disable internal scroll, use page scroll */
+    padding: 15px;
+  }
+
+  /* Hide custom scrollbars on mobile */
+  .main-content::-webkit-scrollbar {
+     display: none;
+  }
+}
+
+/* END OF FILE AdNav.css */

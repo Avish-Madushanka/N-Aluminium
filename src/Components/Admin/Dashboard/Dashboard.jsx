@@ -12,6 +12,7 @@ import {
     Title,
     Tooltip,
     Legend,
+    Filler // Import Filler for area charts
 } from 'chart.js';
 
 // Register Chart.js components
@@ -24,81 +25,91 @@ ChartJS.register(
     ArcElement,
     Title,
     Tooltip,
-    Legend
+    Legend,
+    Filler // Register Filler
 );
 
-// --- Chart Data (Sample Data - Replace with your actual data) ---
+// --- Chart Data (Sample Data - Closely matching the image) ---
 
-const revenueData = {
-    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+// Income Chart (Area Line Chart)
+const incomeData = {
+    labels: ['', '', '', '', '', '', ''], // Labels hidden in image, keep placeholders
     datasets: [
         {
-            label: 'Monthly Revenue ($)',
-            data: [5500, 6200, 7800, 7100, 8500, 9200, 8800],
-            fill: true,
-            borderColor: 'rgb(53, 162, 235)',
-            backgroundColor: 'rgba(53, 162, 235, 0.2)',
+            label: 'Income', // Hidden in final render
+            data: [30, 55, 40, 70, 50, 80, 60], // Example data shape
+            fill: true, // Fill area below line
+            borderColor: 'rgb(53, 162, 235)', // Line color
+            backgroundColor: 'rgba(53, 162, 235, 0.1)', // Area fill color
             tension: 0.4, // Makes the line curvy
+            pointRadius: 0, // Hide points
         },
     ],
 };
 
-const collectionVolumeData = {
-    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6', 'Week 7', 'Week 8'],
+// Growth Chart (Bar Chart)
+const growthData = {
+    labels: ['', '', '', '', '', '', '', '', '', '', '', ''], // Placeholder labels
     datasets: [
         {
-            label: 'Collected Weight (Tonnes)',
-            data: [12, 15, 11, 18, 14, 20, 17, 22],
-            backgroundColor: 'rgba(53, 162, 235, 0.7)',
-            borderRadius: 4,
+            label: 'Growth', // Hidden
+            data: [6, 9, 7, 11, 5, 8, 10, 7, 12, 6, 9, 5], // Example data shape
+            backgroundColor: 'rgba(53, 162, 235, 0.5)', // Bar color
+            borderRadius: 2,
+            barPercentage: 0.6, // Adjust bar width
+            categoryPercentage: 0.7, // Adjust spacing between bars
         },
     ],
 };
 
-// Data for the Doughnut charts (Efficiency/Costs)
-// Note: The original image had simple % circles. Doughnut charts are more visually informative.
-const costRatioData = (label, percentage, color) => ({
-    labels: [label, 'Remainder'],
+// Expense Gauge Charts (Doughnut)
+const createGaugeData = (percentage, color) => ({
+    labels: ['Used', 'Remaining'],
     datasets: [
         {
             data: [percentage, 100 - percentage],
-            backgroundColor: [color, 'rgba(200, 200, 200, 0.3)'],
-            borderColor: ['#ffffff', '#ffffff'],
-            borderWidth: 2,
-            circumference: 270, // Makes it a partial circle like gauge
-            rotation: 225,      // Starts the circle from bottom-left
+            backgroundColor: [color, 'rgba(226, 232, 240, 0.5)'], // Use a light gray for remaining
+            borderColor: ['#ffffff', '#ffffff'], // White border for separation
+            borderWidth: 1,
+            circumference: 360, // Full circle
+            rotation: -90,      // Start from the top
+            cutout: '80%',     // Make it a thin ring like a gauge
         },
     ],
 });
 
-const chartOptions = {
+// Chart Options
+const commonChartOptions = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
-        legend: {
-            display: false, // Hide legend for cleaner look in small widget
-        },
-        title: {
-            display: false, // We have widget titles already
-        },
-        tooltip: {
-            enabled: true,
-        }
+        legend: { display: false }, // No legends shown
+        title: { display: false },  // No titles shown
+        tooltip: { enabled: false } // Disable tooltips if not desired
     },
-    scales: { // Optional: customize axes if needed
+    scales: { // Hide axes for income and growth
+        x: {
+            display: false,
+            grid: { display: false },
+            ticks: { display: false },
+            border: { display: false }
+        },
         y: {
-            beginAtZero: true,
+            display: false,
+            grid: { display: false },
+            ticks: { display: false },
+            border: { display: false }
         },
     },
 };
 
-const doughnutOptions = {
+const gaugeOptions = {
     responsive: true,
     maintainAspectRatio: false,
-    cutout: '70%', // Makes it a doughnut chart
+    cutout: '80%',
     plugins: {
         legend: { display: false },
-        tooltip: { enabled: false }, // Often disable tooltips for gauges
+        tooltip: { enabled: false },
         title: { display: false },
     },
 };
@@ -107,130 +118,113 @@ const doughnutOptions = {
 // --- Main Component ---
 
 function Dashboard() {
-    // Sample Data (Replace with data fetched from your backend/API)
-    const inventoryWeight = 125.5; // Tonnes
-    const estimatedInventoryValue = 155000; // Example value
-    const topSources = [
-        { id: 1, name: 'Industrial Plant A', volume: '25 Tonnes/Month' },
-        { id: 2, name: 'Construction Site B', volume: '18 Tonnes/Month' },
-        { id: 3, name: 'City Recycling Program', volume: '15 Tonnes/Month' },
-        { id: 4, name: 'Small Fabricator C', volume: '12 Tonnes/Month' },
+    // Sample Static Data matching the image
+    const balance = 15000;
+    const mostViewedItems = ['item 01', 'item 02', 'item 03', 'item 04'];
+    const invoices = [
+        { id: '01', date: 'November', code: '1245/s/o', status: 'PAID' },
+        { id: '02', date: 'November', code: '1123/f/o', status: 'PAID' },
+        { id: '03', date: 'November', code: '1298/a/o', status: 'PAID' },
+        { id: '04', date: 'November', code: '1247/s/o', status: 'PAID' },
+        { id: '05', date: 'November', code: '1333/c/o', status: 'PAID' },
+        { id: '06', date: 'November', code: '2134/v/o', status: 'PAID' },
     ];
-    const recentShipments = [
-        { id: 'SHP-0112', date: 'November 18', customer: 'Smelter Inc.', status: 'PAID', grade: 'UBC' },
-        { id: 'SHP-0111', date: 'November 15', customer: 'Alloy Corp.', status: 'PAID', grade: '6063 Extrusion' },
-        { id: 'SHP-0110', date: 'November 12', customer: 'Foundry Ltd.', status: 'PAID', grade: 'Castings' },
-        { id: 'SHP-0109', date: 'November 08', customer: 'Smelter Inc.', status: 'PENDING', grade: 'UBC' },
-        { id: 'SHP-0108', date: 'November 05', customer: 'Alloy Corp.', status: 'PAID', grade: 'Mixed' },
-        { id: 'SHP-0107', date: 'November 02', customer: 'Export Co.', status: 'PAID', grade: 'Tense' },
-    ];
-    const operationalAlerts = [
-        { id: 1, source: 'Route 03', type: '[High Contamination]', detail: 'Load from Site X flagged - 15% waste.' },
-        { id: 2, source: 'Logistics', type: '[Maintenance]', detail: 'Truck T-05 scheduled downtime tomorrow.' },
-        { id: 3, source: 'Yard Ops', type: '[Low Stock]', detail: 'Grade: Clean Sheet inventory below target.' },
-        { id: 4, source: 'Route 01', type: '[Missed Pickup]', detail: 'Site Y reported missed collection today.' },
-        { id: 5, source: 'Sales', type: '[Price Alert]', detail: 'Market price for UBC increased 5%.' },
-        { id: 6, source: 'Quality Control', type: '[Grade Check]', detail: 'Bale #B456 requires secondary inspection.' },
+    const messages = [
+        { name: 'Johnson, Mark', subject: '[ Invoice November ]', detail: 'Status Update : Success' },
+        { name: 'Adelia, Nadia', subject: '[ Project Assignment ]', detail: 'Presentation Material' },
+        { name: 'Amelia, Laura', subject: '[ Meeting Schedule ]', detail: 'Project : interior design' },
+        { name: 'Johnson, Mark', subject: '[ Invoice November ]', detail: 'Status Update : Success' },
+        { name: 'Adelia, Nadia', subject: '[ Project Assignment ]', detail: 'Presentation Material' },
+        { name: 'Amelia, Laura', subject: '[ Meeting Schedule ]', detail: 'Project : interior design' },
     ];
 
-    // Efficiency/Cost Percentages
-    const collectionEfficiency = 85; // Example: % of scheduled pickups completed on time
-    const processingYield = 92; // Example: % of clean aluminum recovered from gross weight
-    const profitMargin = 18; // Example: Overall profit margin %
+    // Gauge percentages from image
+    const expensePercentages = [80, 75, 50];
+    const expenseGaugeColor = 'rgb(53, 162, 235)'; // Color from image
 
     return (
-        <div className="dashboard-container">
+        // Use the db- prefixed class names from the CSS
+        <div className="db-container">
 
             {/* --- Row 1 --- */}
-            <div className="widget widget-income">
-                <h2>Revenue Trend</h2>
-                <div className="chart-container">
-                    <Line options={chartOptions} data={revenueData} />
+            <div className="db-widget db-widget-income">
+                <h2 className="db-widget-title">income</h2>
+                <div className="db-chart-container db-income-chart">
+                    <Line options={commonChartOptions} data={incomeData} />
                 </div>
             </div>
 
-            <div className="widget widget-balance">
-                <h2>Inventory Overview</h2>
-                <div className="balance-value">
-                    <span className="currency">$</span>
-                    {estimatedInventoryValue.toLocaleString()}
+            <div className="db-widget db-widget-balance">
+                <h2 className="db-widget-title">balance</h2>
+                <div className="db-balance-value">
+                    <span className="db-currency">$</span>
+                    {/* Format number like image: 15.000 */}
+                    {balance.toLocaleString('de-DE', { minimumFractionDigits: 3, maximumFractionDigits: 3 })}
                 </div>
-                <div className="balance-weight">
-                    {inventoryWeight.toFixed(1)} Tonnes (Est. Value)
-                </div>
-                <button className="history-button">See Details</button>
+                <button className="db-history-button">see history</button>
             </div>
 
             {/* --- Row 2 --- */}
-            <div className="widget widget-growth">
-                <h2>Collection Volume</h2>
-                 <div className="chart-container">
-                    <Bar options={chartOptions} data={collectionVolumeData} />
+            <div className="db-widget db-widget-growth">
+                <h2 className="db-widget-title">growth</h2>
+                 <div className="db-chart-container db-growth-chart">
+                    <Bar options={commonChartOptions} data={growthData} />
                 </div>
             </div>
 
-            <div className="widget widget-expense">
-                <h2>Key Metrics</h2>
-                <div className="gauges-container">
-                    <div className="gauge-item">
-                        <div className="gauge-chart-container">
-                             <Doughnut data={costRatioData('Collection Eff.', collectionEfficiency, 'rgb(53, 162, 235)')} options={doughnutOptions} />
-                             <div className="gauge-percentage">{collectionEfficiency}%</div>
+            <div className="db-widget db-widget-expense">
+                <h2 className="db-widget-title">expense</h2>
+                <div className="db-gauges-container">
+                    {expensePercentages.map((perc, index) => (
+                        <div className="db-gauge-item" key={index}>
+                            <div className="db-gauge-chart-container">
+                                <Doughnut data={createGaugeData(perc, expenseGaugeColor)} options={gaugeOptions} />
+                                <div className="db-gauge-percentage">{perc}%</div>
+                            </div>
+                            {/* No labels below gauges in the image */}
                         </div>
-                        <span className="gauge-label">Collection Efficiency</span>
-                    </div>
-                     <div className="gauge-item">
-                         <div className="gauge-chart-container">
-                             <Doughnut data={costRatioData('Processing Yield', processingYield, 'rgb(75, 192, 192)')} options={doughnutOptions} />
-                              <div className="gauge-percentage">{processingYield}%</div>
-                         </div>
-                        <span className="gauge-label">Processing Yield</span>
-                    </div>
-                     <div className="gauge-item">
-                         <div className="gauge-chart-container">
-                             <Doughnut data={costRatioData('Profit Margin', profitMargin, 'rgb(255, 159, 64)')} options={doughnutOptions} />
-                              <div className="gauge-percentage">{profitMargin}%</div>
-                         </div>
-                        <span className="gauge-label">Profit Margin</span>
-                    </div>
+                    ))}
                 </div>
             </div>
 
-            <div className="widget widget-most-viewed">
-                <h2>Top Sources (Volume)</h2>
-                <ul className="item-list">
-                    {topSources.map(source => (
-                        <li key={source.id}>
-                            <span>{source.name}</span>
-                            <span className="item-detail">{source.volume}</span>
+            <div className="db-widget db-widget-most-viewed">
+                <h2 className="db-widget-title">most viewed item</h2>
+                <ul className="db-item-list">
+                    {mostViewedItems.map((item, index) => (
+                        <li key={index} className="db-most-viewed-item">
+                            <span className="db-item-name">{item}</span>
+                            <button className="db-boost-button">BOOST</button>
                         </li>
                     ))}
                 </ul>
             </div>
 
             {/* --- Row 3 --- */}
-            <div className="widget widget-invoices">
-                <h2>Recent Shipments</h2>
-                <ul className="invoice-list">
-                    {recentShipments.map(shipment => (
-                        <li key={shipment.id}>
-                            <span className="invoice-id">{shipment.id} / {shipment.date} / {shipment.customer} / Grade: {shipment.grade}</span>
-                            <span className={`status-tag ${shipment.status === 'PAID' ? 'status-paid' : 'status-pending'}`}>
-                                {shipment.status}
+            <div className="db-widget db-widget-invoices">
+                <h2 className="db-widget-title">invoices</h2>
+                <ul className="db-invoice-list">
+                    {invoices.map((invoice, index) => (
+                        <li key={index} className="db-invoice-item">
+                            <span className="db-invoice-detail">
+                                <span className="db-bullet">•</span> {/* Added bullet */}
+                                Invoices {invoice.id}/{invoice.date}/{invoice.code}
+                            </span>
+                            <span className="db-status-tag db-status-paid">
+                                {invoice.status}
                             </span>
                         </li>
                     ))}
                 </ul>
             </div>
 
-            <div className="widget widget-message">
-                <h2>Operational Alerts</h2>
-                <ul className="message-list">
-                     {operationalAlerts.map(alert => (
-                        <li key={alert.id}>
-                            <span className="message-source">{alert.source}</span>
-                            <span className="message-type">{alert.type}</span>
-                            <span className="message-detail">{alert.detail}</span>
+            <div className="db-widget db-widget-message">
+                <h2 className="db-widget-title">message</h2>
+                <ul className="db-message-list">
+                     {messages.map((msg, index) => (
+                        <li key={index} className="db-message-item">
+                            <span className="db-message-name">{msg.name}</span>
+                            <span className="db-message-subject">{msg.subject}</span>
+                            <span className="db-message-detail">{msg.detail}</span>
                         </li>
                      ))}
                 </ul>

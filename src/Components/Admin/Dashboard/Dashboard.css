@@ -1,318 +1,384 @@
-/* --- Global Styles & Variables --- */
-:root {
-  --primary-blue: rgb(53, 162, 235);
-  --light-blue-bg: rgba(53, 162, 235, 0.1);
-  --light-gray-bg: #f8f9fa;
-  --border-color: #e9ecef;
-  --text-color: #495057;
-  --text-muted: #6c757d;
-  --white: #ffffff;
-  --green-paid: #28a745;
-  --orange-pending: #fd7e14;
-  --gauge-green: rgb(75, 192, 192);
-  --gauge-orange: rgb(255, 159, 64);
+/* START OF FILE Dashboard.css */
 
-  --widget-padding: 1.2rem;
-  --widget-radius: 8px;
-  --widget-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+/* --- Base Variables --- */
+:root {
+  --db-primary-blue: rgb(53, 162, 235);
+  --db-light-blue-bg: rgba(227, 242, 253, 0.7); /* Lighter blue for backgrounds */
+  --db-widget-bg: #ffffff;
+  --db-border-color: #eef2f7; /* Lighter border */
+  --db-text-title: #5a6a7f;   /* Muted title color */
+  --db-text-primary: #334155; /* Darker primary text */
+  --db-text-secondary: #64748b;/* Secondary text */
+  --db-text-balance: var(--db-primary-blue);
+  --db-button-bg: #e0f0ff;     /* Lighter blue for buttons */
+  --db-button-text: var(--db-primary-blue);
+  --db-paid-bg: #e0f0ff;       /* Paid tag background */
+  --db-paid-text: #1e40af;     /* Darker blue text for paid */
+  --db-boost-bg: #e0f0ff;      /* Boost button background */
+  --db-boost-text: #1e40af;    /* Boost button text */
+  --db-boost-hover-bg: #d1e7ff;
+
+  --db-widget-padding: 18px; /* Adjust padding */
+  --db-widget-radius: 6px;  /* Slight rounding */
+  --db-widget-shadow: 0 1px 3px rgba(0, 0, 0, 0.04); /* Very subtle shadow */
+  --db-gap: 18px; /* Gap between widgets */
 }
 
-
 /* --- Dashboard Grid Layout --- */
-.dashboard-container {
+/* Use the class name from the JSX */
+.db-container {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* Adjust columns as needed */
-  grid-template-rows: auto auto auto;    /* Adjust rows based on content */
-  gap: 20px;
-  max-width: 1400px; /* Limit max width */
-  margin: auto;      /* Center the dashboard */
+  grid-template-columns: repeat(3, 1fr); /* 3 columns */
+  grid-auto-rows: minmax(120px, auto);   /* Minimum row height, auto adjusts */
+  gap: var(--db-gap);
+  padding: var(--db-gap); /* Use gap value for padding */
+  max-width: 1400px;
+  margin: 0 auto; /* Center the container */
+  background-color: var(--db-light-blue-bg); /* Overall light blue background */
+  /* Ensure this container is within the scrollable .main-content of AdminLayout */
 }
 
 /* --- General Widget Styling --- */
-.widget {
-  background-color: var(--white);
-  border-radius: var(--widget-radius);
-  padding: var(--widget-padding);
-  box-shadow: var(--widget-shadow);
-  border: 1px solid var(--border-color);
+/* Use the class name from the JSX */
+.db-widget {
+  background-color: var(--db-widget-bg);
+  border-radius: var(--db-widget-radius);
+  padding: var(--db-widget-padding);
+  box-shadow: var(--db-widget-shadow);
+  border: 1px solid var(--db-border-color);
   display: flex;
   flex-direction: column;
+  overflow: hidden; /* Prevent content spillover */
 }
 
-.widget h2 {
-  margin-top: 0;
-  margin-bottom: 1rem;
-  font-size: 1.1rem;
+/* Use the class name from the JSX */
+.db-widget-title {
+  margin: 0 0 15px 0; /* Adjusted margin */
+  font-size: 0.9rem;  /* Smaller title */
   font-weight: 600;
-  color: var(--text-color);
+  color: var(--db-text-title);
+  text-transform: lowercase; /* Match image */
 }
 
-.chart-container {
-  position: relative; /* Needed for chart.js responsiveness */
-  flex-grow: 1;      /* Allow chart container to fill space */
-  min-height: 200px; /* Ensure minimum height for charts */
+/* Use the class name from the JSX */
+.db-chart-container {
+  position: relative;
+  flex-grow: 1;
+  min-height: 80px; /* Adjust min height */
   width: 100%;
+}
+
+/* Adjust specific chart heights if needed */
+.db-income-chart {
+  min-height: 100px;
+}
+.db-growth-chart {
+  min-height: 100px;
 }
 
 
 /* --- Specific Widget Layout & Styling --- */
 
 /* Row 1 */
-.widget-income {
-  grid-column: 1 / span 2; /* Span 2 columns */
+.db-widget-income {
+  grid-column: 1 / span 2;
 }
 
-.widget-balance {
+.db-widget-balance {
   grid-column: 3 / span 1;
-  align-items: center; /* Center content vertically */
-  justify-content: center; /* Center content horizontally */
-  text-align: center;
+  align-items: center;
+  justify-content: space-between; /* Space between value and button */
 }
-.balance-value {
-  font-size: 2.8rem;
+.db-balance-value {
+  font-size: 2.5rem; /* Adjust size */
+  font-weight: 400; /* Thinner weight */
+  color: var(--db-text-balance);
+  line-height: 1;
+  margin-bottom: 10px; /* Space below value */
+  flex-grow: 1; /* Allow value to take space */
+  display: flex;
+  align-items: baseline; /* Align $ and number */
+  justify-content: center;
+}
+.db-currency {
+  font-size: 1.5rem; /* Smaller $ */
+  margin-right: 8px;
   font-weight: 300;
-  color: var(--primary-blue);
-  margin-bottom: 0.2rem;
 }
-.balance-value .currency {
-  font-size: 1.8rem;
-  margin-right: 5px;
-  vertical-align: super; /* Align $ sign better */
-}
-.balance-weight {
-  font-size: 0.9rem;
-  color: var(--text-muted);
-  margin-bottom: 1rem;
-}
-.history-button {
-  background-color: var(--primary-blue);
-  color: var(--white);
+.db-history-button {
+  background-color: var(--db-button-bg);
+  color: var(--db-button-text);
   border: none;
-  padding: 8px 15px;
-  border-radius: 20px;
-  font-size: 0.8rem;
+  padding: 6px 12px; /* Smaller padding */
+  border-radius: 15px; /* Pill shape */
+  font-size: 0.75rem; /* Smaller font */
+  font-weight: 500;
   cursor: pointer;
   transition: background-color 0.2s ease;
+  align-self: center; /* Center button horizontally */
+  text-transform: lowercase; /* Match 'see history' */
 }
-.history-button:hover {
-  background-color: rgb(40, 130, 190);
+.db-history-button:hover {
+  background-color: var(--db-boost-hover-bg);
 }
 
 /* Row 2 */
-.widget-growth {
+.db-widget-growth {
   grid-column: 1 / span 1;
 }
 
-.widget-expense {
+.db-widget-expense {
   grid-column: 2 / span 1;
 }
-.gauges-container {
+.db-gauges-container {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  flex-grow: 1; /* Fill vertical space */
-  padding-top: 1rem;
+  flex-grow: 1;
+  padding-top: 5px; /* Reduce top padding */
 }
-.gauge-item {
+.db-gauge-item {
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
 }
-.gauge-chart-container {
-  position: relative; /* For positioning the percentage text */
-  width: 80px; /* Adjust size */
-  height: 80px; /* Adjust size */
-  margin-bottom: 0.5rem;
+.db-gauge-chart-container {
+  position: relative;
+  width: 70px; /* Adjust size */
+  height: 70px; /* Adjust size */
 }
-.gauge-percentage {
+.db-gauge-percentage {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 1.2rem;
+  font-size: 1rem; /* Adjust size */
   font-weight: 600;
-  color: var(--text-color);
-}
-.gauge-label {
-  font-size: 0.8rem;
-  color: var(--text-muted);
+  color: var(--db-text-primary);
 }
 
-
-.widget-most-viewed {
+.db-widget-most-viewed {
   grid-column: 3 / span 1;
 }
-.item-list {
+/* Use the class name from the JSX */
+.db-item-list {
   list-style: none;
   padding: 0;
   margin: 0;
   flex-grow: 1;
-  overflow-y: auto; /* Add scroll if list is long */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around; /* Distribute items vertically */
 }
-.item-list li {
+/* Use the class name from the JSX */
+.db-most-viewed-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.6rem 0;
-  border-bottom: 1px solid var(--border-color);
+  padding: 4px 0; /* Reduced padding */
   font-size: 0.9rem;
+  color: var(--db-text-secondary);
 }
-.item-list li:last-child {
-  border-bottom: none;
+.db-item-name {
+   /* Default styling is fine */
 }
-.item-detail {
-  color: var(--text-muted);
-  font-size: 0.85rem;
-  background-color: var(--light-blue-bg);
-  padding: 3px 8px;
-  border-radius: 10px;
-  margin-left: 10px; /* Space between name and detail */
+/* Use the class name from the JSX */
+.db-boost-button {
+  background-color: var(--db-boost-bg);
+  color: var(--db-boost-text);
+  border: none;
+  padding: 3px 10px; /* Smaller button */
+  border-radius: 10px; /* Pill shape */
+  font-size: 0.65rem; /* Very small font */
+  font-weight: 700; /* Bold */
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  margin-left: 10px;
+  text-transform: uppercase; /* Match image */
+}
+.db-boost-button:hover {
+  background-color: var(--db-boost-hover-bg);
 }
 
 
 /* Row 3 */
-.widget-invoices {
-  grid-column: 1 / span 2; /* Span 2 columns */
+.db-widget-invoices {
+  grid-column: 1 / span 2;
 }
-.invoice-list {
+/* Use the class name from the JSX */
+.db-invoice-list {
   list-style: none;
   padding: 0;
   margin: 0;
   flex-grow: 1;
-  overflow-y: auto; /* Add scroll if list is long */
+  display: flex;
+  flex-direction: column;
+  gap: 8px; /* Space between invoice items */
 }
-.invoice-list li {
+/* Use the class name from the JSX */
+.db-invoice-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.6rem 0;
-  border-bottom: 1px solid var(--border-color);
-  font-size: 0.9rem;
+  font-size: 0.85rem; /* Slightly smaller font */
 }
-.invoice-list li:last-child {
-  border-bottom: none;
-}
-.invoice-id {
-  color: var(--text-muted);
+/* Use the class name from the JSX */
+.db-invoice-detail {
+  color: var(--db-text-secondary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  padding-right: 10px; /* Space before status tag */
+  padding-right: 10px;
+  display: flex; /* Align bullet and text */
+  align-items: center;
 }
-.status-tag {
-  padding: 4px 10px;
-  border-radius: 15px;
-  font-size: 0.75rem;
+/* Use the class name from the JSX */
+.db-bullet {
+    color: var(--db-primary-blue);
+    font-size: 1.2em; /* Larger bullet */
+    margin-right: 8px;
+    line-height: 1;
+}
+/* Use the class name from the JSX */
+.db-status-tag {
+  padding: 3px 10px; /* Smaller padding */
+  border-radius: 10px; /* Pill shape */
+  font-size: 0.7rem;  /* Smaller font */
   font-weight: 600;
   text-transform: uppercase;
   white-space: nowrap;
 }
-.status-paid {
-  background-color: rgba(40, 167, 69, 0.15);
-  color: var(--green-paid);
-}
-.status-pending {
-  background-color: rgba(253, 126, 20, 0.15);
-  color: var(--orange-pending);
+.db-status-paid { /* Only need paid style for image */
+  background-color: var(--db-paid-bg);
+  color: var(--db-paid-text);
 }
 
-.widget-message {
-  grid-column: 3 / span 1; /* Span 1 column */
+.db-widget-message {
+  grid-column: 3 / span 1;
 }
-.message-list {
+/* Use the class name from the JSX */
+.db-message-list {
    list-style: none;
   padding: 0;
   margin: 0;
   flex-grow: 1;
-  overflow-y: auto; /* Add scroll if list is long */
+  display: flex;
+  flex-direction: column;
+  gap: 6px; /* Adjust gap */
 }
-.message-list li {
-  padding: 0.6rem 0;
-  border-bottom: 1px solid var(--border-color);
-  font-size: 0.9rem;
-  display: grid; /* Use grid for better alignment within the message */
-  grid-template-columns: auto 1fr; /* Source | Type & Detail */
-  grid-template-rows: auto auto;
-  column-gap: 8px;
-  row-gap: 2px;
-}
-.message-list li:last-child {
-  border-bottom: none;
-}
-.message-source {
-  font-weight: 600;
-  color: var(--primary-blue);
-  grid-row: 1 / span 2; /* Span both rows */
-  align-self: center; /* Center vertically */
-}
-.message-type {
-  font-weight: 500;
-   grid-column: 2;
-   grid-row: 1;
-}
-.message-detail {
-  color: var(--text-muted);
+/* Use the class name from the JSX */
+.db-message-item {
   font-size: 0.85rem;
-  grid-column: 2;
-  grid-row: 2;
+  display: grid;
+  /* Define 3 columns: Name (fixed width), Subject (flexible), Detail (flexible) */
+  grid-template-columns: 90px minmax(100px, 1fr) minmax(100px, 1.5fr);
+  gap: 10px; /* Gap between columns */
+  align-items: center; /* Vertically align items in the grid row */
+}
+/* Use the class name from the JSX */
+.db-message-name {
+  font-weight: 500;
+  color: var(--db-text-secondary); /* Match image color */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left; /* Ensure name is left-aligned */
+}
+/* Use the class name from the JSX */
+.db-message-subject {
+  color: var(--db-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left; /* Align subject left */
+}
+/* Use the class name from the JSX */
+.db-message-detail {
+  color: var(--db-text-primary); /* Primary color for detail */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left; /* Align detail left */
 }
 
-/* --- Responsive Adjustments (Example) --- */
+/* --- Responsive Adjustments --- */
 @media (max-width: 1200px) {
-  .dashboard-container {
+  .db-container {
       grid-template-columns: repeat(2, 1fr); /* Stack to 2 columns */
   }
   /* Adjust spans for 2-column layout */
-  .widget-income,
-  .widget-invoices {
+  .db-widget-income,
+  .db-widget-invoices {
       grid-column: 1 / span 2; /* Full width */
   }
-   .widget-balance,
-   .widget-growth,
-   .widget-expense,
-   .widget-most-viewed,
-   .widget-message {
+   .db-widget-balance,
+   .db-widget-growth,
+   .db-widget-expense,
+   .db-widget-most-viewed,
+   .db-widget-message {
       grid-column: span 1; /* Take one column */
    }
-   /* Reorder or adjust as needed */
-   .widget-balance { grid-row: 1; grid-column: 2; }
-   .widget-growth { grid-row: 2; grid-column: 1; }
-   .widget-expense { grid-row: 2; grid-column: 2; }
-   .widget-most-viewed { grid-row: 3; grid-column: 1; }
-   .widget-message { grid-row: 3; grid-column: 2; }
-   .widget-invoices { grid-row: 4; grid-column: 1 / span 2; }
-
+   /* Define explicit order for 2-column layout */
+   .db-widget-income { grid-row: 1; grid-column: 1 / span 2; }
+   .db-widget-balance { grid-row: 2; grid-column: 1 / span 1; } /* Example: move balance */
+   .db-widget-growth { grid-row: 2; grid-column: 2 / span 1; } /* Example: move growth */
+   .db-widget-expense { grid-row: 3; grid-column: 1 / span 1; }
+   .db-widget-most-viewed { grid-row: 3; grid-column: 2 / span 1; }
+   .db-widget-invoices { grid-row: 4; grid-column: 1 / span 2; }
+   .db-widget-message { grid-row: 5; grid-column: 1 / span 2; } /* Example: message full width */
 }
 
 @media (max-width: 768px) {
-  .dashboard-container {
+  .db-container {
       grid-template-columns: 1fr; /* Stack everything into 1 column */
-      gap: 15px;
+      gap: var(--db-gap);
+      padding: var(--db-gap);
   }
   /* Reset all spans to 1 column */
-  .widget,
-  .widget-income,
-  .widget-balance,
-  .widget-growth,
-  .widget-expense,
-  .widget-most-viewed,
-  .widget-invoices,
-  .widget-message {
-      grid-column: 1 / span 1;
-      grid-row: auto; /* Let them stack naturally */
+  .db-widget,
+  .db-widget-income,
+  .db-widget-balance,
+  .db-widget-growth,
+  .db-widget-expense,
+  .db-widget-most-viewed,
+  .db-widget-invoices,
+  .db-widget-message {
+      grid-column: auto; /* Let grid place them */
+      grid-row: auto;
   }
 
-  .gauges-container {
-      flex-wrap: wrap; /* Allow gauges to wrap if needed */
-      justify-content: center;
-      gap: 15px;
-  }
-  .gauge-item {
-      flex-basis: 45%; /* Approximately two per row */
+  .db-gauges-container {
+      gap: 20px; /* Increase gap for wrapping */
+      justify-content: space-evenly; /* Distribute gauges */
   }
 
-   .message-list li {
-       grid-template-columns: 80px 1fr; /* Adjust grid for smaller screens */
+   /* Adjust message grid for smaller screens */
+   .db-message-item {
+       grid-template-columns: 70px 1fr; /* Name | Subject+Detail Col */
+       row-gap: 2px; /* Space between subject and detail */
+       align-items: start; /* Align name to top */
    }
+   .db-message-name { grid-row: 1 / span 2; align-self: center;} /* Span both rows */
+   .db-message-subject { grid-row: 1; grid-column: 2; }
+   .db-message-detail { grid-row: 2; grid-column: 2; }
 }
+
+@media (max-width: 480px) {
+    :root { /* Smaller padding/gap on mobile */
+        --db-widget-padding: 15px;
+        --db-gap: 15px;
+    }
+    .db-balance-value { font-size: 2rem; }
+    .db-currency { font-size: 1.2rem; }
+    .db-history-button { padding: 5px 10px; font-size: 0.7rem;}
+    .db-widget-title { font-size: 0.85rem; margin-bottom: 12px;}
+    .db-invoice-item, .db-most-viewed-item { font-size: 0.8rem;}
+    .db-message-item {
+        /* Keep 2 column grid, maybe slightly smaller name col */
+        grid-template-columns: 60px 1fr;
+        gap: 5px;
+    }
+}
+
+/* END OF FILE Dashboard.css */
