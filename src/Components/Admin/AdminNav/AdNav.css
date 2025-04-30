@@ -1,8 +1,10 @@
-/* Global settings to prevent default scrolling */
+/* START OF FILE AdNav.css */
+
+/* Global settings - REMOVED overflow: hidden; from body */
 body {
   margin: 0;
   padding: 0;
-  overflow: hidden; /* Prevent body scrolling */
+  /* overflow: hidden; */ /* <--- THIS LINE WAS REMOVED/COMMENTED OUT */
 }
 
 .dashboard-container {
@@ -10,7 +12,7 @@ body {
   height: 100vh; /* Full viewport height */
   font-family: sans-serif;
   color: #ddd;
-  overflow: hidden; /* Prevent container scrolling */
+  overflow: hidden; /* Prevent container scrolling - This is OK */
 }
 
 .sidebar {
@@ -23,6 +25,8 @@ body {
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
   flex-shrink: 0; /* Prevent sidebar from shrinking */
   z-index: 100; /* Ensure it stays above other content */
+  /* ADDED: Ensure sidebar itself doesn't try to scroll internally unless needed */
+  overflow-y: auto; /* Allow sidebar internal scroll if content exceeds height */
 }
 
 .logo {
@@ -32,6 +36,11 @@ body {
   font-size: 1.5em;
   font-weight: bold;
   margin-bottom: 30px;
+  flex-shrink: 0; /* Prevent logo shrinking */
+}
+
+.logo-text { /* Added styling for the text logo */
+    color: #61dafb; /* Example color */
 }
 
 .logo-icon {
@@ -42,24 +51,33 @@ body {
   cursor: pointer;
 }
 
+.menu {
+    flex-grow: 1; /* Allow menu to take available space */
+    overflow-y: auto; /* Allow scrolling *within* the menu if items overflow */
+    margin-bottom: 20px; /* Space before logout */
+}
+
 .menu-section {
-  margin-bottom: 30px;
+  margin-bottom: 20px; /* Adjusted margin */
 }
 
 .menu-section:first-child {
-  margin-top: 20px;
+  margin-top: 0; /* Remove top margin if logo provides spacing */
 }
 
 .menu-section:last-child {
   margin-bottom: 0;
 }
 
-.menu-section > div {
+/* Changed selector slightly for clarity */
+.menu-section-title {
   font-size: 0.8em;
   text-transform: uppercase;
   color: #888;
   margin-bottom: 10px;
+  padding-left: 10px; /* Align with list items */
 }
+
 
 .menu ul {
   list-style: none;
@@ -68,7 +86,7 @@ body {
 }
 
 .menu li {
-  margin-bottom: 10px;
+  margin-bottom: 8px; /* Slightly reduced margin */
 }
 
 .menu li:last-child {
@@ -81,51 +99,56 @@ body {
   color: #ddd;
   text-decoration: none;
   padding: 10px;
-  border-radius: 8px;
-  transition: background-color 0.3s ease;
+  border-radius: 6px; /* Slightly smaller radius */
+  transition: background-color 0.3s ease, color 0.3s ease; /* Added color transition */
   cursor: pointer; /* Added to show it's clickable */
+  font-size: 0.95rem; /* Consistent font size */
 }
 
 .menu a:hover,
-.menu a.active {
+.menu a.active { /* Ensure .active class is applied by NavLink */
   background-color: #333;
   color: white;
 }
 
 .menu-icon {
-  margin-right: 10px;
-  width: 20px;
+  margin-right: 12px; /* Slightly increased spacing */
+  width: 18px; /* Adjusted width */
   text-align: center;
+  flex-shrink: 0; /* Prevent icon shrinking */
 }
 
 .badge {
   background-color: #61dafb;
   color: #222;
-  padding: 3px 6px;
-  border-radius: 5px;
+  padding: 2px 6px; /* Adjusted padding */
+  border-radius: 4px; /* Adjusted radius */
   font-size: 0.7em;
-  margin-left: auto;
+  margin-left: auto; /* Pushes badge to the right */
+  font-weight: 600;
 }
 
 .logout {
-  margin-top: auto;
-  padding-top: 20px;
+  margin-top: auto; /* Pushes logout to bottom */
+  padding-top: 15px; /* Adjusted padding */
   border-top: 1px solid #333;
+  flex-shrink: 0; /* Prevent shrinking */
 }
 
-.logout a {
+.logout a { /* Target the anchor within logout */
   color: #ddd;
   text-decoration: none;
   display: flex;
   align-items: center;
   padding: 10px;
-  border-radius: 8px;
-  transition: background-color 0.3s ease;
+  border-radius: 6px; /* Match menu item radius */
+  transition: background-color 0.3s ease, color 0.3s ease; /* Added color transition */
   cursor: pointer; /* Added to show it's clickable */
+  font-size: 0.95rem; /* Match menu item size */
 }
 
 .logout a:hover {
-  background-color: #333;
+  background-color: #e74c3c; /* Red background on hover for emphasis */
   color: white;
 }
 
@@ -134,7 +157,8 @@ body {
   display: flex;
   flex-direction: column;
   flex: 1;
-  overflow: hidden; /* Hide overflow at this level */
+  overflow: hidden; /* Hide overflow at this level - This is OK */
+  background-color: #f0f0f0; /* Added default background */
 }
 
 /* Top navigation bar (if you have one) */
@@ -152,43 +176,93 @@ body {
 /* Main content area - THIS IS THE SCROLLABLE PART */
 .main-content {
   flex: 1;
-  padding: 30px;
-  background-color: #f0f0f0;
+  padding: 20px; /* Adjusted padding */
+  /* background-color: #f0f0f0; */ /* Moved background to wrapper */
   color: #333;
-  overflow-y: auto; /* Only this area is scrollable */
+  overflow-y: auto; /* Only this area is scrollable vertically */
+  /* Optional: overflow-x: hidden; if you never want horizontal scroll */
 }
 
 /* Footer (if you have one) */
 .footer {
-  background-color: #222;
+  background-color: #fff; /* Example: white footer */
   padding: 15px 20px;
-  color: #ddd;
+  color: #555; /* Example: gray text */
   flex-shrink: 0; /* Prevent it from shrinking */
+  border-top: 1px solid #eee; /* Example border */
+  text-align: center;
+  font-size: 0.85rem;
 }
 
-/* Custom scrollbar styling */
+/* Custom scrollbar styling for the main content area */
 .main-content::-webkit-scrollbar {
   width: 8px;
 }
 
+.main-content::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Lighter track */
+}
+
 .main-content::-webkit-scrollbar-thumb {
-  background-color: #ccc;
-  border-radius: 5px;
+  background-color: #aaa; /* Gray thumb */
+  border-radius: 4px; /* Rounded thumb */
+}
+
+.main-content::-webkit-scrollbar-thumb:hover {
+  background-color: #888; /* Darker thumb on hover */
 }
 
 /* Mobile responsive behavior */
 @media (max-width: 768px) {
   .dashboard-container {
     flex-direction: column;
+    height: auto; /* Allow height to adjust on mobile */
+    overflow: visible; /* Allow body scroll on mobile */
   }
 
   .sidebar {
     width: 100%;
-    padding: 10px;
+    height: auto; /* Adjust height automatically */
+    padding: 10px 15px; /* Adjust padding */
     box-shadow: none;
+    overflow-y: visible; /* Disable internal scroll on mobile usually */
+    position: static; /* Reset positioning if it was fixed/absolute */
+    z-index: auto;
   }
-  
+
+  .logo {
+      margin-bottom: 20px; /* Adjust spacing */
+  }
+
+  .menu {
+     /* Hide complex menu scroll on mobile - handled by main page scroll */
+     overflow-y: visible;
+     margin-bottom: 10px;
+  }
+
+  .menu-section {
+      margin-bottom: 15px;
+  }
+
+  .logout {
+      padding-top: 10px;
+      margin-top: 15px;
+  }
+
   .content-wrapper {
     width: 100%;
+    overflow: visible; /* Allow content to dictate height */
+  }
+
+  .main-content {
+    overflow-y: visible; /* Use main page scroll */
+    padding: 15px;
+  }
+
+  /* Hide custom scrollbars on mobile if not needed */
+  .main-content::-webkit-scrollbar {
+     display: none;
   }
 }
+
+/* END OF FILE AdNav.css */

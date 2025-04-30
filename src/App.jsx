@@ -1,18 +1,17 @@
 // src/App.jsx
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation, Navigate, Outlet } from 'react-router-dom'; // Import Outlet
+import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation, Navigate } from 'react-router-dom';
 import { ClipLoader } from 'react-spinners';
 import { jwtDecode } from 'jwt-decode';
 
-// --- Core & Helper Component Imports ---
-import Navbar from './Components/Navbar/Navbar'; // Standard Navbar
+// --- Core Components ---
+import Navbar from './Components/Navbar/Navbar';
 import Footer from './Components/Footer/Footer';
-import FloatingChatbot from './Components/Chatbot/ChatBox';
 import ProtectedRoute from './routes/ProtectedRoute';
-import AdminLayout from './Layouts/AdminLayout'; // Import Admin Layout
+import AdminLayout from './Layouts/AdminLayout';
 
-// --- Page Imports ---
+// --- Public Pages ---
 import HomePage from './Pages/HomePage';
 import SignUp from './Pages/SignUp';
 import AboutUs from './Pages/AboutUS';
@@ -26,17 +25,15 @@ import Service from './Pages/Service';
 import Map from './Pages/Map';
 import Calculate from './Components/Calculate/Calculate';
 
-// --- Protected Page Imports ---
+// --- Protected Pages ---
 import SaleForm from './Components/SaleForm/SaleForm';
 import BuyCard from './Components/BuyCard/BuyCard';
 import BOwnerHome from './Pages/BOwnerHome';
 import ProAddForm from './Components/Projects/ProAddForm';
 import WastePickForm from './Components/WasteCollect/WastePickForm';
 import UserCalendar from './Components/WasteCollect/UserCalendar';
-import Admin from './Pages/Admin'; // Admin Dashboard Page
-import AdCalendar from './Components/Admin/AdMinCalendar/AdCalendar'; // Admin's Calendar view
-
-// --- Specific Component Imports (Used as standalone pages/sections) ---
+import Admin from './Pages/Admin';
+import AdCalendar from './Components/Admin/AdMinCalendar/AdCalendar';
 import BOwnerHeader from './Components/BusinessOwner/BOwnerHeader';
 import BSHeader from './Components/BuyandSell/BSHeader';
 import LocationMap from './Components/Maps/LocationMap';
@@ -49,10 +46,6 @@ import EmailListItem from './Components/Admin/EmailDisplay/EmailListItem';
 import Dashboard from './Components/Admin/Dashboard/Dashboard';
 import HandleBOwners from './Components/Admin/HandleBOwners/HandleBOwners';
 
-// --- Placeholder Admin Pages (Create these components later) ---
-const PlaceholderAdminPage = ({ title }) => <h2>{title}</h2>;
-
-// --- Main App Content Component ---
 const AppContent = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -61,7 +54,6 @@ const AppContent = () => {
     const location = useLocation();
 
     const checkAuthStatus = useCallback(() => {
-        console.log("Running checkAuthStatus...");
         const token = localStorage.getItem('token');
         let authenticated = false;
         let currentUserInfo = null;
@@ -76,18 +68,14 @@ const AppContent = () => {
                         name: decoded.name || decoded.ownerName || 'User',
                         email: decoded.email || null,
                         userType: decoded.userType || 'unknown',
-                        // **CRITICAL**: Ensure 'role' exists in your JWT payload for admin check
                         role: decoded.role || (decoded.userType === 'bowner' ? 'bowner' : (decoded.userType === 'client' ? 'client' : 'unknown')),
                         businessName: decoded.businessName || null,
                     };
-                    // console.log("Token valid. User Info:", currentUserInfo);
                 } else {
-                    console.log("Token expired.");
                     localStorage.removeItem('token');
                     localStorage.removeItem('userInfo');
                 }
-            } catch (error) {
-                console.error("Invalid token:", error);
+            } catch {
                 localStorage.removeItem('token');
                 localStorage.removeItem('userInfo');
             }
@@ -95,9 +83,7 @@ const AppContent = () => {
 
         setIsLoggedIn(authenticated);
         setUserInfo(currentUserInfo);
-        if (isLoading) {
-            setIsLoading(false);
-        }
+        if (isLoading) setIsLoading(false);
     }, [isLoading]);
 
     useEffect(() => {
@@ -105,7 +91,6 @@ const AppContent = () => {
     }, [location.key, checkAuthStatus]);
 
     const handleLoginSuccess = useCallback((token) => {
-        console.log("handleLoginSuccess called in App.jsx");
         localStorage.setItem('token', token);
 
         let currentUserInfo = null;
@@ -123,18 +108,15 @@ const AppContent = () => {
             };
             localStorage.setItem('userInfo', JSON.stringify(currentUserInfo));
 
-            // --- Determine Redirect Path Based on Role ---
             if (currentUserInfo.role === 'admin') {
-                 // Redirect to the main admin dashboard route
-                defaultRedirectPath = '/Admin'; // Match the route defined below
+                defaultRedirectPath = '/Admin';
             } else if (currentUserInfo.userType === 'bowner') {
                 defaultRedirectPath = '/BOwnerHome';
             } else if (currentUserInfo.userType === 'client') {
                 defaultRedirectPath = '/ClientProfile';
             }
 
-        } catch (e) {
-            console.error("Error decoding token on login:", e);
+        } catch {
             localStorage.removeItem('token');
             localStorage.removeItem('userInfo');
         }
@@ -144,14 +126,10 @@ const AppContent = () => {
 
         const fromPath = location.state?.from?.pathname;
         const finalRedirect = (fromPath && fromPath !== '/Login') ? fromPath : defaultRedirectPath;
-
-        console.log(`Navigating post-login to: ${finalRedirect} (Role: ${currentUserInfo?.role}, From: ${fromPath})`);
         navigate(finalRedirect, { replace: true });
-
     }, [navigate, location.state]);
 
     const handleLogout = useCallback(() => {
-        console.log("handleLogout called in App.jsx");
         localStorage.removeItem('token');
         localStorage.removeItem('userInfo');
         setIsLoggedIn(false);
@@ -167,24 +145,15 @@ const AppContent = () => {
         );
     }
 
-    // Determine if the current user is an admin
     const isAdmin = isLoggedIn && userInfo?.role === 'admin';
 
     return (
-        // The main div wraps everything
         <div>
-            {/* Conditionally render Navbar only if NOT admin */}
             {!isAdmin && (
-                <Navbar
-                    isLoggedIn={isLoggedIn}
-                    userInfo={userInfo}
-                    handleLogout={handleLogout}
-                />
+                <Navbar isLoggedIn={isLoggedIn} userInfo={userInfo} handleLogout={handleLogout} />
             )}
 
-            {/* --- Define Application Routes --- */}
             <Routes>
-                {/* == Public Routes (No Layout or Default Layout) == */}
                 <Route path="/" element={<HomePage />} />
                 <Route path="/Login" element={<Login onLoginSuccess={handleLoginSuccess} />} />
                 <Route path="/SignUp" element={<SignUp />} />
@@ -201,53 +170,43 @@ const AppContent = () => {
                 <Route path="/BSHeader" element={<BSHeader />} />
                 <Route path="/CalendarDisplay" element={<CalendarDisplay />} />
 
-                {/* == General Protected Routes (Any logged-in user, NOT admin layout) == */}
+                {/* Protected Routes */}
                 <Route path="/UserCalendar" element={<ProtectedRoute><UserCalendar userInfo={userInfo} /></ProtectedRoute>} />
                 <Route path="/SaleForm" element={<ProtectedRoute><SaleForm /></ProtectedRoute>} />
                 <Route path="/BuyCard" element={<ProtectedRoute><BuyCard /></ProtectedRoute>} />
                 <Route path="/WastePickForm" element={<ProtectedRoute><WastePickForm /></ProtectedRoute>} />
-                <Route path="/ClientProfile" element={<ProtectedRoute><ClientProfile /></ProtectedRoute>} /> {/* Removed userInfo prop, component likely fetches its own data */}
+                <Route path="/ClientProfile" element={<ProtectedRoute><ClientProfile /></ProtectedRoute>} />
                 <Route path="/BOwnerHome" element={<ProtectedRoute><BOwnerHome userInfo={userInfo} /></ProtectedRoute>} />
                 <Route path="/ProAddForm" element={<ProtectedRoute><ProAddForm /></ProtectedRoute>} />
                 <Route path="/BOwnerHeader" element={<ProtectedRoute><BOwnerHeader /></ProtectedRoute>} />
                 <Route path="/BOwnerProfile" element={<ProtectedRoute><BOwnerProfile /></ProtectedRoute>} />
 
-                 <Route
+                {/* Admin Layout + Nested Admin Routes */}
+                <Route
                     element={
                         <ProtectedRoute requiredRole="admin">
-                            {/* Pass handleLogout to the layout, which passes it to AdNav */}
                             <AdminLayout handleLogout={handleLogout} />
                         </ProtectedRoute>
                     }
                 >
-                    {/* Child routes render inside AdminLayout's <Outlet /> */}
-                    {/* Ensure paths match the <Link to="..."> paths in AdNav.jsx */}
-                    <Route path="/Admin" element={<Admin userInfo={userInfo} />} /> {/* Admin Dashboard */}
-                    <Route path="/AdCalendar" element={<AdCalendar />} /> 
-                    <Route path="/AdCheckReq" element={<AdCheckReq />} />   
-                    <Route path="/EmailDisplay" element={<EmailDisplay />} />  
-                    <Route path="/EmailListItem" element={<EmailListItem />} /> 
+                    <Route path="/Admin" element={<Admin userInfo={userInfo} />} />
+                    <Route path="/AdCalendar" element={<AdCalendar />} />
+                    <Route path="/AdCheckReq" element={<AdCheckReq />} />
+                    <Route path="/EmailDisplay" element={<EmailDisplay />} />
+                    <Route path="/EmailListItem" element={<EmailListItem />} />
                     <Route path="/DashBoard" element={<Dashboard />} />
                     <Route path="/HandleBOwners" element={<HandleBOwners />} />
-
-            
                 </Route>
 
-                {/* == Fallback Route == */}
+                {/* Catch-all */}
                 <Route path="*" element={<Navigate to="/" replace />} />
-
             </Routes>
 
-            {/* Conditionally render Footer only if NOT admin */}
             {!isAdmin && <Footer />}
-
-            {/* Keep Chatbot globally? Or disable for admin? */}
-            <FloatingChatbot />
         </div>
     );
 };
 
-// --- Root App Component ---
 function App() {
     return (
         <Router>
