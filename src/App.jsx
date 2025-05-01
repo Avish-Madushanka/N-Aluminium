@@ -48,6 +48,7 @@ import Dashboard from './Components/Admin/Dashboard/Dashboard';
 import HandleBOwners from './Components/Admin/HandleBOwners/HandleBOwners';
 import PickupReq from './Components/Profile/PickupReq';
 import CheckBuySell from './Components/Profile/CheckBuySell';
+import AboutUSDiagram from './Components/AboutUs/AboutUSDiagram';
 
 const AppContent = () => {
     const [isLoading, setIsLoading] = useState(true);
@@ -172,6 +173,7 @@ const AppContent = () => {
                 <Route path="/Calculate" element={<Calculate />} />
                 <Route path="/BSHeader" element={<BSHeader />} />
                 <Route path="/CalendarDisplay" element={<CalendarDisplay />} />
+                <Route path="/AboutUSDiagram" element={<AboutUSDiagram />} />
 
                 {/* Protected Routes */}
                 <Route path="/UserCalendar" element={<ProtectedRoute><UserCalendar userInfo={userInfo} /></ProtectedRoute>} />
