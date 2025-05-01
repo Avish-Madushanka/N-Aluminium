@@ -1,64 +1,60 @@
-// --- START OF UPDATED BuySellPage.jsx (formerly BSHeader.jsx) ---
-import React, { useState, useEffect } from "react";
-import axios from "axios"; // Import axios
-import "./BSHeader.css"; // Rename CSS file or update import
-import BuyCard from "../BuyCard/BuyCard"; // Adjust path if needed
+import React, { useState } from "react";
+import "./BSHeader.css";
+import BuyCard from "../BuyCard/BuyCard"; // Assume this is your contact modal component
 
-// Define Backend URL (Consider putting in a config file or .env)
-const BACKEND_URL = 'http://localhost:5002';
-
-// Rename component
 const BuySellPage = () => {
   const [isBuyCardOpen, setIsBuyCardOpen] = useState(false);
-  const [products, setProducts] = useState([]); // State for products from API
-  const [loading, setLoading] = useState(true); // Loading state for fetching
-  const [error, setError] = useState('');     // Error state for fetching
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedFilter, setSelectedFilter] = useState("");
 
-  // --- Fetch Products from Backend ---
-  useEffect(() => {
-    const fetchProducts = async () => {
-      setLoading(true);
-      setError('');
-      try {
-        const response = await axios.get(`${BACKEND_URL}/api/saleitems`); // Use backend URL
-        if (response.data && response.data.success) {
-          setProducts(response.data.data || []); // Set products from response data
-        } else {
-          setError('Failed to load products.');
-        }
-      } catch (err) {
-        console.error("Error fetching products:", err);
-        setError(err.response?.data?.message || 'Could not fetch products.');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProducts(); // Call fetch on component mount
-  }, []); // Empty dependency array: fetch only once
+  // --- Example Static Product Data ---
+  const exampleProducts = [
+    {
+      _id: "1",
+      name: "Sliding Window",
+      description: "Used aluminum sliding window in good condition",
+      price: 1200,
+      type: "Windows",
+      address: "Colombo 5",
+      image: "https://5.imimg.com/data5/XI/DO/MY-44591116/aluminium-panel-window-500x500.jpg"
+    },
+    {
+      _id: "2",
+      name: "Main Door Frame",
+      description: "Strong and durable aluminum door frame",
+      price: 2500,
+      type: "Doors",
+      address: "Negombo",
+      image: "https://5.imimg.com/data5/XI/DO/MY-44591116/aluminium-panel-window-500x500.jpg"
+    },
+    {
+      _id: "3",
+      name: "Pan-Light Roof Panel",
+      description: "Clear roof panels for sunlight",
+      price: 900,
+      type: "Pan-Light",
+      address: "Kandy",
+      image: "https://5.imimg.com/data5/XI/DO/MY-44591116/aluminium-panel-window-500x500.jpg"
+    }
+  ];
 
   const openBuyCard = () => setIsBuyCardOpen(true);
   const closeBuyCard = () => setIsBuyCardOpen(false);
 
-  // --- Filtering Logic (remains the same, operates on fetched data) ---
-  const filteredProducts = products.filter((product) => {
-    // Ensure fields exist before calling toLowerCase()
-    const nameMatch = product.name?.toLowerCase().includes(searchQuery.toLowerCase()) ?? false;
+  // --- Filter Logic ---
+  const filteredProducts = exampleProducts.filter((product) => {
+    const nameMatch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
     const filterMatch = selectedFilter ? product.type === selectedFilter : true;
     return nameMatch && filterMatch;
   });
 
-  // --- Render Logic ---
   return (
-    // Rename container class if desired
     <div className="buy-sell-container">
-      {/* Top Bar with Search, Filter, Sell Button */}
+      {/* Top Bar */}
       <div className="top-bar">
         <input
           type="text"
-          placeholder="Search by Item Name" // More specific placeholder
+          placeholder="Search by Item Name"
           className="search-bar"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
@@ -67,62 +63,48 @@ const BuySellPage = () => {
           className="filter-dropdown"
           value={selectedFilter}
           onChange={(e) => setSelectedFilter(e.target.value)}
-          aria-label="Filter by Type" // Accessibility
         >
-          <option value="">All Types</option> {/* Clearer default option */}
+          <option value="">All Types</option>
           <option value="Doors">Doors</option>
           <option value="Windows">Windows</option>
-          <option value="Pan-Light">Pan Light</option>
+          <option value="Pan-Light">Pan-Light</option>
           <option value="Others">Others</option>
         </select>
-        {/* Link to the SaleForm page */}
         <a href="/SaleForm" className="sell-button">Sell Item</a>
       </div>
 
-       {/* Display Loading or Error State */}
-       {loading && <p className="loading-message">Loading products...</p>}
-       {error && <p className="error-message">{error}</p>}
-
       {/* Product Grid */}
-      {!loading && !error && ( // Only render grid if not loading and no error
-         <div className="product-grid">
-          {filteredProducts.length > 0 ? (
-            filteredProducts.map((product) => ( // Use product._id for key if available
-              <div key={product._id || product.name} className="product-card">
-                {/* Construct image URL from backend path */}
-                <img
-                  src={product.image ? `${BACKEND_URL}${product.image}` : "https://via.placeholder.com/150"}
-                  alt={product.name || "Product Image"}
-                  className="product-image"
-                  onError={(e) => { e.target.onerror = null; e.target.src="https://via.placeholder.com/150"; }} // Fallback image
-                />
-                <div className="product-details">
-                  <h3>{product.name}</h3>
-                  <p>{product.description}</p>
-                  {/* Ensure price is formatted */}
-                  <p className="price">Rs: {product.price?.toLocaleString() ?? 'N/A'}</p>
-                  <p className="location">{product.address}</p>
-                  {/* Add contact button or logic */}
-                  <button className="buy-button" onClick={openBuyCard}>View Contact</button>
-                </div>
+      <div className="product-grid">
+        {filteredProducts.length > 0 ? (
+          filteredProducts.map((product) => (
+            <div key={product._id} className="product-card">
+              <img
+                src={product.image}
+                alt={product.name}
+                className="product-image"
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = "https://via.placeholder.com/150";
+                }}
+              />
+              <div className="product-details">
+                <h3>{product.name}</h3>
+                <p>{product.description}</p>
+                <p className="price">Rs: {product.price.toLocaleString()}</p>
+                <p className="location">{product.address}</p>
+                <button className="buy-button" onClick={openBuyCard}>View Contact</button>
               </div>
-            ))
-          ) : (
-             // Show message if filters result in no products, or if DB is empty
-             <p className="no-products">
-               {products.length === 0 ? "No products listed yet. Be the first!" : "No products match your current filter."}
-            </p>
-          )}
-        </div>
-      )}
+            </div>
+          ))
+        ) : (
+          <p className="no-products">No products match your current filter.</p>
+        )}
+      </div>
 
-
-      {/* BuyCard Modal (remains the same) */}
+      {/* BuyCard Modal */}
       {isBuyCardOpen && <BuyCard onClose={closeBuyCard} />}
     </div>
   );
 };
 
-// Rename export
 export default BuySellPage;
-// --- END OF UPDATED BuySellPage.jsx ---

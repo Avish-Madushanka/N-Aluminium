@@ -1,387 +1,335 @@
-/* BOwnerProfile.css */
+/* BOwnerProfile.css (Updated to match ClientProfile styles) */
 
+/* Container and Title */
 .BOwner-Pro-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-    font-family: 'Arial', sans-serif; /* Consider a system font stack for better native feel */
-  }
-  
-  .BOwner-Pro-main-title {
-    font-size: 28px;
-    margin-bottom: 30px;
-    color: #333;
-    text-align: center;
-    font-weight: 600;
-  }
-  
-  .BOwner-Pro-columns-wrapper {
-    display: flex;
-    gap: 30px;
-  }
-  
-  .BOwner-Pro-column {
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    padding: 25px;
-  }
-  
-  .BOwner-Pro-column-left {
-    flex: 3;
-  }
-  
-  .BOwner-Pro-column-right {
-    flex: 2;
-  }
-  
-  .BOwner-Pro-column-title {
-    font-size: 20px;
-    margin-bottom: 20px;
-    padding-bottom: 15px;
-    border-bottom: 1px solid #eee;
-    color: #444;
-    font-weight: 600;
-  }
-  
-  .BOwner-Pro-form-group {
-    margin-bottom: 20px;
-  }
-  
-  .BOwner-Pro-label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 500;
-    color: #555;
-  }
-  
-  .BOwner-Pro-input-wrapper {
-    position: relative;
-  }
-  
-  .BOwner-Pro-input-icon {
-    position: absolute;
-    left: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #666;
-    /* Ensure pointer-events: none; if the icon covers interactable area */
-    /* pointer-events: none; */
-  }
-  
-  .BOwner-Pro-textarea-icon {
-    top: 16px; /* Adjusted for textarea top alignment */
-    transform: none;
-    /* pointer-events: none; */
-  }
-  
-  .BOwner-Pro-input,
-  .BOwner-Pro-select,
-  .BOwner-Pro-textarea {
-    width: 100%;
-    padding: 12px 12px 12px 40px; /* Padding left accommodates icon */
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    font-size: 14px;
-    transition: border-color 0.3s, box-shadow 0.3s; /* Added box-shadow to transition */
-    box-sizing: border-box; /* Good practice to include */
-  }
-  
-  .BOwner-Pro-input:focus,
-  .BOwner-Pro-select:focus,
-  .BOwner-Pro-textarea:focus {
-    border-color: #4A90E2;
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2); /* Slightly adjusted alpha for visibility */
-  }
-  
-  .BOwner-Pro-textarea {
-    resize: vertical;
-    min-height: 100px; /* Increased min-height slightly */
-    padding-top: 12px; /* Ensure consistent top padding */
-    padding-bottom: 12px; /* Ensure consistent bottom padding */
-  }
-  
-  .BOwner-Pro-form-row {
-    display: flex;
-    gap: 15px;
-  }
-  
-  .BOwner-Pro-form-group-half {
-    flex: 1;
-  }
-  
-  /* Style for file input - hidden */
-  .BOwner-Pro-file-input-hidden {
-    display: none;
-  }
-  
-  /* Style for the custom file upload button (using a label) */
-  .BOwner-Pro-file-upload-btn {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 12px 15px;
-    background-color: #f5f5f5;
-    border: 1px dashed #ccc;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.3s;
-    color: #555; /* Added text color */
-    font-size: 14px; /* Match input font size */
-  }
-  
-  .BOwner-Pro-file-upload-btn:hover {
-    background-color: #eee;
-    border-color: #4A90E2;
-    color: #333; /* Darken text color on hover */
-  }
-  
-  .BOwner-Pro-save-btn {
-    width: 100%;
-    padding: 14px;
-    background-color: #4A90E2;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.3s, opacity 0.3s; /* Added opacity transition */
-    margin-top: 15px;
-    display: inline-flex; /* Helps align text/icons if added */
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .BOwner-Pro-save-btn:hover {
-    background-color: #3a7bc8;
-  }
-  
-  .BOwner-Pro-save-btn:disabled {
-    background-color: #a0c1e7;
-    opacity: 0.7; /* Added opacity for disabled state */
-    cursor: not-allowed;
-  }
-  
-  /* Navigation Styles */
-  .BOwner-Pro-nav-buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  
-  .BOwner-Pro-nav-button {
-    display: flex;
-    align-items: center;
-    padding: 15px;
-    border-radius: 8px;
-    background-color: #f8f9fa;
-    transition: all 0.3s;
-    cursor: pointer;
-    text-decoration: none; /* Remove underline if using <a> tags */
-    color: #444; /* Default text color */
-    border: 1px solid transparent; /* Add border for consistent sizing */
-  }
-  
-  .BOwner-Pro-nav-button:hover {
-    background-color: #e9ecef;
-    border-color: #ddd; /* Subtle border on hover */
-  }
-  
-  .BOwner-Pro-nav-button-active {
-    background-color: #4A90E2;
-    color: white;
-    border-color: #4A90E2;
-  }
-  
-  .BOwner-Pro-nav-button-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 15px;
-    flex-shrink: 0; /* Prevent icon from shrinking */
-  }
-  
-  /* Specific icon background/color styles */
-  .BOwner-Pro-nav-button:not(.BOwner-Pro-nav-button-active) .BOwner-Pro-icon-blue {
-    background-color: #e6f0ff;
-    color: #4A90E2;
-  }
-  .BOwner-Pro-nav-button-active .BOwner-Pro-icon-blue {
-    background-color: rgba(255, 255, 255, 0.2);
-    color: white;
-  }
-  
-  .BOwner-Pro-nav-button:not(.BOwner-Pro-nav-button-active) .BOwner-Pro-icon-red {
-    background-color: #ffebee;
-    color: #f44336;
-  }
-  .BOwner-Pro-nav-button-active .BOwner-Pro-icon-red {
-    background-color: rgba(255, 255, 255, 0.2);
-    color: white;
-  }
-  
-  /* Assuming white icon styles are mainly for the active state */
-  .BOwner-Pro-nav-button-active .BOwner-Pro-icon-white {
-    background-color: rgba(255, 255, 255, 0.2);
-    color: white;
-  }
-  /* Define default state for white if needed */
-  .BOwner-Pro-nav-button:not(.BOwner-Pro-nav-button-active) .BOwner-Pro-icon-white {
-    background-color: #e9ecef; /* Example default background */
-    color: #555; /* Example default color */
-  }
-  
-  .BOwner-Pro-nav-button-text {
-    flex: 1;
-  }
-  
-  .BOwner-Pro-nav-button-title {
-    margin: 0 0 4px;
-    font-size: 16px;
-    font-weight: 600;
-  }
-  
-  /* Adjust color based on active state */
-  .BOwner-Pro-nav-button-active .BOwner-Pro-nav-button-title {
-    color: white;
-  }
-  
-  .BOwner-Pro-nav-button-desc {
-    margin: 0;
-    font-size: 13px;
-    opacity: 0.8; /* Keep opacity */
-  }
-  
-  /* Adjust color based on active state */
-  .BOwner-Pro-nav-button-active .BOwner-Pro-nav-button-desc {
-    color: rgba(255, 255, 255, 0.85); /* Lighter white for description */
-    opacity: 1; /* Reset opacity if color handles contrast */
-  }
-  
-  
-  /* Profile Summary */
-  .BOwner-Pro-profile-summary {
-    margin-top: 30px;
-    padding: 20px;
-    background-color: #f8f9fa;
-    border-radius: 8px;
-    border: 1px solid #eee; /* Added subtle border */
-  }
-  
-  .BOwner-Pro-profile-summary-header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 15px;
-  }
-  
-  .BOwner-Pro-profile-avatar {
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
+  max-width: 1100px; /* Adjusted max-width */
+  margin: 30px auto;  /* Add top/bottom margin */
+  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Match font */
+}
+
+.BOwner-Pro-main-title {
+  text-align: center;
+  font-size: 2rem; /* Match client */
+  margin-bottom: 30px;
+  color: #1f2937; /* Match client */
+  font-weight: 700;
+}
+
+/* Columns layout */
+.BOwner-Pro-columns-wrapper {
+  display: flex;
+  flex-wrap: wrap; /* Allow wrapping */
+  gap: 24px;      /* Match client */
+}
+
+.BOwner-Pro-column {
+  flex: 1;
+  min-width: 300px; /* Ensure columns don't get too small */
+  padding: 25px; /* Keep slightly more padding potentially */
+  background-color: #f9fafb; /* Match client */
+  border-radius: 12px; /* Match client */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); /* Match client */
+  transition: box-shadow 0.3s ease;
+}
+
+.BOwner-Pro-column-left {
+  flex-grow: 3; /* Keep original ratio or adjust */
+}
+
+.BOwner-Pro-column-right {
+  flex-grow: 2; /* Keep original ratio or adjust */
+}
+
+
+.BOwner-Pro-column:hover {
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.07); /* Match client */
+}
+
+.BOwner-Pro-column-title {
+  font-size: 1.25rem; /* Match client */
+  margin-bottom: 20px;
+  color: #1f2937; /* Match client */
+  font-weight: 700;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #e5e7eb; /* Match client */
+}
+
+/* Form elements */
+.BOwner-Pro-form-group {
+  margin-bottom: 16px; /* Match client */
+}
+
+.BOwner-Pro-label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;   /* Match client */
+  color: #374151;    /* Match client */
+}
+
+.BOwner-Pro-input-wrapper {
+  position: relative; /* Keep for icon positioning */
+}
+
+.BOwner-Pro-input-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6b7280; /* Match client icon color */
+  pointer-events: none; /* Prevent icon interfering with input */
+}
+
+.BOwner-Pro-textarea-icon {
+  top: 14px; /* Adjust for textarea */
+  transform: none;
+}
+
+.BOwner-Pro-input,
+.BOwner-Pro-textarea,
+.BOwner-Pro-select {
+  width: 100%;
+  padding: 12px 12px 12px 40px; /* Padding left for icon */
+  border: 1px solid #d1d5db; /* Match client */
+  border-radius: 8px;        /* Match client */
+  font-size: 1rem;           /* Match client */
+  background-color: white;   /* Match client */
+  transition: all 0.2s ease; /* Match client */
+  box-sizing: border-box;
+}
+.BOwner-Pro-select {
+    /* Add specific padding for select if needed without icon */
+    padding-left: 12px; /* Override if select has no icon */
+    /* Basic appearance reset */
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 0.7rem center;
+    background-repeat: no-repeat;
+    background-size: 1.2em 1.2em;
+    padding-right: 2.5rem; /* Space for arrow */
+}
+/* Remove icon padding if select has no icon span */
+.BOwner-Pro-input-wrapper:not(:has(.BOwner-Pro-input-icon)) .BOwner-Pro-select {
+    padding-left: 12px;
+}
+
+.BOwner-Pro-input:focus,
+.BOwner-Pro-textarea:focus,
+.BOwner-Pro-select:focus {
+  outline: none;
+  border-color: #3b82f6; /* Match client */
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25); /* Match client */
+}
+
+.BOwner-Pro-textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.BOwner-Pro-form-row {
+  display: flex;
+  gap: 16px; /* Match client */
+}
+
+.BOwner-Pro-form-group-half {
+  flex: 1;
+}
+
+/* File upload */
+.BOwner-Pro-file-input-hidden {
+  display: none;
+}
+
+.BOwner-Pro-file-upload-btn {
+  display: inline-flex; /* Use inline-flex to allow text wrapping */
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px; /* Match client */
+  background-color: #e0e7ff; /* Match client */
+  color: #1e40af;        /* Match client */
+  border-radius: 8px;   /* Match client */
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease; /* Match client */
+  border: none; /* Remove default border */
+  text-align: left; /* Align text to left */
+  overflow: hidden; /* Prevent long filenames breaking layout */
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 100%; /* Ensure it doesn't overflow container */
+}
+
+.BOwner-Pro-file-upload-btn span {
     overflow: hidden;
-    margin-right: 15px;
-    background-color: #e6f0ff; /* Placeholder background */
-    flex-shrink: 0; /* Prevent shrinking */
-    border: 2px solid white; /* Optional: add border */
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1); /* Optional: add shadow */
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex-shrink: 1; /* Allow text to shrink */
+}
+
+
+.BOwner-Pro-file-upload-btn:hover {
+  background-color: #c7d2fe; /* Match client */
+  transform: translateY(-2px); /* Match client */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Match client */
+}
+
+/* Save button */
+.BOwner-Pro-save-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 12px 20px; /* Match client */
+  background-color: #2563eb; /* Match client */
+  color: white;
+  border: none;
+  border-radius: 8px; /* Match client */
+  font-size: 1rem;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease; /* Match client */
+  margin-top: 20px; /* Add margin top */
+}
+
+.BOwner-Pro-save-btn:hover {
+  background-color: #1d4ed8; /* Match client */
+  transform: translateY(-2px); /* Match client */
+  box-shadow: 0 4px 8px rgba(37, 99, 235, 0.3); /* Match client */
+}
+
+.BOwner-Pro-save-btn:active {
+  transform: translateY(0); /* Match client */
+  box-shadow: 0 2px 4px rgba(37, 99, 235, 0.3); /* Match client */
+}
+
+.BOwner-Pro-save-btn:disabled {
+  background-color: #93c5fd; /* Match client */
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* --- Action Buttons (Right Column - NEW) --- */
+/* Remove old nav button styles if they exist */
+/* .BOwner-Pro-nav-buttons, .BOwner-Pro-nav-button, etc. */
+
+.BOwner-Pro-action-btn {
+  display: flex;
+  align-items: center;
+  width: 100%; /* Changed to full width */
+  margin-bottom: 16px; /* Match client */
+  padding: 14px;        /* Match client */
+  border: none;
+  border-radius: 10px;   /* Match client */
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.3s ease; /* Match client */
+  position: relative;
+  overflow: hidden;
+  color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Match client */
+  text-align: left; /* Align text left */
+}
+.BOwner-Pro-action-btn:last-child {
+    margin-bottom: 0; /* Remove margin from last button */
+}
+
+
+/* Specific button backgrounds (Adjust colors for B-Owner) */
+.BOwner-Pro-action-btn.dashboard {
+  background: linear-gradient(to right, #60a5fa, #2563eb); /* Blue */
+}
+.BOwner-Pro-action-btn.orders {
+  background: linear-gradient(to right, #4ade80, #16a34a); /* Green */
+}
+.BOwner-Pro-action-btn.settings {
+  background: linear-gradient(to right, #c084fc, #7c3aed); /* Purple */
+}
+.BOwner-Pro-action-btn.logout {
+  background: linear-gradient(to right, #f87171, #dc2626); /* Red */
+}
+
+/* Button hover effects */
+.BOwner-Pro-action-btn:hover {
+  transform: translateY(-3px); /* Match client */
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15); /* Match client */
+}
+
+/* Button active effects */
+.BOwner-Pro-action-btn:active,
+.BOwner-Pro-action-btn.active { /* Add .active class handling */
+  transform: translateY(0) scale(0.98); /* Match client */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Match client */
+}
+
+/* Icon containers */
+.BOwner-Pro-btn-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background-color: rgba(255, 255, 255, 0.9); /* White background for icon circle */
+  border-radius: 50%;
+  margin-right: 12px;
+  flex-shrink: 0; /* Prevent icon shrinking */
+}
+
+/* Specific icon colors */
+.BOwner-Pro-btn-icon.dashboard svg { color: #2563eb; }
+.BOwner-Pro-btn-icon.orders svg { color: #16a34a; }
+.BOwner-Pro-btn-icon.settings svg { color: #7c3aed; }
+.BOwner-Pro-btn-icon.logout svg { color: #dc2626; }
+
+
+/* Remove old Profile Summary styles */
+/* .BOwner-Pro-profile-summary, .BOwner-Pro-profile-summary-header, etc. */
+
+
+/* Responsive adjustments */
+@media (max-width: 992px) { /* Changed breakpoint to match client */
+  .BOwner-Pro-columns-wrapper {
+    flex-direction: column;
   }
-  
-  .BOwner-Pro-avatar-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block; /* Remove potential bottom space */
+  .BOwner-Pro-column-right {
+      /* No need to reorder if preference is form first on mobile */
+       margin-bottom: 0; /* Remove bottom margin if it's last */
   }
-  
-  .BOwner-Pro-profile-details {
-    flex: 1; /* Allow details to take remaining space */
-  }
-  
-  
-  .BOwner-Pro-profile-name {
-    margin: 0 0 5px;
-    font-size: 18px;
-    font-weight: 600;
-    color: #333;
-  }
-  
-  .BOwner-Pro-profile-subtitle {
-    margin: 0 0 5px;
-    font-size: 14px;
-    color: #555;
-  }
-  
-  .BOwner-Pro-profile-email {
-    margin: 0;
-    font-size: 14px;
-    color: #666;
-    word-break: break-all; /* Prevent long emails overflowing */
-  }
-  
-  .BOwner-Pro-profile-meta {
-    padding-top: 15px;
-    margin-top: 15px; /* Added margin top for separation */
-    border-top: 1px solid #e5e5e5;
-  }
-  
-  .BOwner-Pro-profile-meta p {
-    margin: 8px 0; /* Adjusted margin */
-    font-size: 13px;
-    color: #777;
-    line-height: 1.4; /* Improve readability */
-  }
-  
-  /* Responsive adjustments */
-  @media (max-width: 992px) {
-    .BOwner-Pro-columns-wrapper {
+}
+
+@media (max-width: 768px) { /* Added breakpoint for form row stacking */
+   .BOwner-Pro-form-row {
       flex-direction: column;
+      gap: 12px; /* Adjust gap for stacked */
+   }
+   .BOwner-Pro-form-group-half {
+       flex-basis: auto; /* Reset flex basis */
+   }
+    .BOwner-Pro-action-btn {
+        width: 100%; /* Make buttons full width */
     }
-  
-    .BOwner-Pro-column-right {
-      order: -1; /* Moves right column (nav/summary) to top */
-      margin-bottom: 30px; /* Add space below when stacked */
-    }
-  
-    .BOwner-Pro-profile-summary {
-        margin-top: 0; /* Remove top margin when it's the first element */
-    }
+}
+
+@media (max-width: 576px) {
+  /* Keep form row stacked from 768px */
+  .BOwner-Pro-main-title {
+      font-size: 1.5rem; /* Slightly smaller */
   }
-  
-  @media (max-width: 576px) {
-    .BOwner-Pro-form-row {
-      flex-direction: column;
-      gap: 0; /* Remove gap, rely on form-group margin */
-    }
-  
-    /* Ensure form groups in a row still have bottom margin */
-    .BOwner-Pro-form-row .BOwner-Pro-form-group {
-        margin-bottom: 20px;
-    }
-    /* Remove margin from the last group in the row */
-     .BOwner-Pro-form-row .BOwner-Pro-form-group:last-child {
-        margin-bottom: 0;
-    }
-  
-    .BOwner-Pro-main-title {
-        font-size: 24px; /* Slightly smaller title */
-    }
-  
-    .BOwner-Pro-column {
-        padding: 20px; /* Slightly less padding */
-    }
-  
-     .BOwner-Pro-nav-button {
-        padding: 12px 15px; /* Adjust padding */
-    }
-  
-     .BOwner-Pro-nav-button-icon {
-        width: 36px;
-        height: 36px;
-        margin-right: 12px;
-    }
+  .BOwner-Pro-column {
+      padding: 20px; /* Less padding */
   }
+  .BOwner-Pro-action-btn {
+      padding: 12px 14px; /* Adjust padding */
+      font-size: 0.95rem;
+  }
+  .BOwner-Pro-btn-icon {
+      width: 32px;
+      height: 32px;
+      margin-right: 10px;
+  }
+  .BOwner-Pro-save-btn {
+      font-size: 0.95rem;
+  }
+}
