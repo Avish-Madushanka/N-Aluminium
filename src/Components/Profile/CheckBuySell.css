@@ -1,0 +1,197 @@
+/* src/Pages/MyItemsPage.css (NEW FILE) */
+
+.my-items-container {
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .my-items-container h1 {
+    text-align: center;
+    margin-bottom: 10px;
+    color: #333;
+  }
+  
+  .page-description {
+      text-align: center;
+      color: #666;
+      margin-bottom: 30px;
+      font-size: 1.1rem;
+  }
+  
+  .loading-message,
+  .error-message {
+    text-align: center;
+    padding: 20px;
+    font-size: 1.1rem;
+    color: #555;
+  }
+  
+  .error-message {
+    color: #dc3545;
+    font-weight: bold;
+  }
+  
+  .no-items-message {
+    text-align: center;
+    padding: 40px 20px;
+    border: 2px dashed #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    color: #777;
+  }
+  .no-items-message svg {
+      margin-bottom: 15px;
+      color: #ccc;
+  }
+  .no-items-message p {
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+  }
+  
+  .list-item-link {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: 500;
+      transition: background-color 0.2s ease;
+  }
+  .list-item-link:hover {
+      background-color: #0056b3;
+  }
+  
+  
+  /* Grid for Items */
+  .my-items-grid {
+    display: grid;
+    /* Adjust columns based on desired layout */
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
+  }
+  
+  /* Individual Item Card Styling */
+  .my-item-card {
+    background: #ffffff;
+    border-radius: 10px;
+    border: 1px solid #eee;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.07);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .my-item-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  .my-item-image {
+    width: 100%;
+    height: 180px; /* Adjust height as needed */
+    object-fit: cover;
+    display: block; /* Remove extra space below image */
+  }
+  
+  .my-item-details {
+    padding: 15px;
+    flex-grow: 1; /* Allow details section to take up space */
+  }
+  
+  .my-item-details h3 {
+    margin: 0 0 8px 0;
+    font-size: 1.15rem;
+    color: #333;
+  }
+  
+  .my-item-description {
+      font-size: 0.9rem;
+      color: #666;
+      line-height: 1.5;
+      margin-bottom: 10px;
+      /* Optional: Limit description lines */
+      display: -webkit-box;
+      -webkit-line-clamp: 2; /* Show max 2 lines */
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+  }
+  
+  .my-item-price {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #007bff; /* Accent color for price */
+    margin-bottom: 5px;
+  }
+  
+  .my-item-location, .my-item-type {
+    font-size: 0.85rem;
+    color: #777;
+    margin-bottom: 5px;
+  }
+  
+  /* Action Buttons Container */
+  .my-item-actions {
+    display: flex;
+    justify-content: flex-end; /* Align buttons to the right */
+    gap: 10px;
+    padding: 10px 15px;
+    border-top: 1px solid #eee;
+    background-color: #fdfdfd; /* Slightly off-white background */
+  }
+  
+  .action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease, opacity 0.2s;
+  }
+  
+  .edit-btn {
+    background-color: #e7f3ff; /* Light blue */
+    color: #0056b3;
+  }
+  .edit-btn:hover {
+    background-color: #cce4ff;
+  }
+  
+  .delete-btn {
+    background-color: #fdeeee; /* Light red */
+    color: #c82333;
+  }
+  .delete-btn:hover {
+    background-color: #f8d7da;
+  }
+  
+  /* Responsive adjustments for grid */
+  @media (max-width: 600px) {
+    .my-items-grid {
+      grid-template-columns: 1fr; /* Single column on small screens */
+    }
+  }
+  
+  /* Placeholder for Bought Items Section */
+  .my-bought-items-section {
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid #ddd;
+  }
+  .my-bought-items-section h2 {
+      text-align: center;
+      margin-bottom: 15px;
+      color: #555;
+  }
+  .my-bought-items-section p {
+      text-align: center;
+      color: #888;
+      font-style: italic;
+  }

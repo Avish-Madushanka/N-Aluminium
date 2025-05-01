@@ -1,294 +1,249 @@
-/* Client Profile Component Styles */
+/* ClientProfile.css */
+
 .Client-Pro-container {
-    max-width: 1200px;
-    margin: 40px auto;
-    padding: 0 20px;
-  }
-  
-  .Client-Pro-main-title {
-    font-size: 28px;
-    font-weight: bold;
-    margin-bottom: 24px;
-    text-align: center;
-    color: #333;
-  }
-  
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.Client-Pro-main-title {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 30px;
+  color: #1f2937;
+  font-weight: 700;
+}
+
+/* Columns layout */
+.Client-Pro-columns-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
+.Client-Pro-column {
+  flex: 1;
+  min-width: 300px;
+  padding: 20px;
+  background-color: #f9fafb;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.3s ease;
+}
+
+.Client-Pro-column:hover {
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.07);
+}
+
+.Client-Pro-column-title {
+  font-size: 1.25rem;
+  margin-bottom: 20px;
+  color: #1f2937;
+  font-weight: 700;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+/* Form elements */
+.Client-Pro-form-group {
+  margin-bottom: 16px;
+}
+
+.Client-Pro-label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.Client-Pro-input,
+.Client-Pro-textarea,
+.Client-Pro-select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: white;
+  transition: all 0.2s ease;
+}
+
+.Client-Pro-input:focus,
+.Client-Pro-textarea:focus,
+.Client-Pro-select:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+}
+
+.Client-Pro-textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.Client-Pro-form-row {
+  display: flex;
+  gap: 16px;
+}
+
+.Client-Pro-form-group-half {
+  flex: 1;
+}
+
+/* File upload */
+.Client-Pro-input-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.Client-Pro-file-input-hidden {
+  display: none;
+}
+
+.Client-Pro-file-upload-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background-color: #e0e7ff;
+  color: #1e40af;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.Client-Pro-file-upload-btn:hover {
+  background-color: #c7d2fe;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Save button */
+.Client-Pro-save-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 12px 20px;
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.Client-Pro-save-btn:hover {
+  background-color: #1d4ed8;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(37, 99, 235, 0.3);
+}
+
+.Client-Pro-save-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(37, 99, 235, 0.3);
+}
+
+.Client-Pro-save-btn:disabled {
+  background-color: #93c5fd;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Action buttons */
+.Client-Pro-action-btn {
+  display: flex;
+  align-items: center;
+  width: 70%;
+  margin-bottom: 16px;
+  padding: 14px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Email button */
+.Client-Pro-action-btn.email {
+  background: linear-gradient(to right, #60a5fa, #2563eb);
+}
+
+/* Pickup button */
+.Client-Pro-action-btn.pickup {
+  background: linear-gradient(to right, #4ade80, #16a34a);
+}
+
+/* Buy & Sell button */
+.Client-Pro-action-btn.buy-sell {
+  background: linear-gradient(to right, #c084fc, #7c3aed);
+}
+
+/* Logout button */
+.Client-Pro-action-btn.logout {
+  background: linear-gradient(to right, #f87171, #dc2626);
+}
+
+/* Button hover effects */
+.Client-Pro-action-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+}
+
+/* Button active effects */
+.Client-Pro-action-btn:active,
+.Client-Pro-action-btn.active {
+  transform: translateY(0) scale(0.98);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Icon containers */
+.Client-Pro-btn-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background-color: white;
+  border-radius: 50%;
+  margin-right: 12px;
+}
+
+.Client-Pro-btn-icon.email svg {
+  color: #2563eb;
+}
+
+.Client-Pro-btn-icon.pickup svg {
+  color: #16a34a;
+}
+
+.Client-Pro-btn-icon.buy-sell svg {
+  color: #7c3aed;
+}
+
+.Client-Pro-btn-icon.logout svg {
+  color: #dc2626;
+}
+
+/* For smaller screens */
+@media (max-width: 768px) {
   .Client-Pro-columns-wrapper {
-    display: flex;
     flex-direction: column;
-    gap: 20px;
   }
   
-  @media (min-width: 768px) {
-    .Client-Pro-columns-wrapper {
-      flex-direction: row;
-    }
-  
-    .Client-Pro-column {
-      width: 50%;
-    }
-  }
-  
-  .Client-Pro-column {
-    width: 100%;
-    background-color: #fff;
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-  }
-  
-  .Client-Pro-column-title {
-    font-size: 22px;
-    font-weight: bold;
-    margin-bottom: 24px;
-    color: #333;
-  }
-  
-  /* Form Styles */
-  .Client-Pro-form-group {
-    margin-bottom: 20px;
-    position: relative;
-  }
-  
-  .Client-Pro-label {
-    display: block;
-    font-weight: 600;
-    margin-bottom: 8px;
-    color: #444;
-  }
-  
-  .Client-Pro-input-wrapper {
-    position: relative;
-  }
-  
-  .Client-Pro-input-icon {
-    position: absolute;
-    top: 50%;
-    left: 12px;
-    transform: translateY(-50%);
-    color: #6b7280;
-    z-index: 1;
-  }
-  
-  .Client-Pro-textarea-icon {
-    top: 16px;
-    transform: none;
-  }
-  
-  .Client-Pro-input,
-  .Client-Pro-textarea,
-  .Client-Pro-select {
-    width: 100%;
-    padding: 12px 12px 12px 40px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    font-size: 16px;
-    outline: none;
-    transition: border-color 0.2s ease-in-out;
-  }
-  
-  .Client-Pro-textarea {
-    min-height: 100px;
-    resize: vertical;
-  }
-  
-  .Client-Pro-input:focus,
-  .Client-Pro-textarea:focus,
-  .Client-Pro-select:focus {
-    border-color: #007bff;
-    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.1);
-  }
-  
-  /* Row layout for form */
   .Client-Pro-form-row {
-    display: flex;
     flex-direction: column;
-    gap: 20px;
-    margin-bottom: 20px;
+    gap: 12px;
   }
-  
-  @media (min-width: 640px) {
-    .Client-Pro-form-row {
-      flex-direction: row;
-    }
-  }
-  
-  .Client-Pro-form-group-half {
-    width: 100%;
-  }
-  
-  @media (min-width: 640px) {
-    .Client-Pro-form-group-half {
-      width: 50%;
-    }
-  }
-  
-  /* File Upload Styles */
-  .Client-Pro-file-input-hidden {
-    display: none;
-  }
-  
-  .Client-Pro-file-upload-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 16px;
-    background-color: #007bff;
-    color: #fff;
-    border-radius: 8px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.2s ease-in-out;
-  }
-  
-  .Client-Pro-file-upload-btn:hover {
-    background-color: #0056b3;
-  }
-  
-  /* Save Button */
-  .Client-Pro-save-btn {
-    width: 100%;
-    background-color: #28a745;
-    color: #fff;
-    padding: 14px;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    margin-top: 20px;
-    transition: background-color 0.2s ease-in-out;
-  }
-  
-  .Client-Pro-save-btn:hover {
-    background-color: #218838;
-  }
-  
-  .Client-Pro-save-btn:disabled {
-    background-color: #6c757d;
-    cursor: not-allowed;
-  }
-  
-  /* Navigation Styles */
-  .Client-Pro-nav-buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-  
-  .Client-Pro-nav-button {
-    display: flex;
-    align-items: center;
-    padding: 16px;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.2s ease-in-out;
-  }
-  
-  .Client-Pro-nav-button:hover {
-    background-color: #f9fafb;
-  }
-  
-  .Client-Pro-nav-button-active {
-    background-color: #ebf5ff;
-    border-color: #bfdbfe;
-  }
-  
-  .Client-Pro-nav-button-icon {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 16px;
-  }
-  
-  .Client-Pro-icon-blue {
-    background-color: #dbeafe;
-    color: #2563eb;
-  }
-  
-  .Client-Pro-icon-white {
-    background-color: #2563eb;
-    color: #fff;
-  }
-  
-  .Client-Pro-icon-red {
-    background-color: #fee2e2;
-    color: #dc2626;
-  }
-  
-  .Client-Pro-nav-button-text {
-    flex-grow: 1;
-  }
-  
-  .Client-Pro-nav-button-title {
-    font-weight: 600;
-    margin-bottom: 4px;
-    color: #111827;
-  }
-  
-  .Client-Pro-nav-button-desc {
-    font-size: 14px;
-    color: #6b7280;
-  }
-  
-  /* Profile Summary */
-  .Client-Pro-profile-summary {
-    margin-top: 32px;
-    padding: 16px;
-    background-color: #f3f4f6;
-    border-radius: 8px;
-  }
-  
-  .Client-Pro-profile-summary-header {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 16px;
-  }
-  
-  .Client-Pro-profile-avatar {
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
-    overflow: hidden;
-    flex-shrink: 0;
-    background-color: #e5e7eb;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .Client-Pro-avatar-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  
-  .Client-Pro-profile-text {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-  
-  .Client-Pro-profile-name {
-    font-size: 18px;
-    font-weight: 600;
-    margin-bottom: 4px;
-    color: #111827;
-  }
-  
-  .Client-Pro-profile-email {
-    font-size: 14px;
-    color: #6b7280;
-  }
-  
-  .Client-Pro-profile-meta {
-    font-size: 14px;
-    color: #4b5563;
-    line-height: 1.6;
-  }
-  
+}

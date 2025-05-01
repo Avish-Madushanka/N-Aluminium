@@ -38,6 +38,7 @@ import BOwnerHeader from './Components/BusinessOwner/BOwnerHeader';
 import BSHeader from './Components/BuyandSell/BSHeader';
 import LocationMap from './Components/Maps/LocationMap';
 import ClientProfile from './Components/Profile/ClientProfile';
+import ClientEmail from './Components/Profile/ClientEmail';
 import CalendarDisplay from './Components/UserCalendar/CalendarDisplay';
 import BOwnerProfile from './Components/Profile/BOwnerProfile';
 import AdCheckReq from './Components/Admin/AdCheckReq/AdCheckReq';
@@ -45,6 +46,8 @@ import EmailDisplay from './Components/Admin/EmailDisplay/EmailDisplay';
 import EmailListItem from './Components/Admin/EmailDisplay/EmailListItem';
 import Dashboard from './Components/Admin/Dashboard/Dashboard';
 import HandleBOwners from './Components/Admin/HandleBOwners/HandleBOwners';
+import PickupReq from './Components/Profile/PickupReq';
+import CheckBuySell from './Components/Profile/CheckBuySell';
 
 const AppContent = () => {
     const [isLoading, setIsLoading] = useState(true);
@@ -176,6 +179,9 @@ const AppContent = () => {
                 <Route path="/BuyCard" element={<ProtectedRoute><BuyCard /></ProtectedRoute>} />
                 <Route path="/WastePickForm" element={<ProtectedRoute><WastePickForm /></ProtectedRoute>} />
                 <Route path="/ClientProfile" element={<ProtectedRoute><ClientProfile /></ProtectedRoute>} />
+                <Route path="/ClientEmail" element={<ProtectedRoute><ClientEmail /></ProtectedRoute>} />
+                <Route path="/PickupReq" element={<ProtectedRoute><PickupReq /></ProtectedRoute>} />
+                <Route path="/CheckBuySell" element={<ProtectedRoute><CheckBuySell /></ProtectedRoute>} />
                 <Route path="/BOwnerHome" element={<ProtectedRoute><BOwnerHome userInfo={userInfo} /></ProtectedRoute>} />
                 <Route path="/ProAddForm" element={<ProtectedRoute><ProAddForm /></ProtectedRoute>} />
                 <Route path="/BOwnerHeader" element={<ProtectedRoute><BOwnerHeader /></ProtectedRoute>} />

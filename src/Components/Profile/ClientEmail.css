@@ -1,0 +1,382 @@
+/* EmailList.css - Extended styles for the email list component */
+
+/* Global styles and variables */
+:root {
+    --primary-color: #3b82f6;
+    --primary-light: #93c5fd;
+    --primary-dark: #1d4ed8;
+    --gray-50: #f9fafb;
+    --gray-100: #f3f4f6;
+    --gray-200: #e5e7eb;
+    --gray-300: #d1d5db;
+    --gray-400: #9ca3af;
+    --gray-500: #6b7280;
+    --gray-600: #4b5563;
+    --gray-700: #374151;
+    --gray-800: #1f2937;
+    --gray-900: #111827;
+    --yellow-400: #facc15;
+    --green-100: #dcfce7;
+    --green-800: #166534;
+    --blue-100: #dbeafe;
+    --blue-800: #1e40af;
+    --red-100: #fee2e2;
+    --red-800: #991b1b;
+    --purple-100: #f3e8ff;
+    --purple-800: #6b21a8;
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --transition-default: all 0.2s ease;
+  }
+  
+  /* Base container styles */
+  .email-list-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background-color: var(--gray-50);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  }
+  
+  /* Toolbar styles */
+  .email-toolbar {
+    background-color: white;
+    border-bottom: 1px solid var(--gray-200);
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  
+  .email-toolbar button {
+    transition: var(--transition-default);
+  }
+  
+  .email-toolbar button:hover {
+    background-color: var(--gray-100);
+    transform: translateY(-1px);
+  }
+  
+  .email-toolbar button:active {
+    transform: translateY(0);
+  }
+  
+  .toolbar-counter {
+    color: var(--gray-500);
+    font-size: 0.875rem;
+  }
+  
+  /* Checkbox styling */
+  .custom-checkbox {
+    appearance: none;
+    width: 1rem;
+    height: 1rem;
+    border: 1px solid var(--gray-300);
+    border-radius: 0.25rem;
+    margin-right: 0.5rem;
+    cursor: pointer;
+    position: relative;
+    transition: var(--transition-default);
+  }
+  
+  .custom-checkbox:checked {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+  }
+  
+  .custom-checkbox:checked::after {
+    content: '';
+    position: absolute;
+    left: 5px;
+    top: 2px;
+    width: 4px;
+    height: 8px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+  
+  .custom-checkbox:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--primary-light);
+  }
+  
+  /* Email item styles */
+  .email-item {
+    border-bottom: 1px solid var(--gray-200);
+    transition: var(--transition-default);
+    cursor: pointer;
+    position: relative;
+  }
+  
+  .email-item:hover {
+    box-shadow: var(--shadow-md);
+    z-index: 1;
+  }
+  
+  .email-item:active {
+    background-color: var(--gray-100);
+  }
+  
+  .email-item.unread {
+    background-color: #ebf5ff;
+  }
+  
+  .email-item.unread::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background-color: var(--primary-color);
+  }
+  
+  .email-content {
+    flex: 1;
+    min-width: 0;
+    padding-right: 1rem;
+  }
+  
+  .email-sender {
+    font-weight: 500;
+    color: var(--gray-900);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .email-subject {
+    font-weight: normal;
+    color: var(--gray-900);
+  }
+  
+  .email-preview {
+    color: var(--gray-500);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .email-item.unread .email-subject {
+    font-weight: 600;
+  }
+  
+  /* Star icon styling */
+  .star-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.25rem;
+    border-radius: 9999px;
+    transition: var(--transition-default);
+  }
+  
+  .star-button:hover {
+    background-color: rgba(250, 204, 21, 0.1);
+  }
+  
+  .star-button:focus {
+    outline: none;
+  }
+  
+  .star-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+    color: var(--gray-400);
+  }
+  
+  .star-icon.starred {
+    color: var(--yellow-400);
+    fill: var(--yellow-400);
+  }
+  
+  /* Label styling */
+  .email-label {
+    font-size: 0.75rem;
+    padding: 0.125rem 0.5rem;
+    border-radius: 9999px;
+    font-weight: 500;
+    letter-spacing: 0.025em;
+  }
+  
+  .email-label.work {
+    background-color: var(--blue-100);
+    color: var(--blue-800);
+  }
+  
+  .email-label.personal {
+    background-color: var(--green-100);
+    color: var(--green-800);
+  }
+  
+  .email-label.important {
+    background-color: var(--red-100);
+    color: var(--red-800);
+  }
+  
+  .email-label.updates {
+    background-color: var(--purple-100);
+    color: var(--purple-800);
+  }
+  
+  /* Attachment icon styling */
+  .attachment-icon {
+    color: var(--gray-400);
+  }
+  
+  /* Email timestamp styling */
+  .email-time {
+    font-size: 0.875rem;
+    color: var(--gray-500);
+    white-space: nowrap;
+    width: 4rem;
+    text-align: right;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .email-item {
+      padding: 0.75rem;
+    }
+    
+    .email-preview-mobile {
+      display: block;
+      font-size: 0.875rem;
+      color: var(--gray-500);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  
+    .email-preview-desktop {
+      display: none;
+    }
+    
+    .email-content-row {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    
+    .email-sender {
+      margin-bottom: 0.25rem;
+    }
+  }
+  
+  @media (min-width: 769px) {
+    .email-preview-mobile {
+      display: none;
+    }
+    
+    .email-preview-desktop {
+      display: inline;
+    }
+    
+    .email-content-row {
+      flex-direction: row;
+      align-items: center;
+    }
+  }
+  
+  /* Animation for new emails */
+  @keyframes newEmailAppear {
+    from {
+      background-color: var(--primary-light);
+      transform: translateY(-4px);
+    }
+    to {
+      background-color: #ebf5ff;
+      transform: translateY(0);
+    }
+  }
+  
+  .email-item.new-email {
+    animation: newEmailAppear 1s ease-out;
+  }
+  
+  /* Selection highlight */
+  .email-item.selected {
+    background-color: rgba(59, 130, 246, 0.1);
+  }
+  
+  /* Empty state styling */
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: var(--gray-500);
+    padding: 2rem;
+    text-align: center;
+  }
+  
+  .empty-state-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: var(--gray-400);
+  }
+  
+  .empty-state-text {
+    font-size: 1.125rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .empty-state-subtext {
+    font-size: 0.875rem;
+  }
+  
+  /* Scrollbar styling */
+  .email-list::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .email-list::-webkit-scrollbar-track {
+    background: var(--gray-100);
+  }
+  
+  .email-list::-webkit-scrollbar-thumb {
+    background-color: var(--gray-300);
+    border-radius: 20px;
+  }
+  
+  .email-list::-webkit-scrollbar-thumb:hover {
+    background-color: var(--gray-400);
+  }
+  
+  /* Loading state */
+  .loading-skeleton {
+    animation: pulse 1.5s ease-in-out infinite;
+    background: linear-gradient(90deg, var(--gray-100), var(--gray-200), var(--gray-100));
+    background-size: 200% 100%;
+    border-radius: 0.25rem;
+  }
+  
+  @keyframes pulse {
+    0% {
+      background-position: 0% 0%;
+    }
+    100% {
+      background-position: -200% 0%;
+    }
+  }
+  
+  /* Drag and drop styling */
+  .email-item.dragging {
+    opacity: 0.5;
+    background-color: var(--gray-100);
+    box-shadow: var(--shadow-lg);
+  }
+  
+  .drop-zone {
+    height: 3px;
+    background-color: var(--primary-color);
+    transition: height 0.2s ease;
+  }
+  
+  .drop-zone.active {
+    height: 12px;
+  }
