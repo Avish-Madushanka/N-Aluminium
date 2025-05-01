@@ -1,5 +1,5 @@
 .ABDiagram-container {
-    background:color(#ffffff);
+    background-color: #ffffff;
     padding: 80px 40px;
     text-align: center;
     max-width: 1200px;
@@ -25,6 +25,7 @@
     padding: 30px;
     border-radius: 12px;
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
+    margin-bottom: 60px;
   }
   
   @media (max-width: 768px) {
