@@ -5,11 +5,11 @@ import {
 import "./AboutUSDiagram.css";
 
 const data = [
-  { year: "2020", usage: 1400, recycled: 1050 },
-  { year: "2021", usage: 1600, recycled: 1250 },
-  { year: "2022", usage: 1800, recycled: 1450 },
-  { year: "2023", usage: 2000, recycled: 1700 },
-  { year: "2024", usage: 2200, recycled: 2000 },
+  { year: "2020", usage: 72000, recycled: 36000 },
+  { year: "2021", usage: 74000, recycled:38540 },
+  { year: "2022", usage: 75500, recycled: 40210 },
+  { year: "2023", usage: 96600, recycled: 50500 },
+  { year: "2024", usage: 100200, recycled: 57395 },
 ];
 
 const AboutUSDiagram = () => {
