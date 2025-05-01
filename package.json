@@ -27,6 +27,7 @@
     "axios": "^1.9.0",
     "bootstrap": "^5.3.3",
     "chart.js": "^4.4.9",
+    "d3-geo": "^3.1.1",
     "date-fns": "^4.1.0",
     "jwt-decode": "^4.0.0",
     "lucide-react": "^0.471.1",
@@ -40,10 +41,12 @@
     "react-loader-spinner": "^6.1.6",
     "react-router-dom": "^7.1.1",
     "react-select": "^5.9.0",
+    "react-simple-maps": "^3.0.0",
     "react-slick": "^0.30.3",
     "react-spinners": "^0.15.0",
     "recharts": "^2.15.3",
-    "slick-carousel": "^1.8.1"
+    "slick-carousel": "^1.8.1",
+    "topojson-client": "^3.1.0"
   },
   "devDependencies": {
     "@babel/plugin-proposal-optional-chaining": "^7.21.0",
