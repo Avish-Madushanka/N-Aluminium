@@ -38,12 +38,12 @@
 .ABtitle {
   font-size: 2.75rem;
   font-weight: 700;
-  color: #1a1a1a;
+  color: #1f3b53;
   margin-bottom: 20px;
 }
 
 .ABtitle .highlight {
-  background: linear-gradient(45deg, #000000, #000000);
+  background: linear-gradient(45deg, #1f3b53, #1f3b53);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }

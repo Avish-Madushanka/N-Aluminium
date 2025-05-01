@@ -1,135 +1,173 @@
-.xrecycling-container {
-    font-family: 'Arial', sans-serif;
-    background-color: #2F4550;
-    color: #fff;
-    padding: 40px;
-    text-align: center;
-    min-height: 100vh;
-  }
-  
-  .xrecycling-title {
-    font-size: 42px;
-    margin-bottom: 30px;
-    font-weight: bold;
-  }
-  
-  .xrecycling-description {
-    font-size: 20px;
-    line-height: 1.6;
-    max-width: 800px;
-    margin: 0 auto 40px;
-  }
-  
-  .ximage-grid {
-    display: flex;
-    justify-content: center;
-    gap: 30px;
-    padding-top: 50px;
-  }
-  
-  .ximage-item {
-    width: 250px;
-  }
-  
-  .xaluminum-image {
-    width: 80%;
-    height: 200px;
-    border-radius: 50%;
-    object-fit: cover;
-  }
-  
-  .xaluminum-text {
-    margin-top: 25px;
-    font-size: 21px;
-    font-weight: bold;
-  }
+.AB3-container {
+  font-family: 'Montserrat', sans-serif;
+  background: linear-gradient(135deg, #1a3a3a 0%, #2F4550 100%);
+  color: #fff;
+  padding: 40px;
+  text-align: center;
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
 
-  @media (max-width: 1024px) {
-    .xrecycling-title {
-      font-size: 36px;
-    }
-  
-    .xrecycling-description {
-      font-size: 18px;
-    }
-  
-    .ximage-grid {
-      gap: 20px;
-    }
-  
-    .ximage-item {
-      width: 200px;
-    }
-  
-    .xaluminum-image {
-      height: 180px;
-    }
-  
-    .xaluminum-text {
-      font-size: 18px;
-    }
+.AB3-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+.AB3-title {
+  font-size: 42px;
+  margin-bottom: 30px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  position: relative;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.AB3-title::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 4px;
+  background: #4CAF50;
+  border-radius: 4px;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.6; width: 80px; }
+  50% { opacity: 1; width: 120px; }
+  100% { opacity: 0.6; width: 80px; }
+}
+
+.AB3-description {
+  font-size: 20px;
+  line-height: 1.6;
+  max-width: 800px;
+  margin: 0 auto 40px;
+  font-weight: 300;
+}
+
+.AB3-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  justify-items: center;
+  padding: 40px 20px;
+  perspective: 1000px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.AB3-item {
+  width: 250px;
+  transform-style: preserve-3d;
+  transition: transform 0.5s ease;
+  position: relative;
+}
+
+.AB3-item:hover {
+  transform: translateY(-10px) rotateY(5deg);
+}
+
+.AB3-image {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+  transition: all 0.3s ease;
+  border: 4px solid transparent;
+}
+
+.AB3-item:hover .AB3-image {
+  border-color: #4CAF50;
+  box-shadow: 0 15px 30px rgba(0,0,0,0.3), 0 0 0 8px rgba(76,175,80,0.2);
+}
+
+.AB3-text {
+  margin-top: 20px;
+  font-size: 21px;
+  font-weight: bold;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.AB3-item:hover .AB3-text {
+  color: #4CAF50;
+}
+
+@media (max-width: 1024px) {
+  .AB3-title {
+    font-size: 36px;
   }
-  
-  @media (max-width: 768px) {
-    .xrecycling-container {
-      padding: 30px;
-    }
-  
-    .xrecycling-title {
-      font-size: 30px;
-    }
-  
-    .xrecycling-description {
-      font-size: 16px;
-    }
-  
-    .ximage-grid {
-      flex-direction: column;
-      align-items: center;
-      gap: 15px;
-    }
-  
-    .ximage-item {
-      width: 180px;
-    }
-  
-    .xaluminum-image {
-      height: 160px;
-    }
-  
-    .xaluminum-text {
-      font-size: 16px;
-    }
+  .AB3-description {
+    font-size: 18px;
   }
-  
-  @media (max-width: 480px) {
-    .xrecycling-container {
-      padding: 20px;
-    }
-  
-    .xrecycling-title {
-      font-size: 30px;
-    }
-  
-    .xrecycling-description {
-      font-size: 18px;
-    }
-  
-    .ximage-grid {
-      gap: 10px;
-    }
-  
-    .ximage-item {
-      width: 150px;
-    }
-  
-    .xaluminum-image {
-      height: 140px;
-      width: 140px;
-    }
-  
-    .xaluminum-text {
-      font-size: 20px;
-    }
+  .AB3-item {
+    width: 200px;
   }
-  
+  .AB3-image {
+    height: 180px;
+    width: 180px;
+  }
+  .AB3-text {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 768px) {
+  .AB3-container {
+    padding: 30px;
+  }
+  .AB3-title {
+    font-size: 30px;
+  }
+  .AB3-description {
+    font-size: 16px;
+  }
+  .AB3-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  .AB3-item {
+    width: 160px;
+  }
+  .AB3-image {
+    height: 140px;
+    width: 140px;
+  }
+  .AB3-text {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .AB3-container {
+    padding: 20px;
+  }
+  .AB3-title {
+    font-size: 26px;
+  }
+  .AB3-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .AB3-item {
+    width: 130px;
+  }
+  .AB3-image {
+    height: 120px;
+    width: 120px;
+  }
+  .AB3-text {
+    font-size: 14px;
+  }
+}
