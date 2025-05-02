@@ -15,6 +15,7 @@ const Footer = () => {
             alt="Avo Company Logo"
             className="footer1-logo"
           />
+          <div className="footer1-text">ALUX</div>
         </div>
 
         <div className="footer1-section">

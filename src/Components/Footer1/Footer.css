@@ -46,7 +46,12 @@
 .footer1-logo {
   max-width: 120px;
   height: auto;
-  margin-bottom: 15px;
+}
+
+.footer1-text{
+  color: rgb(180, 180, 180);
+  font-weight: bolder;
+  font-size: 3.0rem;
 }
 
 .footer1-section h4 {

@@ -1,21 +1,65 @@
-// src/Components/Navbar/Navbar.jsx (Relevant parts updated)
-
-import React, { useState, useEffect } from "react";
-import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'; // Import Link & useNavigate
-import { User } from 'lucide-react';
+import React, { useState, useEffect, useRef } from "react";
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { User, Menu, X, LogOut, ChevronDown } from 'lucide-react';
 import "./Navbar.css";
 import logo from "../../assets/logo.png";
 
 const Navbar = ({ isLoggedIn, userInfo, handleLogout }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [menuAnimation, setMenuAnimation] = useState(false);
   const location = useLocation();
-  const navigate = useNavigate(); // Use navigate for programmatic navigation
+  const navigate = useNavigate();
+  const navbarRef = useRef(null);
 
+  // Track scroll position for navbar appearance change
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY;
+      if (scrollPosition > 50) {
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Close menu on navigation
   useEffect(() => {
     setIsOpen(false);
   }, [location]);
 
-  const toggleMenu = () => setIsOpen(!isOpen);
+  // Handle click outside to close menu
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (navbarRef.current && !navbarRef.current.contains(event.target) && isOpen) {
+        closeMenu();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [isOpen]);
+
+  const toggleMenu = () => {
+    if (isOpen) {
+      closeMenu();
+    } else {
+      setIsOpen(true);
+      setMenuAnimation(true);
+    }
+  };
+
+  const closeMenu = () => {
+    setMenuAnimation(false);
+    // Delay the actual closing to allow animation to complete
+    setTimeout(() => {
+      setIsOpen(false);
+    }, 300);
+  };
 
   const triggerLogout = () => {
     const confirmLogout = window.confirm("Are you sure you want to log out?");
@@ -26,8 +70,7 @@ const Navbar = ({ isLoggedIn, userInfo, handleLogout }) => {
   };
 
   const getInitials = (name) => {
-    // ... (keep existing getInitials logic) ...
-     if (!name) return '?';
+    if (!name) return '?';
     const words = name.trim().split(' ');
     if (words.length > 1 && words[0] && words[words.length - 1]) {
       return (words[0][0] + words[words.length - 1][0]).toUpperCase();
@@ -38,98 +81,148 @@ const Navbar = ({ isLoggedIn, userInfo, handleLogout }) => {
   };
 
   // Determine user type AND profile path
-  const userRole = userInfo?.role; // Prioritize role if available
+  const userRole = userInfo?.role;
   const userType = userInfo?.userType;
-  let profilePath = '/'; // Default
+  let profilePath = '/';
 
   if (userRole === 'admin') {
-      profilePath = '/Admin'; // Or '/AdminDashboard'
+    profilePath = '/Admin';
   } else if (userType === 'bowner-login') {
-      profilePath = '/BOwnerHome';
+    profilePath = '/BOwnerHome';
   } else if (userType === 'client') {
-      profilePath = '/ClientProfile'; // Link to the new client profile page
+    profilePath = '/ClientProfile';
   }
 
   return (
-    <nav className="navbar">
+    <nav className={`navbar ${scrolled ? 'navbar-scrolled' : ''}`} ref={navbarRef}>
       <div className="nav-container">
         <Link className="navbar-brand" to="/">
           <img src={logo} alt="N-Aluminium Logo" className="nav-logo" />
+          <span className="logo-text1">ALUX</span>
         </Link>
 
-        {/* Desktop Links */}
+        {/* Desktop Links with animated indicators */}
         <div className="nav-links">
-          {/* ... other NavLinks ... */}
-           <NavLink to="/" className={({ isActive }) => `nav-item ${isActive ? 'active-nav-item' : ''}`}>Home</NavLink>
-           <NavLink to="/AboutUs" className={({ isActive }) => `nav-item ${isActive ? 'active-nav-item' : ''}`}>About Us</NavLink>
-           <NavLink to="/Service" className={({ isActive }) => `nav-item ${isActive ? 'active-nav-item' : ''}`}>Services</NavLink>
-           <NavLink to="/ContactUs" className={({ isActive }) => `nav-item ${isActive ? 'active-nav-item' : ''}`}>ContactUs</NavLink>
+          <NavLink 
+            to="/" 
+            className={({ isActive }) => `nav-item ${isActive ? 'active-nav-item' : ''}`}
+          >
+            <span>Home</span>
+            <span className="nav-indicator"></span>
+          </NavLink>
           
-          {/* No need for separate dashboard links here if profile serves that purpose */}
+          <NavLink 
+            to="/AboutUs" 
+            className={({ isActive }) => `nav-item ${isActive ? 'active-nav-item' : ''}`}
+          >
+            <span>About Us</span>
+            <span className="nav-indicator"></span>
+          </NavLink>
+          
+          <NavLink 
+            to="/Service" 
+            className={({ isActive }) => `nav-item ${isActive ? 'active-nav-item' : ''}`}
+          >
+            <span>Services</span>
+            <span className="nav-indicator"></span>
+          </NavLink>
+          
+          <NavLink 
+            to="/ContactUs" 
+            className={({ isActive }) => `nav-item ${isActive ? 'active-nav-item' : ''}`}
+          >
+            <span>Contact Us</span>
+            <span className="nav-indicator"></span>
+          </NavLink>
         </div>
 
         {/* Desktop Auth/Profile Section */}
         <div className="auth-buttons">
           {isLoggedIn ? (
-            <>
-              {/* --- Profile Link --- */}
+            <div className="user-menu">
               <Link to={profilePath} className="profile-link" title={userInfo?.name || 'View Profile'}>
                 <div className="profile-indicator">
-                  <span className="profile-initials">
-                    {getInitials(userInfo?.name)}
-                  </span>
+                  <span className="profile-initials">{getInitials(userInfo?.name)}</span>
                 </div>
+                <span className="profile-name">{userInfo?.name?.split(' ')[0] || 'User'}</span>
+                <ChevronDown size={16} className="profile-icon" />
               </Link>
-              {/* Logout Button */}
-              <button onClick={triggerLogout} className="logout-btn nav-button-style">Logout</button>
-            </>
+              
+              <div className="profile-dropdown">
+                <Link to={profilePath} className="dropdown-item">
+                  My Profile
+                </Link>
+                <button onClick={triggerLogout} className="dropdown-item logout-item">
+                  <LogOut size={16} />
+                  <span>Logout</span>
+                </button>
+              </div>
+            </div>
           ) : (
-            <>
+            <div className="auth-buttons-container">
               <Link to="/Login" className="login-btn nav-button-style">Login</Link>
               <Link to="/SignUp" className="signup-btn nav-button-style">Sign Up</Link>
-            </>
+            </div>
           )}
         </div>
 
-        {/* Mobile Menu Toggle */}
-        <button className="menu-toggle" onClick={toggleMenu} aria-label="Toggle menu">
-          {isOpen ? '✕' : '☰'}
+        {/* Mobile Menu Toggle with animation */}
+        <button 
+          className="menu-toggle" 
+          onClick={toggleMenu} 
+          aria-label="Toggle menu"
+        >
+          {isOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
 
-      {/* --- Mobile Menu --- */}
+      {/* Mobile Menu with animation */}
       {isOpen && (
-        <div className="mobile-menu">
-          {/* ... Repeat public NavLinks ... */}
-           <NavLink to="/" className={({ isActive }) => `nav-item ${isActive ? 'active-nav-item' : ''}`}>Home</NavLink>
-           <NavLink to="/AboutUs" className={({ isActive }) => `nav-item ${isActive ? 'active-nav-item' : ''}`}>About Us</NavLink>
-           <NavLink to="/Service" className={({ isActive }) => `nav-item ${isActive ? 'active-nav-item' : ''}`}>Services</NavLink>
-           <NavLink to="/ContactUs" className={({ isActive }) => `nav-item ${isActive ? 'active-nav-item' : ''}`}>ContactUs</NavLink>
-        
-          {/* Link to profile page in mobile */}
-          {isLoggedIn && (
-            <NavLink to={profilePath} className={({ isActive }) => `nav-item ${isActive ? 'active-nav-item' : ''}`}>
-              My Profile ({userInfo?.name?.split(' ')[0] || 'User'}) {/* Show first name */}
+        <div className={`mobile-menu ${menuAnimation ? 'menu-active' : 'menu-inactive'}`}>
+          <div className="mobile-menu-items">
+            <NavLink to="/" className={({ isActive }) => `mobile-nav-item ${isActive ? 'active-mobile-nav-item' : ''}`}>
+              Home
             </NavLink>
-          )}
-
-
-          {/* Auth Buttons Mobile */}
-          <div className="auth-buttons-mobile">
-            {isLoggedIn ? (
-              <>
-                {/* You can remove mobile-profile-info if the profile link is enough */}
-                {/* <div className="mobile-profile-info">
-                  Signed in as: {userInfo?.name || 'User'}
-                </div> */}
-                 <button onClick={triggerLogout} className="logout-btn nav-button-style">Logout</button>
-              </>
-            ) : (
-              <>
-                <Link to="/Login" className="login-btn nav-button-style">Login</Link>
-                <Link to="/SignUp" className="signup-btn nav-button-style">Sign Up</Link>
-              </>
+            <NavLink to="/AboutUs" className={({ isActive }) => `mobile-nav-item ${isActive ? 'active-mobile-nav-item' : ''}`}>
+              About Us
+            </NavLink>
+            <NavLink to="/Service" className={({ isActive }) => `mobile-nav-item ${isActive ? 'active-mobile-nav-item' : ''}`}>
+              Services
+            </NavLink>
+            <NavLink to="/ContactUs" className={({ isActive }) => `mobile-nav-item ${isActive ? 'active-mobile-nav-item' : ''}`}>
+              Contact Us
+            </NavLink>
+          
+            {/* Profile link in mobile menu */}
+            {isLoggedIn && (
+              <NavLink to={profilePath} className={({ isActive }) => `mobile-nav-item ${isActive ? 'active-mobile-nav-item' : ''}`}>
+                <div className="mobile-profile-item">
+                  <div className="mobile-profile-indicator">
+                    <span className="profile-initials">{getInitials(userInfo?.name)}</span>
+                  </div>
+                  <span>My Profile</span>
+                </div>
+              </NavLink>
             )}
+
+            {/* Auth Buttons Mobile */}
+            <div className="auth-buttons-mobile">
+              {isLoggedIn ? (
+                <button onClick={triggerLogout} className="logout-btn mobile-btn">
+                  <LogOut size={18} />
+                  <span>Logout</span>
+                </button>
+              ) : (
+                <>
+                  <Link to="/Login" className="login-btn mobile-btn">
+                    Login
+                  </Link>
+                  <Link to="/SignUp" className="signup-btn mobile-btn">
+                    Sign Up
+                  </Link>
+                </>
+              )}
+            </div>
           </div>
         </div>
       )}
