@@ -19,28 +19,25 @@
 
 .Wheader-content {
     display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    margin-bottom: 40px; 
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 40px;
 }
 
 .Wmain-heading {
     font-size: 2.5em;
     font-weight: bold;
-    max-width: 45%;
-    margin-bottom: 5px; 
-    margin-left: 75px;
+    margin-bottom: 15px;
+    color: #333;
 }
 
 .Wdescription {
     font-size: 1.1em;
     line-height: 1.6;
     color: #555;
-    max-width: 45%;
-    margin-top: 5px;
-    margin-right:75px ;
+    max-width: 800px;
 }
-
 
 .waste-card {
     position: relative;
@@ -52,7 +49,7 @@
 
 .waste-card-image {
     width: 100%;
-    height: 300px;
+    height: 350px;
     object-fit: cover;
     transition: transform 0.3s ease;
 }
@@ -155,6 +152,7 @@
     color: white;
 }
 
+/* Responsive */
 @media (max-width: 768px) {
     .Wheader-content {
         flex-direction: column;
@@ -162,7 +160,7 @@
         text-align: center;
         margin-bottom: 20px;
     }
-    
+
     .waste-section {
         padding: 0;
     }
@@ -180,6 +178,7 @@
         gap: 20px;
         width: 100%;
         padding: 0 15px;
+        height: 700px;
     }
 
     .waste-card {

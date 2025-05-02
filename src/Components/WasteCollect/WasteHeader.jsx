@@ -4,20 +4,16 @@ import "../../assets/wall.png"
 
 const WasteHeader = () => {
   return (
-    <div className="latest-projects-container">
-      <div className="overlay"></div>
-      <div className="left-section">
-        <h1 className="title">Aluminum Scraps 
+    <div className="latest-projects-container1">
+      <div className="overlay1"></div>
+      <div className="left-section1">
+        <h1 className="title1">Aluminum Scraps 
         <p> Metal Recycler</p>
         </h1>
-        <p className="subtitle">Innovative Metal Recycling Solutions</p>
-        <div className="buttons">
-          <button className="btn">Explore More</button>
-          <button className="btn">Get a Quote</button>
-        </div>
+        <p className="subtitle1">Innovative Metal Recycling Solutions</p>
       </div>
-      <div className="right-section">
-        <div className="image-container">
+      <div className="right-section1">
+        <div className="image-container1">
           <div className="Bimage image-2"></div>
         </div>
       </div>

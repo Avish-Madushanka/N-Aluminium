@@ -45,7 +45,17 @@ function LocationMap() {
       hours: "M-F 7:30-8 Sat 10-7 Sun 11-6",
       additional: "New Branch",
       distance: "15 km",
-      position: { lat: 7.2950, lng: 80.6380 }, // slightly adjusted to avoid overlap
+      position: { lat: 7.295, lng: 80.638 },
+    },
+    {
+      id: 4,
+      name: "ABD Shop",
+      address: "Panadura, Sri Lanka",
+      phone: "+94 123 123 123",
+      hours: "M-F 7:30-8 Sat 10-7 Sun 11-6",
+      additional: "New Branch",
+      distance: "25 km",
+      position: { lat: 6.7132, lng: 79.9026 },
     },
   ];
 
@@ -93,7 +103,10 @@ function LocationMap() {
               <p className="store-additional">{location.additional}</p>
               <p className="store-distance">{location.distance}</p>
               <div className="store-actions">
-                <button className="view-map-button" onClick={() => setSelectedLocation(location.position)}>
+                <button
+                  className="view-map-button"
+                  onClick={() => setSelectedLocation(location.position)}
+                >
                   View On Map
                 </button>
               </div>
@@ -102,15 +115,38 @@ function LocationMap() {
         </div>
 
         <div className="map-area">
-          <LoadScript googleMapsApiKey="AIzaSyBb_eKF3rpllpvWbYlfDHI1qyGKMjLhhYI">
+          <LoadScript googleMapsApiKey="YOUR_GOOGLE_MAPS_API_KEY">
             <GoogleMap
               mapContainerStyle={mapContainerStyle}
               center={selectedLocation || sriLankaCenter}
               zoom={selectedLocation ? 12 : 7}
+              onClick={(e) =>
+                setSelectedLocation({
+                  lat: e.latLng.lat(),
+                  lng: e.latLng.lng(),
+                })
+              }
             >
               {filteredLocations.map((location) => (
-                <Marker key={location.id} position={location.position} />
+                <Marker
+                  key={location.id}
+                  position={location.position}
+                  icon={
+                    selectedLocation &&
+                    location.position.lat === selectedLocation.lat &&
+                    location.position.lng === selectedLocation.lng
+                      ? "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
+                      : "http://maps.google.com/mapfiles/ms/icons/red-dot.png"
+                  }
+                />
               ))}
+
+              {selectedLocation &&
+                !filteredLocations.some(
+                  (l) =>
+                    l.position.lat === selectedLocation.lat &&
+                    l.position.lng === selectedLocation.lng
+                ) && <Marker position={selectedLocation} />}
             </GoogleMap>
           </LoadScript>
         </div>

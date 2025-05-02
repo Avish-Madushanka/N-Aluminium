@@ -1,4 +1,4 @@
-.latest-projects-container {
+.latest-projects-container1 {
   position: relative;
   display: flex;
   background-image: url("https://glescrap.com/wp-content/uploads/2022/08/High-tech-scrap-metal-recycling-scaled.jpeg");
@@ -11,7 +11,7 @@
   overflow: hidden;
 }
 
-.latest-projects-container::before {
+.latest-projects-container1::before {
   content: "";
   position: absolute;
   top: 0;
@@ -22,64 +22,41 @@
   z-index: 1;
 }
 
-.left-section,
-.right-section {
+.left-section1,
+.right-section1 {
   position: relative;
   z-index: 2;
 }
 
-.left-section {
+.left-section1 {
   flex: 1;
   padding: 20px;
 }
 
-.title {
+.title1 {
   font-size: 3rem;
   font-weight: bold;
 }
 
-.subtitle {
+.subtitle1 {
   font-size: 1.5rem;
   margin-bottom: 15px;
   opacity: 0.9;
 }
 
-.buttons {
-  display: flex;
-  gap: 15px;
-}
-
-.btn {
-  width: 200px;
-  height: 50px;
-  padding: 12px 20px;
-  background-color: #2c2c2c;
-  color: white;
-  border: none;
-  cursor: pointer;
-  font-weight: bold;
-  border-radius: 6px;
-  transition: background 0.3s ease, transform 0.2s ease;
-}
-
-.btn:hover {
-  background-color: #444;
-  transform: scale(1.05);
-}
-
-.right-section {
+.right-section1 {
   flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.image-container {
+.image-container1 {
   display: flex;
   gap: 10px;
 }
 
-.Bimage {
+.Bimage1 {
   width: 400px;
   height: 370px;
   background-size: cover;
@@ -91,39 +68,35 @@
 }
 
 @media (max-width: 1024px) {
-  .latest-projects-container {
+  .latest-projects-container1 {
       flex-direction: column;
       height: auto;
       padding: 30px 20px;
       text-align: center;
   }
 
-  .left-section {
+  .left-section1 {
       padding: 10px;
   }
 
-  .title {
+  .title1 {
       font-size: 2.5rem;
   }
 
-  .subtitle {
+  .subtitle1 {
       font-size: 1.2rem;
   }
 
-  .buttons {
-      justify-content: center;
-  }
-
-  .right-section {
+  .right-section1 {
       margin-top: 20px;
   }
 
-  .image-container {
+  .image-container1 {
       flex-direction: column;
       gap: 15px;
   }
 
-  .image {
+  .image1 {
       width: 80%;
       height: auto;
       max-width: 300px;
@@ -131,39 +104,30 @@
 }
 
 @media (max-width: 768px) {
-  .title {
+  .title1 {
       font-size: 2rem;
   }
 
-  .subtitle {
+  .subtitle1 {
       font-size: 1rem;
   }
 
-  .buttons {
-      flex-direction: column;
-      gap: 10px;
-  }
-
-  .btn {
-      width: 100%;
-  }
-
-  .image {
+  .image1 {
       width: 90%;
       max-width: 250px;
   }
 }
 
 @media (max-width: 480px) {
-  .title {
+  .title1 {
       font-size: 1.8rem;
   }
 
-  .subtitle {
+  .subtitle1 {
       font-size: 1rem;
   }
 
-  .image {
+  .image1 {
       width: 100%;
       max-width: 200px;
   }
