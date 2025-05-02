@@ -46,7 +46,7 @@
     margin-top: 15px;
     padding: 10px 20px;
     font-size: 1.2em;
-    background: rgb(57, 57, 57);
+    background: #c40000;
     color: rgb(255, 255, 255);
     border: none;
     cursor: pointer;
@@ -54,6 +54,6 @@
 }
 
 .Collect-map-button:hover {
-    background: black;
+    background: #7d0000;
     color: white;
 }
