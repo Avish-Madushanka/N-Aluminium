@@ -1,132 +1,341 @@
-.clientreg-form-container {
-    background-color: #282c34;
-    min-height: 100vh;
-    color: white;
-    padding: 20px;
-    font-family: sans-serif;
+/* --- Light Theme Variables (Client Registration) --- */
+/* Reusing variables for consistency, adjust if needed */
+:root {
+    /* Core Colors */
+    --bg-color: #f8f9fa;
+    --form-bg-color: #ffffff;
+    --text-color: #212529;
+    --text-color-muted: #6c757d;
+  
+    /* Input Fields */
+    --input-bg: #ffffff;
+    --input-text: #495057;
+    --border-color: #ced4da;
+    --focus-border-color: #80bdff;
+    --focus-box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+  
+    /* Buttons */
+    --button-primary-bg: #464646; /* Blue for submit */
+    --button-primary-hover-bg: #000000;
+    --button-secondary-bg: #dddddd; /* Green for upload */
+    --button-secondary-hover-bg: #a7a7a7;
+    --button-text-color: #ffffff;
+  
+    /* Feedback Colors */
+    --error-color: #dc3545;
+    --success-color: #28a745;
+    --error-bg: #f8d7da;
+    --success-bg: #d4edda;
+    --error-border: #f5c6cb;
+    --success-border: #c3e6cb;
+  
+    /* General */
+    --border-radius: 0.25rem;
+    --box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+    --font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  }
+  
+  /* Container for the whole registration section */
+  .CReg-form-container {
+    padding: 40px 20px;
+    font-family: var(--font-family);
     display: flex;
     flex-direction: column;
     align-items: center;
-}
-
-.form-title {
+    width: 100%;
+    box-sizing: border-box;
+    min-height: 100vh; /* Ensure it takes full height */
+  }
+  
+  /* Wrapper for the form card */
+  .CReg-form-wrapper {
+      background-color: var(--form-bg-color);
+      padding: 30px 40px;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      width: 100%;
+      max-width: 650px; /* Slightly adjusted max-width */
+      margin: 30px 0;
+      box-sizing: border-box;
+  }
+  
+  /* Title */
+  .CReg-form-title {
     font-size: 2em;
-    margin-bottom: 20px;
-    color: #eee;
+    margin-bottom: 35px;
+    color: var(--text-color);
+    font-weight: bold;
     text-align: center;
-}
-
-.form-group {
-    margin-bottom: 15px;
+  }
+  
+  /* General Form Group Styling */
+  .CReg-form-group {
+    margin-bottom: 1.5rem;
     width: 100%;
-    max-width: 600px; 
-}
-
-.form-group label {
+  }
+  
+  /* Label Styling */
+  .CReg-form-group label {
     display: block;
-    margin-bottom: 5px;
-    color: #ddd;
-}
-
-.form-group input[type="text"],
-.form-group input[type="email"],
-.form-group input[type="tel"],
-.form-group input[type="password"],
-.form-group textarea,
-.form-group select {
+    margin-bottom: 0.5rem;
+    color: var(--text-color-muted);
+    font-weight: 600;
+    font-size: 0.9em;
+  }
+  
+  /* Base styles for form input elements */
+  .CReg-form-group input[type="text"],
+  .CReg-form-group input[type="email"],
+  .CReg-form-group input[type="tel"],
+  .CReg-form-group input[type="password"],
+  .CReg-form-group textarea,
+  .CReg-form-group select {
     width: 100%;
-    padding: 10px;
-    border-radius: 5px;
-    border: none;
-    background-color: #eee;
-    color: #333;
+    padding: 0.75rem 1rem;
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
+    background-color: var(--input-bg);
+    color: var(--input-text);
     font-size: 1em;
-    box-sizing: border-box; 
-}
-
-.form-group textarea {
-    resize: vertical; 
-}
-
-.form-group select {
-    appearance: none; 
-    background-image: url('data:image/svg+xml;charset=UTF-8,<svg viewBox="0 0 24 24" fill="%23333" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>'); /* Custom arrow */
+    font-family: inherit;
+    box-sizing: border-box;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    outline: none;
+  }
+  
+  /* Focus styles */
+  .CReg-form-group input[type="text"]:focus,
+  .CReg-form-group input[type="email"]:focus,
+  .CReg-form-group input[type="tel"]:focus,
+  .CReg-form-group input[type="password"]:focus,
+  .CReg-form-group textarea:focus,
+  .CReg-form-group select:focus {
+    border-color: var(--focus-border-color);
+    box-shadow: var(--focus-box-shadow);
+  }
+  
+  /* Textarea specific style */
+  .CReg-form-group textarea {
+    resize: vertical;
+    min-height: 100px; /* Adjusted min-height */
+  }
+  
+  /* Select dropdown specific style */
+  .CReg-form-group select {
+    appearance: none;
+    background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill="none" stroke="%236c757d" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2 5l6 6 6-6"/></svg>');
     background-repeat: no-repeat;
-    background-position: right 10px top 50%;
-    background-size: 16px;
-    padding-right: 30px; 
-}
-
-.form-group.horizontal {
+    background-position: right 1rem center;
+    background-size: 16px 12px;
+    padding-right: 2.5rem;
+  }
+  
+  /* Styles for disabled inputs */
+  .CReg-form-group input:disabled,
+  .CReg-form-group textarea:disabled,
+  .CReg-form-group select:disabled {
+      background-color: #e9ecef;
+      cursor: not-allowed;
+      opacity: 0.7;
+  }
+  
+  /* Horizontal Grouping */
+  .CReg-form-group.CReg-horizontal {
     display: flex;
-    justify-content: space-between;
     gap: 20px;
-}
-
-.form-group.horizontal > div {
-    width: 48%; 
-}
-
-.hidden-file-input {
-    width: 0.1px;
-    height: 0.1px;
-    opacity: 0;
-    overflow: hidden;
-    position: absolute;
-    z-index: -1;
-}
-
-.upload-button {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+    flex-wrap: wrap;
+  }
+  
+  /* Inner group styling */
+  .CReg-form-group.CReg-horizontal .CReg-input-group {
+     flex: 1;
+     min-width: 150px;
+  }
+  
+  
+  /* --- Feedback Message Styles --- */
+  .CReg-error-message,
+  .CReg-success-message {
+      padding: 0.75rem 1.25rem;
+      margin-bottom: 1rem;
+      border: 1px solid transparent;
+      border-radius: var(--border-radius);
+      text-align: center;
+      font-weight: 500;
+  }
+  
+  .CReg-error-message {
+      color: var(--error-color);
+      background-color: var(--error-bg);
+      border-color: var(--error-border);
+  }
+  
+  .CReg-success-message {
+      color: var(--success-color);
+      background-color: var(--success-bg);
+      border-color: var(--success-border);
+  }
+  
+  
+  /* --- File Input & Button Styles --- */
+  .CReg-file-input-group label:not(.CReg-upload-button) {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--text-color-muted);
+    font-weight: 600;
+    font-size: 0.9em;
+  }
+  
+  /* Style for the custom upload button (acting as label) */
+  .CReg-upload-button {
+    background-color: var(--button-secondary-bg); /* Using secondary color (green) */
+    color: var(--button-text-color);
+    border: 1px solid var(--button-secondary-bg);
     display: inline-block;
-    margin-top: 5px;
-}
-
-.submit-button {
-    background-color: #333;
-    color: white;
-    padding: 12px 25px;
-    border: none;
-    border-radius: 25px;
+    font-weight: 400;
+    line-height: 1.5;
+    text-align: center;
+    vertical-align: middle;
     cursor: pointer;
+    user-select: none;
+    padding: 0.6rem 1.2rem;
+    font-size: 1rem;
+    border-radius: var(--border-radius);
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    margin-top: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+  }
+  
+  .CReg-upload-button:hover {
+      background-color: var(--button-secondary-hover-bg);
+      border-color: var(--button-secondary-hover-bg);
+  }
+  
+  /* Style for disabled upload button */
+  .CReg-upload-button.CReg-disabled {
+      background-color: #5cb85c; /* Keep base color but lighter */
+      border-color: #5cb85c;
+      opacity: 0.65;
+      cursor: not-allowed;
+  }
+  
+  /* --- Image Preview Styles --- */
+  .CReg-image-preview-container {
+      margin-top: 15px;
+      max-width: 150px; /* Smaller preview */
+      display: inline-block; /* Allow button and preview side-by-side if space */
+      vertical-align: middle; /* Align vertically with button */
+      margin-left: 10px; /* Space between button and preview */
+  }
+  
+  .CReg-image-preview {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    max-height: 150px;
+    border-radius: var(--border-radius);
+    object-fit: cover;
+    border: 1px solid var(--border-color);
+    /* Make profile preview circular */
+    border-radius: 50%;
+    width: 100px; /* Fixed size for circle */
+    height: 100px;
+    max-height: 100px;
+  }
+  
+  
+  /* --- Submit Button Style --- */
+  .CReg-submit-button {
+    background-color: var(--button-primary-bg); /* Using primary color (blue) */
+    color: var(--button-text-color);
+    border: 1px solid var(--button-primary-bg);
+    padding: 0.75rem 1.5rem;
+    border-radius: 50px; /* Pill shape */
     font-size: 1.1em;
-    transition: background-color 0.3s ease;
-    margin-top: 20px;
-}
-
-.submit-button:hover {
-    background-color: #555;
-}
-
-
-@media (max-width: 600px) {
-    .clientreg-form-container {
-        padding: 10px;
+    font-weight: 500;
+    transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.15s ease;
+    display: block;
+    width: 100%;
+    max-width: 250px; /* Adjusted max width */
+    margin: 40px auto 0; /* Increased top margin, centered */
+    cursor: pointer;
+    text-align: center;
+  }
+  
+  .CReg-submit-button:hover:not(:disabled) {
+    background-color: var(--button-primary-hover-bg);
+    border-color: var(--button-primary-hover-bg);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* Style for disabled submit button */
+  .CReg-submit-button:disabled {
+      background-color: var(--button-primary-bg);
+      border-color: var(--button-primary-bg);
+      opacity: 0.65;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+  }
+  
+  /* --- Media Queries --- */
+  @media (max-width: 768px) {
+      .CReg-form-wrapper {
+          max-width: 90%;
+          padding: 25px 30px;
+          margin: 20px 0;
+      }
+  }
+  
+  @media (max-width: 600px) {
+    .CReg-form-container {
+        padding: 20px 10px;
     }
-
-    .form-title {
-        font-size: 1.8em;
+  
+    .CReg-form-wrapper {
+          max-width: 100%;
+          padding: 20px;
+          box-shadow: none;
+          border: 1px solid var(--border-color);
+          margin: 15px 0;
     }
-
-    .form-group {
-        max-width: 100%; 
+  
+    .CReg-form-title {
+        font-size: 1.6em;
+        margin-bottom: 25px;
     }
-
-    .form-group.horizontal {
-        flex-direction: column;
-        gap: 10px;
+  
+    .CReg-form-group.CReg-horizontal {
+      flex-direction: column;
+      gap: 1rem;
     }
-
-    .form-group.horizontal > div {
+  
+    .CReg-form-group.CReg-horizontal .CReg-input-group {
+      width: 100%;
+      min-width: 0;
+    }
+  
+    .CReg-submit-button {
+        max-width: 100%;
+    }
+  
+    /* Stack image preview below button on small screens */
+    .CReg-image-preview-container {
+        display: block;
+        margin-left: 0;
+        margin-top: 10px;
+        text-align: center; /* Center preview */
+        max-width: 100px; /* Match circle size */
+        margin-left: auto; /* Center block */
+        margin-right: auto;
+    }
+    .CReg-upload-button {
+        display: block; /* Make button full width */
         width: 100%;
+        text-align: center;
     }
-
-    .upload-button {
-        width: 100%; 
-    }
-}
+  }
