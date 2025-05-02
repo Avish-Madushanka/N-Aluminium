@@ -1,6 +1,6 @@
 .store-locator-container {
     width: 100%;
-    padding: 50px;
+    padding: 40px;
     box-sizing: border-box;
 }
 
@@ -17,7 +17,7 @@
     justify-content: center;
     gap: 10px;
     margin-bottom: 20px;
-    width: 32%;
+    width: 34%;
     flex-wrap: wrap;
     box-sizing: border-box;
 }
@@ -62,7 +62,7 @@
 }
 
 .store-item {
-    background: white;
+    background: #e7e7e7;
     padding: 15px;
     margin-bottom: 10px;
     border-radius: 5px;
