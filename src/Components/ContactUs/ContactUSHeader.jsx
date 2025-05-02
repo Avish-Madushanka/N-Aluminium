@@ -222,29 +222,10 @@ const ContactUSHeader = () => {
               </div>
             )}
           </div>
-          
-          {/* Contact Info */}
+
           <div className="contact-info">
-            {/* Interactive Map */}
             <div className="map-container">
-              <h3>Find Us Here</h3>
-              <div className="map-wrapper">
-                <canvas 
-                  ref={mapRef} 
-                  width="400" 
-                  height="250" 
-                  className="map-canvas"
-                ></canvas>
-                <div className="map-overlay">
-                  <div className="map-address">
-                    <p className="address-primary">123 Creative Avenue</p>
-                    <p className="address-secondary">Designville, DV 12345</p>
-                  </div>
-                </div>
-              </div>
             </div>
-            
-            {/* Contact Details Cards */}
             <div className="info-cards">
               <div className="info-card">
                 <div className="card-icon email-icon">
@@ -285,16 +266,6 @@ const ContactUSHeader = () => {
           </div>
         </div>
       </main>
-      
-      <footer className="footer">
-        <p>&copy; {new Date().getFullYear()} Creative Company. All rights reserved.</p>
-        <div className="social-links">
-          <a href="#" className="social-link">Twitter</a>
-          <a href="#" className="social-link">LinkedIn</a>
-          <a href="#" className="social-link">Instagram</a>
-          <a href="#" className="social-link">Facebook</a>
-        </div>
-      </footer>
     </div>
   );
 };
