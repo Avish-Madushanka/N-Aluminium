@@ -25,41 +25,41 @@
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
-.user-calendar-wrapper {
+.UCal-user-calendar-wrapper {
   font-family: var(--font-sans);
   padding: 20px;
   min-height: 100vh;
   position: relative;
-  background-image: url('https://anchordisposal.com/wp-content/uploads/Anchor-Disposal-Residential-Trash-Pick-up-1920x1080.webp'); 
+  background-image: url('https://anchordisposal.com/wp-content/uploads/Anchor-Disposal-Residential-Trash-Pick-up-1920x1080.webp');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  background-attachment: fixed; 
+  background-attachment: fixed;
 }
 
-.user-calendar-wrapper::before {
+.UCal-user-calendar-wrapper::before {
     content: '';
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(255, 255, 255, 0.2); 
+    background-color: rgba(255, 255, 255, 0.2);
     z-index: 0;
 }
 
-.user-calendar-container {
+.UCal-user-calendar-container {
   max-width: 900px;
   margin: 20px auto;
   background-color: var(--bg-primary);
   border-radius: var(--border-radius);
   box-shadow: var(--shadow-md);
   overflow: hidden;
-  position: relative; 
+  position: relative;
   z-index: 1;
 }
 
-.user-header {
+.UCal-user-header {
   display: flex;
   align-items: center;
   padding: 20px 24px;
@@ -69,24 +69,24 @@
   font-weight: bolder;
 }
 
-.user-header h1 {
+.UCal-user-header h1 {
   font-size: 2.30rem;
   font-weight: bold;
   color: #ffffff;
   margin: 0;
 }
 
-.booking-progress {
+.UCal-booking-progress {
   padding: 20px 24px;
   background-color: #2f2f2f;
   border-bottom: 1px solid var(--border-color);
 }
 
-.progress-bar {
+.UCal-progress-bar {
   width: 100%;
 }
 
-.progress-steps {
+.UCal-progress-steps {
   display: flex;
   justify-content: space-between;
   margin-bottom: 20px;
@@ -94,7 +94,7 @@
   padding: 0 5%;
 }
 
-.progress-step {
+.UCal-progress-step {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -104,7 +104,7 @@
   z-index: 1;
 }
 
-.step-circle {
+.UCal-step-circle {
   width: 28px;
   height: 28px;
   border-radius: 50%;
@@ -119,7 +119,7 @@
   transition: all 0.3s ease;
 }
 
-.step-label {
+.UCal-step-label {
   font-size: 0.75rem;
   color: #b1b1b1;
   font-weight: 500;
@@ -127,27 +127,27 @@
   text-shadow: 0 1px 1px rgba(0,0,0,0.5); /* Make labels slightly more readable over potential background */
 }
 
-.progress-step.active .step-circle {
+.UCal-progress-step.UCal-active .UCal-step-circle {
   background-color: var(--primary-color);
   border-color: var(--primary-color);
 }
-.progress-step.active .step-label {
+.UCal-progress-step.UCal-active .UCal-step-label {
   color: var(--primary-dark);
    text-shadow: none;
 }
 
-.progress-step.completed .step-circle {
+.UCal-progress-step.UCal-completed .UCal-step-circle {
   background-color: #ff2800;
   border-color: #ff2800;
   color: var(--bg-primary);
 }
-.progress-step.completed .step-label {
+.UCal-progress-step.UCal-completed .UCal-step-label {
   color: #ff2800;
   font-weight: 600;
    text-shadow: none;
 }
 
-.progress-track {
+.UCal-progress-track {
   height: 4px;
   background-color: var(--border-color);
   border-radius: 2px;
@@ -155,7 +155,7 @@
   margin: -16px 5% 0 5%;
 }
 
-.progress-fill {
+.UCal-progress-fill {
   height: 100%;
   background-color: #ff2800;
   border-radius: 2px;
@@ -165,23 +165,23 @@
   top: 0;
 }
 
-.booking-content {
+.UCal-booking-content {
   padding: 24px;
 }
 
-.calendar-container {
+.UCal-calendar-container {
   max-width: 600px;
   margin: 0 auto;
 }
 
-.calendar-header {
+.UCal-calendar-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
 }
 
-.current-month {
+.UCal-current-month {
   font-size: 1.3rem;
   font-weight: 600;
   color: var(--text-primary);
@@ -189,7 +189,7 @@
   flex-grow: 1;
 }
 
-.nav-button {
+.UCal-nav-button {
   background: none;
   border: 1px solid var(--border-color);
   border-radius: 50%;
@@ -202,20 +202,20 @@
   transition: all 0.2s ease;
 }
 
-.nav-button:hover {
+.UCal-nav-button:hover {
   background-color: var(--bg-tertiary);
   border-color: var(--border-color-dark);
   color: var(--text-primary);
 }
 
-.weekday-header {
+.UCal-weekday-header {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: 6px;
   margin-bottom: 10px;
 }
 
-.weekday {
+.UCal-weekday {
   text-align: center;
   font-weight: 500;
   color: var(--text-light);
@@ -223,13 +223,13 @@
   padding-bottom: 8px;
 }
 
-.calendar-grid {
+.UCal-calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: 6px;
 }
 
-.calendar-day {
+.UCal-calendar-day {
   aspect-ratio: 1 / 1;
   border-radius: var(--border-radius);
   border: 1px solid transparent;
@@ -246,56 +246,56 @@
   padding: 0;
 }
 
-.calendar-day:focus {
+.UCal-calendar-day:focus {
   outline: 2px solid var(--primary-color);
   outline-offset: 1px;
 }
 
-.calendar-day.empty {
+.UCal-calendar-day.UCal-empty {
   background-color: transparent;
   cursor: default;
   border: none;
 }
 
-.day-number {
+.UCal-day-number {
   color: #000;
   font-weight: 500;
 }
 
-.calendar-day.past,
-.calendar-day.unavailable:not(.special-available) {
+.UCal-calendar-day.UCal-past,
+.UCal-calendar-day.UCal-unavailable:not(.UCal-special-available) {
   background-color: #e99696;
   color: var(--disabled-text);
   border-color: rgb(0, 0, 15);
   cursor: not-allowed;
 }
-.calendar-day.past:hover,
-.calendar-day.unavailable:hover {
+.UCal-calendar-day.UCal-past:hover,
+.UCal-calendar-day.UCal-unavailable:hover {
   border-color: var(--border-color);
 }
 
-.calendar-day.available {
+.UCal-calendar-day.UCal-available {
   background-color: #8affc3;
   cursor: pointer;
   border: 1px solid var(--border-color-dark);
 }
-.calendar-day.available:hover:not(:disabled) {
+.UCal-calendar-day.UCal-available:hover:not(:disabled) {
   background-color: #78dda9;
   border-color: var(--primary-color);
   color: var(--primary-dark);
 }
 
-.calendar-day.selected {
+.UCal-calendar-day.UCal-selected {
   background-color: #8f8f8f;
   color: white;
   border-color: var(--primary-dark);
   font-weight: 600;
 }
-.calendar-day.selected:hover {
+.UCal-calendar-day.UCal-selected:hover {
    background-color: var(--primary-dark);
 }
 
-.special-indicator {
+.UCal-special-indicator {
   position: absolute;
   top: 4px;
   right: 4px;
@@ -304,13 +304,19 @@
   font-weight: bold;
 }
 
-.calendar-day.special-unavailable {
+.UCal-calendar-day.UCal-special-unavailable {
   background-color: var(--warning-light);
   border-color: var(--warning-color);
   color: var(--warning-color);
 }
+.UCal-calendar-day.UCal-special-available { /* Added for consistency if needed */
+  /* Define styles if special available needs to look different */
+  /* Example: Maybe a different border? */
+  /* border: 2px dashed var(--success-color); */
+}
 
-.calendar-legend {
+
+.UCal-calendar-legend {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -318,12 +324,12 @@
   margin-top: 15px;
   font-size: 0.8rem;
 }
-.legend-item {
+.UCal-legend-item {
   display: flex;
   align-items: center;
   gap: 6px;
 }
-.legend-item::before {
+.UCal-legend-item::before {
   content: '';
   display: inline-block;
   width: 12px;
@@ -331,13 +337,13 @@
   border-radius: 3px;
   border: 1px solid var(--border-color);
 }
-.legend-item.available::before { background-color: #8affc3; }
-.legend-item.selected::before { background-color: #8f8f8f; border-color: var(--primary-dark);}
-.legend-item.unavailable::before { background-color: #e99696; }
-.legend-item.past::before { background-color: var(--bg-tertiary); text-decoration: line-through;}
+.UCal-legend-item.UCal-available::before { background-color: #8affc3; }
+.UCal-legend-item.UCal-selected::before { background-color: #8f8f8f; border-color: var(--primary-dark);}
+.UCal-legend-item.UCal-unavailable::before { background-color: #e99696; }
+.UCal-legend-item.UCal-past::before { background-color: var(--bg-tertiary); /*text-decoration: line-through;*/ border-color: #bdbdbd; } /* Slightly different look for past */
 
 
-.calendar-instructions {
+.UCal-calendar-instructions {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -350,30 +356,30 @@
   border: 1px solid var(--border-color);
 }
 
-.step-container {
+.UCal-step-container {
   padding: 10px 0;
 }
 
-.booking-step-header {
+.UCal-booking-step-header {
   margin-bottom: 24px;
   padding-bottom: 16px;
   border-bottom: 1px solid var(--border-color);
 }
 
-.booking-step-header h2 {
+.UCal-booking-step-header h2 {
   font-size: 1.5rem;
   font-weight: 600;
   margin: 0 0 12px 0;
   color: var(--text-primary);
 }
 
-.booking-step-header p:not(.summary-item) {
+.UCal-booking-step-header p:not(.UCal-summary-item) {
   font-size: 0.9rem;
   color: var(--text-secondary);
   margin-top: 4px;
 }
 
-.summary-item {
+.UCal-summary-item {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -381,23 +387,23 @@
     font-size: 0.875rem;
     margin: 4px 0;
 }
-.summary-item strong {
+.UCal-summary-item strong {
     font-weight: 500;
     color: var(--text-primary);
 }
-.summary-item svg {
+.UCal-summary-item svg {
     color: var(--primary-color);
     flex-shrink: 0;
 }
 
-.options-grid {
+.UCal-options-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 16px;
   margin-bottom: 30px;
 }
 
-.option-card {
+.UCal-option-card {
   padding: 20px 16px;
   border-radius: var(--border-radius);
   border: 1px solid var(--border-color);
@@ -412,62 +418,70 @@
   box-shadow: var(--shadow-sm);
 }
 
-.option-card:hover {
+.UCal-option-card:hover {
   border-color: var(--primary-color);
   box-shadow: var(--shadow-md);
   transform: translateY(-2px);
 }
 
-.option-card.selected {
-  border-color: var(--primary-dark);
-  background-color:#001c43;
+.UCal-option-card.UCal-selected {
+  border-color: #989898;
+  background-color:#0f2133;
   box-shadow: 0 0 0 2px var(--primary-color);
+  color: var(--primary-dark); /* Set text color for selected card */
 }
-.option-card.selected:hover {
+.UCal-option-card.UCal-selected:hover {
     transform: none;
 }
 
 
-.option-card svg {
+.UCal-option-card svg {
     color: var(--primary-color);
 }
-.option-card.selected svg {
-    color: var(--primary-dark);
+.UCal-option-card.UCal-selected svg {
+    color: #ffffff;
 }
 
-.option-card h3 {
+.UCal-option-card h3 {
   font-size: 1.1rem;
   font-weight: 600;
   margin: 0;
   color: var(--text-primary);
 }
-.option-card.selected h3 {
-  color: var(--primary-dark);
+.UCal-option-card.UCal-selected h3 {
+  color: #ffffff; /* Ensure heading text is visible */
 }
 
-.option-card p {
+.UCal-option-card p {
   font-size: 0.875rem;
   color: var(--text-secondary);
   margin: 0;
 }
-.option-card.selected p {
-  color: var(--primary-dark);
+.UCal-option-card.UCal-selected p {
+  color: var(--primary-light); /* Ensure paragraph text is visible */
 }
 
-.material-icon {
+.UCal-material-icon {
   font-size: 1.8rem;
   margin-bottom: 4px;
 }
-.material-rate {
+.UCal-material-rate {
   font-weight: 600;
   color: var(--primary-color);
 }
-.material-desc {
+.UCal-option-card.UCal-selected .UCal-material-rate {
+    color: var(--accent-color); /* Example: Make rate stand out on selected card */
+}
+
+.UCal-material-desc {
   font-size: 0.8rem;
   color: var(--text-light);
 }
+.UCal-option-card.UCal-selected .UCal-material-desc {
+    color: var(--primary-light);
+}
 
-.step-navigation {
+.UCal-step-navigation {
   display: flex;
   justify-content: space-between;
   margin-top: 24px;
@@ -475,7 +489,7 @@
   border-top: 1px solid var(--border-color);
 }
 
-.back-button, .next-button, .confirm-button, .new-booking-button {
+.UCal-back-button, .UCal-next-button, .UCal-confirm-button, .UCal-new-booking-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -489,52 +503,58 @@
   border: 1px solid transparent;
 }
 
-.back-button {
+.UCal-back-button {
   background-color: var(--bg-primary);
   color: var(--text-secondary);
   border-color: var(--border-color-dark);
 }
-.back-button:hover {
+.UCal-back-button:hover {
   background-color: var(--bg-tertiary);
   border-color: var(--text-secondary);
   color: var(--text-primary);
 }
 
-.next-button {
+.UCal-next-button {
   background-color: var(--primary-color);
   color: white;
 }
-.next-button:hover:not(:disabled) {
+.UCal-next-button:hover:not(:disabled) {
   background-color: #001c43;
 }
-.next-button:disabled {
+.UCal-next-button:disabled {
   background-color: var(--disabled-bg);
   color: var(--disabled-text);
   cursor: not-allowed;
 }
 
-.confirm-button {
+.UCal-confirm-button {
   background-color: #000;
   color: white;
 }
-.confirm-button:hover {
+.UCal-confirm-button:hover:not(:disabled) {
   background-color: #001c43;
 }
+.UCal-confirm-button:disabled {
+  background-color: var(--disabled-bg);
+  color: var(--disabled-text);
+  cursor: not-allowed;
+}
 
-.new-booking-button {
+
+.UCal-new-booking-button {
     background-color: var(--primary-color);
     color: white;
     margin: 20px auto 0 auto;
 }
-.new-booking-button:hover {
+.UCal-new-booking-button:hover {
     background-color: #001c43;
 }
 
-.details-collection {
+.UCal-details-collection {
   padding: 10px 0;
 }
 
-.pickup-details-form {
+.UCal-pickup-details-form {
   display: grid;
   grid-template-columns: 1fr;
   gap: 24px;
@@ -542,19 +562,19 @@
 }
 
 @media (min-width: 768px) {
-  .pickup-details-form {
+  .UCal-pickup-details-form {
     grid-template-columns: 1fr 1fr;
   }
 }
 
-.form-section {
+.UCal-form-section {
   padding: 20px;
   background-color: rgba(213, 213, 213, 0.9); /* Slightly transparent gray */
   border-radius: var(--border-radius);
   border: 1px solid var(--border-color);
 }
 
-.form-section h3 {
+.UCal-form-section h3 {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -565,18 +585,18 @@
   padding-bottom: 10px;
   border-bottom: 1px solid var(--border-color);
 }
-.form-section h3 svg {
+.UCal-form-section h3 svg {
     color: var(--primary-color);
 }
 
-.form-field {
+.UCal-form-field {
   margin-bottom: 16px;
 }
-.form-field:last-child {
+.UCal-form-field:last-child {
   margin-bottom: 0;
 }
 
-.form-field label {
+.UCal-form-field label {
   display: block;
   font-size: 0.875rem;
   font-weight: 500;
@@ -584,10 +604,10 @@
   margin-bottom: 6px;
 }
 
-.form-field input[type="text"],
-.form-field input[type="number"],
-.form-field input[type="tel"],
-.form-field input[type="email"] {
+.UCal-form-field input[type="text"],
+.UCal-form-field input[type="number"],
+.UCal-form-field input[type="tel"],
+.UCal-form-field input[type="email"] {
   width: 100%;
   padding: 10px 12px;
   border: 1px solid var(--border-color-dark);
@@ -599,35 +619,47 @@
   box-sizing: border-box;
 }
 
-.form-field input:focus {
+.UCal-form-field input:focus {
   outline: none;
   border-color: var(--primary-color);
   box-shadow: 0 0 0 3px var(--primary-light);
 }
 
-.form-field input::placeholder {
+.UCal-form-field input::placeholder {
   color: var(--text-light);
   font-size: 0.875rem;
 }
 
-.booking-review, .booking-confirmation {
+.UCal-error-text { /* Class for specific field errors */
+    color: var(--error-color);
+    font-size: 0.8rem;
+    margin-top: 4px;
+}
+
+.UCal-booking-review, .UCal-booking-confirmation {
   padding: 10px 0;
 }
 
-.review-details {
+.UCal-review-details {
   display: grid;
   gap: 20px;
   margin-bottom: 30px;
+  grid-template-columns: 1fr; /* Default to single column */
 }
 
-.review-section {
+@media (min-width: 600px) { /* Stack sections side-by-side on larger screens */
+    
+}
+
+
+.UCal-review-section {
   padding: 20px;
    background-color: rgba(213, 213, 213, 0.9); /* Slightly transparent gray */
   border-radius: var(--border-radius);
   border: 1px solid var(--border-color);
 }
 
-.review-section h3 {
+.UCal-review-section h3 {
   font-size: 1.1rem;
   font-weight: 600;
   margin: 0 0 16px 0;
@@ -638,35 +670,35 @@
   align-items: center;
   gap: 8px;
 }
-.review-section h3 svg {
+.UCal-review-section h3 svg {
     color: var(--primary-color);
 }
 
-.review-section p {
+.UCal-review-section p.UCal-summary-item { /* Apply summary item styles here too */
   margin: 8px 0;
 }
 
-.booking-confirmation {
+.UCal-booking-confirmation {
   text-align: center;
 }
 
-.confirmation-header {
+.UCal-confirmation-header {
   margin-bottom: 30px;
 }
 
-.confirmation-icon {
+.UCal-confirmation-icon {
   color: var(--success-color);
   margin-bottom: 16px;
 }
 
-.confirmation-header h2 {
+.UCal-confirmation-header h2 {
   font-size: 1.75rem;
   font-weight: 600;
   margin: 0 0 15px 0;
   color: var(--text-primary);
 }
 
-.booking-id {
+.UCal-booking-id {
   font-size: 1.1rem;
   color: var(--text-secondary);
   margin: 0;
@@ -676,24 +708,24 @@
   display: inline-block;
   border: 1px solid var(--border-color);
 }
-.booking-id strong {
+.UCal-booking-id strong {
   color: #000000;
   font-weight: 600;
 }
 
-.confirmation-details {
+.UCal-confirmation-details {
   margin-bottom: 30px;
   text-align: left;
 }
 
-.confirmation-section {
+.UCal-confirmation-section {
   padding: 20px;
-  background-color: rgba(213, 213, 213, 0.9); 
+  background-color: rgba(213, 213, 213, 0.9);
   border-radius: var(--border-radius);
   border: 1px solid var(--border-color);
 }
 
-.confirmation-instructions {
+.UCal-confirmation-instructions {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -706,32 +738,89 @@
   border: 1px solid #15fa38;
   text-align: left;
 }
-.confirmation-instructions svg {
+.UCal-confirmation-instructions svg {
   color: #000;
   flex-shrink: 0;
 }
 
+/* --- Loading and Error States --- */
+.UCal-loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.85);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Ensure it's on top */
+  gap: 10px;
+  color: #555;
+}
+
+.UCal-animate-spin {
+  animation: UCal-spin 1s linear infinite; /* Prefixed animation name */
+}
+
+@keyframes UCal-spin { /* Prefixed keyframe name */
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.UCal-error-message-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 18px;
+  background-color: var(--error-light);
+  border: 1px solid var(--error-color);
+  border-radius: 6px;
+  color: var(--error-color);
+  margin: 15px 0; /* Spacing for errors */
+  font-size: 0.9rem;
+}
+.UCal-error-message-container.UCal-global-error {
+  margin: 0 24px 20px 24px; /* Position below header/progress */
+}
+.UCal-error-message-container svg {
+    flex-shrink: 0;
+}
+
+.UCal-info-message {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    padding: 12px;
+    background-color: var(--bg-tertiary);
+    border: 1px dashed var(--border-color);
+    border-radius: var(--border-radius);
+    text-align: center;
+}
+
+
+/* --- Responsive Design --- */
 @media (max-width: 768px) {
-  .user-header h1 {
+  .UCal-user-header h1 {
     font-size: 1.3rem;
   }
-  .progress-steps {
+  .UCal-progress-steps {
       padding: 0 2%;
   }
-  .progress-track {
+  .UCal-progress-track {
       margin-left: 2%;
       margin-right: 2%;
   }
-  .step-label {
+  .UCal-step-label {
       font-size: 0.65rem;
   }
-  .options-grid {
+  .UCal-options-grid {
       grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
   }
-  .review-details {
+  .UCal-review-details {
      grid-template-columns: 1fr;
   }
-  .step-navigation {
+  .UCal-step-navigation {
       flex-direction: column-reverse;
       gap: 10px;
       align-items: stretch;
@@ -739,40 +828,43 @@
 }
 
 @media (max-width: 480px) {
-   .user-calendar-wrapper {
+   .UCal-user-calendar-wrapper {
        padding: 10px;
    }
-   .user-calendar-container {
+   .UCal-user-calendar-container {
        margin: 10px auto;
    }
-   .user-header {
+   .UCal-user-header {
        padding: 15px;
        flex-direction: column;
        gap: 10px;
        text-align: center;
    }
-   .booking-progress, .booking-content {
+   .UCal-booking-progress, .UCal-booking-content {
        padding: 15px;
    }
-   .calendar-grid {
+   .UCal-calendar-grid {
        gap: 4px;
    }
-   .calendar-day {
+   .UCal-calendar-day {
        font-size: 0.8rem;
        border-radius: 6px;
    }
-   .weekday {
+   .UCal-weekday {
        font-size: 0.7rem;
    }
-   .options-grid {
+   .UCal-options-grid {
       grid-template-columns: 1fr 1fr;
       gap: 10px;
   }
-  .option-card {
+  .UCal-option-card {
       padding: 12px 10px;
       gap: 6px;
   }
-  .option-card h3 {
+  .UCal-option-card h3 {
       font-size: 0.9rem;
   }
+   .UCal-step-navigation button { /* Make buttons full width on smallest screens */
+       width: 100%;
+   }
 }
