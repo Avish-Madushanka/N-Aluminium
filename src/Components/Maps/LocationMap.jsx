@@ -45,19 +45,25 @@ function LocationMap() {
       hours: "M-F 7:30-8 Sat 10-7 Sun 11-6",
       additional: "New Branch",
       distance: "15 km",
-      position: { lat: 7.2906, lng: 80.6337 },
+      position: { lat: 7.2950, lng: 80.6380 }, // slightly adjusted to avoid overlap
     },
   ];
-
-  const handleSearch = (event) => {
-    setSearchTerm(event.target.value);
-  };
 
   const filteredLocations = locations.filter(
     (location) =>
       location.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       location.address.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const handleSearchClick = () => {
+    if (filteredLocations.length > 0) {
+      setSelectedLocation(filteredLocations[0].position);
+    }
+  };
 
   return (
     <div className="store-locator-container">
@@ -69,9 +75,11 @@ function LocationMap() {
           placeholder="Search the location"
           className="search-input"
           value={searchTerm}
-          onChange={handleSearch}
+          onChange={handleSearchChange}
         />
-        <button className="search-button">Search</button>
+        <button className="search-button" onClick={handleSearchClick}>
+          Search
+        </button>
       </div>
 
       <div className="content-area">
@@ -94,7 +102,7 @@ function LocationMap() {
         </div>
 
         <div className="map-area">
-          <LoadScript googleMapsApiKey="YOUR_GOOGLE_MAPS_API_KEY">
+          <LoadScript googleMapsApiKey="AIzaSyBb_eKF3rpllpvWbYlfDHI1qyGKMjLhhYI">
             <GoogleMap
               mapContainerStyle={mapContainerStyle}
               center={selectedLocation || sriLankaCenter}
