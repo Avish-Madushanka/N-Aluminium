@@ -77,7 +77,7 @@ function LocationMap() {
 
   return (
     <div className="store-locator-container">
-      <h2 className="locator-title">Store Locator - Find Bulletproof products near you.</h2>
+      <h2 className="locator-title">Store Locator - Find near you.</h2>
 
       <div className="search-container">
         <input
@@ -115,7 +115,7 @@ function LocationMap() {
         </div>
 
         <div className="map-area">
-          <LoadScript googleMapsApiKey="YOUR_GOOGLE_MAPS_API_KEY">
+          <LoadScript googleMapsApiKey="AIzaSyBb_eKF3rpllpvWbYlfDHI1qyGKMjLhhYI">
             <GoogleMap
               mapContainerStyle={mapContainerStyle}
               center={selectedLocation || sriLankaCenter}
