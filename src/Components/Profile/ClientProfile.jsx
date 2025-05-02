@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FileImage, Mail, Truck, ShoppingCart, LogOut } from "lucide-react";
-import { useNavigate } from "react-router-dom"; // ✅ Import useNavigate
+import { useNavigate } from "react-router-dom";
 import "./ClientProfile.css";
 
 export default function ClientProfile() {
@@ -18,7 +18,7 @@ export default function ClientProfile() {
   const [saving, setSaving] = useState(false);
   const [activeButton, setActiveButton] = useState(null);
 
-  const navigate = useNavigate(); // ✅ Initialize useNavigate
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -176,7 +176,14 @@ export default function ClientProfile() {
 
             <div className="Client-Pro-form-group">
               <label className="Client-Pro-label">Profile Photo</label>
-              <div className="Client-Pro-input-wrapper">
+              <div className="Client-Pro-photo-preview-wrapper">
+                {profilePhoto && (
+                  <img
+                    src={URL.createObjectURL(profilePhoto)}
+                    alt="Preview"
+                    className="Client-Pro-photo-preview"
+                  />
+                )}
                 <input
                   type="file"
                   id="profile-photo"
@@ -190,11 +197,7 @@ export default function ClientProfile() {
               </div>
             </div>
 
-            <button 
-              type="submit" 
-              className="Client-Pro-save-btn" 
-              disabled={saving}
-            >
+            <button type="submit" className="Client-Pro-save-btn" disabled={saving}>
               {saving ? "Saving..." : "Save Changes"}
             </button>
           </form>
@@ -202,40 +205,40 @@ export default function ClientProfile() {
 
         <div className="Client-Pro-column Client-Pro-column-right">
           <h3 className="Client-Pro-column-title">Actions</h3>
-          
-          <button 
-            className={`Client-Pro-action-btn email ${activeButton === 'email' ? 'active' : ''}`}
-            onClick={() => handleButtonClick('email')}
+
+          <button
+            className={`Client-Pro-action-btn email ${activeButton === "email" ? "active" : ""}`}
+            onClick={() => handleButtonClick("email")}
           >
             <span className="Client-Pro-btn-icon email">
               <Mail size={18} />
             </span>
             Check Emails
           </button>
-          
-          <button 
-            className={`Client-Pro-action-btn pickup ${activeButton === 'pickup' ? 'active' : ''}`}
-            onClick={() => handleButtonClick('pickup')}
+
+          <button
+            className={`Client-Pro-action-btn pickup ${activeButton === "pickup" ? "active" : ""}`}
+            onClick={() => handleButtonClick("pickup")}
           >
             <span className="Client-Pro-btn-icon pickup">
               <Truck size={18} />
             </span>
             My Pickup Request
           </button>
-          
-          <button 
-            className={`Client-Pro-action-btn buy-sell ${activeButton === 'buy' ? 'active' : ''}`}
-            onClick={() => handleButtonClick('buy')}
+
+          <button
+            className={`Client-Pro-action-btn buy-sell ${activeButton === "buy" ? "active" : ""}`}
+            onClick={() => handleButtonClick("buy")}
           >
             <span className="Client-Pro-btn-icon buy-sell">
               <ShoppingCart size={18} />
             </span>
             Check Buy & Sell
           </button>
-          
-          <button 
-            className={`Client-Pro-action-btn logout ${activeButton === 'logout' ? 'active' : ''}`}
-            onClick={() => handleButtonClick('logout')}
+
+          <button
+            className={`Client-Pro-action-btn logout ${activeButton === "logout" ? "active" : ""}`}
+            onClick={() => handleButtonClick("logout")}
           >
             <span className="Client-Pro-btn-icon logout">
               <LogOut size={18} />

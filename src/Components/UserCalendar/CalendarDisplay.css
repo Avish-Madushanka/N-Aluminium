@@ -1,426 +1,625 @@
-/* Main Layout */
-.user-dashboard {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  }
-  
-  .dashboard-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 24px;
-    padding: 20px;
-  }
-  
-  .column-header {
-    border-bottom: 1px solid #e0e0e0;
-    padding-bottom: 10px;
-    margin-bottom: 15px;
-  }
-  
-  .column-header h2 {
-    margin: 0;
-    font-size: 1.5rem;
-    color: #333;
-  }
-  
-  /* Calendar Column Styles */
-  .calendar-column {
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-  }
-  
-  .calendar-container {
-    width: 100%;
-  }
-  
-  .calendar-header {
+/* --- Base & Layout --- */
+.CDis-user-dashboard {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 1200px;
+  margin: 20px auto; /* Add some top/bottom margin */
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; /* Modern font stack */
+  position: relative; /* Needed for loading overlay */
+}
+
+.CDis-dashboard-grid {
+  display: grid;
+  grid-template-columns: minmax(400px, 1fr) minmax(350px, 1fr); /* Adjust column widths */
+  gap: 24px;
+  padding: 0 20px 20px 20px; /* Adjust padding */
+}
+
+.CDis-column-header {
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 10px;
+  margin-bottom: 20px; /* Increased margin */
+}
+
+.CDis-column-header h2 {
+  margin: 0;
+  font-size: 1.4rem; /* Slightly smaller */
+  color: #212121; /* Darker grey */
+  font-weight: 600;
+}
+
+/* --- Calendar Column Styles --- */
+.CDis-calendar-column {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0,0,0,0.06); /* Subtle shadow */
+  padding: 20px;
+  display: flex; /* Allow form to grow */
+  flex-direction: column;
+}
+
+.CDis-calendar-container {
+  width: 100%;
+}
+
+.CDis-calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.CDis-current-month {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.CDis-nav-button {
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #555;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.CDis-nav-button:hover:not(:disabled) {
+  background-color: #f5f5f5;
+  border-color: #bbb;
+}
+
+.CDis-nav-button:focus-visible {
+    outline: 2px solid #2e7d32;
+    outline-offset: 1px;
+}
+
+.CDis-nav-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.CDis-weekday-header {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.CDis-weekday {
+  font-weight: 600;
+  color: #757575; /* Greyer */
+  font-size: 0.85rem;
+  padding: 5px 0;
+}
+
+.CDis-calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px; /* Slightly smaller gap */
+}
+
+.CDis-calendar-day {
+  aspect-ratio: 1/1;
+  border: 1px solid transparent; /* Transparent border for consistent size */
+  border-radius: 50%; /* Circular days */
+  display: flex;
+  flex-direction: column; /* Stack number and indicator */
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  position: relative;
+  cursor: pointer;
+  background-color: #fff;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  font-size: 0.9rem;
+}
+
+.CDis-calendar-day .CDis-day-number {
+    line-height: 1;
+}
+
+.CDis-calendar-day:focus-visible {
+    outline: 2px solid #2e7d32;
+    outline-offset: 1px;
+}
+
+.CDis-calendar-day.CDis-empty {
+  border: none;
+  background-color: transparent;
+  cursor: default;
+}
+
+.CDis-calendar-day.CDis-available {
+  background-color: #83ff8d;
+  border-color: #004d03;
+  color: #000000; /* Darker green */
+}
+.CDis-calendar-day.CDis-available:hover:not(:disabled) {
+  background-color: #67e853;
+  border-color: #000000;
+}
+
+.CDis-calendar-day.CDis-selected,
+.CDis-calendar-day.CDis-selected:hover {
+  background-color: #388e3c;
+  border-color: #2e7d32;
+  color: white;
+}
+
+.CDis-calendar-day.CDis-unavailable,
+.CDis-calendar-day.CDis-past {
+  background-color: #f68787;
+  color: #000000; /* Lighter grey */
+  cursor: not-allowed;
+  border-color: #ff0000;
+}
+
+.CDis-calendar-day.CDis-today {
+    font-weight: 700;
+    border: 1px solid #757575; /* Highlight today */
+}
+.CDis-calendar-day.CDis-today.CDis-selected {
+    border: 1px solid #2e7d32;
+}
+
+.CDis-calendar-day.CDis-special-available {
+  border: 2px solid #388e3c;
+}
+
+.CDis-calendar-day.CDis-special-unavailable {
+  border: 2px solid #e57373; /* Softer red */
+}
+
+.CDis-special-indicator {
+  position: absolute;
+  bottom: 3px; /* Position dot at bottom */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 5px;
+  height: 5px;
+  background-color: #e57373; /* Softer red */
+  border-radius: 50%;
+  /* remove text content, just use dot */
+}
+
+.CDis-calendar-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px; /* Increased gap */
+  margin-top: 20px;
+  font-size: 0.8rem; /* Smaller legend */
+  color: #616161;
+}
+
+.CDis-legend-item {
+  display: flex;
+  align-items: center;
+}
+
+.CDis-legend-item::before {
+  content: '';
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  margin-right: 6px;
+  border-radius: 50%; /* Match day shape */
+  border: 1px solid #eee;
+}
+.CDis-legend-item.CDis-today::before { background-color: #fff; border-color: #757575;}
+.CDis-legend-item.CDis-available::before { background-color: #5dc666; border-color: #c8e6c9; }
+.CDis-legend-item.CDis-selected::before { background-color: #49e151; border-color: #2e7d32; }
+.CDis-legend-item.CDis-unavailable::before, .CDis-legend-item.CDis-past::before { background-color: #e35353; border-color: #eee; }
+
+
+.CDis-calendar-instructions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 15px;
+  font-size: 0.85rem; /* Smaller */
+  color: #757575;
+}
+
+/* --- Schedule Form --- */
+.CDis-schedule-form-container {
+  margin-top: 25px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+  animation: CDis-fadeIn 0.3s ease-out; /* Add fade-in */
+}
+
+@keyframes CDis-fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } } /* Prefixed animation name */
+
+.CDis-schedule-form-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 15px;
-  }
-  
-  .current-month {
-    margin: 0;
-    font-size: 1.2rem;
-  }
-  
-  .nav-button {
+}
+
+.CDis-schedule-form-header h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.CDis-close-form-button {
     background: none;
-    border: 1px solid #ddd;
+    border: none;
+    padding: 4px;
+    cursor: pointer;
+    color: #757575;
     border-radius: 50%;
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-  }
-  
-  .nav-button:hover {
-    background-color: #f5f5f5;
-  }
-  
-  .nav-button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-  
-  .weekday-header {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    text-align: center;
-    margin-bottom: 10px;
-  }
-  
-  .weekday {
-    font-weight: 600;
-    color: #666;
-    padding: 5px 0;
-  }
-  
-  .calendar-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 5px;
-  }
-  
-  .calendar-day {
-    aspect-ratio: 1/1;
-    border: 1px solid #e0e0e0;
-    border-radius: 4px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 500;
-    position: relative;
-    cursor: pointer;
-    background-color: #fff;
-  }
-  
-  .calendar-day.empty {
-    border: none;
-    background-color: transparent;
-  }
-  
-  .calendar-day.available {
-    background-color: #e8f5e9;
-    border-color: #a5d6a7;
-    color: #2e7d32;
-  }
-  
-  .calendar-day.selected {
-    background-color: #2e7d32;
-    border-color: #2e7d32;
-    color: white;
-  }
-  
-  .calendar-day.unavailable {
-    background-color: #f5f5f5;
-    color: #9e9e9e;
-    cursor: not-allowed;
-  }
-  
-  .calendar-day.past {
-    background-color: #f5f5f5;
-    color: #9e9e9e;
-    cursor: not-allowed;
-  }
-  
-  .calendar-day.special-available {
-    border: 2px solid #2e7d32;
-  }
-  
-  .calendar-day.special-unavailable {
-    border: 2px solid #f44336;
-  }
-  
-  .special-indicator {
-    position: absolute;
-    top: 2px;
-    right: 2px;
-    font-size: 10px;
-    color: #f44336;
-  }
-  
-  .calendar-legend {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 15px;
-    font-size: 12px;
-  }
-  
-  .legend-item {
-    display: flex;
-    align-items: center;
-  }
-  
-  .legend-item::before {
-    content: '';
-    display: inline-block;
-    width: 12px;
-    height: 12px;
-    margin-right: 5px;
-    border-radius: 2px;
-  }
-  
-  .legend-item.available::before {
-    background-color: #e8f5e9;
-    border: 1px solid #a5d6a7;
-  }
-  
-  .legend-item.selected::before {
-    background-color: #2e7d32;
-    border: 1px solid #2e7d32;
-  }
-  
-  .legend-item.unavailable::before {
-    background-color: #f5f5f5;
-    border: 1px solid #e0e0e0;
-  }
-  
-  .legend-item.past::before {
-    background-color: #f5f5f5;
-    border: 1px solid #e0e0e0;
-  }
-  
-  .calendar-instructions {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    margin-top: 15px;
-    font-size: 14px;
-    color: #757575;
-  }
-  
-  /* Schedule Form */
-  .schedule-form {
-    margin-top: 20px;
-    padding: 15px;
-    background-color: #f9f9f9;
-    border-radius: 4px;
-    border: 1px solid #e0e0e0;
-  }
-  
-  .schedule-form h3 {
-    margin-top: 0;
-    margin-bottom: 15px;
-    font-size: 16px;
-  }
-  
-  .schedule-button {
-    background-color: #2e7d32;
-    color: white;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-right: 10px;
-  }
-  
-  .cancel-button {
-    background-color: #f5f5f5;
+}
+.CDis-close-form-button:hover {
+    background-color: #eee;
     color: #333;
-    border: 1px solid #ddd;
-    padding: 8px 16px;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  /* Pickups Column Styles */
-  .pickups-column {
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-  }
-  
-  .column-header.with-tabs {
-    display: flex;
-    gap: 20px;
-    border-bottom: 1px solid #e0e0e0;
-    padding-bottom: 0;
-  }
-  
-  .tab-button {
-    background: none;
-    border: none;
-    border-bottom: 3px solid transparent;
-    padding: 10px 5px;
-    font-size: 16px;
-    font-weight: 500;
-    color: #757575;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-  }
-  
-  .tab-button.active {
-    color: #2e7d32;
-    border-bottom-color: #2e7d32;
-  }
-  
-  .pickups-list {
+}
+
+.CDis-schedule-form {
     display: flex;
     flex-direction: column;
     gap: 15px;
-    margin-top: 15px;
-    max-height: 500px;
-    overflow-y: auto;
-  }
-  
-  .pickup-item {
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    padding: 15px;
-    background-color: #f9f9f9;
-  }
-  
-  .pickup-item.confirmed, .pickup-item.completed {
-    border-left: 4px solid #2e7d32;
-  }
-  
-  .pickup-item.pending {
-    border-left: 4px solid #ffa000;
-  }
-  
-  .pickup-header {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 10px;
-  }
-  
-  .status-badge {
-    font-size: 12px;
-    font-weight: 600;
-    padding: 3px 8px;
-    border-radius: 12px;
-  }
-  
-  .status-badge.confirmed, .status-badge.completed {
-    background-color: #e8f5e9;
-    color: #2e7d32;
-  }
-  
-  .status-badge.pending {
-    background-color: #fff8e1;
-    color: #ffa000;
-  }
-  
-  .pickup-id {
-    color: #757575;
-    font-size: 12px;
-  }
-  
-  .pickup-content {
+}
+
+.CDis-form-group {
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    margin-bottom: 12px;
-  }
-  
-  .pickup-detail {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 14px;
-  }
-  
-  .pickup-actions {
-    display: flex;
-    gap: 10px;
-    margin-top: 10px;
-  }
-  
-  .btn-reschedule, .btn-cancel {
-    font-size: 12px;
-    padding: 5px 10px;
+    gap: 5px;
+}
+
+.CDis-form-group label {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #555;
+}
+
+.CDis-form-group label .CDis-required {
+    color: #d32f2f; /* Red for required */
+    margin-left: 2px;
+}
+
+.CDis-form-group select,
+.CDis-form-group textarea {
+    padding: 10px 12px;
+    border: 1px solid #ccc;
     border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  .btn-reschedule {
+    font-size: 0.95rem;
+    background-color: #fff;
+}
+.CDis-form-group select:focus,
+.CDis-form-group textarea:focus {
+    outline: none;
+    border-color: #388e3c;
+    box-shadow: 0 0 0 2px rgba(46, 125, 50, 0.2);
+}
+.CDis-form-group textarea {
+    resize: vertical; /* Allow vertical resize only */
+    min-height: 60px;
+}
+.CDis-form-group select:disabled,
+.CDis-form-group textarea:disabled {
     background-color: #f5f5f5;
-    border: 1px solid #ddd;
-    color: #333;
-  }
-  
-  .btn-cancel {
-    background-color: #ffebee;
-    border: 1px solid #ffcdd2;
-    color: #c62828;
-  }
-  
-  .no-pickups {
+    cursor: not-allowed;
+}
+
+.CDis-form-actions {
+    margin-top: 10px;
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 40px 20px;
-    text-align: center;
-    color: #9e9e9e;
     gap: 10px;
-  }
-  
-  .no-pickups p {
-    margin: 5px 0;
-  }
-  
-  /* Loading and Error States */
-  .loading-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(255, 255, 255, 0.8);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
     align-items: center;
-    z-index: 10;
-  }
-  
-  .animate-spin {
-    animation: spin 1s linear infinite;
-  }
-  
-  @keyframes spin {
-    from {
-      transform: rotate(0deg);
-    }
-    to {
-      transform: rotate(360deg);
-    }
-  }
-  
-  .error-message-container {
+}
+
+.CDis-schedule-button {
+  background-color: #388e3c;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 500;
+  display: inline-flex; /* Align icon and text */
+  align-items: center;
+  gap: 8px;
+  transition: background-color 0.2s ease;
+}
+
+.CDis-schedule-button:hover:not(:disabled) {
+  background-color: #2e7d32;
+}
+.CDis-schedule-button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.CDis-form-message {
+    padding: 10px 15px;
+    border-radius: 4px;
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 10px 15px;
+    font-size: 0.9rem;
+    margin-top: 5px;
+}
+.CDis-form-message.CDis-error {
     background-color: #ffebee;
     border: 1px solid #ffcdd2;
-    border-radius: 4px;
     color: #c62828;
-    margin-bottom: 15px;
+}
+.CDis-form-message.CDis-success {
+    background-color: #e8f5e9;
+    border: 1px solid #c8e6c9;
+    color: #2e7d32;
+}
+
+/* --- Pickups Column Styles --- */
+.CDis-pickups-column {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0,0,0,0.06);
+  padding: 0px 20px 20px 20px; /* Remove top padding, rely on header */
+  display: flex;
+  flex-direction: column;
+}
+
+.CDis-column-header.CDis-with-tabs {
+  display: flex;
+  gap: 20px;
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 0;
+  margin-bottom: 0; /* Remove margin, list handles spacing */
+  padding-top: 20px; /* Add padding here instead of on parent */
+}
+
+.CDis-tab-button {
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  padding: 12px 8px; /* Adjusted padding */
+  font-size: 1rem;
+  font-weight: 600; /* Bolder tabs */
+  color: #757575;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: -1px; /* Overlap border */
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+.CDis-tab-button:hover:not(.CDis-active):not(:disabled) {
+    color: #333;
+}
+.CDis-tab-button.CDis-active {
+  color: #03001f;
+  border-bottom-color: #03001f;
+}
+.CDis-tab-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+.CDis-tab-button:focus-visible {
+    outline: 2px solid #388e3c;
+    outline-offset: 2px;
+    border-bottom-color: transparent; /* Avoid double border look */
+}
+
+.CDis-pickups-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 20px; /* Spacing after tabs */
+  max-height: 550px; /* Adjust height as needed */
+  overflow-y: auto;
+  padding-right: 5px; /* Space for scrollbar */
+}
+/* Simple scrollbar styling */
+.CDis-pickups-list::-webkit-scrollbar { width: 6px; }
+.CDis-pickups-list::-webkit-scrollbar-track { background: #f1f1f1; }
+.CDis-pickups-list::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
+.CDis-pickups-list::-webkit-scrollbar-thumb:hover { background: #aaa; }
+
+
+.CDis-pickup-item {
+  border: 1px solid #e0e0e0;
+  border-left-width: 4px; /* Keep status border */
+  border-radius: 6px;
+  padding: 15px;
+  background-color: #fff; /* Cleaner look */
+  transition: box-shadow 0.2s ease;
+}
+.CDis-pickup-item:hover {
+    box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+}
+
+.CDis-pickup-item.CDis-confirmed,
+.CDis-pickup-item.CDis-completed { border-left-color: #064017; }
+.CDis-pickup-item.CDis-pending { border-left-color: #ffa200; }
+.CDis-pickup-item.CDis-cancelled { border-left-color: #757575; opacity: 0.8; }
+.CDis-pickup-item.CDis-unknown { border-left-color: #bdbdbd; }
+
+
+.CDis-pickup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.CDis-status-badge {
+  font-size: 0.75rem; /* Smaller badge */
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 12px;
+  text-transform: capitalize; /* Consistent casing */
+}
+
+.CDis-status-badge.CDis-confirmed,
+.CDis-status-badge.CDis-completed { background-color: #e8f5e9; color: #004103; }
+.CDis-status-badge.CDis-pending { background-color: #fff8e1; color: #ffa000; }
+.CDis-status-badge.CDis-cancelled { background-color: #eeeeee; color: #616161; }
+.CDis-status-badge.CDis-unknown { background-color: #f5f5f5; color: #757575; }
+
+
+.CDis-pickup-id {
+  color: #9e9e9e; /* Lighter grey */
+  font-size: 0.8rem;
+}
+
+.CDis-pickup-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* Increased gap */
+  margin-bottom: 12px;
+}
+
+.CDis-pickup-detail {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Increased gap */
+  font-size: 0.9rem;
+  color: #424242; /* Darker text */
+}
+.CDis-pickup-detail svg {
+    flex-shrink: 0; /* Prevent icon shrinking */
+    color: #757575; /* Icon color */
+}
+.CDis-pickup-notes {
+    font-style: italic;
+    color: #616161;
+    font-size: 0.85rem;
+}
+
+.CDis-pickup-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+  border-top: 1px solid #eee; /* Separator */
+  padding-top: 12px;
+}
+
+.CDis-btn-reschedule, .CDis-btn-cancel {
+  font-size: 0.8rem; /* Smaller buttons */
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.CDis-btn-reschedule {
+  background-color: #f5f5f5;
+  border: 1px solid #ddd;
+  color: #555;
+}
+.CDis-btn-reschedule:hover { background-color: #eee; border-color: #ccc;}
+
+.CDis-btn-cancel {
+  background-color: #ffebee;
+  border: 1px solid #ffcdd2;
+  color: #c62828;
+}
+.CDis-btn-cancel:hover { background-color: #ffcdd2; border-color: #ef9a9a; }
+
+.CDis-no-pickups, .CDis-loading-pickups {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  text-align: center;
+  color: #9e9e9e;
+  gap: 15px;
+  min-height: 150px; /* Ensure it takes some space */
+}
+.CDis-loading-pickups {
+    font-size: 1rem;
+    color: #757575;
+}
+
+.CDis-no-pickups p {
+  margin: 0;
+  line-height: 1.5;
+}
+.CDis-no-pickups svg {
+    color: #bdbdbd; /* Lighter icon */
+}
+
+/* --- Loading and Error States --- */
+.CDis-loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.85);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Ensure it's on top */
+  gap: 10px;
+  color: #555;
+}
+
+.CDis-animate-spin {
+  animation: CDis-spin 1s linear infinite; /* Prefixed animation name */
+}
+
+/* Keyframes name is also prefixed */
+@keyframes CDis-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.CDis-error-message-container.CDis-global-error {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 18px;
+  background-color: #ffebee;
+  border: 1px solid #ffcdd2;
+  border-radius: 6px;
+  color: #c62828;
+  margin: 0 20px 15px 20px; /* Position below header, within padding */
+  font-size: 0.95rem;
+}
+
+/* --- Responsive Design --- */
+@media (max-width: 900px) { /* Adjust breakpoint */
+  .CDis-dashboard-grid {
+    grid-template-columns: 1fr; /* Stack columns */
   }
-  
-  /* Responsive Design */
-  @media (max-width: 768px) {
-    .dashboard-grid {
-      grid-template-columns: 1fr;
-    }
-  
-    .pickups-column {
-      margin-top: 20px;
-    }
+
+  .CDis-pickups-column {
+    margin-top: 24px; /* Add space between stacked columns */
   }
+
+  .CDis-calendar-column, .CDis-pickups-column {
+    padding: 15px; /* Reduce padding on smaller screens */
+  }
+  .CDis-column-header.CDis-with-tabs { padding-top: 15px; }
+  .CDis-pickups-list { margin-top: 15px; }
+}
+
+@media (max-width: 480px) {
+    .CDis-calendar-day { font-size: 0.8rem; }
+    .CDis-weekday { font-size: 0.75rem; }
+    .CDis-current-month { font-size: 1.1rem; }
+    .CDis-tab-button { font-size: 0.9rem; padding: 10px 5px; }
+    .CDis-column-header h2 { font-size: 1.2rem; }
+    .CDis-pickup-detail { font-size: 0.85rem; }
+    .CDis-schedule-button, .CDis-btn-cancel { font-size: 0.9rem; padding: 8px 14px;} /* Corrected cancel button */
+    .CDis-form-group select, .CDis-form-group textarea { padding: 8px 10px; }
+}
