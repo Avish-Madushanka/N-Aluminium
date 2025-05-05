@@ -1,5 +1,6 @@
 // controllers/settingsController.js
-const Setting = require('../models/settingsModel');
+const Setting = require('../models/settingsModel'); // Ensure path is correct
+const mongoose = require('mongoose'); // Needed for validation check
 
 // --- Get the current settings (or create default if none exist) ---
 exports.getSettings = async (req, res, next) => {
@@ -7,65 +8,87 @@ exports.getSettings = async (req, res, next) => {
         let settings = await Setting.findOne({ singleton: 'global_settings' });
 
         if (!settings) {
-            // If no settings document exists in the DB, create the default one.
-            console.log('No settings found in database, creating default settings document...');
+            console.log('No settings found, creating default settings document...');
             settings = new Setting(); // Instantiates with defaults from the schema
-            await settings.save(); // <<< MUST AWAIT
+            await settings.save();
             console.log('Default settings document created successfully.');
         }
 
         res.status(200).json({ success: true, data: settings });
     } catch (error) {
         console.error("Get Settings Error:", error);
-        next(error); // Pass error to the global handler
+        next(error);
     }
 };
 
 // --- Update settings (Admin Only) ---
-// Add protectAdmin middleware in the corresponding route definition
+// This function now expects the *entire* settings structure in req.body
 exports.updateSettings = async (req, res, next) => {
-    // Only allow updating specific fields to prevent accidental modification of 'singleton'
-    const allowedUpdates = ['availableDays', 'timeSlots', 'serviceAreas', 'specialDates'];
-    const updates = {};
+    // We expect the full settings object structure in the body
+    const { availableDays, timeSlots, serviceAreas, specialDates } = req.body;
 
-    // Filter req.body to only include allowed fields
-    allowedUpdates.forEach(field => {
-        if (req.body[field] !== undefined) {
-            updates[field] = req.body[field];
-        }
-    });
-
-    if (Object.keys(updates).length === 0) {
-        return res.status(400).json({ success: false, message: 'No valid settings data provided for update.' });
+    // Basic validation: Check if the main parts exist
+    if (availableDays === undefined || timeSlots === undefined || serviceAreas === undefined || specialDates === undefined) {
+        return res.status(400).json({
+            success: false,
+            message: 'Invalid settings data. Missing one or more required fields: availableDays, timeSlots, serviceAreas, specialDates.'
+        });
     }
+
+    // Construct the update object containing only the fields we want to update
+    const updates = {
+        availableDays,
+        timeSlots,
+        serviceAreas,
+        specialDates
+    };
 
     console.log("Attempting to update settings with:", JSON.stringify(updates, null, 2));
 
     try {
-        // Find the single settings document and update it
-        // Using findOneAndUpdate with upsert:true ensures it creates if missing (though getSettings should handle creation)
+        // Find the single settings document and update it entirely
+        // Using findOneAndUpdate with upsert:true ensures it creates if missing (though getSettings should handle this)
+        // runValidators: true is crucial for validating the nested arrays/objects against the schema
         const updatedSettings = await Setting.findOneAndUpdate(
             { singleton: 'global_settings' }, // Find the unique document
-            { $set: updates }, // Apply the filtered updates
-            { new: true, runValidators: true, upsert: true } // Options: return updated doc, run schema validators, create if not found
+            { $set: updates },                // Apply the new settings data
+            {
+                new: true,                 // Return the updated document
+                runValidators: true,       // IMPORTANT: Run schema validation on the nested arrays/objects
+                upsert: true,              // Create if document doesn't exist
+                context: 'query'           // Recommended for runValidators with findOneAndUpdate
+            }
         );
 
         if (!updatedSettings) {
-             // This should theoretically not happen with upsert:true, but handle defensively
+            // This shouldn't happen with upsert:true but handle defensively
             console.error("Failed to find or update settings, even with upsert.");
             return res.status(500).json({ success: false, message: 'Failed to update settings.' });
         }
 
-
         console.log("Settings updated successfully.");
-        res.status(200).json({ success: true, message: 'Settings updated successfully.', data: updatedSettings });
+        res.status(200).json({
+            success: true,
+            message: 'Settings updated successfully.',
+            data: updatedSettings // Send back the full, validated, updated settings
+        });
 
     } catch (error) {
         console.error("Update Settings Error:", error);
-         if (error.name === 'ValidationError') {
-            const messages = Object.values(error.errors).map(val => val.message);
-            return res.status(400).json({ success: false, message: `Validation Failed: ${messages.join('. ')}` });
+
+        // Handle Mongoose Validation Errors specifically for better feedback
+        if (error instanceof mongoose.Error.ValidationError) {
+             console.error("Validation Details:", JSON.stringify(error.errors, null, 2));
+             // Extract messages from potentially nested validation errors
+             let messages = [];
+             for (const path in error.errors) {
+                 messages.push(`${path}: ${error.errors[path].message}`);
+             }
+             const errorMessage = `Validation Failed: ${messages.join('. ')}`;
+             return res.status(400).json({ success: false, message: errorMessage });
         }
-        next(error); // Pass other errors to the global handler
+
+        // Pass other types of errors to the global handler
+        next(error);
     }
 };

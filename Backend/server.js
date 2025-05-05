@@ -2,18 +2,18 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-const config = require('./config'); // Loads .env
+const config = require('./config');
 const connectDB = require('./db');
 
 // --- Connect to Database ---
 connectDB();
 
 // --- Route Imports ---
+// Ensure these paths are correct relative to server.js
 const clientRoutes = require('./routes/clientRoutes');
 const authRoutes = require('./routes/authRoutes');
 const bOwnerRoutes = require('./routes/bOwnerRoutes');
 const saleItemRoutes = require('./routes/saleItemRoutes');
-// New Routes for Scheduler
 const bookingRoutes = require('./routes/bookingRoutes');
 const settingsRoutes = require('./routes/settingsRoutes');
 const materialRoutes = require('./routes/materialRoutes');
@@ -22,17 +22,17 @@ const materialRoutes = require('./routes/materialRoutes');
 const app = express();
 
 // --- Core Middleware ---
-app.use(cors()); // Enable Cross-Origin Resource Sharing
-app.use(express.json()); // Parse JSON request bodies
-app.use(express.urlencoded({ extended: true })); // Parse URL-encoded request bodies
-app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // Serve static files from uploads
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // --- API Routes ---
-app.use('/api/auth', authRoutes);
+// Mount routes BEFORE the general 404 handler
+app.use('/api/auth', authRoutes); // Handles /api/auth/login, /api/auth/client/logout, etc.
 app.use('/api/clients', clientRoutes);
 app.use('/api/bowners', bOwnerRoutes);
 app.use('/api/saleitems', saleItemRoutes);
-// Scheduler Routes
 app.use('/api/bookings', bookingRoutes);
 app.use('/api/settings', settingsRoutes);
 app.use('/api/materials', materialRoutes);
@@ -43,61 +43,55 @@ app.get('/', (req, res) => {
 });
 
 // --- 404 Handler for API routes ---
-// This should be after all your API routes
+// This catches any /api/* request that didn't match the routes above
 app.use('/api/*', (req, res, next) => {
   res.status(404).json({ success: false, message: `API endpoint not found at ${req.originalUrl}` });
 });
 
 // --- Global Error Handling Middleware ---
-// This should be the LAST piece of middleware
+// Must be the LAST middleware applied
 app.use((err, req, res, next) => {
     console.error("--- Global Error Handler Caught ---");
     console.error("Timestamp:", new Date().toISOString());
     console.error("Route:", req.method, req.originalUrl);
     console.error("Error Name:", err.name || "N/A");
     console.error("Error Message:", err.message || "No message");
-    // Log stack trace only in development for clarity, or always for detailed debugging
-    if (config.nodeEnv === 'development' || !res.headersSent) { // Avoid logging stack if response already sent
+    if (config.nodeEnv === 'development') {
        console.error("Error Stack:", err.stack || "No stack trace available");
     }
 
-    // Prevent sending response if headers already sent (e.g., by a stream error)
     if (res.headersSent) {
         console.error("Headers already sent, cannot send error response.");
-        return next(err); // Pass to default Express handler
+        return next(err);
     }
 
-    let statusCode = err.statusCode || 500; // Default to 500 Internal Server Error
+    let statusCode = err.statusCode || 500;
     let message = err.message || 'An unexpected server error occurred.';
 
-    // --- Specific Error Handling ---
+    // Specific Error Handling
     if (err.name === 'ValidationError') {
-        statusCode = 400; // Bad Request
-        // Consolidate validation messages
+        statusCode = 400;
         message = `Validation Failed: ${Object.values(err.errors).map(val => val.message).join('. ')}`;
-    } else if (err.code === 11000) { // Mongoose duplicate key error
-        statusCode = 400; // Bad Request
+    } else if (err.code === 11000) {
+        statusCode = 400;
         const field = Object.keys(err.keyValue)[0];
         message = `Duplicate value error: A record with this ${field} already exists.`;
     } else if (err.name === 'CastError') {
-        statusCode = 400; // Bad Request
+        statusCode = 400;
         message = `Invalid data format for field '${err.path}'. Expected ${err.kind}.`;
     } else if (err.name === 'JsonWebTokenError') {
-        statusCode = 401; // Unauthorized
+        statusCode = 401;
         message = 'Authentication error: Invalid token.';
     } else if (err.name === 'TokenExpiredError') {
-        statusCode = 401; // Unauthorized
+        statusCode = 401;
         message = 'Authentication error: Token has expired.';
     }
-     // Add more specific error types as needed
 
-    // --- Send JSON Error Response ---
+    // Send JSON Error Response
     res.status(statusCode).json({
         success: false,
         message: message,
-        // Optionally include error name or code in non-production for easier debugging
         errorType: config.nodeEnv !== 'production' ? err.name : undefined,
-        // DO NOT send stack trace in production
         stack: config.nodeEnv === 'development' ? err.stack : undefined
     });
 });

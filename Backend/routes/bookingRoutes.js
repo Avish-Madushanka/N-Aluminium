@@ -2,24 +2,26 @@
 const express = require('express');
 const router = express.Router();
 const bookingController = require('../controllers/bookingController');
-// Optional: Import authentication/authorization middleware
-// const { protectClient } = require('../middleware/authMiddleware');
-// const { protectAdmin } = require('../middleware/adminMiddleware'); // Create this if you need admin roles
+const { protectAdmin } = require('../middleware/adminMiddleware');
+const { protectClient } = require('../middleware/authMiddleware'); // Assuming clients create bookings
 
-// POST /api/bookings - Create a new booking
-// This is likely public, but could be protected by protectClient if users must log in
-router.post('/', bookingController.createBooking);
+// POST /api/bookings - Create (Client/Public)
+router.post('/', protectClient, bookingController.createBooking); // Protect if needed
 
-// GET /api/bookings - Get all bookings (Requires Admin Auth)
-// router.get('/', protectAdmin, bookingController.getAllBookings);
+// --- Admin Routes ---
+// GET /api/bookings - Get All
+router.get('/', protectAdmin, bookingController.getAllBookings);
 
-// GET /api/bookings/:id - Get a specific booking by DB _id or custom bookingId
-// Add auth middleware as needed (e.g., protectAdmin or protectClient with ownership check)
-// router.get('/:id', bookingController.getBookingById);
+// GET /api/bookings/:id - Get One
+router.get('/:id', protectAdmin, bookingController.getBookingById);
 
-// PUT /api/bookings/:id/status - Update booking status (Requires Admin Auth)
-// The :id can be the DB _id or custom bookingId (controller handles either)
-// router.put('/:id/status', protectAdmin, bookingController.updateBookingStatus);
+// PUT /api/bookings/:id/status - Update Status Only
+router.put('/:id/status', protectAdmin, bookingController.updateBookingStatus);
 
+// PUT /api/bookings/:id - Update Details (General)
+router.put('/:id', protectAdmin, bookingController.updateBookingDetails);
+
+// DELETE /api/bookings/:id - Delete Booking
+router.delete('/:id', protectAdmin, bookingController.deleteBooking);
 
 module.exports = router;
