@@ -11,7 +11,7 @@ function Login({ onLoginSuccess }) {
   const [loading, setLoading] = useState(false); // Loading state for API call
   const [error, setError] = useState('');       // Error message display
   const [success, setSuccess] = useState('');     // Success message display
-  const navigate = useNavigate();                 // Hook for programmatic navigation (used for Admin)
+  const navigate = useNavigate();                 // Hook for programmatic navigation
 
   // --- Effect to clear messages on unmount ---
   useEffect(() => {
@@ -36,10 +36,6 @@ function Login({ onLoginSuccess }) {
     // Backend API endpoint for unified login
     const apiUrl = 'http://localhost:5002/api/auth/login'; // Adjust if your port/URL differs
 
-    // --- Frontend check for Admin email ---
-    // NOTE: Password validation is still done ONLY by the backend.
-    const isAdminEmailEntered = email === 'Admin@gmail.com';
-
     try {
       // --- API Call using Axios ---
       const response = await axios.post(
@@ -49,40 +45,36 @@ function Login({ onLoginSuccess }) {
       );
 
       // --- Handle Successful API Response ---
-      // Check if backend indicates success and provides a token
-      if (response.data && response.data.success && response.data.token) {
+      // Check if backend indicates success and provides a token and user data
+      if (response.data && response.data.success && response.data.token && response.data.data) {
+        const userData = response.data.data; // Get the user data object from the response
+        const userRole = userData.role;     // Get the user's role (as determined by the backend)
+        const userType = userData.userType; // Get the user's type (client/bowner)
 
-        // --- Special Handling for Admin Login ---
-        if (isAdminEmailEntered) {
-          // This block executes ONLY if the entered email was the admin's
-          // AND the backend successfully authenticated the credentials.
-          console.log('Admin login successful (Backend Verified). Redirecting to /Admin...');
-          setSuccess('Admin login successful! Redirecting...'); // Show success message
+        // Store token and user info in localStorage for future use
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('userInfo', JSON.stringify(userData));
 
-          // Store token and user info locally for the admin session
-          localStorage.setItem('token', response.data.token);
-          // Store the full user data object returned by the backend
-          localStorage.setItem('userInfo', JSON.stringify(response.data.data));
-
-          // Directly navigate the admin after a short delay
+        // *** Determine Action Based on Role Returned by Backend ***
+        if (userRole === 'admin') {
+          // --- Handling for Admin Login (Hardcoded credentials verified by backend) ---
+          console.log('Admin login successful. Redirecting to admin dashboard...');
+          setSuccess('Admin login successful! Redirecting to dashboard...');
+          
+          // Direct navigation to Admin dashboard for admin users
           setTimeout(() => {
-            navigate('/Admin', { replace: true }); // Redirect to Admin Dashboard
-          }, 1000); // 1-second delay to allow user to see the success message
-
+            navigate('/Admin', { replace: true });
+          }, 1000);
         } else {
-          // --- Handling for Regular Users (Client or BOwner) ---
-          const receivedUserType = response.data.data?.userType || 'unknown'; // Get type from response data
-          console.log(`Login successful as ${receivedUserType}:`, response.data);
-          setSuccess('Login successful! Redirecting...'); // Show success message
-
-          // *** Call the callback function passed from App.jsx ***
-          // This delegates token storage, state update, and navigation logic to the parent
-          onLoginSuccess(response.data.token);
+          // --- For regular users (client or business owner), use the provided callback ---
+          console.log(`Login successful as ${userType} (Role: ${userRole})`);
+          setSuccess('Login successful! Redirecting...');
+          
+          // Call the callback passed from App.jsx (which will handle navigation)
+          onLoginSuccess(response.data.token, userData);
         }
-
       } else {
-        // Handle cases where the API call succeeded (status 2xx) but the backend logic failed
-        // or returned an unexpected format (e.g., success: false, or missing token)
+        // Handle cases where the API call succeeded but the backend logic failed
         console.error("Login API success, but invalid data received:", response.data);
         throw new Error(response.data?.message || 'Login failed: Invalid response from server.');
       }
@@ -94,38 +86,36 @@ function Login({ onLoginSuccess }) {
       let errorMessage = 'An unknown error occurred during login.'; // Default error message
 
       if (err.response) {
-        // The request was made and the server responded with a status code outside the 2xx range
+        // Server responded with a status code outside the 2xx range
         console.error("Server Error Response:", err.response.status, err.response.data);
-        // Use the error message from the backend response if available
         errorMessage = err.response.data?.message || `Login failed (${err.response.status}). Please check your credentials.`;
       } else if (err.request) {
-        // The request was made but no response was received (e.g., network issue, server down)
+        // Request was made but no response was received
         console.error("No response received:", err.request);
         errorMessage = 'Network Error: Could not connect to the server. Please check your connection or try again later.';
       } else {
-        // Something happened in setting up the request that triggered an Error
+        // Error setting up the request
         console.error('Request Setup Error:', err.message);
         errorMessage = `An unexpected error occurred: ${err.message}`;
       }
-      setError(errorMessage); // Set the error state to display the message to the user
+      setError(errorMessage); // Display error message
+    } finally {
+      setLoading(false); // Always ensure loading stops, whether success or error
     }
-    // setLoading(false) is primarily needed in the catch block.
-    // In success cases, navigation will typically unmount the component or change state causing re-render.
   };
 
   // --- JSX Rendering ---
   return (
-    <div className="login-container"> {/* Main container for the login page */}
-      <div className="login-content"> {/* Container for the two sections */}
-
-        {/* Left Section (Informational/Branding) */}
+    <div className="login-container">
+      <div className="login-content">
+        {/* Left Section */}
         <div className="left-section">
           <h1 className="welcome-title">Welcome</h1>
           <p className="subtitle">
-             Log in to access your N-Aluminium account. Manage pickups, track history, and contribute to sustainable practices.
+            Log in to access your N-Aluminium account. Manage pickups, track history, and contribute to sustainable practices.
           </p>
-          {/* Placeholder social icons */}
           <div className="social-icons">
+             {/* Add actual icons/links if needed */}
             <a href="#" className="social-icon" aria-label="Facebook"><i className="fab fa-facebook-f"></i></a>
             <a href="#" className="social-icon" aria-label="Twitter"><i className="fab fa-twitter"></i></a>
             <a href="#" className="social-icon" aria-label="Instagram"><i className="fab fa-instagram"></i></a>
@@ -133,17 +123,14 @@ function Login({ onLoginSuccess }) {
           </div>
         </div>
 
-        {/* Right Section (Login Form) */}
+        {/* Right Section */}
         <div className="right-section">
           <h2 className="signin-title">Sign in</h2>
 
-          {/* Display Error and Success Messages */}
           {error && <div className="error-message">{error}</div>}
           {success && <div className="success-message">{success}</div>}
 
-          {/* Login Form */}
           <form onSubmit={handleSubmit}>
-            {/* Email Input Field */}
             <div className="form-group">
               <label htmlFor="email">Email Address</label>
               <input
@@ -152,13 +139,12 @@ function Login({ onLoginSuccess }) {
                 value={email}
                 onChange={handleEmailChange}
                 placeholder="you@example.com"
-                autoComplete="email" // Helps browser autofill
-                required // HTML5 validation
-                disabled={loading} // Disable input while loading
+                autoComplete="email"
+                required
+                disabled={loading}
               />
             </div>
 
-            {/* Password Input Field */}
             <div className="form-group">
               <label htmlFor="password">Password</label>
               <input
@@ -167,24 +153,21 @@ function Login({ onLoginSuccess }) {
                 value={password}
                 onChange={handlePasswordChange}
                 placeholder="Enter your password"
-                autoComplete="current-password" // Helps browser autofill
-                required // HTML5 validation
-                disabled={loading} // Disable input while loading
+                autoComplete="current-password"
+                required
+                disabled={loading}
               />
             </div>
 
-            {/* Submit Button */}
             <button
               type="submit"
               className="signin-button"
-              disabled={loading} // Disable button while loading
+              disabled={loading}
             >
-              {/* Show different text based on loading state */}
               {loading ? 'Signing in...' : 'Sign in now'}
             </button>
           </form>
 
-          {/* Terms and Policy Links */}
           <div className="terms">
             By clicking on "Sign in now" you agree to <br />
             <a href="#">Terms of Service</a> | <a href="#">Privacy Policy</a>

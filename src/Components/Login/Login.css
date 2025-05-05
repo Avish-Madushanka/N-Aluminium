@@ -156,6 +156,7 @@
   border-radius: 4px;
   font-size: 14px;
   text-align: center;
+  width: 300px;
 }
 
 .error-message {
