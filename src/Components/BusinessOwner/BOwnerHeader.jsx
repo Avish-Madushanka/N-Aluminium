@@ -8,7 +8,7 @@ const defaultCoverPhoto = 'https://images.unsplash.com/photo-1504805572947-34fad
 const defaultProfilePhoto = 'https://i.pinimg.com/736x/71/b3/e4/71b3e4159892bb319292ab3b76900930.jpg'; // Placeholder profile
 
 // Your backend URL - Make sure this points to where your backend server is running
-const BACKEND_URL = 'http://localhost:5002'; // Default, adjust port if you changed it
+const BACKEND_URL = 'http://localhost:5003'; // Default, adjust port if you changed it
 
 const BOwnerHeader = () => {
   const [businessData, setBusinessData] = useState(null); // State to hold the loaded user info

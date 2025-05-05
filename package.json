@@ -5,6 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "start:backend": "cd Backend && npm run dev",
+    "start:backend:node": "node start-backend.js",
+    "fix:backend": "node fix-backend.js",
+    "start:all": "npm run start:backend & npm run dev",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"

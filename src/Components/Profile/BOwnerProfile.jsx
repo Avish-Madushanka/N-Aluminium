@@ -28,8 +28,8 @@ export default function BOwnerProfile() {
     const [profilePhotoFile, setProfilePhotoFile] = useState(null);
     const [coverPhotoFile, setCoverPhotoFile] = useState(null);
     // Add preview state if needed
-    // const [profilePreview, setProfilePreview] = useState(profile.profilePhotoPath ? `http://localhost:5002${profile.profilePhotoPath}` : null);
-    // const [coverPreview, setCoverPreview] = useState(profile.coverPhotoPath ? `http://localhost:5002${profile.coverPhotoPath}` : null);
+    // const [profilePreview, setProfilePreview] = useState(profile.profilePhotoPath ? `http://localhost:5003${profile.profilePhotoPath}` : null);
+    // const [coverPreview, setCoverPreview] = useState(profile.coverPhotoPath ? `http://localhost:5003${profile.coverPhotoPath}` : null);
 
     // --- UI State ---
     const [saving, setSaving] = useState(false);
@@ -60,8 +60,8 @@ export default function BOwnerProfile() {
                     // coverPhotoPath: parsedInfo.coverPhoto || null,
                 }));
                  // Update previews based on fetched paths
-                // setProfilePreview(parsedInfo.profilePhoto ? `http://localhost:5002${parsedInfo.profilePhoto}` : null);
-                // setCoverPreview(parsedInfo.coverPhoto ? `http://localhost:5002${parsedInfo.coverPhoto}` : null);
+                // setProfilePreview(parsedInfo.profilePhoto ? `http://localhost:5003${parsedInfo.profilePhoto}` : null);
+                // setCoverPreview(parsedInfo.coverPhoto ? `http://localhost:5003${parsedInfo.coverPhoto}` : null);
             } catch (error) {
                 console.error("Failed to parse user info from storage", error);
                 // Handle error, maybe redirect to login
@@ -123,7 +123,7 @@ export default function BOwnerProfile() {
         try {
             const token = localStorage.getItem('token'); // Get auth token
             const response = await axios.put(
-                'http://localhost:5002/api/bowners/profile', // Your update endpoint
+                'http://localhost:5003/api/bowners/profile', // Your update endpoint
                 updateData,
                 {
                     headers: {

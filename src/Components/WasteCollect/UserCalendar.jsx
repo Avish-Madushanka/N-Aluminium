@@ -4,9 +4,10 @@ import {
     CheckCircle, AlertTriangle, Info, Plus, User, Phone, Mail, Package, Weight, Loader2
 } from 'lucide-react';
 import './USerCalendar.css'; // Assuming your CSS is in this file with updated class names
+import API_ENDPOINTS from '../../apiConfig';
 
-// Base URL for your backend API - Adjust if necessary
-const API_BASE_URL = 'http://localhost:5002/api'; // Change port/host if needed
+// Base URL for your backend API - Using centralized config
+const API_BASE_URL = API_ENDPOINTS.API_ROOT;
 
 // --- Default structure (used as fallback if API fails or during initial load) ---
 const fallbackSettings = {

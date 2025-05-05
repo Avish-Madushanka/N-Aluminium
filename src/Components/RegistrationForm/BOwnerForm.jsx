@@ -87,7 +87,7 @@ function BOwnerForm() {
     if (coverPhotoFile) submissionData.append('coverPhoto', coverPhotoFile);
 
     try {
-      await axios.post('http://localhost:5002/api/bowners/register', submissionData);
+      await axios.post('http://localhost:5003/api/bowners/register', submissionData);
       setSuccess('Business registration successful! Redirecting to login...');
       setLoading(false);
       setTimeout(() => navigate('/Login'), 2000);

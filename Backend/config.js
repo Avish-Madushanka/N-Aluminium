@@ -2,7 +2,7 @@
 require('dotenv').config();
 
 const config = {
-  port: process.env.PORT || 5002,
+  port: process.env.PORT || 5003,
   mongoURI: process.env.MONGO_URI,
   jwtSecret: process.env.JWT_SECRET,
   jwtExpire: process.env.JWT_EXPIRE || '30d',

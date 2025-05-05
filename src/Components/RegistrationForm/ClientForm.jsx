@@ -88,7 +88,7 @@ function ClientForm() {
     try {
       // Removed manual Content-Type header - Axios sets it correctly for FormData
       await axios.post(
-        "http://localhost:5002/api/clients/register",
+        "http://localhost:5003/api/clients/register",
         clientData
       );
 

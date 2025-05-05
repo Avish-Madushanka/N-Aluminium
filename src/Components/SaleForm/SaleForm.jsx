@@ -66,7 +66,7 @@ function SaleForm() {
     submissionData.append('image', imageFile);
 
     try {
-      const response = await axios.post('http://localhost:5002/api/saleitems', submissionData);
+      const response = await axios.post('http://localhost:5003/api/saleitems', submissionData);
 
       setLoading(false);
       alert("Product added successfully!");

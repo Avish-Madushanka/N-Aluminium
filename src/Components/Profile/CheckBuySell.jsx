@@ -5,7 +5,7 @@ import { Edit, Trash2, Package } from 'lucide-react'; // Icons
 import './CheckBuySell.css'; // We'll create this CSS file
 
 // Define Backend URL (for constructing image paths)
-const BACKEND_URL = 'http://localhost:5002';
+const BACKEND_URL = 'http://localhost:5003';
 const LOCAL_STORAGE_KEY = 'mySaleItems'; // Consistent key
 
 // --- MyItemCard Component (Display individual item) ---

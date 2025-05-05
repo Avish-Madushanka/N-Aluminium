@@ -5,9 +5,10 @@ import {
     Calendar as CalendarIcon, History, CheckSquare, X
 } from 'lucide-react';
 import './CalendarDisplay.css'; // Ensure this CSS file is also updated/renamed if needed
+import API_ENDPOINTS from '../../apiConfig';
 
-// Base URL for your backend API - Adjust if necessary
-const API_BASE_URL = 'http://localhost:5002/api';
+// Base URL for your backend API - Using centralized config
+const API_BASE_URL = API_ENDPOINTS.API_ROOT;
 
 // --- Default structure (used as fallback if API fails or during initial load) ---
 const fallbackSettings = {
