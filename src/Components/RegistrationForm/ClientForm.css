@@ -20,7 +20,7 @@
   left: 0;
   width: 100%;
   height: 8px;
-  background: linear-gradient(90deg, #4a6cf7, #6a3cf7, #8f22ff);
+  background: linear-gradient(90deg, #000a2e, #110c1f, #313131);
 }
 
 /* Form Header */
@@ -46,7 +46,7 @@
   transform: translateX(-50%);
   width: 60px;
   height: 3px;
-  background: linear-gradient(90deg, #4a6cf7, #8f22ff);
+  background: linear-gradient(90deg, #01071d, #02000c);
   border-radius: 3px;
 }
 
@@ -136,13 +136,13 @@
 }
 
 /* Submit Button */
-.submit-button {
+.submit-button1 {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
   padding: 0.875rem;
-  background: linear-gradient(90deg, #4a6cf7, #6a3cf7);
+  background: linear-gradient(90deg, #525252, #0d0d0e);
   color: white;
   font-weight: 600;
   font-size: 1rem;
@@ -153,13 +153,13 @@
   box-shadow: 0 4px 12px rgba(106, 60, 247, 0.25);
 }
 
-.submit-button:hover:not(:disabled) {
-  background: linear-gradient(90deg, #3b5ef6, #5a2cf6);
+.submit-button1:hover:not(:disabled) {
+  background: linear-gradient(90deg, #001880, #0a0029);
   transform: translateY(-2px);
   box-shadow: 0 6px 16px rgba(106, 60, 247, 0.3);
 }
 
-.submit-button:disabled {
+.submit-button1:disabled {
   background: linear-gradient(90deg, #a0aec0, #cbd5e0);
   cursor: not-allowed;
   box-shadow: none;
@@ -167,6 +167,7 @@
 
 /* Alert Messages */
 .alert {
+  width: fit-content;
   padding: 1rem;
   border-radius: 8px;
   margin-bottom: 1.5rem;

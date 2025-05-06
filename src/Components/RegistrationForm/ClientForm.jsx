@@ -464,7 +464,7 @@ const ClientForm = () => {
           {errors.profilePhoto && <div id="profilePhoto-error" className="error-message">{errors.profilePhoto}</div>}
         </div>
 
-        <button type="submit" disabled={isLoading} className="submit-button">
+        <button type="submit" disabled={isLoading} className="submit-button1">
           {isLoading ? (
             <svg className="spinner" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
              <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" strokeOpacity="0.25" />
