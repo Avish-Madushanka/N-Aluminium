@@ -1,8 +1,12 @@
-const API_BASE_URL = 'http://localhost:5003/api';
-
-export const API_ENDPOINTS = {
+// In your frontend code (apiConfig.js or similar)
+const API_ENDPOINTS = {
+  BASE_URL: 'http://localhost:5003/api',
   AUTH: {
-    LOGIN: `${API_BASE_URL}/auth/login`,
+    LOGIN: '/auth/login',
   },
-  // Other endpoints...
+  CLIENT: {
+    REGISTER: '/clients/register',
+  },
 };
+
+export default API_ENDPOINTS;

@@ -1,336 +1,302 @@
-/* --- Light Theme Variables --- */
+/* BOwnerForm.css - Modern and Creative Styling */
+
+/* --- Root Variables --- */
 :root {
   /* Core Colors */
-  --bg-color: #ececec;
-  --form-bg-color: #ffffff;
-  --text-color: #212529; /* Define primary text color */
-  --text-color-muted: #ffffff;
-
-  /* Input Fields */
-  --input-bg: #ffffff;
-  --input-text: #495057;
-  --border-color: #ced4da;
-  --focus-border-color: #80bdff;
-  --focus-box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
-
-  /* Buttons */
-  --button-primary-bg: #007bff;
-  --button-primary-hover-bg: #0056b3;
-  --button-secondary-bg: #6c757d;
-  --button-secondary-hover-bg: #5a6268;
-  --button-text-color: #ffffff;
-
+  --primary-gradient: linear-gradient(90deg, #4a6cf7, #6a3cf7, #8f22ff);
+  --form-bg: linear-gradient(145deg, #ffffff, #f5f7fa);
+  --text-primary: #2d3748;
+  --text-secondary: #4a5568;
+  --border-color: #e2e8f0;
+  --focus-color: #4a6cf7;
+  --focus-shadow: rgba(74, 108, 247, 0.15);
+  
   /* Feedback Colors */
-  --error-color: #dc3545; /* Red for errors */
-  --success-color: #28a745; /* Green for success */
-  --error-bg: #f8d7da;
-  --success-bg: #d4edda;
-  --error-border: #f5c6cb;
-  --success-border: #c3e6cb;
-
-  /* General */
-  --border-radius: 0.25rem;
-  --box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1); /* Softened shadow slightly */
-  --font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  --error-color: #e53e3e;
+  --success-color: #38a169;
+  --error-bg: #fff5f5;
+  --success-bg: #f0fff4;
+  
+  /* Animation */
+  --transition-speed: 0.3s;
 }
 
-body {
-  background-color: var(--bg-color);
-  margin: 0;
-  font-family: var(--font-family);
-  color: var(--text-color); /* Set base text color */
-  line-height: 1.5; /* Improve readability */
-}
-
-/* Container for the whole registration section */
-.BReg-business-form-container {
-  padding: 40px 20px; /* Add horizontal padding */
-  font-family: var(--font-family);
+/* Main Container Styling */
+.BR-business-form-container {
+  width: 100%;
+  padding: 2rem;
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  justify-content: center;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+}
+
+.BR-form-wrapper {
+  max-width: 700px;
   width: 100%;
-  box-sizing: border-box;
+  background: var(--form-bg);
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1), 
+              0 1px 2px rgba(0, 0, 0, 0.05);
+  padding: 2.5rem 2rem;
+  position: relative;
+  overflow: hidden;
 }
 
-/* Wrapper for the form card */
-.BReg-form-wrapper {
-    background-color: var(--form-bg-color);
-    padding: 30px 40px;
-    border-radius: var(--border-radius);
-    box-shadow: var(--box-shadow);
-    width: 100%;
-    max-width: 700px;
-    margin: 30px 0; /* Add vertical margin */
-    box-sizing: border-box;
+.BR-form-wrapper::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 8px;
+  background: var(--primary-gradient);
 }
 
-/* Title */
-.BReg-form-title {
-  font-size: 2em;
-  margin-bottom: 35px;
-  color: var(--text-color); /* Use primary text color */
-  font-weight: 500;
+/* Form Title */
+.BR-form-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-primary);
   text-align: center;
+  margin-bottom: 2.5rem;
+  position: relative;
+  display: inline-block;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
-/* General Form Group Styling */
-.BReg-form-group {
+.BR-form-title::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 3px;
+  background: var(--primary-gradient);
+  border-radius: 3px;
+}
+
+/* Form Group Styling */
+.BR-form-group {
   margin-bottom: 1.5rem;
-  width: 100%;
+  position: relative;
+  animation: fadeIn 0.5s ease forwards;
+  animation-delay: calc(var(--index) * 0.1s);
+  opacity: 0;
 }
 
-/* Label Styling */
-.BReg-form-group label {
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.BR-form-group label:not(.BR-upload-button) {
   display: block;
-  margin-bottom: 0.5rem;
-  color:#000000;
   font-weight: 600;
-  font-size: 0.9em;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
 }
 
-/* Base styles for form input elements */
-.BReg-form-group input[type="text"],
-.BReg-form-group input[type="email"],
-.BReg-form-group input[type="tel"],
-.BReg-form-group input[type="password"],
-.BReg-form-group textarea,
-.BReg-form-group select {
+/* Input Fields */
+.BR-form-group input[type="text"],
+.BR-form-group input[type="email"],
+.BR-form-group input[type="tel"],
+.BR-form-group input[type="password"],
+.BR-form-group textarea,
+.BR-form-group select {
   width: 100%;
   padding: 0.75rem 1rem;
-  border-radius: var(--border-radius);
   border: 1px solid var(--border-color);
-  background-color: var(--input-bg);
-  color: var(--input-text);
-  font-size: 1em;
-  font-family: inherit;
-  box-sizing: border-box;
-  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  border-radius: 8px;
+  background-color: #fff;
+  color: var(--text-primary);
+  font-size: 1rem;
+  transition: all var(--transition-speed) ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.BR-form-group input:focus,
+.BR-form-group textarea:focus,
+.BR-form-group select:focus {
+  border-color: var(--focus-color);
+  box-shadow: 0 0 0 3px var(--focus-shadow);
   outline: none;
 }
 
-/* Focus styles for form elements */
-.BReg-form-group input[type="text"]:focus,
-.BReg-form-group input[type="email"]:focus,
-.BReg-form-group input[type="tel"]:focus,
-.BReg-form-group input[type="password"]:focus,
-.BReg-form-group textarea:focus,
-.BReg-form-group select:focus {
-  border-color: var(--focus-border-color);
-  box-shadow: var(--focus-box-shadow);
+.BR-form-group textarea {
+  resize: none;
+  min-height: 100px;
 }
 
-/* Textarea specific style */
-.BReg-form-group textarea {
-  resize: vertical;
-  min-height: 120px;
+/* Horizontal Layout */
+.BR-form-group.BR-horizontal {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
 }
 
-/* Select dropdown specific style */
-.BReg-form-group select {
+/* Select Styling */
+.BR-form-group select {
   appearance: none;
-  background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill="none" stroke="%236c757d" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2 5l6 6 6-6"/></svg>');
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%234a5568' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 1rem center;
-  background-size: 16px 12px;
+  background-size: 16px;
   padding-right: 2.5rem;
 }
 
-/* Styles for disabled inputs */
-.BReg-form-group input:disabled,
-.BReg-form-group textarea:disabled,
-.BReg-form-group select:disabled {
-    background-color: #e9ecef; /* Lighter background for disabled */
-    cursor: not-allowed;
-    opacity: 0.7;
+/* File Upload Styling */
+.BR-file-input-group {
+  position: relative;
 }
 
-
-/* Horizontal Grouping */
-.BReg-form-group.BReg-horizontal {
+.BR-upload-button {
   display: flex;
-  gap: 20px; /* Adjust gap as needed */
-  flex-wrap: wrap; /* Allow wrapping on smaller screens if needed */
-}
-
-/* Target the specific input group divs within the horizontal container */
-.BReg-form-group.BReg-horizontal .BReg-input-group {
-   flex: 1; /* Allow items to grow */
-   min-width: 150px; /* Prevent items from becoming too small */
-}
-
-
-/* --- Feedback Message Styles --- */
-.BReg-error-message,
-.BReg-success-message {
-    padding: 0.75rem 1.25rem;
-    margin-bottom: 1rem;
-    border: 1px solid transparent;
-    border-radius: var(--border-radius);
-    text-align: center;
-    font-weight: 500;
-}
-
-.BReg-error-message {
-    color: var(--error-color);
-    background-color: var(--error-bg);
-    border-color: var(--error-border);
-}
-
-.BReg-success-message {
-    color: var(--success-color);
-    background-color: var(--success-bg);
-    border-color: var(--success-border);
-}
-
-
-/* --- File Input & Button Styles --- */
-.BReg-file-input-group label:not(.BReg-upload-button) { /* Style the main label */
-  display: block;
-  margin-bottom: 0.5rem;
-  color: #000000;
-  font-weight: 600;
-  font-size: 0.9em;
-}
-
-.BReg-upload-button {
-  background-color: #d4d4d4;
-  color: var(--button-text-color);
-  border: 1px solid var(--button-secondary-bg);
-  display: inline-block; /* Make it behave like a button */
-  font-weight: 400;
-  line-height: 1.5;
-  text-align: center;
-  vertical-align: middle;
-  cursor: pointer;
-  user-select: none;
-  padding: 0.6rem 1.2rem;
-  font-size: 1rem;
-  border-radius: var(--border-radius);
-  transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
-  margin-top: 5px;
-  white-space: nowrap;      /* Prevent text wrapping */
-  overflow: hidden;         /* Hide overflow */
-  text-overflow: ellipsis;  /* Add ellipsis for long file names */
-  max-width: 100%;          /* Ensure it doesn't overflow container */
-}
-
-.BReg-upload-button:hover {
-    background-color:#b1aeae;
-    border-color: var(--button-secondary-hover-bg);
-}
-
-/* Style for disabled upload button */
-.BReg-upload-button.BReg-disabled {
-    background-color: #adb5bd; /* More muted gray */
-    border-color: #adb5bd;
-    cursor: not-allowed;
-    opacity: 0.65;
-}
-
-/* --- Image Preview Styles --- */
-.BReg-image-preview-container {
-    margin-top: 15px;
-    max-width: 200px; /* Limit container width */
-}
-
-.BReg-image-preview {
-  display: block;
-  max-width: 100%; /* Make image responsive within container */
-  height: auto; /* Maintain aspect ratio */
-  max-height: 150px; /* Limit max height */
-  border-radius: var(--border-radius);
-  object-fit: cover; /* Cover the area, cropping if needed */
-  border: 1px solid var(--border-color);
-}
-
-/* Optional: Specific preview styles if needed */
-.BReg-profile-preview {
-  /* e.g., make profile preview circular */
-  /* border-radius: 50%;
-     width: 100px;
-     height: 100px;
-     max-height: 100px; */
-}
-.BReg-cover-preview {
-  /* No specific styles needed for now */
-}
-
-
-/* --- Submit Button Style --- */
-.BReg-submit-button {
-  background-color: #212529;
-  color: var(--button-text-color);
-  border: 1px solid #000000;
-  padding: 0.75rem 1.5rem;
-  border-radius: 50px; /* Pill shape */
-  font-size: 1.1em;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  background-color: #f7fafc;
+  border: 1px dashed #cbd5e0;
+  border-radius: 8px;
+  color: var(--text-secondary);
   font-weight: 500;
-  transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.15s ease;
-  display: block;
+  cursor: pointer;
+  transition: all var(--transition-speed) ease;
+  margin-top: 0.5rem;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.BR-upload-button:hover {
+  background-color: #edf2f7;
+  border-color: #a0aec0;
+}
+
+.BR-upload-button.BR-disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Image Preview Styling */
+.BR-image-preview-container {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+}
+
+.BR-image-preview {
+  max-width: 100%;
+  max-height: 200px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  object-fit: cover;
+}
+
+.BR-profile-preview {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.BR-cover-preview {
+  width: 100%;
+  max-height: 150px;
+  object-fit: cover;
+}
+
+/* Alert Messages */
+.BR-error-message,
+.BR-success-message {
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.BR-error-message {
+  background-color: var(--error-bg);
+  color: var(--error-color);
+  border-left: 4px solid var(--error-color);
+}
+
+.BR-success-message {
+  background-color: var(--success-bg);
+  color: var(--success-color);
+  border-left: 4px solid var(--success-color);
+}
+
+/* Submit Button */
+.BR-submit-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 100%;
   max-width: 280px;
-  margin: 30px auto 0; /* Center button */
+  margin: 2rem auto 0;
+  padding: 0.875rem;
+  background: linear-gradient(90deg, #4a6cf7, #6a3cf7);
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+  border: none;
+  border-radius: 50px;
   cursor: pointer;
-  text-align: center;
+  transition: all var(--transition-speed) ease;
+  box-shadow: 0 4px 12px rgba(106, 60, 247, 0.25);
 }
 
-.BReg-submit-button:hover:not(:disabled) { /* Only apply hover if not disabled */
-  background-color: #000000;
-  border-color: #919191;
+.BR-submit-button:hover:not(:disabled) {
+  background: linear-gradient(90deg, #3b5ef6, #5a2cf6);
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 6px 16px rgba(106, 60, 247, 0.3);
 }
 
-/* Style for disabled submit button */
-.BReg-submit-button:disabled {
-    background-color: var(--button-primary-bg); /* Keep base color */
-    border-color: #000000;
-    opacity: 0.65;
-    cursor: not-allowed;
-    transform: none; /* Remove hover transform */
-    box-shadow: none; /* Remove hover shadow */
+.BR-submit-button:disabled {
+  background: linear-gradient(90deg, #a0aec0, #cbd5e0);
+  cursor: not-allowed;
+  box-shadow: none;
 }
 
-/* --- Media Queries --- */
+/* Input Group */
+.BR-input-group {
+  width: 100%;
+}
+
+/* Responsive Adjustments */
 @media (max-width: 768px) {
-    .BReg-form-wrapper {
-        max-width: 90%;
-        padding: 25px 30px;
-        margin: 20px 0;
-    }
+  .BR-form-wrapper {
+    padding: 2rem 1.5rem;
+  }
+  
+  .BR-form-title {
+    font-size: 1.75rem;
+  }
 }
 
-@media (max-width: 600px) {
-  .BReg-business-form-container {
-      padding: 20px 10px;
+@media (max-width: 640px) {
+  .BR-business-form-container {
+    padding: 1rem;
   }
-
-  .BReg-form-wrapper {
-        max-width: 100%; /* Allow wrapper to take full width */
-        padding: 20px;
-        box-shadow: none;
-        border: 1px solid var(--border-color);
-        margin: 15px 0;
+  
+  .BR-form-wrapper {
+    padding: 1.5rem 1rem;
+    border-radius: 12px;
   }
-
-  .BReg-form-title {
-      font-size: 1.6em;
-      margin-bottom: 25px;
+  
+  .BR-form-group.BR-horizontal {
+    grid-template-columns: 1fr;
   }
-
-  .BReg-form-group.BReg-horizontal {
-    flex-direction: column; /* Stack items vertically */
-    gap: 1rem; /* Adjust vertical gap */
-  }
-
-  /* Ensure input groups take full width when stacked */
-  .BReg-form-group.BReg-horizontal .BReg-input-group {
-    width: 100%;
-    min-width: 0; /* Reset min-width */
-  }
-
-  .BReg-submit-button {
-      max-width: 100%; /* Allow button full width */
+  
+  .BR-submit-button {
+    max-width: 100%;
   }
 }
