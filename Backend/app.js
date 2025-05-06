@@ -1,4 +1,4 @@
-// app.js
+// app.js (Backend)
 const express = require('express');
 const path = require('path');
 const cors = require('cors');
@@ -13,24 +13,23 @@ const hpp = require('hpp');
 // Route files
 const authRoutes = require('./routes/authRoutes');
 const clientRoutes = require('./routes/clientRoutes');
+// Import admin routes if you have them
+// const adminRoutes = require('./routes/adminRoutes');
 
 // Middleware
-const errorHandler = require('./middleware/errorHandler'); // Ensure this path is correct
+const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
 
-// Enable CORS - configure as needed for production
+// Enable CORS - Ensure frontend origin is allowed
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173', // << UPDATED for :5173
+  origin: process.env.FRONTEND_URL || 'http://localhost:5173', // Or your specific frontend port
   credentials: true
 }));
 
 
-
 // Body parser for JSON
-app.use(express.json({ limit: '10mb' })); // For JSON payloads, limit can be adjusted
-// Body parser for URL-encoded data (not typically used if frontend sends JSON or FormData)
-// app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+app.use(express.json({ limit: '10mb' }));
 
 // Cookie parser
 app.use(cookieParser());
@@ -52,11 +51,11 @@ app.use(xss());
 // Rate limiting
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 200, // limit each IP to 200 requests per windowMs
-  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
-  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+  max: 200,
+  standardHeaders: true,
+  legacyHeaders: false,
 });
-app.use('/api', limiter); // Apply to all API routes
+app.use('/api', limiter); // Apply limiter to API routes
 
 // Prevent http param pollution
 app.use(hpp());
@@ -64,9 +63,20 @@ app.use(hpp());
 // Set static folder for uploads
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+// --- NEW: Simple Root Route for Status Check / Ping ---
+app.get('/', (req, res) => {
+    // You can add more checks here if needed (e.g., DB connection status)
+    // For now, just confirming the Express app is running
+    res.status(200).json({ status: 'ok', message: 'Backend service is running' });
+});
+// --- END OF NEW ROUTE ---
+
 // Mount routers
 app.use('/api/auth', authRoutes);
 app.use('/api/clients', clientRoutes);
+// Mount admin routes if applicable
+// app.use('/api/admin', adminRoutes);
+
 
 // Centralized Error handler middleware - Should be last
 app.use(errorHandler);

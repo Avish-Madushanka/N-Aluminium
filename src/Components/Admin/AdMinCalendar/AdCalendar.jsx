@@ -4,215 +4,189 @@ import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import {
   ChevronLeft, ChevronRight, Calendar, Clock, MapPin,
-  Save, Plus, Trash, Edit, Check, X, Settings, AlertTriangle
+  Save, Plus, Trash, Edit, Check, X, Settings, AlertTriangle, Info
 } from 'lucide-react';
-import { ClipLoader } from 'react-spinners';
-import './AdCalendar.css'; // Ensure CSS file exists
+import { ClipLoader } from 'react-spinners'; // Ensure react-spinners is installed
+import './AdCalendar.css'; // Ensure this CSS file exists and is styled
 import API_ENDPOINTS from '../../../apiConfig'; // Import the central API config
-
 // Use API endpoints from the central config
-const API_SETTINGS_URL = API_ENDPOINTS.ADMIN.SETTINGS; // Correct endpoint for GET/PUT settings
+const API_SETTINGS_URL = API_ENDPOINTS.ADMIN.SETTINGS; // e.g., 'http://localhost:5003/api/admin/settings'
 
 const AdCalendar = () => {
   // --- State Variables ---
-  const [isLoading, setIsLoading] = useState(true);
-  const [isSaving, setIsSaving] = useState(false);
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
-  const [settingsData, setSettingsData] = useState(null); // Holds the entire settings object
-  const [currentDate, setCurrentDate] = useState(new Date()); // For calendar display
-  const [activeTab, setActiveTab] = useState('calendar'); // For UI tabs
+  const [isLoading, setIsLoading] = useState(true); // For initial data load
+  const [isSaving, setIsSaving] = useState(false); // For PUT request status
+  const [error, setError] = useState(''); // General error messages
+  const [success, setSuccess] = useState(''); // Success messages
+  const [settingsData, setSettingsData] = useState(null); // Holds fetched settings object { availableDays, timeSlots, serviceAreas, specialDates, ... }
+  const [currentDate, setCurrentDate] = useState(new Date()); // For calendar display month/year
+  const [activeTab, setActiveTab] = useState('calendar'); // 'calendar', 'timeslots', 'areas'
 
-  // Editing States for lists
-  const [editingTimeSlot, setEditingTimeSlot] = useState(null); // { id, label, time, active }
-  const [newTimeSlot, setNewTimeSlot] = useState({ label: '', time: '', active: true });
-  const [editingServiceArea, setEditingServiceArea] = useState(null); // { id, name, active }
-  const [newServiceArea, setNewServiceArea] = useState({ name: '', active: true });
+  // Editing States for list items
+  const [editingTimeSlot, setEditingTimeSlot] = useState(null); // Stores the time slot being edited { id, label, time, active }
+  const [newTimeSlot, setNewTimeSlot] = useState({ label: '', time: '', active: true }); // Form state for adding a new time slot
+  const [editingServiceArea, setEditingServiceArea] = useState(null); // Stores the service area being edited { id, name, active }
+  const [newServiceArea, setNewServiceArea] = useState({ name: '', active: true }); // Form state for adding a new service area
 
-  // --- Static Data ---
+  // --- Static Data & Defaults ---
   const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   const daysOfWeekMap = { 0: 'Sun', 1: 'Mon', 2: 'Tue', 3: 'Wed', 4: 'Thu', 5: 'Fri', 6: 'Sat' };
-  const dayIndexes = ['1', '2', '3', '4', '5', '6', '0']; // Order for displaying toggles
+  const dayIndexesForDisplay = ['1', '2', '3', '4', '5', '6', '0']; // Mon-Sun order for UI toggles
   const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  // Define default structure in case backend doesn't provide complete data
   const DEFAULT_AVAILABLE_DAYS = { '0': false, '1': true, '2': false, '3': true, '4': false, '5': true, '6': false };
-
-  // --- Calendar navigation functions ---
-  const goToPrevMonth = () => {
-    setCurrentDate(prev => {
-      const newDate = new Date(prev);
-      newDate.setMonth(newDate.getMonth() - 1);
-      return newDate;
-    });
-  };
-
-  const goToNextMonth = () => {
-    setCurrentDate(prev => {
-      const newDate = new Date(prev);
-      newDate.setMonth(newDate.getMonth() + 1);
-      return newDate;
-    });
-  };
-
-   // --- Default settings structure (used if fetch fails unexpectedly) ---
-   const createDefaultSettingsStructure = () => ({
-    availableDays: DEFAULT_AVAILABLE_DAYS,
+  const createDefaultSettingsStructure = () => ({
+    availableDays: { ...DEFAULT_AVAILABLE_DAYS },
     timeSlots: [],
     serviceAreas: [],
-    specialDates: []
+    specialDates: [],
+    _id: null, // Indicate it's default/not fetched
+    singleton: true // Assuming the backend uses this pattern
   });
 
-  // --- Fetch Settings ---
+  // --- Calendar Navigation ---
+  const goToPrevMonth = () => setCurrentDate(prev => new Date(prev.getFullYear(), prev.getMonth() - 1, 1));
+  const goToNextMonth = () => setCurrentDate(prev => new Date(prev.getFullYear(), prev.getMonth() + 1, 1));
+
+  // --- Fetch Settings Data ---
   const fetchSettings = useCallback(async () => {
-    console.log("Attempting to fetch settings from:", API_SETTINGS_URL);
+    console.log("[AdCalendar] Fetching settings from:", API_SETTINGS_URL);
     setIsLoading(true);
     setError('');
-    setSuccess(''); // Clear previous success messages
+    setSuccess('');
+    setSettingsData(null); // Clear old data before fetching
 
     const token = localStorage.getItem('token');
     if (!token) {
-      setError("Admin authentication token not found. Please log in as admin.");
+      setError("Authentication Error: Admin token not found. Please log in.");
       setIsLoading(false);
-      setSettingsData(createDefaultSettingsStructure()); // Show empty structure
-      return; // Stop fetching if no token
+      setSettingsData(createDefaultSettingsStructure()); // Use default empty structure
+      return;
     }
 
     try {
       const response = await axios.get(API_SETTINGS_URL, {
-        headers: {
-          Authorization: `Bearer ${token}`, // Use the token for authentication
-          'Content-Type': 'application/json'
-        },
-        timeout: 8000 // Set a reasonable timeout
+        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+        timeout: 10000
       });
 
+      console.log("[AdCalendar] Fetch response received:", response);
       if (response.data?.success && response.data.data) {
-        console.log("Settings fetched successfully:", response.data.data);
         const fetched = response.data.data;
-        // Ensure data structure integrity, use defaults if parts are missing
+        console.log("[AdCalendar] Settings fetched successfully:", fetched);
+        // Validate structure and ensure all expected arrays/objects exist
         setSettingsData({
-            availableDays: fetched.availableDays && typeof fetched.availableDays === 'object' ? fetched.availableDays : DEFAULT_AVAILABLE_DAYS,
-            timeSlots: Array.isArray(fetched.timeSlots) ? fetched.timeSlots : [],
-            serviceAreas: Array.isArray(fetched.serviceAreas) ? fetched.serviceAreas : [],
-            specialDates: Array.isArray(fetched.specialDates) ? fetched.specialDates : [],
-            _id: fetched._id,
-            singleton: fetched.singleton
+          availableDays: (fetched.availableDays && typeof fetched.availableDays === 'object') ? fetched.availableDays : { ...DEFAULT_AVAILABLE_DAYS },
+          timeSlots: Array.isArray(fetched.timeSlots) ? fetched.timeSlots : [],
+          serviceAreas: Array.isArray(fetched.serviceAreas) ? fetched.serviceAreas : [],
+          specialDates: Array.isArray(fetched.specialDates) ? fetched.specialDates : [],
+          _id: fetched._id || null,
+          singleton: fetched.singleton !== undefined ? fetched.singleton : true
         });
       } else {
-        // Handle cases where API returns success:false or unexpected structure
-        throw new Error(response.data?.message || 'Received unsuccessful or invalid response when fetching settings.');
+        throw new Error(response.data?.message || 'Invalid response structure received from server.');
       }
     } catch (err) {
-      console.error("Fetch Settings Error:", err);
+      console.error("[AdCalendar] Fetch Settings Error:", err);
       let errMsg = 'Could not load settings from server.';
-
       if (err.response) {
-        // Server responded with an error status
         if (err.response.status === 401 || err.response.status === 403) {
-          errMsg = "Authorization Error: You are not authorized to view settings. Please ensure you are logged in as an admin.";
-          // Optionally clear token if it's invalid
-          // localStorage.removeItem('token');
-        } else if (err.response.status === 404) {
-          errMsg = "Settings API endpoint not found. Please contact the administrator.";
+          errMsg = "Authorization Error: Cannot load settings. Ensure you are logged in as admin.";
         } else {
-          errMsg = err.response.data?.message || `Server error (${err.response.status}) while fetching settings.`;
+          errMsg = err.response.data?.error || err.response.data?.message || `Server error (${err.response.status}).`;
         }
       } else if (err.request) {
-        // Request was made but no response (network error, server down)
-        errMsg = "Network Error: Could not connect to the server to fetch settings.";
+        errMsg = "Network Error: Unable to connect to the server.";
       } else {
-        // Other errors (e.g., setup)
-        errMsg = err.message || 'An unknown error occurred while fetching settings.';
+        errMsg = err.message || 'An unknown error occurred.';
       }
       setError(errMsg);
-      // Set a default structure so the UI doesn't completely break
-      setSettingsData(createDefaultSettingsStructure());
+      setSettingsData(createDefaultSettingsStructure()); // Use default empty structure on error
     } finally {
       setIsLoading(false);
     }
-  }, []); // Add empty dependency array to ensure it behaves like componentDidMount
+  }, []); // No dependencies needed, fetch is triggered manually or by useEffect below
 
   useEffect(() => {
-    fetchSettings();
-  }, [fetchSettings]); // Run fetchSettings when the component mounts
+    fetchSettings(); // Fetch settings when component mounts
+  }, [fetchSettings]); // Dependency array includes the function itself
 
-  // --- Calendar utility functions ---
-   const getMonthData = useCallback(() => {
-    const validDate = currentDate instanceof Date && !isNaN(currentDate);
-    if (!validDate) {
-      console.error("Invalid currentDate in getMonthData:", currentDate);
+  // --- Calendar Rendering Logic ---
+  const getMonthData = useCallback(() => {
+    if (!(currentDate instanceof Date) || isNaN(currentDate.getTime())) {
+      console.error("[AdCalendar] Invalid currentDate:", currentDate, "Resetting to now.");
       const now = new Date();
-      setCurrentDate(now); // Reset to current date if invalid
+      setCurrentDate(now); // Attempt recovery
       return { year: now.getFullYear(), month: now.getMonth(), startingDay: now.getDay(), daysInMonth: new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate() };
     }
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
     const firstDayOfMonth = new Date(year, month, 1);
-    const startingDayOfWeek = firstDayOfMonth.getDay(); // 0 for Sunday
+    const startingDayOfWeek = firstDayOfMonth.getDay(); // 0 = Sunday
     const daysInCurrentMonth = new Date(year, month + 1, 0).getDate();
     return { year, month, startingDay: startingDayOfWeek, daysInMonth: daysInCurrentMonth };
   }, [currentDate]);
 
   const isPastDate = (day) => {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const validDate = currentDate instanceof Date && !isNaN(currentDate);
-     if (!validDate) return true; // Treat as past if date is invalid
-    const checkDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
+    const today = new Date(); today.setHours(0, 0, 0, 0);
+    const monthData = getMonthData();
+    if (!monthData) return true; // Assume past if month data invalid
+    const checkDate = new Date(monthData.year, monthData.month, day);
     return checkDate < today;
   };
 
   const isRegularCollectionDay = useCallback((day) => {
-    if (!settingsData?.availableDays) return false;
-     const validDate = currentDate instanceof Date && !isNaN(currentDate);
-     if (!validDate) return false;
-    const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
-    const dayOfWeek = date.getDay(); // 0-6
-    return !!settingsData.availableDays[dayOfWeek.toString()];
-  }, [settingsData?.availableDays, currentDate]);
+    const effectiveSettings = settingsData || createDefaultSettingsStructure();
+    if (!effectiveSettings.availableDays) return false;
+    const monthData = getMonthData();
+    if (!monthData) return false; // Cannot determine day if month data invalid
+    const date = new Date(monthData.year, monthData.month, day);
+    const dayOfWeek = date.getDay().toString(); // 0-6 as string keys
+    return !!effectiveSettings.availableDays[dayOfWeek];
+  }, [settingsData, getMonthData]);
 
   const getSpecialDateStatus = useCallback((day) => {
-    if (!settingsData?.specialDates) return null;
-    const validDate = currentDate instanceof Date && !isNaN(currentDate);
-     if (!validDate) return null;
-    const dateStr = `${currentDate.getFullYear()}-${(currentDate.getMonth() + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
-    const specialDate = settingsData.specialDates.find(d => d.date === dateStr);
-    return specialDate ? specialDate.status : null; // 'available' or 'unavailable'
-  }, [settingsData?.specialDates, currentDate]);
+    const effectiveSettings = settingsData || createDefaultSettingsStructure();
+    if (!effectiveSettings.specialDates) return null;
+    const monthData = getMonthData();
+    if (!monthData) return null; // Cannot check if month data invalid
+    const dateStr = `${monthData.year}-${(monthData.month + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+    const specialDate = effectiveSettings.specialDates.find(d => d.date === dateStr);
+    return specialDate ? specialDate.status : null;
+  }, [settingsData, getMonthData]);
 
   const isCollectionDay = useCallback((day) => {
     const specialStatus = getSpecialDateStatus(day);
     if (specialStatus === 'available') return true;
     if (specialStatus === 'unavailable') return false;
-    // If no special status, rely on the regular schedule
     return isRegularCollectionDay(day);
   }, [getSpecialDateStatus, isRegularCollectionDay]);
 
+  // --- Handlers for Modifying Settings State ---
 
-  // --- State Modification Handlers ---
-  const handleAvailableDayChange = (dayIndex) => {
+  // Toggle regular available day (e.g., always collect on Mondays)
+  const handleAvailableDayChange = (dayIndexString) => {
     setSettingsData(prev => {
-      if (!prev || !prev.availableDays) return prev; // Prevent updates if data isn't loaded
-      // Create a new object for availableDays to ensure state update triggers re-render
+      if (!prev) return prev;
+      const currentAvailability = prev.availableDays ? !!prev.availableDays[dayIndexString] : false;
       const newAvailableDays = {
-          ...prev.availableDays,
-          [dayIndex]: !prev.availableDays[dayIndex]
+        ...(prev.availableDays || { ...DEFAULT_AVAILABLE_DAYS }), // Ensure object exists
+        [dayIndexString]: !currentAvailability
       };
-      return {
-        ...prev,
-        availableDays: newAvailableDays
-      };
+      return { ...prev, availableDays: newAvailableDays };
     });
-     // Clear success message when changes are made before saving
-     setSuccess('');
+    setSuccess(''); // Clear success message on change
   };
 
+  // Toggle special status for a specific calendar date
   const handleSpecialDateToggle = (day) => {
-    const validDate = currentDate instanceof Date && !isNaN(currentDate);
-    if (isPastDate(day) || !settingsData || !validDate) return;
+    const monthData = getMonthData();
+    if (isPastDate(day) || !settingsData || !monthData) return;
 
-    const dateStr = `${currentDate.getFullYear()}-${(currentDate.getMonth() + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+    const dateStr = `${monthData.year}-${(monthData.month + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
 
     setSettingsData(prev => {
+      if (!prev) return prev;
       const currentSpecialDates = prev.specialDates || [];
       const existingIndex = currentSpecialDates.findIndex(d => d.date === dateStr);
 
@@ -220,172 +194,189 @@ const AdCalendar = () => {
       if (existingIndex >= 0) {
         // Remove existing override
         newSpecialDatesList = currentSpecialDates.filter((_, i) => i !== existingIndex);
-        console.log(`Removing special date override for ${dateStr}`);
+        console.log(`[AdCalendar] Removing special date override for ${dateStr}`);
       } else {
-        // Add new override (opposite of regular schedule for that day)
+        // Add new override (opposite of regular schedule)
         const regularStatus = isRegularCollectionDay(day);
         const newStatus = regularStatus ? 'unavailable' : 'available';
-        // Generate a more robust unique ID (useful if backend needs it, good practice)
-        const id = `sd-${dateStr}-${Math.random().toString(36).substring(2, 9)}`; // Example ID
+        const id = `sd-${dateStr}-${Date.now().toString().slice(-5)}`; // Simple unique ID
         const newSpecialDate = { id, date: dateStr, status: newStatus };
         newSpecialDatesList = [...currentSpecialDates, newSpecialDate];
-        console.log(`Adding special date override for ${dateStr}: ${newStatus}`);
+        console.log(`[AdCalendar] Adding special date override for ${dateStr}: ${newStatus}`);
       }
       return { ...prev, specialDates: newSpecialDatesList };
-    });
-     // Clear success message when changes are made before saving
-     setSuccess('');
-  };
-
- // --- List Modification Handlers (Time Slots, Service Areas) ---
-
-  // Generate a simple unique enough ID for new items added client-side
-  const generateItemId = (prefix, value) => {
-      const base = value?.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-') || `item-${Date.now()}`;
-      return `${prefix}-${base}-${Math.random().toString(36).substring(2, 7)}`;
-  };
-
-
-  // Generic add item handler
-  const handleAddItem = (listName, newItemData, idField = 'id', requiredFields = []) => {
-      // Basic validation
-      for (const field of requiredFields) {
-          if (!newItemData[field] || !newItemData[field].trim()) {
-              alert(`${field.charAt(0).toUpperCase() + field.slice(1)} is required to add an item.`);
-              return;
-          }
-      }
-
-      setSettingsData(prev => {
-          if (!prev) return prev;
-          const currentList = prev[listName] || [];
-          // Generate ID based on label/name or fallback
-          const identifierValue = newItemData.label || newItemData.name;
-          const newItemId = generateItemId(listName.slice(0, 2), identifierValue);
-
-          // Check for duplicate names/labels if needed (optional but good)
-          if ((newItemData.label && currentList.some(item => item.label === newItemData.label)) ||
-              (newItemData.name && currentList.some(item => item.name === newItemData.name))) {
-              alert(`An item with this name/label already exists in ${listName}.`);
-              return prev;
-          }
-
-          console.log(`Adding item to ${listName}:`, { ...newItemData, [idField]: newItemId });
-          return { ...prev, [listName]: [...currentList, { ...newItemData, [idField]: newItemId }] };
-      });
-       setSuccess(''); // Clear success message
-  };
-
-  // Generic delete item handler
-  const handleDeleteItem = (listName, idToDelete, idField = 'id') => {
-    if (!window.confirm(`Are you sure you want to delete this item from ${listName}?`)) return;
-    setSettingsData(prev => {
-      if (!prev || !Array.isArray(prev[listName])) return prev;
-      const updatedList = prev[listName].filter(item => item[idField] !== idToDelete);
-      console.log(`Deleting item with ID ${idToDelete} from ${listName}`);
-      return { ...prev, [listName]: updatedList };
     });
     setSuccess('');
   };
 
-  // Generic toggle active handler
-  const handleToggleActive = (listName, idToToggle, idField = 'id') => {
-    setSettingsData(prev => {
-      if (!prev || !Array.isArray(prev[listName])) return prev;
-      const updatedList = prev[listName].map(item =>
-        item[idField] === idToToggle ? { ...item, active: !item.active } : item
-      );
-      console.log(`Toggling active status for item ID ${idToToggle} in ${listName}`);
-      return { ...prev, [listName]: updatedList };
-    });
-     setSuccess('');
+  // --- List Item CRUD Helpers ---
+  const generateItemId = (prefix, value) => `${prefix}-${(value || Date.now()).toString().toLowerCase().replace(/[^a-z0-9]+/g, '-').substring(0, 10)}-${Math.random().toString(36).substring(2, 7)}`;
+
+  // Add item to a list (Time Slot or Service Area)
+  const handleAddItem = (listKey, newItemState, setNewItemState, requiredFields) => {
+    if (!settingsData) return;
+
+    // Client-side validation
+    for (const field of requiredFields) {
+      if (!newItemState[field] || !newItemState[field].trim()) {
+        alert(`${field.charAt(0).toUpperCase() + field.slice(1)} cannot be empty.`);
+        return;
+      }
+    }
+    // Check for duplicates (basic check based on label/name)
+     const identifierField = newItemState.label !== undefined ? 'label' : 'name';
+     const identifierValue = newItemState[identifierField];
+     if (identifierValue && settingsData[listKey]?.some(item => item[identifierField]?.toLowerCase() === identifierValue.toLowerCase())) {
+         alert(`An item with this ${identifierField} already exists.`);
+         return;
+     }
+
+
+    const newItem = {
+      ...newItemState,
+      id: generateItemId(listKey.slice(0, 2), identifierValue), // Generate client-side ID
+      active: newItemState.active !== undefined ? newItemState.active : true // Default to active
+    };
+
+    setSettingsData(prev => ({
+      ...prev,
+      [listKey]: [...(prev[listKey] || []), newItem]
+    }));
+
+    // Reset the 'add new' form state
+    const resetState = Object.keys(newItemState).reduce((acc, key) => {
+        acc[key] = key === 'active' ? true : ''; // Reset strings to empty, keep active as true
+        return acc;
+      }, {});
+    setNewItemState(resetState);
+    setSuccess('');
+    console.log(`[AdCalendar] Added item to ${listKey}:`, newItem);
   };
 
-  // --- Time Slot Specific Edit/Add ---
+  // Delete item from a list
+  const handleDeleteItem = (listKey, idToDelete) => {
+    if (!window.confirm(`Are you sure you want to delete this item? This action cannot be undone.`)) return;
+
+    setSettingsData(prev => {
+      if (!prev || !Array.isArray(prev[listKey])) return prev;
+      const updatedList = prev[listKey].filter(item => item.id !== idToDelete);
+      return { ...prev, [listKey]: updatedList };
+    });
+    // If currently editing the item being deleted, cancel edit mode
+    if(listKey === 'timeSlots' && editingTimeSlot?.id === idToDelete) setEditingTimeSlot(null);
+    if(listKey === 'serviceAreas' && editingServiceArea?.id === idToDelete) setEditingServiceArea(null);
+    setSuccess('');
+    console.log(`[AdCalendar] Deleted item ID ${idToDelete} from ${listKey}`);
+  };
+
+  // Toggle 'active' status of an item
+  const handleToggleActive = (listKey, idToToggle) => {
+    setSettingsData(prev => {
+      if (!prev || !Array.isArray(prev[listKey])) return prev;
+      const updatedList = prev[listKey].map(item =>
+        item.id === idToToggle ? { ...item, active: !item.active } : item
+      );
+      return { ...prev, [listKey]: updatedList };
+    });
+    setSuccess('');
+    console.log(`[AdCalendar] Toggled active status for item ID ${idToToggle} in ${listKey}`);
+  };
+
+  // --- Edit Item Handlers ---
+
+  // Time Slots
   const startEditTimeSlot = (slot) => setEditingTimeSlot({ ...slot });
   const cancelEditTimeSlot = () => setEditingTimeSlot(null);
   const handleEditingTimeSlotChange = (e) => {
+    if (!editingTimeSlot) return;
     const { name, value, type, checked } = e.target;
     setEditingTimeSlot(prev => ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
   };
   const saveEditTimeSlot = () => {
     if (!editingTimeSlot || !editingTimeSlot.label?.trim() || !editingTimeSlot.time?.trim()) {
-        alert('Label and Time Range are required.');
-        return;
+      alert('Label and Time Range are required.'); return;
     }
     setSettingsData(prev => {
-        if (!prev || !prev.timeSlots) return prev;
-        const updatedSlots = prev.timeSlots.map(slot =>
-            slot.id === editingTimeSlot.id ? { ...editingTimeSlot } : slot
-        );
-        return { ...prev, timeSlots: updatedSlots };
+      if (!prev || !prev.timeSlots) return prev;
+      // Basic duplicate check excluding self
+      if (prev.timeSlots.some(slot => slot.id !== editingTimeSlot.id && slot.label?.toLowerCase() === editingTimeSlot.label?.toLowerCase())) {
+          alert('Another time slot with this label already exists.');
+          return prev; // Prevent saving duplicate label
+      }
+      const updatedSlots = prev.timeSlots.map(slot => slot.id === editingTimeSlot.id ? { ...editingTimeSlot } : slot);
+      return { ...prev, timeSlots: updatedSlots };
     });
-    console.log("Saved edited time slot:", editingTimeSlot);
+    console.log("[AdCalendar] Saved edited time slot:", editingTimeSlot);
     setEditingTimeSlot(null);
     setSuccess('');
   };
-  const addTimeSlotHandler = () => {
-      handleAddItem('timeSlots', newTimeSlot, 'id', ['label', 'time']);
-      // Reset the form only if add was successful (handleAddItem doesn't return status, so we assume it worked if no alert)
-      if (newTimeSlot.label?.trim() && newTimeSlot.time?.trim()) {
-         setNewTimeSlot({ label: '', time: '', active: true }); // Reset form
-      }
-  };
 
-  // --- Service Area Specific Edit/Add ---
+  // Service Areas
   const startEditServiceArea = (area) => setEditingServiceArea({ ...area });
   const cancelEditServiceArea = () => setEditingServiceArea(null);
   const handleEditingServiceAreaChange = (e) => {
+    if (!editingServiceArea) return;
     const { name, value, type, checked } = e.target;
     setEditingServiceArea(prev => ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
   };
   const saveEditServiceArea = () => {
-     if (!editingServiceArea || !editingServiceArea.name?.trim()) {
-         alert('Area Name is required.');
-         return;
-     }
+    if (!editingServiceArea || !editingServiceArea.name?.trim()) {
+      alert('Area Name is required.'); return;
+    }
     setSettingsData(prev => {
-         if (!prev || !prev.serviceAreas) return prev;
-        const updatedAreas = prev.serviceAreas.map(area =>
-            area.id === editingServiceArea.id ? { ...editingServiceArea } : area
-        );
+       if (!prev || !prev.serviceAreas) return prev;
+       // Basic duplicate check excluding self
+       if (prev.serviceAreas.some(area => area.id !== editingServiceArea.id && area.name?.toLowerCase() === editingServiceArea.name?.toLowerCase())) {
+           alert('Another service area with this name already exists.');
+           return prev; // Prevent saving duplicate name
+       }
+       const updatedAreas = prev.serviceAreas.map(area => area.id === editingServiceArea.id ? { ...editingServiceArea } : area);
        return { ...prev, serviceAreas: updatedAreas };
     });
-     console.log("Saved edited service area:", editingServiceArea);
+    console.log("[AdCalendar] Saved edited service area:", editingServiceArea);
     setEditingServiceArea(null);
     setSuccess('');
   };
-  const addServiceAreaHandler = () => {
-      handleAddItem('serviceAreas', newServiceArea, 'id', ['name']);
-      // Reset form only if add was successful
-       if (newServiceArea.name?.trim()) {
-         setNewServiceArea({ name: '', active: true }); // Reset form
-      }
-  };
 
-  // --- Save All Settings Handler ---
+  // --- Save All Settings to Backend ---
   const handleSaveAllSettings = async () => {
     if (editingTimeSlot || editingServiceArea) {
-      alert("Please save or cancel any active edits before saving all settings.");
-      return;
+      alert("Please save or cancel any active item edits before saving all settings."); return;
     }
     if (!settingsData) {
-      setError("Cannot save: Settings data is not available.");
-      return;
+      setError("Cannot save: Settings data is not loaded or available."); return;
     }
 
     setIsSaving(true);
     setError('');
     setSuccess('');
 
-    // Prepare data payload, ensure lists are arrays
     const settingsToSave = {
-      availableDays: settingsData.availableDays || DEFAULT_AVAILABLE_DAYS,
+      availableDays: settingsData.availableDays || { ...DEFAULT_AVAILABLE_DAYS },
       timeSlots: settingsData.timeSlots || [],
       serviceAreas: settingsData.serviceAreas || [],
       specialDates: settingsData.specialDates || [],
+      // Include _id and singleton if your backend expects them for update identification
+      _id: settingsData._id, // Might be null if fetched failed and defaults used
+      singleton: settingsData.singleton // Assuming your backend uses this
     };
-    console.log("Attempting to save settings to backend:", settingsToSave);
+
+    // Remove temporary client-side IDs before sending if backend assigns real IDs
+    // If backend DOES NOT re-assign IDs, keep the generated ones.
+    // Example of removing temp IDs (uncomment if needed):
+    // settingsToSave.timeSlots = settingsToSave.timeSlots.map(({ id, ...rest }) =>
+    //   id.startsWith('ts-') ? rest : { id, ...rest } // Remove temp ID, keep existing backend IDs
+    // );
+    // settingsToSave.serviceAreas = settingsToSave.serviceAreas.map(({ id, ...rest }) =>
+    //   id.startsWith('sa-') ? rest : { id, ...rest }
+    // );
+     // Special dates might also need ID handling depending on backend
+     // settingsToSave.specialDates = settingsToSave.specialDates.map(({ id, ...rest }) =>
+     //   id.startsWith('sd-') ? rest : { id, ...rest }
+     // );
+
+
+    console.log("[AdCalendar] Attempting to save settings to backend:", JSON.stringify(settingsToSave, null, 2));
 
     const token = localStorage.getItem('token');
     if (!token) {
@@ -395,51 +386,56 @@ const AdCalendar = () => {
     }
 
     try {
-      // Make PUT request to the backend settings endpoint
       const response = await axios.put(API_SETTINGS_URL, settingsToSave, {
-        headers: {
-          Authorization: `Bearer ${token}`, // Send the admin token
-          'Content-Type': 'application/json'
-        },
-         timeout: 10000 // Slightly longer timeout for save operations
+        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+        timeout: 15000
       });
 
+      console.log("[AdCalendar] Save response received:", response);
       if (response.data?.success) {
         setSuccess('Settings saved successfully!');
-        console.log("Backend confirmation received:", response.data);
-        // Optionally re-sync local state with the exact data returned by backend
-        // This is good practice if the backend modifies data (e.g., assigns real IDs)
+        console.log("[AdCalendar] Backend save confirmation:", response.data);
+        // IMPORTANT: Re-sync state with data returned from backend,
+        // as backend might assign new IDs or perform other transformations.
         const updatedData = response.data.data;
-         if (updatedData) {
-            setSettingsData({
-                availableDays: updatedData.availableDays || DEFAULT_AVAILABLE_DAYS,
-                timeSlots: updatedData.timeSlots || [],
-                serviceAreas: updatedData.serviceAreas || [],
-                specialDates: updatedData.specialDates || [],
-                _id: updatedData._id,
-                singleton: updatedData.singleton
-            });
-         }
-        setTimeout(() => setSuccess(''), 4000); // Clear success message after a delay
+        if (updatedData) {
+           setSettingsData({ // Update state with the confirmed data from backend
+               availableDays: updatedData.availableDays || { ...DEFAULT_AVAILABLE_DAYS },
+               timeSlots: updatedData.timeSlots || [],
+               serviceAreas: updatedData.serviceAreas || [],
+               specialDates: updatedData.specialDates || [],
+               _id: updatedData._id,
+               singleton: updatedData.singleton
+           });
+        } else {
+            // If backend didn't return updated data, log a warning but assume success
+            console.warn("[AdCalendar] Backend reported success but didn't return updated settings data.");
+        }
+        setTimeout(() => setSuccess(''), 5000); // Clear success message
       } else {
-        // Handle cases where backend returns success: false
         throw new Error(response.data?.message || 'Backend indicated failure when saving settings.');
       }
     } catch (err) {
-      console.error("Save Settings Error:", err);
-       let errMsg = 'Could not save settings to server.';
-        if (err.response) {
-            if (err.response.status === 401 || err.response.status === 403) {
-                 errMsg = "Authorization Error: You are not authorized to save settings. Please log in again as admin.";
-                 // localStorage.removeItem('token'); // Optionally clear token
-            } else {
-                 errMsg = err.response.data?.message || `Server error (${err.response.status}) while saving settings.`;
-            }
-        } else if (err.request) {
-            errMsg = "Network Error: Could not connect to the server to save settings.";
+      console.error("[AdCalendar] Save Settings Error:", err);
+      let errMsg = 'Could not save settings to server.';
+      if (err.response) {
+        if (err.response.status === 401 || err.response.status === 403) {
+          errMsg = "Authorization Error: Cannot save settings. Ensure you are logged in as admin.";
+        } else if (err.response.status === 400) {
+          errMsg = err.response.data?.error || err.response.data?.message || "Bad Request: Server rejected the settings data (check validation?).";
+          // Potentially parse field errors from err.response.data.errors if backend sends them on PUT failure
+           if (err.response.data?.errors) {
+               console.error("Backend validation errors on save:", err.response.data.errors);
+               // TODO: Potentially display these specific errors to the user
+           }
         } else {
-            errMsg = err.message || 'An unknown error occurred while saving settings.';
+          errMsg = err.response.data?.error || err.response.data?.message || `Server error (${err.response.status}).`;
         }
+      } else if (err.request) {
+        errMsg = "Network Error: Unable to connect to the server to save.";
+      } else {
+        errMsg = err.message || 'An unknown error occurred.';
+      }
       setError(errMsg);
     } finally {
       setIsSaving(false);
@@ -449,73 +445,76 @@ const AdCalendar = () => {
   // --- Calendar Rendering Function ---
   const renderCalendar = () => {
     const monthData = getMonthData();
-    if (!monthData) return <div className="p-4 text-center text-red-500">Error displaying calendar.</div>;
+    if (!monthData) return <div className="calendar-grid-error">Error preparing calendar data.</div>;
 
     const { startingDay, daysInMonth } = monthData;
-    const calendarDays = [];
+    const calendarCells = [];
 
-    // Add empty cells for days before the 1st of the month
     for (let i = 0; i < startingDay; i++) {
-      calendarDays.push(<div key={`empty-${i}`} className="calendar-empty"></div>);
+      calendarCells.push(<div key={`empty-${i}`} className="calendar-empty"></div>);
     }
 
-    // Add cells for each day of the month
     for (let day = 1; day <= daysInMonth; day++) {
       const isPast = isPastDate(day);
       const isCollection = isCollectionDay(day);
-      const specialStatus = getSpecialDateStatus(day); // 'available', 'unavailable', or null
+      const specialStatus = getSpecialDateStatus(day);
 
-      // Determine CSS classes based on status
       const dayClasses = [
         'calendar-day',
         isPast ? 'past' : 'future',
         isCollection ? 'collection' : 'no-collection',
-        specialStatus ? `special-${specialStatus}` : '' // e.g., special-available
+        specialStatus ? `special-${specialStatus}` : ''
       ].filter(Boolean).join(' ');
 
-      calendarDays.push(
+      const title = isPast
+        ? "Past date (cannot modify)"
+        : `Status: ${isCollection ? 'Collection' : 'No Collection'}. ${specialStatus ? `Override: ${specialStatus}. ` : ''}Click to ${specialStatus ? 'remove override' : 'add override'}.`;
+
+      calendarCells.push(
         <div
           key={`day-${day}`}
           className={dayClasses}
-          // Only allow toggling future dates
           onClick={() => !isPast && handleSpecialDateToggle(day)}
-          title={isPast ? "Past date (cannot modify)" : `Status: ${isCollection ? 'Collection' : 'No Collection'}. Click to toggle special status.`}
-          aria-label={`Day ${day}, Status: ${isCollection ? 'Collection' : 'No Collection'}${specialStatus ? ', Special Status: ' + specialStatus : ''}`}
+          title={title}
+          aria-label={`Day ${day}, ${title}`}
           role="button"
-          tabIndex={isPast ? -1 : 0} // Make clickable days focusable
+          tabIndex={isPast ? -1 : 0}
+          onKeyDown={(e) => { if (!isPast && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); handleSpecialDateToggle(day); }}} // Keyboard accessibility
         >
           <span className="day-number">{day}</span>
-          {/* Display indicator dot for special overrides */}
           {specialStatus && (<div className={`status-indicator ${specialStatus}`} title={`Special Status: ${specialStatus}`}></div>)}
         </div>
       );
     }
-    return calendarDays;
+    return calendarCells;
   };
 
   // --- Main Render ---
-  if (isLoading && !settingsData) {
-     // Show loader only if settingsData is still null (initial load)
+  if (isLoading) {
+    // Show full page loader on initial load
     return <div className="loading-container"><ClipLoader size={50} color="#f97316" /><span>Loading Settings...</span></div>;
   }
 
-  // Handle case where fetching failed but we have default structure
   if (!settingsData && error) {
-     return (
-       <div className="admin-calendar-container p-4">
-         <div className="error-banner flex items-center gap-2">
-           <AlertTriangle size={18} />
-           <span>{error}</span>
-           {/* Provide a retry button */}
-           <button onClick={fetchSettings} className="ml-auto text-sm text-blue-600 hover:underline font-semibold">Retry Fetch</button>
-         </div>
-         {/* Optionally render a disabled view or minimal UI */}
-       </div>
-     );
+    // Handle critical fetch error after loading attempt
+    return (
+      <div className="admin-calendar-container error-state">
+        <div className="error-banner critical-error">
+          <AlertTriangle size={24} />
+          <div>
+            <h2>Failed to Load Settings</h2>
+            <p>{error}</p>
+            <button onClick={fetchSettings} className="retry-button">
+              Retry Fetch
+            </button>
+          </div>
+        </div>
+      </div>
+    );
   }
 
-  // Main UI Render when data is available (or default structure is used)
-  const currentSettings = settingsData || createDefaultSettingsStructure(); // Use loaded or default data
+  // Ensure we have data (either fetched or default)
+  const currentSettings = settingsData || createDefaultSettingsStructure();
 
   return (
     <div className="admin-calendar-container">
@@ -524,10 +523,15 @@ const AdCalendar = () => {
         <h1>Manage Collection Settings</h1>
       </div>
 
-      {/* Removed AdminInfoBanner */}
+      {/* Info Banner (Optional) */}
+       <div className="info-banner">
+          <Info size={18} />
+          <span>Remember to click "Save All Settings" at the bottom to persist your changes.</span>
+       </div>
 
-      {error && <div className="error-banner"><AlertTriangle size={18} /><span>{error}</span> <button onClick={() => setError('')} className="close-banner-button" aria-label="Close error message">✕</button></div>}
-      {success && <div className="success-banner"><Check size={18} /><span>{success}</span> <button onClick={() => setSuccess('')} className="close-banner-button" aria-label="Close success message">✕</button></div>}
+
+      {error && <div className="error-banner"><AlertTriangle size={18} /><span>{error}</span> <button onClick={() => setError('')} className="close-banner-button">✕</button></div>}
+      {success && <div className="success-banner"><Check size={18} /><span>{success}</span> <button onClick={() => setSuccess('')} className="close-banner-button">✕</button></div>}
 
       <div className="admin-tabs">
         <button className={`admin-tab ${activeTab === 'calendar' ? 'active' : ''}`} onClick={() => setActiveTab('calendar')}><Calendar size={16} /><span>Calendar & Days</span></button>
@@ -539,21 +543,21 @@ const AdCalendar = () => {
         {/* Calendar Tab */}
         {activeTab === 'calendar' && (
           <div className="calendar-settings">
-            <h2 className="section-heading">Set Regular Available Days</h2>
+            <h2 className="section-heading">Set Regular Weekly Collection Days</h2>
             <div className="day-toggles">
-              {dayIndexes.map(index => (
+              {dayIndexesForDisplay.map(index => (
                 <button
                   key={index}
                   className={`day-toggle ${currentSettings.availableDays?.[index] ? 'active' : ''}`}
                   onClick={() => handleAvailableDayChange(index)}
-                  aria-pressed={currentSettings.availableDays?.[index]}
+                  aria-pressed={!!currentSettings.availableDays?.[index]}
                 >
                   {daysOfWeekMap[index]}
                 </button>
               ))}
             </div>
 
-            <h2 className="section-heading mt-6">Override Specific Dates</h2>
+            <h2 className="section-heading mt-6">Override Specific Dates (Holidays, Special Events)</h2>
             <div className="admin-calendar">
               <div className="calendar-header">
                 <button onClick={goToPrevMonth} className="nav-button" aria-label="Previous month"><ChevronLeft size={20} /></button>
@@ -563,51 +567,49 @@ const AdCalendar = () => {
               <div className="weekday-header">{daysOfWeek.map(day => (<div key={day} className="weekday">{day}</div>))}</div>
               <div className="calendar-grid">{renderCalendar()}</div>
               <div className="calendar-legend">
-                <div className="legend-item"><span className="legend-dot collection"></span> Regular Collection</div>
-                <div className="legend-item"><span className="legend-dot no-collection"></span> Regular - No Collection</div>
-                <div className="legend-item"><span className="legend-dot special-available"></span> Special - Added</div>
-                <div className="legend-item"><span className="legend-dot special-unavailable"></span> Special - Removed</div>
+                <div className="legend-item"><span className="legend-dot collection"></span> Scheduled Collection</div>
+                <div className="legend-item"><span className="legend-dot no-collection"></span> No Regular Collection</div>
+                 <div className="legend-item"><span className="legend-dot special-available"></span> Special Override: AVAILABLE</div>
+                 <div className="legend-item"><span className="legend-dot special-unavailable"></span> Special Override: UNAVAILABLE</div>
               </div>
-              <div className="calendar-info"><p>Click future dates to toggle special status.</p></div>
+              <div className="calendar-info"><p>Click future dates to add or remove a collection override for that specific day.</p></div>
             </div>
           </div>
         )}
 
         {/* Time Slots Tab */}
         {activeTab === 'timeslots' && (
-          <div className="time-slots-settings list-settings"> {/* Added list-settings class */}
+          <div className="time-slots-settings list-settings">
             <h2 className="section-heading">Manage Collection Time Slots</h2>
-            <p className="section-description">
-              Configure time slots available for scheduling. Active slots appear in the booking form.
-            </p>
-            <div className="item-list"> {/* Changed class */}
-              {currentSettings.timeSlots.map(slot => (
-                <div key={slot.id} className={`list-item ${!slot.active ? 'inactive' : ''}`}> {/* Changed class */}
+            <p className="section-description">Configure time slots available for booking. Inactive slots won't be shown to users.</p>
+            <div className="item-list">
+              {(currentSettings.timeSlots || []).map(slot => (
+                <div key={slot.id} className={`list-item ${!slot.active ? 'inactive' : ''}`}>
                   {editingTimeSlot?.id === slot.id ? (
                     <div className="editing-form">
-                      {/* Editing Form Inputs */}
-                       <div className="form-group">
-                         <label htmlFor={`edit-ts-label-${slot.id}`}>Label</label>
-                         <input id={`edit-ts-label-${slot.id}`} type="text" name="label" value={editingTimeSlot.label} onChange={handleEditingTimeSlotChange} placeholder="e.g., Morning" required/>
+                       <div className="form-grid-2">
+                           <div className="form-group">
+                             <label htmlFor={`edit-ts-label-${slot.id}`}>Label *</label>
+                             <input id={`edit-ts-label-${slot.id}`} type="text" name="label" value={editingTimeSlot.label} onChange={handleEditingTimeSlotChange} placeholder="e.g., Morning" required/>
+                           </div>
+                           <div className="form-group">
+                             <label htmlFor={`edit-ts-time-${slot.id}`}>Time Range *</label>
+                             <input id={`edit-ts-time-${slot.id}`} type="text" name="time" value={editingTimeSlot.time} onChange={handleEditingTimeSlotChange} placeholder="e.g., 8 AM - 11 AM" required/>
+                           </div>
                        </div>
-                       <div className="form-group">
-                         <label htmlFor={`edit-ts-time-${slot.id}`}>Time Range</label>
-                         <input id={`edit-ts-time-${slot.id}`} type="text" name="time" value={editingTimeSlot.time} onChange={handleEditingTimeSlotChange} placeholder="e.g., 8:00 AM - 11:00 AM" required/>
-                       </div>
-                       <div className="form-group checkbox">
+                       <div className="form-group checkbox-group">
                          <label htmlFor={`edit-ts-active-${slot.id}`}>
                            <input id={`edit-ts-active-${slot.id}`} type="checkbox" name="active" checked={editingTimeSlot.active} onChange={handleEditingTimeSlotChange}/>
-                           Active
+                           Active (Visible to users)
                          </label>
                        </div>
                       <div className="edit-actions">
-                        <button onClick={saveEditTimeSlot} className="save-button"><Check size={16} /> Save</button>
+                        <button onClick={saveEditTimeSlot} className="save-button"><Check size={16} /> Save Changes</button>
                         <button onClick={cancelEditTimeSlot} className="cancel-button"><X size={16} /> Cancel</button>
                       </div>
                     </div>
                   ) : (
                     <>
-                      {/* Display View */}
                       <div className="item-details">
                         <h4 className="item-label">{slot.label}</h4>
                         <p className="item-value">{slot.time}</p>
@@ -624,21 +626,23 @@ const AdCalendar = () => {
               {/* Add New Form */}
               <div className="add-new-form">
                 <h3>Add New Time Slot</h3>
-                 <div className="form-group">
-                   <label htmlFor="new-ts-label">Label</label>
-                   <input id="new-ts-label" type="text" value={newTimeSlot.label} onChange={e => setNewTimeSlot({...newTimeSlot, label: e.target.value})} placeholder="e.g., Evening" required/>
+                 <div className="form-grid-2">
+                     <div className="form-group">
+                       <label htmlFor="new-ts-label">Label *</label>
+                       <input id="new-ts-label" type="text" value={newTimeSlot.label} onChange={e => setNewTimeSlot({...newTimeSlot, label: e.target.value})} placeholder="e.g., Evening" required/>
+                     </div>
+                     <div className="form-group">
+                       <label htmlFor="new-ts-time">Time Range *</label>
+                       <input id="new-ts-time" type="text" value={newTimeSlot.time} onChange={e => setNewTimeSlot({...newTimeSlot, time: e.target.value})} placeholder="e.g., 5 PM - 8 PM" required/>
+                     </div>
                  </div>
-                 <div className="form-group">
-                   <label htmlFor="new-ts-time">Time Range</label>
-                   <input id="new-ts-time" type="text" value={newTimeSlot.time} onChange={e => setNewTimeSlot({...newTimeSlot, time: e.target.value})} placeholder="e.g., 5:00 PM - 8:00 PM" required/>
-                 </div>
-                 <div className="form-group checkbox">
+                 <div className="form-group checkbox-group">
                    <label htmlFor="new-ts-active">
                      <input id="new-ts-active" type="checkbox" checked={newTimeSlot.active} onChange={e => setNewTimeSlot({...newTimeSlot, active: e.target.checked})}/>
-                     Active by default
+                     Set as active
                    </label>
                  </div>
-                <button onClick={addTimeSlotHandler} className="add-button"><Plus size={16} /> Add Time Slot</button>
+                <button onClick={() => handleAddItem('timeSlots', newTimeSlot, setNewTimeSlot, ['label', 'time'])} className="add-button"><Plus size={16} /> Add Time Slot</button>
               </div>
             </div>
           </div>
@@ -646,38 +650,33 @@ const AdCalendar = () => {
 
          {/* Service Areas Tab */}
         {activeTab === 'areas' && (
-           <div className="service-areas-settings list-settings"> {/* Added list-settings class */}
+           <div className="service-areas-settings list-settings">
             <h2 className="section-heading">Manage Service Areas</h2>
-             <p className="section-description">
-              Configure geographical areas where collection service is offered.
-             </p>
-             <div className="item-list"> {/* Changed class */}
-              {currentSettings.serviceAreas.map(area => (
-                 <div key={area.id} className={`list-item ${!area.active ? 'inactive' : ''}`}> {/* Changed class */}
+             <p className="section-description">Define areas where collections are available. Inactive areas won't appear in booking options.</p>
+             <div className="item-list">
+              {(currentSettings.serviceAreas || []).map(area => (
+                 <div key={area.id} className={`list-item ${!area.active ? 'inactive' : ''}`}>
                   {editingServiceArea?.id === area.id ? (
                      <div className="editing-form">
-                       {/* Editing Form Inputs */}
-                        <div className="form-group">
-                          <label htmlFor={`edit-sa-name-${area.id}`}>Area Name</label>
-                          <input id={`edit-sa-name-${area.id}`} type="text" name="name" value={editingServiceArea.name} onChange={handleEditingServiceAreaChange} placeholder="e.g., North Side" required/>
+                        <div className="form-group"> {/* Removed grid here for simplicity */}
+                          <label htmlFor={`edit-sa-name-${area.id}`}>Area Name *</label>
+                          <input id={`edit-sa-name-${area.id}`} type="text" name="name" value={editingServiceArea.name} onChange={handleEditingServiceAreaChange} placeholder="e.g., North Zone" required/>
                         </div>
-                        <div className="form-group checkbox">
+                        <div className="form-group checkbox-group">
                           <label htmlFor={`edit-sa-active-${area.id}`}>
                             <input id={`edit-sa-active-${area.id}`} type="checkbox" name="active" checked={editingServiceArea.active} onChange={handleEditingServiceAreaChange}/>
-                            Active
+                            Active (Available for booking)
                           </label>
                         </div>
                        <div className="edit-actions">
-                         <button onClick={saveEditServiceArea} className="save-button"><Check size={16} /> Save</button>
+                         <button onClick={saveEditServiceArea} className="save-button"><Check size={16} /> Save Changes</button>
                          <button onClick={cancelEditServiceArea} className="cancel-button"><X size={16} /> Cancel</button>
                        </div>
                      </div>
                   ) : (
                     <>
-                      {/* Display View */}
                        <div className="item-details">
                          <h4 className="item-label">{area.name}</h4>
-                         {/* No extra value needed here */}
                        </div>
                        <div className="item-actions">
                          <button onClick={() => handleToggleActive('serviceAreas', area.id)} className={`toggle-button ${area.active ? 'active' : 'inactive'}`} title={area.active ? 'Mark as inactive' : 'Mark as active'}>{area.active ? 'Active' : 'Inactive'}</button>
@@ -691,17 +690,17 @@ const AdCalendar = () => {
               {/* Add New Form */}
                <div className="add-new-form">
                  <h3>Add New Service Area</h3>
-                 <div className="form-group">
-                   <label htmlFor="new-sa-name">Area Name</label>
-                   <input id="new-sa-name" type="text" value={newServiceArea.name} onChange={e => setNewServiceArea({...newServiceArea, name: e.target.value})} placeholder="e.g., West End" required/>
+                 <div className="form-group"> {/* Removed grid here */}
+                   <label htmlFor="new-sa-name">Area Name *</label>
+                   <input id="new-sa-name" type="text" value={newServiceArea.name} onChange={e => setNewServiceArea({...newServiceArea, name: e.target.value})} placeholder="e.g., Downtown Core" required/>
                  </div>
-                 <div className="form-group checkbox">
+                 <div className="form-group checkbox-group">
                    <label htmlFor="new-sa-active">
                      <input id="new-sa-active" type="checkbox" checked={newServiceArea.active} onChange={e => setNewServiceArea({...newServiceArea, active: e.target.checked})}/>
-                     Active by default
+                      Set as active
                    </label>
                  </div>
-                 <button onClick={addServiceAreaHandler} className="add-button"><Plus size={16} /> Add Service Area</button>
+                 <button onClick={() => handleAddItem('serviceAreas', newServiceArea, setNewServiceArea, ['name'])} className="add-button"><Plus size={16} /> Add Service Area</button>
                </div>
              </div>
           </div>
@@ -713,8 +712,8 @@ const AdCalendar = () => {
         <button
             onClick={handleSaveAllSettings}
             className="save-settings-button"
-            disabled={isSaving || isLoading} // Disable if saving or still loading initial data
-            aria-live="polite" // Announce changes for screen readers
+            disabled={isSaving || isLoading}
+            aria-live="polite"
             aria-busy={isSaving}
         >
           {isSaving ? <ClipLoader size={18} color="#fff" /> : <Save size={16} />}
