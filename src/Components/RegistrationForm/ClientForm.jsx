@@ -1,328 +1,312 @@
-// src/Components/RegistrationForm/ClientForm.jsx
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { ClipLoader } from 'react-spinners';
+import { FileImage, AlertCircle } from 'lucide-react';
+import './ClientForm.css'
 
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
-import "./ClientForm.css"; // Make sure this CSS file exists and is correctly named/updated
+// API Configuration (ensure this matches your backend)
+const API_ENDPOINTS = {
+  CLIENT: {
+    REGISTER: 'http://localhost:5003/api/clients/register'
+  }
+};
 
-function ClientForm() {
-  // --- State Management ---
+const ClientForm = () => {
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    contactNumber: "",
-    password: "",
-    address: "",
-    district: "",
-    province: "",
+    name: '',
+    email: '',
+    contactNumber: '',
+    password: '',
+    confirmPassword: '',
+    address: '',
+    district: 'colombo', // Default value
+    province: 'western'  // Default value
   });
-  const [profilePhotoFile, setProfilePhotoFile] = useState(null); // State for the File object
-  const [profilePreview, setProfilePreview] = useState(null); // State for the preview URL
+  const [profilePhoto, setProfilePhoto] = useState(null);
+  const [profilePhotoPreview, setProfilePhotoPreview] = useState(null);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
+  const navigate = useNavigate();
 
-  const navigate = useNavigate(); // Initialize navigate
+  // Clean up preview URL on unmount
+  useEffect(() => {
+    return () => {
+      if (profilePhotoPreview) URL.revokeObjectURL(profilePhotoPreview);
+    };
+  }, [profilePhotoPreview]);
 
-  // --- Event Handlers ---
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  // Handles file selection and generates preview
   const handleFileChange = (e) => {
-    const file = e.target.files?.[0] || null;
+    const file = e.target.files[0];
+    if (!file) return;
 
-    // Revoke previous preview URL if it exists
-    if (profilePreview) {
-      URL.revokeObjectURL(profilePreview);
-      console.log("Revoked previous profile preview URL:", profilePreview);
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      setError('Only image files are allowed (JPEG, PNG, GIF)');
+      return;
     }
 
-    setProfilePhotoFile(file); // Store the File object
-
-    // Create and set new preview URL
-    if (file) {
-      const newPreviewUrl = URL.createObjectURL(file);
-      setProfilePreview(newPreviewUrl);
-      console.log("Created new profile preview URL:", newPreviewUrl);
-    } else {
-      setProfilePreview(null); // Clear preview if no file selected
+    // Validate file size (5MB max)
+    if (file.size > 5 * 1024 * 1024) {
+      setError('File size must be less than 5MB');
+      return;
     }
+
+    setProfilePhoto(file);
+    setProfilePhotoPreview(URL.createObjectURL(file));
+    setError('');
   };
 
-  // --- Cleanup Effect for Preview URL ---
-  useEffect(() => {
-    // This function runs when the component unmounts
-    return () => {
-      if (profilePreview) {
-        URL.revokeObjectURL(profilePreview);
-        console.log("Cleaned up profile preview URL on unmount");
-      }
-    };
-  }, [profilePreview]); // Dependency array ensures cleanup if preview changes
-
-  // --- Form Submission ---
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError("");
-    setSuccess("");
+    setError('');
+    setSuccess('');
 
-    const clientData = new FormData();
-
-    // Append text data
-    Object.keys(formData).forEach((key) => {
-      clientData.append(key, formData[key]);
-    });
-
-    // Append file data if it exists
-    if (profilePhotoFile) {
-      clientData.append("profilePhoto", profilePhotoFile); // Ensure backend expects 'profilePhoto'
+    // Client-side validation
+    if (formData.password !== formData.confirmPassword) {
+      setError("Passwords don't match");
+      setLoading(false);
+      return;
     }
 
     try {
-      // Removed manual Content-Type header - Axios sets it correctly for FormData
-      await axios.post(
-        "http://localhost:5003/api/clients/register",
-        clientData
-      );
-
-      setSuccess("Registration successful! Redirecting to login...");
-      setLoading(false); // Stop loading
-
-      // Clear the form fields
-      setFormData({
-        name: "",
-        email: "",
-        contactNumber: "",
-        password: "",
-        address: "",
-        district: "",
-        province: "",
+      const formDataToSend = new FormData();
+      Object.entries(formData).forEach(([key, value]) => {
+        if (key !== 'confirmPassword') {
+          formDataToSend.append(key, value);
+        }
       });
-      setProfilePhotoFile(null);
-      setProfilePreview(null); // Clear preview state
-
-      // Reset the file input visually (optional, but good UX)
-      const fileInput = document.getElementById("CReg-profile-photo");
-      if (fileInput) {
-        fileInput.value = ""; // Clear the file input field
+      
+      if (profilePhoto) {
+        formDataToSend.append('profilePhoto', profilePhoto);
       }
 
-      // Redirect after a delay
-      setTimeout(() => {
-        navigate('/Login'); // Redirect to the common login page
-      }, 2000);
-
-
-    } catch (err) {
-      setLoading(false); // Stop loading
-      setError(
-        err.response?.data?.message || "An error occurred during registration. Please try again."
+      const response = await axios.post(
+        API_ENDPOINTS.CLIENT.REGISTER,
+        formDataToSend,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          },
+          timeout: 10000 // 10 second timeout
+        }
       );
-      console.error("Registration failed:", err);
+
+      setSuccess('Registration successful! Redirecting...');
+      setTimeout(() => navigate('/login'), 2000);
+    } catch (err) {
+      handleApiError(err);
+    } finally {
+      setLoading(false);
     }
   };
 
-  // --- JSX Rendering ---
+  const handleApiError = (err) => {
+    if (err.code === 'ECONNABORTED') {
+      setError('Request timeout - server took too long to respond');
+    } else if (err.response) {
+      // Server responded with error status
+      const { data } = err.response;
+      setError(data.message || `Server error: ${err.response.status}`);
+    } else if (err.request) {
+      // No response received
+      setError('No response from server - check your network connection');
+    } else {
+      // Other errors
+      setError('Registration failed: ' + err.message);
+    }
+  };
+
   return (
-    <div className="CReg-form-container">
-      <div className="CReg-form-wrapper"> {/* Added Wrapper */}
-        <h2 className="CReg-form-title">Client Registration</h2>
+    <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
+      <h2 className="text-2xl font-bold mb-4 text-center">Client Registration</h2>
+      
+      {/* Error/Success Messages */}
+      {error && (
+        <div className="mb-4 p-3 bg-red-100 text-red-700 rounded flex items-center">
+          <AlertCircle className="mr-2" size={18} />
+          {error}
+        </div>
+      )}
+      {success && (
+        <div className="mb-4 p-3 bg-green-100 text-green-700 rounded">
+          {success}
+        </div>
+      )}
 
-        {/* Feedback Messages */}
-        {error && <div className="CReg-error-message">{error}</div>}
-        {success && <div className="CReg-success-message">{success}</div>}
-
-        <form onSubmit={handleSubmit}>
-          {/* Name */}
-          <div className="CReg-form-group">
-            <label htmlFor="CReg-name">Name*</label>
-            <input
-              type="text"
-              id="CReg-name"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              placeholder="Enter your full name"
-              required
-              disabled={loading}
-            />
-          </div>
-
-          {/* Email */}
-          <div className="CReg-form-group">
-            <label htmlFor="CReg-email">Email*</label>
-            <input
-              type="email"
-              id="CReg-email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="Enter your email address"
-              required
-              disabled={loading}
-            />
-          </div>
-
-          {/* Contact Number */}
-          <div className="CReg-form-group">
-            <label htmlFor="CReg-contactNumber">Contact Number*</label>
-            <input
-              type="tel"
-              id="CReg-contactNumber"
-              name="contactNumber"
-              value={formData.contactNumber}
-              onChange={handleChange}
-              placeholder="e.g., 07XXXXXXXX"
-              required
-              disabled={loading}
-            />
-          </div>
-
-          {/* Password */}
-          <div className="CReg-form-group">
-            <label htmlFor="CReg-password">Password*</label>
-            <input
-              type="password"
-              id="CReg-password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              placeholder="Create a password (min 6 chars)"
-              required
-              minLength="6"
-              disabled={loading}
-            />
-          </div>
-
-          {/* Address */}
-          <div className="CReg-form-group">
-            <label htmlFor="CReg-address">Address*</label>
-            <textarea
-              id="CReg-address"
-              name="address"
-              value={formData.address}
-              onChange={handleChange}
-              placeholder="Enter your complete address"
-              rows="3" // Adjusted rows
-              required
-              disabled={loading}
-            ></textarea>
-          </div>
-
-          {/* District & Province */}
-          <div className="CReg-form-group CReg-horizontal">
-            <div className="CReg-input-group"> {/* Explicit inner group class */}
-              <label htmlFor="CReg-district">District*</label>
-              <select
-                id="CReg-district"
-                name="district"
-                value={formData.district}
-                onChange={handleChange}
-                required
-                disabled={loading}
-              >
-                <option value="" disabled>Select District</option>
-                 {/* Add all Sri Lankan districts */}
-                 <option value="colombo">Colombo</option>
-                 <option value="gampaha">Gampaha</option>
-                 <option value="kalutara">Kalutara</option>
-                 <option value="kandy">Kandy</option>
-                 <option value="matale">Matale</option>
-                 <option value="nuwara-eliya">Nuwara Eliya</option>
-                 <option value="galle">Galle</option>
-                 <option value="matara">Matara</option>
-                 <option value="hambantota">Hambantota</option>
-                 <option value="jaffna">Jaffna</option>
-                 <option value="kilinochchi">Kilinochchi</option>
-                 <option value="mannar">Mannar</option>
-                 <option value="vavuniya">Vavuniya</option>
-                 <option value="mullaitivu">Mullaitivu</option>
-                 <option value="batticaloa">Batticaloa</option>
-                 <option value="ampara">Ampara</option>
-                 <option value="trincomalee">Trincomalee</option>
-                 <option value="kurunegala">Kurunegala</option>
-                 <option value="puttalam">Puttalam</option>
-                 <option value="anuradhapura">Anuradhapura</option>
-                 <option value="polonnaruwa">Polonnaruwa</option>
-                 <option value="badulla">Badulla</option>
-                 <option value="monaragala">Monaragala</option>
-                 <option value="ratnapura">Ratnapura</option>
-                 <option value="kegalle">Kegalle</option>
-              </select>
-            </div>
-
-            <div className="CReg-input-group"> {/* Explicit inner group class */}
-              <label htmlFor="CReg-province">Province*</label>
-              <select
-                id="CReg-province"
-                name="province"
-                value={formData.province}
-                onChange={handleChange}
-                required
-                disabled={loading}
-              >
-                <option value="" disabled>Select Province</option>
-                 {/* Add Sri Lankan provinces */}
-                 <option value="western">Western</option>
-                 <option value="central">Central</option>
-                 <option value="southern">Southern</option>
-                 <option value="northern">Northern</option>
-                 <option value="eastern">Eastern</option>
-                 <option value="north-western">North Western</option>
-                 <option value="north-central">North Central</option>
-                 <option value="uva">Uva</option>
-                 <option value="sabaragamuwa">Sabaragamuwa</option>
-              </select>
-            </div>
-          </div>
-
-          {/* Profile Photo Input */}
-          <div className="CReg-form-group CReg-file-input-group"> {/* File input class */}
-            <label>Profile Photo (Optional)</label>
-            <input
-              type="file"
-              id="CReg-profile-photo" // Prefixed ID
-              onChange={handleFileChange}
-              accept="image/jpeg, image/png, image/gif" // Specify accepted types
-              style={{ display: 'none' }} // Hide default input
-              disabled={loading}
-            />
-            {/* Custom styled button as label */}
-            <label htmlFor="CReg-profile-photo" className={`CReg-upload-button ${loading ? 'CReg-disabled' : ''}`}>
-              {profilePhotoFile ? `Selected: ${profilePhotoFile.name}` : "Choose Profile Photo"}
-            </label>
-
-            {/* Image Preview */}
-            {profilePreview && (
-              <div className="CReg-image-preview-container">
-                <img
-                  src={profilePreview}
-                  alt="Profile Preview"
-                  className="CReg-image-preview"
-                />
-              </div>
-            )}
-          </div>
-
-          {/* Submit Button */}
-          <button
-            type="submit"
-            className="CReg-submit-button"
+      <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Name Field */}
+        <div>
+          <label className="block mb-1 font-medium">Full Name *</label>
+          <input
+            type="text"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            required
             disabled={loading}
-          >
-            {loading ? "Registering..." : "Register"}
-          </button>
-        </form>
-      </div> {/* End of CReg-form-wrapper */}
-    </div> // End of CReg-form-container
+            className="w-full p-2 border rounded"
+          />
+        </div>
+
+        {/* Email Field */}
+        <div>
+          <label className="block mb-1 font-medium">Email *</label>
+          <input
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+            disabled={loading}
+            className="w-full p-2 border rounded"
+          />
+        </div>
+
+        {/* Contact Number */}
+        <div>
+          <label className="block mb-1 font-medium">Contact Number *</label>
+          <input
+            type="tel"
+            name="contactNumber"
+            value={formData.contactNumber}
+            onChange={handleChange}
+            required
+            disabled={loading}
+            className="w-full p-2 border rounded"
+          />
+        </div>
+
+        {/* Password Fields */}
+        <div>
+          <label className="block mb-1 font-medium">Password (min 6 chars) *</label>
+          <input
+            type="password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+            minLength="6"
+            disabled={loading}
+            className="w-full p-2 border rounded"
+          />
+        </div>
+
+        <div>
+          <label className="block mb-1 font-medium">Confirm Password *</label>
+          <input
+            type="password"
+            name="confirmPassword"
+            value={formData.confirmPassword}
+            onChange={handleChange}
+            required
+            disabled={loading}
+            className="w-full p-2 border rounded"
+          />
+        </div>
+
+        {/* Address */}
+        <div>
+          <label className="block mb-1 font-medium">Address *</label>
+          <textarea
+            name="address"
+            value={formData.address}
+            onChange={handleChange}
+            required
+            disabled={loading}
+            rows="3"
+            className="w-full p-2 border rounded"
+          />
+        </div>
+
+        {/* District and Province */}
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className="block mb-1 font-medium">District *</label>
+            <select
+              name="district"
+              value={formData.district}
+              onChange={handleChange}
+              required
+              disabled={loading}
+              className="w-full p-2 border rounded"
+            >
+              <option value="colombo">Colombo</option>
+              <option value="kandy">Kandy</option>
+              <option value="galle">Galle</option>
+              {/* Add other districts */}
+            </select>
+          </div>
+
+          <div>
+            <label className="block mb-1 font-medium">Province *</label>
+            <select
+              name="province"
+              value={formData.province}
+              onChange={handleChange}
+              required
+              disabled={loading}
+              className="w-full p-2 border rounded"
+            >
+              <option value="western">Western</option>
+              <option value="central">Central</option>
+              <option value="southern">Southern</option>
+              {/* Add other provinces */}
+            </select>
+          </div>
+        </div>
+
+        {/* Profile Photo Upload */}
+        <div>
+          <label className="block mb-1 font-medium">Profile Photo</label>
+          <div className="flex items-center space-x-4">
+            {profilePhotoPreview && (
+              <img 
+                src={profilePhotoPreview} 
+                alt="Preview" 
+                className="w-16 h-16 object-cover rounded-full border"
+              />
+            )}
+            <label className="cursor-pointer">
+              <div className="flex items-center px-4 py-2 bg-gray-100 rounded-lg hover:bg-gray-200">
+                <FileImage className="mr-2" size={18} />
+                <span>{profilePhoto ? profilePhoto.name : 'Choose Image'}</span>
+              </div>
+              <input
+                type="file"
+                onChange={handleFileChange}
+                accept="image/*"
+                className="hidden"
+                disabled={loading}
+              />
+            </label>
+          </div>
+        </div>
+
+        {/* Submit Button */}
+        <button
+          type="submit"
+          disabled={loading}
+          className={`w-full py-2 px-4 rounded text-white font-medium ${
+            loading ? 'bg-blue-400' : 'bg-blue-600 hover:bg-blue-700'
+          }`}
+        >
+          {loading ? (
+            <ClipLoader size={20} color="#ffffff" />
+          ) : (
+            'Register Account'
+          )}
+        </button>
+      </form>
+    </div>
   );
-}
+};
 
 export default ClientForm;
