@@ -5,27 +5,24 @@ import {
     useLocation, Navigate, Outlet, Link
 } from 'react-router-dom';
 import { ClipLoader } from 'react-spinners';
-import { jwtDecode } from 'jwt-decode'; // Ensure this is installed
+import { jwtDecode } from 'jwt-decode';
 
 // --- Context ---
 const AuthContext = createContext(null);
-export const useAuth = () => useContext(AuthContext);
+export const useAuth = () => useContext(AuthContext); // Hook to consume auth context
 
 // --- Core Components & Pages ---
-// (Assuming all your imports for Navbar, Footer1, ProtectedRoute, AdminLayout, Pages, and Components are correct)
 import Navbar from './Components/Navbar/Navbar';
 import Footer1 from './Components/Footer1/Footer';
-import ProtectedRoute from './routes/ProtectedRoute'; // Assuming this handles role checking
-import AdminLayout from './Layouts/AdminLayout';
-// import API_ENDPOINTS from "./apiConfig"; // Not directly used in App.jsx, but likely by Login or other components
-// import axiosInstance from './api/axiosInstance'; // Not directly used in App.jsx
+import ProtectedRoute from './routes/ProtectedRoute'; // *** UNCOMMENTED: Assuming this file exists and is correct ***
+import AdminLayout from './Layouts/AdminLayout'; // Layout specifically for Admin section
 
-// Pages (ensure all imports are correct - this is a long list, verify paths)
+// Pages (Ensure all these import paths are correct for your project structure)
 import HomePage from './Pages/HomePage';
-import SignUp from './Pages/SignUp';
+import SignUp from './Pages/SignUp'; // Likely your page linking to ClientForm/BOwnerForm
 import AboutUs from './Pages/AboutUS';
 import BuyandSell from './Pages/BuyandSell';
-import Login from './Components/Login/Login'; // This component will use axiosInstance and API_ENDPOINTS
+import Login from './Components/Login/Login';
 import BOwnerForm from './Components/RegistrationForm/BOwnerForm';
 import ClientForm from './Components/RegistrationForm/ClientForm';
 import Project from './Pages/Project';
@@ -34,290 +31,309 @@ import Service from './Pages/Service';
 import Map from './Pages/Map';
 import Calculate from './Components/Calculate/Calculate';
 import ContactUs from './Pages/ContactUs';
+// Functional Components (might be pages or components used on pages)
 import SaleForm from './Components/SaleForm/SaleForm';
 import BuyCard from './Components/BuyCard/BuyCard';
-import BOwnerHome from './Pages/BOwnerHome';
 import ProAddForm from './Components/Projects/ProAddForm';
 import WastePickForm from './Components/WasteCollect/WastePickForm';
 import UserCalendar from './Components/WasteCollect/UserCalendar';
-// Admin Pages
-import Admin from './Pages/Admin'; // Likely an alias for Dashboard or an Admin landing
-import AdCalendar from './Components/Admin/AdMinCalendar/AdCalendar';
 import LocationMap from './Components/Maps/LocationMap';
-// Client Profile related
-// const ClientProfile = () => { /* ... your simplified version ... */ }; // Keep simplified for now
-import ClientProfile from './Components/Profile/ClientProfile'; // Assuming this is the full component
-import ClientEmail from './Components/Profile/ClientEmail';
 import CalendarDisplay from './Components/UserCalendar/CalendarDisplay';
+// Profile/Dashboard Pages
+import BOwnerHome from './Pages/BOwnerHome';
+import ClientProfile from './Components/Profile/ClientProfile';
 import BOwnerProfile from './Components/Profile/BOwnerProfile';
-// More Admin Pages
+import ClientEmail from './Components/Profile/ClientEmail';
+import PickupReq from './Components/Profile/PickupReq';
+import CheckBuySell from './Components/Profile/CheckBuySell';
+// Admin Pages/Components
+// import Admin from './Pages/Admin'; // Often the Dashboard is the main Admin landing
+import AdCalendar from './Components/Admin/AdMinCalendar/AdCalendar';
 import AdCheckReq from './Components/Admin/AdCheckReq/AdCheckReq';
 import EmailDisplay from './Components/Admin/EmailDisplay/EmailDisplay';
 import Dashboard from './Components/Admin/Dashboard/Dashboard';
 import HandleBOwners from './Components/Admin/HandleBOwners/HandleBOwners';
-// More Client Profile Pages
-import PickupReq from './Components/Profile/PickupReq';
-import CheckBuySell from './Components/Profile/CheckBuySell';
 
 
 // --- Helper ---
-// Enhanced parseUserInfo to be more robust and consistent with backend JWT payload
 const parseUserInfoFromToken = (token) => {
-    if (!token) return null;
+    if (!token) {
+        // console.log("[parseUserInfo] No token provided.");
+        return null;
+    }
     try {
-        const decoded = jwtDecode(token); // id, email, role, name should come from backend JWT
-        // Check for expiration
+        const decoded = jwtDecode(token);
+        if (!decoded || typeof decoded !== 'object') {
+             console.error("[parseUserInfo] Failed to decode token or decoded value is not an object.");
+             localStorage.removeItem('token'); localStorage.removeItem('userInfo'); return null;
+        }
+        // Check expiration
         if (decoded.exp * 1000 < Date.now()) {
-            console.warn("[parseUserInfo] Token expired.");
-            localStorage.removeItem('token'); // Clean up expired token
-            localStorage.removeItem('userInfo');
-            return null;
+            console.warn("[parseUserInfo] Token expired at:", new Date(decoded.exp * 1000).toLocaleString());
+            localStorage.removeItem('token'); localStorage.removeItem('userInfo'); return null;
         }
-        // Validate essential fields
+        // Check essential fields - ADJUST 'name' based on your JWT payload consistency
         if (!decoded.id || !decoded.email || !decoded.role || !decoded.name) {
-            console.error("[parseUserInfo] Token is missing essential fields (id, email, role, name).");
-            return null;
+            console.error("[parseUserInfo] Token is missing essential fields (id, email, role, name). Payload:", decoded);
+             localStorage.removeItem('token'); localStorage.removeItem('userInfo'); return null;
         }
+        console.log("[parseUserInfo] Token successfully decoded and validated. Role:", decoded.role);
+        // Return consistent user object structure
         return {
             id: decoded.id,
-            name: decoded.name,
+            name: decoded.name, // Assumes backend always includes 'name' field in JWT for all roles
             email: decoded.email,
-            role: decoded.role, // 'admin', 'client', 'businessOwner'
-            // Add other fields from token if needed, e.g., businessName for businessOwner
+            role: decoded.role, // Should be 'admin', 'client', or 'businessOwner'
             ...(decoded.role === 'businessOwner' && decoded.businessName && { businessName: decoded.businessName }),
         };
     } catch (error) {
-        console.error("[parseUserInfo] Error decoding token:", error);
-        localStorage.removeItem('token'); // Clean up invalid token
-        localStorage.removeItem('userInfo');
-        return null;
+        console.error("[parseUserInfo] Error during token decoding:", error);
+        localStorage.removeItem('token'); localStorage.removeItem('userInfo'); return null;
     }
 };
 
 
 // --- Main App Component ---
 function App() {
-    // State for auth status, user info, and initial loading
     const [authState, setAuthState] = useState({
         isLoggedIn: false,
         userInfo: null,
-        isLoading: true, // Start with loading true
+        isLoading: true, // Start true until initial check completes
     });
     const [logoutMessage, setLogoutMessage] = useState('');
-    const navigateRef = useRef(null); // To use navigate outside Router context if needed (e.g. in axios interceptor)
+    const navigateRef = useRef(null); // For potential use by interceptors
 
     // --- Logout Function ---
-    // useCallback ensures this function's identity is stable if passed as prop
     const handleLogout = useCallback((message = "You have been logged out.") => {
-        console.log('[App] handleLogout initiated. Message:', message);
+        console.log(`[App] handleLogout called. Message: "${message}"`);
         localStorage.removeItem("token");
         localStorage.removeItem("userInfo");
-        setAuthState({ isLoggedIn: false, userInfo: null, isLoading: false }); // Update auth state
-        // Redirect to login page with a message.
-        // This navigation should happen within a component that has access to useNavigate.
-        // We'll handle this in AppContent or by passing navigate.
-        // For now, setting a message that AppContent can pick up.
-        setLogoutMessage(message);
-        // Direct window.location.href is a hard redirect, might be better to use react-router's navigation
-        // If navigateRef.current is set, it can be used: navigateRef.current('/login', { state: { logoutMessage: message }});
-    }, []);
+        setAuthState({ isLoggedIn: false, userInfo: null, isLoading: false }); // Update state
+        setLogoutMessage(message); // Set message for AppContent to potentially redirect
+        // Note: Actual navigation is handled by useEffect in AppContentWrapper based on logoutMessage
+    }, []); // Empty dependency array as it doesn't depend on state/props
 
 
-    // --- Authentication Check on Mount and Storage Changes ---
+    // --- Authentication Check on Mount & Storage Changes ---
     useEffect(() => {
         console.log("[App CheckAuth Effect] Running initial auth check...");
         const token = localStorage.getItem('token');
-        const storedUserInfo = localStorage.getItem('userInfo'); // Get stored user info
-        let userFromToken = null;
-        let userFromStorage = null;
+        const parsedUser = parseUserInfoFromToken(token); // Centralized parsing and validation
 
-        if (token) {
-            userFromToken = parseUserInfoFromToken(token);
-        }
-        if(storedUserInfo) {
-            try {
-                userFromStorage = JSON.parse(storedUserInfo);
-            } catch(e) {
-                console.error("Error parsing stored userInfo:", e);
-                localStorage.removeItem('userInfo'); // Clear corrupted data
+        if (parsedUser) {
+            // Token is valid and parsed correctly
+            const storedUserInfo = localStorage.getItem('userInfo');
+            if (JSON.stringify(parsedUser) !== storedUserInfo) {
+                localStorage.setItem('userInfo', JSON.stringify(parsedUser)); // Sync storage if needed
             }
-        }
-
-        if (userFromToken) {
-            // If token is valid, it's the source of truth. Update localStorage if different.
-            if (JSON.stringify(userFromToken) !== JSON.stringify(userFromStorage)) {
-                localStorage.setItem('userInfo', JSON.stringify(userFromToken));
-            }
-            console.log("[App CheckAuth Effect] Valid session. User:", userFromToken);
-            setAuthState({ isLoggedIn: true, userInfo: userFromToken, isLoading: false });
+            console.log("[App CheckAuth Effect] Valid session found. Setting auth state. User:", parsedUser);
+            setAuthState({ isLoggedIn: true, userInfo: parsedUser, isLoading: false });
         } else {
-            // No valid token, or token parsing failed
-            console.log("[App CheckAuth Effect] No valid session found or token expired.");
+            // No valid token found (or expired/invalid)
+            console.log("[App CheckAuth Effect] No valid session found.");
+            // Ensure cleanup if state somehow became inconsistent
             if (authState.isLoggedIn || localStorage.getItem('token') || localStorage.getItem('userInfo')) {
-                // If state or storage indicates logged in, but token is invalid, perform cleanup
                 localStorage.removeItem('token');
                 localStorage.removeItem('userInfo');
             }
             setAuthState({ isLoggedIn: false, userInfo: null, isLoading: false });
         }
 
-        // Listener for storage events (logout/login in other tabs)
+        // Listener for storage events (sync across tabs)
         const handleStorageChange = (event) => {
             if (event.key === 'token' || event.key === 'userInfo') {
-                console.log(`[App Storage Listener] Detected '${event.key}' change in another tab. Re-checking auth.`);
+                console.log(`[App Storage Listener] Storage changed ('${event.key}'). Re-validating auth state.`);
                 const currentToken = localStorage.getItem('token');
-                const parsedUserAgain = parseUserInfoFromToken(currentToken);
-                if (parsedUserAgain) {
-                    setAuthState({ isLoggedIn: true, userInfo: parsedUserAgain, isLoading: false });
-                    if (JSON.stringify(parsedUserAgain) !== localStorage.getItem('userInfo')) {
-                        localStorage.setItem('userInfo', JSON.stringify(parsedUserAgain));
+                const currentUserInfo = parseUserInfoFromToken(currentToken);
+                // Update state only if it has actually changed compared to current state
+                setAuthState(prevState => {
+                    const newStateIsLoggedIn = !!currentUserInfo;
+                    if (prevState.isLoggedIn !== newStateIsLoggedIn || JSON.stringify(prevState.userInfo) !== JSON.stringify(currentUserInfo)) {
+                         console.log("[App Storage Listener] Auth state changed based on storage event. New state:", { isLoggedIn: newStateIsLoggedIn, userInfo: currentUserInfo });
+                         if (currentUserInfo && JSON.stringify(currentUserInfo) !== localStorage.getItem('userInfo')) {
+                             localStorage.setItem('userInfo', JSON.stringify(currentUserInfo)); // Keep storage synced
+                         } else if (!currentUserInfo) {
+                             localStorage.removeItem('userInfo'); // Ensure userInfo is removed if token invalidates
+                         }
+                         return { ...prevState, isLoggedIn: newStateIsLoggedIn, userInfo: currentUserInfo, isLoading: false };
                     }
-                } else {
-                    if (authState.isLoggedIn) { // Only update if current tab thought it was logged in
-                        setAuthState({ isLoggedIn: false, userInfo: null, isLoading: false });
-                    }
-                }
+                    return prevState; // No change needed
+                });
             }
         };
         window.addEventListener('storage', handleStorageChange);
-        return () => window.removeEventListener('storage', handleStorageChange);
-    }, []); // Run once on mount. authState.isLoggedIn removed to prevent re-runs unless logout logic needs it
+
+        return () => {
+            console.log("[App CheckAuth Effect] Cleaning up storage listener.");
+            window.removeEventListener('storage', handleStorageChange);
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []); // Run only once on initial mount
 
 
     // --- Login Success Handler ---
     const handleLoginSuccess = useCallback((token, backendUserData) => {
-        // backendUserData is the { id, name, email, role, ... } object from the backend login response
-        console.log('[App] handleLoginSuccess triggered. Backend User Data:', backendUserData);
-        // The token itself contains the primary user info, parse it for consistency
-        const parsedUserFromNewToken = parseUserInfoFromToken(token);
+        console.log('[App] handleLoginSuccess triggered.');
+        const parsedUser = parseUserInfoFromToken(token); // Use the token as the primary source of truth
 
-        if (parsedUserFromNewToken) {
+        if (parsedUser) {
+            console.log('%c[App] Login successful. Parsed user from token:', 'color: green; font-weight: bold;', parsedUser);
             localStorage.setItem('token', token);
-            // Use parsed info from token as the source of truth for userInfo state and localStorage.
-            localStorage.setItem('userInfo', JSON.stringify(parsedUserFromNewToken));
-            setAuthState({ isLoggedIn: true, userInfo: parsedUserFromNewToken, isLoading: false });
-            setLogoutMessage(''); // Clear any previous logout message
-            console.log('%c[App] Login successful. AuthState UPDATED.', 'color: green; font-weight: bold;', { userInfo: parsedUserFromNewToken, isLoggedIn: true });
-            // Navigation will be handled by AppContent's redirect logic
+            localStorage.setItem('userInfo', JSON.stringify(parsedUser));
+            setAuthState({ isLoggedIn: true, userInfo: parsedUser, isLoading: false });
+            setLogoutMessage(''); // Clear any prior logout message
+            // Navigation is handled by AppContentWrapper's useEffect reacting to auth state change
         } else {
-            console.error("[App] Login successful but new token was invalid or data missing!");
-            handleLogout("Login failed: Invalid session data received.");
+            console.error("[App] Login seemed successful (got token) but token was invalid upon parsing!");
+            handleLogout("Login failed: Invalid session data received from server."); // Force logout
         }
-    }, [handleLogout]); // handleLogout is a stable dependency
+    }, [handleLogout]); // Dependency on handleLogout
 
 
-    // --- Global Logout Event Listener for 401s from axiosInstance ---
+    // --- Global Logout Event Listener for 401s ---
     useEffect(() => {
         const handleAuthErrorEvent = (event) => {
-            console.warn('[App] Caught global auth-error-401 event from axios interceptor.');
-            const message = event.detail?.message || 'Your session has expired or is invalid. Please log in again.';
-            // Check current auth state before logging out to prevent loops if already logged out
-            if (authState.isLoggedIn) {
-                handleLogout(message);
-            }
+            // Check if we are already logged out before triggering logout again
+            setAuthState(currentState => {
+                if (currentState.isLoggedIn) {
+                    console.warn('[App] Global auth-error-401 listener: Triggering logout.');
+                    const message = event.detail?.message || 'Your session has expired or is invalid. Please log in again.';
+                    handleLogout(message); // Call logout
+                    return { isLoggedIn: false, userInfo: null, isLoading: false }; // Immediately reflect logout state
+                }
+                // If already logged out, do nothing.
+                console.log('[App] Global auth-error-401 listener: Ignored, user already logged out.');
+                return currentState;
+            });
         };
         window.addEventListener('auth-error-401', handleAuthErrorEvent);
-        return () => window.removeEventListener('auth-error-401', handleAuthErrorEvent);
-    }, [handleLogout, authState.isLoggedIn]); // Add authState.isLoggedIn
+        return () => {
+            console.log("[App 401 Listener] Cleaning up auth-error-401 listener.");
+            window.removeEventListener('auth-error-401', handleAuthErrorEvent);
+        };
+    }, [handleLogout]); // Depends on handleLogout
 
 
+    // --- Initial Loading Display ---
     if (authState.isLoading) {
         return (
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', flexDirection: 'column' }}>
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', flexDirection: 'column', backgroundColor: '#f8f8f8' }}>
                 <ClipLoader size={60} color="#f97316" loading={authState.isLoading} />
-                <p style={{ marginTop: '20px', color: '#555' }}>Loading Application...</p>
+                <p style={{ marginTop: '20px', color: '#555', fontSize: '1.1em' }}>Initializing Application...</p>
             </div>
         );
     }
 
+    // --- Render App with Context and Router ---
     return (
+        // Provide the current auth state and the login/logout functions via context
         <AuthContext.Provider value={{ ...authState, logout: handleLogout, login: handleLoginSuccess }}>
             <Router>
-                <AppContentWrapper // Use a new wrapper to get navigate context
+                <AppContentWrapper
                     logoutMessage={logoutMessage}
                     setLogoutMessage={setLogoutMessage}
-                    navigateRef={navigateRef} // Pass ref to AppContentWrapper
+                    navigateRef={navigateRef}
                 />
             </Router>
         </AuthContext.Provider>
     );
 }
 
-// New Wrapper to get access to useNavigate for the AppContent
+
+// --- App Content Wrapper (Handles Routing and Effects needing Router context) ---
 function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
     const navigate = useNavigate();
     const location = useLocation();
-    const auth = useAuth(); // Get auth state from context
+    const auth = useAuth(); // Consume authentication context
 
+    // Effect to set the navigate function for potential external use (e.g., interceptors)
     useEffect(() => {
-        navigateRef.current = navigate; // Set the navigate function to the ref
+        navigateRef.current = navigate;
     }, [navigate, navigateRef]);
 
     // --- Effect for Post-Login Redirect ---
     useEffect(() => {
+        // Only run if user is logged in, has user info, and is currently on the login page
         if (auth.isLoggedIn && auth.userInfo && location.pathname.toLowerCase() === '/login') {
-            const fromPath = location.state?.from?.pathname; // Path user was trying to access before redirect to login
-            let redirectPath = '/'; // Default redirect
+            const fromPath = location.state?.from?.pathname; // Path user was trying to access
+            let redirectPath = '/'; // Default redirect path
 
-            if (auth.userInfo.role === 'admin') redirectPath = '/Admin/Dashboard';
-            else if (auth.userInfo.role === 'client') redirectPath = '/ClientProfile';
-            else if (auth.userInfo.role === 'businessOwner') redirectPath = '/BOwnerHome'; // Corrected 'bowner' to 'businessOwner'
-            // else if (auth.userInfo.role === 'bowner') redirectPath = '/BOwnerHome'; // Example for consistency
+            // Determine redirect path based on user role
+            // *** IMPORTANT: Ensure these role strings ('admin', 'client', 'businessOwner')
+            // *** exactly match the 'role' field coming from your backend JWT payload ***
+            if (auth.userInfo.role === 'admin') {
+                redirectPath = '/Admin/Dashboard';
+            } else if (auth.userInfo.role === 'client') {
+                redirectPath = '/ClientProfile'; // Redirect client to their profile
+            } else if (auth.userInfo.role === 'businessOwner') {
+                redirectPath = '/BOwnerHome'; // Redirect business owner to their home/dashboard
+            } else {
+                 console.warn(`[AppContent PostLogin] Unknown user role encountered: ${auth.userInfo.role}. Redirecting to default.`);
+            }
 
+            // Redirect to the intended 'from' path if it exists and isn't login/root, otherwise use role-based default
             const destination = (fromPath && fromPath !== '/login' && fromPath !== '/') ? fromPath : redirectPath;
-            console.log(`%c[AppContent PostLogin] Logged in & on /login. Navigating to: ${destination}`, 'color: green; font-weight: bold;');
-            navigate(destination, { replace: true });
+            console.log(`%c[AppContent PostLogin] Conditions met. Navigating from /login to: ${destination}`, 'color: blue; font-weight: bold;');
+            navigate(destination, { replace: true }); // Use replace to avoid login page in history
         }
-    }, [auth.isLoggedIn, auth.userInfo, navigate, location]);
+    }, [auth.isLoggedIn, auth.userInfo, navigate, location]); // Dependencies
 
 
-    // --- Effect to Handle Session Expired/Logout Messages from URL ---
+    // --- Effect to Handle Logout Messages from URL ---
     useEffect(() => {
         const params = new URLSearchParams(location.search);
         const msgParam = params.get('logoutMessage');
-        const expiredParam = params.get('sessionExpired'); // If you use this param elsewhere
-        let messageToShow = '';
-
-        if (msgParam) messageToShow = msgParam;
-        else if (expiredParam === 'true' && !logoutMessage) messageToShow = 'Your session has expired. Please log in again.';
-
-        if (messageToShow) {
-            setLogoutMessage(messageToShow);
-            // Clean the URL to remove the message query params
+        if (msgParam) {
+             // Avoid setting the message if it's already the same one
+            if (msgParam !== logoutMessage) {
+                console.log("[AppContent Message Check] Setting logout message from URL param:", msgParam)
+                setLogoutMessage(msgParam);
+            }
+            // Clean the URL query parameters after processing the message
             window.history.replaceState({}, document.title, location.pathname);
         }
-    }, [location.search, setLogoutMessage, logoutMessage]); // location.search for direct dependency
+    }, [location.search, setLogoutMessage, logoutMessage]);
 
-    // --- Handle logout message display and auto-redirect from other pages if logged out ---
+
+    // --- Effect to Redirect to Login if Logout Message Appears ---
     useEffect(() => {
-        if (logoutMessage && location.pathname !== '/login') {
-            // If there's a logout message and user is not on login page, redirect them to login with the message
-            console.log("[AppContent] Logout message present, redirecting to login with message.");
-            navigate(`/login?logoutMessage=${encodeURIComponent(logoutMessage)}`, { replace: true });
+        // If a logout message is set (meaning a logout just occurred) and we are NOT on the login page, redirect there.
+        if (logoutMessage && location.pathname.toLowerCase() !== '/login') {
+            console.log("[AppContent Logout Redirect] Logout message exists and not on login page. Redirecting to /login.");
+            // Pass the message again via state, as query params were cleaned
+            navigate(`/login`, { replace: true, state: { logoutMessage: logoutMessage } });
         }
     }, [logoutMessage, location.pathname, navigate]);
 
 
-    const isAdmin = auth.isLoggedIn && auth.userInfo?.role === 'admin';
+    // Determine if the admin view is active (for layout purposes)
+    const isAdminView = auth.isLoggedIn && auth.userInfo?.role === 'admin';
 
     return (
-        <div className={`App ${isAdmin ? 'admin-view' : ''}`}>
-            {!isAdmin && (
+        <div className={`App ${isAdminView ? 'admin-view' : 'user-view'}`}> {/* Added user-view class */}
+            {/* Render Navbar only if not in admin view */}
+            {!isAdminView && (
                 <Navbar isLoggedIn={auth.isLoggedIn} userInfo={auth.userInfo} handleLogout={auth.logout} />
             )}
 
-            {logoutMessage && location.pathname.toLowerCase() === '/login' && ( // Only show on login page
+            {/* Show logout message ONLY on the login page */}
+            {logoutMessage && location.pathname.toLowerCase() === '/login' && (
                  <div
-                    className="alert alert-warning global-message" // Ensure these CSS classes exist
-                    onClick={() => setLogoutMessage('')}
+                    className="alert alert-warning global-message" // Ensure CSS for this exists
+                    onClick={() => setLogoutMessage('')} // Allow dismissing
                     title="Click to dismiss"
-                    style={{ textAlign: 'center', padding: '10px', backgroundColor: '#fff3cd', color: '#856404', border: '1px solid #ffeeba', margin: '10px auto', maxWidth: '600px', cursor: 'pointer' }}
+                    style={{ /* Basic styles for visibility */
+                        textAlign: 'center', padding: '10px 15px', backgroundColor: '#fff3cd',
+                        color: '#856404', border: '1px solid #ffeeba', margin: '15px auto',
+                        maxWidth: '800px', borderRadius: '4px', cursor: 'pointer', fontSize: '0.95em'
+                    }}
                 >
                     {logoutMessage}
                 </div>
             )}
 
-            <main className={`main-content ${isAdmin ? 'admin-main' : ''}`}>
+            {/* Main content area where routes are rendered */}
+            <main className={`main-content ${isAdminView ? 'admin-main' : ''}`}>
                 <Routes>
                     {/* --- Public Routes --- */}
                     <Route path="/" element={<HomePage />} />
@@ -329,32 +345,37 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
                     <Route path="/Map" element={<Map />} />
                     <Route path="/Calculate" element={<Calculate />} />
                     <Route path="/ContactUs" element={<ContactUs />} />
-                    <Route path="/SignUp" element={<SignUp />} />
+                    <Route path="/SignUp" element={<SignUp />} /> {/* Links to specific reg forms */}
                     <Route path="/BOwnerForm" element={<BOwnerForm />} />
                     <Route path="/ClientForm" element={<ClientForm />} />
 
-                    {/* Login Route: If logged in, redirect based on role, else show Login component */}
+                    {/* --- Login Route --- */}
+                    {/* If already logged in, redirect away from login based on role */}
+                    {/* Otherwise, render the Login component */}
                     <Route
                         path="/Login"
                         element={
                             auth.isLoggedIn && auth.userInfo ? (
-                                auth.userInfo.role === 'admin' ? <Navigate to="/Admin/Dashboard" replace /> :
-                                auth.userInfo.role === 'client' ? <Navigate to="/ClientProfile" replace /> :
-                                auth.userInfo.role === 'businessOwner' ? <Navigate to="/BOwnerHome" replace /> :
-                                <Navigate to="/" replace /> // Fallback
+                                <Navigate to={
+                                    auth.userInfo.role === 'admin' ? '/Admin/Dashboard' :
+                                    auth.userInfo.role === 'client' ? '/ClientProfile' :
+                                    auth.userInfo.role === 'businessOwner' ? '/BOwnerHome' :
+                                    '/' // Fallback redirect
+                                } replace />
                             ) : (
-                                <Login onLoginSuccess={auth.login} />
+                                <Login onLoginSuccess={auth.login} /> // Pass login handler from context
                             )
                         }
                     />
 
                     {/* === Protected Client Routes === */}
+                    {/* All routes within this element require the 'client' role */}
                     <Route element={<ProtectedRoute requiredRole="client" />}>
                         <Route path="/ClientProfile" element={<ClientProfile />} />
                         <Route path="/PickupReq" element={<PickupReq />} />
                         <Route path="/CheckBuySell" element={<CheckBuySell />} />
                         <Route path="/ClientEmail" element={<ClientEmail />} />
-                        <Route path="/UserCalendar" element={<UserCalendar userInfo={auth.userInfo} />} />
+                        <Route path="/UserCalendar" element={<UserCalendar userInfo={auth.userInfo} />} /> {/* Pass userInfo if needed */}
                         <Route path="/CalendarDisplay" element={<CalendarDisplay />} />
                         <Route path="/SaleForm" element={<SaleForm />} />
                         <Route path="/BuyCard" element={<BuyCard />} />
@@ -363,49 +384,36 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
                     </Route>
 
                     {/* === Protected Business Owner Routes === */}
+                     {/* All routes within this element require the 'businessOwner' role */}
                     <Route element={<ProtectedRoute requiredRole="businessOwner" />}>
                          <Route path="/BOwnerHome" element={<BOwnerHome userInfo={auth.userInfo} />} />
                          <Route path="/BOwnerProfile" element={<BOwnerProfile />} />
                          <Route path="/ProAddForm" element={<ProAddForm />} />
+                         {/* Add any other Business Owner specific routes here */}
                     </Route>
 
                      {/* === Protected Admin Routes === */}
+                     {/* All routes within this element require the 'admin' role */}
                      <Route element={<ProtectedRoute requiredRole="admin" />}>
+                        {/* Use the AdminLayout for consistent sidebar/header */}
                         <Route element={<AdminLayout handleLogout={auth.logout} />}>
-                           {/* <Route index element={<Navigate to="/Admin/Dashboard" replace />} /> Redirect from /Admin to /Admin/Dashboard */}
-                           <Route path="/Admin" element={<Navigate to="/Admin/Dashboard" replace />} /> {/* Explicit redirect */}
+                           {/* Redirect base /Admin path to the dashboard */}
+                           <Route path="/Admin" element={<Navigate to="/Admin/Dashboard" replace />} />
                            <Route path="/Admin/Dashboard" element={<Dashboard />} />
-                           <Route path="/Admin/Settings" element={<AdCalendar />} /> {/* Assuming AdCalendar is settings or rename route */}
+                           <Route path="/Admin/Settings" element={<AdCalendar />} /> {/* Example: Using AdCalendar for settings path */}
                            <Route path="/Admin/Requests" element={<AdCheckReq />} />
                            <Route path="/Admin/Emails" element={<EmailDisplay />} />
                            <Route path="/Admin/ManageOwners" element={<HandleBOwners />} />
+                           {/* Add other Admin-specific routes here */}
                         </Route>
                      </Route>
-
-                    {/* Unauthorized Page - Can be navigated to by ProtectedRoute */}
-                    <Route path="/unauthorized" element={
-                        <div style={{ textAlign: 'center', padding: '50px' }}>
-                            <h2>Unauthorized Access</h2>
-                            <p>You do not have permission to view this page.</p>
-                            <Link to="/" style={{ color: '#f97316', textDecoration: 'underline' }}>Go Home</Link>
-                        </div>
-                    }/>
-
-                    {/* Catch-all 404 */}
-                    <Route path="*" element={
-                        <div style={{ textAlign: 'center', padding: '50px' }}>
-                            <h2>404 Not Found</h2>
-                            <p>Sorry, the page you requested does not exist.</p>
-                            <Link to="/" style={{ color: '#f97316', textDecoration: 'underline' }}>Go Home</Link>
-                        </div>
-                    }/>
                 </Routes>
             </main>
 
-            {!isAdmin && <Footer1 />}
+             {/* Render Footer only if not in admin view */}
+            {!isAdminView && <Footer1 />}
         </div>
     );
 }
-
 
 export default App;
