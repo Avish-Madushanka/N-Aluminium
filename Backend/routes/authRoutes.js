@@ -1,11 +1,8 @@
-// routes/authRoutes.js
 const express = require('express');
-const { login, getMe } = require('../controllers/authController');
-const { protect } = require('../middleware/auth');
-
+const authController = require('../controllers/authController');
 const router = express.Router();
 
-router.post('/login', login);
-router.get('/me', protect, getMe);
+// POST /api/auth/login
+router.post('/login', authController.login);
 
 module.exports = router;

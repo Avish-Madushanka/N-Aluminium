@@ -1,10 +1,9 @@
 // config/db.js
 const mongoose = require('mongoose');
-const config = require('./config'); // For potential future use if db config needs JWT_SECRET etc.
+// const config = require('./config'); // Not strictly needed here as MONGO_URI is from process.env
 
 const connectDB = async () => {
-  // Close any existing connections to avoid memory leaks during multiple calls (more relevant for testing)
-  if (mongoose.connection.readyState !== 0 && mongoose.connection.readyState !== 3) { // 0 = disconnected, 3 = disconnecting
+  if (mongoose.connection.readyState !== 0 && mongoose.connection.readyState !== 3) {
     console.log('Disconnecting existing Mongoose connection...');
     await mongoose.disconnect();
   }
@@ -16,29 +15,15 @@ const connectDB = async () => {
     }
 
     const conn = await mongoose.connect(process.env.MONGO_URI, {
-      serverSelectionTimeoutMS: 10000, // Increased timeout
-      maxPoolSize: 15, // Increased pool size
-      // Mongoose 6+ no longer needs these options:
-      // useNewUrlParser: true,
-      // useUnifiedTopology: true,
-      // useCreateIndex: true,
-      // useFindAndModify: false
+      serverSelectionTimeoutMS: 10000,
+      maxPoolSize: 15,
     });
 
     console.log(`MongoDB Connected: ${conn.connection.host}`);
 
-    // Connection event listeners
-    mongoose.connection.on('connected', () => {
-      console.log('Mongoose re-connected to DB');
-    });
-
-    mongoose.connection.on('error', (err) => {
-      console.error(`Mongoose connection error: ${err}`);
-    });
-
-    mongoose.connection.on('disconnected', () => {
-      console.log('Mongoose disconnected from DB');
-    });
+    mongoose.connection.on('connected', () => console.log('Mongoose re-connected to DB'));
+    mongoose.connection.on('error', (err) => console.error(`Mongoose connection error: ${err}`));
+    mongoose.connection.on('disconnected', () => console.log('Mongoose disconnected from DB'));
 
   } catch (error) {
     console.error(`Database connection error: ${error.message}`);
@@ -47,10 +32,9 @@ const connectDB = async () => {
   }
 };
 
-// Graceful shutdown
 const gracefulShutdown = async (signal) => {
   console.log(`\nReceived ${signal}. Closing Mongoose connection...`);
-  if (mongoose.connection.readyState === 1 || mongoose.connection.readyState === 2) { // 1 = connected, 2 = connecting
+  if (mongoose.connection.readyState === 1 || mongoose.connection.readyState === 2) {
     await mongoose.connection.close();
     console.log('Mongoose connection closed due to app termination.');
   }
@@ -59,6 +43,5 @@ const gracefulShutdown = async (signal) => {
 
 process.on('SIGINT', () => gracefulShutdown('SIGINT'));
 process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
-
 
 module.exports = connectDB;

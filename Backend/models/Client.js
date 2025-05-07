@@ -1,104 +1,51 @@
-// models/Client.js
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
-const jwt =require('jsonwebtoken');
-const config = require('../config/config'); // For JWT_SECRET and JWT_EXPIRE
 
+// Define the schema first
 const clientSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: [true, 'Please add a name'],
-    trim: true,
-    maxlength: [50, 'Name cannot be more than 50 characters'],
-  },
-  email: {
-    type: String,
-    required: [true, 'Please add an email'],
-    unique: true,
-    trim: true,
-    lowercase: true,
-    match: [/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/, 'Please add a valid email'],
-  },
-  contactNumber: {
-    type: String,
-    required: [true, 'Please add a contact number'],
-    match: [/^[0-9]{10}$/, 'Please add a valid 10-digit phone number'], // Example: 10 digit Sri Lankan number
-  },
-  password: {
-    type: String,
-    required: [true, 'Please add a password'],
-    minlength: [6, 'Password must be at least 6 characters'],
-    select: false, // Do not return password by default
-  },
-  address: {
-    type: String,
-    required: [true, 'Please add an address'],
-    minlength: [10, 'Address should be at least 10 characters'],
-  },
-  district: {
-    type: String,
-    required: [true, 'Please select a district'],
-    // Example enum, adjust as needed
-    enum: ['colombo', 'kandy', 'galle', 'matara', 'jaffna', 'batticaloa', 'anuradhapura', 'other'],
-    default: 'colombo',
-  },
-  province: {
-    type: String,
-    required: [true, 'Please select a province'],
-    // Example enum, adjust as needed
-    enum: ['western', 'central', 'southern', 'northern', 'eastern', 'north-western', 'north-central', 'uva', 'sabaragamuwa', 'other'],
-    default: 'western',
-  },
-  profilePhoto: {
-    type: String,
-    default: 'default.jpg', // A default image name in your uploads/profiles folder
-  },
-  role: {
-    type: String,
-    enum: ['client', 'admin'],
-    default: 'client',
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
+    name: { type: String, required: true, trim: true },
+    email: { type: String, required: true, unique: true, lowercase: true, trim: true },
+    contactNumber: { type: String, required: true, trim: true },
+    password: { type: String, required: true, select: false },
+    address: { type: String, required: true, trim: true },
+    district: { type: String, required: true },
+    province: { type: String, required: true },
+    profilePhoto: { type: String },
+    role: { type: String, default: 'client', enum: ['client'] },
+    createdAt: { type: Date, default: Date.now }
 });
 
-// Encrypt password before saving
+// Pre-save hook for password hashing
 clientSchema.pre('save', async function(next) {
-  if (!this.isModified('password')) {
-    return next();
-  }
-  try {
-    const salt = await bcrypt.genSalt(10);
-    this.password = await bcrypt.hash(this.password, salt);
-    next();
-  } catch (error) {
-    next(error);
-  }
+    if (!this.isModified('password')) return next();
+    try {
+        const salt = await bcrypt.genSalt(10);
+        this.password = await bcrypt.hash(this.password, salt);
+        console.log(`[ClientModel] Password for ${this.email} hashed successfully during pre-save.`);
+        next();
+    } catch (error) {
+        console.error(`[ClientModel] Error hashing password for ${this.email}:`, error);
+        next(error);
+    }
 });
 
-// Method to compare passwords
-clientSchema.methods.matchPassword = async function(enteredPassword) {
-  try {
+// Method for password comparison
+clientSchema.methods.comparePassword = async function(enteredPassword) {
+    if (!this.password) {
+        console.error(`[ClientModel] comparePassword called on user ${this.email} but this.password is not available.`);
+        return false;
+    }
     return await bcrypt.compare(enteredPassword, this.password);
-  } catch (error) {
-    return false; // Or throw error if you want to handle it differently
-  }
 };
 
-// Sign JWT and return
-clientSchema.methods.getSignedJwtToken = function() {
-  if (!config.JWT_SECRET) {
-    console.error('FATAL ERROR: JWT_SECRET is not defined.');
-    // In a real app, you might throw an error or handle this more gracefully,
-    // but for now, exiting helps identify the missing config during development.
-    // Consider a less drastic approach for production.
-    throw new Error('JWT_SECRET not configured, cannot sign token.');
-  }
-  return jwt.sign({ id: this._id, role: this.role }, config.JWT_SECRET, {
-    expiresIn: config.JWT_EXPIRE || '30d',
-  });
-};
-
-module.exports = mongoose.model('Client', clientSchema);
+// Check if the model already exists before trying to compile it
+// Export the model
+let Client;
+try {
+    // Try to get the existing model if it has been compiled
+    Client = mongoose.model('Client');
+} catch (error) {
+    // If the model doesn't exist, compile it
+    Client = mongoose.model('Client', clientSchema);
+}
+module.exports = Client;

@@ -1,49 +1,55 @@
-// server.js
-require('dotenv').config(); // <<<< MUST BE THE VERY FIRST LINE >>>>
-
-const app = require('./app');
-const connectDB = require('./config/db'); // Ensure this path is correct
-const http = require('http');
+require('dotenv').config(); // Ensures .env variables are loaded first
+const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors');
 const path = require('path');
-const fs = require('fs');
 
-// Create uploads directory if it doesn't exist
-const uploadDir = path.join(__dirname, 'uploads');
-if (!fs.existsSync(uploadDir)) {
-  try {
-    fs.mkdirSync(uploadDir, { recursive: true });
-    console.log(`Uploads directory created at ${uploadDir}`);
-  } catch (err) {
-    console.error(`Error creating uploads directory: ${err.message}`);
-    process.exit(1); // Critical for file uploads
-  }
-} else {
-  console.log(`Uploads directory already exists at ${uploadDir}`);
-}
+// Import routes
+const clientRoutes = require('./routes/clientRoutes');
+const bOwnerRoutes = require('./routes/bOwnerRoutes');
+const authRoutes = require('./routes/authRoutes');
 
-// Connect to database
-connectDB();
+// Import controllers/middleware
+const { createInitialAdmin } = require('./controllers/adminController'); // Correct path
+const errorHandler = require('./middleware/errorHandler'); // Correct path
 
+const app = express();
 const PORT = process.env.PORT || 5003;
 
-const server = http.createServer(app);
+// Middleware
+app.use(cors()); // Enable CORS for all origins
+app.use(express.json()); // Parse JSON request bodies
+app.use(express.urlencoded({ extended: true })); // Parse URL-encoded request bodies
 
-server.listen(PORT, () => {
-  console.log(`Server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
-});
+// Serve static files from the 'uploads' directory (for profile/cover photos)
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// Handle unhandled promise rejections
-process.on('unhandledRejection', (err, promise) => {
-  console.error(`Unhandled Rejection: ${err.message}`);
-  console.error(err.stack); // Log the stack for more details
-  // Close server & exit process
-  server.close(() => process.exit(1));
-});
 
-// Handle uncaught exceptions
-process.on('uncaughtException', (err) => {
-  console.error(`Uncaught Exception: ${err.message}`);
-  console.error(err.stack); // Log the stack for more details
-  // Close server & exit process
-  server.close(() => process.exit(1));
+// API Routes
+app.get('/', (req, res) => { // Basic root path for backend status check
+    res.status(200).send(`N-Aluminum Backend is alive and running on port ${PORT}!`);
 });
+app.use('/api/clients', clientRoutes);
+app.use('/api/b-owners', bOwnerRoutes);
+app.use('/api/auth', authRoutes); // Mount authentication routes
+
+
+// Global Error Handler (must be the last middleware)
+app.use(errorHandler);
+
+// Connect to MongoDB and Start Server
+mongoose.connect(process.env.MONGO_URI)
+    .then(() => {
+        console.log('[DB Connection] Successfully connected to MongoDB Atlas.');
+        app.listen(PORT, async () => {
+            console.log(`[Server Startup] Backend server is running on http://localhost:${PORT}`);
+            // Attempt to create initial admin user if not exists
+            await createInitialAdmin();
+        });
+    })
+    .catch(err => {
+        console.error('[DB Connection] MongoDB connection error:', err.message);
+        console.error('Full error object:', err); // Log full error for more details
+        console.error('Halting application due to DB connection failure.');
+        process.exit(1); // Exit process if DB connection fails critically
+    });

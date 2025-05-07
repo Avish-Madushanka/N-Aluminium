@@ -2,46 +2,50 @@
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
-const config = require('../config/config'); // For MAX_FILE_SIZE and ALLOWED_FILE_TYPES
+const config = require('../config/config');
 
-const uploadDir = './uploads/'; // Relative to project root
+// Specific directory for client profile photos
+const clientProfileUploadDir = path.join(__dirname, '..', 'uploads', 'profiles');
 
-// Ensure upload directory exists
-if (!fs.existsSync(uploadDir)) {
+// Ensure this specific directory exists
+if (!fs.existsSync(clientProfileUploadDir)) {
   try {
-    fs.mkdirSync(uploadDir, { recursive: true });
-    console.log(`Uploads directory for Multer created at ${path.resolve(uploadDir)}`);
+    fs.mkdirSync(clientProfileUploadDir, { recursive: true });
+    console.log(`Client profiles upload directory created at ${clientProfileUploadDir}`);
   } catch (err) {
-    console.error(`Error creating uploads directory for Multer: ${err.message}`);
-    // Don't exit here, let server.js handle overall creation
+    console.error(`Error creating client profiles upload directory: ${err.message}`);
+    // Consider exiting if this specific path is critical and cannot be created
+    // process.exit(1);
   }
 }
 
-
 const storage = multer.diskStorage({
   destination: function(req, file, cb) {
-    cb(null, uploadDir); // Use the defined uploadDir
+    // All files from this uploader go to the client profiles directory
+    cb(null, clientProfileUploadDir);
   },
   filename: function(req, file, cb) {
-    // Example: client-timestamp-originalextension
     cb(null, `client-${Date.now()}${path.extname(file.originalname)}`);
   },
 });
 
 const fileFilter = (req, file, cb) => {
+  // Use ALLOWED_FILE_TYPES from global config
   if (!config.ALLOWED_FILE_TYPES || config.ALLOWED_FILE_TYPES.length === 0) {
-    console.warn('ALLOWED_FILE_TYPES not configured in config/config.js or .env. Allowing all files.');
-    return cb(null, true); // Or cb(new Error('File types not configured'), false); for stricter control
+    console.warn('ALLOWED_FILE_TYPES not configured. Allowing all files for client upload.');
+    return cb(null, true);
   }
   if (!config.ALLOWED_FILE_TYPES.includes(file.mimetype)) {
-    return cb(new Error(`Only ${config.ALLOWED_FILE_TYPES.join(', ')} files are allowed. You tried to upload: ${file.mimetype}`), false);
+    // Create a custom error property on req for the error handler or route middleware
+    req.fileValidationError = `Only ${config.ALLOWED_FILE_TYPES.join(', ')} files are allowed. You tried: ${file.mimetype}`;
+    return cb(null, false); // Reject file, but don't throw multer error immediately
   }
   cb(null, true);
 };
 
 const upload = multer({
   storage: storage,
-  limits: { fileSize: config.MAX_FILE_SIZE || (1024 * 1024 * 5) }, // Default 5MB if not set
+  limits: { fileSize: config.MAX_FILE_SIZE_MB * 1024 * 1024 }, // Use MB from config
   fileFilter: fileFilter,
 });
 
