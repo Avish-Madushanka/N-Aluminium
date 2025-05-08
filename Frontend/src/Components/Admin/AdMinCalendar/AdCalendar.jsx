@@ -239,7 +239,6 @@ const AdCalendar = () => {
   return (
     <div className="admin-calendar-container">
       <div className="admin-header">
-        <Settings size={24} className="header-icon" />
         <h1>Manage Collection Settings</h1>
       </div>
 

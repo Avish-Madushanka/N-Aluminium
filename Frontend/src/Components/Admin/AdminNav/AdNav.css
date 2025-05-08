@@ -11,7 +11,7 @@
 .sidebar {
   width: 250px;
   flex-shrink: 0;
-  background-color: #222;
+  background-color: #030b08;
   color: #ddd;
   padding: 20px; /* Keep overall sidebar padding */
   display: flex;
@@ -33,7 +33,7 @@
 }
 
 .logo-text {
-  color: #61dafb;
+  color: #c6c6c6;
 }
 
 /* Menu Styling */
