@@ -341,20 +341,24 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
             <Navbar isLoggedIn={auth.isLoggedIn} userInfo={auth.userInfo} handleLogout={auth.logout} />
 
             {/* Display logout message ONLY when on the /login page */}
-            {logoutMessage && location.pathname.toLowerCase() === '/login' && (
-                 <div
-                    className="alert alert-warning global-message" // Use appropriate CSS classes
-                    onClick={() => setLogoutMessage('')} // Allow dismissing message
-                    title="Click to dismiss"
-                    style={{ /* Basic styles for visibility */
-                        textAlign: 'center', padding: '10px 15px', backgroundColor: '#fff3cd',
-                        color: '#856404', border: '1px solid #ffeeba', margin: '15px auto',
-                        maxWidth: '800px', borderRadius: '4px', cursor: 'pointer', fontSize: '0.95em'
-                    }}
-                >
-                    {logoutMessage}
+           {logoutMessage && location.pathname.toLowerCase() === '/login' && (
+                <div className="toast-popup">
+                    <strong>Notice:</strong> {logoutMessage}
+                    <button
+                        onClick={() => setLogoutMessage('')}
+                        style={{
+                            marginLeft: '10px',
+                            background: 'transparent',
+                            border: 'none',
+                            fontWeight: 'bold',
+                            cursor: 'pointer',
+                            color: '#92400e'
+                        }}
+                    >
+                    </button>
                 </div>
             )}
+
 
             {/* Main Content Area for Page Rendering */}
             <main className="main-content"> {/* Ensure this class allows space for header/footer */}
@@ -381,7 +385,7 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
                                 // If logged in, redirect away from login page
                                 <Navigate to={
                                     auth.userInfo.role === 'admin' ? '/Admin/Dashboard' :
-                                    auth.userInfo.role === 'client' ? '/ClientProfile' :
+                                    auth.userInfo.role === 'client' ? '/' :
                                     auth.userInfo.role === 'businessOwner' ? '/BOwnerHome' :
                                     '/' // Fallback
                                 } replace />

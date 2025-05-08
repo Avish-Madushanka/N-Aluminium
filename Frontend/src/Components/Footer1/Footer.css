@@ -1,5 +1,5 @@
 .footer1 {
-  background-color: #1a1a1a;
+  background-color: #061d13;
   color: #b0b0b0;
   padding: 30px 0;
   font-family: 'Arial', sans-serif;
@@ -70,7 +70,7 @@
   bottom: 0;
   width: 40px;
   height: 2px;
-  background-color: #007bff;
+  background-color: #969696;
 }
 
 .footer1-section ul {
@@ -112,7 +112,7 @@
 }
 
 .footer1-social-links a:hover {
-  color: #007bff;
+  color: #8f8f8f;
   transform: translateY(-3px);
 }
 
