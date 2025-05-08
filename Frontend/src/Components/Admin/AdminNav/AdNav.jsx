@@ -2,136 +2,132 @@
 import React from 'react';
 import './AdNav.css'; // Make sure this CSS file exists and is correct
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faCog, faQuestionCircle, faUserCog, faSignOutAlt, faTachometerAlt, faBox, faUsers, faStar, faCreditCard, faLink, faCalendarAlt, faEnvelope, faBuilding } from '@fortawesome/free-solid-svg-icons'; // Added more icons
-// Removed faProductHunt, using faEnvelope instead
-import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'; // Import NavLink
+import { faCog, faQuestionCircle, faSignOutAlt, faTachometerAlt, faBox, faUsers, faStar, faCreditCard, faLink, faCalendarAlt, faEnvelope, faBuilding } from '@fortawesome/free-solid-svg-icons';
+import { NavLink, useNavigate } from 'react-router-dom'; // Use NavLink for active styling
 
-// Accept handleLogout as a prop
-// Define the function using standard function declaration or const
-function AdNavComponent({ handleLogout }) { // Renamed internally to avoid conflict with default export name
-    const location = useLocation(); // Use hook to get current path
-    const navigate = useNavigate(); // Use hook for navigation
+function AdNavComponent({ handleLogout }) {
+    const navigate = useNavigate();
 
-    // Function to handle the logout action
     const performLogout = (e) => {
-        e.preventDefault(); // Prevent default link behavior
+        e.preventDefault();
         if (handleLogout) {
-            handleLogout(); // Call the function passed from the parent
+            handleLogout(); // Use the function passed from AdminLayout/App
         } else {
             console.warn("handleLogout prop not provided to AdNav");
-            // Fallback or redirect logic if needed
-            navigate('/login');
+            navigate('/login'); // Fallback
         }
     };
 
-
     return (
-        // The main container (.dashboard-container) is now handled by the layout component
-        <aside className="sidebar">
+        // Sidebar container
+        <aside className="sidebar"> {/* Ensure CSS targets .sidebar */}
             <div className="logo">
-                {/* Choose one logo representation */}
-                <span className="logo-text">Admin Panel</span> {/* Example text logo */}
-                {/* Or keep your icon if preferred: */}
-                {/* <span className="logo-icon">subcom</span> */}
-                {/* Toggle might need state if you implement sidebar collapse */}
-                {/* <FontAwesomeIcon icon={faBars} className="menu-toggle" /> */}
+                <span className="logo-text">Admin Panel</span> {/* Or your logo */}
             </div>
 
             <nav className="menu">
-                {/* Use NavLink for automatic active class styling */}
+                {/* General Section */}
                 <div className="menu-section">
-                    <div className="menu-section-title">GENERAL</div> {/* Added title class */}
+                    <div className="menu-section-title">GENERAL</div>
                     <ul>
+                        {/* Update 'to' props to match App.jsx routes */}
                         <li>
-                            <NavLink to="/Dashboard" className={({ isActive }) => isActive ? 'active' : ''}>
-                                <FontAwesomeIcon icon={faTachometerAlt} className="menu-icon" />
-                                Dashboard
+                            <NavLink to="/Admin/Dashboard" className={({ isActive }) => isActive ? 'active' : ''}>
+                                <FontAwesomeIcon icon={faTachometerAlt} className="menu-icon" /> Dashboard
                             </NavLink>
                         </li>
                         <li>
-                            <NavLink to="/AdCalendar" className={({ isActive }) => isActive ? 'active' : ''}>
-                                <FontAwesomeIcon icon={faCalendarAlt} className="menu-icon" />
-                                Schedule Mgmt {/* Renamed for clarity */}
+                            {/* Assuming AdCalendar component handles "Settings" or "Schedule" */}
+                            <NavLink to="/Admin/Calendar" className={({ isActive }) => isActive ? 'active' : ''}>
+                                <FontAwesomeIcon icon={faCalendarAlt} className="menu-icon" /> Schedule Mgmt
                             </NavLink>
                         </li>
                         <li>
-                            <NavLink to="/AdCheckReq" className={({ isActive }) => isActive ? 'active' : ''}>
-                                <FontAwesomeIcon icon={faBox} className="menu-icon" />
-                                Pickup Requests
+                            <NavLink to="/Admin/Requests" className={({ isActive }) => isActive ? 'active' : ''}>
+                                <FontAwesomeIcon icon={faBox} className="menu-icon" /> Pickup Requests
                             </NavLink>
                         </li>
                         <li>
-                            <NavLink to="/EmailDisplay" className={({ isActive }) => isActive ? 'active' : ''}>
-                                <FontAwesomeIcon icon={faEnvelope} className="menu-icon" /> {/* Changed Icon */}
-                                Check Emails
+                            <NavLink to="/Admin/Emails" className={({ isActive }) => isActive ? 'active' : ''}>
+                                <FontAwesomeIcon icon={faEnvelope} className="menu-icon" /> Check Emails
                             </NavLink>
                         </li>
                          <li>
-                            <NavLink to="/HandleBOwners" className={({ isActive }) => isActive ? 'active' : ''}>
-                                <FontAwesomeIcon icon={faBuilding} className="menu-icon" /> {/* Changed Icon */}
-                                Business Owners
+                            <NavLink to="/Admin/ManageOwners" className={({ isActive }) => isActive ? 'active' : ''}>
+                                <FontAwesomeIcon icon={faBuilding} className="menu-icon" /> Business Owners
                             </NavLink>
                         </li>
-                        {/* Placeholder Routes - update 'to' prop when routes exist */}
+                        {/* --- Placeholder / Future Routes --- */}
+                        {/* Ensure paths start with /Admin/ if they are admin-only pages */}
+                        {/*
                         <li>
-                           <NavLink to="/admin/reviews" className={({ isActive }) => isActive ? 'active' : ''}>
-                                <FontAwesomeIcon icon={faStar} className="menu-icon" />
-                                Reviews
-                                {/* <span className="badge">02</span> */}
+                           <NavLink to="/Admin/Reviews" className={({ isActive }) => isActive ? 'active' : ''}>
+                                <FontAwesomeIcon icon={faStar} className="menu-icon" /> Reviews
                             </NavLink>
                         </li>
                          <li>
-                            <NavLink to="/admin/payment" className={({ isActive }) => isActive ? 'active' : ''}>
-                                <FontAwesomeIcon icon={faCreditCard} className="menu-icon" />
-                                Payments
+                            <NavLink to="/Admin/Payments" className={({ isActive }) => isActive ? 'active' : ''}>
+                                <FontAwesomeIcon icon={faCreditCard} className="menu-icon" /> Payments
                             </NavLink>
                         </li>
                          <li>
-                            <NavLink to="/admin/integration" className={({ isActive }) => isActive ? 'active' : ''}>
-                                <FontAwesomeIcon icon={faLink} className="menu-icon" />
-                                Integrations
+                            <NavLink to="/Admin/Integrations" className={({ isActive }) => isActive ? 'active' : ''}>
+                                <FontAwesomeIcon icon={faLink} className="menu-icon" /> Integrations
                             </NavLink>
                         </li>
+                        */}
                     </ul>
                 </div>
 
+                {/* Account Section */}
                 <div className="menu-section">
-                     <div className="menu-section-title">ACCOUNT</div> {/* Added title class */}
+                     <div className="menu-section-title">ACCOUNT & SUPPORT</div>
                     <ul>
-                        {/* Placeholder Routes */}
+                        {/* Update paths for future routes */}
+                        {/*
                         <li>
-                            <NavLink to="/admin/settings" className={({ isActive }) => isActive ? 'active' : ''}>
-                                <FontAwesomeIcon icon={faCog} className="menu-icon" />
-                                Settings
+                            <NavLink to="/Admin/GeneralSettings" className={({ isActive }) => isActive ? 'active' : ''}>
+                                <FontAwesomeIcon icon={faCog} className="menu-icon" /> Settings
                             </NavLink>
                         </li>
                         <li>
-                           <NavLink to="/admin/help" className={({ isActive }) => isActive ? 'active' : ''}>
-                                <FontAwesomeIcon icon={faQuestionCircle} className="menu-icon" />
-                                Help
+                           <NavLink to="/Admin/Help" className={({ isActive }) => isActive ? 'active' : ''}>
+                                <FontAwesomeIcon icon={faQuestionCircle} className="menu-icon" /> Help
                             </NavLink>
                         </li>
                         <li>
-                            <NavLink to="/admin/manage-users" className={({ isActive }) => isActive ? 'active' : ''}>
-                                <FontAwesomeIcon icon={faUsers} className="menu-icon" /> {/* Changed icon */}
-                                Manage Users
+                            <NavLink to="/Admin/ManageUsers" className={({ isActive }) => isActive ? 'active' : ''}>
+                                <FontAwesomeIcon icon={faUsers} className="menu-icon" /> Manage Users
                             </NavLink>
                         </li>
+                        */}
+                         <li>
+                           {/* Placeholder Link - Update or Remove */}
+                           <a href="#" style={{ opacity: 0.6, cursor: 'not-allowed' }}>
+                                <FontAwesomeIcon icon={faCog} className="menu-icon" /> Settings (TBD)
+                            </a>
+                        </li>
+                         <li>
+                           {/* Placeholder Link - Update or Remove */}
+                           <a href="#" style={{ opacity: 0.6, cursor: 'not-allowed' }}>
+                                <FontAwesomeIcon icon={faQuestionCircle} className="menu-icon" /> Help (TBD)
+                            </a>
+                        </li>
+
                     </ul>
                 </div>
             </nav>
 
+            {/* Logout Section */}
             <div className="logout">
-                {/* Use the performLogout function */}
-                <a onClick={performLogout} href="#" style={{ cursor: 'pointer' }}>
+                {/* Use button semantics for actions, styled as needed */}
+                <button onClick={performLogout} className="logout-button"> {/* Style .logout-button in CSS */}
                     <FontAwesomeIcon icon={faSignOutAlt} className="menu-icon" />
                     Logout
-                </a>
+                </button>
             </div>
         </aside>
     );
 }
 
-// --- Use export default ---
 export default AdNavComponent;
-// END OF FILE AdNav.jsx
