@@ -1,110 +1,108 @@
+// backend/controllers/authController.js
 const jwt = require('jsonwebtoken');
+
+// --- Model Imports ---
+// *** TRIPLE-CHECK THESE PATHS RELATIVE TO THIS FILE (controllers/) ***
 const Client = require('../models/Client');
-const BusinessOwner = require('../models/BusinessOwner');
+const BusinessOwner = require('../models/BusinessOwner'); // <--- CHECK THIS PATH
 const Admin = require('../models/Admin');
-// bcryptjs is not directly used here anymore as comparePassword is on the model
+// *** END PATH CHECK ***
 
-// Helper function to find user across collections
+// --- Diagnostic Logging ---
+console.log('[AuthCtrl Module Load] Required Client Type:', typeof Client, 'Has findOne:', typeof Client?.findOne === 'function');
+console.log('[AuthCtrl Module Load] Required BusinessOwner Type:', typeof BusinessOwner, 'Has findOne:', typeof BusinessOwner?.findOne === 'function'); // <--- WATCH THIS LOG
+console.log('[AuthCtrl Module Load] Required Admin Type:', typeof Admin, 'Has findOne:', typeof Admin?.findOne === 'function');
+// --- End Diagnostic Logging ---
+
+
 const findUserByEmail = async (email) => {
-    console.log(`[AuthCtrl] findUserByEmail: Searching for email: ${email}`);
+    console.log(`[AuthCtrl findUserByEmail] Searching for: "${email}"`);
 
-    // When fetching user for login, explicitly select the password field
+    // Pre-checks (These should ideally pass now if imports/exports are correct)
+    if (typeof Client?.findOne !== 'function') throw new Error('Server Config Error: Client model invalid.');
+    if (typeof BusinessOwner?.findOne !== 'function') {
+        // This was the failing check
+        console.error("[AuthCtrl findUserByEmail] FATAL: BusinessOwner variable is invalid! Type:", typeof BusinessOwner);
+        throw new Error('Server Config Error: BusinessOwner model invalid.');
+    }
+    if (typeof Admin?.findOne !== 'function') throw new Error('Server Config Error: Admin model invalid.');
+
+    // Search sequence
     let user = await Client.findOne({ email }).select('+password');
-    if (user) {
-        console.log(`[AuthCtrl] findUserByEmail: Found in Clients collection.`);
-        return { user, userModelName: 'Client' };
-    }
+    if (user) return { user, userModelName: 'Client' };
 
-    user = await BusinessOwner.findOne({ email }).select('+password');
-    if (user) {
-        console.log(`[AuthCtrl] findUserByEmail: Found in BusinessOwners collection.`);
-        return { user, userModelName: 'BusinessOwner' };
-    }
+    console.log('[AuthCtrl findUserByEmail] Checking BusinessOwner...');
+    user = await BusinessOwner.findOne({ email }).select('+password'); // Should work now
+    if (user) return { user, userModelName: 'BusinessOwner' };
 
     user = await Admin.findOne({ email }).select('+password');
-    if (user) {
-        console.log(`[AuthCtrl] findUserByEmail: Found in Admins collection.`);
-        return { user, userModelName: 'Admin' };
-    }
+    if (user) return { user, userModelName: 'Admin' };
 
-    console.log(`[AuthCtrl] findUserByEmail: User not found with email: ${email}`);
-    return null; // User not found in any collection
+    console.log(`[AuthCtrl findUserByEmail] User not found.`);
+    return null;
 };
 
 exports.login = async (req, res, next) => {
-    console.log('[AuthCtrl] Login endpoint hit. Request body:', req.body);
-    try {
-        const { email, password } = req.body;
+    const { email, password } = req.body;
+    console.log('[AuthCtrl Login] Request:', { email: email, password: password ? '******' : 'Missing' });
 
+    try {
         if (!email || !password) {
-            console.log('[AuthCtrl] Login validation failed: Email or password missing from request body.');
-            return res.status(400).json({ success: false, message: 'Please provide both email and password.' });
+            return res.status(400).json({ success: false, message: 'Email and password required.' });
         }
 
-        console.log(`[AuthCtrl] Attempting to find user with email: ${email}`);
         const result = await findUserByEmail(email);
-
-        if (!result || !result.user) {
-            console.log(`[AuthCtrl] Login failed: No user found in any collection for email: ${email}`);
+        if (!result?.user) {
             return res.status(401).json({ success: false, message: 'Invalid email or password.' });
         }
 
-        const { user, userModelName } = result;
-        console.log(`[AuthCtrl] User found in ${userModelName}. User ID: ${user._id}, Role: ${user.role}, Name: ${user.name}`);
-        console.log(`[AuthCtrl] Password field from DB for ${email}: ${user.password ? 'Retrieved' : 'NOT RETRIEVED (CRITICAL: Check .select(\'+password\') in findUserByEmail AND select:false in model)'}`);
+        const { user } = result; // Removed userModelName here as less critical now
 
         if (!user.password) {
-            // This case should ideally be prevented by .select('+password')
-            console.error(`[AuthCtrl] CRITICAL FAILURE: Password field was not retrieved for user ${email} from ${userModelName} model. Cannot compare.`);
-            return res.status(500).json({ success: false, message: 'Server configuration error during login (password field missing).' });
+            console.error(`[AuthCtrl Login] Password missing from DB for user ${email}.`);
+            return res.status(500).json({ success: false, message: 'Server error (L1).' });
         }
-        
-        console.log(`[AuthCtrl] Comparing provided password with stored hash for user: ${email}`);
-        // Use the comparePassword method defined on the specific user model instance
-        const isMatch = await user.comparePassword(password);
 
+        const isMatch = await user.comparePassword(password);
         if (!isMatch) {
-            console.log(`[AuthCtrl] Login failed: Password mismatch for email: ${email}.`);
             return res.status(401).json({ success: false, message: 'Invalid email or password.' });
         }
 
-        console.log(`%c[AuthCtrl] Login successful for: ${email}. User role: ${user.role}`, 'color: green; font-weight: bold;');
-        
-        // User is authenticated, create JWT
-        const payload = {
-            id: user._id,
-            email: user.email,
-            role: user.role,
-            name: user.name, // Ensure 'name' exists on all user models
-            // Conditionally add businessName if user is a businessOwner and has it
-            ...(user.role === 'businessOwner' && user.businessName && { businessName: user.businessName }),
-        };
-        console.log('[AuthCtrl] JWT Payload to be signed:', payload);
-
-        if (!process.env.JWT_SECRET) {
-            console.error("[AuthCtrl] CRITICAL FAILURE: JWT_SECRET is not defined in .env file. Cannot sign token.");
-            return res.status(500).json({ success: false, message: "Server configuration error (JWT secret missing)." });
+        // --- Payload Creation ---
+        let nameForPayload;
+        if (user.role === 'businessOwner') {
+            nameForPayload = user.ownerName || user.businessName || 'Business User';
+        } else {
+            nameForPayload = user.name || `${user.role.charAt(0).toUpperCase() + user.role.slice(1)} User`;
         }
 
-        const token = jwt.sign(payload, process.env.JWT_SECRET, {
-            expiresIn: '1d' // Example: token expires in 1 day
-        });
-        console.log('[AuthCtrl] JWT Token generated successfully.');
+        const payload = {
+            id: user._id, email: user.email, role: user.role, name: nameForPayload,
+            ...(user.role === 'businessOwner' && user.businessName && { businessName: user.businessName }),
+        };
+        console.log('[AuthCtrl Login] Payload to sign:', payload);
+        if (!payload.id || !payload.email || !payload.role || !payload.name) {
+             console.error("[AuthCtrl Login] FATAL: Payload missing fields!", payload);
+             return res.status(500).json({ success: false, message: "Server error (L2)." });
+        }
 
-        // Prepare user data to send back to client (excluding password)
-        const userResponse = { ...user._doc }; // Use ._doc to get a plain object from Mongoose document
-        delete userResponse.password; // Explicitly remove password if it somehow got included
+        // --- Token Signing ---
+        const jwtSecret = process.env.JWT_SECRET;
+        if (!jwtSecret) {
+            console.error("[AuthCtrl Login] FATAL: JWT_SECRET missing!");
+            return res.status(500).json({ success: false, message: "Server error (L3)." });
+        }
+        const token = jwt.sign(payload, jwtSecret, { expiresIn: '1d' });
+        console.log('[AuthCtrl Login] Token generated.');
 
-        res.status(200).json({
-            success: true,
-            message: 'Login successful.',
-            token,
-            data: userResponse // Send sanitized user data (id, email, role, name, etc.)
-        });
+        // --- Response ---
+        const userResponse = user.toObject ? user.toObject() : { ...user };
+        delete userResponse.password;
+        res.status(200).json({ success: true, message: 'Login successful.', token, data: userResponse });
 
     } catch (error) {
-        console.error('[AuthCtrl] Unexpected error in login controller:', error);
-        // Pass the error to the global error handler for consistent error response
-        next(error); // This will go to your errorHandler middleware in server.js
+        // Catch errors from findUserByEmail pre-checks OR other unexpected errors
+        console.error('[AuthCtrl Login] Error in login handler:', error);
+        next(error); // Pass to global error handler
     }
 };

@@ -1,17 +1,20 @@
+// backend/models/BusinessOwner.js
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
-// Define the schema first
+console.log('[BusinessOwnerModel] File loaded. Defining schema...');
+
 const businessOwnerSchema = new mongoose.Schema({
-    businessId: { type: String, required: true, unique: true, trim: true },
-    businessName: { type: String, required: true, trim: true },
-    ownerName: { type: String, required: true, trim: true },
-    address: { type: String, required: true, trim: true },
-    contactNumber: { type: String, required: true, trim: true },
-    district: { type: String, required: true },
-    province: { type: String, required: true },
-    email: { type: String, required: true, unique: true, lowercase: true, trim: true },
-    password: { type: String, required: true, select: false },
+    // --- Keep your schema definition exactly as before ---
+    businessId: { type: String, required: [true, 'Business ID required.'], unique: true, trim: true },
+    businessName: { type: String, required: [true, 'Business Name required.'], trim: true },
+    ownerName: { type: String, required: [true, 'Owner Name required.'], trim: true },
+    address: { type: String, required: [true, 'Address required.'], trim: true, minlength: [10] },
+    contactNumber: { type: String, required: [true, 'Contact Number required.'], trim: true, match: [/^[0-9]{10}$/, 'Invalid 10-digit contact number.'] },
+    district: { type: String, required: [true, 'District required.'] },
+    province: { type: String, required: [true, 'Province required.'] },
+    email: { type: String, required: [true, 'Email required.'], unique: true, lowercase: true, trim: true, match: [/^\S+@\S+\.\S+$/, 'Invalid email address.'] },
+    password: { type: String, required: [true, 'Password required.'], minlength: [6], select: false },
     profilePhoto: { type: String },
     coverPhoto: { type: String },
     isVerified: { type: Boolean, default: false },
@@ -19,37 +22,44 @@ const businessOwnerSchema = new mongoose.Schema({
     createdAt: { type: Date, default: Date.now }
 });
 
-// Pre-save hook for password hashing
+console.log('[BusinessOwnerModel] Schema defined.');
+
+// --- Hooks and Methods ---
 businessOwnerSchema.pre('save', async function(next) {
     if (!this.isModified('password')) return next();
+    console.log(`[BusinessOwnerModel] Hashing password for ${this.email}...`);
     try {
         const salt = await bcrypt.genSalt(10);
         this.password = await bcrypt.hash(this.password, salt);
-        console.log(`[BusinessOwnerModel] Password for ${this.email} hashed successfully during pre-save.`);
         next();
     } catch (error) {
-        console.error(`[BusinessOwnerModel] Error hashing password for ${this.email}:`, error);
+        console.error(`[BusinessOwnerModel] Hashing error for ${this.email}:`, error);
         next(error);
     }
 });
 
-// Method for password comparison
 businessOwnerSchema.methods.comparePassword = async function(enteredPassword) {
     if (!this.password) {
-        console.error(`[BusinessOwnerModel] comparePassword called on user ${this.email} but this.password is not available.`);
+        console.error(`[BusinessOwnerModel] comparePassword error: Stored password missing for ${this.email}.`);
         return false;
     }
-    return await bcrypt.compare(enteredPassword, this.password);
+    // console.log(`[BusinessOwnerModel] Comparing password for ${this.email}...`); // Keep log minimal
+    try {
+        return await bcrypt.compare(enteredPassword, this.password);
+    } catch (compareError) {
+        console.error(`[BusinessOwnerModel] bcrypt comparison error for ${this.email}:`, compareError);
+        return false;
+    }
 };
 
-// Check if the model already exists before trying to compile it
-// Export the model
-let BusinessOwner;
-try {
-    // Try to get the existing model if it has been compiled
-    BusinessOwner = mongoose.model('BusinessOwner');
-} catch (error) {
-    // If the model doesn't exist, compile it
-    BusinessOwner = mongoose.model('BusinessOwner', businessOwnerSchema);
-}
+console.log('[BusinessOwnerModel] Hooks and methods defined.');
+
+// --- SIMPLIFIED EXPORT - Directly compile and export ---
+// This assumes this file is only required ONCE per server lifecycle.
+// If OverwriteModelError comes back, revert to the try/catch pattern,
+// but the problem is likely deeper if this doesn't work.
+console.log(`[BusinessOwnerModel] Compiling and exporting model 'BusinessOwner'...`);
+const BusinessOwner = mongoose.model('BusinessOwner', businessOwnerSchema);
+console.log(`[BusinessOwnerModel] Exporting type: ${typeof BusinessOwner}, Has findOne: ${typeof BusinessOwner?.findOne === 'function'}`);
+
 module.exports = BusinessOwner;

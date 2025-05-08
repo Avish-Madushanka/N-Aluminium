@@ -1,20 +1,16 @@
-// src/Components/Navbar/Navbar.jsx
 import React, { useState, useEffect, useRef } from "react";
-import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 import { User, Menu, X, LogOut, ChevronDown } from 'lucide-react';
 import "./Navbar.css";
-import logo from "../../assets/logo.png"; // Adjust path as needed
+import logo from "../../assets/logo.png";
 
-// Assuming apiConfig.js is correctly set up and userInfo structure is consistent
-// const Navbar = ({ isLoggedIn, userInfo = null, handleLogout }) => { // Default userInfo to null
-const Navbar = ({ isLoggedIn, userInfo, handleLogout }) => { // Use props directly
-
+const Navbar = ({ isLoggedIn, userInfo, handleLogout }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [menuAnimation, setMenuAnimation] = useState(false);
   const location = useLocation();
-  const navigate = useNavigate(); // Keep for potential future use
   const navbarRef = useRef(null);
+  const profileRef = useRef(null);
 
   // Scroll handling
   useEffect(() => {
@@ -23,42 +19,37 @@ const Navbar = ({ isLoggedIn, userInfo, handleLogout }) => { // Use props direct
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Close menu on navigation
+  // Close menus on navigation
   useEffect(() => {
-    closeMenu();
-     // eslint-disable-next-line react-hooks/exhaustive-deps
+    setIsOpen(false);
+    setIsProfileOpen(false);
   }, [location]);
 
-  // Close menu on outside click
+  // Close menus on outside click
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (navbarRef.current && !navbarRef.current.contains(event.target) && isOpen) {
-        closeMenu();
+      if (navbarRef.current && !navbarRef.current.contains(event.target)) {
+        setIsOpen(false);
+        setIsProfileOpen(false);
       }
     };
-    if (isOpen) document.addEventListener("mousedown", handleClickOutside);
+    
+    document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [isOpen]); // Re-run when isOpen changes
+  }, []);
 
   const toggleMenu = () => {
-    if (isOpen) closeMenu();
-    else {
-      setIsOpen(true);
-      setMenuAnimation(true);
-    }
+    setIsOpen(!isOpen);
   };
 
-  const closeMenu = () => {
-    if (!isOpen) return;
-    setMenuAnimation(false);
-    const timer = setTimeout(() => setIsOpen(false), 300); // Match CSS animation duration
-    return () => clearTimeout(timer);
+  const toggleProfile = (e) => {
+    e.stopPropagation();
+    setIsProfileOpen(!isProfileOpen);
   };
 
   const triggerLogout = () => {
-    closeMenu();
     if (window.confirm("Are you sure you want to log out?")) {
-      handleLogout(); // Parent component handles actual logout logic & redirect
+      handleLogout();
     }
   };
 
@@ -70,133 +61,193 @@ const Navbar = ({ isLoggedIn, userInfo, handleLogout }) => { // Use props direct
     return words[0][0].toUpperCase();
   };
 
-  // --- Determine Profile Info ---
+  // Determine Profile Info
   let profilePath = '/';
   let profileName = 'User';
-  let displayRole = ''; // For potential display if needed
   const userRole = userInfo?.role;
-  // Use name field primarily for display name, fallback needed if structure varies
-  const displayName = userInfo?.name || userInfo?.ownerName; // Assuming 'name' for clients/admins, 'ownerName' for bowners
+  const displayName = userInfo?.name || userInfo?.ownerName;
 
   if (isLoggedIn && userInfo) {
-    profileName = displayName?.split(' ')[0] || 'Profile'; // Use first name or fallback
+    profileName = displayName?.split(' ')[0] || 'Profile';
 
-    // --- PATH LOGIC ---
     if (userRole === 'admin') {
-      profilePath = '/Admin'; // Or your specific admin dashboard route
-      displayRole = 'Admin';
+      profilePath = '/Admin';
+    } else if (userRole === 'client') {
+      profilePath = '/ClientProfile';
     }
-    // Add check for Business Owner if applicable - adjust 'bowner' role/type as needed
-    // else if (userRole === 'bowner' || userInfo.userType === 'bowner') {
-    //   profilePath = '/BOwnerHome'; // Or your specific bowner route
-    //   displayRole = 'Business Owner';
-    // }
-    else if (userRole === 'client') { // Check for client role
-      profilePath = '/ClientProfile'; // <<< Path to ClientProfile Component
-      displayRole = 'Client';
-    }
-    else {
-      console.warn("Navbar: Unknown user role for profile path:", userInfo);
-      profilePath = '/'; // Fallback to home for unknown roles
-    }
-    // --- END PATH LOGIC ---
-
   }
 
   return (
     <nav className={`navbar ${scrolled ? 'navbar-scrolled' : ''}`} ref={navbarRef}>
       <div className="nav-container">
         <Link className="navbar-brand" to="/">
-          <img src={logo} alt="N-Aluminium Logo" className="nav-logo" />
+          <img src={logo} alt="Company Logo" className="nav-logo" />
           <span className="logo-text1">ALUX</span>
         </Link>
 
         <div className="nav-links">
-          <NavLink to="/" className={({ isActive }) => `nav-item ${isActive ? 'active-nav-item' : ''}`}><span>Home</span><span className="nav-indicator"></span></NavLink>
-          <NavLink to="/AboutUs" className={({ isActive }) => `nav-item ${isActive ? 'active-nav-item' : ''}`}><span>About Us</span><span className="nav-indicator"></span></NavLink>
-          <NavLink to="/Service" className={({ isActive }) => `nav-item ${isActive ? 'active-nav-item' : ''}`}><span>Services</span><span className="nav-indicator"></span></NavLink>
-          <NavLink to="/ContactUs" className={({ isActive }) => `nav-item ${isActive ? 'active-nav-item' : ''}`}><span>Contact Us</span><span className="nav-indicator"></span></NavLink>
-          {/* Conditional Admin link */}
+          <NavLink to="/" className={({ isActive }) => `nav-item ${isActive ? 'active-nav-item' : ''}`}>
+            Home
+          </NavLink>
+          
+          <div className="has-dropdown">
+            <NavLink to="/AboutUs" className={({ isActive }) => `nav-item ${isActive ? 'active-nav-item' : ''}`}>
+              About Us
+            </NavLink>
+            <div className="dropdown-menu">
+              <Link to="/AboutUs/Company" className="dropdown-item">Our Company</Link>
+              <Link to="/AboutUs/Team" className="dropdown-item">Our Team</Link>
+              <Link to="/AboutUs/History" className="dropdown-item">Our History</Link>
+            </div>
+          </div>
+          
+          <NavLink to="/Service" className={({ isActive }) => `nav-item ${isActive ? 'active-nav-item' : ''}`}>
+            Services
+          </NavLink>
+          
+          <div className="has-dropdown">
+            <NavLink to="/ContactUs" className={({ isActive }) => `nav-item ${isActive ? 'active-nav-item' : ''}`}>
+              Contact
+            </NavLink>
+            <div className="dropdown-menu">
+              <Link to="/ContactUs/Form" className="dropdown-item">Contact Form</Link>
+              <Link to="/ContactUs/Locations" className="dropdown-item">Our Locations</Link>
+              <Link to="/ContactUs/Support" className="dropdown-item">Support</Link>
+            </div>
+          </div>
+          
           {isLoggedIn && userRole === 'admin' && (
-              <NavLink to="/Admin" className={({ isActive }) => `nav-item ${isActive ? 'active-nav-item' : ''}`}><span>Admin Panel</span><span className="nav-indicator"></span></NavLink>
+            <NavLink to="/Admin" className={({ isActive }) => `nav-item ${isActive ? 'active-nav-item' : ''}`}>
+              Admin Panel
+            </NavLink>
           )}
-          {/* Add conditional Business Owner link if needed */}
-           {/* {isLoggedIn && userRole === 'bowner' && (
-               <NavLink to="/BOwnerHome" className={({ isActive }) => `nav-item ${isActive ? 'active-nav-item' : ''}`}><span>Business Panel</span><span className="nav-indicator"></span></NavLink>
-           )} */}
         </div>
 
         <div className="auth-section">
           {isLoggedIn && userInfo ? (
-            <div className="user-menu">
-              {/* Use the determined profilePath */}
-              <Link to={profilePath} className="profile-link" title={`View ${profileName}'s Profile (${displayRole})`}>
-                <div className="profile-indicator">
-                   {/* Use the determined displayName */}
-                  <span className="profile-initials">{getInitials(displayName)}</span>
-                </div>
-                <span className="profile-name">{profileName}</span>
+            <div 
+              className={`user-menu ${isProfileOpen ? 'active' : ''}`} 
+              ref={profileRef}
+              onClick={toggleProfile}
+            >
+              <span className="profile-name">{profileName}</span>
+              <button className="profile-toggle">
+                <span className="profile-initials">{getInitials(displayName)}</span>
                 <ChevronDown size={16} className="profile-icon" />
-              </Link>
+              </button>
+              
               <div className="profile-dropdown">
-                 {/* Use the determined profilePath */}
-                <Link to={profilePath} className="dropdown-item" onClick={closeMenu}>
-                   <User size={16} /> My Profile
+                <Link to={profilePath} className="profile-btn" onClick={() => setIsProfileOpen(false)}>
+                  <User size={16} /> Profile
                 </Link>
-                {/* Example conditional dropdown item */}
-                {userRole === 'admin' && <Link to="/Admin/Settings" className="dropdown-item" onClick={closeMenu}><Settings size={16} /> Settings</Link>}
-                <button onClick={triggerLogout} className="dropdown-item logout-item">
-                  <LogOut size={16} /><span>Logout</span>
+                <button onClick={triggerLogout} className="logout-btn">
+                  <LogOut size={16} /> Logout
                 </button>
               </div>
             </div>
           ) : (
             <div className="auth-buttons-container">
-              <Link to="/Login" className="login-btn nav-button-style">Login</Link>
-              <Link to="/SignUp" className="signup-btn nav-button-style">Sign Up</Link>
+              <Link to="/Login" className="login-btn">Login</Link>
+              <Link to="/SignUp" className="signup-btn">Sign Up</Link>
             </div>
           )}
-        </div>
 
-        <button className="menu-toggle" onClick={toggleMenu} aria-label={isOpen ? "Close menu" : "Open menu"} aria-expanded={isOpen}>
-          {isOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
+          <button 
+            className="menu-toggle" 
+            onClick={toggleMenu} 
+            aria-label={isOpen ? "Close menu" : "Open menu"}
+            aria-expanded={isOpen}
+          >
+            {isOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile Menu */}
-      {isOpen && (
-        <div className={`mobile-menu ${menuAnimation ? 'menu-open' : 'menu-close'}`}>
-          <div className="mobile-menu-items">
-            <NavLink to="/" className={({ isActive }) => `mobile-nav-item ${isActive ? 'active-mobile-nav-item' : ''}`}>Home</NavLink>
-            <NavLink to="/AboutUs" className={({ isActive }) => `mobile-nav-item ${isActive ? 'active-mobile-nav-item' : ''}`}>About Us</NavLink>
-            <NavLink to="/Service" className={({ isActive }) => `mobile-nav-item ${isActive ? 'active-mobile-nav-item' : ''}`}>Services</NavLink>
-            <NavLink to="/ContactUs" className={({ isActive }) => `mobile-nav-item ${isActive ? 'active-mobile-nav-item' : ''}`}>Contact Us</NavLink>
-
-            {/* Conditional Mobile Links */}
-             {isLoggedIn && userRole === 'admin' && (
-                <NavLink to="/Admin" className={({ isActive }) => `mobile-nav-item ${isActive ? 'active-mobile-nav-item' : ''}`}>Admin Panel</NavLink>
-            )}
-            {/* Add Bowner Link if needed */}
-            {/* Use profilePath which is dynamically set */}
-            {isLoggedIn && userInfo && userRole !== 'admin' && ( // Show profile link for non-admins
-                <NavLink to={profilePath} className={({ isActive }) => `mobile-nav-item ${isActive ? 'active-mobile-nav-item' : ''}`}>My Profile</NavLink>
-            )}
-
-            <div className="auth-buttons-mobile">
-              {isLoggedIn ? (
-                <button onClick={triggerLogout} className="logout-btn mobile-btn">
-                  <LogOut size={18} /><span>Logout</span>
-                </button>
-              ) : (
-                <>
-                  <Link to="/Login" className="login-btn mobile-btn">Login</Link>
-                  <Link to="/SignUp" className="signup-btn mobile-btn">Sign Up</Link>
-                </>
-              )}
+      <div className={`mobile-menu ${isOpen ? 'active' : ''}`}>
+        <div className="mobile-menu-items">
+          <NavLink 
+            to="/" 
+            className={({ isActive }) => `mobile-nav-item ${isActive ? 'active-mobile-nav-item' : ''}`}
+            onClick={() => setIsOpen(false)}
+          >
+            Home
+          </NavLink>
+          
+          <div className="mobile-nav-item" onClick={() => setIsOpen(false)}>
+            About Us
+            <div className="mobile-dropdown-items">
+              <NavLink to="/AboutUs/Company" className="mobile-dropdown-item">Our Company</NavLink>
+              <NavLink to="/AboutUs/Team" className="mobile-dropdown-item">Our Team</NavLink>
+              <NavLink to="/AboutUs/History" className="mobile-dropdown-item">Our History</NavLink>
             </div>
           </div>
+          
+          <NavLink 
+            to="/Service" 
+            className={({ isActive }) => `mobile-nav-item ${isActive ? 'active-mobile-nav-item' : ''}`}
+            onClick={() => setIsOpen(false)}
+          >
+            Services
+          </NavLink>
+          
+          <div className="mobile-nav-item" onClick={() => setIsOpen(false)}>
+            Contact
+            <div className="mobile-dropdown-items">
+              <NavLink to="/ContactUs/Form" className="mobile-dropdown-item">Contact Form</NavLink>
+              <NavLink to="/ContactUs/Locations" className="mobile-dropdown-item">Our Locations</NavLink>
+              <NavLink to="/ContactUs/Support" className="mobile-dropdown-item">Support</NavLink>
+            </div>
+          </div>
+
+          {isLoggedIn && userRole === 'admin' && (
+            <NavLink 
+              to="/Admin" 
+              className={({ isActive }) => `mobile-nav-item ${isActive ? 'active-mobile-nav-item' : ''}`}
+              onClick={() => setIsOpen(false)}
+            >
+              Admin Panel
+            </NavLink>
+          )}
+          
+          {isLoggedIn && (
+            <div className="auth-buttons-mobile">
+              <Link 
+                to={profilePath} 
+                className="login-btn mobile-btn"
+                onClick={() => setIsOpen(false)}
+              >
+                <User size={18} /> My Profile
+              </Link>
+              <button 
+                onClick={triggerLogout} 
+                className="logout-btn mobile-btn"
+              >
+                <LogOut size={18} /> Logout
+              </button>
+            </div>
+          )}
+          
+          {!isLoggedIn && (
+            <div className="auth-buttons-mobile">
+              <Link 
+                to="/Login" 
+                className="login-btn mobile-btn"
+                onClick={() => setIsOpen(false)}
+              >
+                Login
+              </Link>
+              <Link 
+                to="/SignUp" 
+                className="signup-btn mobile-btn"
+                onClick={() => setIsOpen(false)}
+              >
+                Sign Up
+              </Link>
+            </div>
+          )}
         </div>
-      )}
+      </div>
     </nav>
   );
 };
