@@ -1,8 +1,15 @@
+// backend/routes/bOwnerRoutes.js
 const express = require('express');
 const bOwnerController = require('../controllers/bOwnerController');
 const { uploadBusinessPhotos } = require('../middleware/uploadMiddleware');
 const router = express.Router();
 
-router.post('/register', uploadBusinessPhotos, bOwnerController.registerBusinessOwner);
+console.log('[Routes/BOwner] Loaded.');
+const log = (req, res, next) => { console.log(`[Routes/BOwner] Hit: ${req.method} ${req.originalUrl}`); next(); };
+
+// POST /api/b-owners/register
+router.post( '/register', log, uploadBusinessPhotos, bOwnerController.registerBusinessOwner );
+
+// Add GET/PUT etc. for business owners here later if needed, using authMiddleware
 
 module.exports = router;

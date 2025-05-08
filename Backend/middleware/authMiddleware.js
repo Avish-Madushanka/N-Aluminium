@@ -1,140 +1,134 @@
-// middleware/authMiddleware.js
+// backend/middleware/authMiddleware.js
 const jwt = require('jsonwebtoken');
-const Client = require('../models/ClientModel');         // <-- Ensure this matches your filename
-const BusinessOwner = require('../models/bOwnerModel'); // <-- Ensure this matches your filename
-const config = require('../config/config');
-const ErrorResponse = require('../utils/errorResponse');
-const asyncHandler = require('./async'); // Assuming async is in the same directory
+const mongoose = require('mongoose'); // Needed for ID validation
 
-// Generic protect middleware (can be used if JWT payload has userType/role)
-// This is more flexible for a unified /me route.
-exports.protect = asyncHandler(async (req, res, next) => {
+// --- Correct Model Imports ---
+const Admin = require('../models/Admin');           // Uses Admin.js
+const Client = require('../models/Client');         // Uses Client.js
+const BusinessOwner = require('../models/BusinessOwner'); // Uses BusinessOwner.js
+// --- End Corrected Model Imports ---
+
+console.log('[AuthMiddleware] Module loaded.');
+// Diagnostic check right after import
+console.log('[AuthMiddleware] Post-Import Check - BusinessOwner Type:', typeof BusinessOwner, 'Has findById:', typeof BusinessOwner?.findById === 'function');
+
+
+// --- Protect Middleware ---
+exports.protect = async (req, res, next) => {
+    console.log(`[Auth Protect] Running for: ${req.method} ${req.originalUrl}`);
     let token;
-    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
-        token = req.headers.authorization.split(' ')[1];
+    const authHeader = req.headers.authorization;
+
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+        token = authHeader.split(' ')[1];
     }
-    // else if (req.cookies.token) { token = req.cookies.token; }
 
     if (!token) {
-        return next(new ErrorResponse('Not authorized (no token)', 401));
+        console.warn('[Auth Protect] No token provided.');
+        return res.status(401).json({ success: false, message: 'Not authorized, no token.' });
     }
 
     try {
-        const decoded = jwt.verify(token, config.JWT_SECRET);
-        console.log("Decoded JWT in protect:", decoded);
+        const jwtSecret = process.env.JWT_SECRET;
+        if (!jwtSecret) throw new Error("JWT_SECRET missing in environment"); // Critical server config error
 
-        // Attach decoded payload to req.user for general use
-        // Specific profile fetching can be done in the actual route handler if needed
-        // Or fetch here based on decoded.userType/role
-        req.user = { // Store essential decoded info
-            id: decoded.id,
-            role: decoded.role,
-            userType: decoded.userType,
-            name: decoded.name,
-            email: decoded.email
-        };
+        console.log('[Auth Protect] Verifying token...');
+        const decoded = jwt.verify(token, jwtSecret);
+        console.log('[Auth Protect] Token decoded:', decoded);
 
-        // Example: If you want to fetch the full user object here
-        // if (decoded.userType === 'client') {
-        //   req.user = await Client.findById(decoded.id).select('-password');
-        // } else if (decoded.userType === 'bowner') {
-        //   req.user = await BusinessOwner.findById(decoded.id).select('-password');
-        // }
-        // if (!req.user) { return next(new ErrorResponse('User not found', 401)); }
-
-        next();
-    } catch (err) {
-        console.error('Generic Protect Auth Error:', err.message);
-        return next(new ErrorResponse('Not authorized (token invalid/expired)', 401));
-    }
-});
-
-
-exports.protectClient = asyncHandler(async (req, res, next) => {
-   let token;
-   if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
-       token = req.headers.authorization.split(' ')[1];
-   }
-   if (!token) { return next(new ErrorResponse('Not authorized (no token)', 401)); }
-   try {
-       const decoded = jwt.verify(token, config.JWT_SECRET);
-       req.client = await Client.findById(decoded.id).select('-password'); // Sets req.client
-       if (!req.client) { return next(new ErrorResponse('Not authorized (user not found)', 401)); }
-       if (req.client.role !== 'client' && req.client.role !== 'admin') { // Admin might also be a client
-          return next(new ErrorResponse('Access denied (invalid role for client route)', 403));
-       }
-       req.user = req.client; // Also set req.user for consistency if needed by authorize
-       next();
-   } catch (err) {
-        console.error('Client Auth Error:', err.message);
-        return next(new ErrorResponse('Not authorized (token invalid)', 401));
-   }
-});
-
-exports.protectBOwner = asyncHandler(async (req, res, next) => {
-    let token;
-    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
-        token = req.headers.authorization.split(' ')[1];
-    }
-    if (!token) {
-        return next(new ErrorResponse('Not authorized (no token)', 401));
-    }
-    try {
-        const decoded = jwt.verify(token, config.JWT_SECRET);
-        req.bOwner = await BusinessOwner.findById(decoded.id).select('-password'); // Sets req.bOwner
-        if (!req.bOwner) {
-            return next(new ErrorResponse('Not authorized (user not found)', 401));
+        if (!decoded.id || !decoded.role) {
+             console.error('[Auth Protect] Token payload missing id or role.');
+             return res.status(401).json({ success: false, message: 'Not authorized (invalid token payload).' });
         }
-        if (req.bOwner.role !== 'bowner' && req.bOwner.role !== 'admin') {
-            return next(new ErrorResponse(`User role '${req.bOwner.role}' is not authorized`, 403));
+
+        // Find user based on role and ID
+        let user = null;
+        const UserModel =
+            decoded.role === 'client' ? Client :
+            decoded.role === 'businessOwner' ? BusinessOwner :
+            decoded.role === 'admin' ? Admin : null;
+
+        if (!UserModel || typeof UserModel.findById !== 'function') { // Check if model is valid before querying
+             console.error(`[Auth Protect] Invalid or non-existent Mongoose model determined for role: ${decoded.role}`);
+             return res.status(500).json({ success: false, message: 'Server configuration error (Auth M1).' });
         }
-        req.user = req.bOwner; // Also set req.user for consistency
+        console.log(`[Auth Protect] Fetching user from DB. Model: ${UserModel.modelName}, ID: ${decoded.id}`);
+
+        // Fetch user - DO NOT select password
+        user = await UserModel.findById(decoded.id);
+
+        if (!user) {
+             console.warn(`[Auth Protect] User not found in DB. ID: ${decoded.id}, Role: ${decoded.role}`);
+             return res.status(401).json({ success: false, message: 'User belonging to token no longer exists.' });
+        }
+
+        // Attach user to request
+        req.user = user;
+        console.log(`[Auth Protect] SUCCESS. User attached: ID ${req.user.id}, Role ${req.user.role}`);
         next();
+
     } catch (err) {
-        console.error('BOwner Auth Error:', err.message);
-        return next(new ErrorResponse('Not authorized (token invalid/expired)', 401));
+        console.error('[Auth Protect] Token verification/user fetch failed:', err);
+        let message = 'Not authorized.';
+        let statusCode = 401;
+        if (err.name === 'JsonWebTokenError') message = 'Not authorized (invalid token).';
+        else if (err.name === 'TokenExpiredError') message = 'Not authorized (token expired).';
+        else if (err.message?.includes('model invalid')) { statusCode = 500; message = err.message; } // Propagate model error
+        else if (err.message?.includes('JWT_SECRET missing')) { statusCode = 500; message = 'Server configuration error (Auth S1).'; }
+        return res.status(statusCode).json({ success: false, message: message });
     }
-});
+};
 
-exports.protectAdmin = asyncHandler(async (req, res, next) => {
-      let token;
-      if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
-        token = req.headers.authorization.split(' ')[1];
-      }
-      if (!token) { return next(new ErrorResponse('Not authorized (no token)', 401)); }
-      try {
-          const decoded = jwt.verify(token, config.JWT_SECRET);
-          // Admin could be a BOwner with role 'admin'
-          let adminUser = await BusinessOwner.findById(decoded.id).select('-password');
-          if (!adminUser || adminUser.role !== 'admin') {
-              // Or admin could be a Client with role 'admin'
-              adminUser = await Client.findById(decoded.id).select('-password');
-              if (!adminUser || adminUser.role !== 'admin') {
-                  return next(new ErrorResponse('Not authorized (Admin role required, user not found or not admin)', 403));
-              }
-          }
-          req.user = adminUser; // Set req.user for the admin
-          next();
-      } catch (err) {
-          console.error('Admin Auth Error:', err.message);
-          return next(new ErrorResponse('Not authorized (token invalid)', 401));
-      }
-});
-
-// General authorize (can be used after any protect middleware that sets req.user)
+// --- Authorize Middleware ---
 exports.authorize = (...roles) => {
-  return (req, res, next) => {
-    if (!req.user || !req.user.role) {
-        return next(new ErrorResponse(`User context or role not available for authorization`, 403));
-    }
-    if (!roles.includes(req.user.role)) {
-      return next(
-        new ErrorResponse(
-          `User role '${req.user.role}' is not authorized for this route. Allowed: ${roles.join(', ')}`,
-          403
-        )
-      );
-    }
-    next();
-  };
+    console.log(`[Auth Authorize] Setup for roles: ${roles.join(', ')}`);
+    return (req, res, next) => {
+        if (!req.user?.role) {
+             console.error('[Auth Authorize] FAILED: req.user.role missing.');
+             return res.status(401).json({ success: false, message: 'User authentication context missing.' });
+        }
+        const userRole = req.user.role;
+        console.log(`[Auth Authorize] Checking role: User='${userRole}', Allowed='${roles.join(', ')}'`);
+        if (!roles.includes(userRole)) {
+            console.warn(`[Auth Authorize] FAILED: Role '${userRole}' not in required: ${roles.join(', ')}`);
+            return res.status(403).json({ success: false, message: `Access denied. Required role(s): ${roles.join(', ')}` });
+        }
+        console.log(`[Auth Authorize] SUCCESS: Role '${userRole}' allowed.`);
+        next();
+    };
+};
+
+// --- Check Ownership or Admin Middleware ---
+exports.checkOwnershipOrAdmin = (Model = null) => { // Model param generally not needed if checking req.user.id vs req.params.id
+    console.log('[Auth CheckOwnership] Setup.');
+    return async (req, res, next) => {
+        const resourceId = req.params.id;
+        const loggedInUserId = req.user?.id;
+        const loggedInUserRole = req.user?.role;
+
+        console.log(`[Auth CheckOwnership] Checking resource: ${resourceId}. User: ${loggedInUserId}, Role: ${loggedInUserRole}`);
+
+        if (!loggedInUserId) {
+            console.warn('[Auth CheckOwnership] FAILED: User not found on request.');
+             return res.status(401).json({ success: false, message: 'Authentication required.' });
+        }
+         if (!resourceId || !mongoose.Types.ObjectId.isValid(resourceId)) {
+             console.warn(`[Auth CheckOwnership] FAILED: Invalid/missing resource ID: ${resourceId}`);
+             return res.status(400).json({ success: false, message: 'Valid resource identifier required.' });
+         }
+
+        if (loggedInUserRole === 'admin') {
+            console.log(`[Auth CheckOwnership] Access GRANTED: User is admin.`);
+            return next(); // Admins bypass ownership check
+        }
+
+        if (loggedInUserId === resourceId) {
+             console.log(`[Auth CheckOwnership] Access GRANTED: User ID matches resource ID.`);
+            return next(); // User matches the resource ID
+        }
+
+        // If not admin and ID doesn't match
+        console.warn(`[Auth CheckOwnership] Authorization FAILED: User ID '${loggedInUserId}' cannot access resource '${resourceId}'.`);
+        return res.status(403).json({ success: false, message: 'You are not authorized to access or modify this specific resource.' });
+    };
 };

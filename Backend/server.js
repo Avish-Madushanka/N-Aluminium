@@ -1,55 +1,59 @@
-require('dotenv').config(); // Ensures .env variables are loaded first
+// backend/server.js
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
 
-// Import routes
+// --- Import Routes ---
 const clientRoutes = require('./routes/clientRoutes');
 const bOwnerRoutes = require('./routes/bOwnerRoutes');
 const authRoutes = require('./routes/authRoutes');
+const calendarSettingsRoutes = require('./routes/calendarSettingsRoutes'); // <-- Included
 
-// Import controllers/middleware
-const { createInitialAdmin } = require('./controllers/adminController'); // Correct path
-const errorHandler = require('./middleware/errorHandler'); // Correct path
+// --- Import Controllers/Middleware ---
+const { createInitialAdmin } = require('./controllers/adminController');
+const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
 const PORT = process.env.PORT || 5003;
 
-// Middleware
-app.use(cors()); // Enable CORS for all origins
-app.use(express.json()); // Parse JSON request bodies
-app.use(express.urlencoded({ extended: true })); // Parse URL-encoded request bodies
-
-// Serve static files from the 'uploads' directory (for profile/cover photos)
+// --- Core Middleware ---
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+console.log(`[Server Config] Serving static files from ${path.join(__dirname, 'uploads')} at /uploads`);
 
-
-// API Routes
-app.get('/', (req, res) => { // Basic root path for backend status check
-    res.status(200).send(`N-Aluminum Backend is alive and running on port ${PORT}!`);
-});
+// --- API Routes Mounting ---
+app.get('/', (req, res) => { res.status(200).send(`Backend API running.`); });
+console.log(`[Server Config] Mounting /api/auth routes...`);
+app.use('/api/auth', authRoutes);
+console.log(`[Server Config] Mounting /api/clients routes...`);
 app.use('/api/clients', clientRoutes);
+console.log(`[Server Config] Mounting /api/b-owners routes...`);
 app.use('/api/b-owners', bOwnerRoutes);
-app.use('/api/auth', authRoutes); // Mount authentication routes
+console.log(`[Server Config] Mounting /api/calendar-settings routes...`); // <-- Included
+app.use('/api/calendar-settings', calendarSettingsRoutes);              // <-- Included
 
-
-// Global Error Handler (must be the last middleware)
+// --- Global Error Handler (MUST BE LAST) ---
+console.log('[Server Config] Adding global error handler.');
 app.use(errorHandler);
 
-// Connect to MongoDB and Start Server
+// --- Database Connection & Server Start ---
+console.log('[DB Connection] Attempting connection...');
 mongoose.connect(process.env.MONGO_URI)
     .then(() => {
-        console.log('[DB Connection] Successfully connected to MongoDB Atlas.');
+        console.log('[DB Connection] MongoDB Connected.');
         app.listen(PORT, async () => {
-            console.log(`[Server Startup] Backend server is running on http://localhost:${PORT}`);
-            // Attempt to create initial admin user if not exists
+            console.log(`[Server Startup] Server listening on http://localhost:${PORT}`);
             await createInitialAdmin();
+            console.log('[Server Startup] Ready.');
         });
     })
     .catch(err => {
-        console.error('[DB Connection] MongoDB connection error:', err.message);
-        console.error('Full error object:', err); // Log full error for more details
-        console.error('Halting application due to DB connection failure.');
-        process.exit(1); // Exit process if DB connection fails critically
+        console.error('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+        console.error('[DB Connection] CRITICAL FAILURE:', err.message);
+        console.error('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+        process.exit(1);
     });

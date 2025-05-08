@@ -1,28 +1,24 @@
+// backend/middleware/errorHandler.js
+const mongoose = require('mongoose');
+
 const errorHandler = (err, req, res, next) => {
-    console.error("ERROR STACK:", err.stack);
-    console.error("ERROR MESSAGE:", err.message);
+    console.error("--- Global Error Handler ---");
+    console.error("Timestamp:", new Date().toISOString());
+    console.error("URL:", req.originalUrl);
+    console.error("Message:", err.message);
+    if (process.env.NODE_ENV === 'development') console.error("Stack:", err.stack);
+    console.error("-----------------------------");
 
-    if (err.code === 'LIMIT_FILE_SIZE') {
-        return res.status(400).json({ message: 'File is too large. Max 5MB allowed.' });
-    }
-    if (err.message === 'Not an image! Please upload only images.') {
-        return res.status(400).json({ message: 'Invalid file type. Only images are allowed.' });
-    }
-    if (err.code === 11000) {
-        let field = Object.keys(err.keyValue)[0];
-        field = field.charAt(0).toUpperCase() + field.slice(1);
-        return res.status(400).json({ message: `${field} already exists.` });
-    }
-    if (err.name === 'ValidationError') {
-        const messages = Object.values(err.errors).map(val => val.message);
-        return res.status(400).json({ message: messages.join('. ') });
-    }
+    let errorResponse = { success: false, message: err.message || 'An unexpected server error occurred.' };
+    let statusCode = err.statusCode || 500;
 
-    res.status(err.statusCode || 500).json({
-        success: false, // Add success false for errors
-        message: err.message || 'An unexpected server error occurred.',
-        ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
-    });
+    if (err.name === 'ValidationError') { statusCode = 400; errorResponse.message = 'Validation failed.'; errorResponse.errors = Object.values(err.errors).reduce((acc, val) => { acc[val.path] = val.message; return acc; }, {}); }
+    else if (err.code === 11000) { statusCode = 400; const field = Object.keys(err.keyValue)[0]; errorResponse.message = `Duplicate field: ${field} must be unique.`; errorResponse.errors = { [field]: `Duplicate value entered.` }; }
+    else if (err.name === 'CastError') { statusCode = 400; errorResponse.message = `Invalid data format for field '${err.path}'.`; errorResponse.errors = { [err.path]: `Invalid ${err.kind} value.` }; }
+    else if (err.code === 'LIMIT_FILE_SIZE') { statusCode = 400; errorResponse.message = 'File size limit exceeded.'; }
+    else if (err.message?.includes('Invalid file type')) { statusCode = 400; errorResponse.message = 'Invalid file type provided.'; }
+    else if (!err.statusCode) { statusCode = 500; errorResponse.message = 'Internal server error.'; } // Hide internal details
+
+    res.status(statusCode).json(errorResponse);
 };
-
 module.exports = errorHandler;
