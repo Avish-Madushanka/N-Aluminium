@@ -1,4 +1,3 @@
-// src/Components/Admin/AdMinCalendar/AdCalendar.jsx
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   ChevronLeft, ChevronRight, Calendar, Clock, MapPin,
@@ -140,13 +139,35 @@ const AdCalendar = () => {
       reason: newSpecialDate.reason || undefined
     };
 
-    setSettingsData(prev => ({
-      ...prev,
-      specialDates: [
-        ...prev.specialDates.filter(d => d.date !== newSpecialDate.date),
-        specialDate
-      ]
-    }));
+    setSettingsData(prev => {
+      const existingDateSettings = prev.dateSettings[newSpecialDate.date] || {};
+      
+      // Initialize with default active time slots and service areas if not already set
+      const defaultTimeSlots = prev.timeSlots
+        .filter(ts => ts.active)
+        .map(ts => ts.id);
+        
+      const defaultServiceAreas = prev.serviceAreas
+        .filter(sa => sa.active)
+        .map(sa => sa.id);
+        
+      const newDateSettings = {
+        timeSlots: existingDateSettings.timeSlots || defaultTimeSlots,
+        serviceAreas: existingDateSettings.serviceAreas || defaultServiceAreas
+      };
+
+      return {
+        ...prev,
+        specialDates: [
+          ...prev.specialDates.filter(d => d.date !== newSpecialDate.date),
+          specialDate
+        ],
+        dateSettings: {
+          ...prev.dateSettings,
+          [newSpecialDate.date]: newDateSettings
+        }
+      };
+    });
 
     setNewSpecialDate({ date: '', status: 'available', reason: '' });
     setSuccess(`Added special date override for ${newSpecialDate.date}`);
@@ -156,7 +177,10 @@ const AdCalendar = () => {
   const removeSpecialDate = (date) => {
     setSettingsData(prev => ({
       ...prev,
-      specialDates: prev.specialDates.filter(d => d.date !== date)
+      specialDates: prev.specialDates.filter(d => d.date !== date),
+      dateSettings: Object.fromEntries(
+        Object.entries(prev.dateSettings).filter(([key]) => key !== date)
+      )
     }));
     setSuccess(`Removed special date override for ${date}`);
   };
@@ -233,19 +257,40 @@ const AdCalendar = () => {
   const deleteTimeSlot = (id) => {
     if (!window.confirm("Are you sure you want to delete this time slot?")) return;
     
-    setSettingsData(prev => ({
-      ...prev,
-      timeSlots: prev.timeSlots.filter(ts => ts.id !== id),
-      dateSettings: Object.fromEntries(
-        Object.entries(prev.dateSettings).map(([date, settings]) => [
-          date,
-          {
-            ...settings,
-            timeSlots: settings.timeSlots?.filter(tsId => tsId !== id) || []
+    setSettingsData(prev => {
+      // First remove from regular time slots
+      const updatedTimeSlots = prev.timeSlots.filter(ts => ts.id !== id);
+      
+      // Then clean up date settings
+      const updatedDateSettings = { ...prev.dateSettings };
+      
+      // Remove from all date settings
+      Object.keys(updatedDateSettings).forEach(date => {
+        if (updatedDateSettings[date].timeSlots) {
+          updatedDateSettings[date].timeSlots = updatedDateSettings[date].timeSlots.filter(tsId => tsId !== id);
+          
+          // Remove the date setting entirely if no time slots or service areas remain
+          if (updatedDateSettings[date].timeSlots.length === 0 && 
+              (!updatedDateSettings[date].serviceAreas || updatedDateSettings[date].serviceAreas.length === 0)) {
+            delete updatedDateSettings[date];
           }
-        ])
-      )
-    }));
+        }
+      });
+      
+      // Also clean up special dates that might reference this time slot
+      const updatedSpecialDates = prev.specialDates.filter(sd => {
+        // If the special date has time slot settings, check if it references this time slot
+        const dateSetting = updatedDateSettings[sd.date];
+        return !dateSetting || !dateSetting.timeSlots || !dateSetting.timeSlots.includes(id);
+      });
+      
+      return {
+        ...prev,
+        timeSlots: updatedTimeSlots,
+        dateSettings: updatedDateSettings,
+        specialDates: updatedSpecialDates
+      };
+    });
 
     setSuccess("Time slot deleted");
   };
@@ -292,19 +337,40 @@ const AdCalendar = () => {
   const deleteServiceArea = (id) => {
     if (!window.confirm("Are you sure you want to delete this service area?")) return;
     
-    setSettingsData(prev => ({
-      ...prev,
-      serviceAreas: prev.serviceAreas.filter(sa => sa.id !== id),
-      dateSettings: Object.fromEntries(
-        Object.entries(prev.dateSettings).map(([date, settings]) => [
-          date,
-          {
-            ...settings,
-            serviceAreas: settings.serviceAreas?.filter(saId => saId !== id) || []
+    setSettingsData(prev => {
+      // First remove from regular service areas
+      const updatedServiceAreas = prev.serviceAreas.filter(sa => sa.id !== id);
+      
+      // Then clean up date settings
+      const updatedDateSettings = { ...prev.dateSettings };
+      
+      // Remove from all date settings
+      Object.keys(updatedDateSettings).forEach(date => {
+        if (updatedDateSettings[date].serviceAreas) {
+          updatedDateSettings[date].serviceAreas = updatedDateSettings[date].serviceAreas.filter(saId => saId !== id);
+          
+          // Remove the date setting entirely if no time slots or service areas remain
+          if (updatedDateSettings[date].serviceAreas.length === 0 && 
+              (!updatedDateSettings[date].timeSlots || updatedDateSettings[date].timeSlots.length === 0)) {
+            delete updatedDateSettings[date];
           }
-        ])
-      )
-    }));
+        }
+      });
+      
+      // Also clean up special dates that might reference this service area
+      const updatedSpecialDates = prev.specialDates.filter(sd => {
+        // If the special date has service area settings, check if it references this service area
+        const dateSetting = updatedDateSettings[sd.date];
+        return !dateSetting || !dateSetting.serviceAreas || !dateSetting.serviceAreas.includes(id);
+      });
+      
+      return {
+        ...prev,
+        serviceAreas: updatedServiceAreas,
+        dateSettings: updatedDateSettings,
+        specialDates: updatedSpecialDates
+      };
+    });
 
     setSuccess("Service area deleted");
   };
@@ -315,8 +381,13 @@ const AdCalendar = () => {
     
     setSettingsData(prev => {
       const newSettings = { ...prev };
+      
+      // Initialize date settings if not exists
       if (!newSettings.dateSettings[selectedDate.date]) {
-        newSettings.dateSettings[selectedDate.date] = { timeSlots: [], serviceAreas: [] };
+        newSettings.dateSettings[selectedDate.date] = { 
+          timeSlots: prev.timeSlots.filter(ts => ts.active).map(ts => ts.id),
+          serviceAreas: prev.serviceAreas.filter(sa => sa.active).map(sa => sa.id)
+        };
       }
       
       const timeSlots = newSettings.dateSettings[selectedDate.date].timeSlots || [];
@@ -324,6 +395,17 @@ const AdCalendar = () => {
         timeSlots.includes(timeSlotId)
           ? timeSlots.filter(id => id !== timeSlotId)
           : [...timeSlots, timeSlotId];
+      
+      // Ensure the date is in special dates if it's not already
+      const isSpecialDate = newSettings.specialDates.some(d => d.date === selectedDate.date);
+      if (!isSpecialDate) {
+        newSettings.specialDates.push({
+          id: `sd-${selectedDate.date}-${Date.now()}`,
+          date: selectedDate.date,
+          status: 'available',
+          reason: 'Custom time slot selection'
+        });
+      }
       
       return newSettings;
     });
@@ -335,8 +417,13 @@ const AdCalendar = () => {
     
     setSettingsData(prev => {
       const newSettings = { ...prev };
+      
+      // Initialize date settings if not exists
       if (!newSettings.dateSettings[selectedDate.date]) {
-        newSettings.dateSettings[selectedDate.date] = { timeSlots: [], serviceAreas: [] };
+        newSettings.dateSettings[selectedDate.date] = { 
+          timeSlots: prev.timeSlots.filter(ts => ts.active).map(ts => ts.id),
+          serviceAreas: prev.serviceAreas.filter(sa => sa.active).map(sa => sa.id)
+        };
       }
       
       const serviceAreas = newSettings.dateSettings[selectedDate.date].serviceAreas || [];
@@ -344,6 +431,17 @@ const AdCalendar = () => {
         serviceAreas.includes(serviceAreaId)
           ? serviceAreas.filter(id => id !== serviceAreaId)
           : [...serviceAreas, serviceAreaId];
+      
+      // Ensure the date is in special dates if it's not already
+      const isSpecialDate = newSettings.specialDates.some(d => d.date === selectedDate.date);
+      if (!isSpecialDate) {
+        newSettings.specialDates.push({
+          id: `sd-${selectedDate.date}-${Date.now()}`,
+          date: selectedDate.date,
+          status: 'available',
+          reason: 'Custom service area selection'
+        });
+      }
       
       return newSettings;
     });
@@ -368,7 +466,7 @@ const AdCalendar = () => {
   };
 
   // Render calendar grid
-  const renderCalendar = () => {
+  const renderCalendar = (viewOnly = false) => {
     const monthData = getMonthData();
     const { startingDay, daysInMonth } = monthData;
     const calendarCells = [];
@@ -382,7 +480,7 @@ const AdCalendar = () => {
     for (let day = 1; day <= daysInMonth; day++) {
       const isPast = isPastDate(day);
       const isAvailable = isCollectionDay(day);
-      const isSelected = selectedDate?.day === day;
+      const isSelected = !viewOnly && selectedDate?.day === day;
       const specialStatus = getSpecialDateStatus(
         `${monthData.year}-${(monthData.month + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`
       );
@@ -392,20 +490,45 @@ const AdCalendar = () => {
         isPast ? 'past' : 'future',
         isAvailable ? 'available' : 'unavailable',
         specialStatus ? `special-${specialStatus}` : '',
-        isSelected ? 'selected' : ''
+        isSelected ? 'selected' : '',
+        viewOnly ? 'view-only' : ''
       ].filter(Boolean).join(' ');
 
       calendarCells.push(
         <div
           key={`day-${day}`}
           className={dayClasses}
-          onClick={() => !isPast && handleDateSelect(day)}
-          role="button"
-          tabIndex={isPast ? -1 : 0}
+          onClick={viewOnly ? undefined : () => !isPast && handleDateSelect(day)}
+          role={viewOnly ? undefined : "button"}
+          tabIndex={viewOnly ? undefined : (isPast ? -1 : 0)}
         >
           <span className="day-number">{day}</span>
           {specialStatus && (
             <div className="status-indicator" title={`Special override: ${specialStatus}`}></div>
+          )}
+          {viewOnly && (
+            <div className="day-details">
+              {isAvailable && !specialStatus && (
+                <div className="day-time-slots">
+                  {settingsData.timeSlots
+                    .filter(ts => ts.active)
+                    .filter(ts => {
+                      const dateSettings = settingsData.dateSettings[`${monthData.year}-${(monthData.month + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`];
+                      return !dateSettings?.timeSlots || dateSettings.timeSlots.includes(ts.id);
+                    })
+                    .map(ts => (
+                      <div key={ts.id} className="day-time-slot">
+                        {ts.label}: {ts.time}
+                      </div>
+                    ))}
+                </div>
+              )}
+              {specialStatus === 'available' && (
+                <div className="day-special-available">
+                  Special availability
+                </div>
+              )}
+            </div>
           )}
         </div>
       );
@@ -469,6 +592,13 @@ const AdCalendar = () => {
           <MapPin size={16} />
           <span>Service Areas</span>
         </button>
+        <button 
+          className={`admin-tab ${activeTab === 'view' ? 'active' : ''}`} 
+          onClick={() => setActiveTab('view')}
+        >
+          <Calendar size={16} />
+          <span>View Calendar</span>
+        </button>
       </div>
 
       <div className="admin-content">
@@ -493,23 +623,25 @@ const AdCalendar = () => {
             <div className="tab-section">
               <h2 className="section-heading">Special Date Overrides</h2>
               <div className="add-special-date">
-                <div className="form-group">
-                  <label>Date</label>
-                  <input
-                    type="date"
-                    value={newSpecialDate.date}
-                    onChange={(e) => setNewSpecialDate({...newSpecialDate, date: e.target.value})}
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Status</label>
-                  <select
-                    value={newSpecialDate.status}
-                    onChange={(e) => setNewSpecialDate({...newSpecialDate, status: e.target.value})}
-                  >
-                    <option value="available">Available</option>
-                    <option value="unavailable">Unavailable</option>
-                  </select>
+                <div className="form-row">
+                  <div className="form-group">
+                    <label>Date</label>
+                    <input
+                      type="date"
+                      value={newSpecialDate.date}
+                      onChange={(e) => setNewSpecialDate({...newSpecialDate, date: e.target.value})}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Status</label>
+                    <select
+                      value={newSpecialDate.status}
+                      onChange={(e) => setNewSpecialDate({...newSpecialDate, status: e.target.value})}
+                    >
+                      <option value="available">Available</option>
+                      <option value="unavailable">Unavailable</option>
+                    </select>
+                  </div>
                 </div>
                 <div className="form-group">
                   <label>Reason (Optional)</label>
@@ -520,56 +652,149 @@ const AdCalendar = () => {
                     placeholder="e.g., Holiday"
                   />
                 </div>
-                <button onClick={addSpecialDate} className="add-button">
+
+                {/* Time Slots Selection */}
+                {newSpecialDate.date && settingsData.timeSlots.filter(ts => ts.active).length > 0 && (
+                  <div className="form-group">
+                    <label>Available Time Slots</label>
+                    <div className="time-slots-selection">
+                      {settingsData.timeSlots.filter(ts => ts.active).map(slot => (
+                        <div key={slot.id} className="time-slot-option">
+                          <input
+                            type="checkbox"
+                            id={`time-slot-${slot.id}`}
+                            checked={settingsData.dateSettings[newSpecialDate.date]?.timeSlots?.includes(slot.id) ?? true}
+                            onChange={() => {
+                              // Toggle time slot selection
+                              setSettingsData(prev => {
+                                const dateSettings = prev.dateSettings[newSpecialDate.date] || {
+                                  timeSlots: prev.timeSlots.filter(ts => ts.active).map(ts => ts.id),
+                                  serviceAreas: prev.serviceAreas.filter(sa => sa.active).map(sa => sa.id)
+                                };
+                                
+                                const newTimeSlots = dateSettings.timeSlots.includes(slot.id)
+                                  ? dateSettings.timeSlots.filter(id => id !== slot.id)
+                                  : [...dateSettings.timeSlots, slot.id];
+                                
+                                return {
+                                  ...prev,
+                                  dateSettings: {
+                                    ...prev.dateSettings,
+                                    [newSpecialDate.date]: {
+                                      ...dateSettings,
+                                      timeSlots: newTimeSlots
+                                    }
+                                  }
+                                };
+                              });
+                            }}
+                          />
+                          <label htmlFor={`time-slot-${slot.id}`}>
+                            {slot.label} ({slot.time})
+                          </label>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Service Areas Selection */}
+                {newSpecialDate.date && settingsData.serviceAreas.filter(sa => sa.active).length > 0 && (
+                  <div className="form-group">
+                    <label>Available Service Areas</label>
+                    <div className="service-areas-selection">
+                      {settingsData.serviceAreas.filter(sa => sa.active).map(area => (
+                        <div key={area.id} className="service-area-option">
+                          <input
+                            type="checkbox"
+                            id={`service-area-${area.id}`}
+                            checked={settingsData.dateSettings[newSpecialDate.date]?.serviceAreas?.includes(area.id) ?? true}
+                            onChange={() => {
+                              // Toggle service area selection
+                              setSettingsData(prev => {
+                                const dateSettings = prev.dateSettings[newSpecialDate.date] || {
+                                  timeSlots: prev.timeSlots.filter(ts => ts.active).map(ts => ts.id),
+                                  serviceAreas: prev.serviceAreas.filter(sa => sa.active).map(sa => sa.id)
+                                };
+                                
+                                const newServiceAreas = dateSettings.serviceAreas.includes(area.id)
+                                  ? dateSettings.serviceAreas.filter(id => id !== area.id)
+                                  : [...dateSettings.serviceAreas, area.id];
+                                
+                                return {
+                                  ...prev,
+                                  dateSettings: {
+                                    ...prev.dateSettings,
+                                    [newSpecialDate.date]: {
+                                      ...dateSettings,
+                                      serviceAreas: newServiceAreas
+                                    }
+                                  }
+                                };
+                              });
+                            }}
+                          />
+                          <label htmlFor={`service-area-${area.id}`}>
+                            {area.name}
+                          </label>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                <button onClick={addSpecialDate} className="add-button1">
                   <Plus size={16} /> Add Override
                 </button>
               </div>
 
               <div className="special-dates-list">
-                {settingsData.specialDates.map(specialDate => (
-                  <div key={specialDate.id} className="special-date-item">
-                    <div className="date-info">
-                      <span className="date">{specialDate.date}</span>
-                      <span className={`status ${specialDate.status}`}>
-                        {specialDate.status}
-                      </span>
-                      {specialDate.reason && (
-                        <span className="reason">{specialDate.reason}</span>
-                      )}
+                {settingsData.specialDates.map(specialDate => {
+                  const dateSettings = settingsData.dateSettings[specialDate.date] || {};
+                  return (
+                    <div key={specialDate.id} className="special-date-item">
+                      <div className="date-info">
+                        <span className="date">{specialDate.date}</span>
+                        <span className={`status ${specialDate.status}`}>
+                          {specialDate.status}
+                        </span>
+                        {specialDate.reason && (
+                          <span className="reason">{specialDate.reason}</span>
+                        )}
+                        <div className="date-details">
+                          {dateSettings.timeSlots && dateSettings.timeSlots.length > 0 && (
+                            <div className="detail-item">
+                              <Clock size={14} />
+                              <span>
+                                {settingsData.timeSlots
+                                  .filter(ts => dateSettings.timeSlots.includes(ts.id))
+                                  .map(ts => ts.label)
+                                  .join(', ')}
+                              </span>
+                            </div>
+                          )}
+                          {dateSettings.serviceAreas && dateSettings.serviceAreas.length > 0 && (
+                            <div className="detail-item">
+                              <MapPin size={14} />
+                              <span>
+                                {settingsData.serviceAreas
+                                  .filter(sa => dateSettings.serviceAreas.includes(sa.id))
+                                  .map(sa => sa.name)
+                                  .join(', ')}
+                              </span>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                      <button 
+                        onClick={() => removeSpecialDate(specialDate.date)}
+                        className="delete-button"
+                      >
+                        <Trash size={16} />
+                      </button>
                     </div>
-                    <button 
-                      onClick={() => removeSpecialDate(specialDate.date)}
-                      className="delete-button"
-                    >
-                      <Trash size={16} />
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="tab-section">
-              <h2 className="section-heading">Calendar View</h2>
-              <div className="admin-calendar">
-                <div className="calendar-header">
-                  <button onClick={goToPrevMonth} className="nav-button">
-                    <ChevronLeft size={20} />
-                  </button>
-                  <h3 className="current-month">
-                    {monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}
-                  </h3>
-                  <button onClick={goToNextMonth} className="nav-button">
-                    <ChevronRight size={20} />
-                  </button>
-                </div>
-                <div className="weekday-header">
-                  {daysOfWeek.map(day => (
-                    <div key={day} className="weekday">{day}</div>
-                  ))}
-                </div>
-                <div className="calendar-grid">
-                  {renderCalendar()}
-                </div>
+                  );
+                })}
               </div>
             </div>
 
@@ -784,6 +1009,53 @@ const AdCalendar = () => {
                     </div>
                   </div>
                 ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* View Calendar Tab */}
+        {activeTab === 'view' && (
+          <div className="view-calendar-tab">
+            <div className="tab-section">
+              <h2 className="section-heading">Calendar Overview</h2>
+              <div className="view-calendar-container">
+                <div className="admin-calendar">
+                  <div className="calendar-header">
+                    <button onClick={goToPrevMonth} className="nav-button">
+                      <ChevronLeft size={20} />
+                    </button>
+                    <h3 className="current-month">
+                      {monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}
+                    </h3>
+                    <button onClick={goToNextMonth} className="nav-button">
+                      <ChevronRight size={20} />
+                    </button>
+                  </div>
+                  <div className="weekday-header">
+                    {daysOfWeek.map(day => (
+                      <div key={day} className="weekday">{day}</div>
+                    ))}
+                  </div>
+                  <div className="calendar-grid">
+                    {renderCalendar(true)}
+                  </div>
+                </div>
+                
+                <div className="calendar-legend">
+                  <div className="legend-item">
+                    <span className="legend-dot available"></span> Available
+                  </div>
+                  <div className="legend-item">
+                    <span className="legend-dot unavailable"></span> Unavailable
+                  </div>
+                  <div className="legend-item">
+                    <span className="legend-dot special-available"></span> Special: Available
+                  </div>
+                  <div className="legend-item">
+                    <span className="legend-dot special-unavailable"></span> Special: Unavailable
+                  </div>
+                </div>
               </div>
             </div>
           </div>
