@@ -33,6 +33,8 @@ import ContactUs from './Pages/ContactUs';
 import Login from './Components/Login/Login';
 import BOwnerForm from './Components/RegistrationForm/BOwnerForm';
 import ClientForm from './Components/RegistrationForm/ClientForm';
+import CollectorForm from './Components/RegistrationForm/CollectorForm';
+import CollectorLogin from './Components/Login/CollectorLogin'
 
 // Functional Components
 import Calculate from './Components/Calculate/Calculate';
@@ -268,9 +270,10 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
                     <Route path="/SignUp" element={<SignUp />} />
                     <Route path="/BOwnerForm" element={<BOwnerForm />} />
                     <Route path="/ClientForm" element={<ClientForm />} />
+                    <Route path="/CollectorForm" element={<CollectorForm />} />
+                    <Route path="/CollectorLogin" element={<CollectorLogin />} />
                     {/* MOVED HERE: CalendarDisplay is now a public route */}
                     <Route path="/CalendarDisplay" element={<CalendarDisplay />} />
-                    <Route path="/CollectorLogin" element={<CollectorLogin />} />
 
                     {/* === Login Route === */}
                     <Route path="/Login" element={
