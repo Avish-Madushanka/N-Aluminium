@@ -10,6 +10,7 @@ const clientRoutes = require('./routes/clientRoutes');
 const bOwnerRoutes = require('./routes/bOwnerRoutes');
 const authRoutes = require('./routes/authRoutes');
 const calendarSettingsRoutes = require('./routes/calendarSettingsRoutes'); // <-- Included
+const bookingRoutes = require('./routes/bookingRoutes'); 
 
 // --- Import Controllers/Middleware ---
 const { createInitialAdmin } = require('./controllers/adminController');
@@ -25,6 +26,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 console.log(`[Server Config] Serving static files from ${path.join(__dirname, 'uploads')} at /uploads`);
 
+
 // --- API Routes Mounting ---
 app.get('/', (req, res) => { res.status(200).send(`Backend API running.`); });
 console.log(`[Server Config] Mounting /api/auth routes...`);
@@ -35,6 +37,8 @@ console.log(`[Server Config] Mounting /api/b-owners routes...`);
 app.use('/api/b-owners', bOwnerRoutes);
 console.log(`[Server Config] Mounting /api/calendar-settings routes...`); // <-- Included
 app.use('/api/calendar-settings', calendarSettingsRoutes);              // <-- Included
+console.log(`[Server Config] Mounting /api/bookings routes...`);
+app.use('/api/bookings', bookingRoutes);
 
 // --- Global Error Handler (MUST BE LAST) ---
 console.log('[Server Config] Adding global error handler.');

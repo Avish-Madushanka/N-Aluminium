@@ -1,382 +1,444 @@
-/* EmailList.css - Extended styles for the email list component */
+/* src/Components/ClientEmail/ClientEmail.css */
 
-/* Global styles and variables */
-:root {
-    --primary-color: #3b82f6;
-    --primary-light: #93c5fd;
-    --primary-dark: #1d4ed8;
-    --gray-50: #f9fafb;
-    --gray-100: #f3f4f6;
-    --gray-200: #e5e7eb;
-    --gray-300: #d1d5db;
-    --gray-400: #9ca3af;
-    --gray-500: #6b7280;
-    --gray-600: #4b5563;
-    --gray-700: #374151;
-    --gray-800: #1f2937;
-    --gray-900: #111827;
-    --yellow-400: #facc15;
-    --green-100: #dcfce7;
-    --green-800: #166534;
-    --blue-100: #dbeafe;
-    --blue-800: #1e40af;
-    --red-100: #fee2e2;
-    --red-800: #991b1b;
-    --purple-100: #f3e8ff;
-    --purple-800: #6b21a8;
-    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-    --transition-default: all 0.2s ease;
+body { /* Apply to body or a higher-level app container for consistency */
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  background-color: #f8fafc; /* Light gray background for the page */
+  color: #1f2937; /* Default text color */
+  margin: 0;
+}
+
+.profile-email-list-container {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 40px);
+  max-height: 800px;
+  width: 100%;
+  max-width: 1350px;
+  margin: 20px auto;
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  overflow: hidden; 
+}
+
+/* Email Toolbar */
+.email-toolbar {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid #e5e7eb; /* gray-200 */
+  background-color: #f9fafb; /* Slightly off-white for toolbar */
+  flex-shrink: 0; /* Prevent toolbar from shrinking */
+}
+
+.email-toolbar .flex {
+  display: flex;
+}
+.email-toolbar .items-center {
+  align-items: center;
+}
+.email-toolbar .mr-4 {
+  margin-right: 1rem;
+}
+.email-toolbar .ml-2 {
+  margin-left: 0.5rem;
+}
+.email-toolbar .h-4 {
+  height: 1rem;
+}
+.email-toolbar .w-4 {
+  width: 1rem;
+}
+.email-toolbar .text-gray-500 {
+  color: #6b7280;
+}
+
+.email-toolbar .space-x-4 > * + * {
+  margin-left: 1rem;
+}
+
+.email-toolbar button {
+  padding: 0.5rem; /* p-2 */
+  border-radius: 9999px; /* rounded-full */
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+.email-toolbar button:hover {
+  background-color: #f3f4f6; /* gray-100 */
+}
+.email-toolbar button .h-5 {
+  height: 1.25rem;
+}
+.email-toolbar button .w-5 {
+  width: 1.25rem;
+}
+.email-toolbar button .text-gray-600 {
+  color: #4b5563;
+}
+
+.email-toolbar .ml-auto {
+  margin-left: auto;
+}
+
+.toolbar-counter {
+  font-size: 0.875rem;
+  color: #4b5563; /* gray-600 */
+}
+
+/* Custom Checkbox */
+.custom-checkbox {
+  appearance: none;
+  background-color: #fff;
+  border: 1px solid #d1d5db; /* gray-300 */
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+.custom-checkbox:checked {
+  background-color: #3b82f6; /* blue-500 */
+  border-color: #3b82f6;
+}
+.custom-checkbox:checked::after {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 2px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+.custom-checkbox:focus {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 2px #3b82f6; /* blue-500 focus ring */
+}
+
+
+/* Email List */
+.email-list {
+  flex-grow: 1; /* Take remaining space */
+  overflow-y: auto;
+  padding: 8px 0; /* Add some padding top/bottom for the list itself */
+}
+
+.email-item {
+  display: flex; /* Replaces internal flex for direct children */
+  align-items: center; /* Replaces internal items-center */
+  padding: 12px 16px; /* p-4, adjusted */
+  border-bottom: 1px solid #f3f4f6; /* gray-100, very light separator */
+  cursor: pointer;
+  transition: background-color 0.15s ease-in-out, border-left 0.3s ease;
+  position: relative;
+}
+
+.email-item:last-child {
+  border-bottom: none;
+}
+
+.email-item.unread {
+  background-color: #fef3c740; /* Very light yellow, subtle */
+  font-weight: 600; /* Bolder text for unread */
+}
+.email-item.unread .email-sender,
+.email-item.unread .email-subject {
+  color: #1f2937; /* gray-800, darker for emphasis */
+}
+
+.email-item.selected {
+  background-color: #e0e7ff; /* indigo-100 */
+  border-left: 4px solid #4f46e5; /* indigo-600 */
+  padding-left: 12px; /* Adjust padding due to border */
+}
+.email-item.selected.unread {
+    background-color: #dbeafe; /* blue-200 for selected unread */
+}
+
+
+.email-item:hover:not(.selected) {
+  background-color: #f9fafb; /* gray-50 */
+}
+
+/* New Email Animation */
+.email-item.new-email {
+  animation: newEmailArrive 0.7s ease-out;
+  background-color: #d1fae5; /* green-100 for new email flash */
+}
+@keyframes newEmailArrive {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+    background-color: #a7f3d0; /* green-200 */
   }
-  
-  /* Base container styles */
-  .email-list-container {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    background-color: var(--gray-50);
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  }
-  
-  /* Toolbar styles */
-  .email-toolbar {
-    background-color: white;
-    border-bottom: 1px solid var(--gray-200);
-    padding: 1rem;
-    display: flex;
-    align-items: center;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-  }
-  
-  .email-toolbar button {
-    transition: var(--transition-default);
-  }
-  
-  .email-toolbar button:hover {
-    background-color: var(--gray-100);
-    transform: translateY(-1px);
-  }
-  
-  .email-toolbar button:active {
+  to {
+    opacity: 1;
     transform: translateY(0);
+    background-color: #d1fae5; /* green-100 */
   }
-  
-  .toolbar-counter {
-    color: var(--gray-500);
-    font-size: 0.875rem;
+}
+.email-item.new-email.read { /* If it's marked read quickly while animation is still possible */
+  animation: newEmailArriveRead 0.7s ease-out;
+}
+@keyframes newEmailArriveRead {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+    background-color: #a7f3d0; /* green-200 */
   }
-  
-  /* Checkbox styling */
-  .custom-checkbox {
-    appearance: none;
-    width: 1rem;
-    height: 1rem;
-    border: 1px solid var(--gray-300);
-    border-radius: 0.25rem;
-    margin-right: 0.5rem;
-    cursor: pointer;
-    position: relative;
-    transition: var(--transition-default);
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    background-color: #ffffff; /* transition to normal read background */
   }
-  
-  .custom-checkbox:checked {
-    background-color: var(--primary-color);
-    border-color: var(--primary-color);
-  }
-  
-  .custom-checkbox:checked::after {
-    content: '';
-    position: absolute;
-    left: 5px;
-    top: 2px;
-    width: 4px;
-    height: 8px;
-    border: solid white;
-    border-width: 0 2px 2px 0;
-    transform: rotate(45deg);
-  }
-  
-  .custom-checkbox:focus {
-    outline: none;
-    box-shadow: 0 0 0 2px var(--primary-light);
-  }
-  
-  /* Email item styles */
-  .email-item {
-    border-bottom: 1px solid var(--gray-200);
-    transition: var(--transition-default);
-    cursor: pointer;
-    position: relative;
-  }
-  
-  .email-item:hover {
-    box-shadow: var(--shadow-md);
-    z-index: 1;
-  }
-  
-  .email-item:active {
-    background-color: var(--gray-100);
-  }
-  
-  .email-item.unread {
-    background-color: #ebf5ff;
-  }
-  
-  .email-item.unread::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 4px;
-    background-color: var(--primary-color);
-  }
-  
-  .email-content {
-    flex: 1;
-    min-width: 0;
-    padding-right: 1rem;
-  }
-  
-  .email-sender {
-    font-weight: 500;
-    color: var(--gray-900);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  
-  .email-subject {
-    font-weight: normal;
-    color: var(--gray-900);
-  }
-  
-  .email-preview {
-    color: var(--gray-500);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  
-  .email-item.unread .email-subject {
+}
+
+
+/* Inner structure of email item */
+.email-item > .flex.items-center.w-full { /* This targets the main inner flex container */
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 1rem; /* Replaces space-x-4 */
+}
+
+.email-item .flex.items-center.space-x-3 { /* Checkbox and star container */
+  display: flex;
+  align-items: center;
+  gap: 0.75rem; /* space-x-3 */
+  flex-shrink: 0; /* Prevent shrinking */
+}
+
+.star-button {
+  background: none;
+  border: none;
+  padding: 2px;
+  cursor: pointer;
+  color: #9ca3af; /* gray-400 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.star-icon {
+  width: 20px;
+  height: 20px;
+  transition: color 0.2s ease;
+}
+.star-button:hover .star-icon {
+  color: #f59e0b; /* yellow-500 */
+}
+.star-icon.starred {
+  color: #f59e0b; /* yellow-500 */
+  fill: #f59e0b;
+}
+
+.email-content {
+  flex-grow: 1;
+  min-width: 0; /* Important for text truncation within flex items */
+}
+.email-content-row {
+  display: flex;
+  align-items: baseline; /* Align sender and subject nicely */
+  gap: 0.5rem;
+}
+.email-sender {
+  font-weight: 500; /* Medium weight for sender */
+  color: #374151; /* gray-700 */
+  flex-shrink: 0;
+  width: 180px; /* w-48 approximation */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.email-item.unread .email-sender {
+    font-weight: 700; /* Bold for unread sender */
+}
+
+.email-subject {
+  font-weight: 500;
+  color: #374151; /* gray-700 */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.email-item.unread .email-subject {
     font-weight: 600;
+}
+
+.email-preview-desktop {
+  color: #6b7280; /* gray-500 */
+  font-weight: 400; /* Normal weight for preview */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-left: 4px; /* Small space after subject */
+}
+.email-preview-mobile {
+  display: none; /* Hidden by default, shown via media query */
+  color: #6b7280; /* gray-500 */
+  font-size: 0.875rem;
+  font-weight: 400;
+  margin-top: 4px;
+  /* For multi-line preview on mobile if desired:
+  white-space: normal;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  */
+}
+
+
+/* Email Metadata (Attachment, Labels, Time) */
+.email-item > .flex.items-center.w-full > .flex.items-center.space-x-2 {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem; /* space-x-2, adjusted */
+  flex-shrink: 0; /* Prevent shrinking */
+  margin-left: auto; /* Pushes this group to the right if email-content takes up space */
+}
+
+.attachment-icon {
+  height: 1rem; /* h-4 */
+  width: 1rem;  /* w-4 */
+  color: #6b7280; /* gray-500 */
+}
+
+.email-label {
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  border-radius: 12px; /* Pill shape */
+  font-weight: 500;
+  white-space: nowrap;
+}
+.email-label.work {
+  background-color: #dbeafe; /* blue-200 */
+  color: #1d4ed8; /* blue-700 */
+}
+.email-label.personal {
+  background-color: #d1fae5; /* green-200 */
+  color: #047857; /* green-700 */
+}
+.email-label.important {
+  background-color: #fee2e2; /* red-200 */
+  color: #b91c1c; /* red-700 */
+}
+.email-label.updates {
+  background-color: #ede9fe; /* purple-200 */
+  color: #5b21b6; /* purple-700 */
+}
+
+.email-time {
+  font-size: 0.8rem;
+  color: #6b7280; /* gray-500 */
+  font-weight: 400; /* Normal weight for time */
+  white-space: nowrap;
+  min-width: 70px; /* Ensure enough space for time */
+  text-align: right;
+}
+.email-item.unread .email-time {
+    color: #1e2937; /* Darker time for unread */
+    font-weight: 600;
+}
+
+/* Empty State */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  text-align: center;
+  color: #6b7280; /* gray-500 */
+  height: 100%;
+}
+.empty-state-icon {
+  font-size: 3rem;
+  margin-bottom: 16px;
+}
+.empty-state-text {
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: #374151; /* gray-700 */
+  margin-bottom: 8px;
+}
+.empty-state-subtext {
+  font-size: 0.9rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .email-sender {
+    width: 120px; /* Shorter sender column */
   }
-  
-  /* Star icon styling */
-  .star-button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0.25rem;
-    border-radius: 9999px;
-    transition: var(--transition-default);
+  .email-preview-desktop {
+    display: none; /* Hide desktop preview */
   }
-  
-  .star-button:hover {
-    background-color: rgba(250, 204, 21, 0.1);
-  }
-  
-  .star-button:focus {
-    outline: none;
-  }
-  
-  .star-icon {
-    width: 1.25rem;
-    height: 1.25rem;
-    color: var(--gray-400);
-  }
-  
-  .star-icon.starred {
-    color: var(--yellow-400);
-    fill: var(--yellow-400);
-  }
-  
-  /* Label styling */
-  .email-label {
-    font-size: 0.75rem;
-    padding: 0.125rem 0.5rem;
-    border-radius: 9999px;
-    font-weight: 500;
-    letter-spacing: 0.025em;
-  }
-  
-  .email-label.work {
-    background-color: var(--blue-100);
-    color: var(--blue-800);
-  }
-  
-  .email-label.personal {
-    background-color: var(--green-100);
-    color: var(--green-800);
-  }
-  
-  .email-label.important {
-    background-color: var(--red-100);
-    color: var(--red-800);
-  }
-  
-  .email-label.updates {
-    background-color: var(--purple-100);
-    color: var(--purple-800);
-  }
-  
-  /* Attachment icon styling */
-  .attachment-icon {
-    color: var(--gray-400);
-  }
-  
-  /* Email timestamp styling */
-  .email-time {
-    font-size: 0.875rem;
-    color: var(--gray-500);
+  .email-preview-mobile {
+    display: block; /* Show mobile preview */
+    /* Basic truncation for mobile preview */
     white-space: nowrap;
-    width: 4rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .email-item > .flex.items-center.w-full > .flex.items-center.space-x-2 {
+    /* On smaller screens, maybe stack labels or time below */
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.25rem;
+  }
+  .email-item .flex.flex-wrap.gap-1 { /* label container */
+    justify-content: flex-end;
+  }
+  .email-time {
     text-align: right;
   }
-  
-  /* Responsive adjustments */
-  @media (max-width: 768px) {
-    .email-item {
-      padding: 0.75rem;
-    }
-    
-    .email-preview-mobile {
-      display: block;
-      font-size: 0.875rem;
-      color: var(--gray-500);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-  
-    .email-preview-desktop {
-      display: none;
-    }
-    
-    .email-content-row {
-      flex-direction: column;
-      align-items: flex-start;
-    }
-    
-    .email-sender {
-      margin-bottom: 0.25rem;
-    }
+  .email-list-container {
+    margin: 0;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    height: 100vh; /* Full height on mobile often */
+    max-height: none;
   }
-  
-  @media (min-width: 769px) {
-    .email-preview-mobile {
-      display: none;
-    }
-    
-    .email-preview-desktop {
-      display: inline;
-    }
-    
-    .email-content-row {
-      flex-direction: row;
-      align-items: center;
-    }
+  .email-item {
+    padding: 10px 12px;
   }
-  
-  /* Animation for new emails */
-  @keyframes newEmailAppear {
-    from {
-      background-color: var(--primary-light);
-      transform: translateY(-4px);
-    }
-    to {
-      background-color: #ebf5ff;
-      transform: translateY(0);
-    }
-  }
-  
-  .email-item.new-email {
-    animation: newEmailAppear 1s ease-out;
-  }
-  
-  /* Selection highlight */
   .email-item.selected {
-    background-color: rgba(59, 130, 246, 0.1);
+    padding-left: 8px;
   }
-  
-  /* Empty state styling */
-  .empty-state {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    color: var(--gray-500);
-    padding: 2rem;
-    text-align: center;
+}
+
+@media (max-width: 480px) {
+  .email-toolbar {
+    padding: 8px 10px;
+    /* Might need to hide some toolbar icons or make them smaller */
   }
-  
-  .empty-state-icon {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-    color: var(--gray-400);
+  .email-toolbar .space-x-4 > * + * {
+    margin-left: 0.5rem; /* Smaller gaps in toolbar */
   }
-  
-  .empty-state-text {
-    font-size: 1.125rem;
-    margin-bottom: 0.5rem;
+  .email-sender {
+    display: none; /* Hide sender name, show only subject/preview */
   }
-  
-  .empty-state-subtext {
-    font-size: 0.875rem;
+  .email-content-row {
+    flex-direction: column; /* Stack subject and mobile preview */
+    align-items: flex-start;
   }
-  
-  /* Scrollbar styling */
-  .email-list::-webkit-scrollbar {
-    width: 8px;
+  .email-subject {
+    font-size: 0.95rem;
   }
-  
-  .email-list::-webkit-scrollbar-track {
-    background: var(--gray-100);
+  .email-preview-mobile {
+    font-size: 0.85rem;
+    /* For multi-line preview on very small screens:
+    white-space: normal;
+    -webkit-line-clamp: 2;
+    */
   }
-  
-  .email-list::-webkit-scrollbar-thumb {
-    background-color: var(--gray-300);
-    border-radius: 20px;
-  }
-  
-  .email-list::-webkit-scrollbar-thumb:hover {
-    background-color: var(--gray-400);
-  }
-  
-  /* Loading state */
-  .loading-skeleton {
-    animation: pulse 1.5s ease-in-out infinite;
-    background: linear-gradient(90deg, var(--gray-100), var(--gray-200), var(--gray-100));
-    background-size: 200% 100%;
-    border-radius: 0.25rem;
-  }
-  
-  @keyframes pulse {
-    0% {
-      background-position: 0% 0%;
-    }
-    100% {
-      background-position: -200% 0%;
-    }
-  }
-  
-  /* Drag and drop styling */
-  .email-item.dragging {
-    opacity: 0.5;
-    background-color: var(--gray-100);
-    box-shadow: var(--shadow-lg);
-  }
-  
-  .drop-zone {
-    height: 3px;
-    background-color: var(--primary-color);
-    transition: height 0.2s ease;
-  }
-  
-  .drop-zone.active {
-    height: 12px;
-  }
+}

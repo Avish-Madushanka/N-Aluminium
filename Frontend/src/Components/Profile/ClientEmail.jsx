@@ -148,7 +148,7 @@ export default function ClientEmai() {
   };
 
   return (
-    <div className="email-list-container">
+    <div className="profile-email-list-container">
       {/* Email toolbar */}
       <div className="email-toolbar">
         <div className="flex items-center mr-4">

@@ -1,551 +1,386 @@
-/* --- Base Variables (Inspired by Tailwind Defaults) --- */
-:root {
-    --color-bg-light: #f9fafb;       /* Very light gray */
-    --color-bg-header: #f3f4f6;     /* Slightly darker gray */
-    --color-border-light: #e5e7eb;   /* Light gray border */
-    --color-border-medium: #d1d5db; /* Medium gray border */
-    --color-text-primary: #111827;   /* Very dark gray (near black) */
-    --color-text-secondary: #374151; /* Dark gray */
-    --color-text-muted: #6b7280;     /* Medium gray */
-    --color-text-header: #4b5563;    /* Header text gray */
-    --color-text-disabled: #9ca3af;  /* Disabled/placeholder text */
+/* src/Components/Admin/AdCheckReq/AdCheckReq.css */
 
-    --color-blue-500: #3b82f6;
-    --color-blue-600: #2563eb;
-    --color-blue-bg-light: #eff6ff;
-    --color-blue-text-dark: #1e40af;
+/* Apply a base font styling if this component is part of a larger app */
+/* body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
+    background-color: #f8fafc;
+    color: #1e293b;
+    line-height: 1.5;
+} */
 
-    --color-red-500: #ef4444;
-    --color-red-600: #dc2626;
-    --color-red-bg-light: #fee2e2;
-    --color-red-text-dark: #991b1b;
-
-    --color-green-500: #10b981; /* Emerald 500 */
-    --color-green-600: #059669; /* Emerald 600 */
-    --color-green-bg-light: #d1fae5; /* Emerald 100 */
-    --color-green-text-dark: #065f46; /* Emerald 800 */
-
-    --color-amber-500: #f59e0b; /* Amber 500 */
-    --color-amber-600: #d97706; /* Amber 600 */
-
-    --border-radius-sm: 4px;
-    --border-radius-md: 8px;
-    --border-radius-lg: 12px;
-
-    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+/* --- Main Container --- */
+.ad-check-req-container {
+    padding: 20px 24px; /* Default padding */
+    background-color: #ffffff; /* --content-bg-color */
+    border-radius: 0.5rem; /* --border-radius-lg */
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* --box-shadow-md */
+    margin: 20px; /* Adjust if it's a full-page component or part of a layout */
+    color: #1e293b; /* --text-primary-color */
 }
 
-/* --- Container and General Layout --- */
-.admin-bowners-container {
-    padding: 25px;
-    margin: 20px auto;
-    max-width: 1100px;
-    background-color: var(--color-bg-light);
-    border-radius: var(--border-radius-md);
-    box-shadow: var(--shadow-md);
-    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-    color: var(--color-text-secondary);
-}
-
-.admin-bowners-container h2 {
-    margin-top: 0;
-    margin-bottom: 25px;
-    color: var(--color-text-primary);
-    font-size: 1.5rem; /* 24px */
-    font-weight: 600;
-    border-bottom: 1px solid var(--color-border-light);
-    padding-bottom: 12px;
-}
-
-/* --- Loading and Error States --- */
-.loading {
-    text-align: center;
-    padding: 40px;
-    font-size: 1rem;
-    color: var(--color-text-muted);
-}
-
-.error-message {
-    color: var(--color-red-text-dark);
-    background-color: var(--color-red-bg-light);
-    border: 1px solid var(--color-red-500);
-    border-radius: var(--border-radius-sm);
-    padding: 15px;
-    margin-bottom: 20px;
-    text-align: center;
-    font-weight: 500;
-}
-
-/* --- Notification Styles --- */
-.notification {
-    padding: 12px 20px;
-    margin-bottom: 20px;
-    border-radius: var(--border-radius-sm);
-    text-align: center;
-    font-weight: 500;
-    font-size: 0.95em;
-    border: 1px solid transparent;
-}
-
-.notification.success {
-    color: var(--color-green-text-dark);
-    background-color: var(--color-green-bg-light);
-    border-color: var(--color-green-500);
-}
-
-.notification.error {
-    color: var(--color-red-text-dark);
-    background-color: var(--color-red-bg-light);
-    border-color: var(--color-red-500);
-}
-
-/* --- Table Styling --- */
-.table-container {
-    overflow-x: auto;
-    margin-top: 20px;
-    border: 1px solid var(--color-border-light);
-    border-radius: var(--border-radius-md);
-    background-color: #fff;
-    box-shadow: var(--shadow-sm);
-}
-
-.bowners-table {
-    width: 100%;
-    border-collapse: collapse;
-    border-spacing: 0;
-    font-size: 0.9rem; /* 14px */
-}
-
-.bowners-table thead {
-    background-color: var(--color-bg-header);
-}
-
-.bowners-table th,
-.bowners-table td {
-    padding: 12px 15px; /* py-3 px-4 */
-    text-align: left;
-    border-bottom: 1px solid var(--color-border-light);
-    vertical-align: middle;
-    white-space: nowrap;
-}
-
-.bowners-table th {
-    font-weight: 600;
-    color: var(--color-text-header);
-    text-transform: uppercase;
-    font-size: 0.75rem; /* 12px */
-    letter-spacing: 0.05em;
-}
-
-/* Allow wrapping for specific columns */
-.bowners-table td:nth-child(2), /* Business Name */
-.bowners-table td:nth-child(3), /* Owner Name */
-.bowners-table td:nth-child(5) { /* Address */
-    white-space: normal;
-}
-
-.bowners-table tbody tr:hover {
-    background-color: var(--color-bg-light);
-}
-
-.no-data {
-    text-align: center;
-    font-style: italic;
-    color: var(--color-text-muted);
-    padding: 40px 20px;
-    border-top: 1px solid var(--color-border-light);
-}
-
-/* --- Action Buttons in Table --- */
-.action-buttons {
-    text-align: right; /* Align buttons to the right */
-    white-space: nowrap;
-}
-
-.action-buttons button {
-    padding: 6px 12px; /* Adjusted padding */
-    margin-left: 8px; /* Space between buttons */
-    border: 1px solid transparent;
-    border-radius: var(--border-radius-sm);
-    cursor: pointer;
-    font-size: 0.8rem; /* Slightly smaller font */
-    font-weight: 500;
-    transition: all 0.2s ease;
-    display: inline-flex; /* For potential icons */
-    align-items: center;
-    gap: 4px; /* Space between icon and text if added */
-}
-
-.action-buttons button:hover {
-    opacity: 0.9;
-    box-shadow: var(--shadow-sm);
-}
-.action-buttons button:active {
-    transform: scale(0.97);
-}
-
-.details-button {
-    background-color: #fff;
-    color: var(--color-text-secondary);
-    border-color: var(--color-border-medium);
-}
-.details-button:hover {
-    background-color: var(--color-bg-header);
-    border-color: var(--color-text-muted);
-}
-
-.email-button {
-    background-color: var(--color-blue-bg-light);
-    color: var(--color-blue-600);
-    border-color: var(--color-blue-500);
-}
-.email-button:hover {
-    background-color: #dbeafe; /* Slightly darker blue bg */
-    border-color: var(--color-blue-600);
-}
-
-.remove-button {
-    background-color: var(--color-red-bg-light);
-    color: var(--color-red-600);
-    border-color: var(--color-red-500);
-}
-.remove-button:hover {
-    background-color: #fecaca; /* Slightly darker red bg */
-    border-color: var(--color-red-600);
-}
-
-
-/* --- Modal Styling --- */
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(17, 24, 39, 0.6); /* bg-gray-900 with opacity */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    padding: 20px;
-    box-sizing: border-box;
-    backdrop-filter: blur(4px); /* Optional: Add blur effect */
-}
-
-.email-modal,
-.details-modal {
-    background-color: white;
-    border-radius: var(--border-radius-md);
-    box-shadow: var(--shadow-lg);
-    width: 100%;
-    max-width: 600px; /* Increased max-width */
-    z-index: 1001;
-    overflow: hidden; /* Prevent content from overflowing rounded corners */
-    display: flex;
-    flex-direction: column;
-    max-height: 90vh; /* Limit height and enable scrolling */
-    animation: fadeInModal 0.3s ease-out;
-}
-
-@keyframes fadeInModal {
-  from { opacity: 0; transform: translateY(-20px) scale(0.98); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
-}
-
-.modal-header {
+/* --- Header Section --- */
+.adcr-header-section {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid var(--color-border-light);
-    padding: 16px 24px; /* Slightly more padding */
-    background-color: var(--color-bg-light); /* Light header background */
-    flex-shrink: 0; /* Prevent header from shrinking */
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #e2e8f0; /* --border-color */
 }
 
-.modal-header h3 {
+.adcr-page-title {
+    font-size: 1.625rem; /* ~26px */
+    font-weight: 700;
+    color: #1e293b; /* --text-primary-color */
     margin: 0;
-    font-size: 1.125rem; /* 18px */
-    font-weight: 600;
-    color: var(--color-text-primary);
 }
 
-.close-button {
-    background: none;
+.adcr-refresh-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    background-color: #f97316; /* --primary-color */
+    color: #ffffff; /* --content-bg-color */
     border: none;
-    font-size: 1.5rem; /* 24px */
-    font-weight: bold;
-    color: var(--color-text-muted);
+    border-radius: 0.375rem; /* --border-radius-md */
+    font-size: 0.875rem; /* 14px */
+    font-weight: 600;
     cursor: pointer;
-    line-height: 1;
-    padding: 4px; /* Make click target slightly larger */
-    border-radius: 50%;
-    transition: color 0.2s ease, background-color 0.2s ease;
+    transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* --box-shadow-sm */
 }
 
-.close-button:hover {
-    color: var(--color-text-primary);
-    background-color: var(--color-bg-header);
+.adcr-refresh-button:hover:not(:disabled) {
+    background-color: #ea580c; /* --primary-hover-color */
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* --box-shadow-md */
 }
 
-.modal-body {
-    padding: 24px;
-    overflow-y: auto; /* Enable scrolling for modal content */
-    flex-grow: 1; /* Allow body to take available space */
+.adcr-refresh-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    box-shadow: none;
 }
 
-/* --- Modal Form Styling --- */
-.email-modal form {
+/* --- Error Banner --- */
+.adcr-error-banner {
     display: flex;
-    flex-direction: column;
-    gap: 16px; /* Spacing between form groups */
+    align-items: center;
+    gap: 10px;
+    background-color: #fef2f2; /* --error-bg-color */
+    color: #ef4444; /* --error-color */
+    padding: 12px 16px;
+    border-radius: 0.375rem; /* --border-radius-md */
+    margin-bottom: 20px;
+    border: 1px solid #ef4444; /* --error-color */
+    font-size: 0.9rem;
+    font-weight: 500;
 }
 
-.form-group label {
-    display: block;
-    margin-bottom: 6px;
-    font-weight: 500;
-    color: var(--color-text-secondary);
+.adcr-error-banner svg {
+    flex-shrink: 0; /* Prevent icon from shrinking */
+}
+
+/* --- Empty State --- */
+.adcr-empty-state-container {
+    text-align: center;
+    padding: 48px 24px;
+    border: 2px dashed #e2e8f0; /* --border-color */
+    border-radius: 0.5rem; /* --border-radius-lg */
+    margin-top: 32px;
+    background-color: #f8fafc; /* --bg-color */
+}
+
+.adcr-empty-icon {
+    color: #f97316; /* --primary-color */
+    margin-bottom: 20px;
+}
+
+.adcr-empty-state-title {
+    font-size: 1.375rem; /* ~22px */
+    font-weight: 600;
+    color: #1e293b; /* --text-primary-color */
+    margin-bottom: 12px;
+}
+
+.adcr-empty-state-subtitle {
+    font-size: 0.95rem;
+    color: #64748b; /* --text-secondary-color */
+}
+
+/* --- Table Styling --- */
+.adcr-table-wrapper {
+    overflow-x: auto;
+    border: 1px solid #e2e8f0; /* --border-color */
+    border-radius: 0.5rem; /* --border-radius-lg */
+    background-color: #ffffff; /* --content-bg-color */
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* --box-shadow-sm */
+}
+
+.adcr-requests-table {
+    width: 100%;
+    border-collapse: collapse;
     font-size: 0.875rem; /* 14px */
 }
 
-.form-group input[type="text"],
-.form-group textarea {
-    width: 100%;
-    padding: 10px 12px;
-    border: 1px solid var(--color-border-medium);
-    border-radius: var(--border-radius-sm);
-    box-sizing: border-box;
-    font-size: 0.9rem; /* 14px */
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
-    color: var(--color-text-secondary);
+.adcr-requests-table th,
+.adcr-requests-table td {
+    padding: 14px 18px;
+    text-align: left;
+    vertical-align: top;
+    border-bottom: 1px solid #e2e8f0; /* --border-color */
 }
 
-.form-group input[type="text"]:focus,
-.form-group textarea:focus {
-    border-color: var(--color-blue-500);
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2); /* Focus ring */
-}
-
-.form-group input.read-only-input,
-.form-group input:disabled {
-    background-color: var(--color-bg-header);
-    cursor: not-allowed;
-    opacity: 0.8;
-    border-color: var(--color-border-light);
-}
-
-.form-group textarea {
-    resize: vertical;
-    min-height: 120px;
-}
-
-/* --- Details Modal Specific Styles --- */
-.details-content {
-    font-size: 0.9rem;
-    line-height: 1.6;
-    color: var(--color-text-secondary);
-}
-
-.details-content h4 {
-    font-size: 1.25rem; /* 20px */
+.adcr-requests-table th {
+    background-color: #f9fafb; /* Cool Gray 50, slightly darker than page bg */
     font-weight: 600;
-    color: var(--color-text-primary);
-    margin-top: 0;
-    margin-bottom: 16px;
+    color: #94a3b8; /* --text-tertiary-color */
+    text-transform: uppercase;
+    font-size: 0.75rem; /* 12px */
+    letter-spacing: 0.05em;
+    white-space: nowrap;
 }
 
-.detail-item {
-    margin-bottom: 12px;
+.adcr-requests-table th .icon,
+.adcr-requests-table td .icon {
+    margin-right: 8px;
+    vertical-align: middle;
+    position: relative;
+    top: -1px; /* Fine-tune icon alignment */
+    color: #475569; /* --secondary-color */
+}
+
+.adcr-table-row:last-child td {
+    border-bottom: none;
+}
+
+.adcr-table-row:hover {
+    background-color: #fcfdff; /* Very subtle hover, almost white */
+}
+
+.adcr-td-style strong {
+    color: #1e293b; /* --text-primary-color */
+    font-weight: 600; /* Bolder names */
+    display: block; /* Ensure booking ID goes to next line if name is long */
+    margin-bottom: 2px;
+}
+
+.adcr-sub-text {
+    font-size: 0.8rem; /* ~13px */
+    color: #64748b; /* --text-secondary-color */
+    margin-top: 5px;
     display: flex;
-    flex-wrap: wrap; /* Allow wrapping on small screens */
+    align-items: center;
+    gap: 5px;
+}
+.adcr-sub-text .icon {
+    color: #94a3b8; /* --text-tertiary-color */
+}
+
+.adcr-break-all {
+    word-break: break-all;
+}
+
+.adcr-location-cell {
+    min-width: 220px;
+}
+.adcr-location-cell > div:first-child {
+    font-weight: 500;
+}
+
+/* Row Loading Overlay Effect */
+.row-loading-overlay {
+    position: relative;
+    opacity: 0.7;
+    pointer-events: none; /* Disable interactions on row content while loading */
+}
+.row-loading-overlay td:last-child { /* Keep actions cell interactive */
+    pointer-events: auto;
+}
+
+
+/* --- Status Badge --- */
+.status-badge {
+    padding: 5px 12px;
+    border-radius: 9999px; /* Pill shape */
+    font-size: 0.75rem; /* 12px */
+    font-weight: 600;
+    text-transform: capitalize;
+    display: inline-block;
+    line-height: 1.2;
+    /* Tailwind classes in JSX handle specific bg/text colors.
+       e.g., bg-yellow-100 text-yellow-800 */
+}
+
+/* If not using Tailwind, define base status colors here,
+   though they are already defined in JSX:
+.status-badge.pending { background-color: #fffbeb; color: #f59e0b; }
+.status-badge.confirmed { background-color: #ecfdf5; color: #10b981; }
+*/
+
+
+/* --- Action Buttons --- */
+.adcr-action-buttons-container {
+    display: flex;
     gap: 8px;
+    align-items: center;
+    flex-wrap: wrap; /* Allow wrapping on small screens */
 }
 
-.detail-item strong {
-    font-weight: 600;
-    color: var(--color-text-secondary);
-    flex-shrink: 0; /* Prevent label from shrinking too much */
-    /* min-width: 120px; Optional: set a min-width for labels */
-}
-
-.detail-item a {
-    color: var(--color-blue-600);
-    text-decoration: none;
-    font-weight: 500;
-}
-.detail-item a:hover {
-    text-decoration: underline;
-}
-
-.details-divider {
-    border: none;
-    border-top: 1px solid var(--color-border-light);
-    margin: 20px 0;
-}
-
-.notes-section p {
-    margin-top: 4px;
-    margin-bottom: 0;
-    padding: 10px;
-    background-color: var(--color-bg-light);
-    border-radius: var(--border-radius-sm);
-    border: 1px solid var(--color-border-light);
-    white-space: pre-wrap; /* Preserve line breaks in notes */
-    font-size: 0.875rem;
-    line-height: 1.5;
-}
-
-/* --- Modal Action Buttons --- */
-.form-actions {
-    display: flex;
-    justify-content: flex-end;
-    padding: 16px 24px;
-    border-top: 1px solid var(--color-border-light);
-    background-color: var(--color-bg-light);
-    flex-shrink: 0; /* Prevent footer from shrinking */
-    gap: 12px; /* Space between buttons */
-}
-
-.form-actions button {
-    padding: 10px 20px;
-    border: 1px solid transparent;
-    border-radius: var(--border-radius-sm);
+.adcr-action-btn {
+    background-color: #ffffff; /* --content-bg-color */
+    border: 1px solid #e2e8f0; /* --border-color */
+    color: #475569; /* --secondary-color */
+    padding: 8px; /* Square buttons for icons */
+    border-radius: 0.375rem; /* --border-radius-md */
     cursor: pointer;
+    transition: all 0.15s ease-in-out;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* --box-shadow-sm */
+}
+
+.adcr-action-btn svg {
+    width: 16px;
+    height: 16px;
+}
+
+.adcr-action-btn:hover:not(:disabled) {
+    border-color: #f97316; /* --primary-color */
+    color: #f97316; /* --primary-color */
+    background-color: #fff7ed; /* --primary-light-color */
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* --box-shadow-md */
+}
+
+.adcr-action-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
+/* Specific Action Button Hover/Focus Styles (using specific theme colors) */
+.adcr-view-btn:hover:not(:disabled) {
+    border-color: #3b82f6; /* --info-color */
+    color: #3b82f6; /* --info-color */
+    background-color: #eff6ff; /* --info-bg-color */
+}
+.adcr-edit-btn:hover:not(:disabled) {
+    border-color: #f59e0b; /* --warning-color */
+    color: #f59e0b; /* --warning-color */
+    background-color: #fffbeb; /* --warning-bg-color */
+}
+.adcr-confirm-btn:hover:not(:disabled),
+.adcr-complete-btn:hover:not(:disabled) {
+    border-color: #10b981; /* --success-color */
+    color: #10b981; /* --success-color */
+    background-color: #ecfdf5; /* --success-bg-color */
+}
+.adcr-cancel-btn:hover:not(:disabled),
+.adcr-delete-btn:hover:not(:disabled) {
+    border-color: #ef4444; /* --error-color */
+    color: #ef4444; /* --error-color */
+    background-color: #fef2f2; /* --error-bg-color */
+}
+
+/* Button with text like "Mark Done" */
+.adcr-complete-btn {
+    padding: 8px 12px; /* More horizontal padding for text */
     font-weight: 500;
-    font-size: 0.9rem; /* 14px */
-    transition: all 0.2s ease;
+    font-size: 0.8rem;
 }
-.form-actions button:active {
-    transform: scale(0.98);
-}
-
-.cancel-button {
-    background-color: #fff;
-    color: var(--color-text-secondary);
-    border-color: var(--color-border-medium);
-    box-shadow: var(--shadow-sm);
-}
-.cancel-button:hover {
-    background-color: var(--color-bg-header);
-}
-
-.send-button {
-    background-color: var(--color-green-500);
-    color: white;
-    border-color: var(--color-green-500);
-    box-shadow: var(--shadow-sm);
-}
-.send-button:hover {
-    background-color: var(--color-green-600);
-    border-color: var(--color-green-600);
+.adcr-complete-btn svg {
+    margin-right: 6px;
 }
 
 
-/* --- Responsive Adjustments (Table to Cards) --- */
-@media (max-width: 900px) { /* Increased breakpoint for better usability */
-    .bowners-table thead {
-        display: none;
-    }
-
-    .bowners-table,
-    .bowners-table tbody,
-    .bowners-table tr,
-    .bowners-table td {
-        display: block;
-        width: 100%;
-    }
-
-    .bowners-table tr {
-        margin-bottom: 15px;
-        border: 1px solid var(--color-border-light);
-        border-radius: var(--border-radius-md);
-        overflow: hidden;
-        background-color: #fff; /* Ensure white background for cards */
-        box-shadow: var(--shadow-sm);
-    }
-
-    .bowners-table td {
-        text-align: right;
-        padding-left: 45%; /* Adjust space for label */
-        position: relative;
-        border-bottom: 1px dotted var(--color-border-light);
-        min-height: 45px; /* Ensure minimum height */
-        display: flex; /* Better alignment */
-        align-items: center;
-        justify-content: flex-end;
-        white-space: normal; /* Allow content wrapping */
-    }
-     .bowners-table td:last-child {
-        border-bottom: none;
-     }
-
-    .bowners-table td::before {
-        content: attr(data-label); /* Use data-label for the 'header' */
-        position: absolute;
-        left: 15px;
-        width: calc(45% - 30px); /* Adjust width */
-        padding-right: 10px;
-        font-weight: 600;
-        text-align: left;
-        color: var(--color-text-header);
-        font-size: 0.75rem;
-        text-transform: uppercase;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        display: flex; /* Align label vertically */
-        align-items: center;
-        height: 100%; /* Ensure label fills height */
-        top: 0;
-    }
-
-    .action-buttons {
-       padding: 10px 15px; /* Add padding to action row */
-       text-align: center;
-       display: flex; /* Use flex for better button arrangement */
-       justify-content: space-evenly; /* Distribute buttons */
-       flex-wrap: wrap; /* Allow wrapping if needed */
-       gap: 8px;
-       padding-left: 15px !important; /* Override padding-left */
-    }
-    .action-buttons::before {
-       display: none; /* Hide the label for the actions cell */
-    }
-    .action-buttons button {
-        margin-left: 0; /* Remove left margin */
-    }
-
+/* --- Full Page Loading Spinner --- */
+.adcr-loading-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 400px; /* Ensure it takes up space */
+    width: 100%;
+    text-align: center;
+    padding: 20px;
 }
 
+.adcr-loading-container p {
+    margin-top: 20px;
+    font-size: 1.125rem;
+    color: #64748b; /* --text-secondary-color */
+    font-weight: 500;
+}
+
+/* --- Modal Styles (Basic structure - EditBookingModal should have its own detailed CSS) --- */
+/* Assuming EditBookingModal might use these classes or similar for its root elements */
+.edit-booking-modal-overlay {
+    position: fixed;
+    inset: 0; /* top, right, bottom, left = 0 */
+    background-color: rgba(15, 23, 42, 0.6); /* Cool Gray 900 with opacity */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 50; /* Ensure it's above other content */
+    padding: 16px;
+    backdrop-filter: blur(4px);
+}
+
+.edit-booking-modal-content {
+    background: #ffffff; /* --content-bg-color */
+    padding: 24px 32px;
+    border-radius: 0.5rem; /* --border-radius-lg */
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* --box-shadow-lg */
+    width: 100%;
+    max-width: 600px; /* Adjust as needed */
+    /* Further styling for modal header, body, footer would go into EditBookingModal.css */
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+/* Responsiveness for smaller screens */
 @media (max-width: 768px) {
-    .admin-bowners-container {
-        padding: 15px;
+    .ad-check-req-container {
+        margin: 10px;
+        padding: 16px;
     }
-    .admin-bowners-container h2 {
-        font-size: 1.25rem;
-        margin-bottom: 20px;
+    .adcr-page-title {
+        font-size: 1.375rem; /* ~22px */
     }
-    .email-modal,
-    .details-modal {
-        max-width: 95%; /* Allow modal to be wider on small screens */
+    .adcr-refresh-button {
+        padding: 8px 14px;
+        font-size: 0.8rem;
+    }
+    .adcr-requests-table th,
+    .adcr-requests-table td {
+        padding: 10px 12px;
+        font-size: 0.8rem; /* Slightly smaller font for table on mobile */
+    }
+    .adcr-sub-text {
+        font-size: 0.75rem;
+    }
+    .adcr-action-buttons-container {
+        gap: 6px; /* Smaller gap for buttons */
+    }
+    .adcr-action-btn {
+        padding: 7px; /* Slightly smaller buttons */
+    }
+    .adcr-complete-btn {
+        padding: 7px 10px;
     }
 }
 
 @media (max-width: 480px) {
-     .form-actions {
-        flex-direction: column-reverse; /* Stack buttons vertically */
-        gap: 10px;
-     }
-     .form-actions button {
-        width: 100%; /* Make buttons full width */
-     }
-     .bowners-table td {
-        padding-left: 35%; /* Reduce label space */
-     }
-     .bowners-table td::before {
-        width: calc(35% - 25px);
-     }
+    .adcr-header-section {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+    .adcr-page-title {
+        font-size: 1.25rem;
+    }
+    /* Further fine-tuning for very small screens if needed */
 }

@@ -982,6 +982,8 @@
   }
 }
 
+
+
 @media (max-width: 480px) {
   .calendar-legend {
     flex-direction: column;
