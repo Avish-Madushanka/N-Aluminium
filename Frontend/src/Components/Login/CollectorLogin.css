@@ -1,0 +1,104 @@
+/* CollectorLogin.css */
+.RegCollect-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f8f9fa;
+    padding: 20px;
+  }
+  
+  .RegCollect-card {
+    background: white;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+  }
+  
+  .RegCollect-card h2 {
+    margin-bottom: 10px;
+    color: #2d3748;
+  }
+  
+  .RegCollect-card p {
+    color: #718096;
+    margin-bottom: 30px;
+  }
+  
+  .RegCollect-formGroup {
+    margin-bottom: 20px;
+    text-align: left;
+  }
+  
+  .RegCollect-formGroup label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #4a5568;
+  }
+  
+  .RegCollect-input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 4px;
+    font-size: 16px;
+  }
+  
+  .RegCollect-input:focus {
+    outline: none;
+    border-color: #4299e1;
+    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.2);
+  }
+  
+  .RegCollect-button {
+    width: 100%;
+    padding: 12px;
+    background-color: #4299e1;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.3s;
+  }
+  
+  .RegCollect-button:hover {
+    background-color: #3182ce;
+  }
+  
+  .RegCollect-button:disabled {
+    background-color: #a0aec0;
+    cursor: not-allowed;
+  }
+  
+  .RegCollect-error {
+    color: #e53e3e;
+    background-color: #fff5f5;
+    padding: 12px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .RegCollect-footer {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 14px;
+  }
+  
+  .RegCollect-link {
+    color: #4299e1;
+    text-decoration: none;
+  }
+  
+  .RegCollect-link:hover {
+    text-decoration: underline;
+  }

@@ -1,0 +1,264 @@
+// backend/controllers/bookingsController.js
+const Booking = require('../models/Booking');
+const { sendBookingStatusUpdateEmail } = require('../utils/emailService'); // Ensure this path is correct
+
+// @desc    Create a new booking
+// @route   POST /api/bookings
+// @access  Private (User or Guest, depending on route protection)
+const createBooking = async (req, res, next) => {
+    try {
+        const {
+            selectedDate,
+            timeSlotId, // This will now be the time string, e.g., "1:00 PM - 5:00 PM"
+            serviceAreaId,
+            estimatedWeight,
+            pickupLocation,
+            contactDetails
+        } = req.body;
+
+        // Basic validation
+        if (!selectedDate || !timeSlotId || !serviceAreaId || !pickupLocation || !contactDetails) {
+            return res.status(400).json({ success: false, message: 'Missing required booking fields.' });
+        }
+        if (!contactDetails.name || !contactDetails.phone || !contactDetails.email) {
+            return res.status(400).json({ success: false, message: 'Missing required contact details fields (name, phone, email).' });
+        }
+
+        const newBookingData = {
+            selectedDate: new Date(selectedDate), // Ensure it's a Date object
+            timeSlotId, // Saves the time string directly
+            serviceAreaId,
+            estimatedWeight: (estimatedWeight !== undefined && estimatedWeight !== null && estimatedWeight !== '') ? Number(estimatedWeight) : undefined,
+            pickupLocation,
+            contactDetails,
+            status: 'pending', // Default status
+        };
+
+        if (req.user) {
+            newBookingData.userId = req.user._id;
+            newBookingData.userModel = req.user.constructor.modelName;
+        }
+
+        const booking = new Booking(newBookingData);
+        await booking.save();
+
+        res.status(201).json({
+            success: true,
+            message: 'Booking request submitted successfully.',
+            data: booking
+        });
+
+    } catch (error) {
+        console.error('Error creating booking:', error);
+        if (error.name === 'ValidationError') {
+            const messages = Object.values(error.errors).map(val => val.message);
+            return res.status(400).json({ success: false, message: messages.join(' ') });
+        }
+        next(error);
+    }
+};
+
+// @desc    Get all bookings (for Admin)
+// @route   GET /api/bookings
+// @access  Private (Admin)
+const getAllBookings = async (req, res, next) => {
+    try {
+        const bookings = await Booking.find({})
+            .populate('userId', 'name email')
+            .sort({ createdAt: -1 });
+
+        res.status(200).json({
+            success: true,
+            count: bookings.length,
+            data: bookings
+        });
+    } catch (error) {
+        console.error('Error fetching all bookings:', error);
+        next(error);
+    }
+};
+
+// @desc    Get a single booking by ID
+// @route   GET /api/bookings/:id
+// @access  Private
+const getBookingById = async (req, res, next) => {
+    try {
+        const booking = await Booking.findById(req.params.id).populate('userId', 'name email');
+        if (!booking) {
+            return res.status(404).json({ success: false, message: 'Booking not found.' });
+        }
+        res.status(200).json({ success: true, data: booking });
+    } catch (error) {
+        console.error(`Error fetching booking ${req.params.id}:`, error);
+        next(error);
+    }
+};
+
+// @desc    Update booking status (for Admin)
+// @route   PUT /api/bookings/:id/status
+// @access  Private (Admin)
+const updateBookingStatus = async (req, res, next) => {
+    try {
+        const bookingId = req.params.id;
+        const { status } = req.body;
+        const adminNotes = req.body.adminNotes !== undefined ? req.body.adminNotes : null;
+
+        if (!status || !['pending', 'confirmed', 'completed', 'cancelled'].includes(status)) {
+            return res.status(400).json({ success: false, message: 'Invalid status provided.' });
+        }
+
+        const bookingBeforeUpdate = await Booking.findById(bookingId);
+        if (!bookingBeforeUpdate) {
+            return res.status(404).json({ success: false, message: 'Booking not found.' });
+        }
+
+        const oldStatus = bookingBeforeUpdate.status;
+        const oldAdminNotes = bookingBeforeUpdate.adminNotes;
+
+        const updateData = { status };
+        if (adminNotes !== null) {
+            updateData.adminNotes = adminNotes;
+        } else if (status === 'cancelled' && adminNotes === null && !oldAdminNotes) {
+             updateData.adminNotes = '';
+        }
+        
+        let notesChanged = false;
+        if (adminNotes !== null && oldAdminNotes !== adminNotes) {
+            notesChanged = true;
+        } else if (status === 'cancelled' && adminNotes === null && !oldAdminNotes && oldAdminNotes !== '') {
+            notesChanged = true;
+        }
+
+        if (oldStatus === status && !notesChanged) {
+             console.log(`[BookingsCtrl UpdateStatus] No change for booking ${bookingId}.`);
+             return res.status(200).json({ success: true, message: 'No changes in status or notes.', data: bookingBeforeUpdate });
+        }
+
+        const updatedBooking = await Booking.findByIdAndUpdate(
+            bookingId,
+            updateData,
+            { new: true, runValidators: true }
+        ).populate('userId', 'name email');
+
+        if (!updatedBooking) {
+            return res.status(404).json({ success: false, message: 'Booking not found during update.' });
+        }
+        console.log(`[BookingsCtrl UpdateStatus] Booking ${bookingId} status: ${oldStatus} -> ${updatedBooking.status}. Notes: "${updatedBooking.adminNotes}"`);
+
+        if (updatedBooking.status !== oldStatus && (updatedBooking.status === 'confirmed' || updatedBooking.status === 'cancelled')) {
+            console.log(`[BookingsCtrl UpdateStatus] Email for booking ${bookingId}, new status: ${updatedBooking.status}`);
+            await sendBookingStatusUpdateEmail(updatedBooking, updatedBooking.status);
+        }
+
+        res.status(200).json({ success: true, message: 'Booking status updated.', data: updatedBooking });
+    } catch (error) {
+        console.error(`Error updating status for booking ${req.params.id}:`, error);
+        if (error.name === 'ValidationError') {
+            const messages = Object.values(error.errors).map(val => val.message);
+            return res.status(400).json({ success: false, message: messages.join(' ') });
+        }
+        next(error);
+    }
+};
+
+// @desc    Update a booking (for Admin)
+// @route   PUT /api/bookings/:id
+// @access  Private (Admin)
+const updateBooking = async (req, res, next) => {
+    try {
+        const bookingId = req.params.id;
+        
+        const bookingBeforeUpdate = await Booking.findById(bookingId);
+        if (!bookingBeforeUpdate) {
+            return res.status(404).json({ success: false, message: 'Booking not found for update.' });
+        }
+        const oldStatus = bookingBeforeUpdate.status;
+
+        const {
+            selectedDate, timeSlotId, serviceAreaId, estimatedWeight,
+            pickupLocation, contactDetails, status, adminNotes
+        } = req.body;
+
+        const updateFields = {};
+        if (selectedDate !== undefined) updateFields.selectedDate = new Date(selectedDate);
+        if (timeSlotId !== undefined) updateFields.timeSlotId = timeSlotId; // Will save the time string
+        if (serviceAreaId !== undefined) updateFields.serviceAreaId = serviceAreaId;
+        if (estimatedWeight !== undefined) updateFields.estimatedWeight = (estimatedWeight === null || estimatedWeight === '') ? null : Number(estimatedWeight);
+        if (pickupLocation !== undefined) updateFields.pickupLocation = pickupLocation;
+        if (contactDetails !== undefined) { 
+            if (!contactDetails.name || !contactDetails.phone || !contactDetails.email) {
+                 return res.status(400).json({ success: false, message: 'If updating contactDetails, all fields (name, phone, email) are required.' });
+            }
+            updateFields.contactDetails = contactDetails;
+        }
+        
+        if (status !== undefined && ['pending', 'confirmed', 'completed', 'cancelled'].includes(status)) {
+            updateFields.status = status;
+        }
+        
+        if (adminNotes !== undefined) {
+            updateFields.adminNotes = adminNotes;
+        }
+
+        if (Object.keys(updateFields).length === 0) {
+            return res.status(200).json({ success: true, message: 'No valid fields for update.', data: bookingBeforeUpdate });
+        }
+
+        const updatedBooking = await Booking.findByIdAndUpdate(
+            bookingId,
+            { $set: updateFields },
+            { new: true, runValidators: true }
+        ).populate('userId', 'name email'); 
+
+        if (!updatedBooking) {
+            return res.status(404).json({ success: false, message: 'Booking not found after update attempt.' });
+        }
+        console.log(`[BookingsCtrl UpdateBooking] Booking ${bookingId} updated. Status: ${oldStatus} -> ${updatedBooking.status}. Notes: "${updatedBooking.adminNotes}"`);
+
+        const finalStatus = updatedBooking.status; 
+        if (finalStatus !== oldStatus && (finalStatus === 'confirmed' || finalStatus === 'cancelled')) {
+            console.log(`[BookingsCtrl UpdateBooking] Email for booking ${bookingId}, new status: ${finalStatus}`);
+            await sendBookingStatusUpdateEmail(updatedBooking, finalStatus);
+        }
+
+        res.status(200).json({ success: true, message: 'Booking updated successfully.', data: updatedBooking });
+    } catch (error) {
+        console.error(`Error updating booking ${req.params.id}:`, error);
+        if (error.name === 'CastError' && error.path === 'estimatedWeight') {
+             return res.status(400).json({ success: false, message: `Invalid data format for field estimatedWeight. Must be a number.`});
+        }
+        if (error.name === 'CastError') { 
+            return res.status(400).json({ success: false, message: `Invalid data format for field ${error.path}. Expected ${error.kind}.`});
+        }
+        if (error.name === 'ValidationError') {
+            const messages = Object.values(error.errors).map(val => val.message);
+            return res.status(400).json({ success: false, message: messages.join(' ') });
+        }
+        next(error);
+    }
+};
+
+// @desc    Delete a booking (for Admin)
+// @route   DELETE /api/bookings/:id
+// @access  Private (Admin)
+const deleteBooking = async (req, res, next) => {
+    try {
+        const booking = await Booking.findByIdAndDelete(req.params.id);
+        if (!booking) {
+            return res.status(404).json({ success: false, message: 'Booking not found.' });
+        }
+        res.status(200).json({ success: true, message: 'Booking deleted successfully.' });
+    } catch (error) {
+        console.error(`Error deleting booking ${req.params.id}:`, error);
+        next(error);
+    }
+};
+
+module.exports = {
+    createBooking,
+    getAllBookings,
+    getBookingById,
+    updateBookingStatus,
+    updateBooking,
+    deleteBooking
+};

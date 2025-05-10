@@ -1,4 +1,3 @@
-// src/Components/Admin/AdMinCalendar/AdCalendar.jsx
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   ChevronLeft, ChevronRight, Calendar, Clock, MapPin,
@@ -490,6 +489,53 @@ const AdCalendar = () => {
                     </div>
                   </div>
                 ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* View Calendar Tab */}
+        {activeTab === 'view' && (
+          <div className="view-calendar-tab">
+            <div className="tab-section">
+              <h2 className="section-heading">Calendar Overview</h2>
+              <div className="view-calendar-container">
+                <div className="admin-calendar">
+                  <div className="calendar-header">
+                    <button onClick={goToPrevMonth} className="nav-button">
+                      <ChevronLeft size={20} />
+                    </button>
+                    <h3 className="current-month">
+                      {monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}
+                    </h3>
+                    <button onClick={goToNextMonth} className="nav-button">
+                      <ChevronRight size={20} />
+                    </button>
+                  </div>
+                  <div className="weekday-header">
+                    {daysOfWeek.map(day => (
+                      <div key={day} className="weekday">{day}</div>
+                    ))}
+                  </div>
+                  <div className="calendar-grid">
+                    {renderCalendar(true)}
+                  </div>
+                </div>
+                
+                <div className="calendar-legend">
+                  <div className="legend-item">
+                    <span className="legend-dot available"></span> Available
+                  </div>
+                  <div className="legend-item">
+                    <span className="legend-dot unavailable"></span> Unavailable
+                  </div>
+                  <div className="legend-item">
+                    <span className="legend-dot special-available"></span> Special: Available
+                  </div>
+                  <div className="legend-item">
+                    <span className="legend-dot special-unavailable"></span> Special: Unavailable
+                  </div>
+                </div>
               </div>
             </div>
           </div>

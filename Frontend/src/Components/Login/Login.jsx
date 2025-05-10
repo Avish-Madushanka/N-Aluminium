@@ -118,6 +118,13 @@ function Login({ onLoginSuccess }) {
         <div className="left-section">
           <h1 className="welcome-title">Welcome Back!</h1>
           <p className="subtitle">Log in to your N-Aluminium account.</p>
+          <div className="collector-reg-container">
+            <Link to="/collectorLogin" className="collector-reg-button">
+              <button className="collector-btn">
+                Register as Collector
+              </button>
+            </Link>
+          </div>
         </div>
         <div className="right-section">
           <h2 className="signin-title">Sign in</h2>
