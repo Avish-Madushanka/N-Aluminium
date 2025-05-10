@@ -557,8 +557,6 @@
 
 /* Special Dates Form */
 .add-special-date {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: var(--space-md);
   margin-bottom: var(--space-lg);
   padding: var(--space-md);
@@ -996,4 +994,114 @@
 .loading-container span {
   color: var(--gray-600);
   font-weight: 500;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .admin-calendar-container {
+    padding: var(--space-md);
+  }
+
+  .admin-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-sm);
+    padding-bottom: var(--space-sm);
+  }
+
+  .admin-header h1 {
+    font-size: var(--text-2xl);
+    text-align: left;
+  }
+
+  .admin-tabs {
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+
+  .admin-tab {
+    width: 100%;
+    justify-content: flex-start;
+    border-radius: 0.5rem;
+    border: 1px solid var(--gray-300);
+    background-color: var(--gray-50);
+  }
+
+  .admin-tab.active {
+    border-color: var(--primary);
+    background-color: #ffffff;
+  }
+
+  .admin-content {
+    padding: var(--space-md);
+    border-radius: 0.5rem;
+  }
+
+  .section-heading {
+    font-size: var(--text-lg);
+  }
+
+  .section-description {
+    font-size: var(--text-sm);
+  }
+
+  .day-toggles {
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .day-toggle {
+    width: 100%;
+    text-align: center;
+  }
+
+  .calendar-header {
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .weekday-header {
+    font-size: var(--text-xs);
+  }
+
+  .calendar-grid {
+    gap: 1px;
+  }
+
+  .calendar-day, .calendar-empty {
+    font-size: var(--text-sm);
+  }
+
+  .calendar-legend {
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .legend-item {
+    justify-content: flex-start;
+  }
+
+  .calendar-info {
+    font-size: var(--text-xs);
+  }
+
+  .add-special-date {
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-header h1 {
+    font-size: var(--text-xl);
+  }
+
+  .admin-tab {
+    font-size: var(--text-sm);
+    padding: var(--space-sm);
+  }
+
+  .calendar-day, .calendar-empty {
+    aspect-ratio: 1 / 1.2;
+  }
 }

@@ -57,14 +57,12 @@ function AdNavComponent({ handleLogout }) {
                                 <FontAwesomeIcon icon={faBuilding} className="menu-icon" /> Business Owners
                             </NavLink>
                         </li>
-                        {/* --- Placeholder / Future Routes --- */}
-                        {/* Ensure paths start with /Admin/ if they are admin-only pages */}
-                        {/*
                         <li>
-                           <NavLink to="/Admin/Reviews" className={({ isActive }) => isActive ? 'active' : ''}>
+                           <NavLink to="/Admin/DisReview" className={({ isActive }) => isActive ? 'active' : ''}>
                                 <FontAwesomeIcon icon={faStar} className="menu-icon" /> Reviews
                             </NavLink>
                         </li>
+                        {/*
                          <li>
                             <NavLink to="/Admin/Payments" className={({ isActive }) => isActive ? 'active' : ''}>
                                 <FontAwesomeIcon icon={faCreditCard} className="menu-icon" /> Payments

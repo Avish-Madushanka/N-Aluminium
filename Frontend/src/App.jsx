@@ -58,6 +58,7 @@ import AdCheckReq from './Components/Admin/AdCheckReq/AdCheckReq';
 import EmailDisplay from './Components/Admin/EmailDisplay/EmailDisplay';
 import Dashboard from './Components/Admin/Dashboard/Dashboard'; // Admin Dashboard
 import HandleBOwners from './Components/Admin/HandleBOwners/HandleBOwners';
+import DisReview from './Components/Admin/DisReview/DisReview';
 
 // --- Helper: Parse and Validate JWT ---
 const parseUserInfoFromToken = (token) => {
@@ -311,6 +312,7 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
                            <Route path="/Admin/Requests" element={<AdCheckReq />} />
                            <Route path="/Admin/Emails" element={<EmailDisplay />} />
                            <Route path="/Admin/ManageOwners" element={<HandleBOwners />} />
+                           <Route path="/Admin/DisReview" element={<DisReview />} />
                            {/* Add future admin routes here using the /Admin/ prefix */}
                            {/* <Route path="/Admin/Placeholder1" element={<PlaceholderComponent1 />} /> */}
                            {/* <Route path="/Admin/Placeholder2" element={<PlaceholderComponent2 />} /> */}

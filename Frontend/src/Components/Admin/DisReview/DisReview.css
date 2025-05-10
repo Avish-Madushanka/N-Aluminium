@@ -1,0 +1,464 @@
+/* DisReview.css */
+.ARev-reviews-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  }
+  
+  /* Header styles */
+  .ARev-header {
+    margin-bottom: 2rem;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 1.5rem;
+  }
+  
+  .ARev-header h1 {
+    font-size: 2.2rem;
+    color: #2c3e50;
+    margin: 0 0 0.5rem 0;
+  }
+  
+  .ARev-header p {
+    color: #7f8c8d;
+    font-size: 1rem;
+    margin: 0;
+  }
+  
+  /* Controls section */
+  .ARev-controls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    gap: 1rem;
+    background-color: #fff;
+    padding: 1.2rem;
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+  
+  .ARev-search {
+    flex: 1;
+    min-width: 250px;
+  }
+  
+  .ARev-search input {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    transition: border-color 0.3s;
+  }
+  
+  .ARev-search input:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+  }
+  
+  .ARev-filters {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  
+  .ARev-filter-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .ARev-filter-group label {
+    font-size: 0.9rem;
+    color: #666;
+    white-space: nowrap;
+  }
+  
+  .ARev-filter-group select {
+    padding: 0.7rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: white;
+    font-size: 0.9rem;
+    color: #333;
+    cursor: pointer;
+    transition: border-color 0.3s;
+  }
+  
+  .ARev-filter-group select:focus {
+    outline: none;
+    border-color: #3498db;
+  }
+  
+  .ARev-actions {
+    display: flex;
+    gap: 0.8rem;
+    margin-left: auto;
+  }
+  
+  .ARev-actions button {
+    padding: 0.7rem 1.2rem;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  
+  .ARev-select-all {
+    background-color: #f1f1f1;
+    color: #555;
+  }
+  
+  .ARev-select-all:hover {
+    background-color: #e0e0e0;
+  }
+  
+  .ARev-select-all.ARev-selected {
+    background-color: #e1f5fe;
+    color: #0288d1;
+  }
+  
+  .ARev-delete-selected {
+    background-color: #f44336;
+    color: white;
+    font-weight: 500;
+  }
+  
+  .ARev-delete-selected:hover {
+    background-color: #d32f2f;
+  }
+  
+  /* Review Cards */
+  .ARev-reviews-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+  
+  .ARev-review-card {
+    background-color: #fff;
+    border-radius: 6px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    border-left: 4px solid transparent;
+  }
+  
+  .ARev-review-card:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+  }
+  
+  .ARev-review-card.ARev-selected {
+    border-left: 4px solid #3498db;
+    background-color: #f8f9ff;
+  }
+  
+  .ARev-review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  
+  .ARev-checkbox-container {
+    position: relative;
+  }
+  
+  .ARev-checkbox-container input[type="checkbox"] {
+    opacity: 0;
+    position: absolute;
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    z-index: 1;
+  }
+  
+  .ARev-checkbox-label {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background-color: #fff;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  
+  .ARev-checkbox-container input[type="checkbox"]:checked + .ARev-checkbox-label {
+    background-color: #3498db;
+    border-color: #3498db;
+  }
+  
+  .ARev-checkbox-container input[type="checkbox"]:checked + .ARev-checkbox-label::after {
+    content: "";
+    position: absolute;
+    left: 6px;
+    top: 2px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+  
+  .ARev-reviewer-info {
+    flex: 1;
+    min-width: 200px;
+  }
+  
+  .ARev-reviewer-info h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: #2c3e50;
+  }
+  
+  .ARev-reviewer-info p {
+    margin: 0.2rem 0 0;
+    font-size: 0.85rem;
+    color: #7f8c8d;
+  }
+  
+  .ARev-review-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.4rem;
+  }
+  
+  .ARev-rating {
+    font-size: 1.1rem;
+    line-height: 1;
+  }
+  
+  .ARev-star {
+    margin-right: 2px;
+  }
+  
+  .ARev-star-filled {
+    color: #f39c12;
+  }
+  
+  .ARev-star-empty {
+    color: #ddd;
+  }
+  
+  .ARev-date {
+    font-size: 0.85rem;
+    color: #95a5a6;
+  }
+  
+  .ARev-review-content {
+    margin: 1rem 0;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: #555;
+  }
+  
+  .ARev-review-content p {
+    margin: 0;
+    font-style: italic;
+  }
+  
+  .ARev-review-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 1rem;
+  }
+  
+  .ARev-delete-btn {
+    background-color: transparent;
+    color: #e74c3c;
+    border: 1px solid #e74c3c;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  
+  .ARev-delete-btn:hover {
+    background-color: #e74c3c;
+    color: white;
+  }
+  
+  /* Loading state */
+  .ARev-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 0;
+  }
+  
+  .ARev-spinner {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #3498db;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  .ARev-loading p {
+    color: #7f8c8d;
+    font-size: 0.95rem;
+  }
+  
+  /* No reviews state */
+  .ARev-no-reviews {
+    text-align: center;
+    padding: 3rem 0;
+    color: #7f8c8d;
+    background-color: #fff;
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Footer */
+  .ARev-footer {
+    margin-top: 2rem;
+    text-align: right;
+    font-size: 0.85rem;
+    color: #95a5a6;
+  }
+  
+  /* Delete confirmation modal */
+  .ARev-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .ARev-delete-modal {
+    background-color: white;
+    border-radius: 8px;
+    padding: 2rem;
+    width: 100%;
+    max-width: 450px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    animation: modalFadeIn 0.3s ease;
+  }
+  
+  @keyframes modalFadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .ARev-delete-modal h3 {
+    margin-top: 0;
+    color: #2c3e50;
+    font-size: 1.5rem;
+  }
+  
+  .ARev-delete-modal p {
+    color: #555;
+    margin-bottom: 1rem;
+  }
+  
+  .ARev-warning {
+    color: #e74c3c !important;
+    font-weight: 500;
+  }
+  
+  .ARev-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+  
+  .ARev-cancel-btn, .ARev-confirm-btn {
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  
+  .ARev-cancel-btn {
+    background-color: #f1f1f1;
+    color: #555;
+  }
+  
+  .ARev-cancel-btn:hover {
+    background-color: #e0e0e0;
+  }
+  
+  .ARev-confirm-btn {
+    background-color: #e74c3c;
+    color: white;
+    font-weight: 500;
+  }
+  
+  .ARev-confirm-btn:hover {
+    background-color: #c0392b;
+  }
+  
+  /* Responsive styles */
+  @media (max-width: 768px) {
+    .ARev-reviews-container {
+      padding: 1.5rem;
+    }
+    
+    .ARev-controls {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    
+    .ARev-search, .ARev-filters, .ARev-actions {
+      width: 100%;
+    }
+    
+    .ARev-filters {
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+    
+    .ARev-filter-group {
+      justify-content: space-between;
+    }
+    
+    .ARev-filter-group select {
+      flex: 1;
+    }
+    
+    .ARev-actions {
+      justify-content: center;
+      margin-top: 1rem;
+    }
+    
+    .ARev-review-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    
+    .ARev-review-meta {
+      align-items: flex-start;
+      margin-top: 0.5rem;
+    }
+  }
