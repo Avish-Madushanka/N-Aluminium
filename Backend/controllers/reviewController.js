@@ -1,6 +1,6 @@
 // Backend/controllers/reviewController.js
 const Review = require('../models/reviewModel');
-const asyncHandler = require('../middleware/async');
+const asyncHandler = require('../utils/async');
 const ErrorResponse = require('../utils/errorResponse');
 
 // @desc    Create a new review

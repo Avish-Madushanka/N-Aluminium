@@ -61,6 +61,7 @@ import EmailDisplay from './Components/Admin/EmailDisplay/EmailDisplay';
 import Dashboard from './Components/Admin/Dashboard/Dashboard'; 
 import HandleBOwners from './Components/Admin/HandleBOwners/HandleBOwners';
 import DisReview from './Components/Admin/DisReview/DisReview';
+import AdScrap from './Components/Admin/AdScrap/AdScrap';
 
 // --- Helper: Parse and Validate JWT ---
 const parseUserInfoFromToken = (token) => {
@@ -291,7 +292,7 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
                         <Route path="/CheckBuySell" element={<CheckBuySell />} />
                         <Route path="/ClientEmail" element={<ClientEmail />} />
                         {/* <Route path="/CalendarDisplay" element={<CalendarDisplay />} />  MOVED to public routes */}
-                        <Route path="/SaleForm" element={<SaleForm />} />
+                        
                         <Route path="/BuyCard" element={<BuyCard />} />
                         <Route path="/WastePickForm" element={<WastePickForm />} />
                         <Route path="/LocationMap" element={<LocationMap />} />
@@ -300,8 +301,10 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
                     {/* === Protected Business Owner Routes === */}
                     <Route element={<ProtectedRoute requiredRole="businessOwner" />}>
                          <Route path="/BOwnerHome" element={<BOwnerHome userInfo={auth.userInfo} />} />
+                         <Route path="/BusinessDashboard" element={<BOwnerHome />} />
                          <Route path="/BOwnerProfile" element={<BOwnerProfile />} />
                          <Route path="/ProAddForm" element={<ProAddForm />} />
+                         <Route path="/SaleForm" element={<SaleForm />} />
                     </Route>
 
                      {/* === Protected Admin Routes === */}
@@ -311,6 +314,7 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
                            <Route path="/Admin/Dashboard" element={<Dashboard />} />
                            <Route path="/Admin/Calendar" element={<AdCalendar />} /> 
                            <Route path="/Admin/Requests" element={<AdCheckReq />} />
+                           <Route path="/Admin/Scrap" element={<AdScrap />} />
                            <Route path="/Admin/Emails" element={<EmailDisplay />} />
                            <Route path="/Admin/ManageOwners" element={<HandleBOwners />} />
                         </Route>

@@ -37,37 +37,37 @@ const HomeDes = () => {
   ];
 
   return (
-    <div className="waste-disposal-container">
-      <h1 className={`waste-disposal-heading ${isVisible ? 'fade-in' : ''}`}>
+    <div className="HomeDes-container">
+      <h1 className={`HomeDes-heading ${isVisible ? 'HomeDes-fade-in' : ''}`}>
         Our Features & Services
       </h1>
 
-      <div className="waste-disposal-services">
+      <div className="HomeDes-services">
         {services.map((service, index) => (
           <div 
             key={index}
-            className={`service-card ${isVisible ? 'slide-up' : ''}`} 
+            className={`HomeDes-card ${isVisible ? 'HomeDes-slide-up' : ''}`} 
             style={{ animationDelay: `${index * 0.2}s` }}
           >
-            <div className="service-image-container">
+            <div className="HomeDes-image-container">
               <img
                 src={service.image}
                 alt={service.alt}
-                className="service-image"
+                className="HomeDes-image"
               />
-              <div className="image-overlay">
-                <div className="overlay-icon">
-                  <div className="pulse-circle"></div>
+              <div className="HomeDes-image-overlay">
+                <div className="HomeDes-overlay-icon">
+                  <div className="HomeDes-pulse-circle"></div>
                 </div>
               </div>
             </div>
 
-            <h3 className="service-title">{service.title}</h3>
+            <h3 className="HomeDes-title">{service.title}</h3>
 
-            <p className="service-description">{service.description}</p>
+            <p className="HomeDes-description">{service.description}</p>
 
-            <a href={service.link} className="service-link">
-              <span className="arrow-icon">→</span>
+            <a href={service.link} className="HomeDes-link">
+              <span className="HomeDes-arrow-icon">→</span>
             </a>
           </div>
         ))}

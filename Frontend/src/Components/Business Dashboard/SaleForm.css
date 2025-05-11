@@ -1,0 +1,153 @@
+/* SaleForm.css */
+
+/* .form-title is styled by BusinessDashboard.css if this component is wrapped by .biz-form-container */
+.sale-form-content .form-title {
+    font-size: 1.8em;
+    color: #dc2626;
+    margin-bottom: 25px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  
+  
+  .sale-form-content .sale-form-group {
+    margin-bottom: 20px;
+    flex: 1; /* For use in form-group-row */
+  }
+  
+  .sale-form-content .sale-form-group-row {
+    display: flex;
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
+    gap: 20px; /* Space between items in a row */
+    margin-bottom: 20px;
+  }
+  .sale-form-content .sale-form-group-row .sale-form-group {
+    margin-bottom: 0; /* Remove bottom margin when in a row */
+  }
+  
+  
+  .sale-form-content label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #374151;
+  }
+  
+  .sale-form-content input[type="text"],
+  .sale-form-content input[type="number"],
+  .sale-form-content input[type="tel"],
+  .sale-form-content textarea,
+  .sale-form-content select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    box-sizing: border-box;
+    font-size: 1em;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .sale-form-content input[type="text"]:focus,
+  .sale-form-content input[type="number"]:focus,
+  .sale-form-content input[type="tel"]:focus,
+  .sale-form-content textarea:focus,
+  .sale-form-content select:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  }
+  
+  .sale-form-content input[disabled],
+  .sale-form-content textarea[disabled],
+  .sale-form-content select[disabled] {
+      background-color: #f3f4f6;
+      cursor: not-allowed;
+  }
+  
+  .sale-form-content .sale-file-upload-label {
+    display: block;
+    padding: 12px 15px;
+    background-color: #f9fafb;
+    border: 1px dashed #d1d5db;
+    border-radius: 6px;
+    cursor: pointer;
+    text-align: center;
+    color: #374151;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+  }
+  .sale-form-content .sale-file-upload-label:hover {
+    border-color: #3b82f6;
+    background-color: #f0f8ff;
+  }
+  .sale-form-content .sale-file-upload-label.file-chosen {
+      border-style: solid;
+      border-color: #10b981; /* Green border if file chosen */
+      color: #059669;
+  }
+  .sale-form-content .sale-file-upload-label.disabled {
+      background-color: #e5e7eb;
+      cursor: not-allowed;
+      border-color: #d1d5db;
+  }
+  
+  
+  .sale-form-content .sale-image-preview-container {
+    margin-top: 15px;
+    margin-bottom: 20px; /* Space before the submit button */
+    text-align: center; /* Center the preview image */
+  }
+  
+  .sale-form-content .sale-image-preview {
+    max-width: 100%; /* Responsive image */
+    max-height: 250px; /* Limit height */
+    border-radius: 6px;
+    border: 1px solid #e5e7eb;
+    object-fit: contain; /* Show entire image, letterboxed if needed */
+  }
+  
+  .sale-form-content .sale-submit-button {
+    background-color: #ef4444;
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+    width: 100%;
+    margin-top: 10px;
+  }
+  
+  .sale-form-content .sale-submit-button:hover {
+    background-color: #dc2626;
+  }
+  
+  .sale-form-content .sale-submit-button:disabled {
+    background-color: #fca5a5;
+    cursor: not-allowed;
+  }
+  
+  .sale-form-content .sale-error-message {
+    color: #b91c1c;
+    background-color: #fee2e2;
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    border: 1px solid #fecaca;
+    font-size: 0.95em;
+  }
+  
+  /* Responsive adjustments for form rows if needed */
+  @media (max-width: 768px) {
+    .sale-form-content .sale-form-group-row {
+      flex-direction: column; /* Stack items vertically on smaller screens */
+      gap: 0; /* Remove gap as items are stacked */
+    }
+    .sale-form-content .sale-form-group-row .sale-form-group {
+      margin-bottom: 20px; /* Add back margin for stacked items */
+    }
+    .sale-form-content .sale-form-group-row .sale-form-group:last-child {
+      margin-bottom: 0; /* Remove margin for the last item in the stacked column */
+    }
+  }

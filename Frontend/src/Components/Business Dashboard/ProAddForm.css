@@ -1,0 +1,160 @@
+/* ProAddForm.css */
+
+/* .form-title is styled by BusinessDashboard.css if this component is wrapped by .biz-form-container */
+/* However, we can provide a fallback or specific styling if needed. */
+.pro-add-form-content .form-title {
+    font-size: 1.8em;
+    color: #dc2626; /* Reddish color consistent with dashboard */
+    margin-bottom: 25px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  
+  
+  .pro-add-form-content .pro-form-group {
+    margin-bottom: 20px;
+  }
+  
+  .pro-add-form-content label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #374151;
+  }
+  
+  .pro-add-form-content input[type="text"],
+  .pro-add-form-content textarea,
+  .pro-add-form-content select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    box-sizing: border-box;
+    font-size: 1em;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .pro-add-form-content input[type="text"]:focus,
+  .pro-add-form-content textarea:focus,
+  .pro-add-form-content select:focus {
+    outline: none;
+    border-color: #3b82f6; /* Blue focus color */
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  }
+  
+  .pro-add-form-content input[disabled],
+  .pro-add-form-content textarea[disabled],
+  .pro-add-form-content select[disabled] {
+      background-color: #f3f4f6;
+      cursor: not-allowed;
+  }
+  
+  
+  .pro-add-form-content .file-upload-area {
+    margin-bottom: 20px;
+  }
+  
+  .pro-add-form-content .pro-file-input-label {
+    display: block; /* Make it block to take full width or as needed */
+    padding: 12px 15px;
+    background-color: #f9fafb;
+    border: 1px dashed #d1d5db;
+    border-radius: 6px;
+    cursor: pointer;
+    text-align: center;
+    color: #374151;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+  }
+  .pro-add-form-content .pro-file-input-label:hover {
+    border-color: #3b82f6;
+    background-color: #f0f8ff; /* Light blue tint on hover */
+  }
+  .pro-add-form-content .pro-file-input-label.disabled {
+      background-color: #e5e7eb;
+      cursor: not-allowed;
+      border-color: #d1d5db;
+  }
+  
+  
+  .pro-add-form-content .pro-image-previews-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px; /* Space between preview items */
+    margin-top: 15px;
+  }
+  
+  .pro-add-form-content .pro-image-preview-item {
+    position: relative; /* For positioning the remove button */
+    width: 100px; /* Size of the preview box */
+    height: 100px;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    overflow: hidden; /* Ensures image fits well */
+    background-color: #f9fafb; /* Light background for empty space if image is smaller */
+  }
+  
+  .pro-add-form-content .pro-preview-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Cover the area, cropping if necessary */
+    display: block;
+  }
+  
+  .pro-add-form-content .pro-remove-image-btn {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 22px;
+    height: 22px;
+    font-size: 14px;
+    line-height: 22px; /* Vertically center the 'x' */
+    text-align: center;
+    cursor: pointer;
+    padding: 0;
+    transition: background-color 0.2s ease;
+  }
+  .pro-add-form-content .pro-remove-image-btn:hover {
+    background-color: rgba(220, 38, 38, 0.8); /* Red on hover */
+  }
+  .pro-add-form-content .pro-remove-image-btn[disabled] {
+      background-color: rgba(100, 100, 100, 0.5);
+      cursor: not-allowed;
+  }
+  
+  
+  .pro-add-form-content .pro-submit-button {
+    background-color: #ef4444; /* Red button, consistent with dashboard theme */
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+    width: 100%; /* Make button full width or adjust as needed */
+    margin-top: 10px; /* Space above button */
+  }
+  
+  .pro-add-form-content .pro-submit-button:hover {
+    background-color: #dc2626; /* Darker red on hover */
+  }
+  
+  .pro-add-form-content .pro-submit-button:disabled {
+    background-color: #fca5a5; /* Lighter red when disabled */
+    cursor: not-allowed;
+  }
+  
+  .pro-add-form-content .pro-error-message {
+    color: #b91c1c; /* Darker red for error text */
+    background-color: #fee2e2; /* Light red background */
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    border: 1px solid #fecaca; /* Slightly darker red border */
+    font-size: 0.95em;
+  }

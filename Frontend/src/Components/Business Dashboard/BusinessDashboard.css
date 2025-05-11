@@ -1,0 +1,213 @@
+/* BusinessDashboard.css */
+
+/* Main Layout */
+.biz-dash-layout {
+    display: flex;
+    min-height: 100vh;
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f2f5; /* Light background for content area */
+  }
+  
+  /* Sidebar Styling */
+  .biz-sidebar-container {
+    width: 260px;
+    background-color: #1e293b; /* Dark sidebar background like admin panel */
+    color: #e2e8f0; /* Light text color for sidebar */
+    padding: 20px 0;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+  }
+  
+  .biz-sidebar-header {
+    padding: 0 20px 20px 20px;
+    border-bottom: 1px solid #334155; /* Separator line */
+  }
+  
+  .biz-sidebar-title {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: #cbd5e1;
+    margin: 0;
+    text-align: left;
+  }
+  
+  .biz-sidebar-nav {
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+    flex-grow: 1;
+  }
+  
+  .biz-sidebar-nav-item {
+    margin: 0;
+  }
+  
+  .biz-sidebar-link {
+    display: flex;
+    align-items: center;
+    padding: 15px 25px;
+    text-decoration: none;
+    color: #94a3b8; /* Default link color */
+    font-size: 1.1em;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    border-left: 4px solid transparent; /* For active state indication */
+  }
+  
+  .biz-sidebar-link:hover {
+    background-color: #334155; /* Hover background */
+    color: #f1f5f9; /* Hover text color */
+  }
+  
+  .biz-sidebar-link.active {
+    background-color: #0f172a; /* Active link background */
+    color: #ffffff; /* Active link text color */
+    border-left-color: #3b82f6; /* Active indicator color */
+    font-weight: 600;
+  }
+  
+  /* Icon styling (if you add icons later) */
+  .biz-sidebar-link svg {
+    margin-right: 12px;
+    width: 20px;
+    height: 20px;
+  }
+  
+  /* Content Area Styling */
+  .biz-content-area {
+    flex-grow: 1;
+    padding: 30px;
+    overflow-y: auto;
+  }
+  
+  .biz-content-area h1, .biz-content-area h2 {
+    color: #1e293b; /* Dark text for titles in content area */
+    margin-bottom: 20px;
+  }
+  
+  /* Styling for forms within the content area to match the admin panel style */
+  .biz-form-container {
+    background-color: #ffffff;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    max-width: 800px; /* Max width for forms */
+    margin: 0 auto; /* Center forms */
+  }
+  
+  .biz-form-container .form-title,
+  .biz-form-container h1.add-projects-title { /* Target ProAddForm title */
+    font-size: 1.8em;
+    color: #dc2626; /* Reddish color like "Manage Pickup Availability" */
+    margin-bottom: 25px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  
+  /* General form elements for consistency if not already styled by individual form CSS */
+  .biz-form-container .form-group {
+    margin-bottom: 20px;
+  }
+  
+  .biz-form-container label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #374151;
+  }
+  
+  .biz-form-container input[type="text"],
+  .biz-form-container input[type="number"],
+  .biz-form-container input[type="email"],
+  .biz-form-container input[type="tel"],
+  .biz-form-container textarea,
+  .biz-form-container select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    box-sizing: border-box;
+    font-size: 1em;
+  }
+  .biz-form-container input:focus,
+  .biz-form-container textarea:focus,
+  .biz-form-container select:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+  }
+  
+  
+  .biz-form-container .form-group-row {
+    display: flex;
+    gap: 20px;
+  }
+  .biz-form-container .form-group-row > * {
+    flex: 1;
+  }
+  
+  
+  .biz-form-container .file-upload,
+  .biz-form-container input[type="file"] { /* Basic styling for file input if ProAddForm doesn't cover it */
+    display: block;
+    padding: 10px;
+    border: 1px dashed #d1d5db;
+    border-radius: 6px;
+    cursor: pointer;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  .biz-form-container .file-upload:hover {
+    border-color: #3b82f6;
+  }
+  
+  .biz-form-container .image-preview {
+    max-width: 200px;
+    max-height: 200px;
+    margin-top: 15px;
+    border-radius: 6px;
+    border: 1px solid #e5e7eb;
+  }
+  
+  .biz-form-container .submit-button {
+    background-color: #ef4444; /* Red button */
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+  }
+  
+  .biz-form-container .submit-button:hover {
+    background-color: #dc2626; /* Darker red on hover */
+  }
+  .biz-form-container .submit-button:disabled {
+    background-color: #fca5a5;
+    cursor: not-allowed;
+  }
+  
+  .biz-form-container .error-message {
+    color: #dc2626;
+    background-color: #fee2e2;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    border: 1px solid #fecaca;
+  }
+  
+  /* Specific adjustments for ProAddForm if needed */
+  .biz-form-container .add-projects-container {
+    padding: 0; /* Remove padding if ProAddForm already has it */
+    box-shadow: none;
+    max-width: none;
+  }
+  
+  /* Specific adjustments for SaleForm if needed */
+  .biz-form-container .sale-form-container {
+    padding: 0;
+    box-shadow: none;
+    max-width: none;
+  }

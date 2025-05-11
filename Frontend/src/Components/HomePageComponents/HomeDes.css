@@ -1,88 +1,90 @@
-.waste-disposal-container {
+/* src/HomePageComponents/HomeDes.css */
+.HomeDes-container {
   background-color: #ffffff;
-  font-family: sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  min-height: 100vh;
-  padding-bottom: 50px;
+  padding: 4rem 2rem;
   overflow: hidden;
 }
 
-.waste-disposal-heading {
-  font-size: 3.5rem;
-  font-weight: bolder;
-  margin-bottom: 20px;
-  color: #000000;
+.HomeDes-heading {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 800;
+  margin-bottom: 3rem;
+  color: #222;
   text-align: center;
-  margin-top: 80px;
   opacity: 0;
   transform: translateY(-20px);
   transition: opacity 0.8s ease, transform 0.8s ease;
+  background: linear-gradient(90deg, #2b5876 0%, #4e4376 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
-.waste-disposal-heading.fade-in {
+.HomeDes-heading.HomeDes-fade-in {
   opacity: 1;
   transform: translateY(0);
 }
 
-.waste-disposal-services {
-  display: flex;
-  justify-content: center;
-  gap: 30px;
+.HomeDes-services {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
   width: 100%;
   max-width: 1200px;
-  flex-wrap: wrap;
 }
 
-.service-card {
-  background-color: #dddddd;
-  border-radius: 20px;
-  padding: 20px;
-  width: 380px;
+.HomeDes-card {
+  background-color: #f8f9fa;
+  border-radius: 1.25rem;
+  padding: 1.5rem;
   text-align: center;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-  transition: all 0.4s ease;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   cursor: pointer;
   position: relative;
   opacity: 0;
   transform: translateY(40px);
+  overflow: hidden;
 }
 
-.service-card.slide-up {
+.HomeDes-card.HomeDes-slide-up {
   opacity: 1;
   transform: translateY(0);
 }
 
-.service-card:hover {
+.HomeDes-card:hover {
   transform: translateY(-10px);
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
-  background-color: #f0f0f0;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
 }
 
-.service-image-container {
+.HomeDes-image-container {
   overflow: hidden;
-  margin-bottom: 15px;
-  height: 250px;
-  width: 340px;
-  border-radius: 10px 10px 70px 70px;
+  margin-bottom: 1.5rem;
+  height: 220px;
+  border-radius: 0.75rem;
   position: relative;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
-.service-image {
-  width: 340px;
-  height: 250px;
+.HomeDes-image {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
   transform: scale(1);
   transition: transform 0.7s ease;
 }
 
-.service-card:hover .service-image {
-  transform: scale(1.08);
+.HomeDes-card:hover .HomeDes-image {
+  transform: scale(1.1);
 }
 
-.image-overlay {
+.HomeDes-image-overlay {
   position: absolute;
   top: 0;
   left: 0;
@@ -96,36 +98,36 @@
   transition: opacity 0.5s ease, background-color 0.5s ease;
 }
 
-.service-card:hover .image-overlay {
-  background-color: rgba(0, 0, 0, 0.2);
+.HomeDes-card:hover .HomeDes-image-overlay {
+  background-color: rgba(0, 0, 0, 0.15);
   opacity: 1;
 }
 
-.overlay-icon {
+.HomeDes-overlay-icon {
   position: relative;
-  width: 50px;
-  height: 50px;
+  width: 60px;
+  height: 60px;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.pulse-circle {
-  width: 50px;
-  height: 50px;
+.HomeDes-pulse-circle {
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.7);
+  background-color: rgba(255, 255, 255, 0.8);
   position: absolute;
-  animation: pulse 2s infinite;
+  animation: HomeDes-pulse 2s infinite;
 }
 
-@keyframes pulse {
+@keyframes HomeDes-pulse {
   0% {
     transform: scale(0.5);
     opacity: 0;
   }
   50% {
-    opacity: 0.5;
+    opacity: 0.7;
   }
   100% {
     transform: scale(1.2);
@@ -133,48 +135,53 @@
   }
 }
 
-.service-title {
+.HomeDes-title {
   font-size: 1.4rem;
-  font-weight: bold;
-  padding-top: 20px;
-  margin-bottom: 15px;
+  font-weight: 700;
+  margin: 1.5rem 0 1rem;
   color: #333;
   position: relative;
   display: inline-block;
+  transition: color 0.3s ease;
 }
 
-.service-title::after {
+.HomeDes-title::after {
   content: '';
   position: absolute;
   width: 0;
   height: 3px;
-  bottom: -5px;
+  bottom: -8px;
   left: 50%;
-  background-color: #007bff;
+  background: linear-gradient(90deg, #2b5876 0%, #4e4376 100%);
   transition: width 0.4s ease, left 0.4s ease;
 }
 
-.service-card:hover .service-title::after {
+.HomeDes-card:hover .HomeDes-title {
+  color: #2b5876;
+}
+
+.HomeDes-card:hover .HomeDes-title::after {
   width: 80%;
   left: 10%;
 }
 
-.service-description {
-  font-size: 0.9rem;
+.HomeDes-description {
+  font-size: 1rem;
   color: #555;
-  line-height: 1.6;
-  margin-bottom: 25px;
+  line-height: 1.7;
+  margin-bottom: 2rem;
+  padding: 0 1rem;
 }
 
-.service-link {
+.HomeDes-link {
   background-color: #ffffff;
-  border: 2px solid #ddd;
+  border: 2px solid #e0e0e0;
   border-radius: 50%;
   width: 50px;
   height: 50px;
   text-decoration: none;
-  color: #007bff;
-  font-size: 1.2rem;
+  color: #2b5876;
+  font-size: 1.3rem;
   display: inline-flex;
   justify-content: center;
   align-items: center;
@@ -183,118 +190,112 @@
   overflow: hidden;
 }
 
-.arrow-icon {
+.HomeDes-arrow-icon {
   position: relative;
   z-index: 2;
   transition: transform 0.3s ease;
 }
 
-.service-card:hover .arrow-icon {
-  transform: translateX(3px);
+.HomeDes-card:hover .HomeDes-arrow-icon {
+  transform: translateX(5px);
 }
 
-.service-link::before {
+.HomeDes-link::before {
   content: '';
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: #3a3a3a;
+  background: linear-gradient(90deg, #2b5876 0%, #4e4376 100%);
   transform: scale(0);
   border-radius: 50%;
   transition: transform 0.3s ease;
   z-index: 1;
 }
 
-.service-link:hover {
+.HomeDes-link:hover {
   color: white;
-  border-color: #000000;
+  border-color: transparent;
 }
 
-.service-link:hover::before {
+.HomeDes-link:hover::before {
   transform: scale(1);
 }
 
-@keyframes float {
-  0% {
-    transform: translateY(0px);
+/* Responsive Styles */
+@media (max-width: 992px) {
+  .HomeDes-container {
+    padding: 3rem 1.5rem;
   }
-  50% {
-    transform: translateY(-8px);
-  }
-  100% {
-    transform: translateY(0px);
+  
+  .HomeDes-services {
+    gap: 1.5rem;
   }
 }
 
-
 @media (max-width: 768px) {
-  .waste-disposal-heading {
-    font-size: 1.8rem;
-    margin-top: 50px;
-    padding: 0 15px;
+  .HomeDes-container {
+    padding: 2.5rem 1rem;
   }
-
-  .waste-disposal-services {
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
+  
+  .HomeDes-heading {
+    margin-bottom: 2rem;
   }
-
-  .service-card {
-    width: 90%;
-    max-width: 360px;
-    padding: 15px;
+  
+  .HomeDes-services {
+    grid-template-columns: 1fr;
+    max-width: 500px;
   }
-
-  .service-title {
-    font-size: 1.2rem;
+  
+  .HomeDes-card {
+    padding: 1.25rem;
   }
-
-  .service-description {
-    font-size: 0.85rem;
+  
+  .HomeDes-image-container {
+    height: 200px;
   }
-
-  .service-image-container {
-    width: 100%;
-    height: auto;
+  
+  .HomeDes-title {
+    font-size: 1.3rem;
+    margin: 1.25rem 0 0.75rem;
   }
-
-  .service-image {
-    width: 100%;
-    height: 180px;
+  
+  .HomeDes-description {
+    font-size: 0.95rem;
+    margin-bottom: 1.5rem;
   }
 }
 
 @media (max-width: 480px) {
-  .waste-disposal-heading {
-    font-size: 1.6rem;
+  .HomeDes-container {
+    padding: 2rem 1rem;
   }
-
-  .service-card {
-    padding: 12px;
+  
+  .HomeDes-heading {
+    margin-bottom: 1.5rem;
   }
-
-  .service-title {
-    font-size: 1rem;
+  
+  .HomeDes-card {
+    padding: 1rem;
   }
-
-  .service-description {
-    font-size: 0.8rem;
+  
+  .HomeDes-image-container {
+    height: 180px;
   }
-
-  .service-image {
-    height: 160px;
+  
+  .HomeDes-title {
+    font-size: 1.2rem;
   }
-
-  .service-link {
-    width: 32px;
-    height: 32px;
-    font-size: 1rem;
+  
+  .HomeDes-description {
+    font-size: 0.9rem;
+    padding: 0;
   }
-
-  .arrow-icon {
-    transform: scale(0.9);
+  
+  .HomeDes-link {
+    width: 45px;
+    height: 45px;
+    font-size: 1.1rem;
   }
 }
