@@ -2,15 +2,12 @@
 const moduleApiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5003/api';
 
 // Determine the absolute root of the backend server.
-// This is useful for pings or other non-/api prefixed routes if needed.
-let derivedBackendServerRoot; // Changed variable name for clarity and to avoid conflict if API_ENDPOINTS.BACKEND_ROOT_URL was meant to be the definitive one.
+let derivedBackendServerRoot;
 
 if (moduleApiBaseUrl.endsWith('/api')) {
     derivedBackendServerRoot = moduleApiBaseUrl.substring(0, moduleApiBaseUrl.length - '/api'.length);
 } else {
-    // If moduleApiBaseUrl doesn't end with /api, it might already be the root or something else.
-    // This assumes if /api is not present, then moduleApiBaseUrl is the root.
-    derivedBackendServerRoot = moduleApiBaseUrl; // Assign it directly
+    derivedBackendServerRoot = moduleApiBaseUrl;
     console.warn(
         `[apiConfig] moduleApiBaseUrl ("${moduleApiBaseUrl}") does not end with "/api". ` +
         `derivedBackendServerRoot will be the same as moduleApiBaseUrl. ` +
@@ -18,8 +15,8 @@ if (moduleApiBaseUrl.endsWith('/api')) {
     );
 }
 
-const API_ENDPOINTS = {
-  API_ROOT: moduleApiBaseUrl, // This is your primary base for API calls
+const API_ENDPOINTS = { // <--- Make sure this is the object being exported
+  API_ROOT: moduleApiBaseUrl,
   CLIENT: {
     REGISTER: `${moduleApiBaseUrl}/clients/register`,
   },
@@ -35,19 +32,30 @@ const API_ENDPOINTS = {
   },
   BOOKINGS: {
     CREATE: `${moduleApiBaseUrl}/bookings`,
+    GET_ALL: `${moduleApiBaseUrl}/bookings`,
+    UPDATE_STATUS: `${moduleApiBaseUrl}/bookings`,
+    UPDATE_ONE: `${moduleApiBaseUrl}/bookings`,
+    DELETE_ONE: `${moduleApiBaseUrl}/bookings`,
   },
-  // This version of BACKEND_ROOT_URL is more robust as it directly uses the env var or fallback
-  // and explicitly removes '/api'. This is likely what you want for the Login component's server check.
+
+  // ===========================================================
+  // === ENSURE THIS SECTION EXISTS AND IS CORRECTLY TYPED ===
+  // ===========================================================
+  SCRAP_TYPES: {  // <--- THIS KEY MUST BE EXACTLY "SCRAP_TYPES"
+      GET_ALL: `${moduleApiBaseUrl}/scrap-types`,    // <--- Must have GET_ALL
+      CREATE: `${moduleApiBaseUrl}/scrap-types`,     // <--- Must have CREATE
+      UPDATE_ONE: `${moduleApiBaseUrl}/scrap-types`, // <--- Must have UPDATE_ONE
+      DELETE_ONE: `${moduleApiBaseUrl}/scrap-types`, // <--- Must have DELETE_ONE
+  },
+  // ===========================================================
+
   BACKEND_ROOT_URL: (import.meta.env.VITE_API_BASE_URL || 'http://localhost:5003/api').replace('/api', '')
-  // If you needed the derivedBackendServerRoot for some other specific purpose, you could add it:
-  // DERIVED_SERVER_ROOT_FOR_PING: derivedBackendServerRoot,
 };
 
-// Log the configured URLs for easier debugging during development
-if (import.meta.env.DEV) { // Only log in development mode for Vite
-    console.log('[apiConfig] API_ENDPOINTS.API_ROOT set to:', API_ENDPOINTS.API_ROOT);
-    console.log('[apiConfig] API_ENDPOINTS.BACKEND_ROOT_URL (for server pings/root access) set to:', API_ENDPOINTS.BACKEND_ROOT_URL);
-    // console.log('[apiConfig] derivedBackendServerRoot (internal calculation) was:', derivedBackendServerRoot); // Optional: if you want to see the intermediate
+// This log should now show the SCRAP_TYPES object if defined correctly above
+if (import.meta.env.DEV) {
+    console.log('[apiConfig] Initializing API_ENDPOINTS:', API_ENDPOINTS); // Log the whole object
+    console.log('[apiConfig] API_ENDPOINTS.SCRAP_TYPES defined as:', API_ENDPOINTS.SCRAP_TYPES);
 }
 
-export default API_ENDPOINTS;
+export default API_ENDPOINTS; // <--- Make sure this line exports the API_ENDPOINTS object
