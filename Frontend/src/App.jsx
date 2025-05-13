@@ -1,3 +1,4 @@
+// src/App.jsx
 import React, { useState, useEffect, useCallback, createContext, useContext, useRef } from 'react';
 import {
     BrowserRouter as Router, Routes, Route, useNavigate,
@@ -6,14 +7,18 @@ import {
 import { ClipLoader } from 'react-spinners';
 import { jwtDecode } from 'jwt-decode';
 
+// --- Context ---
 const AuthContext = createContext(null);
-export const useAuth = () => useContext(AuthContext); 
+export const useAuth = () => useContext(AuthContext);
 
+// --- Core Layout & Routing Components ---
 import Navbar from './Components/Navbar/Navbar';
 import Footer1 from './Components/Footer1/Footer';
-import ProtectedRoute from './routes/ProtectedRoute'; 
-import AdminLayout from './Layouts/AdminLayout';       
+import ProtectedRoute from './routes/ProtectedRoute';
+import AdminLayout from './Layouts/AdminLayout';
 
+// --- Page Components (Verify ALL import paths) ---
+// Public Pages
 import HomePage from './Pages/HomePage';
 import SignUp from './Pages/SignUp';
 import AboutUs from './Pages/AboutUS';
@@ -23,12 +28,15 @@ import Collection from './Pages/Collection';
 import Service from './Pages/Service';
 import Map from './Pages/Map';
 import ContactUs from './Pages/ContactUs';
-import Login from './Components/Login/Login';
+import Login from './Components/Login/Login'; // Main Login
 import BOwnerForm from './Components/RegistrationForm/BOwnerForm';
 import ClientForm from './Components/RegistrationForm/ClientForm';
-import CollectorForm from './Components/RegistrationForm/CollectorForm';
-import CollectorLogin from './Components/Login/CollectorLogin'
+import CollectorForm from './Components/RegistrationForm/CollectorForm'; // Collector Registration Form
+import CollectorLogin from './Components/Login/CollectorLogin'; // Collector Login Page (as per your import)
+// Ensure you have a CollectorDashboard component or a placeholder
+// import CollectorDashboard from './Pages/CollectorDashboard'; // Example
 
+// Functional Components
 import Calculate from './Components/Calculate/Calculate';
 import SaleForm from './Components/SaleForm/SaleForm';
 import BuyCard from './Components/BuyCard/BuyCard';
@@ -36,8 +44,10 @@ import ProAddForm from './Components/Projects/ProAddForm';
 import WastePickForm from './Components/WasteCollect/WastePickForm';
 import UserCalendar from './Components/WasteCollect/UserCalendar';
 import LocationMap from './Components/Maps/LocationMap';
-import CalendarDisplay from './Components/UserCalendar/CalendarDisplay'; 
+import CalendarDisplay from './Components/UserCalendar/CalendarDisplay';
+import BSHeader from './Components/BuyandSell/BSHeader'; // You added this
 
+// Role-Specific Dashboards / Profiles
 import BOwnerHome from './Pages/BOwnerHome';
 import ClientProfile from './Components/Profile/ClientProfile';
 import BOwnerProfile from './Components/Profile/BOwnerProfile';
@@ -45,14 +55,15 @@ import ClientEmail from './Components/Profile/ClientEmail';
 import PickupReq from './Components/Profile/PickupReq';
 import CheckBuySell from './Components/Profile/CheckBuySell';
 
+// Admin Pages / Components
 import AdCalendar from './Components/Admin/AdMinCalendar/AdCalendar';
 import AdCheckReq from './Components/Admin/AdCheckReq/AdCheckReq';
 import EmailDisplay from './Components/Admin/EmailDisplay/EmailDisplay';
-import Dashboard from './Components/Admin/Dashboard/Dashboard'; 
+import Dashboard from './Components/Admin/Dashboard/Dashboard';
 import HandleBOwners from './Components/Admin/HandleBOwners/HandleBOwners';
 import DisReview from './Components/Admin/DisReview/DisReview';
 import AdScrap from './Components/Admin/AdScrap/AdScrap';
-import BSHeader from './Components/BuyandSell/BSHeader';
+
 
 const parseUserInfoFromToken = (token) => {
     if (!token) return null;
@@ -67,14 +78,20 @@ const parseUserInfoFromToken = (token) => {
             console.warn("[parseUserInfo] Token expired.");
             localStorage.removeItem('token'); localStorage.removeItem('userInfo'); return null;
         }
+        // Ensure 'name' is always present from the token for consistency
         if (!decoded.id || !decoded.email || !decoded.role || !decoded.name) {
-            console.error("[parseUserInfo] Token missing essential fields.", decoded);
+            console.error("[parseUserInfo] Token missing essential fields (id, email, role, name).", decoded);
              localStorage.removeItem('token'); localStorage.removeItem('userInfo'); return null;
         }
-        console.log("[parseUserInfo] Token valid. Role:", decoded.role);
+        console.log("[parseUserInfo] Token valid. Role:", decoded.role, "Decoded:", decoded);
         return {
-            id: decoded.id, name: decoded.name, email: decoded.email, role: decoded.role,
+            id: decoded.id,
+            name: decoded.name, // Should be set by backend for all roles
+            email: decoded.email,
+            role: decoded.role,
             ...(decoded.role === 'businessOwner' && decoded.businessName && { businessName: decoded.businessName }),
+            // Add collector-specific fields if they are in the token and needed globally
+            ...(decoded.role === 'collector' && decoded.primaryPhone && { primaryPhone: decoded.primaryPhone }),
         };
     } catch (error) {
         console.error("[parseUserInfo] Error decoding:", error);
@@ -82,78 +99,82 @@ const parseUserInfoFromToken = (token) => {
     }
 };
 
-
 function App() {
     const [authState, setAuthState] = useState({
         isLoggedIn: false, userInfo: null, isLoading: true,
     });
     const [logoutMessage, setLogoutMessage] = useState('');
-    const navigateRef = useRef(null);
+    const navigateRef = useRef(null); // To allow navigation from outside React components if needed
 
-    // Logout 
     const handleLogout = useCallback((message = "You have been logged out.") => {
         console.log(`[App] handleLogout. Message: "${message}"`);
-        localStorage.removeItem("token"); localStorage.removeItem("userInfo");
+        localStorage.removeItem("token");
+        localStorage.removeItem("userInfo");
         setAuthState({ isLoggedIn: false, userInfo: null, isLoading: false });
         setLogoutMessage(message);
+        // Optionally navigate to login page after logout, handled by AppContentWrapper
     }, []);
 
-    // Auth Check
     useEffect(() => {
         console.log("[App CheckAuth] Running initial check...");
         const token = localStorage.getItem('token');
         const parsedUser = parseUserInfoFromToken(token);
+
         if (parsedUser) {
-            console.log("[App CheckAuth] Valid session found.", parsedUser);
-            const storedUserInfo = localStorage.getItem('userInfo');
-            if (JSON.stringify(parsedUser) !== storedUserInfo) {
+            console.log("[App CheckAuth] Valid session found from token.", parsedUser);
+            // Ensure userInfo in localStorage is consistent with the token
+            const storedUserInfoString = localStorage.getItem('userInfo');
+            if (JSON.stringify(parsedUser) !== storedUserInfoString) {
+                console.log("[App CheckAuth] Updating localStorage userInfo to match token.");
                 localStorage.setItem('userInfo', JSON.stringify(parsedUser));
             }
             setAuthState({ isLoggedIn: true, userInfo: parsedUser, isLoading: false });
         } else {
-            console.log("[App CheckAuth] No valid session.");
-            if (authState.isLoggedIn || localStorage.getItem('token') || localStorage.getItem('userInfo')) {
-                localStorage.removeItem('token'); localStorage.removeItem('userInfo');
+            console.log("[App CheckAuth] No valid session from token.");
+            // Clear any stale auth data if token is invalid but local storage items exist
+            if (localStorage.getItem('token') || localStorage.getItem('userInfo')) {
+                localStorage.removeItem('token');
+                localStorage.removeItem('userInfo');
             }
             setAuthState({ isLoggedIn: false, userInfo: null, isLoading: false });
         }
 
-        // Storage setup
-         const handleStorageChange = (event) => {
+        const handleStorageChange = (event) => {
             if (event.key === 'token' || event.key === 'userInfo') {
-                 console.log(`[App Storage Listener] Storage changed ('${event.key}'). Re-validating auth.`);
-                 const currentToken = localStorage.getItem('token');
-                 const currentUserInfo = parseUserInfoFromToken(currentToken);
-                 setAuthState(prevState => { 
+                console.log(`[App Storage Listener] Storage changed ('${event.key}'). Re-validating auth.`);
+                const currentToken = localStorage.getItem('token');
+                const currentUserInfo = parseUserInfoFromToken(currentToken); // This will also update localStorage.userInfo if token is valid
+                setAuthState(prevState => {
                     const newStateIsLoggedIn = !!currentUserInfo;
                     if (prevState.isLoggedIn !== newStateIsLoggedIn || JSON.stringify(prevState.userInfo) !== JSON.stringify(currentUserInfo)) {
-                         console.log("[App Storage Listener] Auth state updated.");
-                         if (currentUserInfo && JSON.stringify(currentUserInfo) !== localStorage.getItem('userInfo')) localStorage.setItem('userInfo', JSON.stringify(currentUserInfo));
-                         else if (!currentUserInfo) localStorage.removeItem('userInfo');
-                         return { isLoading: false, isLoggedIn: newStateIsLoggedIn, userInfo: currentUserInfo };
+                        console.log("[App Storage Listener] Auth state updated due to storage change.");
+                        if (currentUserInfo && JSON.stringify(currentUserInfo) !== localStorage.getItem('userInfo')) {
+                             localStorage.setItem('userInfo', JSON.stringify(currentUserInfo));
+                        } else if (!currentUserInfo) {
+                             localStorage.removeItem('userInfo'); // Ensure userInfo is cleared if token becomes invalid
+                        }
+                        return { isLoading: false, isLoggedIn: newStateIsLoggedIn, userInfo: currentUserInfo };
                     }
-                    return prevState;
-                 });
-             }
-         };
-         window.addEventListener('storage', handleStorageChange);
-         return () => window.removeEventListener('storage', handleStorageChange);
+                    return { ...prevState, isLoading: false }; // Ensure isLoading is false even if no state change
+                });
+            }
+        };
+        window.addEventListener('storage', handleStorageChange);
+        return () => window.removeEventListener('storage', handleStorageChange);
+    }, []); // Run only once on mount
 
-    }, []); 
-
-    // Login Success 
     const handleLoginSuccess = useCallback((token, backendUserData) => {
-        console.log('[App] handleLoginSuccess.');
-        const parsedUser = parseUserInfoFromToken(token);
+        console.log('[App] handleLoginSuccess called with token and backendUserData:', backendUserData);
+        const parsedUser = parseUserInfoFromToken(token); // This will derive userInfo from the token
         if (parsedUser) {
-            console.log('%c[App] Login OK. Updating AuthState.', 'color: green; font-weight: bold;', parsedUser);
+            console.log('%c[App] Login OK. Updating AuthState with parsed user from token.', 'color: green; font-weight: bold;', parsedUser);
             localStorage.setItem('token', token);
-            localStorage.setItem('userInfo', JSON.stringify(parsedUser)); // Store parsedUser
+            localStorage.setItem('userInfo', JSON.stringify(parsedUser));
             setAuthState({ isLoggedIn: true, userInfo: parsedUser, isLoading: false });
             setLogoutMessage('');
         } else {
-            console.error("[App] Login token invalid after successful login!");
-            handleLogout("Login failed: Invalid session data.");
+            console.error("[App] Login token invalid immediately after successful login response!");
+            handleLogout("Login failed: Invalid session data received.");
         }
     }, [handleLogout]);
 
@@ -161,19 +182,17 @@ function App() {
         const handleAuthErrorEvent = (event) => {
             setAuthState(currentState => {
                 if (currentState.isLoggedIn) {
-                    console.warn('[App] Global 401 listener: Triggering logout.');
-                    const message = event.detail?.message || 'Session expired/invalid.';
-                    handleLogout(message); 
-                   
+                    console.warn('[App] Global 401 listener: Triggering logout due to auth-error-401 event.');
+                    const message = event.detail?.message || 'Your session has expired or is invalid. Please log in again.';
+                    handleLogout(message);
                 }
-                return currentState; 
+                return { ...currentState, isLoading: false }; // Ensure isLoading is false
             });
         };
         window.addEventListener('auth-error-401', handleAuthErrorEvent);
         return () => window.removeEventListener('auth-error-401', handleAuthErrorEvent);
-    }, [handleLogout]); 
+    }, [handleLogout]);
 
-    // Loading Screen
     if (authState.isLoading) {
         return ( <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}> <ClipLoader size={60} color="#f97316" /> </div> );
     }
@@ -184,62 +203,85 @@ function App() {
                 <AppContentWrapper
                     logoutMessage={logoutMessage}
                     setLogoutMessage={setLogoutMessage}
-                    navigateRef={navigateRef}
+                    navigateRef={navigateRef} // Pass ref if needed by AppContentWrapper for imperative navigation
                 />
-            </Router
->        </AuthContext.Provider>
+            </Router>
+        </AuthContext.Provider>
     );
 }
 
-
-// --- App Content Wrapper Component ---
 function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
     const navigate = useNavigate();
     const location = useLocation();
     const auth = useAuth();
 
-    useEffect(() => { navigateRef.current = navigate; return () => { navigateRef.current = null; }; }, [navigate, navigateRef]);
-
-    // Post-Login
     useEffect(() => {
-        if (auth.isLoggedIn && auth.userInfo && location.pathname.toLowerCase() === '/login') {
+      if (navigateRef) navigateRef.current = navigate; // For imperative navigation from outside
+      return () => { if (navigateRef) navigateRef.current = null; };
+    }, [navigate, navigateRef]);
+
+    useEffect(() => {
+        // Handles redirection if user is logged in and tries to access a login page
+        const currentPath = location.pathname.toLowerCase();
+        const isAnyLoginPage = currentPath === '/login' || currentPath === '/collectorlogin';
+
+        if (auth.isLoggedIn && auth.userInfo && isAnyLoginPage) {
             const fromPath = location.state?.from?.pathname;
-            let redirectPath = '/';
-            if (auth.userInfo.role === 'admin') redirectPath = '/Admin/Dashboard';
-            else if (auth.userInfo.role === 'client') redirectPath = '/ClientProfile'; 
-            else if (auth.userInfo.role === 'businessOwner') redirectPath = '/BOwnerHome';
-            const destination = (fromPath && fromPath !== '/login' && fromPath !== '/') ? fromPath : redirectPath;
-            console.log(`%c[AppContent PostLogin] Navigating from /login to: ${destination}`, 'color: blue;');
+            let redirectPath = '/'; // Default redirect
+            switch (auth.userInfo.role) {
+                case 'admin': redirectPath = '/Admin/Dashboard'; break;
+                case 'client': redirectPath = '/ClientProfile'; break;
+                case 'businessOwner': redirectPath = '/BOwnerHome'; break;
+                case 'collector': redirectPath = '/collector-dashboard'; break; // Collector specific
+                default: redirectPath = '/';
+            }
+            // If 'from' state exists and is not a login page or root, redirect there, else to role-based dashboard
+            const destination = (fromPath && fromPath !== '/login' && fromPath !== '/collectorlogin' && fromPath !== '/') ? fromPath : redirectPath;
+            console.log(`%c[AppContent PostLogin] User already logged in. Navigating from ${currentPath} to: ${destination}`, 'color: blue;');
             navigate(destination, { replace: true });
         }
     }, [auth.isLoggedIn, auth.userInfo, navigate, location]);
 
-    // Handle Logout Messages
     useEffect(() => {
         const params = new URLSearchParams(location.search);
         const msgParam = params.get('logoutMessage');
         if (msgParam) {
-            if (msgParam !== logoutMessage) setLogoutMessage(msgParam);
-            
-            const newUrl = location.pathname; 
+            if (msgParam !== logoutMessage) { // Avoid re-setting if already set by handleLogout
+                setLogoutMessage(decodeURIComponent(msgParam));
+            }
+            // Clean the URL by removing the query parameter
+            const newUrl = location.pathname;
             window.history.replaceState({}, document.title, newUrl);
         }
-    }, [location.search, location.pathname, setLogoutMessage, logoutMessage]);
+    }, [location.search, location.pathname, logoutMessage, setLogoutMessage]);
+
 
     useEffect(() => {
-        if (logoutMessage && location.pathname.toLowerCase() !== '/login') {
-            console.log("[AppContent LogoutRedirect] Redirecting to login due to logout message.");
+        // If there's a logout message and user is not on a login page, redirect to main login page
+        // This ensures the logout message is displayed on the login page
+        const currentPath = location.pathname.toLowerCase();
+        const isAnyLoginPage = currentPath === '/login' || currentPath === '/collectorlogin';
+
+        if (logoutMessage && !isAnyLoginPage && !auth.isLoggedIn) { // Added !auth.isLoggedIn to prevent loop if logout fails
+            console.log("[AppContent LogoutRedirect] Has logout message, redirecting to main /login page.");
             navigate(`/login`, { replace: true, state: { logoutMessage: logoutMessage } });
         }
-    }, [logoutMessage, location.pathname, navigate]);
+    }, [logoutMessage, location.pathname, navigate, auth.isLoggedIn]);
 
     return (
-        <div className="App"> 
+        <div className="App">
             <Navbar isLoggedIn={auth.isLoggedIn} userInfo={auth.userInfo} handleLogout={auth.logout} />
 
+            {logoutMessage && (location.pathname.toLowerCase() === '/login' || location.pathname.toLowerCase() === '/collectorlogin') && (
+                 <div className="alert alert-warning global-message" onClick={() => setLogoutMessage('')} title="Click to dismiss"
+                      style={{ textAlign: 'center', padding: '10px', margin: '10px auto', maxWidth: '600px', cursor: 'pointer', border: '1px solid orange', borderRadius: '4px', backgroundColor: '#fff3e0' }}>
+                    {logoutMessage}
+                 </div>
+            )}
 
             <main className="main-content">
                 <Routes>
+                    {/* === Public Routes === */}
                     <Route path="/" element={<HomePage />} />
                     <Route path="/AboutUs" element={<AboutUs />} />
                     <Route path="/Service" element={<Service />} />
@@ -252,49 +294,87 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
                     <Route path="/SignUp" element={<SignUp />} />
                     <Route path="/BOwnerForm" element={<BOwnerForm />} />
                     <Route path="/ClientForm" element={<ClientForm />} />
-                    <Route path="/CollectorForm" element={<CollectorForm />} />
-                    <Route path="/CollectorLogin" element={<CollectorLogin />} />
+                    <Route path="/CollectorForm" element={<CollectorForm />} /> {/* Collector Registration */}
                     <Route path="/CalendarDisplay" element={<CalendarDisplay />} />
+                    <Route path="/BSHeader" element={<BSHeader />} /> {/* You added this, ensure component exists */}
 
+
+                    {/* === Login Routes === */}
+                    {/* Main Login for Client, BOwner, Admin */}
                     <Route path="/Login" element={
                             auth.isLoggedIn && auth.userInfo ? (
-                                <Navigate to={ auth.userInfo.role === 'admin' ? '/Admin/Dashboard' : auth.userInfo.role === 'client' ? '/ClientProfile' : auth.userInfo.role === 'businessOwner' ? '/BOwnerHome' : '/' } replace />
-                            ) : ( <Login onLoginSuccess={auth.login} /> )
+                                <Navigate to={
+                                    auth.userInfo.role === 'admin' ? '/Admin/Dashboard' :
+                                    auth.userInfo.role === 'client' ? '/ClientProfile' :
+                                    auth.userInfo.role === 'businessOwner' ? '/BOwnerHome' :
+                                    auth.userInfo.role === 'collector' ? '/collector-dashboard' : // If collector lands here
+                                    '/' } replace />
+                            ) : ( <Login onLoginSuccess={auth.login} /> ) // Pass login handler
+                        }
+                    />
+                    {/* Collector Specific Login Page */}
+                    <Route path="/CollectorLogin" element={
+                            auth.isLoggedIn && auth.userInfo?.role === 'collector' ? ( // If already logged in as collector
+                                <Navigate to="/collector-dashboard" replace />
+                            ) : auth.isLoggedIn && auth.userInfo ? ( // If logged in as someone else, redirect from collector login
+                                <Navigate to="/" replace />
+                            ) : ( <CollectorLogin /> ) // CollectorLogin component should use useAuth().login
                         }
                     />
 
+                    {/* === Protected Client Routes === */}
                     <Route element={<ProtectedRoute requiredRole="client" />}>
                         <Route path="/UserCalendar" element={<UserCalendar userInfo={auth.userInfo} />} />
                         <Route path="/ClientProfile" element={<ClientProfile />} />
                         <Route path="/PickupReq" element={<PickupReq />} />
                         <Route path="/CheckBuySell" element={<CheckBuySell />} />
                         <Route path="/ClientEmail" element={<ClientEmail />} />
-                        <Route path="/BSHeader" element={<BSHeader />} />
+                        {/* <Route path="/BSHeader" element={<BSHeader />} /> If BSHeader is client specific */}
                         <Route path="/BuyCard" element={<BuyCard />} />
                         <Route path="/WastePickForm" element={<WastePickForm />} />
                         <Route path="/LocationMap" element={<LocationMap />} />
                     </Route>
 
+                    {/* === Protected Business Owner Routes === */}
                     <Route element={<ProtectedRoute requiredRole="businessOwner" />}>
                          <Route path="/BOwnerHome" element={<BOwnerHome userInfo={auth.userInfo} />} />
-                         <Route path="/BusinessDashboard" element={<BOwnerHome />} />
+                         <Route path="/BusinessDashboard" element={<Navigate to="/BOwnerHome" replace />} /> {/* Redirect to BOwnerHome */}
                          <Route path="/BOwnerProfile" element={<BOwnerProfile />} />
                          <Route path="/ProAddForm" element={<ProAddForm />} />
                          <Route path="/SaleForm" element={<SaleForm />} />
                     </Route>
 
+                     {/* === Protected Admin Routes === */}
                      <Route element={<ProtectedRoute requiredRole="admin" />}>
                         <Route element={<AdminLayout handleLogout={auth.logout} />}>
-                           <Route path="/Admin" element={<Navigate to="/Admin/Dashboard" replace />} /> 
+                           <Route path="/Admin" element={<Navigate to="/Admin/Dashboard" replace />} />
                            <Route path="/Admin/Dashboard" element={<Dashboard />} />
-                           <Route path="/Admin/Calendar" element={<AdCalendar />} /> 
+                           <Route path="/Admin/Calendar" element={<AdCalendar />} />
                            <Route path="/Admin/Requests" element={<AdCheckReq />} />
                            <Route path="/Admin/Scrap" element={<AdScrap />} />
                            <Route path="/Admin/Emails" element={<EmailDisplay />} />
                            <Route path="/Admin/ManageOwners" element={<HandleBOwners />} />
+                           {/* Add other admin sub-routes here if needed */}
                         </Route>
                      </Route>
-                    </Routes>
+
+                    {/* === Protected Collector Routes === */}
+                    <Route element={<ProtectedRoute requiredRole="collector" />}>
+                        {/* Replace div with actual CollectorDashboard component when ready */}
+                        <Route path="/collector-dashboard" element={
+                            <div>
+                                <h1>Collector Dashboard</h1>
+                                <p>Welcome, {auth.userInfo?.name || 'Collector'}!</p>
+                                {/* Add links or content specific to collectors */}
+                            </div>
+                        } />
+                        {/* Add more collector-specific protected routes here */}
+                    </Route>
+
+                    {/* Fallback for unmatched routes - Optional */}
+                    {/* <Route path="*" element={<Navigate to="/" replace />} /> */}
+
+                </Routes>
             </main>
 
             <Footer1 />

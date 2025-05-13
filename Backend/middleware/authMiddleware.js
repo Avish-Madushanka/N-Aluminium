@@ -1,19 +1,17 @@
 // backend/middleware/authMiddleware.js
 const jwt = require('jsonwebtoken');
-const mongoose = require('mongoose'); // Needed for ID validation
+const mongoose = require('mongoose');
 
-// --- Correct Model Imports ---
-const Admin = require('../models/Admin');           // Uses Admin.js
-const Client = require('../models/Client');         // Uses Client.js
-const BusinessOwner = require('../models/BusinessOwner'); // Uses BusinessOwner.js
-// --- End Corrected Model Imports ---
+const Admin = require('../models/Admin');
+const Client = require('../models/Client');
+const BusinessOwner = require('../models/BusinessOwner');
+const Collector = require('../models/Collector'); // <--- ADD THIS IMPORT
 
 console.log('[AuthMiddleware] Module loaded.');
-// Diagnostic check right after import
 console.log('[AuthMiddleware] Post-Import Check - BusinessOwner Type:', typeof BusinessOwner, 'Has findById:', typeof BusinessOwner?.findById === 'function');
+console.log('[AuthMiddleware] Post-Import Check - Collector Type:', typeof Collector, 'Has findById:', typeof Collector?.findById === 'function'); // <--- ADD THIS LOG
 
 
-// --- Protect Middleware ---
 exports.protect = async (req, res, next) => {
     console.log(`[Auth Protect] Running for: ${req.method} ${req.originalUrl}`);
     let token;
@@ -30,7 +28,7 @@ exports.protect = async (req, res, next) => {
 
     try {
         const jwtSecret = process.env.JWT_SECRET;
-        if (!jwtSecret) throw new Error("JWT_SECRET missing in environment"); // Critical server config error
+        if (!jwtSecret) throw new Error("JWT_SECRET missing in environment");
 
         console.log('[Auth Protect] Verifying token...');
         const decoded = jwt.verify(token, jwtSecret);
@@ -41,28 +39,44 @@ exports.protect = async (req, res, next) => {
              return res.status(401).json({ success: false, message: 'Not authorized (invalid token payload).' });
         }
 
-        // Find user based on role and ID
         let user = null;
         const UserModel =
             decoded.role === 'client' ? Client :
             decoded.role === 'businessOwner' ? BusinessOwner :
-            decoded.role === 'admin' ? Admin : null;
+            decoded.role === 'admin' ? Admin :
+            decoded.role === 'collector' ? Collector : null; // <--- ADD COLLECTOR HERE
 
-        if (!UserModel || typeof UserModel.findById !== 'function') { // Check if model is valid before querying
+        if (!UserModel || typeof UserModel.findById !== 'function') {
              console.error(`[Auth Protect] Invalid or non-existent Mongoose model determined for role: ${decoded.role}`);
              return res.status(500).json({ success: false, message: 'Server configuration error (Auth M1).' });
         }
         console.log(`[Auth Protect] Fetching user from DB. Model: ${UserModel.modelName}, ID: ${decoded.id}`);
 
-        // Fetch user - DO NOT select password
-        user = await UserModel.findById(decoded.id);
+        user = await UserModel.findById(decoded.id); // Password should be excluded by default select:false in schema
 
         if (!user) {
              console.warn(`[Auth Protect] User not found in DB. ID: ${decoded.id}, Role: ${decoded.role}`);
              return res.status(401).json({ success: false, message: 'User belonging to token no longer exists.' });
         }
 
-        // Attach user to request
+        // --- For Collectors, check if active and verified AFTER fetching from DB ---
+        // This is an additional check because the token might be old,
+        // and their status could have changed in the DB.
+        if (user.role === 'collector') {
+            if (!user.isVerified) {
+                console.warn(`[Auth Protect] Collector ${user.email} is not verified (DB check).`);
+                // You might want to decide if this invalidates the token session immediately
+                // or if certain non-sensitive endpoints are still accessible.
+                // For strictness, you can deny access:
+                // return res.status(403).json({ success: false, message: 'Collector account not verified.' });
+            }
+            if (!user.isActive) {
+                console.warn(`[Auth Protect] Collector ${user.email} is not active (DB check).`);
+                // return res.status(403).json({ success: false, message: 'Collector account inactive.' });
+            }
+        }
+        // --- END OF COLLECTOR DB CHECK ---
+
         req.user = user;
         console.log(`[Auth Protect] SUCCESS. User attached: ID ${req.user.id}, Role ${req.user.role}`);
         next();
@@ -73,14 +87,15 @@ exports.protect = async (req, res, next) => {
         let statusCode = 401;
         if (err.name === 'JsonWebTokenError') message = 'Not authorized (invalid token).';
         else if (err.name === 'TokenExpiredError') message = 'Not authorized (token expired).';
-        else if (err.message?.includes('model invalid')) { statusCode = 500; message = err.message; } // Propagate model error
+        else if (err.message?.includes('model invalid')) { statusCode = 500; message = err.message; }
         else if (err.message?.includes('JWT_SECRET missing')) { statusCode = 500; message = 'Server configuration error (Auth S1).'; }
         return res.status(statusCode).json({ success: false, message: message });
     }
 };
 
-// --- Authorize Middleware ---
-exports.authorize = (...roles) => {
+// authorize and checkOwnershipOrAdmin middlewares should work as is,
+// just ensure you pass 'collector' to authorize when needed for collector-specific routes.
+exports.authorize = (...roles) => { /* ... (no changes needed here, just use 'collector' in roles array when calling it) ... */
     console.log(`[Auth Authorize] Setup for roles: ${roles.join(', ')}`);
     return (req, res, next) => {
         if (!req.user?.role) {
@@ -97,9 +112,7 @@ exports.authorize = (...roles) => {
         next();
     };
 };
-
-// --- Check Ownership or Admin Middleware ---
-exports.checkOwnershipOrAdmin = (Model = null) => { // Model param generally not needed if checking req.user.id vs req.params.id
+exports.checkOwnershipOrAdmin = (Model = null) => { /* ... (no changes needed here unless collectors own specific resources you check by ID) ... */
     console.log('[Auth CheckOwnership] Setup.');
     return async (req, res, next) => {
         const resourceId = req.params.id;
