@@ -241,7 +241,6 @@
   }
 
   .main-content {
-    padding: 20px; /* <<< Adjusted mobile padding */
     overflow-y: visible;
   }
 

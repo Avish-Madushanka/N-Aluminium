@@ -1,6 +1,3 @@
-// src/App.jsx
-// FINAL CONSOLIDATED VERSION (Reflecting Admin Layout Structure)
-
 import React, { useState, useEffect, useCallback, createContext, useContext, useRef } from 'react';
 import {
     BrowserRouter as Router, Routes, Route, useNavigate,
@@ -9,18 +6,14 @@ import {
 import { ClipLoader } from 'react-spinners';
 import { jwtDecode } from 'jwt-decode';
 
-// --- Context ---
 const AuthContext = createContext(null);
-export const useAuth = () => useContext(AuthContext); // Hook to consume auth context
+export const useAuth = () => useContext(AuthContext); 
 
-// --- Core Layout & Routing Components ---
 import Navbar from './Components/Navbar/Navbar';
 import Footer1 from './Components/Footer1/Footer';
 import ProtectedRoute from './routes/ProtectedRoute'; 
 import AdminLayout from './Layouts/AdminLayout';       
 
-// --- Page Components (Verify ALL import paths) ---
-// Public Pages
 import HomePage from './Pages/HomePage';
 import SignUp from './Pages/SignUp';
 import AboutUs from './Pages/AboutUS';
@@ -36,7 +29,6 @@ import ClientForm from './Components/RegistrationForm/ClientForm';
 import CollectorForm from './Components/RegistrationForm/CollectorForm';
 import CollectorLogin from './Components/Login/CollectorLogin'
 
-// Functional Components
 import Calculate from './Components/Calculate/Calculate';
 import SaleForm from './Components/SaleForm/SaleForm';
 import BuyCard from './Components/BuyCard/BuyCard';
@@ -44,9 +36,8 @@ import ProAddForm from './Components/Projects/ProAddForm';
 import WastePickForm from './Components/WasteCollect/WastePickForm';
 import UserCalendar from './Components/WasteCollect/UserCalendar';
 import LocationMap from './Components/Maps/LocationMap';
-import CalendarDisplay from './Components/UserCalendar/CalendarDisplay'; // Make sure path is correct
+import CalendarDisplay from './Components/UserCalendar/CalendarDisplay'; 
 
-// Role-Specific Dashboards / Profiles
 import BOwnerHome from './Pages/BOwnerHome';
 import ClientProfile from './Components/Profile/ClientProfile';
 import BOwnerProfile from './Components/Profile/BOwnerProfile';
@@ -54,7 +45,6 @@ import ClientEmail from './Components/Profile/ClientEmail';
 import PickupReq from './Components/Profile/PickupReq';
 import CheckBuySell from './Components/Profile/CheckBuySell';
 
-// Admin Pages / Components
 import AdCalendar from './Components/Admin/AdMinCalendar/AdCalendar';
 import AdCheckReq from './Components/Admin/AdCheckReq/AdCheckReq';
 import EmailDisplay from './Components/Admin/EmailDisplay/EmailDisplay';
@@ -62,8 +52,8 @@ import Dashboard from './Components/Admin/Dashboard/Dashboard';
 import HandleBOwners from './Components/Admin/HandleBOwners/HandleBOwners';
 import DisReview from './Components/Admin/DisReview/DisReview';
 import AdScrap from './Components/Admin/AdScrap/AdScrap';
+import BSHeader from './Components/BuyandSell/BSHeader';
 
-// --- Helper: Parse and Validate JWT ---
 const parseUserInfoFromToken = (token) => {
     if (!token) return null;
     try {
@@ -92,7 +82,7 @@ const parseUserInfoFromToken = (token) => {
     }
 };
 
-// --- Root App Component ---
+
 function App() {
     const [authState, setAuthState] = useState({
         isLoggedIn: false, userInfo: null, isLoading: true,
@@ -100,7 +90,7 @@ function App() {
     const [logoutMessage, setLogoutMessage] = useState('');
     const navigateRef = useRef(null);
 
-    // --- Logout Handler ---
+    // Logout 
     const handleLogout = useCallback((message = "You have been logged out.") => {
         console.log(`[App] handleLogout. Message: "${message}"`);
         localStorage.removeItem("token"); localStorage.removeItem("userInfo");
@@ -108,7 +98,7 @@ function App() {
         setLogoutMessage(message);
     }, []);
 
-    // --- Initial Auth Check ---
+    // Auth Check
     useEffect(() => {
         console.log("[App CheckAuth] Running initial check...");
         const token = localStorage.getItem('token');
@@ -127,7 +117,8 @@ function App() {
             }
             setAuthState({ isLoggedIn: false, userInfo: null, isLoading: false });
         }
-        // Storage listener setup
+
+        // Storage setup
          const handleStorageChange = (event) => {
             if (event.key === 'token' || event.key === 'userInfo') {
                  console.log(`[App Storage Listener] Storage changed ('${event.key}'). Re-validating auth.`);
@@ -147,10 +138,10 @@ function App() {
          };
          window.addEventListener('storage', handleStorageChange);
          return () => window.removeEventListener('storage', handleStorageChange);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []); // authState.isLoggedIn removed from deps to prevent loop if initial state is loggedIn but token becomes invalid
 
-    // --- Login Success Handler ---
+    }, []); 
+
+    // Login Success 
     const handleLoginSuccess = useCallback((token, backendUserData) => {
         console.log('[App] handleLoginSuccess.');
         const parsedUser = parseUserInfoFromToken(token);
@@ -166,29 +157,27 @@ function App() {
         }
     }, [handleLogout]);
 
-    // --- Global 401 Listener ---
     useEffect(() => {
         const handleAuthErrorEvent = (event) => {
             setAuthState(currentState => {
                 if (currentState.isLoggedIn) {
                     console.warn('[App] Global 401 listener: Triggering logout.');
                     const message = event.detail?.message || 'Session expired/invalid.';
-                    handleLogout(message); // handleLogout will update state
-                    // No need to return new state here, handleLogout does it
+                    handleLogout(message); 
+                   
                 }
-                return currentState; // Return current state if not logged in or no action taken
+                return currentState; 
             });
         };
         window.addEventListener('auth-error-401', handleAuthErrorEvent);
         return () => window.removeEventListener('auth-error-401', handleAuthErrorEvent);
-    }, [handleLogout]); // Added handleLogout to dependencies
+    }, [handleLogout]); 
 
-    // --- Loading Screen ---
+    // Loading Screen
     if (authState.isLoading) {
         return ( <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}> <ClipLoader size={60} color="#f97316" /> </div> );
     }
 
-    // --- Render App ---
     return (
         <AuthContext.Provider value={{ ...authState, logout: handleLogout, login: handleLoginSuccess }}>
             <Router>
@@ -211,7 +200,7 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
 
     useEffect(() => { navigateRef.current = navigate; return () => { navigateRef.current = null; }; }, [navigate, navigateRef]);
 
-    // --- Effect for Post-Login Redirect ---
+    // Post-Login
     useEffect(() => {
         if (auth.isLoggedIn && auth.userInfo && location.pathname.toLowerCase() === '/login') {
             const fromPath = location.state?.from?.pathname;
@@ -225,19 +214,18 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
         }
     }, [auth.isLoggedIn, auth.userInfo, navigate, location]);
 
-    // --- Effect to Handle Logout Messages from URL ---
+    // Handle Logout Messages
     useEffect(() => {
         const params = new URLSearchParams(location.search);
         const msgParam = params.get('logoutMessage');
         if (msgParam) {
             if (msgParam !== logoutMessage) setLogoutMessage(msgParam);
-            // Clean the URL
-            const newUrl = location.pathname; // URL without query params
+            
+            const newUrl = location.pathname; 
             window.history.replaceState({}, document.title, newUrl);
         }
     }, [location.search, location.pathname, setLogoutMessage, logoutMessage]);
 
-    // --- Effect to Redirect to Login if Logout Message is Set ---
     useEffect(() => {
         if (logoutMessage && location.pathname.toLowerCase() !== '/login') {
             console.log("[AppContent LogoutRedirect] Redirecting to login due to logout message.");
@@ -246,19 +234,12 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
     }, [logoutMessage, location.pathname, navigate]);
 
     return (
-        <div className="App"> {/* General App container */}
+        <div className="App"> 
             <Navbar isLoggedIn={auth.isLoggedIn} userInfo={auth.userInfo} handleLogout={auth.logout} />
 
-            {logoutMessage && location.pathname.toLowerCase() === '/login' && (
-                 <div className="alert alert-warning global-message" onClick={() => setLogoutMessage('')} title="Click to dismiss"
-                      style={{ textAlign: 'center', padding: '10px', margin: '10px auto', maxWidth: '600px', cursor: 'pointer', border: '1px solid', borderRadius: '4px' }}>
-                    {logoutMessage}
-                 </div>
-            )}
 
             <main className="main-content">
                 <Routes>
-                    {/* === Public Routes === */}
                     <Route path="/" element={<HomePage />} />
                     <Route path="/AboutUs" element={<AboutUs />} />
                     <Route path="/Service" element={<Service />} />
@@ -273,10 +254,8 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
                     <Route path="/ClientForm" element={<ClientForm />} />
                     <Route path="/CollectorForm" element={<CollectorForm />} />
                     <Route path="/CollectorLogin" element={<CollectorLogin />} />
-                    {/* MOVED HERE: CalendarDisplay is now a public route */}
                     <Route path="/CalendarDisplay" element={<CalendarDisplay />} />
 
-                    {/* === Login Route === */}
                     <Route path="/Login" element={
                             auth.isLoggedIn && auth.userInfo ? (
                                 <Navigate to={ auth.userInfo.role === 'admin' ? '/Admin/Dashboard' : auth.userInfo.role === 'client' ? '/ClientProfile' : auth.userInfo.role === 'businessOwner' ? '/BOwnerHome' : '/' } replace />
@@ -284,21 +263,18 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
                         }
                     />
 
-                    {/* === Protected Client Routes === */}
                     <Route element={<ProtectedRoute requiredRole="client" />}>
                         <Route path="/UserCalendar" element={<UserCalendar userInfo={auth.userInfo} />} />
                         <Route path="/ClientProfile" element={<ClientProfile />} />
                         <Route path="/PickupReq" element={<PickupReq />} />
                         <Route path="/CheckBuySell" element={<CheckBuySell />} />
                         <Route path="/ClientEmail" element={<ClientEmail />} />
-                        {/* <Route path="/CalendarDisplay" element={<CalendarDisplay />} />  MOVED to public routes */}
-                        
+                        <Route path="/BSHeader" element={<BSHeader />} />
                         <Route path="/BuyCard" element={<BuyCard />} />
                         <Route path="/WastePickForm" element={<WastePickForm />} />
                         <Route path="/LocationMap" element={<LocationMap />} />
                     </Route>
 
-                    {/* === Protected Business Owner Routes === */}
                     <Route element={<ProtectedRoute requiredRole="businessOwner" />}>
                          <Route path="/BOwnerHome" element={<BOwnerHome userInfo={auth.userInfo} />} />
                          <Route path="/BusinessDashboard" element={<BOwnerHome />} />
@@ -307,7 +283,6 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
                          <Route path="/SaleForm" element={<SaleForm />} />
                     </Route>
 
-                     {/* === Protected Admin Routes === */}
                      <Route element={<ProtectedRoute requiredRole="admin" />}>
                         <Route element={<AdminLayout handleLogout={auth.logout} />}>
                            <Route path="/Admin" element={<Navigate to="/Admin/Dashboard" replace />} /> 

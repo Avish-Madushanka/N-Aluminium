@@ -62,12 +62,6 @@ const ServiceMain = () => {
             <p className="service-description">
               We offer a reliable, convenient, and eco-friendly aluminum scraps pickup service tailored for homes, businesses, factories, and workshops of all sizes. Whether you have old aluminum window frames, roofing sheets, machinery parts, or leftover offcuts from recent projects, our dedicated team is ready to collect them directly from your location—no hassle, no heavy lifting on your part.
             </p>
-            <ul className="service-features">
-              <li><span>✓</span> Free pickup for bulk quantities</li>
-              <li><span>✓</span> Environmentally responsible recycling</li>
-              <li><span>✓</span> Competitive pricing</li>
-              <li><span>✓</span> Same-day service available</li>
-            </ul>
             <div className="service-cta">
               <Link to="/Collection" className="service-button">
                 <span>More Details</span>
@@ -102,18 +96,6 @@ const ServiceMain = () => {
               Buy and sell reusable items effortlessly! Discover a smarter, more sustainable way to exchange goods by giving your pre-owned items a second life. Whether you're decluttering your space or looking for affordable finds, our platform makes it easy to connect with others in your community.
             </p>
             <div className="service-stats">
-              <div className="stat-item">
-                <div className="stat-number">10K+</div>
-                <div className="stat-label">Items Listed</div>
-              </div>
-              <div className="stat-item">
-                <div className="stat-number">95%</div>
-                <div className="stat-label">Satisfaction Rate</div>
-              </div>
-              <div className="stat-item">
-                <div className="stat-number">24/7</div>
-                <div className="stat-label">Support</div>
-              </div>
             </div>
             <div className="service-cta">
               <Link to="/BuyandSell" className="service-button secondary">
@@ -148,20 +130,6 @@ const ServiceMain = () => {
             <p className="service-description">
               Take a look at our most recent work, where innovation meets sustainability. From custom aluminum installations to eco-friendly scrap collection initiatives, our latest projects showcase our commitment to quality, efficiency, and environmental responsibility.
             </p>
-            <div className="project-highlights">
-              <div className="highlight-item">
-                <div className="highlight-icon">🏭</div>
-                <div className="highlight-text">Industrial Recycling Solutions</div>
-              </div>
-              <div className="highlight-item">
-                <div className="highlight-icon">🏡</div>
-                <div className="highlight-text">Residential Collection Programs</div>
-              </div>
-              <div className="highlight-item">
-                <div className="highlight-icon">🔄</div>
-                <div className="highlight-text">Circular Economy Initiatives</div>
-              </div>
-            </div>
             <div className="service-cta">
               <Link to="/Project" className="service-button">
                 <span>View Projects</span>
@@ -182,15 +150,6 @@ const ServiceMain = () => {
               <div className="image-overlay"></div>
             </div>
           </div>
-        </div>
-      </div>
-
-      {/* Call to Action Section */}
-      <div className="service-cta-section">
-        <div className="cta-content">
-          <h2>Ready to join the sustainability movement?</h2>
-          <p>Whether you need scrap pickup, want to buy/sell reusable items, or just learn more about our projects, we're here to help.</p>
-          <Link to="/Contact" className="cta-button">Get Started Today</Link>
         </div>
       </div>
     </div>

@@ -1,4 +1,3 @@
-/* Base Styles */
 :root {
   --primary-color: #2e7d32;
   --primary-dark: #1b5e20;
@@ -25,10 +24,9 @@
   line-height: 1.6;
 }
 
-/* Hero Section */
 .service-hero {
-  height: 80vh;
-  min-height: 500px;
+  height: 30vh;
+  min-height: 300px;
   background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
   display: flex;
   align-items: center;
@@ -112,7 +110,6 @@
   }
 }
 
-/* Service Header */
 .service-header {
   width: 100%;
   max-width: 1400px;
@@ -320,7 +317,6 @@
   font-weight: 500;
 }
 
-/* Service Image */
 .service-image {
   position: relative;
   width: 100%;
@@ -381,7 +377,6 @@
   transform: scale(1.05);
 }
 
-/* CTA Buttons */
 .service-cta {
   margin-top: 2rem;
   opacity: 0;
@@ -443,7 +438,6 @@
   left: 100%;
 }
 
-/* CTA Section */
 .service-cta-section {
   background: linear-gradient(135deg, var(--dark-color) 0%, #000 100%);
   color: white;
@@ -501,7 +495,6 @@
   background-color: #ff9800;
 }
 
-/* Animations */
 @keyframes fadeUp {
   from {
     opacity: 0;
@@ -518,7 +511,6 @@
   to { opacity: 1; }
 }
 
-/* Responsive Styles */
 @media (max-width: 1024px) {
   .service-header {
     padding: 60px 30px;
