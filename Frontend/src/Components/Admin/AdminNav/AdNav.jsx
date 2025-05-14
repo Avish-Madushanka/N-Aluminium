@@ -48,6 +48,11 @@ function AdNavComponent({ handleLogout }) {
                             </NavLink>
                         </li>
                         <li>
+                            <NavLink to="/Admin/Scrap" className={({ isActive }) => isActive ? 'active' : ''}>
+                                <FontAwesomeIcon icon={faBox} className="menu-icon" /> Scrap Calculator
+                            </NavLink>
+                        </li>
+                        <li>
                             <NavLink to="/Admin/Emails" className={({ isActive }) => isActive ? 'active' : ''}>
                                 <FontAwesomeIcon icon={faEnvelope} className="menu-icon" /> Check Emails
                             </NavLink>

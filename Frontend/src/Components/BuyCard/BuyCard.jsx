@@ -1,8 +1,31 @@
 import React from 'react';
 import './BuyCard.css';
 
-const BuyCard = ({ onClose }) => { 
+const BuyCard = ({ onClose, product }) => { 
   console.log("BuyCard rendered, onClose:", onClose);
+
+  // Default product data in case none is provided
+  const defaultProduct = {
+    image: "https://i.redd.it/rturazpmucha1.jpg",
+    title: "Aluminum Door",
+    description: "An aluminum door is strong, lightweight, weather-resistant, durable, low-maintenance, and modern-looking.",
+    address: "426F/18 Shanthi Garden, Medha MW, Alubomulla, Panadura\nKalutara, Western",
+    price: "Rs: 10,000.00",
+    contact: {
+      phone: "0777-123 456",
+      email: "Admin123@gmail.com"
+    }
+  };
+
+  // Use the provided product or fall back to defaults
+  const {
+    image,
+    title,
+    description,
+    address,
+    price,
+    contact
+  } = product || defaultProduct;
 
   return (
     <div className="popup1-overlay" onClick={onClose}>
@@ -20,31 +43,33 @@ const BuyCard = ({ onClose }) => {
 
         <div className="product1-image-container">
           <img
-            src="https://i.redd.it/rturazpmucha1.jpg"
-            alt="Aluminum Door"
+            src={image}
+            alt={title}
             className="product1-image"
           />
         </div>
 
         <div className="product1-info">
-          <h2 className="product1-title">Aluminum Door</h2>
+          <h2 className="product1-title">{title}</h2>
 
           <p className="product1-description">
-            An aluminum door is strong, lightweight, weather-resistant, durable,
-            low-maintenance, and modern-looking.
+            {description}
           </p>
 
           <p className="product1-address">
-            426F/18 Shanthi Garden, Medha MW, Alubomulla, Panadura
-            <br />
-            Kalutara, Western
+            {address.split('\n').map((line, i) => (
+              <React.Fragment key={i}>
+                {line}
+                <br />
+              </React.Fragment>
+            ))}
           </p>
 
-          <p className="product1-price">Rs: 10,000.00</p>
+          <p className="product1-price">{price}</p>
 
           <div className="contact1-info">
-            <p>📞 0777-123 456</p>
-            <p>📧 Admin123@gmail.com</p>
+            <p>📞 {contact.phone}</p>
+            <p>📧 {contact.email}</p>
           </div>
         </div>
       </div>

@@ -1,13 +1,12 @@
 import React, { useState } from "react";
 import "./BSHeader.css";
-import BuyCard from "../BuyCard/BuyCard"; // Assume this is your contact modal component
+import BuyCard from "../BuyCard/BuyCard";
 
-const BuySellPage = () => {
+const BSHeader = () => {
   const [isBuyCardOpen, setIsBuyCardOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedFilter, setSelectedFilter] = useState("");
 
-  // --- Example Static Product Data ---
   const exampleProducts = [
     {
       _id: "1",
@@ -35,13 +34,30 @@ const BuySellPage = () => {
       type: "Pan-Light",
       address: "Kandy",
       image: "https://5.imimg.com/data5/XI/DO/MY-44591116/aluminium-panel-window-500x500.jpg"
+    },
+    {
+      _id: "4",
+      name: "Aluminum Railings",
+      description: "Modern aluminum railings for balcony",
+      price: 1800,
+      type: "Others",
+      address: "Galle",
+      image: "https://5.imimg.com/data5/XI/DO/MY-44591116/aluminium-panel-window-500x500.jpg"
+    },
+    {
+      _id: "5",
+      name: "Sliding Door",
+      description: "High quality aluminum sliding door",
+      price: 3200,
+      type: "Doors",
+      address: "Colombo 7",
+      image: "https://5.imimg.com/data5/XI/DO/MY-44591116/aluminium-panel-window-500x500.jpg"
     }
   ];
 
   const openBuyCard = () => setIsBuyCardOpen(true);
   const closeBuyCard = () => setIsBuyCardOpen(false);
 
-  // --- Filter Logic ---
   const filteredProducts = exampleProducts.filter((product) => {
     const nameMatch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
     const filterMatch = selectedFilter ? product.type === selectedFilter : true;
@@ -49,55 +65,86 @@ const BuySellPage = () => {
   });
 
   return (
-    <div className="buy-sell-container">
-      {/* Top Bar */}
-      <div className="top-bar">
-        <input
-          type="text"
-          placeholder="Search by Item Name"
-          className="search-bar"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
-        <select
-          className="filter-dropdown"
-          value={selectedFilter}
-          onChange={(e) => setSelectedFilter(e.target.value)}
-        >
-          <option value="">All Types</option>
-          <option value="Doors">Doors</option>
-          <option value="Windows">Windows</option>
-          <option value="Pan-Light">Pan-Light</option>
-          <option value="Others">Others</option>
-        </select>
-        <a href="/SaleForm" className="sell-button">Sell Item</a>
+    <div className="bs-container">
+      {/* Header Section */}
+      <div className="bs-header">
+        <h1 className="bs-title">Buy & Sell Reuse Items</h1>
+        <p className="bs-subtitle">Find quality used aluminum items or sell your own</p>
+      </div>
+
+      {/* Filter Controls */}
+      <div className="bs-controls">
+        <div className="bs-search-container">
+          <input
+            type="text"
+            placeholder="Search by item name..."
+            className="bs-search-bar"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <select
+            className="bs-filter-dropdown"
+            value={selectedFilter}
+            onChange={(e) => setSelectedFilter(e.target.value)}
+          >
+            <option value="">All Categories</option>
+            <option value="Doors">Doors</option>
+            <option value="Windows">Windows</option>
+            <option value="Pan-Light">Pan-Light</option>
+            <option value="Glass">Glass</option>
+            <option value="Others">Others</option>
+          </select>
+        </div>
+        <a href="/SaleForm" className="bs-sell-button">
+          <i className="fas fa-plus"></i> Sell Item
+        </a>
       </div>
 
       {/* Product Grid */}
-      <div className="product-grid">
+      <div className="bs-product-grid">
         {filteredProducts.length > 0 ? (
           filteredProducts.map((product) => (
-            <div key={product._id} className="product-card">
-              <img
-                src={product.image}
-                alt={product.name}
-                className="product-image"
-                onError={(e) => {
-                  e.target.onerror = null;
-                  e.target.src = "https://via.placeholder.com/150";
-                }}
-              />
-              <div className="product-details">
-                <h3>{product.name}</h3>
-                <p>{product.description}</p>
-                <p className="price">Rs: {product.price.toLocaleString()}</p>
-                <p className="location">{product.address}</p>
-                <button className="buy-button" onClick={openBuyCard}>View Contact</button>
+            <div key={product._id} className="bs-product-card">
+              <div className="bs-product-image-container">
+                <img
+                  src={product.image}
+                  alt={product.name}
+                  className="bs-product-image"
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = "https://via.placeholder.com/300x200?text=Product+Image";
+                  }}
+                />
+              </div>
+              <div className="bs-product-details">
+                <h3 className="bs-product-name">{product.name}</h3>
+                <p className="bs-product-description">{product.description}</p>
+                <div className="bs-product-meta">
+                  <span className="bs-product-price">Rs. {product.price.toLocaleString()}</span>
+                  <span className="bs-product-location">
+                    <i className="fas fa-map-marker-alt"></i> {product.address}
+                  </span>
+                </div>
+                <button className="bs-buy-button" onClick={openBuyCard}>
+                  <i className="fas fa-phone-alt"></i> Contact Seller
+                </button>
               </div>
             </div>
           ))
         ) : (
-          <p className="no-products">No products match your current filter.</p>
+          <div className="bs-no-products">
+            <i className="fas fa-search"></i>
+            <p>No products found matching your criteria</p>
+            <button 
+              className="bs-clear-filters"
+              onClick={() => {
+                setSearchQuery("");
+                setSelectedFilter("");
+              }}
+            >
+              Clear Filters
+            </button>
+          </div>
         )}
       </div>
 
@@ -107,4 +154,4 @@ const BuySellPage = () => {
   );
 };
 
-export default BuySellPage;
+export default BSHeader;

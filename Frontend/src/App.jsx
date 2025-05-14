@@ -11,7 +11,7 @@ import { jwtDecode } from 'jwt-decode';
 
 // --- Context ---
 const AuthContext = createContext(null);
-export const useAuth = () => useContext(AuthContext); // Hook to consume auth context
+export const useAuth = () => useContext(AuthContext);
 
 // --- Core Layout & Routing Components ---
 import Navbar from './Components/Navbar/Navbar';
@@ -49,6 +49,7 @@ import WastePickForm from './Components/WasteCollect/WastePickForm';
 import UserCalendar from './Components/WasteCollect/UserCalendar';
 import LocationMap from './Components/Maps/LocationMap';
 import CalendarDisplay from './Components/UserCalendar/CalendarDisplay';
+import BSHeader from './Components/BuyandSell/BSHeader'; // You added this
 
 // Role-Specific Dashboards / Profiles
 import BOwnerHome from './Pages/BOwnerHome';
@@ -65,11 +66,12 @@ import CheckBuySell from './Components/Profile/CheckBuySell';
 import AdCalendar from './Components/Admin/AdMinCalendar/AdCalendar';
 import AdCheckReq from './Components/Admin/AdCheckReq/AdCheckReq';
 import EmailDisplay from './Components/Admin/EmailDisplay/EmailDisplay';
-import Dashboard from './Components/Admin/Dashboard/Dashboard'; // Admin Dashboard
+import Dashboard from './Components/Admin/Dashboard/Dashboard';
 import HandleBOwners from './Components/Admin/HandleBOwners/HandleBOwners';
 import DisReview from './Components/Admin/DisReview/DisReview';
+import AdScrap from './Components/Admin/AdScrap/AdScrap';
 
-// --- Helper: Parse and Validate JWT ---
+
 const parseUserInfoFromToken = (token) => {
     if (!token) return null;
     try {
@@ -85,7 +87,7 @@ const parseUserInfoFromToken = (token) => {
         }
         // Ensure core fields exist for any role
         if (!decoded.id || !decoded.email || !decoded.role || !decoded.name) {
-            console.error("[parseUserInfo] Token missing essential fields.", decoded);
+            console.error("[parseUserInfo] Token missing essential fields (id, email, role, name).", decoded);
              localStorage.removeItem('token'); localStorage.removeItem('userInfo'); return null;
         }
         console.log("[parseUserInfo] Token valid. Role:", decoded.role);
@@ -107,7 +109,6 @@ const parseUserInfoFromToken = (token) => {
     }
 };
 
-// --- Root App Component ---
 function App() {
     const [authState, setAuthState] = useState({
         isLoggedIn: false, userInfo: null, isLoading: true,
@@ -115,13 +116,13 @@ function App() {
     const [logoutMessage, setLogoutMessage] = useState('');
     const navigateRef = useRef(null); // For potential imperative navigation from outside React Router context
 
-    // --- Logout Handler ---
     const handleLogout = useCallback((message = "You have been logged out.") => {
         console.log(`[App] handleLogout. Message: "${message}"`);
         localStorage.removeItem("token");
         localStorage.removeItem("userInfo");
         setAuthState({ isLoggedIn: false, userInfo: null, isLoading: false });
         setLogoutMessage(message);
+        // Optionally navigate to login page after logout, handled by AppContentWrapper
     }, []);
 
     // --- Initial Auth Check & Storage Listener ---
@@ -142,13 +143,8 @@ function App() {
             console.log("[App CheckAuth] No valid session. Clearing any residual auth data.");
             // Ensure consistency if token was invalid or not present
             if (localStorage.getItem('token') || localStorage.getItem('userInfo')) {
-                localStorage.removeItem('token');
                 localStorage.removeItem('userInfo');
             }
-            setAuthState({ isLoggedIn: false, userInfo: null, isLoading: false });
-        }
-
-        const handleStorageChange = (event) => {
             if (event.key === 'token' || event.key === 'userInfo') {
                  console.log(`[App Storage Listener] Storage changed ('${event.key}'). Re-validating auth.`);
                  const currentToken = localStorage.getItem('token');
@@ -180,7 +176,7 @@ function App() {
         console.log('[App] handleLoginSuccess.');
         const parsedUser = parseUserInfoFromToken(token);
         if (parsedUser) {
-            console.log('%c[App] Login OK. Updating AuthState.', 'color: green; font-weight: bold;', parsedUser);
+            console.log('%c[App] Login OK. Updating AuthState with parsed user from token.', 'color: green; font-weight: bold;', parsedUser);
             localStorage.setItem('token', token);
             localStorage.setItem('userInfo', JSON.stringify(parsedUser));
             setAuthState({ isLoggedIn: true, userInfo: parsedUser, isLoading: false });
@@ -209,7 +205,6 @@ function App() {
         return () => window.removeEventListener('auth-error-401', handleAuthErrorEvent);
     }, [handleLogout]);
 
-    // --- Loading Screen ---
     if (authState.isLoading) {
         return (
             <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
@@ -219,7 +214,6 @@ function App() {
         );
     }
 
-    // --- Render App ---
     return (
         <AuthContext.Provider value={{ ...authState, logout: handleLogout, login: handleLoginSuccess }}>
             <Router>
@@ -290,7 +284,7 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage }) {
             // Pass the logout message to the state of the login route.
             navigate(`/login`, { replace: true, state: { logoutMessage: logoutMessage } });
         }
-    }, [logoutMessage, location.pathname, navigate]);
+    }, [logoutMessage, location.pathname, navigate, auth.isLoggedIn]);
 
     // Helper function to determine redirect path for logged-in users
     const getRedirectPathForRole = (role) => {
@@ -319,7 +313,7 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage }) {
             {(location.pathname.toLowerCase() === '/login' || location.pathname.toLowerCase() === '/collectorlogin') &&
              logoutMessage && !location.state?.logoutMessage && (
                  <div className="alert alert-warning global-message" onClick={() => setLogoutMessage('')} title="Click to dismiss"
-                      style={{ textAlign: 'center', padding: '10px', margin: '10px auto', maxWidth: '600px', cursor: 'pointer', border: '1px solid', borderRadius: '4px' }}>
+                      style={{ textAlign: 'center', padding: '10px', margin: '10px auto', maxWidth: '600px', cursor: 'pointer', border: '1px solid orange', borderRadius: '4px', backgroundColor: '#fff3e0' }}>
                     {logoutMessage}
                  </div>
             )}
@@ -361,13 +355,12 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage }) {
                         
                     {/* === Protected Client Routes === */}
                     <Route element={<ProtectedRoute requiredRole="client" />}>
+                        <Route path="/UserCalendar" element={<UserCalendar userInfo={auth.userInfo} />} />
                         <Route path="/ClientProfile" element={<ClientProfile />} />
                         <Route path="/PickupReq" element={<PickupReq />} />
                         <Route path="/CheckBuySell" element={<CheckBuySell />} />
                         <Route path="/ClientEmail" element={<ClientEmail />} />
-                        <Route path="/UserCalendar" element={<UserCalendar userInfo={auth.userInfo} />} />
-                        <Route path="/CalendarDisplay" element={<CalendarDisplay />} />
-                        <Route path="/SaleForm" element={<SaleForm />} />
+                        {/* <Route path="/BSHeader" element={<BSHeader />} /> If BSHeader is client specific */}
                         <Route path="/BuyCard" element={<BuyCard />} />
                         <Route path="/WastePickForm" element={<WastePickForm />} />
                         <Route path="/LocationMap" element={<LocationMap />} />
@@ -376,8 +369,10 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage }) {
                     {/* === Protected Business Owner Routes === */}
                     <Route element={<ProtectedRoute requiredRole="businessOwner" />}>
                          <Route path="/BOwnerHome" element={<BOwnerHome userInfo={auth.userInfo} />} />
+                         <Route path="/BusinessDashboard" element={<Navigate to="/BOwnerHome" replace />} /> {/* Redirect to BOwnerHome */}
                          <Route path="/BOwnerProfile" element={<BOwnerProfile />} />
                          <Route path="/ProAddForm" element={<ProAddForm />} />
+                         <Route path="/SaleForm" element={<SaleForm />} />
                     </Route>
 
                     {/* === Protected Collector Routes === */}
@@ -397,6 +392,7 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage }) {
                            <Route path="/Admin/Dashboard" element={<Dashboard />} />
                            <Route path="/Admin/Calendar" element={<AdCalendar />} />
                            <Route path="/Admin/Requests" element={<AdCheckReq />} />
+                           <Route path="/Admin/Scrap" element={<AdScrap />} />
                            <Route path="/Admin/Emails" element={<EmailDisplay />} />
                            <Route path="/Admin/ManageOwners" element={<HandleBOwners />} />
                            <Route path="/Admin/DisReview" element={<DisReview />} />
@@ -413,5 +409,4 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage }) {
     );
 }
 
-// --- Export App Component ---
 export default App;

@@ -1,7 +1,9 @@
 // src/Components/CollectForm/CollectForm.jsx
 import React, { useState } from 'react';
 import { AlertCircle, Mail, Phone, Lock, Home, User } from 'lucide-react';
-import './CollectorForm.css'; // Make sure this CSS file exists in the same directory
+import axiosInstance from '../../api/axiosInstance'; // Ensure this path is correct
+import API_ENDPOINTS from '../../api/apiConfig';   // Ensure this path is correct
+import './CollectorForm.css';
 
 const VALIDATION_PATTERNS = {
   NAME: /^[a-zA-Z\s]{3,50}$/,
@@ -11,8 +13,6 @@ const VALIDATION_PATTERNS = {
   ADDRESS_MIN_LENGTH: 10,
 };
 
-// Corrected component declaration:
-// Renamed from 'Form' to 'CollectForm' and added 'const'
 const CollectorForm = () => {
   const [formData, setFormData] = useState({
     name: '',
@@ -27,6 +27,8 @@ const CollectorForm = () => {
   const [successMessage, setSuccessMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [touchedFields, setTouchedFields] = useState({});
+  const [formWideError, setFormWideError] = useState('');
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -76,53 +78,77 @@ const CollectorForm = () => {
     }
     
     setErrors(prev => ({ ...prev, [name]: fieldError }));
-    return !fieldError; // Returns true if valid, false if error
+    return !fieldError;
   };
 
   const fullyValidateForm = () => {
     let isFormValid = true;
-    const currentErrors = {}; // This variable is declared but not directly used to set errors. validateSingleField updates errors state.
+    const currentFieldErrors = {};
     const allFieldsToTouch = {};
 
-    // Ensure all fields are marked as touched and validated
     for (const key in formData) {
       if (Object.prototype.hasOwnProperty.call(formData, key)) {
-        allFieldsToTouch[key] = true; // Mark as touched
-        // Re-validate and update errors state directly via validateSingleField
+        allFieldsToTouch[key] = true;
         if (!validateSingleField(key, formData[key])) {
           isFormValid = false;
         }
       }
     }
-    setTouchedFields(allFieldsToTouch); // Set all fields as touched
+    setTouchedFields(allFieldsToTouch);
     return isFormValid;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     setSuccessMessage('');
-    // Clear previous form-wide error, field errors will be re-evaluated by fullyValidateForm
-    setErrors(prev => ({ ...prev, form: '' })); 
-
+    setFormWideError(''); // Clear previous form-wide error
+    setErrors({}); // Clear previous field errors
 
     if (!fullyValidateForm()) {
       setIsLoading(false);
-      // Set a general form error message if individual field validations fail
-      setErrors(prev => ({ ...prev, form: 'Please correct the errors highlighted below.' }));
+      setFormWideError('Please correct the errors highlighted below.');
       return;
     }
 
-    // Simulate API call
-    console.log('Form data submitted:', formData); 
-    setTimeout(() => {
-      setSuccessMessage('Collector registration successful!');
+    try {
+      console.log('Submitting Collector Registration Data:', formData);
+      // Ensure API_ENDPOINTS and the specific path are defined
+      if (!API_ENDPOINTS?.COLLECTORS?.REGISTER) {
+          console.error("API endpoint for collector registration is not defined in apiConfig.");
+          setFormWideError("Configuration error: Cannot submit registration.");
+          setIsLoading(false);
+          return;
+      }
+
+      const response = await axiosInstance.post(API_ENDPOINTS.COLLECTORS.REGISTER, formData);
+
+      if (response.data && response.data.success) {
+        setSuccessMessage(response.data.message || 'Collector registration successful! Account may require verification.');
+        // Reset form
+        setFormData({ name: '', email: '', primaryPhone: '', secondaryPhone: '', password: '', address: '' });
+        setTouchedFields({});
+        setErrors({});
+      } else {
+        setFormWideError(response.data?.message || 'Registration failed. Please try again.');
+      }
+    } catch (err) {
+      console.error('Collector Registration Error:', err);
+      if (err.response && err.response.data) {
+        const serverErrorMessage = err.response.data.message || 'An unexpected error occurred.';
+        // If the backend sends specific field errors, you can try to map them
+        if (err.response.data.errors) {
+          setErrors(prev => ({...prev, ...err.response.data.errors}));
+          setFormWideError('Please correct the highlighted errors.');
+        } else {
+          setFormWideError(serverErrorMessage);
+        }
+      } else {
+        setFormWideError('Network error or server is unreachable. Please try again later.');
+      }
+    } finally {
       setIsLoading(false);
-      // Optionally reset form after successful submission
-      // setFormData({ name: '', email: '', primaryPhone: '', secondaryPhone: '', password: '', address: '' });
-      // setTouchedFields({});
-      // setErrors({});
-    }, 1500);
+    }
   };
 
   return (
@@ -131,10 +157,10 @@ const CollectorForm = () => {
         <h2 className="CollectReg-title">Collector Registration</h2>
       </div>
 
-      {errors.form && (
-        <div className="alert alert-error" role="alert">
+      {formWideError && (
+        <div className="alert alert-error global-form-error" role="alert">
           <AlertCircle size={20} />
-          <span>{errors.form}</span>
+          <span>{formWideError}</span>
         </div>
       )}
       {successMessage && (
@@ -193,7 +219,7 @@ const CollectorForm = () => {
               required disabled={isLoading}
               className={`CollectReg-input ${errors.primaryPhone ? 'input-error' : ''}`}
               placeholder="07xxxxxxxx"
-              pattern="[0-9]{10}" // HTML5 validation, good to have as fallback
+              pattern="[0-9]{10}"
               aria-invalid={!!errors.primaryPhone}
               aria-describedby={errors.primaryPhone ? "primaryPhone-error" : undefined}
             />
@@ -211,7 +237,7 @@ const CollectorForm = () => {
               disabled={isLoading}
               className={`CollectReg-input ${errors.secondaryPhone ? 'input-error' : ''}`}
               placeholder="07xxxxxxxx (optional)"
-              pattern="[0-9]{10}" // HTML5 validation
+              pattern="[0-9]{10}"
               aria-invalid={!!errors.secondaryPhone}
               aria-describedby={errors.secondaryPhone ? "secondaryPhone-error" : undefined}
             />
@@ -231,7 +257,7 @@ const CollectorForm = () => {
             required disabled={isLoading}
             className={`CollectReg-input ${errors.password ? 'input-error' : ''}`}
             placeholder="Create a password"
-            minLength="6" // HTML5 validation
+            minLength="6"
             aria-invalid={!!errors.password}
             aria-describedby={errors.password ? "password-error" : undefined}
           />

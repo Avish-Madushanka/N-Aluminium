@@ -1,6 +1,6 @@
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css');
 
-.login-container {
+.LoginPage-container {
   width: 100%;
   height: 100vh;
   display: flex;
@@ -9,14 +9,12 @@
   background-image: url('https://img.freepik.com/free-vector/paper-style-white-monochrome-background_23-2149010273.jpg');
   background-size: cover;
   background-position: center;
-  overflow: hidden;
   padding: 20px;
 }
 
-.login-content {
+.LoginPage-content {
   width: 100%;
   max-width: 1200px;
-  height: auto;
   min-height: 550px;
   display: flex;
   background-color: rgba(0, 0, 0, 0.6);
@@ -27,7 +25,7 @@
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
 }
 
-.left-section {
+.LoginPage-left {
   width: 50%;
   padding: 50px 40px;
   display: flex;
@@ -36,46 +34,45 @@
   border-right: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.welcome-title {
+.LoginPage-title {
   font-size: 44px;
   font-weight: 700;
   margin-bottom: 20px;
   line-height: 1.2;
 }
 
-.subtitle {
+.LoginPage-subtitle {
   font-size: 15px;
   line-height: 1.7;
   opacity: 0.85;
   margin-bottom: 35px;
 }
 
-.social-icons {
-  display: flex;
-  gap: 18px;
-  margin-top: 20px;
+.LoginPage-collectorReg {
+  margin-top: 25px;
+  text-align: center;
 }
 
-.social-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.15);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  text-decoration: none;
-  font-size: 18px;
+.LoginPage-collectorBtn {
+  width: 100%;
+  max-width: 220px;
+  padding: 12px 20px;
+  background-color: #ffffff;
+  color: #2d3748;
+  border: none;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
   transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.social-icon:hover {
-  background-color: rgba(255, 255, 255, 0.3);
-  transform: translateY(-2px);
+.LoginPage-collectorBtn:hover {
+  background-color: #f7fafc;
+  transform: translateY(-1px);
 }
 
-.right-section {
+.LoginPage-right {
   width: 50%;
   padding: 50px 40px;
   display: flex;
@@ -83,7 +80,7 @@
   justify-content: center;
 }
 
-.signin-title {
+.LoginPage-signinTitle {
   font-size: 28px;
   font-weight: 600;
   margin-bottom: 35px;
@@ -91,11 +88,26 @@
   text-align: center;
 }
 
-.form-group {
+.LoginPage-message {
+  min-height: 40px;
+  margin-bottom: 20px;
+}
+
+.LoginPage-error {
+  background-color: rgba(255, 0, 0, 0.2);
+  color: #f8d7da;
+  border: 1px solid rgba(255, 0, 0, 0.3);
+  padding: 10px 15px;
+  border-radius: 4px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.LoginPage-formGroup {
   margin-bottom: 25px;
 }
 
-.form-group label {
+.LoginPage-formGroup label {
   display: block;
   font-size: 14px;
   margin-bottom: 8px;
@@ -103,7 +115,7 @@
   opacity: 0.9;
 }
 
-.form-group input {
+.LoginPage-formGroup input {
   width: 100%;
   padding: 14px 12px;
   border: 1px solid transparent;
@@ -112,17 +124,16 @@
   color: #333;
   font-size: 15px;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
-  box-sizing: border-box;
 }
 
-.form-group input:focus {
+.LoginPage-formGroup input:focus {
   outline: none;
   border-color: #aaa;
   background-color: white;
   box-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
 }
 
-.signin-button {
+.LoginPage-submit {
   width: 100%;
   background-color: #007bff;
   color: white;
@@ -137,160 +148,96 @@
   transition: background-color 0.3s ease, transform 0.1s ease;
 }
 
-.signin-button:hover {
+.LoginPage-submit:hover {
   background-color: #0056b3;
 }
 
-.signin-button:active {
+.LoginPage-submit:active {
   transform: scale(0.98);
 }
 
-.signin-button:disabled {
+.LoginPage-submit:disabled {
   background-color: #6c757d;
   cursor: not-allowed;
 }
 
-.error-message, .success-message {
-  padding: 10px 15px;
-  margin-bottom: 20px;
-  border-radius: 4px;
-  font-size: 14px;
+.LoginPage-signupLink {
   text-align: center;
-  width: 300px;
+  font-size: 0.9em;
+  margin-top: 20px;
 }
 
-.error-message {
-  background-color: rgba(255, 0, 0, 0.2);
-  color: #f8d7da;
-  border: 1px solid rgba(255, 0, 0, 0.3);
-}
-
-.success-message {
-  background-color: rgba(0, 255, 0, 0.15);
-  color: #d4edda;
-  border: 1px solid rgba(0, 255, 0, 0.25);
-}
-
-.terms {
-  font-size: 12px;
-  opacity: 0.8;
-  line-height: 1.6;
-  text-align: center;
-}
-
-.terms a {
+.LoginPage-signupLink a {
   color: #a0d0ff;
   text-decoration: underline;
-  transition: color 0.3s ease;
 }
 
-.terms a:hover {
+.LoginPage-signupLink a:hover {
   color: #ffffff;
 }
 
-collector-reg-container {
-  margin-top: 25px;
-  text-align: center;
-}
-
-.collector-btn {
-  width: 100%;
-  max-width: 220px;
-  padding: 12px 20px;
-  background-color: #ffffff;
-  color: #2d3748;
-  border: none;
-  border-radius: 4px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.collector-btn:hover {
-  background-color: #f7fafc;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
 @media (max-width: 992px) {
-  .login-content {
+  .LoginPage-content {
     flex-direction: column;
-    height: auto;
     max-width: 500px;
-    min-height: 0;
   }
 
-  .left-section,
-  .right-section {
+  .LoginPage-left,
+  .LoginPage-right {
     width: 100%;
     padding: 40px 30px;
     border-right: none;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   }
 
-  .left-section {
+  .LoginPage-left {
     text-align: center;
   }
 
-  .social-icons {
-    justify-content: center;
-  }
-
-  .right-section {
-    border-bottom: none;
-  }
-
-  .welcome-title {
+  .LoginPage-title {
     font-size: 36px;
   }
 
-  .subtitle {
+  .LoginPage-subtitle {
     font-size: 14px;
   }
 
-  .signin-title {
+  .LoginPage-signinTitle {
     font-size: 24px;
   }
 }
 
 @media (max-width: 576px) {
-  .login-container {
+  .LoginPage-container {
     padding: 10px;
   }
 
-  .login-content {
+  .LoginPage-content {
     max-width: 95%;
   }
 
-  .left-section, .right-section {
+  .LoginPage-left,
+  .LoginPage-right {
     padding: 30px 20px;
   }
 
-  .welcome-title {
+  .LoginPage-title {
     font-size: 30px;
   }
 
-  .subtitle {
+  .LoginPage-subtitle {
     font-size: 13px;
   }
 
-  .signin-title {
+  .LoginPage-signinTitle {
     font-size: 22px;
   }
 
-  .social-icon {
-    width: 35px;
-    height: 35px;
-    font-size: 16px;
-  }
-
-  .signin-button {
+  .LoginPage-submit {
     padding: 12px;
     font-size: 15px;
   }
 
-  .form-group input {
+  .LoginPage-formGroup input {
     padding: 12px 10px;
     font-size: 14px;
   }

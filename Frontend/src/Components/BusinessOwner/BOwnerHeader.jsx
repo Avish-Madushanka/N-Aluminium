@@ -7,8 +7,13 @@ import './BOwnerHeader.css'; // Ensure your CSS file exists and styles elements 
 const defaultCoverPhoto = 'https://images.unsplash.com/photo-1504805572947-34fad45aed93?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8ZmFjZWJvb2slMjBjb3ZlcnxlbnwwfHwwfHx8MA%3D%3D'; // Placeholder cover
 const defaultProfilePhoto = 'https://i.pinimg.com/736x/71/b3/e4/71b3e4159892bb319292ab3b76900930.jpg'; // Placeholder profile
 
-// Your backend URL - Make sure this points to where your backend server is running
-const BACKEND_URL = 'http://localhost:5003'; // Default, adjust port if you changed it
+// Your backend URL - For Vite, ensure VITE_BACKEND_URL (or VITE_API_BASE_URL) is in your .env file
+// and you've restarted the dev server.
+// We'll derive the base URL from VITE_API_BASE_URL if VITE_BACKEND_URL is not explicitly set.
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5003/api';
+const BACKEND_URL = (import.meta.env.VITE_BACKEND_URL || API_BASE_URL.replace('/api', ''));
+
+console.log("BOwnerHeader: Using BACKEND_URL:", BACKEND_URL); // For debugging
 
 const BOwnerHeader = () => {
   const [businessData, setBusinessData] = useState(null); // State to hold the loaded user info
@@ -31,49 +36,37 @@ const BOwnerHeader = () => {
           const parsedData = JSON.parse(storedDataString);
           console.log("BOwnerHeader: Parsed userInfo from localStorage:", parsedData);
 
-          // --- Validate User Type ---
-          // Check if the parsed data is for a 'bowner' or 'admin'
-          if (parsedData && (parsedData.userType === 'bowner' || parsedData.role === 'admin')) {
-            // If valid, update the component's state
+          // --- Validate User Type/Role ---
+          if (parsedData && (parsedData.role === 'businessOwner' || parsedData.role === 'admin')) {
             setBusinessData(parsedData);
+            console.log("BOwnerHeader: User role validated. Data set for role:", parsedData.role);
           } else {
-            // If data exists but isn't the correct type
-            console.warn("BOwnerHeader: Loaded userInfo is not for a bowner/admin. User type:", parsedData?.userType, "Role:", parsedData?.role);
-            setError('Access denied. Invalid user type loaded.'); // Set appropriate error message
-            setBusinessData(null); // Clear potentially incorrect data
-            // Consider clearing the bad localStorage data here if desired
-            // localStorage.removeItem('userInfo');
-            // localStorage.removeItem('token');
+            console.warn("BOwnerHeader: Loaded userInfo is not for a businessOwner/admin. User role:", parsedData?.role);
+            setError('Access denied. Invalid user role loaded.');
+            setBusinessData(null);
           }
         } else {
-          // No 'userInfo' found in localStorage
           console.log("BOwnerHeader: No 'userInfo' found in localStorage. User likely not logged in or data cleared.");
           setError('Business information not found. Please log in.');
           setBusinessData(null);
         }
       } catch (parseError) {
-        // Handle potential errors during JSON.parse (if data in localStorage is corrupted)
         console.error("BOwnerHeader: Error parsing userInfo from localStorage:", parseError);
         setError('Failed to load user information. Data might be corrupted.');
         setBusinessData(null);
-        // Consider clearing the corrupted item: localStorage.removeItem('userInfo');
       } finally {
-        // Stop the loading indicator whether successful or not
         setLoading(false);
       }
     };
 
-    loadBusinessData(); // Execute the function
+    loadBusinessData();
 
-  }, []); // Empty dependency array ensures this runs only once on mount
+  }, []);
 
-  // --- Construct Image URLs ---
-  // Safely access photo paths from the businessData state using optional chaining (?.)
-  const coverPhotoPath = businessData?.coverPhoto; // e.g., "/uploads/b_owner_covers/file.jpg" or null/undefined
-  const profilePhotoPath = businessData?.profilePhoto; // e.g., "/uploads/b_owner_profiles/file.jpg" or null/undefined
+  const coverPhotoPath = businessData?.coverPhoto;
+  const profilePhotoPath = businessData?.profilePhoto;
 
-  // Build the full image URL only if a path exists, otherwise fallback to the default image
-  // Ensure paths from DB/Token start with '/'
+  // BACKEND_URL is used here to construct full image paths
   const coverPhotoUrl = coverPhotoPath && coverPhotoPath.startsWith('/')
     ? `${BACKEND_URL}${coverPhotoPath}`
     : defaultCoverPhoto;
@@ -82,65 +75,49 @@ const BOwnerHeader = () => {
     ? `${BACKEND_URL}${profilePhotoPath}`
     : defaultProfilePhoto;
 
-  // --- Render Logic ---
-
-  // 1. Show Loading State
   if (loading) {
     return <div className="loading-placeholder" style={{ padding: '40px', textAlign: 'center', color: '#555' }}>Loading Business Information...</div>;
   }
 
-  // 2. Show Error State (if error occurred or no valid data found)
   if (error || !businessData) {
      return (
-        // Use CSS classes for styling the error message box
         <div className="business-data-missing error-message" style={{ padding: '20px', border: '1px solid #dc2626', margin: '20px', borderRadius: '5px', backgroundColor: '#fee2e2', color: '#dc2626', textAlign: 'center' }}>
             <p><strong>Error:</strong> {error || 'Could not load business information. Please try logging in again.'}</p>
-            {/* Optionally add a button/link to redirect to login */}
-            {/* <button onClick={() => window.location.href='/Login'}>Go to Login</button> */}
         </div>
      );
   }
 
-  // 3. Render Header with Business Data (Success)
   return (
-    <div className="business1-card"> {/* Ensure class names match your CSS */}
-      {/* Cover Photo Section */}
+    <div className="business1-card">
       <div className="cover1-photo">
         <img
             src={coverPhotoUrl}
-            alt={`${businessData.businessName || 'Business'} Cover Photo`} // Descriptive alt text
+            alt={`${businessData.businessName || 'Business'} Cover Photo`}
             className="cover1-image"
-            // onError fallback: If the constructed image URL fails (404, etc.), display the default cover photo
             onError={(e) => {
                 console.warn(`Failed to load cover image from ${coverPhotoUrl}. Using default.`);
-                e.target.onerror = null; // Prevent infinite loop if the default also fails
+                e.target.onerror = null;
                 e.target.src = defaultCoverPhoto;
             }}
         />
-        {/* Profile Photo overlaid on Cover Photo */}
         <div className="profile1-photo">
           <img
             src={profilePhotoUrl}
-            alt={`${businessData.name || 'Owner'} Profile Photo`} // Descriptive alt text
+            alt={`${businessData.name || 'Owner'} Profile Photo`}
             className="profile1-image"
-            // onError fallback for profile photo
             onError={(e) => {
                 console.warn(`Failed to load profile image from ${profilePhotoUrl}. Using default.`);
-                e.target.onerror = null; // Prevent infinite loop
+                e.target.onerror = null;
                 e.target.src = defaultProfilePhoto;
             }}
           />
         </div>
       </div>
 
-      {/* Business Info Section */}
       <div className="business1-info">
-        {/* Display data from businessData state, using fallbacks for safety */}
         <h2 className="business1-name">{businessData?.businessName || 'Business Name N/A'}</h2>
-        {/* 'name' in userInfo corresponds to 'ownerName' for BOwner */}
         <p className="owner1-name">{businessData?.name || 'Owner Name N/A'}</p>
-        {/* 'contactNumber' should now be available from the token */}
-        <p className="contact1-number">{businessData?.contactNumber || 'Contact N/A'}</p>
+        <p className="contact1-number">{businessData?.contactNumber || 'Contact N/A'}</p> {/* Ensure contactNumber is in JWT payload */}
         <p className="email1">{businessData?.email || 'Email N/A'}</p>
       </div>
     </div>

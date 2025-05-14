@@ -2,17 +2,30 @@
 import React from 'react';
 import { X, Save } from 'lucide-react';
 import { ClipLoader } from 'react-spinners';
-import './EditBookingModal.css'; // Create this CSS file
+import './EditBookingModal.css';
 
-function EditBookingModal({ isOpen, onClose, requestData, onInputChange, onSave, isSaving, error }) {
+// Add timeSlots to props (serviceAreas is optional if you also change that field)
+function EditBookingModal({
+    isOpen,
+    onClose,
+    requestData,
+    onInputChange,
+    onSave,
+    isSaving,
+    error,
+    timeSlots = [], // Default to empty array if not provided
+    // serviceAreas = []
+}) {
     if (!isOpen || !requestData) return null;
 
     const handleModalContentClick = (e) => e.stopPropagation();
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (!isSaving) onSave(); // Prevent double-submit
+        if (!isSaving) onSave();
     };
+
+    const activeTimeSlots = timeSlots.filter(slot => slot.active);
 
     return (
         <div className="modal-overlay" onClick={onClose}>
@@ -34,8 +47,35 @@ function EditBookingModal({ isOpen, onClose, requestData, onInputChange, onSave,
                             <input type="datetime-local" id="selectedDate" name="selectedDate" value={requestData.selectedDate || ''} onChange={onInputChange} className="form-input" required disabled={isSaving} />
                         </div>
                         <div className="form-group">
-                            <label htmlFor="timeSlotId" className="form-label">Time Slot ID*</label>
-                            <input type="text" id="timeSlotId" name="timeSlotId" value={requestData.timeSlotId || ''} onChange={onInputChange} className="form-input" placeholder="e.g., morning" required disabled={isSaving} />
+                            <label htmlFor="timeSlotId" className="form-label">Time Slot*</label>
+                            {/* Change to select dropdown */}
+                            <select
+                                id="timeSlotId"
+                                name="timeSlotId"
+                                value={requestData.timeSlotId || ''}
+                                onChange={onInputChange}
+                                className="form-select" // Use form-select for consistent styling
+                                required
+                                disabled={isSaving || activeTimeSlots.length === 0}
+                            >
+                                <option value="">Select Time Slot</option>
+                                {/* Ensure the currently selected timeSlotId is an option, even if not in activeTimeSlots (e.g., if it was deactivated) */}
+                                {requestData.timeSlotId && !activeTimeSlots.some(ts => ts.time === requestData.timeSlotId) && (
+                                    <option value={requestData.timeSlotId} disabled>
+                                        {requestData.timeSlotId} (Current)
+                                    </option>
+                                )}
+                                {activeTimeSlots.map(slot => (
+                                    <option key={slot.id} value={slot.time}> {/* VALUE is slot.time */}
+                                        {slot.label} ({slot.time})
+                                    </option>
+                                ))}
+                            </select>
+                            {activeTimeSlots.length === 0 && !isSaving && (
+                                <small className="form-text text-muted" style={{color: 'red'}}>
+                                    No active time slots available. Check calendar settings.
+                                </small>
+                            )}
                         </div>
                         <div className="form-group">
                             <label htmlFor="contactName" className="form-label">Contact Name*</label>
@@ -53,7 +93,7 @@ function EditBookingModal({ isOpen, onClose, requestData, onInputChange, onSave,
                         {/* Column 2 */}
                         <div className="form-group">
                             <label htmlFor="materialTypeId" className="form-label">Material Type ID*</label>
-                            <input type="text" id="materialTypeId" name="materialTypeId" value={requestData.materialTypeId || ''} onChange={onInputChange} className="form-input" placeholder="e.g., cans" required disabled={isSaving} />
+                            <input type="text" id="materialTypeId" name="materialTypeId" value={requestData.materialTypeId || ''} onChange={onInputChange} className="form-input" placeholder="e.g., cans-id" required disabled={isSaving} />
                         </div>
                         <div className="form-group">
                             <label htmlFor="estimatedWeight" className="form-label">Est. Weight (kg)</label>
@@ -61,7 +101,8 @@ function EditBookingModal({ isOpen, onClose, requestData, onInputChange, onSave,
                         </div>
                         <div className="form-group">
                             <label htmlFor="serviceAreaId" className="form-label">Service Area ID*</label>
-                            <input type="text" id="serviceAreaId" name="serviceAreaId" value={requestData.serviceAreaId || ''} onChange={onInputChange} className="form-input" placeholder="e.g., downtown" required disabled={isSaving} />
+                            {/* Keeping serviceAreaId as text for now, but could be a dropdown similar to timeSlotId */}
+                            <input type="text" id="serviceAreaId" name="serviceAreaId" value={requestData.serviceAreaId || ''} onChange={onInputChange} className="form-input" placeholder="e.g., downtown-id" required disabled={isSaving} />
                         </div>
                         <div className="form-group">
                             <label htmlFor="status" className="form-label">Status*</label>
@@ -75,6 +116,10 @@ function EditBookingModal({ isOpen, onClose, requestData, onInputChange, onSave,
                         <div className="form-group full-width">
                             <label htmlFor="pickupLocation" className="form-label">Pickup Location*</label>
                             <textarea id="pickupLocation" name="pickupLocation" rows="3" value={requestData.pickupLocation || ''} onChange={onInputChange} className="form-input" required disabled={isSaving} />
+                        </div>
+                        <div className="form-group full-width">
+                            <label htmlFor="adminNotes" className="form-label">Admin Notes (for user email on cancellation)</label>
+                            <textarea id="adminNotes" name="adminNotes" rows="3" value={requestData.adminNotes || ''} onChange={onInputChange} className="form-input" placeholder="Optional notes for the user, e.g., reason for cancellation." disabled={isSaving} />
                         </div>
                     </div>
 
