@@ -3,7 +3,7 @@ import './ChatBot.css'; // We'll create this CSS file next
 import { MessageSquare, X, Send, Bot } from 'lucide-react'; // Using lucide-react for icons
 
 const qaPairs = {
-  "hello": "Hi there! How can I help you today?",
+  "hey": "Hi there! How can I help you today?",
   "hi": "Hello! What can I do for you?",
   "how are you": "I'm just a bunch of code, but I'm doing great! Thanks for asking.",
   "what is your name": "I'm your friendly website assistant!",
