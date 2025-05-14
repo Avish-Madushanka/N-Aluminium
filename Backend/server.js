@@ -6,7 +6,6 @@ const path = require('path');
 const http = require('http');
 
 // Import the connectDB function
-// Adjust the path if your db.js is in a different location (e.g., './db' if in the same folder)
 const connectDB = require('./config/db');
 
 // --- Import Routes ---
@@ -17,7 +16,6 @@ const calendarSettingsRoutes = require('./routes/calendarSettingsRoutes');
 const bookingRoutes = require('./routes/bookingRoutes');
 const reviewRoutes = require('./routes/reviewRoutes');
 const scrapTypeRoutes = require('./routes/scrapTypeRoutes');
-const collectorRoutes = require('./routes/collectorRoutes');
 
 // --- Import Controllers/Middleware ---
 const { createInitialAdmin } = require('./controllers/adminController');
@@ -36,9 +34,10 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 console.log(`[Server Config] Serving static files from ${path.join(__dirname, 'uploads')} at /uploads`);
 
-
 // --- API Routes Mounting ---
-app.get('/', (req, res) => { res.status(200).json({ status: 'ok', message: 'Backend API is running.' }); });
+app.get('/', (req, res) => {
+    res.status(200).json({ status: 'ok', message: 'Backend API is running.' });
+});
 
 const mountRoutes = () => {
     console.log(`[Server Config] Mounting /api/auth routes...`);
@@ -61,16 +60,12 @@ const mountRoutes = () => {
         console.log(`[Server Config] Mounting /api/scrap-types routes...`);
         app.use('/api/scrap-types', scrapTypeRoutes);
     }
-    if (collectorRoutes) {
-        console.log(`[Server Config] Mounting /api/collectors routes...`);
-        app.use('/api/collectors', collectorRoutes);
-    }
     console.log('[Server Config] All routes mounted.');
 };
 
-mountRoutes(); // Call the function to mount all routes
+mountRoutes();
 
-// --- Global Error Handler (MUST BE LAST middleware before listen) ---
+// --- Global Error Handler ---
 console.log('[Server Config] Adding global error handler.');
 app.use(errorHandler);
 
@@ -80,13 +75,9 @@ const server = http.createServer(app);
 // --- Start Server Function ---
 const startServer = async () => {
     try {
-        // Connect to Database
-        await connectDB(); // This now handles all Mongoose connection logic
-
-        // Start listening for requests
+        await connectDB();
         server.listen(PORT, async () => {
             console.log(`[Server Startup] Server listening on http://localhost:${PORT}`);
-            // Create initial admin after server is listening and DB is connected
             try {
                 await createInitialAdmin();
             } catch (adminError) {
@@ -101,39 +92,36 @@ const startServer = async () => {
             console.error(error);
         }
         console.error('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
-        process.exit(1); // Exit if DB connection fails from connectDB or other critical startup error
+        process.exit(1);
     }
 };
 
-// --- Global Unhandled Error Handlers for Node Process ---
-// (These should ideally be outside startServer, as they are process-level)
+// --- Global Unhandled Error Handlers ---
 process.on('unhandledRejection', (err, promise) => {
-  console.error(`Unhandled Rejection at: ${promise}, reason: ${err.message}`);
-  console.error(err.stack);
-  // Gracefully shutdown the server if it's running
-  if (server && server.listening) {
-    server.close(() => {
-      console.error('Server closed due to Unhandled Rejection.');
-      process.exit(1);
-    });
-  } else {
-    process.exit(1);
-  }
+    console.error(`Unhandled Rejection at: ${promise}, reason: ${err.message}`);
+    console.error(err.stack);
+    if (server && server.listening) {
+        server.close(() => {
+            console.error('Server closed due to Unhandled Rejection.');
+            process.exit(1);
+        });
+    } else {
+        process.exit(1);
+    }
 });
 
 process.on('uncaughtException', (err) => {
-  console.error(`Uncaught Exception: ${err.message}`);
-  console.error(err.stack);
-  if (server && server.listening) {
-    server.close(() => {
-      console.error('Server closed due to Uncaught Exception.');
-      process.exit(1);
-    });
-  } else {
-    process.exit(1);
-  }
+    console.error(`Uncaught Exception: ${err.message}`);
+    console.error(err.stack);
+    if (server && server.listening) {
+        server.close(() => {
+            console.error('Server closed due to Uncaught Exception.');
+            process.exit(1);
+        });
+    } else {
+        process.exit(1);
+    }
 });
-
 
 // --- Initiate Server Start ---
 startServer();
