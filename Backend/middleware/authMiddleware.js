@@ -5,7 +5,6 @@ const mongoose = require('mongoose');
 const Admin = require('../models/Admin');
 const Client = require('../models/Client');
 const BusinessOwner = require('../models/BusinessOwner');
-const Collector = require('../models/Collector'); // <--- ADD THIS IMPORT
 
 console.log('[AuthMiddleware] Module loaded.');
 console.log('[AuthMiddleware] Post-Import Check - BusinessOwner Type:', typeof BusinessOwner, 'Has findById:', typeof BusinessOwner?.findById === 'function');

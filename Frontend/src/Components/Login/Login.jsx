@@ -1,48 +1,56 @@
+// Frontend/src/Components/Login/Login.jsx
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import axiosInstance from '../../api/axiosInstance';
-import { Link } from 'react-router-dom';
 import API_ENDPOINTS from '../../apiConfig';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
+
 import './Login.css';
 
-function Login({ onLoginSuccess }) {
+console.log('[Login.jsx] Mounted.');
+console.log('[Login.jsx] axiosInstance imported:', !!axiosInstance);
+console.log('[Login.jsx] API_ENDPOINTS imported:', API_ENDPOINTS ? 'Object received' : 'API_ENDPOINTS IS UNDEFINED - CHECK IMPORT');
+console.log('[Login.jsx] useAuth imported:', !!useAuth);
+
+function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [serverStatus, setServerStatus] = useState('checking');
 
-  const [showCollectorLogin, setShowCollectorLogin] = useState(false);
-  const [collectorEmail, setCollectorEmail] = useState('');
-  const [collectorPassword, setCollectorPassword] = useState('');
-  const [collectorError, setCollectorError] = useState('');
-  const [collectorLoading, setCollectorLoading] = useState(false);
+  const auth = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     setErrorMessage('');
-    checkBackendStatus();
+    if (typeof API_ENDPOINTS?.BACKEND_ROOT_URL !== 'string') {
+      console.warn("[Login.jsx] API_ENDPOINTS.BACKEND_ROOT_URL is not configured.");
+      setServerStatus('error');
+      setErrorMessage("Client configuration error for server check.");
+    } else {
+      checkBackendStatus();
+    }
   }, []);
 
   const isConnectionError = (msg) =>
-    /connection error|cannot reach|timed out|network error/i.test(msg);
+    msg && /connection error|cannot reach|timed out|network error/i.test(String(msg).toLowerCase());
 
   const checkBackendStatus = async () => {
-    const backendRootUrl = API_ENDPOINTS.BACKEND_ROOT_URL || 'http://localhost:5003/';
+    const backendRootUrl = API_ENDPOINTS?.BACKEND_ROOT_URL || 'http://localhost:5003/';
     setServerStatus('checking');
-
     if (isConnectionError(errorMessage)) {
       setErrorMessage('');
     }
-
     try {
-      await axios.get(backendRootUrl, { timeout: 5000 });
+      await axiosInstance.get(backendRootUrl.replace('/api', ''), { timeout: 5000 });
       setServerStatus('online');
       return true;
     } catch (err) {
-      console.error("[Login Comp] Backend check failed:", err.message);
+      console.error("[Login.jsx] Backend check failed:", err.message);
       setServerStatus('offline');
       if (!errorMessage || isConnectionError(errorMessage)) {
-        setErrorMessage('Connection Error: Cannot reach the server. Please ensure it is running.');
+        setErrorMessage('Connection Error: Cannot reach the server. Please ensure it is running and accessible.');
       }
       return false;
     }
@@ -51,14 +59,11 @@ function Login({ onLoginSuccess }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMessage('');
-
     if (!email || !password) {
       setErrorMessage(!email ? "Please enter your email address." : "Please enter your password.");
       return;
     }
-
     setIsLoading(true);
-
     if (serverStatus !== 'online') {
       const isOnline = await checkBackendStatus();
       if (!isOnline) {
@@ -67,158 +72,97 @@ function Login({ onLoginSuccess }) {
       }
     }
 
+    if (typeof auth?.login !== 'function') {
+      console.error("[Login.jsx handleSubmit] CRITICAL: auth.login is not a function!");
+      setErrorMessage("Login system error (auth context). Please try again later or contact support.");
+      setIsLoading(false);
+      return;
+    }
+    if (typeof API_ENDPOINTS?.AUTH?.LOGIN !== 'string') {
+      console.error("[Login.jsx handleSubmit] CRITICAL: Login API Endpoint missing.");
+      setErrorMessage("Configuration error: Login endpoint missing. Cannot proceed.");
+      setIsLoading(false);
+      return;
+    }
+
     try {
       const response = await axiosInstance.post(API_ENDPOINTS.AUTH.LOGIN, { email, password });
-
       if (response.data?.success && response.data?.token && response.data?.data) {
-        onLoginSuccess(response.data.token, response.data.data);
+        console.log("[Login.jsx] Login successful for user:", response.data.data.email);
+        auth.login(response.data.token, response.data.data);
       } else {
         const errMsg = response.data?.message || 'Login failed: Unexpected response from server.';
+        console.warn("[Login.jsx] Login failed:", response.data);
         setErrorMessage(errMsg);
-        setIsLoading(false);
       }
     } catch (err) {
       handleApiError(err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleApiError = (error) => {
     setIsLoading(false);
-
-    if (error.code === 'ECONNABORTED') {
+    console.error("[Login.jsx handleApiError]", error);
+    if (error.code === 'ECONNABORTED' || error.message.toLowerCase().includes('timeout')) {
       setErrorMessage('Login request timed out. The server might be busy or not responding.');
       setServerStatus('error');
       return;
     }
-
     if (error.response) {
       const { status, data } = error.response;
-      const msg = data?.message;
+      const msg = data?.message || `An error occurred (Status ${status}).`;
       switch (status) {
-        case 400:
-          setErrorMessage(msg || 'Invalid input. Please check your details.');
-          break;
-        case 401:
-          setErrorMessage(msg || 'Incorrect email or password.');
-          break;
-        case 403:
-          setErrorMessage(msg || 'Access denied with these credentials.');
-          break;
-        case 500:
-        default:
-          setErrorMessage(msg || `Login failed (Status ${status}). Please try again.`);
-          if (status >= 500) setServerStatus('error');
+        case 400: setErrorMessage(msg); break;
+        case 401: setErrorMessage(msg || 'Incorrect email or password.'); break;
+        case 403: setErrorMessage(msg || 'Access denied.'); break;
+        default: setErrorMessage(msg); if (status >= 500) setServerStatus('error');
       }
     } else if (error.request) {
-      setErrorMessage('Network Error: Could not connect to the server. Check your internet connection.');
+      setErrorMessage('Network Error: Could not connect to the server.');
       setServerStatus('offline');
     } else {
-      setErrorMessage(error.message || 'Unexpected error occurred during login.');
+      setErrorMessage(error.message || 'Unexpected login error.');
     }
   };
 
-  const handleCollectorSubmit = (e) => {
-    e.preventDefault();
-    setCollectorError('');
-    setCollectorLoading(true);
-
-    if (!collectorEmail || !collectorPassword) {
-      setCollectorError('Please fill in all fields');
-      setCollectorLoading(false);
-      return;
-    }
-
-    // Simulate login (replace with axios later)
-    setTimeout(() => {
-      console.log('Collector login attempted:', { collectorEmail, collectorPassword });
-      setCollectorLoading(false);
-      // Do actual login handling here
-    }, 1000);
-  };
+  if (typeof API_ENDPOINTS === 'undefined' || typeof auth === 'undefined' || typeof auth.login !== 'function') {
+    const errorDetails = `API_ENDPOINTS: ${API_ENDPOINTS ? 'Loaded' : 'MISSING! Check import.'}. Auth Context: ${auth ? 'Loaded' : 'MISSING!'}. Auth Login Fn: ${auth && typeof auth.login === 'function' ? 'Available' : 'MISSING!'}`;
+    console.error("[Login.jsx] Critical dependency error:", errorDetails);
+    return (
+      <div className="LoginPage-container error-page" style={{ padding: '20px', textAlign: 'center' }}>
+        <h2>Application Configuration Error</h2>
+        <p style={{ color: 'red', fontWeight: 'bold' }}>A critical part of the application is not configured correctly.</p>
+        <p>Details: {errorDetails}</p>
+        <p>Please check the browser console and ensure all imports are correct and the AuthProvider is set up in App.jsx.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="LoginPage-container">
-      {/* Collector Login Popup */}
-      {showCollectorLogin && (
-        <div className="collector-login-popup">
-          <div className="collector-login-content">
-            <button 
-              className="collector-login-close"
-              onClick={() => setShowCollectorLogin(false)}
-            >
-              &times;
-            </button>
-            <h2>Collector Login</h2>
-            <p>Access your collector dashboard</p>
-
-            {collectorError && <div className="collector-login-error">{collectorError}</div>}
-
-            <form onSubmit={handleCollectorSubmit}>
-              <div className="collector-form-group">
-                <label>Email</label>
-                <input
-                  type="email"
-                  value={collectorEmail}
-                  onChange={(e) => setCollectorEmail(e.target.value)}
-                  placeholder="collector@example.com"
-                  required
-                />
-              </div>
-              <div className="collector-form-group">
-                <label>Password</label>
-                <input
-                  type="password"
-                  value={collectorPassword}
-                  onChange={(e) => setCollectorPassword(e.target.value)}
-                  placeholder="Enter your password"
-                  required
-                />
-              </div>
-              <button type="submit" disabled={collectorLoading}>
-                {collectorLoading ? 'Logging in...' : 'Login'}
-              </button>
-            </form>
-            <div className="collector-login-footer">
-              <Link to="/collector-forgot-password">Forgot password?</Link>
-              <span>
-                Don’t have an account?{' '}
-                <Link to="/collector-register">Register</Link>
-              </span>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Main Login Form */}
-      <div className={`LoginPage-content ${showCollectorLogin ? 'blurred' : ''}`}>
+      <div className="LoginPage-content">
         <div className="LoginPage-left">
           <h1 className="LoginPage-title">Welcome Back!</h1>
           <p className="LoginPage-subtitle">Log in to your N-Aluminium account.</p>
-          <div className="LoginPage-collectorReg">
-            <button 
-              className="LoginPage-collectorBtn"
-              onClick={() => setShowCollectorLogin(true)}
-            >
-              Login as Collector
-            </button>
-          </div>
         </div>
-
         <div className="LoginPage-right">
           <h2 className="LoginPage-signinTitle">Sign in</h2>
           <div className="LoginPage-message">
             {errorMessage && <div className="LoginPage-error">{errorMessage}</div>}
           </div>
-          <form onSubmit={handleSubmit} noValidate>
+          <form onSubmit={handleSubmit} noValidate autoComplete="off">
             <div className="LoginPage-formGroup">
               <label htmlFor="login-email">Email Address</label>
               <input
                 type="email"
                 id="login-email"
+                name="loginEmail"
                 value={email}
                 onChange={(e) => setEmail(e.target.value.trim())}
                 placeholder="you@example.com"
-                autoComplete="email"
+                autoComplete="off"
                 required
                 disabled={isLoading || serverStatus === 'checking'}
               />
@@ -228,19 +172,16 @@ function Login({ onLoginSuccess }) {
               <input
                 type="password"
                 id="login-password"
+                name="loginPassword"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter your password"
-                autoComplete="current-password"
+                autoComplete="new-password"
                 required
                 disabled={isLoading || serverStatus === 'checking'}
               />
             </div>
-            <button
-              type="submit"
-              className="LoginPage-submit"
-              disabled={isLoading || serverStatus !== 'online'}
-            >
+            <button type="submit" className="LoginPage-submit" disabled={isLoading || serverStatus !== 'online'}>
               {isLoading ? 'Signing in...' : serverStatus === 'checking' ? 'Connecting...' : 'Sign in now'}
             </button>
           </form>
