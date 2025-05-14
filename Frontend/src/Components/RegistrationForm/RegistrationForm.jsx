@@ -10,14 +10,6 @@ const RegistrationForm = () => {
         
         <div className="account-options">
           <div className="account-option">
-            <div className="icon-container client-icon">
-              <i className="fas fa-user"></i>
-            </div>
-            <h3>Collector</h3>
-            <p>Access services</p>
-            <a href="/CollectorForm" className="option-button">Select</a>
-          </div>
-          <div className="account-option">
             <div className="icon-container business-icon">
               <i className="fas fa-briefcase"></i>
             </div>

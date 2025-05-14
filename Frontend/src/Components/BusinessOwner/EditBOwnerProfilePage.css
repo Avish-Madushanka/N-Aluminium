@@ -1,0 +1,272 @@
+/* Frontend/src/Pages/EditBOwnerProfilePage.css */
+
+.bowner-profile-update-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Align to top for potentially long forms */
+    min-height: 90vh;      /* Ensure it takes good height on the page */
+    padding: 40px 20px;    /* More padding around the card */
+    background-color: #f4f7f6; /* A light, neutral background for the page */
+}
+
+.bowner-profile-update-card {
+    background-color: #ffffff;
+    padding: 30px 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Softer, more spread shadow */
+    width: 100%;
+    max-width: 750px; /* Can be wider for edit forms with more fields */
+}
+
+.bowner-profile-update-title {
+    text-align: center;
+    color: #2c3e50; /* A deep, professional blue-gray */
+    font-size: 1.8em; /* Slightly smaller than a main registration title */
+    margin-bottom: 25px;
+    font-weight: 600;
+}
+
+/* Styles for read-only information display */
+.form-group.read-only-group {
+    margin-bottom: 18px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ecf0f1; /* Light separator */
+}
+.form-group.read-only-group label {
+    font-weight: 600;
+    color: #34495e; /* Slightly darker label for read-only */
+    font-size: 0.9em;
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+}
+.form-group.read-only-group label svg {
+    margin-right: 8px;
+    color: #7f8c8d; /* Muted icon color */
+}
+.form-group.read-only-group p {
+    font-size: 1em;
+    color: #333;
+    margin-top: 2px;
+    padding: 5px 0;
+    word-break: break-all; /* Prevent long emails/IDs from breaking layout */
+}
+
+
+/* Grid for form elements */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Responsive columns */
+    gap: 20px 25px; /* Row and column gap */
+    margin-bottom: 20px;
+}
+.file-inputs .form-group {
+    align-items: flex-start; /* Align file inputs to start if they vary in height */
+}
+
+.form-group {
+    margin-bottom: 20px; /* Default margin if not in grid */
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+    font-weight: 500; /* Slightly less bold than main titles */
+    color: #34495e; /* Dark gray for labels */
+    font-size: 0.9rem;
+}
+.form-group label svg {
+    margin-right: 8px;
+    color: #f39c12; /* An accent color (orange/gold) */
+}
+
+/* Input fields styling */
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="password"],
+textarea {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid #bdc3c7; /* Light gray border */
+    border-radius: 6px;
+    font-size: 0.95em;
+    box-sizing: border-box; /* Ensures padding and border are inside width/height */
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="tel"]:focus,
+input[type="password"]:focus,
+textarea:focus {
+    border-color: #f39c12; /* Highlight on focus */
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(243, 156, 18, 0.2); /* Soft glow */
+}
+textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+
+/* File inputs */
+input[type="file"] {
+    margin-top: 8px;
+    font-size: 0.9em;
+    border: 1px dashed #bdc3c7;
+    padding: 8px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+input[type="file"]::-webkit-file-upload-button { /* For Chrome/Safari */
+    background-color: #f39c12;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+input[type="file"]::file-selector-button { /* Standard */
+    background-color: #f39c12;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.image-preview {
+    width: 120px;
+    height: 120px;
+    margin-top: 10px;
+    border: 2px solid #ecf0f1; /* Light border for preview */
+    border-radius: 8px;
+    object-fit: cover; /* Ensures image covers the area without distortion */
+    display: block; /* Or inline-block */
+}
+.existing-image-preview {
+    /* opacity: 0.8; */ /* Optional: differentiate existing from new preview */
+}
+
+/* Error styling */
+.input-error {
+    border-color: #e74c3c !important; /* Red for error */
+}
+.input-error:focus {
+    box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.2) !important; /* Red glow for error */
+}
+.error-message {
+    color: #e74c3c; /* Red text */
+    font-size: 0.8em;
+    margin-top: 6px;
+}
+
+/* Form-wide alerts */
+.form-alert {
+    padding: 12px 15px;
+    margin-bottom: 20px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    font-size: 0.95em;
+}
+.form-alert svg { margin-right: 10px; }
+.error-alert { background-color: #fdecea; color: #9b2c2c; border: 1px solid #f9caca; }
+.success-alert { background-color: #e6fffa; color: #237a60; border: 1px solid #90e5c9; }
+
+/* Dividers and section titles */
+.form-divider {
+    border: none;
+    border-top: 1px solid #ecf0f1; /* Light separator */
+    margin: 25px 0;
+}
+.form-section-title {
+    font-size: 1.2em;
+    color: #34495e; /* Darker gray for section titles */
+    margin-top: 25px; /* Space above section */
+    margin-bottom: 15px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #ecf0f1;
+    font-weight: 600;
+}
+.form-note {
+    font-size: 0.85em;
+    color: #7f8c8d; /* Muted text for notes */
+    margin-bottom: 15px;
+    margin-top: -10px; /* Pull up slightly under title */
+}
+
+/* Action buttons */
+.form-actions {
+    display: flex;
+    justify-content: flex-end; /* Align buttons to the right */
+    gap: 15px; /* Space between buttons */
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #ecf0f1; /* Separator above actions */
+}
+
+.form-actions button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.95em;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Space between icon and text */
+    transition: background-color 0.2s, opacity 0.2s;
+}
+
+.form-actions .submit-btn {
+    background-color: #27ae60; /* Green for save/update */
+    color: white;
+}
+.form-actions .submit-btn:hover:not(:disabled) {
+    background-color: #229954; /* Darker green */
+}
+
+.form-actions .cancel-btn {
+    background-color: #e0e0e0; /* Light gray for cancel */
+    color: #333;
+}
+.form-actions .cancel-btn:hover:not(:disabled) {
+    background-color: #c7c7c7; /* Darker gray */
+}
+
+.form-actions button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Loading state for the whole page/form section */
+.profile-update-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 50vh; /* Or adjust as needed */
+    font-size: 1.1em;
+    color: #555;
+}
+.profile-update-loading p {
+    margin-top: 15px;
+}
+
+/* Fallback error state if API_ENDPOINTS fails to load */
+.form-container.error-state, .profile-update-loading.error-state { /* Target general error states */
+    border: 2px solid red;
+    padding: 20px;
+    background-color: #ffebee;
+    color: red;
+    text-align: center;
+}
+.form-container.error-state h2 {
+    color: red;
+}
