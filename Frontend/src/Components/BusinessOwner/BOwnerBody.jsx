@@ -33,9 +33,9 @@ const BOwnerBody = () => {
       button: "/BuyandSell",
     },
     {
-      imageUrl: "https://a1scrapmetalrecyclers.com.au/wp-content/uploads/2023/10/A1-Scrap-metal.jpg",
-      title: "DOORS Doors",
-      description: "An aluminum door is strong, lightweight, weather-resistant, durable, and modern-looking.",
+      imageUrl: "https://storage.googleapis.com/mgcpleagcspub1/Industrial-Scrap-1080x750.jpg",
+      title: "Pickup Scraps details",
+      description: "Here you can view all the details of your scheduled scrap pickups, including dates, and materials.",
       button: "/doors",
     },
   ];

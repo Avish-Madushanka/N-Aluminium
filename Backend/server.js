@@ -1,147 +1,182 @@
 // backend/server.js
-require('dotenv').config();
+require('dotenv').config(); // Ensures environment variables are loaded first
+
 const express = require('express');
 const cors = require('cors');
-const path = 'path'; // Error: should be require('path')
-const actualHttp = require('http'); // Corrected
+const actualPath = require('path'); // Use 'actualPath' to avoid conflict if 'path' variable is used elsewhere
+const actualHttp = require('http'); // Use 'actualHttp'
 const fs = require('fs');
 
-const connectDB = require('./config/db');
+const connectDB = require('./config/db'); // Path to your database connection function
 
-// --- Import Routes ---
-console.log('[Server Startup] Attempting to load routes...');
-let clientRoutes, bOwnerRoutes, authRoutes, calendarSettingsRoutes, bookingRoutes, reviewRoutes, scrapTypeRoutes, shopLocationRoutes;
+// --- Attempt to Import All Route Files with Logging ---
+console.log('[Server Startup] Initializing: Attempting to load route modules...');
+let clientRoutes, bOwnerRoutes, authRoutes, calendarSettingsRoutes, 
+    bookingRoutes, reviewRoutes, scrapTypeRoutes, shopLocationRoutes, adminRoutes; // Added adminRoutes just in case
 
-try {
-    clientRoutes = require('./routes/clientRoutes');
-    console.log('[Server Startup] clientRoutes loaded successfully.');
-} catch (e) { console.error('[Server Startup] FAILED to load clientRoutes:', e.message); }
-
-try {
-    bOwnerRoutes = require('./routes/bOwnerRoutes');
-    console.log('[Server Startup] bOwnerRoutes loaded successfully.');
-} catch (e) { console.error('[Server Startup] FAILED to load bOwnerRoutes:', e.message); }
-
-try {
-    authRoutes = require('./routes/authRoutes');
-    console.log('[Server Startup] authRoutes loaded successfully.');
-} catch (e) { console.error('[Server Startup] FAILED to load authRoutes:', e.message); }
-
-try {
-    calendarSettingsRoutes = require('./routes/calendarSettingsRoutes');
-    console.log('[Server Startup] calendarSettingsRoutes loaded successfully.');
-} catch (e) { console.error('[Server Startup] FAILED to load calendarSettingsRoutes:', e.message); }
-
-try {
-    bookingRoutes = require('./routes/bookingRoutes');
-    console.log('[Server Startup] bookingRoutes loaded successfully.');
-} catch (e) { console.error('[Server Startup] FAILED to load bookingRoutes:', e.message); }
-
-try {
-    reviewRoutes = require('./routes/reviewRoutes');
-    console.log('[Server Startup] reviewRoutes loaded successfully.');
-} catch (e) { console.error('[Server Startup] FAILED to load reviewRoutes:', e.message); }
-
-try {
-    scrapTypeRoutes = require('./routes/scrapTypeRoutes');
-    console.log('[Server Startup] scrapTypeRoutes loaded successfully.');
-} catch (e) { console.error('[Server Startup] FAILED to load scrapTypeRoutes:', e.message); }
-
-try {
-    shopLocationRoutes = require('./routes/shopLocationRoutes'); // <<< Key import
-    console.log('[Server Startup] shopLocationRoutes loaded successfully. Type:', typeof shopLocationRoutes);
-    if (typeof shopLocationRoutes !== 'function' && typeof shopLocationRoutes.stack !== 'object') {
-        console.warn('[Server Startup] shopLocationRoutes loaded, but it does not look like an Express router. Check its module.exports.');
+const loadRoute = (routeName, path) => {
+  try {
+    const routeModule = require(path);
+    console.log(`[Server Startup] Successfully loaded ${routeName} from ${path}. Type: ${typeof routeModule}`);
+    if (typeof routeModule !== 'function' && (typeof routeModule !== 'object' || !routeModule.stack)) {
+      console.warn(`[Server Startup] WARNING: ${routeName} loaded from ${path}, but it does not appear to be an Express router. Check module.exports in that file.`);
     }
-} catch (e) {
-    console.error('[Server Startup] CRITICAL: FAILED to load shopLocationRoutes:', e.message, e.stack);
-    shopLocationRoutes = null; // Ensure it's null if failed
-}
+    return routeModule;
+  } catch (e) {
+    console.error(`[Server Startup] FAILED to load ${routeName} from ${path}: ${e.message}`);
+    // console.error(e.stack); // Uncomment for full stack trace if needed
+    return null; 
+  }
+};
+
+clientRoutes = loadRoute('clientRoutes', './routes/clientRoutes');
+bOwnerRoutes = loadRoute('bOwnerRoutes', './routes/bOwnerRoutes');
+authRoutes = loadRoute('authRoutes', './routes/authRoutes');
+calendarSettingsRoutes = loadRoute('calendarSettingsRoutes', './routes/calendarSettingsRoutes');
+bookingRoutes = loadRoute('bookingRoutes', './routes/bookingRoutes');
+reviewRoutes = loadRoute('reviewRoutes', './routes/reviewRoutes');
+scrapTypeRoutes = loadRoute('scrapTypeRoutes', './routes/scrapTypeRoutes');
+shopLocationRoutes = loadRoute('shopLocationRoutes', './routes/shopLocationRoutes'); 
+adminRoutes = loadRoute('adminRoutes', './routes/adminRoutes'); // If you have admin specific routes
 
 
 // --- Import Controllers/Middleware ---
+console.log('[Server Startup] Loading controllers and middleware...');
 const { createInitialAdmin } = require('./controllers/adminController');
 const errorHandler = require('./middleware/errorHandler');
+// Import other necessary middleware if any, e.g., authMiddleware if used directly in server.js (though typically used in route files)
 
 const app = express();
 const PORT = process.env.PORT || 5003;
 
+// --- Core Middleware Setup ---
+console.log('[Server Config] Applying core middleware...');
 app.use(cors({
-    origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+    origin: process.env.FRONTEND_URL || 'http://localhost:5173', // Ensure your frontend URL is correct
     credentials: true
 }));
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+app.use(express.json({ limit: '10mb' })); // For parsing application/json
+app.use(express.urlencoded({ extended: true, limit: '10mb' })); // For parsing application/x-www-form-urlencoded
 
-const actualPath = require('path'); // Corrected the path import
-app.use('/uploads', express.static(actualPath.join(__dirname, 'uploads')));
-if (fs.existsSync(actualPath.join(__dirname, 'uploads'))) {
-    console.log(`[Server Config] Serving static files from ${actualPath.join(__dirname, 'uploads')} at /uploads`);
+// Static file serving for uploads directory
+const uploadsDirectory = actualPath.join(__dirname, 'uploads');
+app.use('/uploads', express.static(uploadsDirectory));
+if (fs.existsSync(uploadsDirectory)) {
+    console.log(`[Server Config] Serving static files from ${uploadsDirectory} at /uploads`);
 } else {
-    console.warn(`[Server Config] 'uploads' directory does not exist. Static file serving for /uploads might not work as expected.`);
+    console.warn(`[Server Config] 'uploads' directory (${uploadsDirectory}) does not exist. Static file serving for /uploads might not work as expected.`);
 }
 
+// --- API Health Check Endpoint ---
 app.get('/api/health', (req, res) => {
-    res.status(200).json({ status: 'ok', message: 'Backend API is running.' });
+    console.log('[Health Check] /api/health endpoint was hit.');
+    res.status(200).json({ status: 'ok', message: 'Backend API is running and healthy.' });
 });
 
+// --- API Routes Mounting Function ---
 const mountRoutes = () => {
     console.log('[Server Config] Starting route mounting process...');
-    if (authRoutes) { app.use('/api/auth', authRoutes); console.log('[Server Config] /api/auth mounted.'); }
-    if (clientRoutes) { app.use('/api/clients', clientRoutes); console.log('[Server Config] /api/clients mounted.'); }
-    if (bOwnerRoutes) { app.use('/api/b-owners', bOwnerRoutes); console.log('[Server Config] /api/b-owners mounted.'); }
-    if (calendarSettingsRoutes) { app.use('/api/calendar-settings', calendarSettingsRoutes); console.log('[Server Config] /api/calendar-settings mounted.'); }
-    if (bookingRoutes) { app.use('/api/bookings', bookingRoutes); console.log('[Server Config] /api/bookings mounted.'); }
-    if (reviewRoutes) { app.use('/api/reviews', reviewRoutes); console.log('[Server Config] /api/reviews mounted.'); }
-    if (scrapTypeRoutes) { app.use('/api/scrap-types', scrapTypeRoutes); console.log('[Server Config] /api/scrap-types mounted.'); }
+    
+    const mount = (path, routerModule, routerName) => {
+        if (routerModule && (typeof routerModule === 'function' || (typeof routerModule === 'object' && routerModule.stack))) {
+            app.use(path, routerModule);
+            console.log(`[Server Config] SUCCESS: Mounted ${routerName} at ${path}`);
+        } else {
+            console.error(`[Server Config] ERROR: ${routerName} (for ${path}) was NOT mounted. Module is ${routerModule === null ? 'null (failed to load)' : 'not an Express router or undefined'}.`);
+        }
+    };
 
-    // --- Shop Locations Mounting ---
-    if (shopLocationRoutes && (typeof shopLocationRoutes === 'function' || typeof shopLocationRoutes.stack === 'object')) {
-        app.use('/api/shop-locations', shopLocationRoutes);
-        console.log(`[Server Config] SUCCESS: /api/shop-locations routes mounted.`);
-    } else {
-        console.error(`[Server Config] ERROR: shopLocationRoutes was NOT mounted. It's either undefined, null, or not an Express router.`);
-        console.error(`[Server Config] Current value of shopLocationRoutes:`, shopLocationRoutes);
-        console.error(`[Server Config] Type of shopLocationRoutes:`, typeof shopLocationRoutes);
-    }
-    // --- End Shop Locations Mounting ---
+    mount('/api/auth', authRoutes, 'authRoutes');
+    mount('/api/clients', clientRoutes, 'clientRoutes');
+    mount('/api/b-owners', bOwnerRoutes, 'bOwnerRoutes');
+    mount('/api/calendar-settings', calendarSettingsRoutes, 'calendarSettingsRoutes');
+    mount('/api/bookings', bookingRoutes, 'bookingRoutes');
+    mount('/api/reviews', reviewRoutes, 'reviewRoutes');
+    mount('/api/scrap-types', scrapTypeRoutes, 'scrapTypeRoutes');
+    mount('/api/shop-locations', shopLocationRoutes, 'shopLocationRoutes'); 
+    mount('/api/admin', adminRoutes, 'adminRoutes'); 
 
     console.log('[Server Config] Route mounting process completed.');
 };
 
-mountRoutes();
+mountRoutes(); // Call the function to mount all routes
 
+// --- Global Error Handler (Must be defined AFTER all routes) ---
+console.log('[Server Config] Applying global error handler.');
 app.use(errorHandler);
 
+// --- Create HTTP Server ---
 const server = actualHttp.createServer(app);
 
+// --- Start Server Function ---
 const startServer = async () => {
     try {
-        await connectDB();
+        console.log('[Server Startup] Attempting to connect to MongoDB...');
+        await connectDB(); // Ensure DB connects before starting the HTTP server listener
+
         server.listen(PORT, async () => {
-            console.log(`[Server Startup] Server listening on http://localhost:${PORT}`);
-            console.log(`[Server Startup] Frontend expected at: ${process.env.FRONTEND_URL || 'http://localhost:5173'}`);
+            console.log(`[Server Startup] SERVER LISTENING on http://localhost:${PORT}`);
+            console.log(`[Server Startup] Environment: ${process.env.NODE_ENV || 'development'}`);
+            console.log(`[Server Startup] Frontend URL configured for CORS: ${process.env.FRONTEND_URL || 'http://localhost:5173'}`);
+            
             try {
+                console.log('[Server Startup] Attempting to create initial admin user...');
                 await createInitialAdmin();
             } catch (adminError) {
                 console.error("[Server Startup] Error during initial admin creation:", adminError.message);
             }
-            console.log('[Server Startup] Application ready.');
+            console.log('[Server Startup] Application is ready and running.');
         });
     } catch (error) {
-        console.error('CRITICAL FAILURE TO START SERVER:', error.message, error.stack);
-        process.exit(1);
+        console.error('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+        console.error('[Server Startup] CRITICAL FAILURE TO START SERVER:', error.message);
+        if (error.stack) {
+            console.error(error.stack);
+        }
+        console.error('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+        process.exit(1); // Exit if server cannot start
     }
 };
 
+// --- Global Unhandled Error / Rejection Handlers ---
 process.on('unhandledRejection', (reason, promise) => {
-    console.error('UNHANDLED REJECTION:', reason.message || reason, reason.stack);
-    if (server && server.listening) server.close(() => process.exit(1)); else process.exit(1);
+    console.error('!!!!!!!!!!!!!!!! UNHANDLED PROMISE REJECTION !!!!!!!!!!!!!!!!');
+    console.error('Reason:', reason.message || reason);
+    if (reason && reason.stack) {
+        console.error(reason.stack);
+    }
+    console.error('Promise:', promise);
+    console.error('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+    // Gracefully shutdown server if running, then exit
+    if (server && server.listening) {
+        console.log('Closing server due to unhandled rejection...');
+        server.close(() => {
+            console.error('Server closed.');
+            process.exit(1);
+        });
+    } else {
+        process.exit(1);
+    }
 });
 
 process.on('uncaughtException', (err) => {
-    console.error('UNCAUGHT EXCEPTION:', err.message, err.stack);
-    if (server && server.listening) server.close(() => process.exit(1)); else process.exit(1);
+    console.error('!!!!!!!!!!!!!!!! UNCAUGHT EXCEPTION !!!!!!!!!!!!!!!!');
+    console.error('Error:', err.message);
+    if (err.stack) {
+        console.error(err.stack);
+    }
+    console.error('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+    // Gracefully shutdown server if running, then exit
+    if (server && server.listening) {
+        console.log('Closing server due to uncaught exception...');
+        server.close(() => {
+            console.error('Server closed.');
+            process.exit(1);
+        });
+    } else {
+        process.exit(1);
+    }
 });
 
+// --- Initiate Server Start ---
 startServer();
