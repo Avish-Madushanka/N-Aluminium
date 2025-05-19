@@ -1,4 +1,3 @@
-// Frontend/src/App.jsx
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import {
     BrowserRouter as Router,
@@ -7,26 +6,18 @@ import {
     useNavigate,
     useLocation,
     Navigate,
-    Outlet, // Keep if AdminLayout or other layouts use <Outlet />
-    Link    // Ensure Link is imported for any <Link> components used directly in App.jsx
+    Outlet,
+    Link
 } from 'react-router-dom';
 import { ClipLoader } from 'react-spinners';
 import { jwtDecode } from 'jwt-decode';
-
-// Context: Assumes AuthContext.jsx is in src/context/
 import { AuthContext, useAuth } from './context/AuthContext';
-
-// Core UI Components: VERIFY PATHS
 import Navbar from './Components/Navbar/Navbar';
 import Footer1 from './Components/Footer1/Footer';
-
-// Routing Components: VERIFY PATHS
 import ProtectedRoute from './routes/ProtectedRoute';
 import AdminLayout from './Layouts/AdminLayout';
-
-// Page Components: VERIFY ALL PATHS
 import HomePage from './Pages/HomePage';
-import SignUp from './Pages/SignUp'; // This is likely a page that lets users choose which form to go to
+import SignUp from './Pages/SignUp';
 import AboutUs from './Pages/AboutUS';
 import BuyandSell from './Pages/BuyandSell';
 import Project from './Pages/Project';
@@ -34,50 +25,45 @@ import Collection from './Pages/Collection';
 import Service from './Pages/Service';
 import Map from './Pages/Map';
 import ContactUs from './Pages/ContactUs';
-import UnauthorizedPage from './Pages/UnauthorizedPage'; // For 403 errors from ProtectedRoute
+import UnauthorizedPage from './Pages/UnauthorizedPage';
+import Login from './Components/Login/Login';
 
-// Form & Login Components: VERIFY PATHS
-import Login from './Components/Login/Login'; // Main login for Client, BOwner, Admin
 import BOwnerForm from './Components/RegistrationForm/BOwnerForm';
 import ClientForm from './Components/RegistrationForm/ClientForm';
-
-// Other Functional Components: VERIFY PATHS
 import Calculate from './Components/Calculate/Calculate';
-import SaleForm from './Components/SaleForm/SaleForm'; // Used by BOwner
-import BuyCard from './Components/BuyCard/BuyCard';   // Used by Client
-import ProAddForm from './Components/Projects/ProAddForm'; // Used by BOwner
-import WastePickForm from './Components/WasteCollect/WastePickForm'; // Used by Client
-import UserCalendar from './Components/WasteCollect/UserCalendar'; // Used by Client
-import LocationMap from './Components/Maps/LocationMap'; // Used by Client
+import SaleForm from './Components/SaleForm/SaleForm';
+import BuyCard from './Components/BuyCard/BuyCard';
+import ProAddForm from './Components/Projects/ProAddForm';
+import WastePickForm from './Components/WasteCollect/WastePickForm';
+import UserCalendar from './Components/WasteCollect/UserCalendar';
+import LocationMap from './Components/Maps/LocationMap';
 import CalendarDisplay from './Components/UserCalendar/CalendarDisplay';
-import BSHeader from './Components/BuyandSell/BSHeader';
 
-// Role-Specific Profile/Dashboard Pages: VERIFY PATHS
+import BSHeader from './Components/BuyandSell/BSHeader';
 import BOwnerHome from './Pages/BOwnerHome';
 import ClientProfile from './Components/Profile/ClientProfile';
-import BOwnerProfile from './Components/Profile/BOwnerProfile'; // Display page for BOwner
-import EditBOwnerProfilePage from './Pages/EditBOwnerProfilePage'; 
+import BOwnerProfile from './Components/Profile/BOwnerProfile';
+import EditBOwnerProfilePage from './Pages/EditBOwnerProfilePage';
 import ClientEmail from './Components/Profile/ClientEmail';
-import PickupReq from './Components/Profile/PickupReq'; // This was the one causing "not defined" error
+import PickupReq from './Components/Profile/PickupReq';
 import CheckBuySell from './Components/Profile/CheckBuySell';
-
-// Admin Components: VERIFY PATHS
 import AdCalendar from './Components/Admin/AdMinCalendar/AdCalendar';
+
 import AdCheckReq from './Components/Admin/AdCheckReq/AdCheckReq';
 import EmailDisplay from './Components/Admin/EmailDisplay/EmailDisplay';
 import Dashboard from './Components/Admin/Dashboard/Dashboard';
 import HandleBOwners from './Components/Admin/HandleBOwners/HandleBOwners';
 import DisReview from './Components/Admin/DisReview/DisReview';
 import AdScrap from './Components/Admin/AdScrap/AdScrap';
+import AdminLocationManager from './Components/Admin/AdMapUpdate/AdminLocationManager';
+import FloatingChatbot from './Components/ChatBot/FloatingChatbot';
 
 const parseUserInfoFromToken = (token) => {
     if (!token) {
-        // console.debug("[parseUserInfo] No token provided.");
         return null;
     }
     try {
         const decoded = jwtDecode(token);
-        // Basic validation of decoded token structure
         if (!decoded || typeof decoded !== 'object' || !decoded.exp || !decoded.id || !decoded.email || !decoded.role || typeof decoded.name === 'undefined') {
             console.error("[parseUserInfo] Invalid token structure or essential fields missing. Decoded:", decoded);
             localStorage.removeItem('token');
@@ -93,14 +79,12 @@ const parseUserInfoFromToken = (token) => {
             return null;
         }
 
-        // console.debug("[parseUserInfo] Token successfully decoded and validated. User:", decoded.email, "Role:", decoded.role);
         return {
             id: decoded.id,
             name: decoded.name,
             email: decoded.email,
             role: decoded.role,
             ...(decoded.role === 'businessOwner' && decoded.businessName && { businessName: decoded.businessName }),
-            // Add other role-specific info from token if needed globally
         };
     } catch (error) {
         console.error("[parseUserInfo] Error decoding token:", error.message, "Token snippet:", token.substring(0, 20) + "...");
@@ -114,10 +98,10 @@ function App() {
     const [authState, setAuthState] = useState({
         isLoggedIn: false,
         userInfo: null,
-        isLoading: true, // Start with loading true
+        isLoading: true,
     });
     const [logoutMessage, setLogoutMessage] = useState('');
-    const navigateRef = useRef(null); // For potential imperative navigation if needed
+    const navigateRef = useRef(null);
 
     const handleLogout = useCallback((message = "You have been logged out.") => {
         console.log(`[App] handleLogout called. Message: "${message}"`);
@@ -127,7 +111,6 @@ function App() {
         setLogoutMessage(message);
     }, []);
 
-    // Effect for initial authentication check on app load
     useEffect(() => {
         console.log("[App useEffect] Performing initial authentication check...");
         const token = localStorage.getItem('token');
@@ -135,14 +118,12 @@ function App() {
 
         if (parsedUser) {
             console.log("[App useEffect] Valid session restored from token. User:", parsedUser.email);
-            // Ensure localStorage.userInfo is consistent with the parsed token
             if (JSON.stringify(parsedUser) !== localStorage.getItem('userInfo')) {
                 localStorage.setItem('userInfo', JSON.stringify(parsedUser));
             }
             setAuthState({ isLoggedIn: true, userInfo: parsedUser, isLoading: false });
         } else {
             console.log("[App useEffect] No valid session found, or token expired.");
-            // Ensure any stale auth data is cleared if token is invalid
             if (localStorage.getItem('token') || localStorage.getItem('userInfo')) {
                 localStorage.removeItem('token');
                 localStorage.removeItem('userInfo');
@@ -150,78 +131,65 @@ function App() {
             setAuthState({ isLoggedIn: false, userInfo: null, isLoading: false });
         }
 
-        // Listener for storage changes (e.g., logout in another tab)
         const handleStorageChange = (event) => {
              if (event.key === 'token' || event.key === 'userInfo') {
                  console.log(`[App Storage Listener] Storage changed ('${event.key}'). Re-evaluating auth state.`);
                  const currentToken = localStorage.getItem('token');
-                 const currentUserInfo = parseUserInfoFromToken(currentToken); // This also cleans up if token invalid
+                 const currentUserInfo = parseUserInfoFromToken(currentToken);
                  setAuthState(prevState => {
                     const newStateIsLoggedIn = !!currentUserInfo;
                     if (prevState.isLoggedIn !== newStateIsLoggedIn || JSON.stringify(prevState.userInfo) !== JSON.stringify(currentUserInfo)) {
-                        // If currentUserInfo is valid, ensure localStorage matches
                         if (currentUserInfo && JSON.stringify(currentUserInfo) !== localStorage.getItem('userInfo')) {
                              localStorage.setItem('userInfo', JSON.stringify(currentUserInfo));
-                        } else if (!currentUserInfo) { // If no valid user, ensure userInfo is cleared
+                        } else if (!currentUserInfo) {
                              localStorage.removeItem('userInfo');
                         }
                         return { isLoading: false, isLoggedIn: newStateIsLoggedIn, userInfo: currentUserInfo };
                     }
-                    // If no change in actual auth data, still ensure isLoading is false
                     return { ...prevState, isLoading: false };
                 });
              }
          };
         window.addEventListener('storage', handleStorageChange);
         return () => window.removeEventListener('storage', handleStorageChange);
-    }, []); // Empty dependency array, runs once on mount
+    }, []);
 
-    // Callback for successful login
     const handleLoginSuccess = useCallback((token, backendUserData) => {
         console.log('[App] handleLoginSuccess callback triggered.');
-        // The source of truth for userInfo in authState should be the parsed token.
-        // backendUserData might have more details initially, but token contains what's critical for auth.
         const parsedUser = parseUserInfoFromToken(token);
         if (parsedUser) {
             console.log('%c[App] Login successful. Updating AuthState with parsed user:', 'color: green; font-weight: bold;', parsedUser);
             localStorage.setItem('token', token);
             localStorage.setItem('userInfo', JSON.stringify(parsedUser));
             setAuthState({ isLoggedIn: true, userInfo: parsedUser, isLoading: false });
-            setLogoutMessage(''); // Clear any previous logout messages
+            setLogoutMessage('');
         } else {
-            // This case means the token received from a "successful" backend login was invalid upon parsing.
             console.error("[App] CRITICAL ERROR: Token from successful login was invalid. Logging out.");
             handleLogout("Login failed: Invalid session data received from server. Please try again.");
         }
-    }, [handleLogout]); // handleLogout is memoized
+    }, [handleLogout]);
 
-    // Global listener for 401 errors dispatched by axiosInstance
     useEffect(() => {
         const handleAuthErrorEvent = (event) => {
             console.warn('[App] Global 401 (auth-error-401) event listener received.');
-            setAuthState(currentState => { // Use functional update
+            setAuthState(currentState => {
                 if (currentState.isLoggedIn) {
                     const message = event.detail?.message || 'Your session has expired or is invalid. Please log in again.';
                     console.log(`[App 401 Handler] User was logged in. Initiating logout with message: "${message}"`);
-                    handleLogout(message); // This will update authState, including isLoading: false
-                    // Return the state that handleLogout will set, or an interim if needed.
-                    // Since handleLogout sets state, we can rely on that re-render.
-                    // However, to be safe, ensure isLoading is false if handleLogout might not trigger immediate re-render here.
-                } else {
-                    console.log("[App 401 Handler] User was not logged in or already logged out. No auth state change from this handler.");
+                    handleLogout(message);
                 }
-                return currentState.isLoggedIn ? currentState : { ...currentState, isLoading: false }; // if already logged out, ensure isLoading is false
+                return currentState.isLoggedIn ? currentState : { ...currentState, isLoading: false };
             });
         };
         window.addEventListener('auth-error-401', handleAuthErrorEvent);
         return () => window.removeEventListener('auth-error-401', handleAuthErrorEvent);
-    }, [handleLogout]); // handleLogout is memoized
+    }, [handleLogout]);
 
     if (authState.isLoading) {
         return (
-            <div className="app-loading-container"> {/* Style this with CSS */}
+            <div className="app-loading-container">
                 <ClipLoader size={70} color="#f97316" />
-                <p className="app-loading-text">Loading Application...</p> {/* Style this with CSS */}
+                <p className="app-loading-text">Loading Application...</p>
             </div>
         );
     }
@@ -242,17 +210,15 @@ function App() {
 function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
     const navigate = useNavigate();
     const location = useLocation();
-    const auth = useAuth(); // Consumes AuthContext
+    const auth = useAuth();
 
     useEffect(() => {
         if (navigateRef) navigateRef.current = navigate;
         return () => { if (navigateRef) navigateRef.current = null; };
     }, [navigate, navigateRef]);
 
-    // Effect for Post-Login/Post-Auth-Change Redirection
     useEffect(() => {
         const currentPath = location.pathname.toLowerCase();
-        // Only redirect if on the main login page
         if (auth.isLoggedIn && auth.userInfo && currentPath === '/login') {
             let redirectPath = '/';
             switch (auth.userInfo.role) {
@@ -264,29 +230,25 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
                     redirectPath = '/';
             }
             const fromPath = location.state?.from?.pathname;
-            // Redirect to 'fromPath' if it exists and isn't a login page or root, otherwise to role-specific dashboard
             const destination = (fromPath && fromPath !== '/login' && fromPath !== '/') ? fromPath : redirectPath;
             console.log(`%c[AppContentWrapper] User logged in (${auth.userInfo.email}, ${auth.userInfo.role}). Navigating from ${currentPath} to: ${destination}`, 'color: blue; font-weight: bold;');
-            navigate(destination, { replace: true, state: {} }); // Clear 'from' state
+            navigate(destination, { replace: true, state: {} });
         }
     }, [auth.isLoggedIn, auth.userInfo, navigate, location]);
 
-    // Effect to Handle Logout Messages from URL Query Parameter
     useEffect(() => {
         const params = new URLSearchParams(location.search);
         const msgParam = params.get('logoutMessage');
         if (msgParam) {
             const decodedMsg = decodeURIComponent(msgParam);
-            if (decodedMsg !== logoutMessage) { // Avoid re-setting if already set by handleLogout
+            if (decodedMsg !== logoutMessage) {
                 setLogoutMessage(decodedMsg);
             }
-            // Clean the URL: remove the query parameter after reading it
             const newUrl = location.pathname;
             window.history.replaceState({}, document.title, newUrl);
         }
     }, [location.search, location.pathname, logoutMessage, setLogoutMessage]);
 
-    // Effect to Redirect to Login Page if a Logout Message is Set (and user isn't already on login page)
     useEffect(() => {
         const currentPath = location.pathname.toLowerCase();
         if (logoutMessage && currentPath !== '/login' && !auth.isLoggedIn) {
@@ -295,7 +257,6 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
         }
     }, [logoutMessage, location.pathname, navigate, auth.isLoggedIn]);
 
-    // Inline styles for the logout message popup, as requested
     const popupStyle = {
         position: 'fixed', top: '80px', left: '50%', transform: 'translateX(-50%)',
         padding: '15px 25px', backgroundColor: '#fff3cd', color: '#856404',
@@ -311,7 +272,7 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
     };
 
     return (
-        <div className="App-wrapper"> {/* Consider if you need a specific wrapper class for global layout */}
+        <div className="App-wrapper">
             <Navbar isLoggedIn={auth.isLoggedIn} userInfo={auth.userInfo} handleLogout={auth.logout} />
             
             {logoutMessage && (location.pathname.toLowerCase() === '/login') && (
@@ -321,7 +282,7 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
                  </div>
             )}
 
-            <main className="main-content"> {/* Add global styles for main-content, like padding for fixed navbar/footer */}
+            <main className="main-content">
                 <Routes>
                     {/* === Public Routes === */}
                     <Route path="/" element={<HomePage />} />
@@ -339,6 +300,7 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
                     <Route path="/CalendarDisplay" element={<CalendarDisplay />} />
                     <Route path="/BSHeader" element={<BSHeader />} />
                     <Route path="/unauthorized" element={<UnauthorizedPage />} />
+                    <Route path="/LocationMap" element={<LocationMap />} />
 
                     {/* === Login Route === */}
                     <Route path="/Login" element={ auth.isLoggedIn && auth.userInfo ? (<Navigate to={ (auth.userInfo.role === 'admin' && '/Admin/Dashboard') || (auth.userInfo.role === 'client' && '/ClientProfile') || (auth.userInfo.role === 'businessOwner' && '/BOwnerHome') || '/' } replace /> ) : ( <Login /> )} />
@@ -352,7 +314,6 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
                         <Route path="/ClientEmail" element={<ClientEmail />} />
                         <Route path="/BuyCard" element={<BuyCard />} />
                         <Route path="/WastePickForm" element={<WastePickForm />} />
-                        <Route path="/LocationMap" element={<LocationMap />} />
                     </Route>
 
                     {/* === Protected Business Owner Routes === */}
@@ -376,12 +337,13 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
                            <Route path="/Admin/Emails" element={<EmailDisplay />} />
                            <Route path="/Admin/ManageOwners" element={<HandleBOwners />} />
                            <Route path="/Admin/Reviews" element={<DisReview />} />
+                           <Route path="/Admin/AdminLocationManager" element={<AdminLocationManager />} />
                         </Route>
                      </Route>
 
                     {/* Fallback for unmatched routes */}
                     <Route path="*" element={ 
-                        <div className="page-not-found-container"> {/* Style with CSS */}
+                        <div className="page-not-found-container">
                             <h1 className="page-not-found-title">404 - Page Not Found</h1>
                             <p className="page-not-found-message">The page you are looking for does not exist.</p>
                             <Link to="/" className="page-not-found-link">Go to Homepage</Link>
@@ -390,6 +352,7 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
                 </Routes>
             </main>
             <Footer1 />
+            <FloatingChatbot /> 
         </div>
     );
 }

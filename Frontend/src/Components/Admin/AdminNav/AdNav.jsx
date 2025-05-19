@@ -63,16 +63,16 @@ function AdNavComponent({ handleLogout }) {
                             </NavLink>
                         </li>
                         <li>
+                            <NavLink to="/Admin/AdminLocationManager" className={({ isActive }) => isActive ? 'active' : ''}>
+                                <FontAwesomeIcon icon={faCreditCard} className="menu-icon" /> Add Shop Location
+                            </NavLink>
+                        </li>
+                        <li>
                            <NavLink to="/Admin/DisReview" className={({ isActive }) => isActive ? 'active' : ''}>
                                 <FontAwesomeIcon icon={faStar} className="menu-icon" /> Reviews
                             </NavLink>
                         </li>
                         {/*
-                         <li>
-                            <NavLink to="/Admin/Payments" className={({ isActive }) => isActive ? 'active' : ''}>
-                                <FontAwesomeIcon icon={faCreditCard} className="menu-icon" /> Payments
-                            </NavLink>
-                        </li>
                          <li>
                             <NavLink to="/Admin/Integrations" className={({ isActive }) => isActive ? 'active' : ''}>
                                 <FontAwesomeIcon icon={faLink} className="menu-icon" /> Integrations
