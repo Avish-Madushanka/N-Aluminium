@@ -1,4 +1,3 @@
-// backend/controllers/adminController.js
 const Admin = require('../models/Admin');
 
 exports.createInitialAdmin = async () => {

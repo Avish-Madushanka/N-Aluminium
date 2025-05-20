@@ -1,4 +1,3 @@
-// Backend/models/reviewModel.js
 const mongoose = require('mongoose');
 
 const reviewSchema = new mongoose.Schema({
@@ -31,31 +30,17 @@ const reviewSchema = new mongoose.Schema({
             message: '{VALUE} is not an integer value for rating'
         }
     },
-    reviewText: { // Changed from 'comment' to match frontend formData
+    reviewText: {
         type: String,
         required: [true, 'Please provide your review text'],
         trim: true,
         maxlength: [2000, 'Review text cannot be more than 2000 characters']
     },
-    // Optional: Link to a user if reviews are tied to logged-in users
-    // userId: {
-    //   type: mongoose.Schema.ObjectId,
-    //   ref: 'Client', // Or a generic 'User' model
-    //   required: false // Make it optional if guest reviews are allowed
-    // },
-    // Optional: Link to a product/service if reviews are for specific items
-    // itemId: {
-    //   type: mongoose.Schema.ObjectId,
-    //   ref: 'Product', // Example
-    //   required: false
-    // },
-    isApproved: { // For admin moderation
+    
+    isApproved: { 
         type: Boolean,
-        default: false // Reviews might need approval before displaying
+        default: false 
     }
-}, { timestamps: true }); // Adds createdAt and updatedAt
-
-// Prevent duplicate reviews from the same email for the same subject quickly (optional)
-// reviewSchema.index({ email: 1, subject: 1 }, { unique: true, partialFilterExpression: { /* condition if needed */ } });
+}, { timestamps: true }); 
 
 module.exports = mongoose.models.Review || mongoose.model('Review', reviewSchema);

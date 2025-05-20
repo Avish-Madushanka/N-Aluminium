@@ -1,22 +1,17 @@
-// backend/controllers/bookingsController.js
 const Booking = require('../models/Booking');
-const { sendBookingStatusUpdateEmail } = require('../utils/emailService'); // Ensure this path is correct
+const { sendBookingStatusUpdateEmail } = require('../utils/emailService'); 
 
-// @desc    Create a new booking
-// @route   POST /api/bookings
-// @access  Private (User or Guest, depending on route protection)
 const createBooking = async (req, res, next) => {
     try {
         const {
             selectedDate,
-            timeSlotId, // This will now be the time string, e.g., "1:00 PM - 5:00 PM"
+            timeSlotId, 
             serviceAreaId,
             estimatedWeight,
             pickupLocation,
             contactDetails
         } = req.body;
 
-        // Basic validation
         if (!selectedDate || !timeSlotId || !serviceAreaId || !pickupLocation || !contactDetails) {
             return res.status(400).json({ success: false, message: 'Missing required booking fields.' });
         }
@@ -25,13 +20,13 @@ const createBooking = async (req, res, next) => {
         }
 
         const newBookingData = {
-            selectedDate: new Date(selectedDate), // Ensure it's a Date object
-            timeSlotId, // Saves the time string directly
+            selectedDate: new Date(selectedDate), 
+            timeSlotId, 
             serviceAreaId,
             estimatedWeight: (estimatedWeight !== undefined && estimatedWeight !== null && estimatedWeight !== '') ? Number(estimatedWeight) : undefined,
             pickupLocation,
             contactDetails,
-            status: 'pending', // Default status
+            status: 'pending', 
         };
 
         if (req.user) {
@@ -58,9 +53,6 @@ const createBooking = async (req, res, next) => {
     }
 };
 
-// @desc    Get all bookings (for Admin)
-// @route   GET /api/bookings
-// @access  Private (Admin)
 const getAllBookings = async (req, res, next) => {
     try {
         const bookings = await Booking.find({})
@@ -78,9 +70,6 @@ const getAllBookings = async (req, res, next) => {
     }
 };
 
-// @desc    Get a single booking by ID
-// @route   GET /api/bookings/:id
-// @access  Private
 const getBookingById = async (req, res, next) => {
     try {
         const booking = await Booking.findById(req.params.id).populate('userId', 'name email');
@@ -94,9 +83,6 @@ const getBookingById = async (req, res, next) => {
     }
 };
 
-// @desc    Update booking status (for Admin)
-// @route   PUT /api/bookings/:id/status
-// @access  Private (Admin)
 const updateBookingStatus = async (req, res, next) => {
     try {
         const bookingId = req.params.id;
@@ -161,9 +147,6 @@ const updateBookingStatus = async (req, res, next) => {
     }
 };
 
-// @desc    Update a booking (for Admin)
-// @route   PUT /api/bookings/:id
-// @access  Private (Admin)
 const updateBooking = async (req, res, next) => {
     try {
         const bookingId = req.params.id;
@@ -181,7 +164,7 @@ const updateBooking = async (req, res, next) => {
 
         const updateFields = {};
         if (selectedDate !== undefined) updateFields.selectedDate = new Date(selectedDate);
-        if (timeSlotId !== undefined) updateFields.timeSlotId = timeSlotId; // Will save the time string
+        if (timeSlotId !== undefined) updateFields.timeSlotId = timeSlotId; 
         if (serviceAreaId !== undefined) updateFields.serviceAreaId = serviceAreaId;
         if (estimatedWeight !== undefined) updateFields.estimatedWeight = (estimatedWeight === null || estimatedWeight === '') ? null : Number(estimatedWeight);
         if (pickupLocation !== undefined) updateFields.pickupLocation = pickupLocation;
@@ -238,9 +221,6 @@ const updateBooking = async (req, res, next) => {
     }
 };
 
-// @desc    Delete a booking (for Admin)
-// @route   DELETE /api/bookings/:id
-// @access  Private (Admin)
 const deleteBooking = async (req, res, next) => {
     try {
         const booking = await Booking.findByIdAndDelete(req.params.id);

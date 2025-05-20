@@ -26,7 +26,7 @@ const ServiceMain = () => {
 
     const sections = document.querySelectorAll('.service-header');
     sections.forEach((section, index) => {
-      section.dataset.delay = index * 100; // Staggered delay
+      section.dataset.delay = index * 100; 
       observer.observe(section);
     });
 
@@ -39,7 +39,6 @@ const ServiceMain = () => {
 
   return (
     <div className="service-container">
-      {/* Hero Section */}
       <div className="service-hero">
         <div className="hero-content">
           <h1 className="hero-title">Sustainable Solutions for a Greener Tomorrow</h1>
@@ -51,7 +50,6 @@ const ServiceMain = () => {
         </div>
       </div>
 
-      {/* Services */}
       <div className="service-header" data-delay="0">
         <div className="service-content">
           <div className="service-left">

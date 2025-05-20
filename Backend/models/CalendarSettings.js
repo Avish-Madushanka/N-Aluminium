@@ -1,4 +1,3 @@
-// backend/models/CalendarSettings.js
 const mongoose = require('mongoose');
 
 const timeSlotSchema = new mongoose.Schema({ 

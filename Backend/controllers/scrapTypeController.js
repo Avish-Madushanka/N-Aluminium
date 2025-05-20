@@ -1,11 +1,7 @@
-// backend/controllers/scrapTypeController.js
 const ScrapType = require('../models/ScrapType');
 const asyncHandler = require('../utils/async');
 const ErrorResponse = require('../utils/errorResponse');
 
-// @desc    Create a new scrap type
-// @route   POST /api/scrap-types
-// @access  Private (Admin)
 exports.createScrapType = asyncHandler(async (req, res, next) => {
     const { name, price, unit, description, isActive } = req.body;
 
@@ -21,7 +17,7 @@ exports.createScrapType = asyncHandler(async (req, res, next) => {
     const scrapType = await ScrapType.create({
         name,
         price,
-        unit: unit || 'kg', // Default to 'kg' if not provided
+        unit: unit || 'kg', 
         description,
         isActive: isActive === undefined ? true : isActive,
     });
@@ -33,34 +29,19 @@ exports.createScrapType = asyncHandler(async (req, res, next) => {
     });
 });
 
-// @desc    Get all scrap types
-// @route   GET /api/scrap-types
-// @access  Public (can be filtered for active only on frontend or via query param)
-//          Admin will see all by default.
 exports.getAllScrapTypes = asyncHandler(async (req, res, next) => {
     let query;
 
-    // If the user is not an admin, or if 'activeOnly=true' is in query, only show active
-    // For now, let's always return all and let frontend filter, or admin panel show all
-    // If you want to filter active by default for non-admins:
-    // if (req.user?.role !== 'admin' || req.query.activeOnly === 'true') {
-    //     query = ScrapType.find({ isActive: true });
-    // } else {
-    //     query = ScrapType.find();
-    // }
-
-    // Simpler: by default return active ones for public, all for admin page or if specified
     const filter = {};
     if (req.query.active === 'true') {
         filter.isActive = true;
     } else if (req.query.active === 'false' && req.user?.role === 'admin') {
         filter.isActive = false;
-    } else if (req.user?.role !== 'admin') { // Non-admins only see active by default
+    } else if (req.user?.role !== 'admin') { 
         filter.isActive = true;
     }
-    // If admin and no 'active' query, show all (empty filter object)
 
-    const scrapTypes = await ScrapType.find(filter).sort({ name: 1 }); // Sort by name
+    const scrapTypes = await ScrapType.find(filter).sort({ name: 1 });
 
     res.status(200).json({
         success: true,
@@ -69,9 +50,6 @@ exports.getAllScrapTypes = asyncHandler(async (req, res, next) => {
     });
 });
 
-// @desc    Get a single scrap type by ID
-// @route   GET /api/scrap-types/:id
-// @access  Private (Admin) - Or Public if needed for detail views
 exports.getScrapTypeById = asyncHandler(async (req, res, next) => {
     const scrapType = await ScrapType.findById(req.params.id);
 
@@ -79,20 +57,12 @@ exports.getScrapTypeById = asyncHandler(async (req, res, next) => {
         return next(new ErrorResponse(`Scrap type not found with id of ${req.params.id}`, 404));
     }
 
-    // Optionally, restrict access for non-admins if it's an inactive item
-    // if (!scrapType.isActive && req.user?.role !== 'admin') {
-    //     return next(new ErrorResponse(`Scrap type not found with id of ${req.params.id}`, 404));
-    // }
-
     res.status(200).json({
         success: true,
         data: scrapType,
     });
 });
 
-// @desc    Update a scrap type
-// @route   PUT /api/scrap-types/:id
-// @access  Private (Admin)
 exports.updateScrapType = asyncHandler(async (req, res, next) => {
     const { name, price, unit, description, isActive } = req.body;
     const scrapTypeId = req.params.id;
@@ -103,7 +73,6 @@ exports.updateScrapType = asyncHandler(async (req, res, next) => {
         return next(new ErrorResponse(`Scrap type not found with id of ${scrapTypeId}`, 404));
     }
 
-    // Check if name is being changed and if the new name already exists
     if (name && name !== scrapType.name) {
         const existingScrapType = await ScrapType.findOne({ name });
         if (existingScrapType && existingScrapType._id.toString() !== scrapTypeId) {
@@ -126,9 +95,6 @@ exports.updateScrapType = asyncHandler(async (req, res, next) => {
     });
 });
 
-// @desc    Delete a scrap type (soft delete by setting isActive to false)
-// @route   DELETE /api/scrap-types/:id
-// @access  Private (Admin)
 exports.deleteScrapType = asyncHandler(async (req, res, next) => {
     const scrapType = await ScrapType.findById(req.params.id);
 
@@ -136,21 +102,16 @@ exports.deleteScrapType = asyncHandler(async (req, res, next) => {
         return next(new ErrorResponse(`Scrap type not found with id of ${req.params.id}`, 404));
     }
 
-    // Soft delete:
     scrapType.isActive = false;
     await scrapType.save();
-    // If you want hard delete: await ScrapType.findByIdAndDelete(req.params.id);
 
     res.status(200).json({
         success: true,
         message: `Scrap type '${scrapType.name}' deactivated successfully.`,
-        data: {}, // Or return the updated (deactivated) item
+        data: {}, 
     });
 });
 
-// @desc    Hard Delete a scrap type (actual removal from DB)
-// @route   DELETE /api/scrap-types/:id/force
-// @access  Private (Admin)
 exports.forceDeleteScrapType = asyncHandler(async (req, res, next) => {
     const scrapType = await ScrapType.findByIdAndDelete(req.params.id);
 

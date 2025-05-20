@@ -1,11 +1,10 @@
-// backend/models/BusinessOwner.js
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
 console.log('[BusinessOwnerModel] File loaded. Defining schema...');
 
 const businessOwnerSchema = new mongoose.Schema({
-    // --- Keep your schema definition exactly as before ---
+
     businessId: { type: String, required: [true, 'Business ID required.'], unique: true, trim: true },
     businessName: { type: String, required: [true, 'Business Name required.'], trim: true },
     ownerName: { type: String, required: [true, 'Owner Name required.'], trim: true },
@@ -24,7 +23,6 @@ const businessOwnerSchema = new mongoose.Schema({
 
 console.log('[BusinessOwnerModel] Schema defined.');
 
-// --- Hooks and Methods ---
 businessOwnerSchema.pre('save', async function(next) {
     if (!this.isModified('password')) return next();
     console.log(`[BusinessOwnerModel] Hashing password for ${this.email}...`);
@@ -43,7 +41,7 @@ businessOwnerSchema.methods.comparePassword = async function(enteredPassword) {
         console.error(`[BusinessOwnerModel] comparePassword error: Stored password missing for ${this.email}.`);
         return false;
     }
-    // console.log(`[BusinessOwnerModel] Comparing password for ${this.email}...`); // Keep log minimal
+
     try {
         return await bcrypt.compare(enteredPassword, this.password);
     } catch (compareError) {
@@ -54,10 +52,6 @@ businessOwnerSchema.methods.comparePassword = async function(enteredPassword) {
 
 console.log('[BusinessOwnerModel] Hooks and methods defined.');
 
-// --- SIMPLIFIED EXPORT - Directly compile and export ---
-// This assumes this file is only required ONCE per server lifecycle.
-// If OverwriteModelError comes back, revert to the try/catch pattern,
-// but the problem is likely deeper if this doesn't work.
 console.log(`[BusinessOwnerModel] Compiling and exporting model 'BusinessOwner'...`);
 const BusinessOwner = mongoose.model('BusinessOwner', businessOwnerSchema);
 console.log(`[BusinessOwnerModel] Exporting type: ${typeof BusinessOwner}, Has findOne: ${typeof BusinessOwner?.findOne === 'function'}`);

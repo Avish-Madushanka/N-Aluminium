@@ -1,4 +1,3 @@
-// backend/utils/emailService.js
 const nodemailer = require('nodemailer');
 
 const transporter = nodemailer.createTransport({
@@ -9,17 +8,14 @@ const transporter = nodemailer.createTransport({
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS,
     },
-    // Optional: For development with self-signed certificates or local SMTP servers
-    // tls: {
-    //     rejectUnauthorized: false
-    // }
+ 
 });
 
 /**
  * Sends an email.
- * @param {string} to - Recipient's email address.
- * @param {string} subject - Email subject.
- * @param {string} htmlContent - HTML content of the email.
+ * @param {string} to 
+ * @param {string} subject 
+ * @param {string} htmlContent 
  * @returns {Promise<void>}
  */
 const sendEmail = async (to, subject, htmlContent) => {
@@ -35,14 +31,13 @@ const sendEmail = async (to, subject, htmlContent) => {
         console.log(`[EmailService] Email sent to ${to}: ${info.messageId}`);
     } catch (error) {
         console.error(`[EmailService] Error sending email to ${to}:`, error);
-        // Do not re-throw here to prevent failing the main API operation
     }
 };
 
 /**
- * Sends a booking status update email to the user.
- * @param {object} booking - The booking object.
- * @param {string} newStatus - The new status ('confirmed' or 'cancelled').
+
+ * @param {object} booking 
+ * @param {string} newStatus 
  */
 const sendBookingStatusUpdateEmail = async (booking, newStatus) => {
     if (!booking || !booking.contactDetails || !booking.contactDetails.email) {
@@ -55,7 +50,7 @@ const sendBookingStatusUpdateEmail = async (booking, newStatus) => {
     let subject = '';
     let htmlContent = '';
 
-    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173'; // Fallback URL
+    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173'; 
 
     if (newStatus === 'confirmed') {
         subject = `Your Pickup Booking ${booking.bookingId} is Confirmed!`;
@@ -91,7 +86,7 @@ const sendBookingStatusUpdateEmail = async (booking, newStatus) => {
         `;
     } else {
         console.log(`[EmailService] No email template configured for status: ${newStatus} for booking ${booking.bookingId}.`);
-        return; // Do not send email for other statuses like 'completed' or 'pending' via this function
+        return; 
     }
 
     await sendEmail(recipientEmail, subject, htmlContent);

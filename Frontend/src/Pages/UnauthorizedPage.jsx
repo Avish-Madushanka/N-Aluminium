@@ -1,10 +1,9 @@
-// Frontend/src/Pages/UnauthorizedPage.jsx
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
 const UnauthorizedPage = () => {
     const location = useLocation();
-    const { requiredRole, userRole, from } = location.state || {}; // Get state passed from ProtectedRoute
+    const { requiredRole, userRole, from } = location.state || {}; 
 
     return (
         <div style={{ 
@@ -12,7 +11,7 @@ const UnauthorizedPage = () => {
             flexDirection: 'column', 
             alignItems: 'center', 
             justifyContent: 'center', 
-            minHeight: 'calc(100vh - 120px)', // Adjust based on navbar/footer height
+            minHeight: 'calc(100vh - 120px)', 
             padding: '40px 20px',
             textAlign: 'center',
             backgroundColor: '#f8f9fa'

@@ -1,4 +1,3 @@
-// backend/middleware/errorHandler.js
 const mongoose = require('mongoose');
 
 const errorHandler = (err, req, res, next) => {

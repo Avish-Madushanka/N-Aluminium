@@ -1,18 +1,16 @@
-// backend/server.js
-require('dotenv').config(); // Ensures environment variables are loaded first
+require('dotenv').config();
 
 const express = require('express');
 const cors = require('cors');
-const actualPath = require('path'); // Use 'actualPath' to avoid conflict if 'path' variable is used elsewhere
-const actualHttp = require('http'); // Use 'actualHttp'
+const actualPath = require('path'); 
+const actualHttp = require('http'); 
 const fs = require('fs');
 
-const connectDB = require('./config/db'); // Path to your database connection function
+const connectDB = require('./config/db'); 
 
-// --- Attempt to Import All Route Files with Logging ---
 console.log('[Server Startup] Initializing: Attempting to load route modules...');
 let clientRoutes, bOwnerRoutes, authRoutes, calendarSettingsRoutes, 
-    bookingRoutes, reviewRoutes, scrapTypeRoutes, shopLocationRoutes, adminRoutes; // Added adminRoutes just in case
+    bookingRoutes, reviewRoutes, scrapTypeRoutes, shopLocationRoutes, adminRoutes;
 
 const loadRoute = (routeName, path) => {
   try {
@@ -24,7 +22,6 @@ const loadRoute = (routeName, path) => {
     return routeModule;
   } catch (e) {
     console.error(`[Server Startup] FAILED to load ${routeName} from ${path}: ${e.message}`);
-    // console.error(e.stack); // Uncomment for full stack trace if needed
     return null; 
   }
 };
@@ -37,28 +34,24 @@ bookingRoutes = loadRoute('bookingRoutes', './routes/bookingRoutes');
 reviewRoutes = loadRoute('reviewRoutes', './routes/reviewRoutes');
 scrapTypeRoutes = loadRoute('scrapTypeRoutes', './routes/scrapTypeRoutes');
 shopLocationRoutes = loadRoute('shopLocationRoutes', './routes/shopLocationRoutes'); 
-adminRoutes = loadRoute('adminRoutes', './routes/adminRoutes'); // If you have admin specific routes
+adminRoutes = loadRoute('adminRoutes', './routes/adminRoutes'); 
 
 
-// --- Import Controllers/Middleware ---
 console.log('[Server Startup] Loading controllers and middleware...');
 const { createInitialAdmin } = require('./controllers/adminController');
 const errorHandler = require('./middleware/errorHandler');
-// Import other necessary middleware if any, e.g., authMiddleware if used directly in server.js (though typically used in route files)
 
 const app = express();
 const PORT = process.env.PORT || 5003;
 
-// --- Core Middleware Setup ---
 console.log('[Server Config] Applying core middleware...');
 app.use(cors({
-    origin: process.env.FRONTEND_URL || 'http://localhost:5173', // Ensure your frontend URL is correct
+    origin: process.env.FRONTEND_URL || 'http://localhost:5173', 
     credentials: true
 }));
-app.use(express.json({ limit: '10mb' })); // For parsing application/json
-app.use(express.urlencoded({ extended: true, limit: '10mb' })); // For parsing application/x-www-form-urlencoded
+app.use(express.json({ limit: '10mb' })); 
+app.use(express.urlencoded({ extended: true, limit: '10mb' })); 
 
-// Static file serving for uploads directory
 const uploadsDirectory = actualPath.join(__dirname, 'uploads');
 app.use('/uploads', express.static(uploadsDirectory));
 if (fs.existsSync(uploadsDirectory)) {
@@ -67,13 +60,11 @@ if (fs.existsSync(uploadsDirectory)) {
     console.warn(`[Server Config] 'uploads' directory (${uploadsDirectory}) does not exist. Static file serving for /uploads might not work as expected.`);
 }
 
-// --- API Health Check Endpoint ---
 app.get('/api/health', (req, res) => {
     console.log('[Health Check] /api/health endpoint was hit.');
     res.status(200).json({ status: 'ok', message: 'Backend API is running and healthy.' });
 });
 
-// --- API Routes Mounting Function ---
 const mountRoutes = () => {
     console.log('[Server Config] Starting route mounting process...');
     
@@ -99,20 +90,17 @@ const mountRoutes = () => {
     console.log('[Server Config] Route mounting process completed.');
 };
 
-mountRoutes(); // Call the function to mount all routes
+mountRoutes();
 
-// --- Global Error Handler (Must be defined AFTER all routes) ---
 console.log('[Server Config] Applying global error handler.');
 app.use(errorHandler);
 
-// --- Create HTTP Server ---
 const server = actualHttp.createServer(app);
 
-// --- Start Server Function ---
 const startServer = async () => {
     try {
         console.log('[Server Startup] Attempting to connect to MongoDB...');
-        await connectDB(); // Ensure DB connects before starting the HTTP server listener
+        await connectDB(); 
 
         server.listen(PORT, async () => {
             console.log(`[Server Startup] SERVER LISTENING on http://localhost:${PORT}`);
@@ -134,11 +122,10 @@ const startServer = async () => {
             console.error(error.stack);
         }
         console.error('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
-        process.exit(1); // Exit if server cannot start
+        process.exit(1); 
     }
 };
 
-// --- Global Unhandled Error / Rejection Handlers ---
 process.on('unhandledRejection', (reason, promise) => {
     console.error('!!!!!!!!!!!!!!!! UNHANDLED PROMISE REJECTION !!!!!!!!!!!!!!!!');
     console.error('Reason:', reason.message || reason);
@@ -147,7 +134,7 @@ process.on('unhandledRejection', (reason, promise) => {
     }
     console.error('Promise:', promise);
     console.error('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
-    // Gracefully shutdown server if running, then exit
+
     if (server && server.listening) {
         console.log('Closing server due to unhandled rejection...');
         server.close(() => {
@@ -166,7 +153,7 @@ process.on('uncaughtException', (err) => {
         console.error(err.stack);
     }
     console.error('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
-    // Gracefully shutdown server if running, then exit
+
     if (server && server.listening) {
         console.log('Closing server due to uncaught exception...');
         server.close(() => {
@@ -178,5 +165,5 @@ process.on('uncaughtException', (err) => {
     }
 });
 
-// --- Initiate Server Start ---
+
 startServer();

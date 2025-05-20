@@ -1,5 +1,3 @@
-// utils/validators.js (BACKEND)
-
 exports.validateRegistration = (data) => {
   console.log("--- BACKEND: utils/validators.js: validateRegistration ---");
   console.log("Data received by validator:", JSON.stringify(data, null, 2));
@@ -10,7 +8,6 @@ exports.validateRegistration = (data) => {
   const email = typeof data.email === 'string' ? data.email.trim() : '';
   const contactNumber = typeof data.contactNumber === 'string' ? data.contactNumber.trim() : '';
   const password = typeof data.password === 'string' ? data.password : '';
-  // confirmPassword removed from data destructuring and validation
   const address = typeof data.address === 'string' ? data.address.trim() : '';
   const district = typeof data.district === 'string' ? data.district.trim() : '';
   const province = typeof data.province === 'string' ? data.province.trim() : '';
@@ -27,15 +24,6 @@ exports.validateRegistration = (data) => {
 
   if (!password) errors.password = 'Password is required.';
   else if (password.length < 6) errors.password = 'Password: min 6 characters.';
-  // Complex password regex check removed for backend simplicity, frontend handles it.
-  // If needed, add Mongoose custom validator for complex password rules.
-
-  // Confirm Password validation REMOVED
-  // if (!confirmPassword) {
-  //     errors.confirmPassword = 'Confirm password is required.';
-  // } else if (password !== confirmPassword) {
-  //   errors.confirmPassword = 'Passwords do not match.';
-  // }
 
   if (!address) errors.address = 'Address is required.';
   else if (address.length < 10) errors.address = 'Address: min 10 characters.';

@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
-// Define the schema first
 const adminSchema = new mongoose.Schema({
     email: {
         type: String,
@@ -33,7 +32,6 @@ const adminSchema = new mongoose.Schema({
     }
 });
 
-// Pre-save hook for password hashing
 adminSchema.pre('save', async function(next) {
     if (!this.isModified('password')) return next();
     try {
@@ -47,7 +45,6 @@ adminSchema.pre('save', async function(next) {
     }
 });
 
-// Method for password comparison
 adminSchema.methods.comparePassword = async function(enteredPassword) {
     if (!this.password) {
         console.error(`[AdminModel] comparePassword called on user ${this.email} but this.password is not available.`);
@@ -56,14 +53,10 @@ adminSchema.methods.comparePassword = async function(enteredPassword) {
     return await bcrypt.compare(enteredPassword, this.password);
 };
 
-// Check if the model already exists before trying to compile it
-// Export the model
 let Admin;
 try {
-    // Try to get the existing model if it has been compiled
     Admin = mongoose.model('Admin');
 } catch (error) {
-    // If the model doesn't exist, compile it
     Admin = mongoose.model('Admin', adminSchema);
 }
 module.exports = Admin;

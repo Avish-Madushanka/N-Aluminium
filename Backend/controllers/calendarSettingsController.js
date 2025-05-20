@@ -1,4 +1,3 @@
-// backend/controllers/calendarSettingsController.js
 const CalendarSettings = require('../models/CalendarSettings');
 
 const getOrCreateSettings = async () => {

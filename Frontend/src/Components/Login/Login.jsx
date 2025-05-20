@@ -1,25 +1,17 @@
-// Frontend/src/Components/Login/Login.jsx
 import React, { useState, useEffect, useCallback } from 'react';
-import axiosInstance from '../../api/axiosInstance'; // Adjust path if needed
-import API_ENDPOINTS from '../../apiConfig';         // Adjust path if needed
+import axiosInstance from '../../api/axiosInstance'; 
+import API_ENDPOINTS from '../../apiConfig';        
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';  // Adjust path if needed
+import { useAuth } from '../../context/AuthContext';  
 
-import './Login.css'; // Ensure this path is correct
-
-// Initial console logs for sanity checking imports (good for debugging)
-// console.log('[Login.jsx] Mounted.');
-// console.log('[Login.jsx] axiosInstance imported:', !!axiosInstance);
-// console.log('[Login.jsx] API_ENDPOINTS imported:', API_ENDPOINTS ? JSON.stringify(API_ENDPOINTS) : 'API_ENDPOINTS IS UNDEFINED');
-// console.log('[Login.jsx] useAuth imported:', !!useAuth);
+import './Login.css'; 
 
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const [serverStatus, setServerStatus] = useState('checking'); // 'checking', 'online', 'offline', 'error'
-
+  const [serverStatus, setServerStatus] = useState('checking'); 
   const auth = useAuth();
   const navigate = useNavigate();
 
@@ -29,15 +21,13 @@ function Login() {
   const checkBackendStatus = useCallback(async () => {
     console.log('[Login.jsx] checkBackendStatus called.');
     setServerStatus('checking');
-    // Clear connection-related errors before re-checking
+    // Clear connection
     if (isConnectionError(errorMessage)) {
       setErrorMessage('');
     }
 
-    // Ensure API_ENDPOINTS.HEALTH is defined for the check
-    // This assumes your backend has a GET /api/health endpoint
-    // and axiosInstance has baseURL: 'http://localhost:5003/api'
-    const healthCheckEndpoint = API_ENDPOINTS?.HEALTH || '/health'; // Default to '/health'
+
+    const healthCheckEndpoint = API_ENDPOINTS?.HEALTH || '/health'; 
 
     if (!healthCheckEndpoint) {
       console.warn("[Login.jsx] Health check endpoint is not configured in API_ENDPOINTS.HEALTH.");
@@ -47,28 +37,24 @@ function Login() {
     }
 
     try {
-      // Use a relative path. axiosInstance will prepend its baseURL.
       console.log(`[Login.jsx] Pinging backend health at: ${healthCheckEndpoint}`);
-      await axiosInstance.get(healthCheckEndpoint, { timeout: 7000 }); // Increased timeout slightly
+      await axiosInstance.get(healthCheckEndpoint, { timeout: 7000 }); 
       console.log('[Login.jsx] Backend health check successful.');
       setServerStatus('online');
       return true;
     } catch (err) {
       console.error("[Login.jsx] Backend health check failed:", err.message, err.code, err.response?.status);
       setServerStatus(err.code === 'ECONNABORTED' || !err.response ? 'offline' : 'error');
-      // Only set a generic connection error if no other specific error is already displayed
-      // or if the current error is also a connection type error.
       if (!errorMessage || isConnectionError(errorMessage)) {
         setErrorMessage('Connection Error: Cannot reach the server. Please ensure it is running and accessible.');
       }
       return false;
     }
-  }, [errorMessage]); // Added errorMessage to dependencies
+  }, [errorMessage]); // errorMessage
 
   useEffect(() => {
-    // Initial backend status check
     checkBackendStatus();
-  }, [checkBackendStatus]); // checkBackendStatus is memoized by useCallback
+  }, [checkBackendStatus]); // checkBackendStatus
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -79,18 +65,16 @@ function Login() {
     }
     setIsLoading(true);
 
-    // Re-check server status only if it's not already 'online'
+    // Re-check server
     if (serverStatus !== 'online') {
       console.log("[Login.jsx handleSubmit] Server not online, re-checking status...");
       const isOnline = await checkBackendStatus();
       if (!isOnline) {
         setIsLoading(false);
-        // errorMessage will be set by checkBackendStatus
         return;
       }
     }
 
-    // Critical dependency checks
     if (typeof auth?.login !== 'function') {
       console.error("[Login.jsx handleSubmit] CRITICAL: auth.login is not a function!");
       setErrorMessage("Login system error (auth context). Please contact support.");
@@ -106,24 +90,22 @@ function Login() {
 
     try {
       console.log(`[Login.jsx handleSubmit] Attempting login to: ${API_ENDPOINTS.AUTH.LOGIN}`);
-      // API_ENDPOINTS.AUTH.LOGIN should be a relative path like '/auth/login'
       const response = await axiosInstance.post(API_ENDPOINTS.AUTH.LOGIN, { email, password });
 
       if (response.data?.success && response.data?.token && response.data?.data) {
         console.log("[Login.jsx] Login successful for user:", response.data.data.email, "Role:", response.data.data.role);
-        auth.login(response.data.token, response.data.data); // Pass user data to auth context
+        auth.login(response.data.token, response.data.data); 
         
-        // Navigate based on role
         const userRole = response.data.data.role;
         if (userRole === 'admin') {
-          navigate('/admin/dashboard'); // Or your admin default route
+          navigate('/admin/dashboard'); 
         } else if (userRole === 'client') {
-          navigate('/client/dashboard'); // Or your client default route
+          navigate('/client/dashboard'); 
         } else if (userRole === 'businessOwner') {
-          navigate('/bo/dashboard'); // Or your business owner default route
+          navigate('/bo/dashboard'); 
         }
         else {
-          navigate('/'); // Fallback navigation
+          navigate('/');
         }
 
       } else {
@@ -132,8 +114,6 @@ function Login() {
         setErrorMessage(errMsg);
       }
     } catch (err) {
-      // Error handling is now more robust in the Axios interceptor,
-      // but we can still use a local handler for component-specific UI updates.
       console.error("[Login.jsx handleSubmit] Login API call failed:", err);
       handleApiError(err);
     } finally {
@@ -142,8 +122,7 @@ function Login() {
   };
 
   const handleApiError = (error) => {
-    // setIsLoading(false); // Already handled in handleSubmit's finally block
-    console.warn("[Login.jsx handleApiError]", error); // Use warn for non-critical display
+    console.warn("[Login.jsx handleApiError]", error); 
     if (error.code === 'ECONNABORTED' || error.message.toLowerCase().includes('timeout')) {
       setErrorMessage('Login request timed out. The server might be busy.');
       setServerStatus('error');
@@ -154,19 +133,18 @@ function Login() {
       if (status === 400) setErrorMessage(msg || "Invalid input. Please check your details.");
       else if (status === 401) setErrorMessage(msg || 'Incorrect email or password.');
       else if (status === 403) setErrorMessage(msg || 'Access Denied.');
-      else if (status === 404) setErrorMessage("Login service not found. Please contact support."); // Should not happen if health check passed
+      else if (status === 404) setErrorMessage("Login service not found. Please contact support."); 
       else setErrorMessage(msg);
 
       if (status >= 500) setServerStatus('error');
-    } else if (error.request) { // Network error, server unreachable
+    } else if (error.request) {
       setErrorMessage('Network Error: Unable to connect to the server.');
       setServerStatus('offline');
-    } else { // Other errors (e.g., setup issues)
+    } else { 
       setErrorMessage(error.message || 'An unexpected error occurred during login.');
     }
   };
 
-  // Critical dependency check (good for early error detection)
   if (typeof API_ENDPOINTS === 'undefined' || typeof auth === 'undefined' || typeof auth.login !== 'function') {
     const errorDetails = `API_ENDPOINTS: ${API_ENDPOINTS ? 'Loaded' : 'MISSING! Check import/config.'}. Auth Context: ${auth ? 'Loaded' : 'MISSING! Check AuthProvider.'}. Auth.login function: ${auth && typeof auth.login === 'function' ? 'Available' : 'MISSING on AuthContext!'}`;
     console.error("[Login.jsx] Critical dependency error on mount:", errorDetails);
@@ -184,18 +162,13 @@ function Login() {
     <div className="LoginPage-container">
       <div className="LoginPage-content">
         <div className="LoginPage-left">
-          {/* Decorative content, logo, etc. */}
           <h1 className="LoginPage-title">Welcome Back!</h1>
           <p className="LoginPage-subtitle">Log in to manage your N-Aluminium account.</p>
-          {/* You can add an image or illustration here */}
         </div>
         <div className="LoginPage-right">
           <h2 className="LoginPage-signinTitle">Sign In</h2>
           <div className="LoginPage-status-message">
-            {/* Display server status subtly unless it's an error */}
             {serverStatus === 'checking' && <p className="status-checking">Connecting to server...</p>}
-            {/* {serverStatus === 'online' && <p className="status-online">Server Connected</p>} */}
-            {/* errorMessage will display more prominent errors */}
           </div>
           {errorMessage && <div className="LoginPage-error">{errorMessage}</div>}
           
@@ -205,11 +178,11 @@ function Login() {
               <input
                 type="email"
                 id="login-email"
-                name="email" // Consistent naming
+                name="email" 
                 value={email}
-                onChange={(e) => setEmail(e.target.value)} // Removed .trim() here, can trim on submit
+                onChange={(e) => setEmail(e.target.value)} 
                 placeholder="you@example.com"
-                autoComplete="email" // More standard autocomplete
+                autoComplete="email" 
                 required
                 disabled={isLoading || serverStatus === 'checking'}
               />
@@ -219,11 +192,11 @@ function Login() {
               <input
                 type="password"
                 id="login-password"
-                name="password" // Consistent naming
+                name="password" 
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter your password"
-                autoComplete="current-password" // More standard autocomplete
+                autoComplete="current-password" 
                 required
                 disabled={isLoading || serverStatus === 'checking'}
               />
@@ -237,7 +210,6 @@ function Login() {
             </button>
           </form>
           <div className="LoginPage-extraLinks">
-            {/* <Link to="/forgot-password">Forgot Password?</Link> */}
           </div>
           <div className="LoginPage-signupLink">
             Don't have an account? <Link to="/SignUp">Sign Up Now</Link>

@@ -19,6 +19,7 @@ import AdminLayout from './Layouts/AdminLayout';
 import HomePage from './Pages/HomePage';
 import SignUp from './Pages/SignUp';
 import AboutUs from './Pages/AboutUS';
+import AboutUSDiagram from './Components/AboutUs/AboutUSDiagram'
 import BuyandSell from './Pages/BuyandSell';
 import Project from './Pages/Project';
 import Collection from './Pages/Collection';
@@ -284,7 +285,6 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
 
             <main className="main-content">
                 <Routes>
-                    {/* === Public Routes === */}
                     <Route path="/" element={<HomePage />} />
                     <Route path="/AboutUs" element={<AboutUs />} />
                     <Route path="/Service" element={<Service />} />
@@ -301,11 +301,10 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
                     <Route path="/BSHeader" element={<BSHeader />} />
                     <Route path="/unauthorized" element={<UnauthorizedPage />} />
                     <Route path="/LocationMap" element={<LocationMap />} />
+                    <Route path="/AboutUSDiagram" element={<AboutUSDiagram />} />
 
-                    {/* === Login Route === */}
                     <Route path="/Login" element={ auth.isLoggedIn && auth.userInfo ? (<Navigate to={ (auth.userInfo.role === 'admin' && '/Admin/Dashboard') || (auth.userInfo.role === 'client' && '/ClientProfile') || (auth.userInfo.role === 'businessOwner' && '/BOwnerHome') || '/' } replace /> ) : ( <Login /> )} />
                     
-                    {/* === Protected Client Routes === */}
                     <Route element={<ProtectedRoute requiredRole="client" />}>
                         <Route path="/UserCalendar" element={<UserCalendar userInfo={auth.userInfo} />} />
                         <Route path="/ClientProfile" element={<ClientProfile />} />
@@ -316,7 +315,6 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
                         <Route path="/WastePickForm" element={<WastePickForm />} />
                     </Route>
 
-                    {/* === Protected Business Owner Routes === */}
                     <Route element={<ProtectedRoute requiredRole="businessOwner" />}>
                          <Route path="/BOwnerHome" element={<BOwnerHome userInfo={auth.userInfo} />} />
                          <Route path="/BusinessDashboard" element={<Navigate to="/BOwnerHome" replace />} />
@@ -326,7 +324,6 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
                          <Route path="/SaleForm" element={<SaleForm />} />
                     </Route>
 
-                     {/* === Protected Admin Routes === */}
                      <Route element={<ProtectedRoute requiredRole="admin" />}>
                         <Route element={<AdminLayout handleLogout={auth.logout} userInfo={auth.userInfo} />}>
                            <Route path="/Admin" element={<Navigate to="/Admin/Dashboard" replace />} /> 
@@ -341,7 +338,6 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
                         </Route>
                      </Route>
 
-                    {/* Fallback for unmatched routes */}
                     <Route path="*" element={ 
                         <div className="page-not-found-container">
                             <h1 className="page-not-found-title">404 - Page Not Found</h1>

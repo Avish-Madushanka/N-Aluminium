@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
-// Define the schema first
 const clientSchema = new mongoose.Schema({
     name: { type: String, required: true, trim: true },
     email: { type: String, required: true, unique: true, lowercase: true, trim: true },
@@ -15,7 +14,6 @@ const clientSchema = new mongoose.Schema({
     createdAt: { type: Date, default: Date.now }
 });
 
-// Pre-save hook for password hashing
 clientSchema.pre('save', async function(next) {
     if (!this.isModified('password')) return next();
     try {
@@ -29,7 +27,6 @@ clientSchema.pre('save', async function(next) {
     }
 });
 
-// Method for password comparison
 clientSchema.methods.comparePassword = async function(enteredPassword) {
     if (!this.password) {
         console.error(`[ClientModel] comparePassword called on user ${this.email} but this.password is not available.`);
@@ -38,14 +35,10 @@ clientSchema.methods.comparePassword = async function(enteredPassword) {
     return await bcrypt.compare(enteredPassword, this.password);
 };
 
-// Check if the model already exists before trying to compile it
-// Export the model
 let Client;
 try {
-    // Try to get the existing model if it has been compiled
     Client = mongoose.model('Client');
 } catch (error) {
-    // If the model doesn't exist, compile it
     Client = mongoose.model('Client', clientSchema);
 }
 module.exports = Client;

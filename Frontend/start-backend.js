@@ -1,4 +1,3 @@
-// Script to start the backend server
 const { spawn } = require('child_process');
 const path = require('path');
 const os = require('os');

@@ -1,16 +1,11 @@
-// src/routes/ProtectedRoute.jsx
 import React from 'react';
 import { Navigate, useLocation, Outlet } from 'react-router-dom';
 import { ClipLoader } from 'react-spinners';
 
-// --- CORRECTED IMPORT FOR useAuth ---
-// This path assumes:
-// - ProtectedRoute.jsx is in src/routes/
-// - AuthContext.jsx is in src/context/
-import { useAuth } from '../context/AuthContext'; // <<<--- THIS IS THE FIX
+import { useAuth } from '../context/AuthContext'; 
 
 const ProtectedRoute = ({ requiredRole, children }) => {
-    const auth = useAuth(); // Call useAuth to get context value
+    const auth = useAuth(); 
     const location = useLocation();
 
     if (!auth) {
@@ -53,7 +48,7 @@ const ProtectedRoute = ({ requiredRole, children }) => {
             console.warn(`[ProtectedRoute] Role mismatch for path: ${location.pathname}. User role: '${userInfo.role}', Required role: '${requiredRole}'. Redirecting to /unauthorized.`);
             return <Navigate to="/unauthorized" state={{ from: location, requiredRole: requiredRole, userRole: userInfo.role }} replace />;
         }
-        else { // userInfo.role === requiredRole
+        else { 
              console.log(`[ProtectedRoute] User role '${userInfo.role}' matches required role '${requiredRole}' for path: ${location.pathname}. Access GRANTED.`);
         }
     } else {
