@@ -38,9 +38,9 @@ const Footer = () => {
         </div>
 
         <div className="footer1-section footer1-section-contact">
-          <h4>Let's chat!</h4>
+          <h4>Let's Message!</h4>
           <p>
-            <a href="mailto:hi@avo.app" className="footer1-email-link">hi@avo.app</a>
+            <a href="mailto:hi@avo.app" className="footer1-email-link">donotreply.ALUX@gmail.com</a>
           </p>
           <div className="footer1-social-links">
             <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Follow us on Facebook">
@@ -60,7 +60,7 @@ const Footer = () => {
       </div>
 
       <div className="footer1-copyright">
-        © {currentYear} Avo.app. All rights reserved.
+        © {currentYear} ALUX. All rights reserved.
       </div>
     </footer>
   );
