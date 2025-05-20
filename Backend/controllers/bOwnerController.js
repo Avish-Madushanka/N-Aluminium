@@ -1,4 +1,3 @@
-// backend/controllers/bOwnerController.js
 const BusinessOwner = require('../models/BusinessOwner');
 const asyncHandler = require('../utils/async'); // Assuming you have this utility
 const ErrorResponse = require('../utils/errorResponse'); // Assuming you have this utility
@@ -21,6 +20,29 @@ exports.getMyBOwnerProfile = asyncHandler(async (req, res, next) => {
     res.status(200).json({ success: true, data: bOwner });
 });
 
+// @desc    Get all business owners (for admin)
+// @route   GET /api/b-owners
+// @access  Private (Admin only)
+exports.getAllBusinessOwners = asyncHandler(async (req, res, next) => {
+    console.log('[BOwnerCtrl GetAll] Admin fetching all business owners');
+    
+    try {
+        const businessOwners = await BusinessOwner.find()
+            .select('-password') // Exclude password field for security
+            .sort({ createdAt: -1 }); // Sort by newest first
+        
+        console.log(`[BOwnerCtrl GetAll] Found ${businessOwners.length} business owners`);
+        
+        res.status(200).json({
+            success: true,
+            count: businessOwners.length,
+            data: businessOwners
+        });
+    } catch (error) {
+        console.error('[BOwnerCtrl GetAll] Error fetching all business owners:', error);
+        next(error);
+    }
+});
 
 // @desc    Update current logged-in business owner's profile
 // @route   PUT /api/b-owners/profile/me

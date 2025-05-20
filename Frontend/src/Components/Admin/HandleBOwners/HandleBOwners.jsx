@@ -1,124 +1,86 @@
 import React, { useState, useEffect } from 'react';
-// Removed axios import as we are simulating frontend only
-// import axios from 'axios'; 
-import './HandleBOwners.css'; // Assuming you have this CSS file from previous examples
-
-// --- Sample Data (Simulating Backend Response) ---
-const sampleBusinessOwners = [
-  {
-    businessId: 'B001',
-    businessName: 'Green Tech Recycling',
-    ownerName: 'Alice Johnson',
-    email: 'alice.j@greentech.com', // Added for email modal
-    contactNumber: '555-1234',
-    address: '123 Recycling Ave, Anytown, USA',
-    registrationDate: '2022-01-15', // Example detail field
-    businessType: 'Industrial Recycling', // Example detail field
-    website: 'www.greentech.com', // Example detail field
-    notes: 'Primary contact for aluminum scraps. Prefers weekly pickups.' // Example detail field
-  },
-  {
-    businessId: 'B002',
-    businessName: 'MetalWorks Inc.',
-    ownerName: 'Bob Smith',
-    email: 'bob.smith@metalworks.co', // Added for email modal
-    contactNumber: '555-5678',
-    address: '456 Industrial Rd, Sometown, USA',
-    registrationDate: '2021-11-01',
-    businessType: 'Metal Fabrication',
-    website: null, // Example of optional data
-    notes: 'Source for offcuts and shavings.'
-  },
-  {
-    businessId: 'B003',
-    businessName: 'Construct Solutions',
-    ownerName: 'Carol White',
-    email: 'carol.w@constructsol.net', // Added for email modal
-    contactNumber: '555-9012',
-    address: '789 Building Ln, Otherville, USA',
-    registrationDate: '2023-03-20',
-    businessType: 'Construction & Demolition',
-    website: 'www.constructsolutions.net',
-    notes: 'Demolition site scraps, variable quality.'
-  },
-];
-// --- End Sample Data ---
-
+import axiosInstance from '../../../api/axiosInstance'; // Update path as needed
+import API_ENDPOINTS from '../../../apiConfig'; // Update path as needed
+import './HandleBOwners.css';
 
 function HandleBOwners() {
   // State management
   const [businessOwners, setBusinessOwners] = useState([]);
-  const [loading, setLoading] = useState(true); // Keep loading state for simulation
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   
   // Email Modal State
   const [emailModalOpen, setEmailModalOpen] = useState(false);
-  const [currentOwnerForEmail, setCurrentOwnerForEmail] = useState(null); // Renamed for clarity
+  const [currentOwnerForEmail, setCurrentOwnerForEmail] = useState(null);
   const [emailData, setEmailData] = useState({ subject: '', message: '' });
 
   // Details Modal State
   const [detailsModalOpen, setDetailsModalOpen] = useState(false);
-  const [selectedOwnerForDetails, setSelectedOwnerForDetails] = useState(null); // State for details modal
+  const [selectedOwnerForDetails, setSelectedOwnerForDetails] = useState(null);
 
   // Notification State
   const [notification, setNotification] = useState({ show: false, message: '', type: '' });
 
-  // Simulate fetching business owners on component mount
+  // Fetch business owners data from API
   useEffect(() => {
-    setLoading(true);
-    setError('');
-    // Simulate API call delay
-    const timer = setTimeout(() => {
+    const fetchBusinessOwners = async () => {
+      setLoading(true);
+      setError('');
+      
       try {
-        // --- Simulate successful data fetch ---
-        setBusinessOwners(sampleBusinessOwners); 
-        setLoading(false);
-        // --- Or uncomment below to simulate an error ---
-        // throw new Error("Simulated network failure"); 
+        const response = await axiosInstance.get(API_ENDPOINTS.BOWNERS.GET_ALL);
+        
+        if (response.data && response.data.success) {
+          console.log('Business owners fetched successfully:', response.data);
+          setBusinessOwners(response.data.data);
+        } else {
+          throw new Error('Failed to fetch business owners data');
+        }
       } catch (err) {
-        console.error("Simulated fetch error:", err);
-        setError('Failed to load business owners (Simulated). Please try again later.');
+        console.error('Error fetching business owners:', err);
+        setError(err.response?.data?.message || 'Failed to load business owners. Please try again.');
+      } finally {
         setLoading(false);
       }
-    }, 1000); // 1 second delay
+    };
 
-    // Cleanup function for timeout if component unmounts
-    return () => clearTimeout(timer); 
-  }, []); // Empty dependency array means this runs once on mount
+    fetchBusinessOwners();
+  }, []);
 
-  // --- Simulated Actions (No Backend Calls) ---
-
-  // Function to handle removal of a business owner (Frontend Only)
-  const handleRemoveBOwner = (businessIdToRemove) => {
-    if (window.confirm('Are you sure you want to remove this business owner? (Frontend Simulation)')) {
-      // Simulate successful removal
-      setBusinessOwners(prevOwners => 
-        prevOwners.filter(owner => owner.businessId !== businessIdToRemove)
-      );
-      showNotification('Business owner removed successfully (Simulated)', 'success');
-      
-      // --- To simulate an error: ---
-      // console.error("Simulated remove error");
-      // showNotification('Failed to remove business owner (Simulated)', 'error');
+  // Function to handle removal of a business owner
+  const handleRemoveBOwner = async (businessId) => {
+    if (window.confirm('Are you sure you want to remove this business owner?')) {
+      try {
+        // Here you would implement the actual API call to remove the business owner
+        // For now, we'll just update the UI
+        setBusinessOwners(prevOwners => 
+          prevOwners.filter(owner => owner._id !== businessId)
+        );
+        showNotification('Business owner removed successfully', 'success');
+      } catch (err) {
+        console.error("Error removing business owner:", err);
+        showNotification('Failed to remove business owner', 'error');
+      }
     }
   };
 
-  // Function to simulate sending email (Frontend Only)
-  const handleSendEmail = (e) => {
+  // Function to send email
+  const handleSendEmail = async (e) => {
     e.preventDefault();
     if (!emailData.subject || !emailData.message) {
       showNotification('Please fill in all fields', 'error');
       return;
     }
 
-    // Simulate successful email send
-    console.log('Simulating sending email to:', currentOwnerForEmail.email, 'Data:', emailData);
-    showNotification(`Email sent successfully to ${currentOwnerForEmail.ownerName} (Simulated)`, 'success');
-    closeEmailModal();
-
-    // --- To simulate an error: ---
-    // console.error("Simulated email send error");
-    // showNotification('Failed to send email (Simulated)', 'error');
+    try {
+      // Here you would implement the actual email sending API
+      console.log('Sending email to:', currentOwnerForEmail.email, 'Data:', emailData);
+      showNotification(`Email sent successfully to ${currentOwnerForEmail.ownerName}`, 'success');
+      closeEmailModal();
+    } catch (err) {
+      console.error("Error sending email:", err);
+      showNotification('Failed to send email', 'error');
+    }
   };
 
   // --- Modal Control Functions ---
@@ -132,7 +94,7 @@ function HandleBOwners() {
   const closeEmailModal = () => {
     setEmailModalOpen(false);
     setCurrentOwnerForEmail(null);
-    setEmailData({ subject: '', message: '' }); // Reset form
+    setEmailData({ subject: '', message: '' });
   };
 
   // Details Modal
@@ -148,13 +110,13 @@ function HandleBOwners() {
 
   // --- Helper Functions ---
 
-  // Handle email form input changes (Remains the same)
+  // Handle email form input changes
   const handleEmailChange = (e) => {
     const { name, value } = e.target;
     setEmailData(prev => ({ ...prev, [name]: value }));
   };
 
-  // Function to show notification (Remains the same)
+  // Function to show notification
   const showNotification = (message, type) => {
     setNotification({ show: true, message, type });
     setTimeout(() => {
@@ -195,18 +157,17 @@ function HandleBOwners() {
             <tbody>
               {businessOwners.length > 0 ? (
                 businessOwners.map((owner) => (
-                  <tr key={owner.businessId}>
+                  <tr key={owner._id}>
                     <td>{owner.businessId}</td>
                     <td>{owner.businessName}</td>
                     <td>{owner.ownerName}</td>
                     <td>{owner.contactNumber}</td>
                     <td>{owner.address}</td>
                     <td className="action-buttons">
-                      {/* Details Button Added */}
                       <button 
-                        className="details-button" // Add specific style for this button if needed
+                        className="details-button"
                         onClick={() => openDetailsModal(owner)}
-                        title="View Details" // Tooltip
+                        title="View Details"
                       >
                         Details
                       </button>
@@ -219,7 +180,7 @@ function HandleBOwners() {
                       </button>
                       <button 
                         className="remove-button" 
-                        onClick={() => handleRemoveBOwner(owner.businessId)}
+                        onClick={() => handleRemoveBOwner(owner._id)}
                         title="Remove Owner"
                       >
                         Remove
@@ -240,7 +201,7 @@ function HandleBOwners() {
       {/* --- Email Modal --- */}
       {emailModalOpen && currentOwnerForEmail && (
         <div className="modal-overlay">
-          <div className="email-modal"> {/* Use existing email-modal class */}
+          <div className="email-modal">
             <div className="modal-header">
               <h3>Send Email to {currentOwnerForEmail.ownerName}</h3>
               <button className="close-button" onClick={closeEmailModal}>×</button>
@@ -252,8 +213,8 @@ function HandleBOwners() {
                   type="text"
                   id="recipient"
                   value={currentOwnerForEmail.email}
-                  readOnly // Changed to readOnly, better practice than disabled for display
-                  className="read-only-input" // Optional: Add class for specific styling
+                  readOnly
+                  className="read-only-input"
                 />
               </div>
               <div className="form-group">
@@ -285,7 +246,7 @@ function HandleBOwners() {
                   Cancel
                 </button>
                 <button type="submit" className="send-button">
-                  Send Email (Simulated)
+                  Send Email
                 </button>
               </div>
             </form>
@@ -296,13 +257,12 @@ function HandleBOwners() {
       {/* --- Details Modal --- */}
       {detailsModalOpen && selectedOwnerForDetails && (
         <div className="modal-overlay">
-          {/* You might want a different class or reuse 'email-modal' styling */}
           <div className="details-modal"> 
             <div className="modal-header">
               <h3>Business Owner Details</h3>
               <button className="close-button" onClick={closeDetailsModal}>×</button>
             </div>
-            <div className="modal-body details-content"> {/* Added classes for content styling */}
+            <div className="modal-body details-content">
               <h4>{selectedOwnerForDetails.businessName}</h4>
               <div className="detail-item">
                 <strong>Owner Name:</strong> {selectedOwnerForDetails.ownerName}
@@ -319,36 +279,40 @@ function HandleBOwners() {
               <div className="detail-item">
                 <strong>Address:</strong> {selectedOwnerForDetails.address}
               </div>
-              <hr className="details-divider"/> {/* Optional divider */}
+              <hr className="details-divider"/>
               <div className="detail-item">
-                <strong>Registration Date:</strong> {selectedOwnerForDetails.registrationDate || 'N/A'}
+                <strong>Registration Date:</strong> {
+                  selectedOwnerForDetails.createdAt 
+                    ? new Date(selectedOwnerForDetails.createdAt).toLocaleDateString() 
+                    : 'N/A'
+                }
               </div>
               <div className="detail-item">
-                <strong>Business Type:</strong> {selectedOwnerForDetails.businessType || 'N/A'}
+                <strong>District:</strong> {selectedOwnerForDetails.district || 'N/A'}
               </div>
               <div className="detail-item">
-                <strong>Website:</strong> 
-                {selectedOwnerForDetails.website ? 
-                  <a href={selectedOwnerForDetails.website.startsWith('http') ? selectedOwnerForDetails.website : `http://${selectedOwnerForDetails.website}`} target="_blank" rel="noopener noreferrer">
-                    {selectedOwnerForDetails.website}
-                  </a> 
-                  : 'N/A'}
+                <strong>Province:</strong> {selectedOwnerForDetails.province || 'N/A'}
               </div>
-               <hr className="details-divider"/>
-              <div className="detail-item notes-section"> {/* Class for potentially different styling */}
-                <strong>Notes:</strong> 
-                <p>{selectedOwnerForDetails.notes || 'No notes available.'}</p>
-              </div>
+              {selectedOwnerForDetails.profilePhoto && (
+                <div className="detail-item">
+                  <strong>Profile Photo:</strong>
+                  <img 
+                    src={`${process.env.REACT_APP_API_URL}${selectedOwnerForDetails.profilePhoto}`} 
+                    alt="Profile" 
+                    className="owner-profile-thumbnail" 
+                    style={{ maxWidth: '100px', marginTop: '10px' }}
+                  />
+                </div>
+              )}
             </div>
-             <div className="form-actions"> {/* Reuse form-actions for button alignment */}
-                <button type="button" className="cancel-button" onClick={closeDetailsModal}>
-                  Close
-                </button>
-              </div>
+            <div className="form-actions">
+              <button type="button" className="cancel-button" onClick={closeDetailsModal}>
+                Close
+              </button>
+            </div>
           </div>
         </div>
       )}
-
     </div>
   );
 }

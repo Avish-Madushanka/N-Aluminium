@@ -1,12 +1,11 @@
 import React from 'react'
-import ContactUSHeader from '../Components/ContactUs/ContactUSHeader'
-import Submit from '../Components/ContactUs/Submit'
+import ContactReviewPage from '../Components/ContactUs/ContactReviewPage'
+
 
 const ContactUs = () => {
   return (
     <>
-      <ContactUSHeader />
-      <Submit />
+    <ContactReviewPage />
     </>
   )
 }
