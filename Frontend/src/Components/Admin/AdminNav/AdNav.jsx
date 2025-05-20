@@ -52,11 +52,6 @@ function AdNavComponent({ handleLogout }) {
                                 <FontAwesomeIcon icon={faBox} className="menu-icon" /> Scrap Calculator
                             </NavLink>
                         </li>
-                        <li>
-                            <NavLink to="/Admin/Emails" className={({ isActive }) => isActive ? 'active' : ''}>
-                                <FontAwesomeIcon icon={faEnvelope} className="menu-icon" /> Check Emails
-                            </NavLink>
-                        </li>
                          <li>
                             <NavLink to="/Admin/ManageOwners" className={({ isActive }) => isActive ? 'active' : ''}>
                                 <FontAwesomeIcon icon={faBuilding} className="menu-icon" /> Business Owners
@@ -66,59 +61,11 @@ function AdNavComponent({ handleLogout }) {
                             <NavLink to="/Admin/AdminLocationManager" className={({ isActive }) => isActive ? 'active' : ''}>
                                 <FontAwesomeIcon icon={faCreditCard} className="menu-icon" /> Add Shop Location
                             </NavLink>
-                        </li>
-                        <li>
-                           <NavLink to="/Admin/DisReview" className={({ isActive }) => isActive ? 'active' : ''}>
-                                <FontAwesomeIcon icon={faStar} className="menu-icon" /> Reviews
-                            </NavLink>
-                        </li>
-                        {/*
-                         <li>
-                            <NavLink to="/Admin/Integrations" className={({ isActive }) => isActive ? 'active' : ''}>
-                                <FontAwesomeIcon icon={faLink} className="menu-icon" /> Integrations
-                            </NavLink>
-                        </li>
-                        */}
+                        </li> 
                     </ul>
                 </div>
 
-                {/* Account Section */}
-                <div className="menu-section">
-                     <div className="menu-section-title">ACCOUNT & SUPPORT</div>
-                    <ul>
-                        {/* Update paths for future routes */}
-                        {/*
-                        <li>
-                            <NavLink to="/Admin/GeneralSettings" className={({ isActive }) => isActive ? 'active' : ''}>
-                                <FontAwesomeIcon icon={faCog} className="menu-icon" /> Settings
-                            </NavLink>
-                        </li>
-                        <li>
-                           <NavLink to="/Admin/Help" className={({ isActive }) => isActive ? 'active' : ''}>
-                                <FontAwesomeIcon icon={faQuestionCircle} className="menu-icon" /> Help
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink to="/Admin/ManageUsers" className={({ isActive }) => isActive ? 'active' : ''}>
-                                <FontAwesomeIcon icon={faUsers} className="menu-icon" /> Manage Users
-                            </NavLink>
-                        </li>
-                        */}
-                         <li>
-                           {/* Placeholder Link - Update or Remove */}
-                           <a href="#" style={{ opacity: 0.6, cursor: 'not-allowed' }}>
-                                <FontAwesomeIcon icon={faCog} className="menu-icon" /> Settings (TBD)
-                            </a>
-                        </li>
-                         <li>
-                           {/* Placeholder Link - Update or Remove */}
-                           <a href="#" style={{ opacity: 0.6, cursor: 'not-allowed' }}>
-                                <FontAwesomeIcon icon={faQuestionCircle} className="menu-icon" /> Help (TBD)
-                            </a>
-                        </li>
-
-                    </ul>
-                </div>
+                
             </nav>
 
             {/* Logout Section */}

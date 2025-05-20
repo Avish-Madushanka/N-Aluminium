@@ -1,28 +1,31 @@
+// --- START OF FILE server.js ---
 require('dotenv').config();
 
 const express = require('express');
 const cors = require('cors');
-const actualPath = require('path'); 
-const actualHttp = require('http'); 
+const actualPath = require('path');
+const actualHttp = require('http');
 const fs = require('fs');
 
-const connectDB = require('./config/db'); 
+const connectDB = require('./config/db');
 
 console.log('[Server Startup] Initializing: Attempting to load route modules...');
-let clientRoutes, bOwnerRoutes, authRoutes, calendarSettingsRoutes, 
+let clientRoutes, bOwnerRoutes, authRoutes, calendarSettingsRoutes,
     bookingRoutes, reviewRoutes, scrapTypeRoutes, shopLocationRoutes, adminRoutes;
 
 const loadRoute = (routeName, path) => {
   try {
     const routeModule = require(path);
     console.log(`[Server Startup] Successfully loaded ${routeName} from ${path}. Type: ${typeof routeModule}`);
+    // Express routers are functions or objects with a 'stack' property
     if (typeof routeModule !== 'function' && (typeof routeModule !== 'object' || !routeModule.stack)) {
       console.warn(`[Server Startup] WARNING: ${routeName} loaded from ${path}, but it does not appear to be an Express router. Check module.exports in that file.`);
     }
     return routeModule;
   } catch (e) {
     console.error(`[Server Startup] FAILED to load ${routeName} from ${path}: ${e.message}`);
-    return null; 
+    if (process.env.NODE_ENV === 'development') console.error(e.stack); // More detail in dev
+    return null;
   }
 };
 
@@ -33,8 +36,8 @@ calendarSettingsRoutes = loadRoute('calendarSettingsRoutes', './routes/calendarS
 bookingRoutes = loadRoute('bookingRoutes', './routes/bookingRoutes');
 reviewRoutes = loadRoute('reviewRoutes', './routes/reviewRoutes');
 scrapTypeRoutes = loadRoute('scrapTypeRoutes', './routes/scrapTypeRoutes');
-shopLocationRoutes = loadRoute('shopLocationRoutes', './routes/shopLocationRoutes'); 
-adminRoutes = loadRoute('adminRoutes', './routes/adminRoutes'); 
+shopLocationRoutes = loadRoute('shopLocationRoutes', './routes/shopLocationRoutes');
+adminRoutes = loadRoute('adminRoutes', './routes/adminRoutes');
 
 
 console.log('[Server Startup] Loading controllers and middleware...');
@@ -46,18 +49,24 @@ const PORT = process.env.PORT || 5003;
 
 console.log('[Server Config] Applying core middleware...');
 app.use(cors({
-    origin: process.env.FRONTEND_URL || 'http://localhost:5173', 
+    origin: process.env.FRONTEND_URL || 'http://localhost:5173',
     credentials: true
 }));
-app.use(express.json({ limit: '10mb' })); 
-app.use(express.urlencoded({ extended: true, limit: '10mb' })); 
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 const uploadsDirectory = actualPath.join(__dirname, 'uploads');
 app.use('/uploads', express.static(uploadsDirectory));
 if (fs.existsSync(uploadsDirectory)) {
     console.log(`[Server Config] Serving static files from ${uploadsDirectory} at /uploads`);
 } else {
-    console.warn(`[Server Config] 'uploads' directory (${uploadsDirectory}) does not exist. Static file serving for /uploads might not work as expected.`);
+    console.warn(`[Server Config] 'uploads' directory (${uploadsDirectory}) does not exist. Static file serving for /uploads might not work as expected. Attempting to create...`);
+    try {
+        fs.mkdirSync(uploadsDirectory, { recursive: true });
+        console.log(`[Server Config] Successfully created 'uploads' directory at ${uploadsDirectory}`);
+    } catch (err) {
+        console.error(`[Server Config] FAILED to create 'uploads' directory: ${err.message}`);
+    }
 }
 
 app.get('/api/health', (req, res) => {
@@ -67,7 +76,7 @@ app.get('/api/health', (req, res) => {
 
 const mountRoutes = () => {
     console.log('[Server Config] Starting route mounting process...');
-    
+
     const mount = (path, routerModule, routerName) => {
         if (routerModule && (typeof routerModule === 'function' || (typeof routerModule === 'object' && routerModule.stack))) {
             app.use(path, routerModule);
@@ -84,8 +93,8 @@ const mountRoutes = () => {
     mount('/api/bookings', bookingRoutes, 'bookingRoutes');
     mount('/api/reviews', reviewRoutes, 'reviewRoutes');
     mount('/api/scrap-types', scrapTypeRoutes, 'scrapTypeRoutes');
-    mount('/api/shop-locations', shopLocationRoutes, 'shopLocationRoutes'); 
-    mount('/api/admin', adminRoutes, 'adminRoutes'); 
+    mount('/api/shop-locations', shopLocationRoutes, 'shopLocationRoutes');
+    mount('/api/admin', adminRoutes, 'adminRoutes');
 
     console.log('[Server Config] Route mounting process completed.');
 };
@@ -100,13 +109,13 @@ const server = actualHttp.createServer(app);
 const startServer = async () => {
     try {
         console.log('[Server Startup] Attempting to connect to MongoDB...');
-        await connectDB(); 
+        await connectDB();
 
         server.listen(PORT, async () => {
             console.log(`[Server Startup] SERVER LISTENING on http://localhost:${PORT}`);
             console.log(`[Server Startup] Environment: ${process.env.NODE_ENV || 'development'}`);
             console.log(`[Server Startup] Frontend URL configured for CORS: ${process.env.FRONTEND_URL || 'http://localhost:5173'}`);
-            
+
             try {
                 console.log('[Server Startup] Attempting to create initial admin user...');
                 await createInitialAdmin();
@@ -122,7 +131,7 @@ const startServer = async () => {
             console.error(error.stack);
         }
         console.error('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
-        process.exit(1); 
+        process.exit(1);
     }
 };
 

@@ -1,88 +1,100 @@
-const moduleApiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5003/api';
+// frontend/src/api/apiConfig.js
 
 const API_ENDPOINTS = {
-  API_ROOT: moduleApiBaseUrl,
+  // API_ROOT: import.meta.env.VITE_API_BASE_URL || 'http://localhost:5003/api', // Keep for reference or non-Axios use if needed
   
   AUTH: {
-    LOGIN: `${moduleApiBaseUrl}/auth/login`,
-    LOGOUT: `${moduleApiBaseUrl}/auth/logout`,
-    REFRESH: `${moduleApiBaseUrl}/auth/refresh`,
-    FORGOT_PASSWORD: `${moduleApiBaseUrl}/auth/forgot-password`,
-    RESET_PASSWORD: `${moduleApiBaseUrl}/auth/reset-password`
+    LOGIN: '/auth/login',
+    LOGOUT: '/auth/logout',
+    REFRESH: '/auth/refresh',
+    FORGOT_PASSWORD: '/auth/forgot-password',
+    RESET_PASSWORD: '/auth/reset-password'
   },
 
   CLIENT: {
-    REGISTER: `${moduleApiBaseUrl}/clients/register`,
-    PROFILE: `${moduleApiBaseUrl}/clients/profile`,
-    UPDATE: `${moduleApiBaseUrl}/clients/update`,
-    DELETE: `${moduleApiBaseUrl}/clients/delete`
+    REGISTER: '/clients/register',
+    PROFILE: (id) => `/clients/${id}`, // For fetching profile by ID
+    MY_PROFILE: '/clients/profile/me', // Or a specific route for the logged-in user's profile
+    UPDATE: (id) => `/clients/${id}`, // For updating profile by ID
+    UPDATE_MY_PROFILE: '/clients/profile/me/update', // Or a specific route
+    DELETE: (id) => `/clients/${id}`  // For deleting profile by ID
   },
 
   BOWNERS: {
-    REGISTER: `${moduleApiBaseUrl}/b-owners/register`,
-    GET_ALL: `${moduleApiBaseUrl}/b-owners`,
-    PROFILE: `${moduleApiBaseUrl}/b-owners/profile`,
-    UPDATE: `${moduleApiBaseUrl}/b-owners/update`,
-    DELETE: `${moduleApiBaseUrl}/b-owners/delete`,
-    VERIFY: `${moduleApiBaseUrl}/b-owners/verify`
+    REGISTER: '/b-owners/register',
+    GET_ALL: '/b-owners', // Corrected to be a relative path
+    PROFILE: (id) => `/b-owners/${id}`, // For fetching profile by ID
+    MY_PROFILE: '/b-owners/profile/me', // Or a specific route
+    UPDATE: (id) => `/b-owners/${id}`, // For updating profile by ID
+    UPDATE_MY_PROFILE: '/b-owners/profile/me/update', // Or specific route
+    DELETE: (id) => `/b-owners/${id}`, // For deleting profile by ID
+    VERIFY: (id) => `/b-owners/${id}/verify` // For verifying a business owner
   },
 
   COLLECTORS: {
-    REGISTER: `${moduleApiBaseUrl}/collectors/register`,
-    GET_ALL: `${moduleApiBaseUrl}/collectors`,
-    PROFILE: `${moduleApiBaseUrl}/collectors/profile`,
-    UPDATE: `${moduleApiBaseUrl}/collectors/update`,
-    DELETE: `${moduleApiBaseUrl}/collectors/delete`,
-    ASSIGN_BOOKING: `${moduleApiBaseUrl}/collectors/assign-booking`
+    REGISTER: '/collectors/register',
+    GET_ALL: '/collectors',
+    PROFILE: (id) => `/collectors/${id}`,
+    UPDATE: (id) => `/collectors/${id}`,
+    DELETE: (id) => `/collectors/${id}`,
+    ASSIGN_BOOKING: '/collectors/assign-booking' // This might need collectorId and bookingId
   },
 
   BOOKINGS: {
-    CREATE: `${moduleApiBaseUrl}/bookings`,
-    GET_ALL: `${moduleApiBaseUrl}/bookings`,
-    GET_ONE: `${moduleApiBaseUrl}/bookings`,
-    UPDATE_STATUS: `${moduleApiBaseUrl}/bookings/status`,
-    UPDATE_ONE: `${moduleApiBaseUrl}/bookings`,
-    DELETE_ONE: `${moduleApiBaseUrl}/bookings`,
-    CLIENT_BOOKINGS: `${moduleApiBaseUrl}/bookings/client`,
-    OWNER_BOOKINGS: `${moduleApiBaseUrl}/bookings/owner`
+    CREATE: '/bookings',
+    GET_ALL: '/bookings', // Admin route
+    GET_ONE: (id) => `/bookings/${id}`,
+    UPDATE_STATUS: (id) => `/bookings/${id}/status`,
+    UPDATE_ONE: (id) => `/bookings/${id}`,
+    DELETE_ONE: (id) => `/bookings/${id}`,
+    CLIENT_BOOKINGS: '/bookings/user/client', // Assuming a route for logged-in client's bookings
+    OWNER_BOOKINGS: '/bookings/user/b-owner' // Assuming a route for logged-in b-owner's bookings
   },
 
   CALENDAR_SETTINGS: {
-    GET: `${moduleApiBaseUrl}/calendar-settings`,
-    UPDATE: `${moduleApiBaseUrl}/calendar-settings`,
-    AVAILABILITY: `${moduleApiBaseUrl}/calendar-settings/availability`
+    GET: '/calendar-settings',
+    UPDATE: '/calendar-settings',
+    AVAILABILITY: '/calendar-settings/availability' // Might be GET or POST depending on use
   },
 
   SCRAP_TYPES: {
-    GET_ALL: `${moduleApiBaseUrl}/scrap-types`,
-    CREATE: `${moduleApiBaseUrl}/scrap-types`,
-    UPDATE_ONE: `${moduleApiBaseUrl}/scrap-types`,
-    DELETE_ONE: `${moduleApiBaseUrl}/scrap-types`,
-    GET_BY_OWNER: `${moduleApiBaseUrl}/scrap-types/owner`
+    GET_ALL: '/scrap-types',
+    CREATE: '/scrap-types',
+    UPDATE_ONE: (id) => `/scrap-types/${id}`,
+    DELETE_ONE: (id) => `/scrap-types/${id}`, // Soft delete
+    FORCE_DELETE_ONE: (id) => `/scrap-types/${id}/force`, // Permanent delete
+    GET_BY_ID: (id) => `/scrap-types/${id}`,
+    GET_BY_OWNER: (ownerId) => `/scrap-types/owner/${ownerId}` // If specific to an owner
   },
 
   REVIEWS: {
-    CREATE: `${moduleApiBaseUrl}/reviews`,
-    GET_ALL: `${moduleApiBaseUrl}/reviews`,
-    GET_BY_OWNER: `${moduleApiBaseUrl}/reviews/owner`,
-    GET_BY_CLIENT: `${moduleApiBaseUrl}/reviews/client`,
-    UPDATE: `${moduleApiBaseUrl}/reviews`,
-    DELETE: `${moduleApiBaseUrl}/reviews`
+    CREATE: '/reviews',
+    GET_ALL: '/reviews', // Can be public (approved) or admin (all)
+    GET_BY_OWNER: (ownerId) => `/reviews/owner/${ownerId}`,
+    GET_BY_CLIENT: (clientId) => `/reviews/client/${clientId}`,
+    UPDATE: (id) => `/reviews/${id}`, // For admin to approve/edit
+    DELETE: (id) => `/reviews/${id}`  // For admin
   },
 
   ADMIN: {
-    STATS: `${moduleApiBaseUrl}/admin/stats`,
-    USERS: `${moduleApiBaseUrl}/admin/users`,
-    BOOKINGS: `${moduleApiBaseUrl}/admin/bookings`
+    STATS: '/admin/stats',
+    USERS: '/admin/users', // For managing all users
+    USER_BY_ID: (userId) => `/admin/users/${userId}`, // For a specific user
+    BOOKINGS: '/admin/bookings' // Likely same as BOOKINGS.GET_ALL but for admin context
   },
 
+  // This provides the server root, e.g., "http://localhost:5003"
+  // Useful for constructing full URLs for static assets like images.
   BACKEND_ROOT_URL: (import.meta.env.VITE_API_BASE_URL || 'http://localhost:5003/api').replace('/api', ''),
-  HEALTH_CHECK: `${moduleApiBaseUrl}/healthcheck`,
-  UPLOADS: `${moduleApiBaseUrl}/uploads`
+  
+  // This is a relative path for an API call to a health check endpoint
+  HEALTH_CHECK: '/health', // Matched with /api/health in server.js
+  
+  // For accessing static uploaded files, use BACKEND_ROOT_URL + stored_file_path (e.g., /uploads/image.png)
 };
 
 if (import.meta.env.DEV) {
-  console.log('[apiConfig] API_ENDPOINTS fully initialized:', JSON.parse(JSON.stringify(API_ENDPOINTS)));
+  console.log('[apiConfig] API_ENDPOINTS (using relative paths for Axios) fully initialized.');
 }
 
 export default API_ENDPOINTS;

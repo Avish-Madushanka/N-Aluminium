@@ -28,17 +28,19 @@ function HandleBOwners() {
       setError('');
       
       try {
+        console.log('Fetching business owners from:', API_ENDPOINTS.BOWNERS.GET_ALL);
         const response = await axiosInstance.get(API_ENDPOINTS.BOWNERS.GET_ALL);
         
         if (response.data && response.data.success) {
           console.log('Business owners fetched successfully:', response.data);
           setBusinessOwners(response.data.data);
         } else {
-          throw new Error('Failed to fetch business owners data');
+          console.error('Failed to fetch business owners data, success false or no data:', response);
+          throw new Error(response.data?.message || 'Failed to fetch business owners data');
         }
       } catch (err) {
         console.error('Error fetching business owners:', err);
-        setError(err.response?.data?.message || 'Failed to load business owners. Please try again.');
+        setError(err.response?.data?.message || err.message || 'Failed to load business owners. Please try again.');
       } finally {
         setLoading(false);
       }
@@ -48,18 +50,20 @@ function HandleBOwners() {
   }, []);
 
   // Function to handle removal of a business owner
-  const handleRemoveBOwner = async (businessId) => {
-    if (window.confirm('Are you sure you want to remove this business owner?')) {
+  const handleRemoveBOwner = async (ownerId) => {
+    if (window.confirm('Are you sure you want to remove this business owner? This action might be irreversible.')) {
       try {
-        // Here you would implement the actual API call to remove the business owner
-        // For now, we'll just update the UI
+        // TODO: Implement actual API call to remove/deactivate the business owner
+        // Example: await axiosInstance.delete(API_ENDPOINTS.BOWNERS.DELETE(ownerId));
+        
+        // For now, we'll just update the UI optimistically
         setBusinessOwners(prevOwners => 
-          prevOwners.filter(owner => owner._id !== businessId)
+          prevOwners.filter(owner => owner._id !== ownerId)
         );
-        showNotification('Business owner removed successfully', 'success');
+        showNotification('Business owner removed successfully (UI only)', 'success');
       } catch (err) {
         console.error("Error removing business owner:", err);
-        showNotification('Failed to remove business owner', 'error');
+        showNotification(err.response?.data?.message || 'Failed to remove business owner', 'error');
       }
     }
   };
@@ -73,13 +77,14 @@ function HandleBOwners() {
     }
 
     try {
-      // Here you would implement the actual email sending API
+      // TODO: Implement actual email sending API endpoint
+      // Example: await axiosInstance.post(API_ENDPOINTS.ADMIN.SEND_EMAIL_TO_USER, { userId: currentOwnerForEmail._id, subject: emailData.subject, message: emailData.message });
       console.log('Sending email to:', currentOwnerForEmail.email, 'Data:', emailData);
-      showNotification(`Email sent successfully to ${currentOwnerForEmail.ownerName}`, 'success');
+      showNotification(`Email sent successfully to ${currentOwnerForEmail.ownerName} (simulated)`, 'success');
       closeEmailModal();
     } catch (err) {
       console.error("Error sending email:", err);
-      showNotification('Failed to send email', 'error');
+      showNotification(err.response?.data?.message || 'Failed to send email', 'error');
     }
   };
 
@@ -165,7 +170,7 @@ function HandleBOwners() {
                     <td>{owner.address}</td>
                     <td className="action-buttons">
                       <button 
-                        className="details-button"
+                        className="details-button" // Assuming you'll add styles for this
                         onClick={() => openDetailsModal(owner)}
                         title="View Details"
                       >
@@ -214,7 +219,7 @@ function HandleBOwners() {
                   id="recipient"
                   value={currentOwnerForEmail.email}
                   readOnly
-                  className="read-only-input"
+                  className="read-only-input" // Add style for this if needed
                 />
               </div>
               <div className="form-group">
@@ -257,12 +262,12 @@ function HandleBOwners() {
       {/* --- Details Modal --- */}
       {detailsModalOpen && selectedOwnerForDetails && (
         <div className="modal-overlay">
-          <div className="details-modal"> 
+          <div className="details-modal email-modal"> {/* Reusing email-modal for basic structure, can be customized */}
             <div className="modal-header">
               <h3>Business Owner Details</h3>
               <button className="close-button" onClick={closeDetailsModal}>×</button>
             </div>
-            <div className="modal-body details-content">
+            <div className="modal-body details-content"> {/* Add specific class for content if needed */}
               <h4>{selectedOwnerForDetails.businessName}</h4>
               <div className="detail-item">
                 <strong>Owner Name:</strong> {selectedOwnerForDetails.ownerName}
@@ -279,7 +284,7 @@ function HandleBOwners() {
               <div className="detail-item">
                 <strong>Address:</strong> {selectedOwnerForDetails.address}
               </div>
-              <hr className="details-divider"/>
+              <hr className="details-divider"/> {/* Add style for this if needed */}
               <div className="detail-item">
                 <strong>Registration Date:</strong> {
                   selectedOwnerForDetails.createdAt 
@@ -297,10 +302,21 @@ function HandleBOwners() {
                 <div className="detail-item">
                   <strong>Profile Photo:</strong>
                   <img 
-                    src={`${process.env.REACT_APP_API_URL}${selectedOwnerForDetails.profilePhoto}`} 
+                    src={`${API_ENDPOINTS.BACKEND_ROOT_URL}${selectedOwnerForDetails.profilePhoto}`} 
                     alt="Profile" 
-                    className="owner-profile-thumbnail" 
-                    style={{ maxWidth: '100px', marginTop: '10px' }}
+                    className="owner-profile-thumbnail" // Add style for this
+                    style={{ maxWidth: '100px', maxHeight: '100px', marginTop: '10px', borderRadius: '4px', objectFit: 'cover' }}
+                  />
+                </div>
+              )}
+              {selectedOwnerForDetails.coverPhoto && (
+                <div className="detail-item">
+                  <strong>Cover Photo:</strong>
+                  <img 
+                    src={`${API_ENDPOINTS.BACKEND_ROOT_URL}${selectedOwnerForDetails.coverPhoto}`} 
+                    alt="Cover" 
+                    className="owner-cover-thumbnail" // Add style for this
+                    style={{ maxWidth: '200px', maxHeight: '120px', marginTop: '10px', borderRadius: '4px', objectFit: 'cover' }}
                   />
                 </div>
               )}
