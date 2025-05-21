@@ -1,7 +1,9 @@
+// backend/middleware/uploadMiddleware.js
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
+// --- Base Uploads Directory ---
 const uploadsDir = path.join(__dirname, '../uploads');
 console.log(`[Multer Config] Uploads directory target: ${uploadsDir}`);
 if (!fs.existsSync(uploadsDir)) {
@@ -15,6 +17,7 @@ if (!fs.existsSync(uploadsDir)) {
     console.log(`[Multer Config] Uploads directory exists: ${uploadsDir}`);
 }
 
+// --- Subdirectory for Sale Item Images ---
 const saleItemsUploadsDir = path.join(uploadsDir, 'saleitems');
 if (!fs.existsSync(saleItemsUploadsDir)) {
     try {
@@ -81,6 +84,7 @@ const projectImageStorage = multer.diskStorage({
     }
 });
 
+// --- File Filter for Images ---
 const imageFileFilter = (req, file, cb) => {
     console.log(`[Multer FileFilter] Checking file - Fieldname: '${file.fieldname}', Original Filename: '${file.originalname}', Mimetype: '${file.mimetype}'`);
     if (file.mimetype && file.mimetype.startsWith('image/')) {
@@ -112,6 +116,7 @@ const uploadProjectImagesMiddleware = multer({
 }).array('projectImages', 10); // 'projectImages' is the field name, allowing up to 10 files
 
 
+// --- Other Uploaders (Kept for completeness, if used elsewhere) ---
 const generalStorage = multer.diskStorage({ destination: uploadsDir, filename: (req, file, cb) => { cb(null, `general-${Date.now()}-${file.originalname}`); } });
 const generalUpload = multer({ storage: generalStorage, limits: { fileSize: 5 * 1024 * 1024 } });
 const uploadProfilePhoto = generalUpload.single('profilePhoto');
