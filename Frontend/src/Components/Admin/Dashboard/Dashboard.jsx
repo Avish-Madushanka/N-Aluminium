@@ -1,6 +1,6 @@
-import React from 'react';
-import './Dashboard.css'; // Import the CSS file
-import { Line, Bar, Doughnut } from 'react-chartjs-2';
+import React, { useState, useEffect } from 'react';
+import './Dashboard.css';
+import { Line, Bar, Pie } from 'react-chartjs-2';
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -12,8 +12,12 @@ import {
     Title,
     Tooltip,
     Legend,
-    Filler // Import Filler for area charts
+    Filler
 } from 'chart.js';
+import { useNavigate } from 'react-router-dom'; // Uncomment if you use it for navigation
+
+import axiosInstance from '../../../api/axiosInstance'; // Adjust path if needed
+import API_ENDPOINTS from '../../../apiConfig';     // Adjust path if needed
 
 // Register Chart.js components
 ChartJS.register(
@@ -26,210 +30,322 @@ ChartJS.register(
     Title,
     Tooltip,
     Legend,
-    Filler // Register Filler
+    Filler
 );
 
-// --- Chart Data (Sample Data - Closely matching the image) ---
-
-// Income Chart (Area Line Chart)
-const incomeData = {
-    labels: ['', '', '', '', '', '', ''], // Labels hidden in image, keep placeholders
-    datasets: [
-        {
-            label: 'Income', // Hidden in final render
-            data: [30, 55, 40, 70, 50, 80, 60], // Example data shape
-            fill: true, // Fill area below line
-            borderColor: 'rgb(53, 162, 235)', // Line color
-            backgroundColor: 'rgba(53, 162, 235, 0.1)', // Area fill color
-            tension: 0.4, // Makes the line curvy
-            pointRadius: 0, // Hide points
-        },
-    ],
+// --- Initial Chart Data States (empty, to be filled by API) ---
+const initialUserStatsData = {
+    labels: ['Clients', 'Business Owners', 'Admins'],
+    datasets: [{
+        label: 'User Distribution',
+        data: [0, 0, 0],
+        backgroundColor: ['#4A90E2', '#F5A623', '#FF6B6B'],
+        hoverBackgroundColor: ['#357ABD', '#D98C1F', '#E84A4A'],
+        borderColor: '#fff',
+        borderWidth: 2,
+    }],
 };
 
-// Growth Chart (Bar Chart)
-const growthData = {
-    labels: ['', '', '', '', '', '', '', '', '', '', '', ''], // Placeholder labels
-    datasets: [
-        {
-            label: 'Growth', // Hidden
-            data: [6, 9, 7, 11, 5, 8, 10, 7, 12, 6, 9, 5], // Example data shape
-            backgroundColor: 'rgba(53, 162, 235, 0.5)', // Bar color
-            borderRadius: 2,
-            barPercentage: 0.6, // Adjust bar width
-            categoryPercentage: 0.7, // Adjust spacing between bars
-        },
-    ],
+const initialBookingStatsData = {
+    labels: ['Pending', 'Confirmed', 'Completed', 'Cancelled'],
+    datasets: [{
+        label: 'Bookings by Status',
+        data: [0, 0, 0, 0],
+        backgroundColor: ['#FFCB2F', '#4CAF50', '#2196F3', '#F44336'],
+        borderColor: ['#EDB60F', '#388E3C', '#1976D2', '#D32F2F'],
+        borderWidth: 1,
+    }],
 };
 
-// Expense Gauge Charts (Doughnut)
-const createGaugeData = (percentage, color) => ({
-    labels: ['Used', 'Remaining'],
-    datasets: [
-        {
-            data: [percentage, 100 - percentage],
-            backgroundColor: [color, 'rgba(226, 232, 240, 0.5)'], // Use a light gray for remaining
-            borderColor: ['#ffffff', '#ffffff'], // White border for separation
-            borderWidth: 1,
-            circumference: 360, // Full circle
-            rotation: -90,      // Start from the top
-            cutout: '80%',     // Make it a thin ring like a gauge
-        },
-    ],
-});
+const initialSalesOverviewData = {
+    labels: [],
+    datasets: [{
+        label: 'Monthly Activity',
+        data: [],
+        fill: true,
+        backgroundColor: 'rgba(74, 144, 226, 0.1)',
+        borderColor: '#4A90E2',
+        borderWidth: 2,
+        tension: 0.4,
+        pointRadius: 0,
+        pointHoverRadius: 5,
+        pointBackgroundColor: '#4A90E2',
+    }],
+};
 
-// Chart Options
-const commonChartOptions = {
+// --- Chart Options ---
+const userPieChartOptions = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
-        legend: { display: false }, // No legends shown
-        title: { display: false },  // No titles shown
-        tooltip: { enabled: false } // Disable tooltips if not desired
-    },
-    scales: { // Hide axes for income and growth
-        x: {
-            display: false,
-            grid: { display: false },
-            ticks: { display: false },
-            border: { display: false }
+        legend: {
+            position: 'bottom',
+            labels: { padding: 20, boxWidth: 12, font: { size: 11 } }
         },
-        y: {
-            display: false,
-            grid: { display: false },
-            ticks: { display: false },
-            border: { display: false }
+        title: {
+            display: true,
+            text: 'User Distribution',
+            align: 'center',
+            font: { size: 15, weight: '500' },
+            color: '#333',
+            padding: { top: 5, bottom: 15 }
         },
+         tooltip: {
+            callbacks: {
+                label: function(context) {
+                    let label = context.label || '';
+                    if (label) { label += ': '; }
+                    if (context.parsed !== null) { label += context.parsed; }
+                    return label;
+                }
+            }
+        }
     },
 };
 
-const gaugeOptions = {
+const bookingBarChartOptions = {
     responsive: true,
     maintainAspectRatio: false,
-    cutout: '80%',
     plugins: {
         legend: { display: false },
-        tooltip: { enabled: false },
-        title: { display: false },
+        title: {
+            display: true,
+            text: 'Booking Trends',
+            font: { size: 15, weight: '500', color: '#333' },
+            padding: { top: 5, bottom: 15 }
+        },
+    },
+    scales: { y: { beginAtZero: true, ticks: { precision: 0 } }, x: { grid: { display: false } } },
+};
+
+const salesLineChartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+        legend: { display: false },
+        title: {
+            display: true,
+            text: 'Activity Overview',
+            font: { size: 15, weight: '500', color: '#333' },
+            padding: { top: 5, bottom: 15 }
+        },
+    },
+    scales: {
+        y: {
+            beginAtZero: false,
+            ticks: { callback: function(value) { return '$' + value.toLocaleString(); }, color: '#555', font: { size: 10 } },
+            grid: { borderColor: '#e0e0e0', color: '#f0f0f0' }
+        },
+        x: { grid: { display: false }, ticks: { color: '#555', font: {size: 10} } }
     },
 };
 
 
-// --- Main Component ---
-
 function Dashboard() {
-    // Sample Static Data matching the image
-    const balance = 15000;
-    const mostViewedItems = ['item 01', 'item 02', 'item 03', 'item 04'];
-    const invoices = [
-        { id: '01', date: 'November', code: '1245/s/o', status: 'PAID' },
-        { id: '02', date: 'November', code: '1123/f/o', status: 'PAID' },
-        { id: '03', date: 'November', code: '1298/a/o', status: 'PAID' },
-        { id: '04', date: 'November', code: '1247/s/o', status: 'PAID' },
-        { id: '05', date: 'November', code: '1333/c/o', status: 'PAID' },
-        { id: '06', date: 'November', code: '2134/v/o', status: 'PAID' },
-    ];
-    const messages = [
-        { name: 'Johnson, Mark', subject: '[ Invoice November ]', detail: 'Status Update : Success' },
-        { name: 'Adelia, Nadia', subject: '[ Project Assignment ]', detail: 'Presentation Material' },
-        { name: 'Amelia, Laura', subject: '[ Meeting Schedule ]', detail: 'Project : interior design' },
-        { name: 'Johnson, Mark', subject: '[ Invoice November ]', detail: 'Status Update : Success' },
-        { name: 'Adelia, Nadia', subject: '[ Project Assignment ]', detail: 'Presentation Material' },
-        { name: 'Amelia, Laura', subject: '[ Meeting Schedule ]', detail: 'Project : interior design' },
-    ];
+    // const navigate = useNavigate(); // For quick action navigation
+    const [userStats, setUserStats] = useState(initialUserStatsData);
+    const [bookingStats, setBookingStats] = useState(initialBookingStatsData);
+    const [salesOverview, setSalesOverview] = useState(initialSalesOverviewData);
+    const [recentBookings, setRecentBookings] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-    // Gauge percentages from image
-    const expensePercentages = [80, 75, 50];
-    const expenseGaugeColor = 'rgb(53, 162, 235)'; // Color from image
+    useEffect(() => {
+        const fetchData = async () => {
+            setLoading(true);
+            setError(null); // Clear previous errors
+            let aggregatedErrorMessages = []; // Collect multiple error messages
 
+            console.log("Dashboard: Fetching data...");
+            // console.log("API Endpoints used by Dashboard:"); // Optional: keep for debugging
+            // console.log("User Dist:", API_ENDPOINTS.ADMIN.STATS_USER_DISTRIBUTION);
+            // console.log("Booking Sum:", API_ENDPOINTS.ADMIN.STATS_BOOKING_SUMMARY);
+            // console.log("Sales Over:", API_ENDPOINTS.ADMIN.STATS_SALES_OVERVIEW);
+            // console.log("Recent Bookings:", API_ENDPOINTS.BOOKINGS.GET_ALL + with params);
+
+
+            try {
+                const results = await Promise.allSettled([
+                    axiosInstance.get(API_ENDPOINTS.ADMIN.STATS_USER_DISTRIBUTION),
+                    axiosInstance.get(API_ENDPOINTS.ADMIN.STATS_BOOKING_SUMMARY),
+                    axiosInstance.get(API_ENDPOINTS.ADMIN.STATS_SALES_OVERVIEW),
+                    axiosInstance.get(API_ENDPOINTS.BOOKINGS.GET_ALL, { // <<< CORRECTED HERE
+                        params: { 
+                            limit: 5, 
+                            sort: '-createdAt' 
+                        } 
+                    })
+                ]);
+
+                const [userDistResponse, bookingSumResponse, salesOverResponse, recentBookResponse] = results;
+
+                // Process User Distribution
+                if (userDistResponse.status === 'fulfilled' && userDistResponse.value.data.success) {
+                    const data = userDistResponse.value.data.data;
+                    setUserStats(prev => ({
+                        ...prev,
+                        datasets: [{ ...prev.datasets[0], data: [data.clients, data.businessOwners, data.admins] }]
+                    }));
+                } else {
+                    const errorMsg = userDistResponse.reason?.response?.data?.message || userDistResponse.reason?.message || userDistResponse.value?.data?.message || "Failed to load user distribution.";
+                    console.error("User dist fetch failed:", errorMsg, userDistResponse.reason || userDistResponse.value);
+                    aggregatedErrorMessages.push(errorMsg);
+                }
+
+                // Process Booking Summary
+                if (bookingSumResponse.status === 'fulfilled' && bookingSumResponse.value.data.success) {
+                    const counts = bookingSumResponse.value.data.data.statusCounts;
+                    setBookingStats(prev => ({
+                        ...prev,
+                        datasets: [{ ...prev.datasets[0], data: [counts.pending, counts.confirmed, counts.completed, counts.cancelled] }]
+                    }));
+                } else {
+                    const errorMsg = bookingSumResponse.reason?.response?.data?.message || bookingSumResponse.reason?.message || bookingSumResponse.value?.data?.message || "Failed to load booking summary.";
+                    console.error("Booking sum fetch failed:", errorMsg, bookingSumResponse.reason || bookingSumResponse.value);
+                    aggregatedErrorMessages.push(errorMsg);
+                }
+
+                // Process Sales Overview
+                if (salesOverResponse.status === 'fulfilled' && salesOverResponse.value.data.success) {
+                    const data = salesOverResponse.value.data.data;
+                    setSalesOverview(prev => ({
+                        ...prev,
+                        labels: data.labels || [],
+                        datasets: [{ ...prev.datasets[0], data: data.data || [] }]
+                    }));
+                } else {
+                     const errorMsg = salesOverResponse.reason?.response?.data?.message || salesOverResponse.reason?.message || salesOverResponse.value?.data?.message || "Failed to load activity overview.";
+                    console.error("Sales over fetch failed:", errorMsg, salesOverResponse.reason || salesOverResponse.value);
+                    aggregatedErrorMessages.push(errorMsg);
+                }
+
+                // Process Recent Bookings
+                if (recentBookResponse.status === 'fulfilled' && recentBookResponse.value.data.success) {
+                    setRecentBookings(recentBookResponse.value.data.data);
+                } else {
+                    const errorMsg = recentBookResponse.reason?.response?.data?.message || recentBookResponse.reason?.message || recentBookResponse.value?.data?.message || "Failed to load recent bookings.";
+                    console.error("Recent book fetch failed:", errorMsg, recentBookResponse.reason || recentBookResponse.value);
+                    aggregatedErrorMessages.push(errorMsg);
+                }
+                
+                if (aggregatedErrorMessages.length > 0) {
+                    setError(aggregatedErrorMessages.join("\n"));
+                }
+
+            } catch (err) { 
+                // This catch block is for errors in Promise.allSettled itself or general setup, less likely.
+                const generalErrorMsg = "An unexpected error occurred while initiating data fetch.";
+                setError(generalErrorMsg);
+                console.error("Dashboard fetch setup error:", err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchData();
+    }, []);
+
+    const getStatusClass = (status) => {
+        switch (status?.toLowerCase()) {
+            case 'confirmed': return 'status-confirmed';
+            case 'pending': return 'status-pending';
+            case 'completed': return 'status-completed';
+            case 'cancelled': return 'status-cancelled';
+            default: return 'status-unknown';
+        }
+    };
+
+    // const handleQuickAction = (path) => { navigate(path); }; // Example
+
+    if (loading) {
+        return <div className="admin-dashboard-message">Loading Dashboard Data...</div>;
+    }
+    
     return (
-        // Use the db- prefixed class names from the CSS
-        <div className="db-container">
+        <div className="admin-dashboard-page">
+            <h1 className="admin-dashboard-main-title">Admin Dashboard</h1>
 
-            {/* --- Row 1 --- */}
-            <div className="db-widget db-widget-income">
-                <h2 className="db-widget-title">income</h2>
-                <div className="db-chart-container db-income-chart">
-                    <Line options={commonChartOptions} data={incomeData} />
+            {error && (
+                <div className="admin-dashboard-message admin-dashboard-error">
+                    Could not load all dashboard data. Please check console for details.
+                    <pre style={{ whiteSpace: 'pre-wrap', textAlign: 'left', maxHeight: '150px', overflowY: 'auto', marginTop: '10px', backgroundColor: '#fff0f0', padding: '10px', border: '1px solid #fcc' }}>
+                        {error}
+                    </pre>
+                </div>
+            )}
+
+
+            <div className="admin-dashboard-section admin-dashboard-quick-actions">
+                <h2 className="admin-dashboard-section-title">Quick Actions</h2>
+                <div className="admin-dashboard-actions-container">
+                    <button className="admin-dashboard-action-btn" onClick={() => useNavigate('/Admin/Calendar')} >Manage Pickup Schedule</button>
+                    <button className="admin-dashboard-action-btn" onClick={() => useNavigate('/Admin/ManageOwners')} >Manage Business Owners</button>
+                    <button className="admin-dashboard-action-btn" onClick={() => useNavigate('/Admin/AdminLocationManager')} >Add Shops</button>
                 </div>
             </div>
-
-            <div className="db-widget db-widget-balance">
-                <h2 className="db-widget-title">balance</h2>
-                <div className="db-balance-value">
-                    <span className="db-currency">$</span>
-                    {/* Format number like image: 15.000 */}
-                    {balance.toLocaleString('de-DE', { minimumFractionDigits: 3, maximumFractionDigits: 3 })}
+            
+            <div className="admin-dashboard-widgets-grid">
+                <div className="admin-dashboard-widget chart-widget user-distribution-widget">
+                    <div className="admin-dashboard-chart-container">
+                         {userStats.datasets[0].data.some(d => d > 0) ? 
+                            <Pie data={userStats} options={userPieChartOptions} /> : 
+                            (!loading && <p className="no-data-message">No user data available</p>)}
+                    </div>
                 </div>
-                <button className="db-history-button">see history</button>
-            </div>
 
-            {/* --- Row 2 --- */}
-            <div className="db-widget db-widget-growth">
-                <h2 className="db-widget-title">growth</h2>
-                 <div className="db-chart-container db-growth-chart">
-                    <Bar options={commonChartOptions} data={growthData} />
+                <div className="admin-dashboard-widget chart-widget booking-trends-widget">
+                    <div className="admin-dashboard-chart-container">
+                        {bookingStats.datasets[0].data.some(d => d > 0) ?
+                            <Bar data={bookingStats} options={bookingBarChartOptions} /> :
+                            (!loading && <p className="no-data-message">No booking data available</p>)}
+                    </div>
                 </div>
-            </div>
 
-            <div className="db-widget db-widget-expense">
-                <h2 className="db-widget-title">expense</h2>
-                <div className="db-gauges-container">
-                    {expensePercentages.map((perc, index) => (
-                        <div className="db-gauge-item" key={index}>
-                            <div className="db-gauge-chart-container">
-                                <Doughnut data={createGaugeData(perc, expenseGaugeColor)} options={gaugeOptions} />
-                                <div className="db-gauge-percentage">{perc}%</div>
-                            </div>
-                            {/* No labels below gauges in the image */}
-                        </div>
-                    ))}
+                <div className="admin-dashboard-widget recent-bookings-widget full-width-widget">
+                    <h2 className="admin-dashboard-widget-title">Recent Bookings</h2>
+                    <div className="table-responsive-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Customer</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {recentBookings.length > 0 ? recentBookings.map((booking) => (
+                                    <tr key={booking._id || booking.id}>
+                                        <td>{booking.bookingId || booking.id}</td>
+                                        <td>{booking.contactDetails?.name || booking.customerName || 'N/A'}</td>
+                                        <td>{new Date(booking.selectedDate || booking.date).toLocaleDateString()}</td>
+                                        <td>
+                                            <span className={`status-badge ${getStatusClass(booking.status)}`}>
+                                                {booking.status}
+                                            </span>
+                                        </td>
+                                        <td><button className="view-details-btn" /* onClick={() => handleQuickAction(`/admin/booking/${booking._id}`)}*/>View</button></td>
+                                    </tr>
+                                )) : (
+                                    <tr><td colSpan="5" className="no-data-message">{!loading ? 'No recent bookings found.' : 'Loading...'}</td></tr>
+                                )}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-            </div>
 
-            <div className="db-widget db-widget-most-viewed">
-                <h2 className="db-widget-title">most viewed item</h2>
-                <ul className="db-item-list">
-                    {mostViewedItems.map((item, index) => (
-                        <li key={index} className="db-most-viewed-item">
-                            <span className="db-item-name">{item}</span>
-                            <button className="db-boost-button">BOOST</button>
-                        </li>
-                    ))}
-                </ul>
-            </div>
+                <div className="admin-dashboard-widget chart-widget sales-overview-widget full-width-widget">
+                     <div className="admin-dashboard-chart-container sales-chart-container">
+                        {salesOverview.datasets[0].data.length > 0 ?
+                            <Line data={salesOverview} options={salesLineChartOptions} /> :
+                            (!loading && <p className="no-data-message">No activity data available</p>)}
+                    </div>
+                </div>
+                
 
-            {/* --- Row 3 --- */}
-            <div className="db-widget db-widget-invoices">
-                <h2 className="db-widget-title">invoices</h2>
-                <ul className="db-invoice-list">
-                    {invoices.map((invoice, index) => (
-                        <li key={index} className="db-invoice-item">
-                            <span className="db-invoice-detail">
-                                <span className="db-bullet">•</span> {/* Added bullet */}
-                                Invoices {invoice.id}/{invoice.date}/{invoice.code}
-                            </span>
-                            <span className="db-status-tag db-status-paid">
-                                {invoice.status}
-                            </span>
-                        </li>
-                    ))}
-                </ul>
+                
             </div>
-
-            <div className="db-widget db-widget-message">
-                <h2 className="db-widget-title">message</h2>
-                <ul className="db-message-list">
-                     {messages.map((msg, index) => (
-                        <li key={index} className="db-message-item">
-                            <span className="db-message-name">{msg.name}</span>
-                            <span className="db-message-subject">{msg.subject}</span>
-                            <span className="db-message-detail">{msg.detail}</span>
-                        </li>
-                     ))}
-                </ul>
-            </div>
-
         </div>
     );
 }

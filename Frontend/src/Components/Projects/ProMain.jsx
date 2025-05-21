@@ -1,7 +1,13 @@
-import React, { useState } from 'react';
-import './ProMain.css';
 
-const ImageSlider = ({ images, onClose }) => {
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom'; // For the "Add Projects" button
+import { ClipLoader } from 'react-spinners'; // For loading spinner
+import './ProMain.css';
+import axiosInstance from '../../api/axiosInstance'; // Adjusted path
+import API_ENDPOINTS from '../../apiConfig'; // Adjust path if needed
+import { useAuth } from '../../context/AuthContext'; // To check if user can add projects
+
+const ImageSlider = ({ images, onClose, backendUrl }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
 
     const handleNext = () => {
@@ -12,19 +18,41 @@ const ImageSlider = ({ images, onClose }) => {
         setCurrentIndex((prevIndex) => (prevIndex - 1 + images.length) % images.length);
     };
 
+    if (!images || images.length === 0) {
+        return (
+             <div className="image-slider-container">
+                <button className="close-button" onClick={onClose} aria-label="Close slider">×</button>
+                <p>No additional images available.</p>
+            </div>
+        );
+    }
+
     return (
         <div className="image-slider-container">
-            <button className="close-button" onClick={onClose}>×</button>
+            <button className="close-button" onClick={onClose} aria-label="Close slider">×</button>
             <div className="image-slider">
-                <button className="slider-button prev" onClick={handlePrev}></button>
-                <img src={images[currentIndex]} alt={`Image ${currentIndex + 1}`} className="slider-image" />
-                <button className="slider-button next" onClick={handleNext}></button>
+                <button className="slider-button prev" onClick={handlePrev} aria-label="Previous image">‹</button>
+                <img 
+                    src={`${backendUrl}${images[currentIndex]}`} 
+                    alt={`Project view ${currentIndex + 1}`} 
+                    className="slider-image" 
+                />
+                <button className="slider-button next" onClick={handleNext} aria-label="Next image">›</button>
+            </div>
+            <div className="slider-dots">
+                {images.map((_, index) => (
+                    <span
+                        key={index}
+                        className={`dot ${index === currentIndex ? 'active' : ''}`}
+                        onClick={() => setCurrentIndex(index)}
+                    ></span>
+                ))}
             </div>
         </div>
     );
 };
 
-const ProjectCard = ({ imageUrl, title, description, moreImages }) => {
+const ProjectCard = ({ project, backendUrl }) => {
     const [showSlider, setShowSlider] = useState(false);
 
     const handleViewMore = () => {
@@ -35,20 +63,30 @@ const ProjectCard = ({ imageUrl, title, description, moreImages }) => {
         setShowSlider(false);
     };
 
+    // Use the first image as the main card image, or a placeholder if no images
+    const mainImageUrl = project.images && project.images.length > 0 
+        ? `${backendUrl}${project.images[0]}`
+        : "https://via.placeholder.com/300x200?text=No+Image";
+
     return (
         <div className="project-card">
-            <img src={imageUrl} alt={title} className="project-image" />
+            <img src={mainImageUrl} alt={project.title} className="project-image" />
             <div className="project-content">
-                <h2 className="project-title">{title}</h2>
-                <p className="project-description">{description}</p>
+                <h2 className="project-title">{project.title}</h2>
+                <p className="project-type-badge">{project.projectType?.toUpperCase()}</p>
+                <p className="project-description">{project.description.substring(0, 120)}{project.description.length > 120 ? "..." : ""}</p>
                 <div className="project-buttons">
-                    <button className="button-1" onClick={handleViewMore}>View More Photos</button>
-                    <a href="#" className="button-2">Contact US</a>
+                    <button className="button-1" onClick={handleViewMore} disabled={!project.images || project.images.length <= 1}>
+                        View More Photos
+                    </button>
+                    <Link to="/ContactUs" className="button-2">Contact Us</Link>
                 </div>
             </div>
             {showSlider && (
-                <div className="slider-overlay">
-                    <ImageSlider images={moreImages} onClose={handleCloseSlider} />
+                <div className="slider-overlay" onClick={handleCloseSlider}>
+                    <div className="slider-content-wrapper" onClick={(e) => e.stopPropagation()}>
+                        <ImageSlider images={project.images || []} onClose={handleCloseSlider} backendUrl={backendUrl} />
+                    </div>
                 </div>
             )}
         </div>
@@ -56,85 +94,105 @@ const ProjectCard = ({ imageUrl, title, description, moreImages }) => {
 };
 
 const ProMain = () => {
-    const projectsData = [
-        {
-            imageUrl: "https://www.akamai.com/site/im-demo/perceptual-standard.jpg?imbypass=true",
-            title: "Aluminum Door",
-            description: "You can only see your pickup schedule if you are a current customer. You can only see your pickup schedule if you are a current customer.",
-            moreImages: [
-                "https://via.placeholder.com/400x300/3498db/fff",
-                "https://via.placeholder.com/400x300/e74c3c/fff",
-                "https://via.placeholder.com/400x300/2ecc71/fff",
-                "https://via.placeholder.com/400x300/f39c12/fff",
-                "https://via.placeholder.com/400x300/9b59b6/fff",
-                "https://via.placeholder.com/400x300/1abc9c/fff"
-            ]
-        },
-        {
-            imageUrl: "https://www.akamai.com/site/im-demo/perceptual-standard.jpg?imbypass=true",
-            title: "Aluminum Door",
-            description: "You can only see your pickup schedule if you are a current customer. You can only see your pickup schedule if you are a current customer.",
-            moreImages: [
-                "https://via.placeholder.com/400x300/3498db/fff",
-                "https://via.placeholder.com/400x300/e74c3c/fff",
-                "https://via.placeholder.com/400x300/2ecc71/fff",
-                "https://via.placeholder.com/400x300/f39c12/fff",
-                "https://via.placeholder.com/400x300/9b59b6/fff",
-                "https://via.placeholder.com/400x300/1abc9c/fff"
-            ]
-        },
-        {
-            imageUrl: "https://www.akamai.com/site/im-demo/perceptual-standard.jpg?imbypass=true",
-            title: "Aluminum Door",
-            description: "You can only see your pickup schedule if you are a current customer. You can only see your pickup schedule if you are a current customer.",
-            moreImages: [
-                "https://via.placeholder.com/400x300/3498db/fff",
-                "https://via.placeholder.com/400x300/e74c3c/fff",
-                "https://via.placeholder.com/400x300/2ecc71/fff",
-                "https://via.placeholder.com/400x300/f39c12/fff",
-                "https://via.placeholder.com/400x300/9b59b6/fff",
-                "https://via.placeholder.com/400x300/1abc9c/fff"
-            ]
-        },
-        {
-            imageUrl: "https://www.akamai.com/site/im-demo/perceptual-standard.jpg?imbypass=true",
-            title: "Aluminum Door",
-            description: "You can only see your pickup schedule if you are a current customer. You can only see your pickup schedule if you are a current customer.",
-            moreImages: [
-                "https://via.placeholder.com/400x300/3498db/fff",
-                "https://via.placeholder.com/400x300/e74c3c/fff",
-                "https://via.placeholder.com/400x300/2ecc71/fff",
-                "https://via.placeholder.com/400x300/f39c12/fff",
-                "https://via.placeholder.com/400x300/9b59b6/fff",
-                "https://via.placeholder.com/400x300/1abc9c/fff"
-            ]
-        },
-    ];
+    const [projectsData, setProjectsData] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [filterType, setFilterType] = useState('');
+    const { userInfo, isLoggedIn } = useAuth();
+
+    // Construct backend base URL for images (without /api)
+    const backendUrlForImages = `${API_ENDPOINTS.BACKEND_ROOT_URL}/uploads`; // <--- THE FIX
+
+    useEffect(() => {
+        const fetchProjects = async () => {
+            setIsLoading(true);
+            setError(null);
+            try {
+                const response = await axiosInstance.get(API_ENDPOINTS.PROJECTS.GET_ALL);
+                if (response.data.success) {
+                    setProjectsData(response.data.data);
+                } else {
+                    setError(response.data.message || "Failed to fetch projects.");
+                }
+            } catch (err) {
+                console.error("Error fetching projects:", err);
+                setError(err.response?.data?.message || err.message || "An error occurred while fetching projects.");
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchProjects();
+    }, []);
+
+    const filteredProjects = projectsData
+        .filter(project => 
+            project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            project.description.toLowerCase().includes(searchTerm.toLowerCase())
+        )
+        .filter(project => 
+            filterType ? project.projectType === filterType : true
+        );
+    
+    const projectTypes = ["web", "mobile", "design", "other"]; // Should match ProAddForm options
+
+    const canAddProjects = isLoggedIn && userInfo && (userInfo.role === 'admin' || userInfo.role === 'businessOwner');
 
     return (
         <div className="projects-container">
-            <h1 className="projects-title">Latest Projects</h1>
+            <h1 className="projects-title">Our Latest Projects</h1>
             <div className="top-bar">
-                <input type="text" placeholder="Search" className="search-bar" />
-                <select className="filter-dropdown">
-                    <option value="">Filter</option>
-                    <option value="category1">Category 1</option>
-                    <option value="category2">Category 2</option>
+                <input 
+                    type="text" 
+                    placeholder="Search projects..." 
+                    className="search-bar" 
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                />
+                <select 
+                    className="filter-dropdown"
+                    value={filterType}
+                    onChange={(e) => setFilterType(e.target.value)}
+                >
+                    <option value="">All Types</option>
+                    {projectTypes.map(type => (
+                        <option key={type} value={type}>{type.charAt(0).toUpperCase() + type.slice(1)}</option>
+                    ))}
                 </select>
-                <a href="/ProAddForm" className="top-button">Add Projects</a>
+                {canAddProjects && (
+                    <Link to="/ProAddForm" className="top-button">Add New Project</Link>
+                )}
             </div>
 
-            <div className="projects-grid">
-                {projectsData.map((project, index) => (
-                    <ProjectCard
-                        key={index}
-                        imageUrl={project.imageUrl}
-                        title={project.title}
-                        description={project.description}
-                        moreImages={project.moreImages}
-                    />
-                ))}
-            </div>
+            {isLoading && (
+                <div className="loading-container">
+                    <ClipLoader size={50} color={"#fff"} />
+                    <p>Loading Projects...</p>
+                </div>
+            )}
+            {error && (
+                <div className="error-container">
+                    <p>Error: {error}</p>
+                </div>
+            )}
+            {!isLoading && !error && filteredProjects.length === 0 && (
+                <div className="no-projects-container">
+                    <p>No projects found matching your criteria.</p>
+                </div>
+            )}
+
+            {!isLoading && !error && filteredProjects.length > 0 && (
+                <div className="projects-grid">
+                    {filteredProjects.map((project) => (
+                        <ProjectCard
+                            key={project._id} // Use unique ID from backend
+                            project={project}
+                            backendUrl={backendUrlForImages}
+                        />
+                    ))}
+                </div>
+            )}
         </div>
     );
 };

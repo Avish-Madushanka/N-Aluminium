@@ -1,384 +1,293 @@
 /* START OF FILE Dashboard.css */
-
-/* --- Base Variables --- */
-:root {
-  --db-primary-blue: rgb(53, 162, 235);
-  --db-light-blue-bg: rgba(227, 242, 253, 0.7); /* Lighter blue for backgrounds */
-  --db-widget-bg: #ffffff;
-  --db-border-color: #eef2f7; /* Lighter border */
-  --db-text-title: #5a6a7f;   /* Muted title color */
-  --db-text-primary: #334155; /* Darker primary text */
-  --db-text-secondary: #64748b;/* Secondary text */
-  --db-text-balance: var(--db-primary-blue);
-  --db-button-bg: #e0f0ff;     /* Lighter blue for buttons */
-  --db-button-text: var(--db-primary-blue);
-  --db-paid-bg: #e0f0ff;       /* Paid tag background */
-  --db-paid-text: #1e40af;     /* Darker blue text for paid */
-  --db-boost-bg: #e0f0ff;      /* Boost button background */
-  --db-boost-text: #1e40af;    /* Boost button text */
-  --db-boost-hover-bg: #d1e7ff;
-
-  --db-widget-padding: 18px; /* Adjust padding */
-  --db-widget-radius: 6px;  /* Slight rounding */
-  --db-widget-shadow: 0 1px 3px rgba(0, 0, 0, 0.04); /* Very subtle shadow */
-  --db-gap: 18px; /* Gap between widgets */
+.admin-dashboard-page {
+    padding: 20px;
+    background-color: #f4f7fc; /* Light background for the whole page */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    min-height: calc(100vh - 60px); /* Adjust 60px if your navbar height is different */
+    box-sizing: border-box;
 }
 
-/* --- Dashboard Grid Layout --- */
-/* Use the class name from the JSX */
-.db-container {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 3 columns */
-  grid-auto-rows: minmax(120px, auto);   /* Minimum row height, auto adjusts */
-  gap: var(--db-gap);
-  padding: var(--db-gap); /* Use gap value for padding */
-  max-width: 1400px;
-  margin: 0 auto; /* Center the container */
-  background-color: var(--db-light-blue-bg); /* Overall light blue background */
-  /* Ensure this container is within the scrollable .main-content of AdminLayout */
+.admin-dashboard-main-title {
+    font-size: 1.8rem; /* Slightly smaller than before, but prominent */
+    color: #2c3e50; /* Darker, more professional blue/grey */
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 3px solid #4A90E2; /* Blue underline as in image */
+    font-weight: 600; /* Bold */
+    letter-spacing: 0.5px;
 }
 
-/* --- General Widget Styling --- */
-/* Use the class name from the JSX */
-.db-widget {
-  background-color: var(--db-widget-bg);
-  border-radius: var(--db-widget-radius);
-  padding: var(--db-widget-padding);
-  box-shadow: var(--db-widget-shadow);
-  border: 1px solid var(--db-border-color);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden; /* Prevent content spillover */
+.admin-dashboard-message {
+    text-align: center;
+    font-size: 1.2rem;
+    padding: 30px;
+    color: #555;
+}
+.admin-dashboard-error {
+    color: #D32F2F;
+    font-weight: bold;
+    background-color: #ffebee;
+    border: 1px solid #D32F2F;
+    border-radius: 6px;
+    margin-bottom: 20px;
+}
+.admin-dashboard-error pre {
+    white-space: pre-wrap;
+    text-align: left;
+    max-height: 150px;
+    overflow-y: auto;
+    margin-top: 10px;
+    background-color: #fff0f0;
+    padding: 10px;
+    border: 1px solid #fcc;
+    font-size: 0.85em;
+    color: #721c24;
 }
 
-/* Use the class name from the JSX */
-.db-widget-title {
-  margin: 0 0 15px 0; /* Adjusted margin */
-  font-size: 0.9rem;  /* Smaller title */
-  font-weight: 600;
-  color: var(--db-text-title);
-  text-transform: lowercase; /* Match image */
+.admin-dashboard-section { /* Common class for Quick Actions and other top-level sections */
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06); /* Softer shadow */
+    margin-bottom: 25px;
 }
 
-/* Use the class name from the JSX */
-.db-chart-container {
-  position: relative;
-  flex-grow: 1;
-  min-height: 80px; /* Adjust min height */
-  width: 100%;
+.admin-dashboard-section-title { /* Title for Quick Actions section */
+    font-size: 1.1rem; /* Matching image's "Quick Actions" title size */
+    color: #333;
+    margin: 0 0 18px 0; /* Margin only at the bottom */
+    font-weight: 500; /* Medium weight */
+    border-bottom: 1px solid #eee; /* Subtle separator */
+    padding-bottom: 10px;
 }
 
-/* Adjust specific chart heights if needed */
-.db-income-chart {
-  min-height: 100px;
-}
-.db-growth-chart {
-  min-height: 100px;
-}
-
-
-/* --- Specific Widget Layout & Styling --- */
-
-/* Row 1 */
-.db-widget-income {
-  grid-column: 1 / span 2;
+.admin-dashboard-widget-title { /* Title for individual widgets like Map, Recent Bookings */
+    font-size: 1.05rem;
+    color: #333;
+    margin: 0 0 15px 0;
+    font-weight: 500;
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 8px;
 }
 
-.db-widget-balance {
-  grid-column: 3 / span 1;
-  align-items: center;
-  justify-content: space-between; /* Space between value and button */
-}
-.db-balance-value {
-  font-size: 2.5rem; /* Adjust size */
-  font-weight: 400; /* Thinner weight */
-  color: var(--db-text-balance);
-  line-height: 1;
-  margin-bottom: 10px; /* Space below value */
-  flex-grow: 1; /* Allow value to take space */
-  display: flex;
-  align-items: baseline; /* Align $ and number */
-  justify-content: center;
-}
-.db-currency {
-  font-size: 1.5rem; /* Smaller $ */
-  margin-right: 8px;
-  font-weight: 300;
-}
-.db-history-button {
-  background-color: var(--db-button-bg);
-  color: var(--db-button-text);
-  border: none;
-  padding: 6px 12px; /* Smaller padding */
-  border-radius: 15px; /* Pill shape */
-  font-size: 0.75rem; /* Smaller font */
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-  align-self: center; /* Center button horizontally */
-  text-transform: lowercase; /* Match 'see history' */
-}
-.db-history-button:hover {
-  background-color: var(--db-boost-hover-bg);
+.admin-dashboard-actions-container {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
 }
 
-/* Row 2 */
-.db-widget-growth {
-  grid-column: 1 / span 1;
+.admin-dashboard-action-btn {
+    background-color: #4A90E2; /* Blue color from image */
+    color: white;
+    border: none;
+    padding: 10px 20px; /* Adjusted padding */
+    border-radius: 4px; /* Less rounded corners to match image */
+    font-size: 0.9rem; /* Adjusted font size */
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    flex-grow: 1; /* Buttons will share space */
+    min-width: 150px; /* Minimum width for buttons */
+    text-align: center;
+}
+.admin-dashboard-action-btn:hover {
+    background-color: #357ABD;
+    transform: translateY(-1px);
 }
 
-.db-widget-expense {
-  grid-column: 2 / span 1;
-}
-.db-gauges-container {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  flex-grow: 1;
-  padding-top: 5px; /* Reduce top padding */
-}
-.db-gauge-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-}
-.db-gauge-chart-container {
-  position: relative;
-  width: 70px; /* Adjust size */
-  height: 70px; /* Adjust size */
-}
-.db-gauge-percentage {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 1rem; /* Adjust size */
-  font-weight: 600;
-  color: var(--db-text-primary);
+/* Widgets Grid Layout */
+.admin-dashboard-widgets-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive columns */
+    gap: 25px;
 }
 
-.db-widget-most-viewed {
-  grid-column: 3 / span 1;
+.admin-dashboard-widget {
+    background-color: #ffffff;
+    padding: 15px; /* Slightly reduced padding for widgets */
+    border-radius: 6px; /* More subtle rounding for widgets */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
 }
-/* Use the class name from the JSX */
-.db-item-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around; /* Distribute items vertically */
+
+.chart-widget {
+    min-height: 350px; /* Adjusted min-height */
 }
-/* Use the class name from the JSX */
-.db-most-viewed-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 4px 0; /* Reduced padding */
-  font-size: 0.9rem;
-  color: var(--db-text-secondary);
+
+.admin-dashboard-chart-container {
+    position: relative;
+    flex-grow: 1;
+    width: 100%;
+    min-height: 280px; /* Default min height for charts */
+    display: flex; /* For centering no-data message */
+    align-items: center; /* For centering no-data message */
+    justify-content: center; /* For centering no-data message */
 }
-.db-item-name {
-   /* Default styling is fine */
+
+.user-distribution-widget .admin-dashboard-chart-container {
+    min-height: 280px; 
+    max-height: 320px; 
 }
-/* Use the class name from the JSX */
-.db-boost-button {
-  background-color: var(--db-boost-bg);
-  color: var(--db-boost-text);
-  border: none;
-  padding: 3px 10px; /* Smaller button */
-  border-radius: 10px; /* Pill shape */
-  font-size: 0.65rem; /* Very small font */
-  font-weight: 700; /* Bold */
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-  margin-left: 10px;
-  text-transform: uppercase; /* Match image */
+
+.sales-chart-container { /* For the Line chart */
+    min-height: 320px; 
 }
-.db-boost-button:hover {
-  background-color: var(--db-boost-hover-bg);
+
+/* Full Width Widget (for Sales and Recent Bookings) */
+.full-width-widget {
+    grid-column: 1 / -1;
+}
+
+/* Map Placeholder */
+.map-widget {
+    min-height: 350px;
+}
+.map-placeholder {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #eef2f7;
+    border-radius: 6px;
+    text-align: center;
+    color: #5a7184;
+    padding: 20px;
+}
+.map-placeholder p { font-size: 1.05rem; font-weight: 500; margin-bottom: 8px; }
+.map-placeholder span { font-size: 0.8rem; margin-bottom: 12px; }
+.map-icon { font-size: 2.8rem; color: #4A90E2; }
+
+/* Recent Bookings Table */
+.recent-bookings-widget .table-responsive-container {
+    overflow-x: auto;
+    flex-grow: 1;
+}
+.recent-bookings-widget table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+}
+.recent-bookings-widget th,
+.recent-bookings-widget td {
+    padding: 10px 12px; /* Slightly reduced padding */
+    text-align: left;
+    border-bottom: 1px solid #e8edf3;
+    white-space: nowrap; /* Prevent text wrapping in cells */
+}
+.recent-bookings-widget th {
+    background-color: #f9fafc;
+    font-weight: 500; /* Medium weight for headers */
+    color: #455a64; /* Dark grey for header text */
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.recent-bookings-widget tbody tr:hover {
+    background-color: #f5f8fb;
+}
+.no-data-message {
+    text-align: center;
+    padding: 20px;
+    color: #777;
+    font-style: italic;
+    width: 100%; /* Ensure it spans if inside a flex container */
+}
+td.no-data-message { /* For table cell */
+    text-align: center !important;
 }
 
 
-/* Row 3 */
-.db-widget-invoices {
-  grid-column: 1 / span 2;
+.status-badge {
+    padding: 4px 10px; /* Smaller badges */
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: white;
+    display: inline-block;
+    min-width: 80px;
+    text-align: center;
+    text-transform: capitalize;
 }
-/* Use the class name from the JSX */
-.db-invoice-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 8px; /* Space between invoice items */
+.status-confirmed { background-color: #4CAF50; }
+.status-pending { background-color: #FFCB2F; color: #424242; }
+.status-completed { background-color: #2196F3; }
+.status-cancelled { background-color: #F44336; }
+.status-unknown { background-color: #9E9E9E; }
+
+.view-details-btn {
+    background-color: #78909c; /* Muted grey/blue */
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 3px;
+    font-size: 0.78rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
 }
-/* Use the class name from the JSX */
-.db-invoice-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 0.85rem; /* Slightly smaller font */
-}
-/* Use the class name from the JSX */
-.db-invoice-detail {
-  color: var(--db-text-secondary);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  padding-right: 10px;
-  display: flex; /* Align bullet and text */
-  align-items: center;
-}
-/* Use the class name from the JSX */
-.db-bullet {
-    color: var(--db-primary-blue);
-    font-size: 1.2em; /* Larger bullet */
-    margin-right: 8px;
-    line-height: 1;
-}
-/* Use the class name from the JSX */
-.db-status-tag {
-  padding: 3px 10px; /* Smaller padding */
-  border-radius: 10px; /* Pill shape */
-  font-size: 0.7rem;  /* Smaller font */
-  font-weight: 600;
-  text-transform: uppercase;
-  white-space: nowrap;
-}
-.db-status-paid { /* Only need paid style for image */
-  background-color: var(--db-paid-bg);
-  color: var(--db-paid-text);
+.view-details-btn:hover {
+    background-color: #607d8b;
 }
 
-.db-widget-message {
-  grid-column: 3 / span 1;
-}
-/* Use the class name from the JSX */
-.db-message-list {
-   list-style: none;
-  padding: 0;
-  margin: 0;
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 6px; /* Adjust gap */
-}
-/* Use the class name from the JSX */
-.db-message-item {
-  font-size: 0.85rem;
-  display: grid;
-  /* Define 3 columns: Name (fixed width), Subject (flexible), Detail (flexible) */
-  grid-template-columns: 90px minmax(100px, 1fr) minmax(100px, 1.5fr);
-  gap: 10px; /* Gap between columns */
-  align-items: center; /* Vertically align items in the grid row */
-}
-/* Use the class name from the JSX */
-.db-message-name {
-  font-weight: 500;
-  color: var(--db-text-secondary); /* Match image color */
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  text-align: left; /* Ensure name is left-aligned */
-}
-/* Use the class name from the JSX */
-.db-message-subject {
-  color: var(--db-text-secondary);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  text-align: left; /* Align subject left */
-}
-/* Use the class name from the JSX */
-.db-message-detail {
-  color: var(--db-text-primary); /* Primary color for detail */
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  text-align: left; /* Align detail left */
-}
 
-/* --- Responsive Adjustments --- */
+/* Responsive Adjustments */
 @media (max-width: 1200px) {
-  .db-container {
-      grid-template-columns: repeat(2, 1fr); /* Stack to 2 columns */
-  }
-  /* Adjust spans for 2-column layout */
-  .db-widget-income,
-  .db-widget-invoices {
-      grid-column: 1 / span 2; /* Full width */
-  }
-   .db-widget-balance,
-   .db-widget-growth,
-   .db-widget-expense,
-   .db-widget-most-viewed,
-   .db-widget-message {
-      grid-column: span 1; /* Take one column */
-   }
-   /* Define explicit order for 2-column layout */
-   .db-widget-income { grid-row: 1; grid-column: 1 / span 2; }
-   .db-widget-balance { grid-row: 2; grid-column: 1 / span 1; } /* Example: move balance */
-   .db-widget-growth { grid-row: 2; grid-column: 2 / span 1; } /* Example: move growth */
-   .db-widget-expense { grid-row: 3; grid-column: 1 / span 1; }
-   .db-widget-most-viewed { grid-row: 3; grid-column: 2 / span 1; }
-   .db-widget-invoices { grid-row: 4; grid-column: 1 / span 2; }
-   .db-widget-message { grid-row: 5; grid-column: 1 / span 2; } /* Example: message full width */
-}
-
-@media (max-width: 768px) {
-  .db-container {
-      grid-template-columns: 1fr; /* Stack everything into 1 column */
-      gap: var(--db-gap);
-      padding: var(--db-gap);
-  }
-  /* Reset all spans to 1 column */
-  .db-widget,
-  .db-widget-income,
-  .db-widget-balance,
-  .db-widget-growth,
-  .db-widget-expense,
-  .db-widget-most-viewed,
-  .db-widget-invoices,
-  .db-widget-message {
-      grid-column: auto; /* Let grid place them */
-      grid-row: auto;
-  }
-
-  .db-gauges-container {
-      gap: 20px; /* Increase gap for wrapping */
-      justify-content: space-evenly; /* Distribute gauges */
-  }
-
-   /* Adjust message grid for smaller screens */
-   .db-message-item {
-       grid-template-columns: 70px 1fr; /* Name | Subject+Detail Col */
-       row-gap: 2px; /* Space between subject and detail */
-       align-items: start; /* Align name to top */
-   }
-   .db-message-name { grid-row: 1 / span 2; align-self: center;} /* Span both rows */
-   .db-message-subject { grid-row: 1; grid-column: 2; }
-   .db-message-detail { grid-row: 2; grid-column: 2; }
-}
-
-@media (max-width: 480px) {
-    :root { /* Smaller padding/gap on mobile */
-        --db-widget-padding: 15px;
-        --db-gap: 15px;
-    }
-    .db-balance-value { font-size: 2rem; }
-    .db-currency { font-size: 1.2rem; }
-    .db-history-button { padding: 5px 10px; font-size: 0.7rem;}
-    .db-widget-title { font-size: 0.85rem; margin-bottom: 12px;}
-    .db-invoice-item, .db-most-viewed-item { font-size: 0.8rem;}
-    .db-message-item {
-        /* Keep 2 column grid, maybe slightly smaller name col */
-        grid-template-columns: 60px 1fr;
-        gap: 5px;
+     .full-width-widget {
+        grid-column: 1 / -1; /* Ensure sales and table remain full width */
     }
 }
 
+@media (max-width: 768px) { /* Tablet and smaller */
+    .admin-dashboard-main-title {
+        font-size: 1.6rem;
+    }
+    .admin-dashboard-section-title {
+        font-size: 1rem;
+    }
+    .admin-dashboard-action-btn {
+        padding: 9px 15px;
+        font-size: 0.85rem;
+        min-width: 120px;
+    }
+    .admin-dashboard-widgets-grid {
+        grid-template-columns: 1fr; /* Single column */
+    }
+    .chart-widget, .map-widget, .full-width-widget {
+        grid-column: 1 / -1 !important;
+        min-height: auto;
+    }
+    .admin-dashboard-chart-container {
+        min-height: 250px;
+    }
+    .sales-chart-container {
+        min-height: 280px;
+    }
+}
+
+@media (max-width: 480px) { /* Mobile */
+    .admin-dashboard-page {
+        padding: 15px;
+    }
+    .admin-dashboard-actions-container {
+        flex-direction: column; /* Stack buttons */
+    }
+    .admin-dashboard-action-btn {
+        width: 100%;
+    }
+    .recent-bookings-widget th,
+    .recent-bookings-widget td {
+        padding: 8px 6px;
+        font-size: 0.8rem;
+    }
+     .status-badge {
+        font-size: 0.7rem;
+        padding: 3px 8px;
+        min-width: 70px;
+    }
+    .view-details-btn {
+        font-size: 0.75rem;
+        padding: 4px 8px;
+    }
+}
 /* END OF FILE Dashboard.css */

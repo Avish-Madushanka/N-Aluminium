@@ -55,14 +55,34 @@ const createBooking = async (req, res, next) => {
 
 const getAllBookings = async (req, res, next) => {
     try {
+        let query = Booking.find({}); // Base query for all bookings
 
-        const bookings = await Booking.find({})
-            .populate('userId', 'name email')
-            .sort({ createdAt: -1 });
+        // Sorting - for dashboard recent bookings: ?sort=-createdAt
+        if (req.query.sort) {
+            const sortBy = req.query.sort.split(',').join(' '); // Example: 'field1,field2' -> 'field1 field2'
+            query = query.sort(sortBy);
+        } else {
+            query = query.sort({ createdAt: -1 }); // Default sort: newest first
+        }
+
+        // Limiting - for dashboard recent bookings: ?limit=5
+        const limit = parseInt(req.query.limit, 10);
+        if (!isNaN(limit) && limit > 0) {
+            query = query.limit(limit);
+        }
+        
+        // Populate user details
+        query = query.populate('userId', 'name email');
+
+        const bookings = await query;
+
+        // If you were implementing full pagination, you would also calculate total count here
+        // const totalCount = await Booking.countDocuments({}); // Without limit
 
         res.status(200).json({
             success: true,
-            count: bookings.length,
+            // count: totalCount, // if paginating fully, send total
+            count: bookings.length, // For limited queries, this is the count of returned items
             data: bookings
         });
     } catch (error) {
@@ -97,7 +117,8 @@ const getBookingById = async (req, res, next) => {
         if (!booking) {
             return res.status(404).json({ success: false, message: 'Booking not found.' });
         }
-        if (req.user.role !== 'admin' && booking.userId._id.toString() !== req.user.id) {
+        // Add a check if the user is not admin and doesn't own the booking
+        if (req.user.role !== 'admin' && booking.userId && booking.userId._id.toString() !== req.user.id) {
             return res.status(403).json({ success: false, message: 'You are not authorized to view this booking.' });
         }
         res.status(200).json({ success: true, data: booking });
@@ -177,7 +198,11 @@ const updateBookingStatus = async (req, res, next) => {
 
         if (updatedBooking.status !== oldStatus && (updatedBooking.status === 'confirmed' || updatedBooking.status === 'cancelled')) {
             console.log(`[BookingsCtrl UpdateStatus] Email for booking ${bookingId}, new status: ${updatedBooking.status}`);
-            await sendBookingStatusUpdateEmail(updatedBooking, updatedBooking.status);
+            if (updatedBooking.userId && updatedBooking.contactDetails.email) { // Check if email is available
+                 await sendBookingStatusUpdateEmail(updatedBooking, updatedBooking.status);
+            } else {
+                console.warn(`[BookingsCtrl UpdateStatus] Cannot send email for booking ${bookingId}: user or email missing.`);
+            }
         }
 
         res.status(200).json({ success: true, message: 'Booking status updated.', data: updatedBooking });
@@ -245,7 +270,11 @@ const updateBooking = async (req, res, next) => {
         const finalStatus = updatedBooking.status;
         if (finalStatus !== oldStatus && (finalStatus === 'confirmed' || finalStatus === 'cancelled')) {
             console.log(`[BookingsCtrl UpdateBooking] Email for booking ${bookingId}, new status: ${finalStatus}`);
-            await sendBookingStatusUpdateEmail(updatedBooking, finalStatus);
+            if (updatedBooking.userId && updatedBooking.contactDetails.email) { // Check if email is available
+                await sendBookingStatusUpdateEmail(updatedBooking, finalStatus);
+            } else {
+                console.warn(`[BookingsCtrl UpdateBooking] Cannot send email for booking ${bookingId}: user or email missing.`);
+            }
         }
 
         res.status(200).json({ success: true, message: 'Booking updated successfully.', data: updatedBooking });
@@ -285,5 +314,5 @@ module.exports = {
     getBookingById,
     updateBookingStatus,
     updateBooking,    
-    deleteBooking    
+    deleteBooking     
 };
