@@ -1,11 +1,11 @@
 const Booking = require('../models/Booking');
-const { sendBookingStatusUpdateEmail } = require('../utils/emailService'); 
+const { sendBookingStatusUpdateEmail } = require('../utils/emailService');
 
 const createBooking = async (req, res, next) => {
     try {
         const {
             selectedDate,
-            timeSlotId, 
+            timeSlotId,
             serviceAreaId,
             estimatedWeight,
             pickupLocation,
@@ -20,13 +20,13 @@ const createBooking = async (req, res, next) => {
         }
 
         const newBookingData = {
-            selectedDate: new Date(selectedDate), 
-            timeSlotId, 
+            selectedDate: new Date(selectedDate),
+            timeSlotId,
             serviceAreaId,
             estimatedWeight: (estimatedWeight !== undefined && estimatedWeight !== null && estimatedWeight !== '') ? Number(estimatedWeight) : undefined,
             pickupLocation,
             contactDetails,
-            status: 'pending', 
+            status: 'pending',
         };
 
         if (req.user) {
@@ -55,6 +55,7 @@ const createBooking = async (req, res, next) => {
 
 const getAllBookings = async (req, res, next) => {
     try {
+        // This is for admin to get ALL bookings
         const bookings = await Booking.find({})
             .populate('userId', 'name email')
             .sort({ createdAt: -1 });
@@ -70,11 +71,39 @@ const getAllBookings = async (req, res, next) => {
     }
 };
 
+const getMyBookings = async (req, res, next) => {
+    try {
+        if (!req.user || !req.user.id) {
+            return res.status(401).json({ success: false, message: 'Not authenticated.' });
+        }
+
+        const bookings = await Booking.find({ userId: req.user.id })
+            // We don't populate userId here as it's the current user.
+            // timeSlotId and serviceAreaId are stored as strings.
+            // If richer data is needed, CalendarSettings would need to be queried
+            // and the IDs mapped, or frontend handles this.
+            .sort({ createdAt: -1 });
+
+        res.status(200).json({
+            success: true,
+            count: bookings.length,
+            data: bookings
+        });
+    } catch (error) {
+        console.error('Error fetching my bookings:', error);
+        next(error);
+    }
+};
+
 const getBookingById = async (req, res, next) => {
     try {
         const booking = await Booking.findById(req.params.id).populate('userId', 'name email');
         if (!booking) {
             return res.status(404).json({ success: false, message: 'Booking not found.' });
+        }
+        // Add a check if the user is not admin and doesn't own the booking
+        if (req.user.role !== 'admin' && booking.userId._id.toString() !== req.user.id) {
+            return res.status(403).json({ success: false, message: 'You are not authorized to view this booking.' });
         }
         res.status(200).json({ success: true, data: booking });
     } catch (error) {
@@ -87,7 +116,7 @@ const updateBookingStatus = async (req, res, next) => {
     try {
         const bookingId = req.params.id;
         const { status } = req.body;
-        const adminNotes = req.body.adminNotes !== undefined ? req.body.adminNotes : null;
+        const adminNotesFromRequest = req.body.adminNotes !== undefined ? req.body.adminNotes : null;
 
         if (!status || !['pending', 'confirmed', 'completed', 'cancelled'].includes(status)) {
             return res.status(400).json({ success: false, message: 'Invalid status provided.' });
@@ -98,22 +127,46 @@ const updateBookingStatus = async (req, res, next) => {
             return res.status(404).json({ success: false, message: 'Booking not found.' });
         }
 
+        // Authorization checks
+        if (req.user.role === 'client') {
+            if (bookingBeforeUpdate.userId.toString() !== req.user.id) {
+                return res.status(403).json({ success: false, message: 'You are not authorized to update this booking.' });
+            }
+            if (status !== 'cancelled') {
+                return res.status(403).json({ success: false, message: 'Clients can only cancel bookings.' });
+            }
+            if (!['pending', 'confirmed'].includes(bookingBeforeUpdate.status)) {
+                return res.status(400).json({ success: false, message: `Bookings with status '${bookingBeforeUpdate.status}' cannot be cancelled by you at this stage.` });
+            }
+        } else if (req.user.role !== 'admin') {
+            // Should be caught by authorize middleware, but as a safeguard
+            return res.status(403).json({ success: false, message: 'You do not have permission to change booking status.' });
+        }
+
+
         const oldStatus = bookingBeforeUpdate.status;
         const oldAdminNotes = bookingBeforeUpdate.adminNotes;
 
         const updateData = { status };
-        if (adminNotes !== null) {
-            updateData.adminNotes = adminNotes;
-        } else if (status === 'cancelled' && adminNotes === null && !oldAdminNotes) {
-             updateData.adminNotes = '';
+
+        // Only admin can modify adminNotes
+        if (req.user.role === 'admin') {
+            if (adminNotesFromRequest !== null) {
+                updateData.adminNotes = adminNotesFromRequest;
+            } else if (status === 'cancelled' && adminNotesFromRequest === null && !oldAdminNotes) {
+                 updateData.adminNotes = ''; // Admin can explicitly clear notes if cancelling and notes were empty
+            }
         }
         
         let notesChanged = false;
-        if (adminNotes !== null && oldAdminNotes !== adminNotes) {
+        if (req.user.role === 'admin' && adminNotesFromRequest !== null && oldAdminNotes !== adminNotesFromRequest) {
             notesChanged = true;
-        } else if (status === 'cancelled' && adminNotes === null && !oldAdminNotes && oldAdminNotes !== '') {
-            notesChanged = true;
+        } else if (req.user.role === 'admin' && status === 'cancelled' && adminNotesFromRequest === null && !oldAdminNotes && oldAdminNotes !== '') {
+             // This condition seems to imply if admin is cancelling, notes are empty in request, and old notes were not empty but also not ''
+             // This specific case might need refinement based on exact intent for admin clearing notes
+             if (oldAdminNotes !== undefined) notesChanged = true;
         }
+
 
         if (oldStatus === status && !notesChanged) {
              console.log(`[BookingsCtrl UpdateStatus] No change for booking ${bookingId}.`);
@@ -148,6 +201,7 @@ const updateBookingStatus = async (req, res, next) => {
 };
 
 const updateBooking = async (req, res, next) => {
+    // This route is admin-only. Clients cannot use this for general updates.
     try {
         const bookingId = req.params.id;
         
@@ -164,11 +218,11 @@ const updateBooking = async (req, res, next) => {
 
         const updateFields = {};
         if (selectedDate !== undefined) updateFields.selectedDate = new Date(selectedDate);
-        if (timeSlotId !== undefined) updateFields.timeSlotId = timeSlotId; 
+        if (timeSlotId !== undefined) updateFields.timeSlotId = timeSlotId;
         if (serviceAreaId !== undefined) updateFields.serviceAreaId = serviceAreaId;
         if (estimatedWeight !== undefined) updateFields.estimatedWeight = (estimatedWeight === null || estimatedWeight === '') ? null : Number(estimatedWeight);
         if (pickupLocation !== undefined) updateFields.pickupLocation = pickupLocation;
-        if (contactDetails !== undefined) { 
+        if (contactDetails !== undefined) {
             if (!contactDetails.name || !contactDetails.phone || !contactDetails.email) {
                  return res.status(400).json({ success: false, message: 'If updating contactDetails, all fields (name, phone, email) are required.' });
             }
@@ -179,7 +233,7 @@ const updateBooking = async (req, res, next) => {
             updateFields.status = status;
         }
         
-        if (adminNotes !== undefined) {
+        if (adminNotes !== undefined) { // Admin can set/clear adminNotes
             updateFields.adminNotes = adminNotes;
         }
 
@@ -191,14 +245,14 @@ const updateBooking = async (req, res, next) => {
             bookingId,
             { $set: updateFields },
             { new: true, runValidators: true }
-        ).populate('userId', 'name email'); 
+        ).populate('userId', 'name email');
 
         if (!updatedBooking) {
             return res.status(404).json({ success: false, message: 'Booking not found after update attempt.' });
         }
         console.log(`[BookingsCtrl UpdateBooking] Booking ${bookingId} updated. Status: ${oldStatus} -> ${updatedBooking.status}. Notes: "${updatedBooking.adminNotes}"`);
 
-        const finalStatus = updatedBooking.status; 
+        const finalStatus = updatedBooking.status;
         if (finalStatus !== oldStatus && (finalStatus === 'confirmed' || finalStatus === 'cancelled')) {
             console.log(`[BookingsCtrl UpdateBooking] Email for booking ${bookingId}, new status: ${finalStatus}`);
             await sendBookingStatusUpdateEmail(updatedBooking, finalStatus);
@@ -210,7 +264,7 @@ const updateBooking = async (req, res, next) => {
         if (error.name === 'CastError' && error.path === 'estimatedWeight') {
              return res.status(400).json({ success: false, message: `Invalid data format for field estimatedWeight. Must be a number.`});
         }
-        if (error.name === 'CastError') { 
+        if (error.name === 'CastError') {
             return res.status(400).json({ success: false, message: `Invalid data format for field ${error.path}. Expected ${error.kind}.`});
         }
         if (error.name === 'ValidationError') {
@@ -222,6 +276,7 @@ const updateBooking = async (req, res, next) => {
 };
 
 const deleteBooking = async (req, res, next) => {
+    // This route is admin-only.
     try {
         const booking = await Booking.findByIdAndDelete(req.params.id);
         if (!booking) {
@@ -236,9 +291,10 @@ const deleteBooking = async (req, res, next) => {
 
 module.exports = {
     createBooking,
-    getAllBookings,
+    getAllBookings, // Admin: Gets all bookings
+    getMyBookings,  // Logged-in User: Gets their own bookings
     getBookingById,
     updateBookingStatus,
-    updateBooking,
-    deleteBooking
+    updateBooking,    // Admin: Full update capability
+    deleteBooking     // Admin: Deletes booking
 };

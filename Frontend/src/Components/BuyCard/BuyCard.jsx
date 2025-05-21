@@ -1,31 +1,75 @@
 import React from 'react';
 import './BuyCard.css';
+import API_ENDPOINTS from '../../apiConfig';
 
 const BuyCard = ({ onClose, product }) => { 
-  console.log("BuyCard rendered, onClose:", onClose);
+  console.log("BuyCard rendered with product:", product);
 
   // Default product data in case none is provided
   const defaultProduct = {
-    image: "https://i.redd.it/rturazpmucha1.jpg",
-    title: "Aluminum Door",
-    description: "An aluminum door is strong, lightweight, weather-resistant, durable, low-maintenance, and modern-looking.",
-    address: "426F/18 Shanthi Garden, Medha MW, Alubomulla, Panadura\nKalutara, Western",
-    price: "Rs: 10,000.00",
-    contact: {
-      phone: "0777-123 456",
-      email: "Admin123@gmail.com"
+    imagePath: "https://via.placeholder.com/300x200?text=No+Image",
+    name: "Product Name",
+    description: "Product description not available.",
+    address: "Address not available",
+    district: "District",
+    province: "Province",
+    price: 0,
+    contact: "Contact not available",
+    type: "Type not specified"
+  };
+
+  // If no product is provided, use defaults
+  if (!product) {
+    console.warn("BuyCard: No product data provided, using defaults");
+  }
+
+  // Get the full image URL
+  const getImageUrl = (imagePath) => {
+    if (!imagePath) return "https://via.placeholder.com/300x200?text=No+Image";
+    
+    // If it's already a full URL, return it
+    if (imagePath.startsWith('http')) return imagePath;
+    
+    // Otherwise, construct the URL using the backend root
+    const backendRoot = API_ENDPOINTS.BACKEND_ROOT_URL;
+    return `${backendRoot}${imagePath}`;
+  };
+
+  // Format address with district and province
+  const formatAddress = (address, district, province) => {
+    let formattedAddress = address || 'Address not available';
+    
+    if (district) {
+      formattedAddress += `\n${district}`;
     }
+    
+    if (province) {
+      formattedAddress += district ? `, ${province}` : `\n${province}`;
+    }
+    
+    return formattedAddress;
+  };
+
+  // Format price with commas and currency
+  const formatPrice = (price) => {
+    if (price === undefined || price === null) return 'Price not available';
+    return `Rs. ${Number(price).toLocaleString()}`;
   };
 
   // Use the provided product or fall back to defaults
-  const {
-    image,
-    title,
-    description,
-    address,
-    price,
-    contact
-  } = product || defaultProduct;
+  const productData = product || defaultProduct;
+  
+  const imageUrl = getImageUrl(productData.imagePath);
+  const title = productData.name || defaultProduct.name;
+  const description = productData.description || defaultProduct.description;
+  const formattedAddress = formatAddress(
+    productData.address, 
+    productData.district, 
+    productData.province
+  );
+  const formattedPrice = formatPrice(productData.price);
+  const contactInfo = productData.contact || defaultProduct.contact;
+  const productType = productData.type || defaultProduct.type;
 
   return (
     <div className="popup1-overlay" onClick={onClose}>
@@ -43,21 +87,29 @@ const BuyCard = ({ onClose, product }) => {
 
         <div className="product1-image-container">
           <img
-            src={image}
+            src={imageUrl}
             alt={title}
             className="product1-image"
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = "https://via.placeholder.com/300x200?text=Image+Not+Available";
+            }}
           />
         </div>
 
         <div className="product1-info">
           <h2 className="product1-title">{title}</h2>
+          
+          <div className="product1-type">
+            <span className="product1-type-label">Type:</span> {productType}
+          </div>
 
           <p className="product1-description">
             {description}
           </p>
 
           <p className="product1-address">
-            {address.split('\n').map((line, i) => (
+            {formattedAddress.split('\n').map((line, i) => (
               <React.Fragment key={i}>
                 {line}
                 <br />
@@ -65,11 +117,10 @@ const BuyCard = ({ onClose, product }) => {
             ))}
           </p>
 
-          <p className="product1-price">{price}</p>
+          <p className="product1-price">{formattedPrice}</p>
 
           <div className="contact1-info">
-            <p>📞 {contact.phone}</p>
-            <p>📧 {contact.email}</p>
+            <p>📞 {contactInfo}</p>
           </div>
         </div>
       </div>

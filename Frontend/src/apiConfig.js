@@ -1,7 +1,7 @@
 // frontend/src/api/apiConfig.js
 
 const API_ENDPOINTS = {
-  // API_ROOT: import.meta.env.VITE_API_BASE_URL || 'http://localhost:5003/api', // Keep for reference or non-Axios use if needed
+  API_ROOT: import.meta.env.VITE_API_BASE_URL || 'http://localhost:5003/api',
   
   AUTH: {
     LOGIN: '/auth/login',
@@ -13,84 +13,88 @@ const API_ENDPOINTS = {
 
   CLIENT: {
     REGISTER: '/clients/register',
-    PROFILE: (id) => `/clients/${id}`, // For fetching profile by ID
-    MY_PROFILE: '/clients/profile/me', // Or a specific route for the logged-in user's profile
-    UPDATE: (id) => `/clients/${id}`, // For updating profile by ID
-    UPDATE_MY_PROFILE: '/clients/profile/me/update', // Or a specific route
-    DELETE: (id) => `/clients/${id}`  // For deleting profile by ID
+    PROFILE: (id) => `/clients/${id}`, 
+    MY_PROFILE: '/clients/profile/me', 
+    UPDATE: (id) => `/clients/${id}`, 
+    UPDATE_MY_PROFILE: '/clients/profile/me/update', 
+    DELETE: (id) => `/clients/${id}`  
   },
 
   BOWNERS: {
     REGISTER: '/b-owners/register',
-    GET_ALL: '/b-owners', // Corrected to be a relative path
-    PROFILE: (id) => `/b-owners/${id}`, // For fetching profile by ID
-    MY_PROFILE: '/b-owners/profile/me', // Or a specific route
-    UPDATE: (id) => `/b-owners/${id}`, // For updating profile by ID
-    UPDATE_MY_PROFILE: '/b-owners/profile/me/update', // Or specific route
-    DELETE: (id) => `/b-owners/${id}`, // For deleting profile by ID
-    VERIFY: (id) => `/b-owners/${id}/verify` // For verifying a business owner
+    GET_ALL: '/b-owners', 
+    PROFILE: (id) => `/b-owners/${id}`, 
+    MY_PROFILE: '/b-owners/me', // Matched to bOwnerRoutes.js which uses /me for get and put
+    UPDATE: (id) => `/b-owners/${id}`, 
+    UPDATE_MY_PROFILE: '/b-owners/me', // Matched to bOwnerRoutes.js
+    DELETE: (id) => `/b-owners/${id}`, 
+    VERIFY: (id) => `/b-owners/${id}/verify` 
   },
 
   COLLECTORS: {
+    // These seem to be placeholders, ensure they exist in backend if used
     REGISTER: '/collectors/register',
     GET_ALL: '/collectors',
     PROFILE: (id) => `/collectors/${id}`,
     UPDATE: (id) => `/collectors/${id}`,
     DELETE: (id) => `/collectors/${id}`,
-    ASSIGN_BOOKING: '/collectors/assign-booking' // This might need collectorId and bookingId
+    ASSIGN_BOOKING: '/collectors/assign-booking' 
   },
 
   BOOKINGS: {
     CREATE: '/bookings',
-    GET_ALL: '/bookings', // Admin route
+    GET_ALL: '/bookings',                  // Admin: get all bookings
+    GET_MY_BOOKINGS: '/bookings/my-bookings', // For logged-in user
     GET_ONE: (id) => `/bookings/${id}`,
     UPDATE_STATUS: (id) => `/bookings/${id}/status`,
-    UPDATE_ONE: (id) => `/bookings/${id}`,
-    DELETE_ONE: (id) => `/bookings/${id}`,
-    CLIENT_BOOKINGS: '/bookings/user/client', // Assuming a route for logged-in client's bookings
-    OWNER_BOOKINGS: '/bookings/user/b-owner' // Assuming a route for logged-in b-owner's bookings
+    UPDATE_ONE: (id) => `/bookings/${id}`,    // Admin: full update
+    DELETE_ONE: (id) => `/bookings/${id}`,  // Admin: delete
+    // CLIENT_BOOKINGS and OWNER_BOOKINGS might be redundant if GET_MY_BOOKINGS serves general user type
   },
 
   CALENDAR_SETTINGS: {
     GET: '/calendar-settings',
     UPDATE: '/calendar-settings',
-    AVAILABILITY: '/calendar-settings/availability' // Might be GET or POST depending on use
+    AVAILABILITY: '/calendar-settings/availability' // Ensure this exists if used
   },
 
   SCRAP_TYPES: {
     GET_ALL: '/scrap-types',
     CREATE: '/scrap-types',
     UPDATE_ONE: (id) => `/scrap-types/${id}`,
-    DELETE_ONE: (id) => `/scrap-types/${id}`, // Soft delete
-    FORCE_DELETE_ONE: (id) => `/scrap-types/${id}/force`, // Permanent delete
+    DELETE_ONE: (id) => `/scrap-types/${id}`, 
+    FORCE_DELETE_ONE: (id) => `/scrap-types/${id}/force`, 
     GET_BY_ID: (id) => `/scrap-types/${id}`,
-    GET_BY_OWNER: (ownerId) => `/scrap-types/owner/${ownerId}` // If specific to an owner
+    // GET_BY_OWNER might be an admin/specific feature, ensure it exists
   },
 
   REVIEWS: {
     CREATE: '/reviews',
-    GET_ALL: '/reviews', // Can be public (approved) or admin (all)
-    GET_BY_OWNER: (ownerId) => `/reviews/owner/${ownerId}`,
-    GET_BY_CLIENT: (clientId) => `/reviews/client/${clientId}`,
-    UPDATE: (id) => `/reviews/${id}`, // For admin to approve/edit
-    DELETE: (id) => `/reviews/${id}`  // For admin
+    GET_ALL: '/reviews', 
+    // GET_BY_OWNER & GET_BY_CLIENT might be specific admin/listing features
+    UPDATE: (id) => `/reviews/${id}`, 
+    DELETE: (id) => `/reviews/${id}`  
   },
 
   ADMIN: {
     STATS: '/admin/stats',
-    USERS: '/admin/users', // For managing all users
-    USER_BY_ID: (userId) => `/admin/users/${userId}`, // For a specific user
-    BOOKINGS: '/admin/bookings' // Likely same as BOOKINGS.GET_ALL but for admin context
+    USERS: '/admin/users', 
+    USER_BY_ID: (userId) => `/admin/users/${userId}`, 
+    BOOKINGS: '/admin/bookings' // Potentially redundant with BOOKINGS.GET_ALL if admin uses that
   },
 
-  // This provides the server root, e.g., "http://localhost:5003"
-  // Useful for constructing full URLs for static assets like images.
+  SALE_ITEMS: {
+    CREATE: '/saleitems',
+    GET_ALL: '/saleitems',
+    GET_ONE: (id) => `/saleitems/${id}`,
+    UPDATE_ONE: (id) => `/saleitems/${id}`,
+    DELETE_ONE: (id) => `/saleitems/${id}`,
+  },
+
   BACKEND_ROOT_URL: (import.meta.env.VITE_API_BASE_URL || 'http://localhost:5003/api').replace('/api', ''),
   
-  // This is a relative path for an API call to a health check endpoint
-  HEALTH_CHECK: '/health', // Matched with /api/health in server.js
+  HEALTH_CHECK: '/health', 
   
-  // For accessing static uploaded files, use BACKEND_ROOT_URL + stored_file_path (e.g., /uploads/image.png)
 };
 
 if (import.meta.env.DEV) {

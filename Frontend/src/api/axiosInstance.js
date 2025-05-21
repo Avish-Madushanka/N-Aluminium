@@ -8,7 +8,8 @@ const axiosInstance = axios.create({
   baseURL: API_BASE_URL, 
   timeout: REQUEST_TIMEOUT,
   headers: {
-    'Content-Type': 'application/json', 
+    // Don't set Content-Type globally as it breaks FormData/file uploads
+    // Axios will set the correct Content-Type automatically based on the request data
   },
 });
 
