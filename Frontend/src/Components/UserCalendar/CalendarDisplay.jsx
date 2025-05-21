@@ -6,9 +6,10 @@ import {
   Recycle, Clock, MapPin, Truck, AlertTriangle, Info, Loader2
 } from 'lucide-react';
 import './CalendarDisplay.css';
-import API_ENDPOINTS from '../../apiConfig';
+import API_ENDPOINTS from '../../apiConfig'; // Ensure this path is correct and API_ROOT is defined
 
 const API_BASE_URL = API_ENDPOINTS.API_ROOT;
+console.log("Imported API_ENDPOINTS:", API_ENDPOINTS); // <-- ADD THIS LINE
 
 const fallbackSettings = {
   availableDays: { '0': false, '1': false, '2': false, '3': false, '4': false, '5': false, '6': false },
@@ -38,8 +39,13 @@ const CalendarDisplay = () => {
     
     if (base.availableDays instanceof Map) {
       availableDaysObject = Object.fromEntries(base.availableDays);
-    } else if (typeof base.availableDays !== 'object' || base.availableDays === null) {
+    } else if (typeof base.availableDays !== 'object' || base.availableDays === null || Array.isArray(base.availableDays)) {
+      if (backendSettings) { // Only log warning if backendSettings was supposed to be used
+        console.warn("CalendarDisplay: backendSettings.availableDays is not a valid object, using fallback. Received:", base.availableDays);
+      }
       availableDaysObject = fallbackSettings.availableDays;
+    } else {
+      availableDaysObject = base.availableDays;
     }
     
     return {
@@ -76,17 +82,22 @@ const CalendarDisplay = () => {
     if (specialDate) return specialDate.status === 'available';
     
     const date = new Date(year, month, day);
-    return settings.availableDays[date.getDay().toString()] === true;
+    if (settings.availableDays && typeof settings.availableDays === 'object' && settings.availableDays.hasOwnProperty(date.getDay().toString())) {
+      return settings.availableDays[date.getDay().toString()] === true;
+    }
+    return false; 
   }, [settings.availableDays, getSpecialDateStatus, isPastDate, isToday]);
 
   const findNextAvailableDays = useCallback((count) => {
-    if (!settings || Object.keys(settings.availableDays).length === 0 || isLoading) return [];
+    if (!settings || typeof settings.availableDays !== 'object' || Object.keys(settings.availableDays).length === 0 || isLoading) {
+        return [];
+    }
     
     const available = [];
     let currentDateIteration = new Date();
     currentDateIteration.setHours(0, 0, 0, 0);
     
-    const maxIterations = 90;
+    const maxIterations = 90; 
     for (let i = 0; i < maxIterations && available.length < count; i++) {
       const day = currentDateIteration.getDate();
       const month = currentDateIteration.getMonth();
@@ -104,38 +115,89 @@ const CalendarDisplay = () => {
     const fetchData = async () => {
       setIsLoading(true);
       setError(null);
+
+      if (!API_BASE_URL || typeof API_BASE_URL !== 'string' || API_BASE_URL.trim() === '') {
+        const apiConfigErrorMsg = "API_BASE_URL is not configured. Please check apiConfig.js or environment variables.";
+        console.error(apiConfigErrorMsg, "Current value for API_BASE_URL:", API_BASE_URL);
+        setError(apiConfigErrorMsg);
+        setIsLoading(false);
+        setBackendSettings(null); 
+        return;
+      }
+
       try {
-        const settingsResponse = await fetch(`${API_BASE_URL}/calendar-settings`);
-        if (!settingsResponse.ok) {
-          const errData = await settingsResponse.json().catch(() => ({ 
-            message: settingsResponse.statusText 
-          }));
-          throw new Error(`Failed to fetch settings: ${settingsResponse.status} ${errData.message || 'Server error'}`);
+        const response = await fetch(`${API_BASE_URL}/calendar-settings`);
+
+        if (!response.ok) {
+          let errorDetail = `HTTP ${response.status}: ${response.statusText}`;
+          let responseBodySnippet = "(Could not read error response body)";
+          try {
+            const errorBodyText = await response.text();
+            responseBodySnippet = errorBodyText.substring(0, 200); // Get first 200 chars for preview
+            // Try to parse as JSON in case the error response is structured (some APIs do this)
+            try {
+              const jsonError = JSON.parse(errorBodyText);
+              if (jsonError && jsonError.message) {
+                errorDetail += ` - API Message: ${jsonError.message}`;
+              } else {
+                errorDetail += ` - Server Response (HTML/Text): ${responseBodySnippet}...`;
+              }
+            } catch (e) {
+              // Not JSON, so it's likely HTML or plain text.
+              errorDetail += ` - Server Response (HTML/Text): ${responseBodySnippet}...`;
+            }
+          } catch (textError) {
+            // Failed to even get text body.
+            errorDetail += ` - ${responseBodySnippet}`;
+          }
+          console.error("Full server response for !response.ok:", response);
+          throw new Error(`Failed to fetch settings. ${errorDetail}`);
         }
         
-        const settingsData = await settingsResponse.json();
-        if (settingsData.success && settingsData.data) {
+        const contentType = response.headers.get("content-type");
+        if (!contentType || !contentType.includes("application/json")) {
+          let responseText = "[Could not read response text]";
+          try {
+             responseText = await response.text();
+          } catch (e) { /* ignore, already set default for snippet */ }
+          const bodySnippet = responseText.substring(0, 200);
+          console.warn("Expected JSON, but received Content-Type:", contentType, "Body preview:", bodySnippet);
+          throw new Error(`Expected JSON response from server, but received '${contentType || 'unknown content type'}'. Body preview: ${bodySnippet}...`);
+        }
+
+        const settingsData = await response.json(); // This can still throw SyntaxError if body is malformed JSON despite correct Content-Type
+        
+        if (settingsData && settingsData.success && settingsData.data) {
+          if (typeof settingsData.data.availableDays !== 'object' || settingsData.data.availableDays === null) {
+             console.warn("Received settings, but 'availableDays' is not a valid object:", settingsData.data.availableDays);
+             throw new Error("Received invalid 'availableDays' structure from API.");
+          }
           setBackendSettings(settingsData.data);
         } else {
-          throw new Error(settingsData.message || 'Failed to get valid settings data');
+          throw new Error(settingsData.message || 'API response was not successful or data is missing.');
         }
       } catch (err) {
-        console.error("Error fetching initial data:", err);
-        setError(err.message || 'Could not load scheduling options. Please try refreshing.');
-        setBackendSettings(null);
+        // err could be a SyntaxError from response.json() if content-type was json but body was not
+        // or it could be one of the custom errors thrown above.
+        console.error("Error fetching initial data (see details below):", err.message);
+        if (err.stack) console.error(err.stack); // Log stack for better debugging
+        setError(err.message || 'Could not load scheduling options. Please try refreshing the page.');
+        setBackendSettings(null); 
       } finally {
         setIsLoading(false);
       }
     };
     
     fetchData();
-  }, []);
+  }, []); // API_BASE_URL comes from module scope, assumed constant for component lifecycle
 
   useEffect(() => {
     if (!isLoading && settings && Object.keys(settings.availableDays).length > 0) {
       setNextFourAvailableDays(findNextAvailableDays(4));
+    } else if (!isLoading && error) { 
+      setNextFourAvailableDays([]);
     }
-  }, [isLoading, settings, findNextAvailableDays]);
+  }, [isLoading, settings, error, findNextAvailableDays]);
 
   const getMonthData = (date) => {
     const year = date.getFullYear();
@@ -166,7 +228,7 @@ const CalendarDisplay = () => {
     navigate('/UserCalendar');
   };
   
-  const handleScheduleAvailableDay = () => {
+  const handleScheduleAvailableDay = (/* date */) => { 
     navigate('/UserCalendar');
   };
 
@@ -178,15 +240,20 @@ const CalendarDisplay = () => {
   };
 
   const renderCalendar = () => {
+    if (isLoading && !backendSettings && !error) {
+        return <div className="CDis-calendar-message"><p>Loading days...</p></div>;
+    }
+    // If there's an error and backendSettings never loaded, fallbackSettings will be used by `settings`.
+    // The calendar will attempt to render based on fallback, which might show all days as unavailable.
+    // A global error message is already shown outside the grid.
+
     const { year, month, startingDayOfWeek, daysInMonth } = getMonthData(currentDate);
     const calendarDays = [];
     
-    // Empty days for start of month
     for (let i = 0; i < startingDayOfWeek; i++) {
       calendarDays.push(<div key={`empty-${i}`} className="CDis-calendar-day CDis-empty" />);
     }
     
-    // Actual days of month
     for (let day = 1; day <= daysInMonth; day++) {
       const dateObj = new Date(year, month, day);
       const isSel = selectedDateVisual && selectedDateVisual.getTime() === dateObj.getTime();
@@ -215,7 +282,7 @@ const CalendarDisplay = () => {
         >
           <span className="CDis-day-number">{day}</span>
           {specialDate && (
-            <span className="CDis-special-indicator" title={specialDate.reason}>*</span>
+            <span className="CDis-special-indicator" title={specialDate.reason || (specialDate.status === 'available' ? 'Special availability status' : 'Special unavailability status')}>*</span>
           )}
         </button>
       );
@@ -226,22 +293,23 @@ const CalendarDisplay = () => {
 
   return (
     <div className="CDis-user-dashboard">
-      {isLoading && !backendSettings && (
+      {isLoading && !backendSettings && !error && (
         <div className="CDis-loading-overlay">
           <Loader2 size={48} className="CDis-animate-spin" />
           <p>Loading Availability...</p>
         </div>
       )}
       
-      {!isLoading && error && (
+      {!isLoading && error && ( // Show error prominently if it exists
         <div className="CDis-error-message-container CDis-global-error">
           <AlertTriangle size={18} />
           <span>{error}</span>
         </div>
       )}
 
+      {/* Render the grid structure even if there was an error, 
+          so specific sections can show their error/empty states or use fallback data */}
       <div className="CDis-dashboard-grid">
-        {/* Calendar Column */}
         <div className="CDis-calendar-column">
           <div className="CDis-column-header">
             <h2>View Collection Availability</h2>
@@ -253,7 +321,7 @@ const CalendarDisplay = () => {
                 onClick={goToPrevMonth} 
                 className="CDis-nav-button" 
                 aria-label="Previous month" 
-                disabled={isLoading || !backendSettings}
+                disabled={isLoading && !backendSettings && !error} // Disable only during initial hard load without error
               >
                 <ChevronLeft size={20} />
               </button>
@@ -266,7 +334,7 @@ const CalendarDisplay = () => {
                 onClick={goToNextMonth} 
                 className="CDis-nav-button" 
                 aria-label="Next month" 
-                disabled={isLoading || !backendSettings}
+                disabled={isLoading && !backendSettings && !error}
               >
                 <ChevronRight size={20} />
               </button>
@@ -279,9 +347,7 @@ const CalendarDisplay = () => {
             </div>
             
             <div className="CDis-calendar-grid">
-              {(isLoading && !backendSettings) ? (
-                <p>Loading days...</p>
-              ) : renderCalendar()}
+              {renderCalendar()}
             </div>
             
             <div className="CDis-calendar-legend">
@@ -298,7 +364,6 @@ const CalendarDisplay = () => {
           </div>
         </div>
 
-        {/* Quick Schedule Column */}
         <div className="CDis-pickups-column">
           <div className="CDis-column-header">
             <h2>Quick Schedule</h2>
@@ -307,8 +372,7 @@ const CalendarDisplay = () => {
           <div className="CDis-available-slots-section">
             <h4>Next Available Collection Days</h4>
             
-            {(isLoading && !backendSettings) || 
-             (isLoading && nextFourAvailableDays.length === 0 && !error) ? (
+            {(isLoading && nextFourAvailableDays.length === 0 && !error) ? (
               <div className="CDis-loading-pickups">
                 <Loader2 size={20} className="CDis-animate-spin" /> 
                 Finding available days...
@@ -335,10 +399,11 @@ const CalendarDisplay = () => {
                 <Info size={18} />
                 <p>No upcoming collection days found in the near future. Please check the main calendar or contact support.</p>
               </div>
-            ) : (
+            ) : ( // Error exists, and no days could be determined
               <div className="CDis-no-pickups CDis-text-small">
                 <AlertTriangle size={18} />
-                <p>Could not load availability.</p>
+                {/* Show the main error message, or a more specific one if appropriate */}
+                <p>{error || "Could not load upcoming availability due to an error."}</p> 
               </div>
             )}
           </div>

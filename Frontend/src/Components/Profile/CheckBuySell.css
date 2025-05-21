@@ -1,3 +1,5 @@
+/* src/Pages/MyItemsPage.css (NEW FILE) */
+
 .my-items-container {
     max-width: 1200px;
     margin: 30px auto;
@@ -169,28 +171,28 @@
 
 .delete-btn:hover {
     background-color: #f8d7da;
-}
-
-@media (max-width: 600px) {
+  }
+  
+  /* Responsive adjustments for grid */
+  @media (max-width: 600px) {
     .my-items-grid {
         grid-template-columns: 1fr;
     }
-}
-
-.my-bought-items-section {
-    margin-top: 40px;
-    padding-top: 20px;
-    border-top: 1px solid #ddd;
-}
-
-.my-bought-items-section h2 {
-    text-align: center;
-    margin-bottom: 15px;
-    color: #555;
-}
-
-.my-bought-items-section p {
-    text-align: center;
-    color: #888;
-    font-style: italic;
-}
+  }
+  
+  /* Placeholder for Bought Items Section */
+  .my-bought-items-section {
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid #ddd;
+  }
+  .my-bought-items-section h2 {
+      text-align: center;
+      margin-bottom: 15px;
+      color: #555;
+  }
+  .my-bought-items-section p {
+      text-align: center;
+      color: #888;
+      font-style: italic;
+  }

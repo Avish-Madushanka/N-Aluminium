@@ -3,28 +3,28 @@ require('dotenv').config();
 
 const express = require('express');
 const cors = require('cors');
-const actualPath = require('path');
-const actualHttp = require('http');
+const actualPath = require('path'); // Renamed to avoid conflict if you use 'path' variable elsewhere
+const actualHttp = require('http'); // Renamed
 const fs = require('fs');
 
 const connectDB = require('./config/db');
 
 console.log('[Server Startup] Initializing: Attempting to load route modules...');
 let clientRoutes, bOwnerRoutes, authRoutes, calendarSettingsRoutes,
-    bookingRoutes, reviewRoutes, scrapTypeRoutes, shopLocationRoutes, adminRoutes;
+    bookingRoutes, reviewRoutes, scrapTypeRoutes, shopLocationRoutes, adminRoutes,
+    saleItemRoutes; // <-- Added saleItemRoutes
 
 const loadRoute = (routeName, path) => {
   try {
     const routeModule = require(path);
     console.log(`[Server Startup] Successfully loaded ${routeName} from ${path}. Type: ${typeof routeModule}`);
-    // Express routers are functions or objects with a 'stack' property
     if (typeof routeModule !== 'function' && (typeof routeModule !== 'object' || !routeModule.stack)) {
       console.warn(`[Server Startup] WARNING: ${routeName} loaded from ${path}, but it does not appear to be an Express router. Check module.exports in that file.`);
     }
     return routeModule;
   } catch (e) {
     console.error(`[Server Startup] FAILED to load ${routeName} from ${path}: ${e.message}`);
-    if (process.env.NODE_ENV === 'development') console.error(e.stack); // More detail in dev
+    if (process.env.NODE_ENV === 'development') console.error(e.stack);
     return null;
   }
 };
@@ -38,7 +38,7 @@ reviewRoutes = loadRoute('reviewRoutes', './routes/reviewRoutes');
 scrapTypeRoutes = loadRoute('scrapTypeRoutes', './routes/scrapTypeRoutes');
 shopLocationRoutes = loadRoute('shopLocationRoutes', './routes/shopLocationRoutes');
 adminRoutes = loadRoute('adminRoutes', './routes/adminRoutes');
-
+saleItemRoutes = loadRoute('saleItemRoutes', './routes/saleItemRoutes'); // <-- Load new routes
 
 console.log('[Server Startup] Loading controllers and middleware...');
 const { createInitialAdmin } = require('./controllers/adminController');
@@ -56,18 +56,33 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 const uploadsDirectory = actualPath.join(__dirname, 'uploads');
-app.use('/uploads', express.static(uploadsDirectory));
+app.use('/uploads', express.static(uploadsDirectory)); // This serves /uploads, /uploads/saleitems, etc.
+
 if (fs.existsSync(uploadsDirectory)) {
     console.log(`[Server Config] Serving static files from ${uploadsDirectory} at /uploads`);
+    // Check for saleitems subdirectory specifically (created by uploadMiddleware)
+    const saleItemsSubDir = actualPath.join(uploadsDirectory, 'saleitems');
+    if (fs.existsSync(saleItemsSubDir)) {
+        console.log(`[Server Config] 'uploads/saleitems' subdirectory exists.`);
+    } else {
+        console.warn(`[Server Config] 'uploads/saleitems' subdirectory NOT found. It should be created by uploadMiddleware.`);
+    }
 } else {
     console.warn(`[Server Config] 'uploads' directory (${uploadsDirectory}) does not exist. Static file serving for /uploads might not work as expected. Attempting to create...`);
     try {
         fs.mkdirSync(uploadsDirectory, { recursive: true });
         console.log(`[Server Config] Successfully created 'uploads' directory at ${uploadsDirectory}`);
+        // Attempt to create saleitems subdir as well if main uploads was just created
+        const saleItemsSubDir = actualPath.join(uploadsDirectory, 'saleitems');
+         if (!fs.existsSync(saleItemsSubDir)) {
+            fs.mkdirSync(saleItemsSubDir, { recursive: true });
+            console.log(`[Server Config] Successfully created 'uploads/saleitems' subdirectory.`);
+        }
     } catch (err) {
-        console.error(`[Server Config] FAILED to create 'uploads' directory: ${err.message}`);
+        console.error(`[Server Config] FAILED to create 'uploads' directory or subdirectories: ${err.message}`);
     }
 }
+
 
 app.get('/api/health', (req, res) => {
     console.log('[Health Check] /api/health endpoint was hit.');
@@ -95,6 +110,7 @@ const mountRoutes = () => {
     mount('/api/scrap-types', scrapTypeRoutes, 'scrapTypeRoutes');
     mount('/api/shop-locations', shopLocationRoutes, 'shopLocationRoutes');
     mount('/api/admin', adminRoutes, 'adminRoutes');
+    mount('/api/saleitems', saleItemRoutes, 'saleItemRoutes'); // <-- Mount new routes
 
     console.log('[Server Config] Route mounting process completed.');
 };
@@ -104,7 +120,7 @@ mountRoutes();
 console.log('[Server Config] Applying global error handler.');
 app.use(errorHandler);
 
-const server = actualHttp.createServer(app);
+const server = actualHttp.createServer(app); // Use renamed http
 
 const startServer = async () => {
     try {

@@ -224,7 +224,7 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
             let redirectPath = '/';
             switch (auth.userInfo.role) {
                 case 'admin': redirectPath = '/Admin/Dashboard'; break;
-                case 'client': redirectPath = '/ClientProfile'; break;
+                case 'client': redirectPath = '/'; break;
                 case 'businessOwner': redirectPath = '/BOwnerHome'; break;
                 default:
                     console.warn("[AppContentWrapper] Unknown user role for redirect:", auth.userInfo.role);
@@ -303,7 +303,7 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
                     <Route path="/LocationMap" element={<LocationMap />} />
                     <Route path="/AboutUSDiagram" element={<AboutUSDiagram />} />
 
-                    <Route path="/Login" element={ auth.isLoggedIn && auth.userInfo ? (<Navigate to={ (auth.userInfo.role === 'admin' && '/Admin/Dashboard') || (auth.userInfo.role === 'client' && '/ClientProfile') || (auth.userInfo.role === 'businessOwner' && '/BOwnerHome') || '/' } replace /> ) : ( <Login /> )} />
+                    <Route path="/Login" element={ auth.isLoggedIn && auth.userInfo ? (<Navigate to={ (auth.userInfo.role === 'admin' && '/Admin/Dashboard') || (auth.userInfo.role === 'client' && '/') || (auth.userInfo.role === 'businessOwner' && '/BOwnerHome') || '/' } replace /> ) : ( <Login /> )} />
                     
                     <Route element={<ProtectedRoute requiredRole="client" />}>
                         <Route path="/UserCalendar" element={<UserCalendar userInfo={auth.userInfo} />} />
@@ -313,6 +313,7 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
                         <Route path="/ClientEmail" element={<ClientEmail />} />
                         <Route path="/BuyCard" element={<BuyCard />} />
                         <Route path="/WastePickForm" element={<WastePickForm />} />
+                        <Route path="/SaleForm" element={<SaleForm />} />
                     </Route>
 
                     <Route element={<ProtectedRoute requiredRole="businessOwner" />}>
@@ -321,7 +322,7 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
                          <Route path="/BOwnerProfile" element={<BOwnerProfile />} />
                          <Route path="/b-owner/profile/edit" element={<EditBOwnerProfilePage />} />
                          <Route path="/ProAddForm" element={<ProAddForm />} />
-                         <Route path="/SaleForm" element={<SaleForm />} />
+                         
                     </Route>
 
                      <Route element={<ProtectedRoute requiredRole="admin" />}>
