@@ -158,13 +158,13 @@
 }
 
 .CDis-calendar-day.CDis-available {
-  background-color: #e8f5e9;
-  border-color: #c8e6c9;
+  background-color: #5eee6a;
+  border-color: #005603;
   color: var(--primary-color);
 }
 
 .CDis-calendar-day.CDis-available:hover:not(:disabled) {
-  background-color: #c8e6c9;
+  background-color: #71ff71;
   border-color: var(--primary-color);
 }
 

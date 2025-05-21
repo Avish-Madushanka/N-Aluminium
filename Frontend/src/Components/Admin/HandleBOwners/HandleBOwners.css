@@ -110,58 +110,57 @@
   padding: 20px;
 }
 
-/* --- Action Buttons in Table --- */
 .action-buttons {
-  text-align: center; /* Center align buttons */
-  white-space: nowrap; /* Keep buttons on one line */
+  text-align: center;
+  white-space: nowrap; 
 }
 
 .action-buttons button {
   padding: 6px 14px;
-  margin: 0 5px; /* Space between buttons */
+  margin: 0 5px; 
   border: none;
   border-radius: 4px;
   cursor: pointer;
   font-size: 0.9em;
   font-weight: 500;
   transition: background-color 0.2s ease, transform 0.1s ease;
-  color: white;
+  color: rgb(68, 68, 68);
 }
 
 .action-buttons button:hover {
   opacity: 0.9;
 }
 .action-buttons button:active {
-  transform: scale(0.97); /* Slight press effect */
+  transform: scale(0.97);
 }
 
 .email-button {
-  background-color: #007bff; /* Primary blue */
+  background-color: #007bff; 
 }
 .email-button:hover {
   background-color: #0056b3;
 }
 
 .remove-button {
-  background-color: #dc3545; /* Danger red */
+  background-color: #dc3545; 
 }
 .remove-button:hover {
   background-color: #c82333;
 }
 
-/* --- Modal Styling --- */
+
 .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent dark background */
+  background-color: rgba(0, 0, 0, 0.6); 
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000; /* Ensure modal is on top */
-  padding: 20px; /* Add padding for smaller screens */
+  z-index: 1000; 
+  padding: 20px; 
   box-sizing: border-box;
 }
 
@@ -171,9 +170,9 @@
   border-radius: 8px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
   width: 100%;
-  max-width: 550px; /* Max width of the modal */
+  max-width: 550px; 
   z-index: 1001;
-  animation: fadeInModal 0.3s ease-out; /* Simple fade-in animation */
+  animation: fadeInModal 0.3s ease-out; 
 }
 
 @keyframes fadeInModal {
@@ -186,7 +185,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #e9ecef; /* Light border */
+  border-bottom: 1px solid #e9ecef; 
   padding-bottom: 15px;
   margin-bottom: 25px;
 }

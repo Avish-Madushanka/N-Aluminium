@@ -167,9 +167,9 @@ const ProAddForm = () => {
             required
           >
             <option value="">Select Type</option>
-            <option value="web">Web Development</option>
-            <option value="mobile">Mobile App Development</option>
-            <option value="design">UI/UX Design</option>
+            <option value="web">Aluminum Doors</option>
+            <option value="mobile">Aluminum Windows</option>
+            <option value="design">Full House</option>
             <option value="other">Other</option>
           </select>
         </div>
