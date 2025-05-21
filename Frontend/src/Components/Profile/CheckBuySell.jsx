@@ -216,6 +216,7 @@ const MyItemCard = ({ item, onDelete, onEdit }) => {
   };
 
   const handleDeleteClick = () => {
+    // Ask for confirmation before deleting
     if (window.confirm(`Are you sure you want to delete "${item.name}"? This cannot be undone.`)) {
       onDelete(item._id);
     }
@@ -228,6 +229,13 @@ const MyItemCard = ({ item, onDelete, onEdit }) => {
         alt={item.name || "Listed item"}
         className="my-item-image"
         onError={(e) => { e.target.onerror = null; e.target.src="https://via.placeholder.com/150"; }}
+      />
+      <div className="my-item-details">
+        <h3>{item.name || 'Unnamed Item'}</h3>
+        <p className="my-item-description">{item.description || 'No description.'}</p>
+        <p className="my-item-price">Rs: {item.price?.toLocaleString() ?? 'N/A'}</p>
+        <p className="my-item-location">{item.address || 'Location not specified'}</p>
+        <p className="my-item-type">Type: {item.type || 'N/A'}</p>
       </div>
       <div className="my-item-actions">
         <button onClick={() => onEdit(item)} className="action-btn edit-btn" title="Edit Item">
