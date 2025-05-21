@@ -1,9 +1,7 @@
-
-
 import React, { useState, useEffect, useRef } from 'react';
 import './ProAddForm.css';
-import axiosInstance from '../../api/axiosInstance'; // Adjusted path
-import API_ENDPOINTS from '../../apiConfig'; // Adjusted path
+import axiosInstance from '../../api/axiosInstance'; 
+import API_ENDPOINTS from '../../apiConfig'; 
 
 const ProAddForm = () => {
   const [title, setTitle] = useState('');
@@ -96,47 +94,28 @@ const ProAddForm = () => {
     formData.append('description', description);
     formData.append('projectType', projectType);
     selectedFiles.forEach(file => {
-      formData.append('projectImages', file); // Matches backend multer field name
+      formData.append('projectImages', file); 
     });
 
-    // No need to manually get token, axiosInstance interceptor handles it.
-    // const token = localStorage.getItem('authToken');
-    // if (!token) {
-    //     setMessage({ type: 'error', text: 'Authentication token not found. Please log in.' });
-    //     setIsLoading(false);
-    //     return;
-    // }
-
     try {
-      // API_ENDPOINTS.PROJECTS.CREATE should be '/projects' if your backend is at /api/projects
-      // Ensure API_ENDPOINTS has this:
-      // PROJECTS: { CREATE: '/projects' }
       const response = await axiosInstance.post(API_ENDPOINTS.PROJECTS.CREATE, formData, {
-        // Axios automatically sets Content-Type for FormData
-        // headers: { 'Content-Type': 'multipart/form-data' } // Not needed
       });
 
-      const result = response.data; // Axios puts response data in `data`
+      const result = response.data; 
 
-      if (result.success) { // Assuming your backend returns { success: true, ... }
+      if (result.success) { 
         setMessage({ type: 'success', text: result.message || 'Project added successfully!' });
         resetForm();
       } else {
-        // This else block might not be hit if backend errors are > 400,
-        // as Axios throws an error for non-2xx responses by default.
-        // The catch block will handle those.
         setMessage({ type: 'error', text: result.message || 'Failed to add project. Please try again.' });
       }
     } catch (error) {
       console.error('Submission error:', error);
       if (error.response && error.response.data) {
-        // Error from backend (e.g., validation, server error)
         setMessage({ type: 'error', text: error.response.data.message || 'An error occurred while submitting the project.' });
       } else if (error.request) {
-        // Network error (no response received)
         setMessage({ type: 'error', text: 'Network error. Please check your connection and try again.' });
       } else {
-        // Other errors (e.g., setting up the request)
         setMessage({ type: 'error', text: `An error occurred: ${error.message || 'Unknown error'}` });
       }
     } finally {

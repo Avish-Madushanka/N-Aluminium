@@ -73,7 +73,6 @@ textarea {
   background-color: #555;
 }
 
-/* ✅ New: image preview */
 .image-preview {
   width: 100%;
   max-height: 250px;
@@ -82,7 +81,6 @@ textarea {
   border-radius: 8px;
 }
 
-/* Optional: Error message styling */
 .error-message {
   color: #ff4d4d;
   margin-bottom: 10px;

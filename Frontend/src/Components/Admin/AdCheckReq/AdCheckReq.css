@@ -1,37 +1,25 @@
-/* src/Components/Admin/AdCheckReq/AdCheckReq.css */
-
-/* Apply a base font styling if this component is part of a larger app */
-/* body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
-    background-color: #f8fafc;
-    color: #1e293b;
-    line-height: 1.5;
-} */
-
-/* --- Main Container --- */
 .ad-check-req-container {
-    padding: 20px 24px; /* Default padding */
-    background-color: #ffffff; /* --content-bg-color */
-    border-radius: 0.5rem; /* --border-radius-lg */
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* --box-shadow-md */
-    margin: 20px; /* Adjust if it's a full-page component or part of a layout */
-    color: #1e293b; /* --text-primary-color */
+    padding: 20px 24px;
+    background-color: #ffffff;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    margin: 20px;
+    color: #1e293b;
 }
 
-/* --- Header Section --- */
 .adcr-header-section {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 24px;
     padding-bottom: 16px;
-    border-bottom: 1px solid #e2e8f0; /* --border-color */
+    border-bottom: 1px solid #e2e8f0;
 }
 
 .adcr-page-title {
-    font-size: 1.625rem; /* ~26px */
+    font-size: 1.625rem;
     font-weight: 700;
-    color: #1e293b; /* --text-primary-color */
+    color: #1e293b;
     margin: 0;
 }
 
@@ -40,20 +28,20 @@
     align-items: center;
     gap: 8px;
     padding: 10px 18px;
-    background-color: #f97316; /* --primary-color */
-    color: #ffffff; /* --content-bg-color */
+    background-color: #f97316;
+    color: #ffffff;
     border: none;
-    border-radius: 0.375rem; /* --border-radius-md */
-    font-size: 0.875rem; /* 14px */
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
     font-weight: 600;
     cursor: pointer;
     transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* --box-shadow-sm */
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 }
 
 .adcr-refresh-button:hover:not(:disabled) {
-    background-color: #ea580c; /* --primary-hover-color */
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* --box-shadow-md */
+    background-color: #ea580c;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
 .adcr-refresh-button:disabled {
@@ -62,65 +50,62 @@
     box-shadow: none;
 }
 
-/* --- Error Banner --- */
 .adcr-error-banner {
     display: flex;
     align-items: center;
     gap: 10px;
-    background-color: #fef2f2; /* --error-bg-color */
-    color: #ef4444; /* --error-color */
+    background-color: #fef2f2;
+    color: #ef4444;
     padding: 12px 16px;
-    border-radius: 0.375rem; /* --border-radius-md */
+    border-radius: 0.375rem;
     margin-bottom: 20px;
-    border: 1px solid #ef4444; /* --error-color */
+    border: 1px solid #ef4444;
     font-size: 0.9rem;
     font-weight: 500;
 }
 
 .adcr-error-banner svg {
-    flex-shrink: 0; /* Prevent icon from shrinking */
+    flex-shrink: 0;
 }
 
-/* --- Empty State --- */
 .adcr-empty-state-container {
     text-align: center;
     padding: 48px 24px;
-    border: 2px dashed #e2e8f0; /* --border-color */
-    border-radius: 0.5rem; /* --border-radius-lg */
+    border: 2px dashed #e2e8f0;
+    border-radius: 0.5rem;
     margin-top: 32px;
-    background-color: #f8fafc; /* --bg-color */
+    background-color: #f8fafc;
 }
 
 .adcr-empty-icon {
-    color: #f97316; /* --primary-color */
+    color: #f97316;
     margin-bottom: 20px;
 }
 
 .adcr-empty-state-title {
-    font-size: 1.375rem; /* ~22px */
+    font-size: 1.375rem;
     font-weight: 600;
-    color: #1e293b; /* --text-primary-color */
+    color: #1e293b;
     margin-bottom: 12px;
 }
 
 .adcr-empty-state-subtitle {
     font-size: 0.95rem;
-    color: #64748b; /* --text-secondary-color */
+    color: #64748b;
 }
 
-/* --- Table Styling --- */
 .adcr-table-wrapper {
     overflow-x: auto;
-    border: 1px solid #e2e8f0; /* --border-color */
-    border-radius: 0.5rem; /* --border-radius-lg */
-    background-color: #ffffff; /* --content-bg-color */
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* --box-shadow-sm */
+    border: 1px solid #e2e8f0;
+    border-radius: 0.5rem;
+    background-color: #ffffff;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 }
 
 .adcr-requests-table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 0.875rem; /* 14px */
+    font-size: 0.875rem;
 }
 
 .adcr-requests-table th,
@@ -128,15 +113,15 @@
     padding: 14px 18px;
     text-align: left;
     vertical-align: top;
-    border-bottom: 1px solid #e2e8f0; /* --border-color */
+    border-bottom: 1px solid #e2e8f0;
 }
 
 .adcr-requests-table th {
-    background-color: #f9fafb; /* Cool Gray 50, slightly darker than page bg */
+    background-color: #f9fafb;
     font-weight: 600;
-    color: #94a3b8; /* --text-tertiary-color */
+    color: #94a3b8;
     text-transform: uppercase;
-    font-size: 0.75rem; /* 12px */
+    font-size: 0.75rem;
     letter-spacing: 0.05em;
     white-space: nowrap;
 }
@@ -146,8 +131,8 @@
     margin-right: 8px;
     vertical-align: middle;
     position: relative;
-    top: -1px; /* Fine-tune icon alignment */
-    color: #475569; /* --secondary-color */
+    top: -1px;
+    color: #475569;
 }
 
 .adcr-table-row:last-child td {
@@ -155,26 +140,27 @@
 }
 
 .adcr-table-row:hover {
-    background-color: #fcfdff; /* Very subtle hover, almost white */
+    background-color: #fcfdff;
 }
 
 .adcr-td-style strong {
-    color: #1e293b; /* --text-primary-color */
-    font-weight: 600; /* Bolder names */
-    display: block; /* Ensure booking ID goes to next line if name is long */
+    color: #1e293b;
+    font-weight: 600;
+    display: block;
     margin-bottom: 2px;
 }
 
 .adcr-sub-text {
-    font-size: 0.8rem; /* ~13px */
-    color: #64748b; /* --text-secondary-color */
+    font-size: 0.8rem;
+    color: #64748b;
     margin-top: 5px;
     display: flex;
     align-items: center;
     gap: 5px;
 }
+
 .adcr-sub-text .icon {
-    color: #94a3b8; /* --text-tertiary-color */
+    color: #94a3b8;
 }
 
 .adcr-break-all {
@@ -184,61 +170,50 @@
 .adcr-location-cell {
     min-width: 220px;
 }
+
 .adcr-location-cell > div:first-child {
     font-weight: 500;
 }
 
-/* Row Loading Overlay Effect */
 .row-loading-overlay {
     position: relative;
     opacity: 0.7;
-    pointer-events: none; /* Disable interactions on row content while loading */
+    pointer-events: none;
 }
-.row-loading-overlay td:last-child { /* Keep actions cell interactive */
+
+.row-loading-overlay td:last-child {
     pointer-events: auto;
 }
 
-
-/* --- Status Badge --- */
 .status-badge {
     padding: 5px 12px;
-    border-radius: 9999px; /* Pill shape */
-    font-size: 0.75rem; /* 12px */
+    border-radius: 9999px;
+    font-size: 0.75rem;
     font-weight: 600;
     text-transform: capitalize;
     display: inline-block;
     line-height: 1.2;
-    /* Tailwind classes in JSX handle specific bg/text colors.
-       e.g., bg-yellow-100 text-yellow-800 */
 }
 
-/* If not using Tailwind, define base status colors here,
-   though they are already defined in JSX:
-.status-badge.pending { background-color: #fffbeb; color: #f59e0b; }
-.status-badge.confirmed { background-color: #ecfdf5; color: #10b981; }
-*/
-
-
-/* --- Action Buttons --- */
 .adcr-action-buttons-container {
     display: flex;
     gap: 8px;
     align-items: center;
-    flex-wrap: wrap; /* Allow wrapping on small screens */
+    flex-wrap: wrap;
 }
 
 .adcr-action-btn {
-    background-color: #ffffff; /* --content-bg-color */
-    border: 1px solid #e2e8f0; /* --border-color */
-    color: #475569; /* --secondary-color */
-    padding: 8px; /* Square buttons for icons */
-    border-radius: 0.375rem; /* --border-radius-md */
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    color: #475569;
+    padding: 8px;
+    border-radius: 0.375rem;
     cursor: pointer;
     transition: all 0.15s ease-in-out;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* --box-shadow-sm */
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 }
 
 .adcr-action-btn svg {
@@ -247,11 +222,11 @@
 }
 
 .adcr-action-btn:hover:not(:disabled) {
-    border-color: #f97316; /* --primary-color */
-    color: #f97316; /* --primary-color */
-    background-color: #fff7ed; /* --primary-light-color */
+    border-color: #f97316;
+    color: #f97316;
+    background-color: #fff7ed;
     transform: translateY(-1px);
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* --box-shadow-md */
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
 .adcr-action-btn:disabled {
@@ -261,48 +236,48 @@
     transform: none;
 }
 
-/* Specific Action Button Hover/Focus Styles (using specific theme colors) */
 .adcr-view-btn:hover:not(:disabled) {
-    border-color: #3b82f6; /* --info-color */
-    color: #3b82f6; /* --info-color */
-    background-color: #eff6ff; /* --info-bg-color */
-}
-.adcr-edit-btn:hover:not(:disabled) {
-    border-color: #f59e0b; /* --warning-color */
-    color: #f59e0b; /* --warning-color */
-    background-color: #fffbeb; /* --warning-bg-color */
-}
-.adcr-confirm-btn:hover:not(:disabled),
-.adcr-complete-btn:hover:not(:disabled) {
-    border-color: #10b981; /* --success-color */
-    color: #10b981; /* --success-color */
-    background-color: #ecfdf5; /* --success-bg-color */
-}
-.adcr-cancel-btn:hover:not(:disabled),
-.adcr-delete-btn:hover:not(:disabled) {
-    border-color: #ef4444; /* --error-color */
-    color: #ef4444; /* --error-color */
-    background-color: #fef2f2; /* --error-bg-color */
+    border-color: #3b82f6;
+    color: #3b82f6;
+    background-color: #eff6ff;
 }
 
-/* Button with text like "Mark Done" */
+.adcr-edit-btn:hover:not(:disabled) {
+    border-color: #f59e0b;
+    color: #f59e0b;
+    background-color: #fffbeb;
+}
+
+.adcr-confirm-btn:hover:not(:disabled),
+.adcr-complete-btn:hover:not(:disabled) {
+    border-color: #10b981;
+    color: #10b981;
+    background-color: #ecfdf5;
+}
+
+.adcr-cancel-btn:hover:not(:disabled),
+.adcr-delete-btn:hover:not(:disabled) {
+    border-color: #ef4444;
+    color: #ef4444;
+    background-color: #fef2f2;
+}
+
 .adcr-complete-btn {
-    padding: 8px 12px; /* More horizontal padding for text */
+    padding: 8px 12px;
     font-weight: 500;
     font-size: 0.8rem;
 }
+
 .adcr-complete-btn svg {
     margin-right: 6px;
 }
 
-
-/* --- Full Page Loading Spinner --- */
 .adcr-loading-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    min-height: 400px; /* Ensure it takes up space */
+    min-height: 400px;
     width: 100%;
     text-align: center;
     padding: 20px;
@@ -311,44 +286,40 @@
 .adcr-loading-container p {
     margin-top: 20px;
     font-size: 1.125rem;
-    color: #64748b; /* --text-secondary-color */
+    color: #64748b;
     font-weight: 500;
 }
 
-/* --- Modal Styles (Basic structure - EditBookingModal should have its own detailed CSS) --- */
-/* Assuming EditBookingModal might use these classes or similar for its root elements */
 .edit-booking-modal-overlay {
     position: fixed;
-    inset: 0; /* top, right, bottom, left = 0 */
-    background-color: rgba(15, 23, 42, 0.6); /* Cool Gray 900 with opacity */
+    inset: 0;
+    background-color: rgba(15, 23, 42, 0.6);
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 50; /* Ensure it's above other content */
+    z-index: 50;
     padding: 16px;
     backdrop-filter: blur(4px);
 }
 
 .edit-booking-modal-content {
-    background: #ffffff; /* --content-bg-color */
+    background: #ffffff;
     padding: 24px 32px;
-    border-radius: 0.5rem; /* --border-radius-lg */
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* --box-shadow-lg */
+    border-radius: 0.5rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
     width: 100%;
-    max-width: 600px; /* Adjust as needed */
-    /* Further styling for modal header, body, footer would go into EditBookingModal.css */
+    max-width: 600px;
     max-height: 90vh;
     overflow-y: auto;
 }
 
-/* Responsiveness for smaller screens */
 @media (max-width: 768px) {
     .ad-check-req-container {
         margin: 10px;
         padding: 16px;
     }
     .adcr-page-title {
-        font-size: 1.375rem; /* ~22px */
+        font-size: 1.375rem;
     }
     .adcr-refresh-button {
         padding: 8px 14px;
@@ -357,16 +328,16 @@
     .adcr-requests-table th,
     .adcr-requests-table td {
         padding: 10px 12px;
-        font-size: 0.8rem; /* Slightly smaller font for table on mobile */
+        font-size: 0.8rem;
     }
     .adcr-sub-text {
         font-size: 0.75rem;
     }
     .adcr-action-buttons-container {
-        gap: 6px; /* Smaller gap for buttons */
+        gap: 6px;
     }
     .adcr-action-btn {
-        padding: 7px; /* Slightly smaller buttons */
+        padding: 7px;
     }
     .adcr-complete-btn {
         padding: 7px 10px;
@@ -382,5 +353,4 @@
     .adcr-page-title {
         font-size: 1.25rem;
     }
-    /* Further fine-tuning for very small screens if needed */
 }

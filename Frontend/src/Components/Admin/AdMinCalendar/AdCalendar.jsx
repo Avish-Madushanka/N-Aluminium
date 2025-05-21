@@ -5,29 +5,25 @@ import {
 } from 'lucide-react';
 import { ClipLoader } from 'react-spinners';
 import './AdCalendar.css';
-import axiosInstance from '../../../api/axiosInstance'; // Adjust path as per your project structure
-import API_ENDPOINTS from '../../../apiConfig';   // CORRECTED: Assuming apiConfig.js is in src/api/
+import axiosInstance from '../../../api/axiosInstance'; 
+import API_ENDPOINTS from '../../../apiConfig';  
 
-// Define default days object outside the component to be a stable reference
 const DEFAULT_AVAILABLE_DAYS_OBJECT = { '0': false, '1': true, '2': false, '3': true, '4': false, '5': true, '6': false };
 
 const AdCalendar = () => {
-  // State Variables
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-  const [settingsData, setSettingsData] = useState(null); // Will be initialized in useEffect
+  const [settingsData, setSettingsData] = useState(null); 
   const [currentDate, setCurrentDate] = useState(new Date());
   const [activeTab, setActiveTab] = useState('dates');
   const [selectedDate, setSelectedDate] = useState(null);
 
-  // Editing States
   const [editingTimeSlot, setEditingTimeSlot] = useState(null);
   const [editingServiceArea, setEditingServiceArea] = useState(null);
   const [newSpecialDate, setNewSpecialDate] = useState({ date: '', status: 'available', reason: '' });
 
-  // Static Data
   const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
@@ -51,7 +47,6 @@ const AdCalendar = () => {
       setIsLoading(true);
       setError('');
       try {
-        // Ensure API_ENDPOINTS.CALENDAR_SETTINGS.GET is correctly defined
         if (!API_ENDPOINTS.CALENDAR_SETTINGS || !API_ENDPOINTS.CALENDAR_SETTINGS.GET) {
             throw new Error("API endpoint for getting calendar settings is not defined.");
         }
@@ -282,7 +277,7 @@ const AdCalendar = () => {
     };
     
     try {
-        // Ensure API_ENDPOINTS.CALENDAR_SETTINGS.UPDATE is correctly defined
+
         if (!API_ENDPOINTS.CALENDAR_SETTINGS || !API_ENDPOINTS.CALENDAR_SETTINGS.UPDATE) {
             throw new Error("API endpoint for updating calendar settings is not defined.");
         }
@@ -324,7 +319,6 @@ const AdCalendar = () => {
     return <div className="loading-container"><ClipLoader size={50} color="#f97316" /><span>Loading Settings...</span></div>;
   }
 
-  // Main component render
   return (
     <div className="admin-calendar-container">
       <div className="admin-header"><Settings size={24} className="header-icon" /><h1>Manage Pickup Availability</h1></div>
@@ -494,7 +488,6 @@ const AdCalendar = () => {
           </div>
         )}
 
-        {/* View Calendar Tab */}
         {activeTab === 'view' && (
           <div className="view-calendar-tab">
             <div className="tab-section">

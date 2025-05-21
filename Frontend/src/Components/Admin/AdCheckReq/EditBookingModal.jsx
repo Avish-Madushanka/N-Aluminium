@@ -1,10 +1,8 @@
-// src/Components/Admin/AdCheckReq/EditBookingModal.jsx
 import React from 'react';
 import { X, Save } from 'lucide-react';
 import { ClipLoader } from 'react-spinners';
 import './EditBookingModal.css';
 
-// Add timeSlots to props (serviceAreas is optional if you also change that field)
 function EditBookingModal({
     isOpen,
     onClose,
@@ -13,8 +11,8 @@ function EditBookingModal({
     onSave,
     isSaving,
     error,
-    timeSlots = [], // Default to empty array if not provided
-    // serviceAreas = []
+    timeSlots = [], 
+
 }) {
     if (!isOpen || !requestData) return null;
 
@@ -41,32 +39,29 @@ function EditBookingModal({
                     {error && <div className="modal-error-banner">{error}</div>}
 
                     <div className="form-grid">
-                        {/* Column 1 */}
                         <div className="form-group">
                             <label htmlFor="selectedDate" className="form-label">Pickup Date & Time*</label>
                             <input type="datetime-local" id="selectedDate" name="selectedDate" value={requestData.selectedDate || ''} onChange={onInputChange} className="form-input" required disabled={isSaving} />
                         </div>
                         <div className="form-group">
                             <label htmlFor="timeSlotId" className="form-label">Time Slot*</label>
-                            {/* Change to select dropdown */}
                             <select
                                 id="timeSlotId"
                                 name="timeSlotId"
                                 value={requestData.timeSlotId || ''}
                                 onChange={onInputChange}
-                                className="form-select" // Use form-select for consistent styling
+                                className="form-select"
                                 required
                                 disabled={isSaving || activeTimeSlots.length === 0}
                             >
                                 <option value="">Select Time Slot</option>
-                                {/* Ensure the currently selected timeSlotId is an option, even if not in activeTimeSlots (e.g., if it was deactivated) */}
                                 {requestData.timeSlotId && !activeTimeSlots.some(ts => ts.time === requestData.timeSlotId) && (
                                     <option value={requestData.timeSlotId} disabled>
                                         {requestData.timeSlotId} (Current)
                                     </option>
                                 )}
                                 {activeTimeSlots.map(slot => (
-                                    <option key={slot.id} value={slot.time}> {/* VALUE is slot.time */}
+                                    <option key={slot.id} value={slot.time}> 
                                         {slot.label} ({slot.time})
                                     </option>
                                 ))}
@@ -101,7 +96,6 @@ function EditBookingModal({
                         </div>
                         <div className="form-group">
                             <label htmlFor="serviceAreaId" className="form-label">Service Area ID*</label>
-                            {/* Keeping serviceAreaId as text for now, but could be a dropdown similar to timeSlotId */}
                             <input type="text" id="serviceAreaId" name="serviceAreaId" value={requestData.serviceAreaId || ''} onChange={onInputChange} className="form-input" placeholder="e.g., downtown-id" required disabled={isSaving} />
                         </div>
                         <div className="form-group">

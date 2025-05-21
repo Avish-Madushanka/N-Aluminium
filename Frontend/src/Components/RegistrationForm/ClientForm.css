@@ -1,6 +1,3 @@
-/* ClientForm.css - Modern and Creative Styling */
-
-/* Main Container Styling */
 .client-form-container {
   max-width: 600px;
   margin: 2rem auto;
@@ -23,7 +20,6 @@
   background: linear-gradient(90deg, #000a2e, #110c1f, #313131);
 }
 
-/* Form Header */
 .form-header {
   text-align: center;
   margin-bottom: 2rem;
@@ -50,7 +46,6 @@
   border-radius: 3px;
 }
 
-/* Form Group Styling */
 .form-group {
   margin-bottom: 1.5rem;
   position: relative;
@@ -92,14 +87,12 @@
   min-height: 100px;
 }
 
-/* Grid Layout */
 .form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
 }
 
-/* Profile Photo Upload */
 .profile-upload-container {
   display: flex;
   align-items: center;
@@ -135,7 +128,6 @@
   border-color: #a0aec0;
 }
 
-/* Submit Button */
 .submit-button1 {
   display: flex;
   justify-content: center;
@@ -165,7 +157,6 @@
   box-shadow: none;
 }
 
-/* Alert Messages */
 .alert {
   width: fit-content;
   padding: 1rem;
@@ -188,7 +179,6 @@
   border-left: 4px solid #38a169;
 }
 
-/* Animations */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
@@ -200,7 +190,6 @@
   opacity: 0;
 }
 
-/* Responsive adjustments */
 @media (max-width: 768px) {
   .client-form-container {
     margin: 1rem;
@@ -217,7 +206,6 @@
   }
 }
 
-/* Loading spinner styling */
 .spinner {
   animation: spin 1s linear infinite;
 }
@@ -226,7 +214,7 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
-/* Validation Styles */
+
 .input-error {
   border-color: var(--error-color) !important;
 }
@@ -245,7 +233,6 @@
   margin-right: 0.25rem;
 }
 
-/* Spinner Animation */
 .spinner {
   animation: spin 1s linear infinite;
 }
@@ -255,7 +242,6 @@
   to { transform: rotate(360deg); }
 }
 
-/* Profile Upload Styles */
 .profile-upload-container {
   display: flex;
   align-items: center;

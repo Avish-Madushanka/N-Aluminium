@@ -1,19 +1,18 @@
-/* START OF FILE Dashboard.css */
 .admin-dashboard-page {
     padding: 20px;
-    background-color: #f4f7fc; /* Light background for the whole page */
+    background-color: #f4f7fc; 
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    min-height: calc(100vh - 60px); /* Adjust 60px if your navbar height is different */
+    min-height: calc(100vh - 60px);
     box-sizing: border-box;
 }
 
 .admin-dashboard-main-title {
-    font-size: 1.8rem; /* Slightly smaller than before, but prominent */
-    color: #2c3e50; /* Darker, more professional blue/grey */
+    font-size: 1.8rem; 
+    color: #2c3e50; 
     margin-bottom: 20px;
     padding-bottom: 10px;
-    border-bottom: 3px solid #4A90E2; /* Blue underline as in image */
-    font-weight: 600; /* Bold */
+    border-bottom: 3px solid #4A90E2; 
+    font-weight: 600; 
     letter-spacing: 0.5px;
 }
 
@@ -44,24 +43,24 @@
     color: #721c24;
 }
 
-.admin-dashboard-section { /* Common class for Quick Actions and other top-level sections */
+.admin-dashboard-section { 
     background-color: #ffffff;
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06); /* Softer shadow */
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06); 
     margin-bottom: 25px;
 }
 
-.admin-dashboard-section-title { /* Title for Quick Actions section */
-    font-size: 1.1rem; /* Matching image's "Quick Actions" title size */
+.admin-dashboard-section-title { 
+    font-size: 1.1rem; 
     color: #333;
-    margin: 0 0 18px 0; /* Margin only at the bottom */
-    font-weight: 500; /* Medium weight */
-    border-bottom: 1px solid #eee; /* Subtle separator */
+    margin: 0 0 18px 0; 
+    font-weight: 500; 
+    border-bottom: 1px solid #eee; 
     padding-bottom: 10px;
 }
 
-.admin-dashboard-widget-title { /* Title for individual widgets like Map, Recent Bookings */
+.admin-dashboard-widget-title { 
     font-size: 1.05rem;
     color: #333;
     margin: 0 0 15px 0;
@@ -77,17 +76,17 @@
 }
 
 .admin-dashboard-action-btn {
-    background-color: #4A90E2; /* Blue color from image */
+    background-color: #4A90E2; 
     color: white;
     border: none;
-    padding: 10px 20px; /* Adjusted padding */
-    border-radius: 4px; /* Less rounded corners to match image */
-    font-size: 0.9rem; /* Adjusted font size */
+    padding: 10px 20px; 
+    border-radius: 4px;
+    font-size: 0.9rem; 
     font-weight: 500;
     cursor: pointer;
     transition: background-color 0.2s ease, transform 0.1s ease;
-    flex-grow: 1; /* Buttons will share space */
-    min-width: 150px; /* Minimum width for buttons */
+    flex-grow: 1;
+    min-width: 150px; 
     text-align: center;
 }
 .admin-dashboard-action-btn:hover {
@@ -95,34 +94,33 @@
     transform: translateY(-1px);
 }
 
-/* Widgets Grid Layout */
 .admin-dashboard-widgets-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive columns */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
     gap: 25px;
 }
 
 .admin-dashboard-widget {
     background-color: #ffffff;
-    padding: 15px; /* Slightly reduced padding for widgets */
-    border-radius: 6px; /* More subtle rounding for widgets */
+    padding: 15px; 
+    border-radius: 6px; 
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     display: flex;
     flex-direction: column;
 }
 
 .chart-widget {
-    min-height: 350px; /* Adjusted min-height */
+    min-height: 350px; 
 }
 
 .admin-dashboard-chart-container {
     position: relative;
     flex-grow: 1;
     width: 100%;
-    min-height: 280px; /* Default min height for charts */
-    display: flex; /* For centering no-data message */
-    align-items: center; /* For centering no-data message */
-    justify-content: center; /* For centering no-data message */
+    min-height: 280px;
+    display: flex;
+    align-items: center; 
+    justify-content: center; 
 }
 
 .user-distribution-widget .admin-dashboard-chart-container {
@@ -130,16 +128,14 @@
     max-height: 320px; 
 }
 
-.sales-chart-container { /* For the Line chart */
+.sales-chart-container { 
     min-height: 320px; 
 }
 
-/* Full Width Widget (for Sales and Recent Bookings) */
 .full-width-widget {
     grid-column: 1 / -1;
 }
 
-/* Map Placeholder */
 .map-widget {
     min-height: 350px;
 }
@@ -159,7 +155,6 @@
 .map-placeholder span { font-size: 0.8rem; margin-bottom: 12px; }
 .map-icon { font-size: 2.8rem; color: #4A90E2; }
 
-/* Recent Bookings Table */
 .recent-bookings-widget .table-responsive-container {
     overflow-x: auto;
     flex-grow: 1;
@@ -171,15 +166,15 @@
 }
 .recent-bookings-widget th,
 .recent-bookings-widget td {
-    padding: 10px 12px; /* Slightly reduced padding */
+    padding: 10px 12px; 
     text-align: left;
     border-bottom: 1px solid #e8edf3;
-    white-space: nowrap; /* Prevent text wrapping in cells */
+    white-space: nowrap; 
 }
 .recent-bookings-widget th {
     background-color: #f9fafc;
-    font-weight: 500; /* Medium weight for headers */
-    color: #455a64; /* Dark grey for header text */
+    font-weight: 500; 
+    color: #455a64;
     font-size: 0.8rem;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -192,15 +187,15 @@
     padding: 20px;
     color: #777;
     font-style: italic;
-    width: 100%; /* Ensure it spans if inside a flex container */
+    width: 100%;
 }
-td.no-data-message { /* For table cell */
+td.no-data-message {
     text-align: center !important;
 }
 
 
 .status-badge {
-    padding: 4px 10px; /* Smaller badges */
+    padding: 4px 10px;
     border-radius: 12px;
     font-size: 0.75rem;
     font-weight: 500;
@@ -217,7 +212,7 @@ td.no-data-message { /* For table cell */
 .status-unknown { background-color: #9E9E9E; }
 
 .view-details-btn {
-    background-color: #78909c; /* Muted grey/blue */
+    background-color: #78909c; 
     color: white;
     border: none;
     padding: 5px 10px;
@@ -231,14 +226,13 @@ td.no-data-message { /* For table cell */
 }
 
 
-/* Responsive Adjustments */
 @media (max-width: 1200px) {
      .full-width-widget {
-        grid-column: 1 / -1; /* Ensure sales and table remain full width */
+        grid-column: 1 / -1; 
     }
 }
 
-@media (max-width: 768px) { /* Tablet and smaller */
+@media (max-width: 768px) { 
     .admin-dashboard-main-title {
         font-size: 1.6rem;
     }
@@ -251,7 +245,7 @@ td.no-data-message { /* For table cell */
         min-width: 120px;
     }
     .admin-dashboard-widgets-grid {
-        grid-template-columns: 1fr; /* Single column */
+        grid-template-columns: 1fr; 
     }
     .chart-widget, .map-widget, .full-width-widget {
         grid-column: 1 / -1 !important;
@@ -265,12 +259,12 @@ td.no-data-message { /* For table cell */
     }
 }
 
-@media (max-width: 480px) { /* Mobile */
+@media (max-width: 480px) { 
     .admin-dashboard-page {
         padding: 15px;
     }
     .admin-dashboard-actions-container {
-        flex-direction: column; /* Stack buttons */
+        flex-direction: column; 
     }
     .admin-dashboard-action-btn {
         width: 100%;
@@ -290,4 +284,3 @@ td.no-data-message { /* For table cell */
         padding: 4px 8px;
     }
 }
-/* END OF FILE Dashboard.css */

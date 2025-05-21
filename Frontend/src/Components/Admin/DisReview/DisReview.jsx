@@ -11,14 +11,11 @@ const DisReview = () => {
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
-    // Simulate loading time
     setLoading(true);
     
     setTimeout(() => {
-      // Get reviews from localStorage
       const storedReviews = JSON.parse(localStorage.getItem('reviews')) || [];
       
-      // If no stored reviews, use default reviews
       const defaultReviews = [
         {
           id: 1,
@@ -55,15 +52,12 @@ const DisReview = () => {
     }, 800);
   }, []);
 
-  // Sort reviews based on selected sort option
   const getSortedReviews = () => {
     const filteredReviews = reviews.filter(review => {
-      // Apply rating filter
       if (filterRating !== 'all' && review.rating !== parseInt(filterRating)) {
         return false;
       }
       
-      // Apply search filter
       if (searchTerm && !review.name.toLowerCase().includes(searchTerm.toLowerCase()) && 
           !review.comment.toLowerCase().includes(searchTerm.toLowerCase())) {
         return false;
@@ -88,7 +82,6 @@ const DisReview = () => {
     });
   };
 
-  // Toggle selection for a review
   const toggleReviewSelection = (id) => {
     if (selectedReviews.includes(id)) {
       setSelectedReviews(selectedReviews.filter(reviewId => reviewId !== id));
@@ -97,7 +90,6 @@ const DisReview = () => {
     }
   };
 
-  // Toggle select all reviews
   const toggleSelectAll = () => {
     if (selectedReviews.length === getSortedReviews().length) {
       setSelectedReviews([]);
@@ -106,7 +98,6 @@ const DisReview = () => {
     }
   };
 
-  // Delete selected reviews
   const handleDeleteSelected = () => {
     const updatedReviews = reviews.filter(review => !selectedReviews.includes(review.id));
     setReviews(updatedReviews);
@@ -115,7 +106,6 @@ const DisReview = () => {
     setConfirmDelete(false);
   };
 
-  // Delete a single review
   const handleDeleteReview = (id) => {
     const updatedReviews = reviews.filter(review => review.id !== id);
     setReviews(updatedReviews);
@@ -123,7 +113,6 @@ const DisReview = () => {
     setSelectedReviews(selectedReviews.filter(reviewId => reviewId !== id));
   };
 
-  // Render stars for rating
   const renderStars = (rating) => {
     const stars = [];
     for (let i = 1; i <= 5; i++) {
@@ -139,7 +128,6 @@ const DisReview = () => {
     return stars;
   };
 
-  // Format date to be more readable
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', {

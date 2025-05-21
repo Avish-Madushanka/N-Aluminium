@@ -13,7 +13,6 @@ const BSHeader = () => {
   const [error, setError] = useState(null);
   const [selectedProduct, setSelectedProduct] = useState(null);
 
-  // Fetch sale items from the API
   useEffect(() => {
     const fetchSaleItems = async () => {
       try {
@@ -50,34 +49,28 @@ const BSHeader = () => {
     setSelectedProduct(null);
   };
 
-  // Filter products based on search query and selected filter
   const filteredProducts = saleItems.filter((product) => {
     const nameMatch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
     const filterMatch = selectedFilter ? product.type === selectedFilter : true;
     return nameMatch && filterMatch;
   });
 
-  // Get the full image URL
   const getImageUrl = (imagePath) => {
     if (!imagePath) return "https://via.placeholder.com/300x200?text=No+Image";
     
-    // If it's already a full URL, return it
     if (imagePath.startsWith('http')) return imagePath;
     
-    // Otherwise, construct the URL using the backend root
     const backendRoot = API_ENDPOINTS.BACKEND_ROOT_URL;
     return `${backendRoot}${imagePath}`;
   };
 
   return (
     <div className="bs-container">
-      {/* Header Section */}
       <div className="bs-header">
         <h1 className="bs-title">Buy & Sell Reuse Items</h1>
         <p className="bs-subtitle">Find quality used aluminum items or sell your own</p>
       </div>
 
-      {/* Filter Controls */}
       <div className="bs-controls">
         <div className="bs-search-container">
           <input
@@ -105,7 +98,6 @@ const BSHeader = () => {
         </a>
       </div>
 
-      {/* Loading and Error States */}
       {loading && (
         <div className="bs-loading">
           <div className="bs-spinner"></div>
@@ -126,7 +118,6 @@ const BSHeader = () => {
         </div>
       )}
 
-      {/* Product Grid */}
       {!loading && !error && (
         <div className="bs-product-grid">
           {filteredProducts.length > 0 ? (
@@ -176,7 +167,6 @@ const BSHeader = () => {
         </div>
       )}
 
-      {/* BuyCard Modal - Pass the selected product data */}
       {isBuyCardOpen && <BuyCard onClose={closeBuyCard} product={selectedProduct} />}
     </div>
   );

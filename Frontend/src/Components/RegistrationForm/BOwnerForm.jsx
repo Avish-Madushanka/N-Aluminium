@@ -1,15 +1,13 @@
-// src/Components/RegistrationForm/BOwnerForm.jsx
 import React, { useState, useEffect } from 'react';
-import axiosInstance from '../../api/axiosInstance'; // Make sure path is correct
-import API_ENDPOINTS from '../../apiConfig';     // Make sure path is correct
+import axiosInstance from '../../api/axiosInstance'; 
+import API_ENDPOINTS from '../../apiConfig';    
 import { useNavigate } from 'react-router-dom';
 import { FileImage, AlertCircle, Mail, Phone, Lock, Home, MapPin, User, Briefcase, Image, X } from 'lucide-react';
-import './BOwnerForm.css'; // Your CSS
+import './BOwnerForm.css'; 
 
-// --- CONFIGURATION CONSTANTS ---
 const MAX_FILE_SIZE_MB = 5;
 const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
-const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg']; // Added 'image/jpg' for completeness
+const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg']; 
 
 function BOwnerForm() {
   const [formData, setFormData] = useState({
@@ -18,8 +16,8 @@ function BOwnerForm() {
     ownerName: '',
     address: '',
     contactNumber: '',
-    district: '', // Consider setting a default like 'colombo' if appropriate
-    province: '', // Consider setting a default like 'western'
+    district: '', 
+    province: '', 
     email: '',
     password: '',
   });
@@ -33,48 +31,43 @@ function BOwnerForm() {
 
   const navigate = useNavigate();
 
-  // --- MISSING HANDLER FUNCTIONS - RE-ADD THESE ---
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prevData => ({ ...prevData, [name]: value }));
-    setError(''); // Clear general errors on input change
+    setError(''); 
 
-    // Basic inline validation example (can be expanded or moved to a separate validation function)
     if (name === "contactNumber") {
         if (value && !/^[0-9]{10}$/.test(value) && value.length <= 10) {
-            // Temporarily set an error, or use a more sophisticated validation state per field
-            // For now, we'll just clear the main error and let submit validation catch it
+
         }
     }
     if (name === "email") {
-        // Basic email format check (can be improved)
         if (value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
-            // Similar to contact number, handle inline error display if desired
+
         }
     }
   };
 
   const handleFileChange = (e, setFileState, setPreviewState, currentPreviewUrl) => {
     const file = e.target.files?.[0] || null;
-    setError(''); // Clear previous file errors
+    setError(''); 
 
-    // Revoke old URL if it exists
     if (currentPreviewUrl) {
       URL.revokeObjectURL(currentPreviewUrl);
     }
 
     if (file) {
-      // Client-side validation
       if (file.size > MAX_FILE_SIZE_BYTES) {
         setError(`File "${file.name}" is too large. Max ${MAX_FILE_SIZE_MB}MB.`);
-        e.target.value = null; // Reset file input
+        e.target.value = null; 
         setFileState(null);
         setPreviewState(null);
         return;
       }
       if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
         setError(`Invalid file type for "${file.name}". Allowed: ${ALLOWED_IMAGE_TYPES.join(', ')}`);
-        e.target.value = null; // Reset file input
+        e.target.value = null; 
         setFileState(null);
         setPreviewState(null);
         return;
@@ -84,7 +77,7 @@ function BOwnerForm() {
       const newPreviewUrl = URL.createObjectURL(file);
       setPreviewState(newPreviewUrl);
     } else {
-      // If no file is selected (e.g., user cancels file dialog)
+
       setFileState(null);
       setPreviewState(null);
     }
@@ -99,26 +92,23 @@ function BOwnerForm() {
   };
 
   const clearFile = (fileType) => {
-    setError(''); // Clear any existing errors
+    setError(''); 
     if (fileType === 'profile') {
         if (profilePreview) URL.revokeObjectURL(profilePreview);
         setProfilePhotoFile(null);
         setProfilePreview(null);
-        // Reset the file input element
         const profileInput = document.getElementById('profilePhotoUpload');
         if (profileInput) profileInput.value = null;
+
     } else if (fileType === 'cover') {
         if (coverPreview) URL.revokeObjectURL(coverPreview);
         setCoverPhotoFile(null);
         setCoverPreview(null);
-        // Reset the file input element
         const coverInput = document.getElementById('coverPhotoUpload');
         if (coverInput) coverInput.value = null;
     }
   };
-  // --- END OF MISSING HANDLER FUNCTIONS ---
 
-  // --- useEffect for revoking object URLs on unmount ---
   useEffect(() => {
     return () => {
       if (profilePreview) URL.revokeObjectURL(profilePreview);
@@ -127,17 +117,14 @@ function BOwnerForm() {
   }, [profilePreview, coverPreview]);
 
 
-  // --- Form Submission ---
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setSuccess('');
 
-    // Frontend Validations
     const requiredFields = ['businessId', 'businessName', 'ownerName', 'address', 'contactNumber', 'district', 'province', 'email', 'password'];
     for (const field of requiredFields) {
         if (!formData[field] || String(formData[field]).trim() === '') {
-            // Capitalize first letter of field name for user-friendly message
             const fieldName = field.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
             setError(`${fieldName} is required.`);
             return;
@@ -155,7 +142,6 @@ function BOwnerForm() {
         setError("Password must be at least 6 characters long.");
         return;
     }
-    // Add other frontend validations if necessary
 
     setLoading(true);
 
@@ -171,16 +157,16 @@ function BOwnerForm() {
       
       if (response.data && response.data.success) {
         setSuccess('Business registration successful! Redirecting to login...');
-        setFormData({ // Reset form
+        setFormData({ 
             businessId: '', businessName: '', ownerName: '', address: '', 
             contactNumber: '', district: '', province: '', email: '', password: '' 
         });
-        clearFile('profile'); // Clear files and previews
+        clearFile('profile'); 
         clearFile('cover');
-        setLoading(false); // Set loading false before timeout
+        setLoading(false); 
         setTimeout(() => navigate('/login'), 2000);
       } else {
-        // Handle cases where API returns 2xx but success: false
+
         throw new Error(response.data?.message || 'Business registration failed: Unexpected server response.');
       }
     } catch (err) {
@@ -193,39 +179,35 @@ function BOwnerForm() {
         setError(err.message || `An unexpected error occurred.`);
       }
     }
-    // No finally block needed for setLoading(false) as it's handled in try/catch
   };
 
-  // --- JSX Rendering ---
   return (
     <div className="BR-business-form-container">
       <div className="BR-form-wrapper">
         <h2 className="BR-form-title">Business Owner Registration</h2>
 
         {error && (
-          <div className="BR-error-message"> {/* Ensure this class is styled */}
+          <div className="BR-error-message"> 
             <AlertCircle size={20} />
             <span>{error}</span>
           </div>
         )}
         {success && (
-          <div className="BR-success-message"> {/* Ensure this class is styled */}
+          <div className="BR-success-message"> 
             <span>{success}</span>
           </div>
         )}
 
         <form onSubmit={handleSubmit} encType="multipart/form-data">
-            {/* Business ID Field */}
             <div className="BR-form-group" style={{"--index": 0}}>
                 <label htmlFor="businessId">
                 <Briefcase size={16} className="mr-1 inline" /> Business ID*
                 </label>
                 <input type="text" id="businessId" name="businessId" value={formData.businessId} 
-                       onChange={handleChange} // Using re-added handleChange
+                       onChange={handleChange} 
                        placeholder="Enter Business Registration ID" required disabled={loading} />
             </div>
 
-            {/* Business Name Field */}
             <div className="BR-form-group" style={{"--index": 1}}>
                 <label htmlFor="businessName">
                 <Briefcase size={16} className="mr-1 inline" /> Business Name*
@@ -235,7 +217,6 @@ function BOwnerForm() {
                        placeholder="Enter Official Business Name" required disabled={loading} />
             </div>
 
-            {/* Owner Name Field */}
             <div className="BR-form-group" style={{"--index": 2}}>
                 <label htmlFor="ownerName">
                 <User size={16} className="mr-1 inline" /> Owner's Full Name*
@@ -245,7 +226,6 @@ function BOwnerForm() {
                        placeholder="Enter Owner's Full Name" required disabled={loading} />
             </div>
 
-            {/* Business Address Field */}
             <div className="BR-form-group" style={{"--index": 3}}>
                 <label htmlFor="address">
                 <Home size={16} className="mr-1 inline" /> Business Address*
@@ -255,7 +235,6 @@ function BOwnerForm() {
                           placeholder="Enter Full Business Address" rows="3" required disabled={loading}></textarea>
             </div>
 
-            {/* Contact Number Field */}
             <div className="BR-form-group" style={{"--index": 4}}>
                 <label htmlFor="contactNumber">
                 <Phone size={16} className="mr-1 inline" /> Contact Number* (10 digits)
@@ -265,7 +244,6 @@ function BOwnerForm() {
                        placeholder="e.g., 07XXXXXXXX" required pattern="[0-9]{10}" title="Please enter a 10-digit phone number" disabled={loading} />
             </div>
 
-            {/* District and Province Fields */}
             <div className="BR-form-group BR-horizontal" style={{"--index": 5}}>
                 <div className="BR-input-group">
                 <label htmlFor="district">
@@ -291,7 +269,6 @@ function BOwnerForm() {
                 </div>
             </div>
 
-            {/* Email Address Field */}
             <div className="BR-form-group" style={{"--index": 6}}>
                 <label htmlFor="email">
                 <Mail size={16} className="mr-1 inline" /> Email Address*
@@ -301,7 +278,6 @@ function BOwnerForm() {
                        placeholder="Enter Business Login Email" required disabled={loading} />
             </div>
 
-            {/* Password Field */}
             <div className="BR-form-group" style={{"--index": 7}}>
                 <label htmlFor="password">
                 <Lock size={16} className="mr-1 inline" /> Password*
@@ -312,14 +288,13 @@ function BOwnerForm() {
             </div>
 
 
-          {/* Profile Photo Upload */}
           <div className="BR-form-group BR-file-input-group" style={{"--index": 8}}>
             <label>
               <User size={16} className="mr-1 inline" /> Profile Photo (Optional)
             </label>
             <div className="BR-file-input-area">
                 <input type="file" id="profilePhotoUpload" 
-                       onChange={handleProfilePhotoChange} // Using re-added function
+                       onChange={handleProfilePhotoChange} 
                        style={{ display: 'none' }} disabled={loading} accept={ALLOWED_IMAGE_TYPES.join(",")} />
                 <label htmlFor="profilePhotoUpload" className={`BR-upload-button ${loading ? 'BR-disabled' : ''}`}>
                     <FileImage size={18} />
@@ -344,14 +319,13 @@ function BOwnerForm() {
             )}
           </div>
 
-          {/* Cover Photo Upload */}
           <div className="BR-form-group BR-file-input-group" style={{"--index": 9}}>
             <label>
               <Image size={16} className="mr-1 inline" /> Cover Photo (Optional)
             </label>
             <div className="BR-file-input-area">
                 <input type="file" id="coverPhotoUpload" 
-                       onChange={handleCoverPhotoChange} // Using re-added function
+                       onChange={handleCoverPhotoChange}
                        style={{ display: 'none' }} disabled={loading} accept={ALLOWED_IMAGE_TYPES.join(",")} />
                 <label htmlFor="coverPhotoUpload" className={`BR-upload-button ${loading ? 'BR-disabled' : ''}`}>
                     <FileImage size={18} />
@@ -376,7 +350,6 @@ function BOwnerForm() {
             )}
           </div>
 
-          {/* Submit Button */}
           <button type="submit" className="BR-submit-button" disabled={loading}>
             {loading ? (
                 <svg className="spinner" width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor">

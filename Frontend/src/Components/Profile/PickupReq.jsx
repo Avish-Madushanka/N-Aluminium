@@ -4,11 +4,11 @@ import {
   Search, Filter, MoreHorizontal, RefreshCw, XCircle, AlertTriangle,
   Calendar as CalendarIcon, CheckSquare, Clock as ClockIcon, Info, CheckCircle, User
 } from 'lucide-react';
-import "./PickupReq.css"; // Make sure this CSS file exists and is correctly styled
+import "./PickupReq.css"; 
 
-import { useAuth } from '../../context/AuthContext'; // Adjust path as needed
-import axiosInstance from '../../api/axiosInstance';   // Adjust path as needed
-import API_ENDPOINTS from '../../apiConfig';      // Adjust path as needed
+import { useAuth } from '../../context/AuthContext';
+import axiosInstance from '../../api/axiosInstance';
+import API_ENDPOINTS from '../../apiConfig';
 
 const STATUS_BADGES = {
   'pending': { color: 'badge-pending', icon: <Clock size={14} />, label: 'Pending' },
@@ -17,7 +17,7 @@ const STATUS_BADGES = {
   'cancelled': { color: 'badge-cancelled', icon: <XCircle size={14} />, label: 'Cancelled' },
 };
 
-// Helper Functions
+
 const formatDate = (dateString) => {
   if (!dateString) return 'N/A';
   const date = new Date(dateString);
@@ -32,29 +32,27 @@ const formatDate = (dateString) => {
 const formatWeight = (weightValue) => {
   if (weightValue === null || weightValue === undefined || isNaN(parseFloat(weightValue))) return "N/A";
   const weight = parseFloat(weightValue);
-  if (weight < 0) return "Invalid"; // Should be caught by backend validation too
+  if (weight < 0) return "Invalid"; 
   return `${weight.toFixed(1)} kg`;
 };
 
 const PickupReq = () => {
   const { userInfo, isLoggedIn } = useAuth();
 
-  // Main state
   const [bookings, setBookings] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [detailView, setDetailView] = useState(null);
 
-  // Filtering and pagination state
   const [filters, setFilters] = useState({
     status: 'all',
     dateFrom: '',
     dateTo: '',
     searchTerm: ''
   });
-  const [sortBy, setSortBy] = useState('date-desc'); // Default sort
+  const [sortBy, setSortBy] = useState('date-desc'); 
   const [page, setPage] = useState(1);
-  const [itemsPerPage] = useState(5); // Items per page
+  const [itemsPerPage] = useState(5); 
 
   const fetchMyBookings = useCallback(async () => {
     if (!isLoggedIn || !userInfo?.id) {
@@ -87,45 +85,40 @@ const PickupReq = () => {
   }, [fetchMyBookings]);
 
 
-  // Apply filters and sorting using useMemo for efficiency
   const filteredBookings = useMemo(() => {
     return bookings.filter(booking => {
-      // Status filter
       if (filters.status !== 'all' && booking.status !== filters.status) {
         return false;
       }
 
-      // Date range filter
       const bookingDate = new Date(booking.selectedDate);
-      bookingDate.setHours(0, 0, 0, 0); // Normalize booking date to start of day
+      bookingDate.setHours(0, 0, 0, 0); 
 
       if (filters.dateFrom) {
         const fromDate = new Date(filters.dateFrom);
-        fromDate.setHours(0, 0, 0, 0); // Normalize fromDate
+        fromDate.setHours(0, 0, 0, 0); 
         if (bookingDate < fromDate) return false;
       }
 
       if (filters.dateTo) {
         const toDate = new Date(filters.dateTo);
-        toDate.setHours(23, 59, 59, 999); // Normalize toDate to end of day
+        toDate.setHours(23, 59, 59, 999); 
         if (bookingDate > toDate) return false;
       }
 
-      // Search term filter
       if (filters.searchTerm) {
         const searchLower = filters.searchTerm.toLowerCase();
         return (
           booking.bookingId?.toLowerCase().includes(searchLower) ||
           booking.contactDetails?.name?.toLowerCase().includes(searchLower) ||
           booking.pickupLocation?.toLowerCase().includes(searchLower) ||
-          (booking.timeSlotId && booking.timeSlotId.toLowerCase().includes(searchLower)) || // Search by timeSlotId string
-          (booking.serviceAreaId && booking.serviceAreaId.toLowerCase().includes(searchLower)) // Search by serviceAreaId string
+          (booking.timeSlotId && booking.timeSlotId.toLowerCase().includes(searchLower)) || 
+          (booking.serviceAreaId && booking.serviceAreaId.toLowerCase().includes(searchLower)) 
         );
       }
 
       return true;
     }).sort((a, b) => {
-      // Sorting logic
       switch (sortBy) {
         case 'date-asc':
           return new Date(a.selectedDate) - new Date(b.selectedDate);
@@ -134,59 +127,51 @@ const PickupReq = () => {
         case 'status':
           return (STATUS_BADGES[a.status]?.label || '').localeCompare(STATUS_BADGES[b.status]?.label || '');
         default:
-          return new Date(b.selectedDate) - new Date(a.selectedDate); // Default: newest first
+          return new Date(b.selectedDate) - new Date(a.selectedDate); 
       }
     });
-  }, [bookings, filters, sortBy]); // Recalculate when these change
+  }, [bookings, filters, sortBy]); 
 
-  // Calculate pagination based on filtered data
   const totalPages = Math.ceil(filteredBookings.length / itemsPerPage);
   const paginatedBookings = useMemo(() => {
     return filteredBookings.slice(
       (page - 1) * itemsPerPage,
       page * itemsPerPage
     );
-  }, [filteredBookings, page, itemsPerPage]); // Recalculate when these change
+  }, [filteredBookings, page, itemsPerPage]); 
 
 
-  // Handle filter changes
   const handleFilterChange = (key, value) => {
     setFilters(prev => ({ ...prev, [key]: value }));
-    setPage(1); // Reset to first page when filters change
+    setPage(1); 
   };
 
-  // View booking details
   const openDetailView = (bookingId) => {
     const booking = bookings.find(b => b.bookingId === bookingId);
     setDetailView(booking);
   };
 
-  // Close detail view
   const closeDetailView = () => {
     setDetailView(null);
   };
 
-  // Handle status change (e.g., cancelling a booking)
   const handleStatusChange = async (bookingId, newStatus) => {
     if (newStatus === 'cancelled' && !window.confirm('Are you sure you want to cancel this booking?')) {
       return;
     }
 
-    setIsLoading(true); // Indicate an action is in progress
+    setIsLoading(true); 
     try {
-        // API_ENDPOINTS.BOOKINGS.UPDATE_STATUS(bookingId) should resolve to `/bookings/:id/status`
         const response = await axiosInstance.put(API_ENDPOINTS.BOOKINGS.UPDATE_STATUS(bookingId), { status: newStatus });
         if (response.data && response.data.success) {
-            // Successfully updated on backend, now update frontend state
             const updatedBookingFromServer = response.data.data;
             setBookings(prevBookings =>
                 prevBookings.map(booking =>
                     booking.bookingId === bookingId
-                        ? updatedBookingFromServer // Replace with the fresh data from server
+                        ? updatedBookingFromServer 
                         : booking
                 )
             );
-            // If this booking was in detail view, update that too
             if (detailView && detailView.bookingId === bookingId) {
                 setDetailView(updatedBookingFromServer);
             }
@@ -203,12 +188,11 @@ const PickupReq = () => {
 
 
   const refreshBookings = () => {
-    fetchMyBookings(); // Re-fetch all bookings for the user
+    fetchMyBookings(); 
   };
 
-  // Render the status badge
   const renderStatusBadge = (status) => {
-    const statusInfo = STATUS_BADGES[status] || STATUS_BADGES.pending; // Default to pending if unknown
+    const statusInfo = STATUS_BADGES[status] || STATUS_BADGES.pending; 
     return (
       <span className={`status-badge ${statusInfo.color}`}>
         {statusInfo.icon}
@@ -217,9 +201,7 @@ const PickupReq = () => {
     );
   };
 
-  // Render each booking card
   const renderBookingCard = (booking) => {
-    // Display IDs directly as backend sends string IDs for timeSlotId and serviceAreaId
     const timeSlotDisplay = booking.timeSlotId || 'N/A';
     const estimatedWeightDisplay = formatWeight(booking.estimatedWeight);
     const serviceAreaDisplay = booking.serviceAreaId || 'N/A';
@@ -239,12 +221,12 @@ const PickupReq = () => {
               {formatDate(booking.selectedDate)}
               <span className="separator">|</span>
               <ClockIcon size={14} />
-              {timeSlotDisplay} {/* Display ID */}
+              {timeSlotDisplay} 
             </p>
 
-            <p className="material-info"> {/* Changed to reflect Service Area instead of Material Type */}
+            <p className="material-info">
               <Package size={14} />
-              Service Area: {serviceAreaDisplay} {/* Display ID */}
+              Service Area: {serviceAreaDisplay} 
               <span className="separator">|</span>
               <Weight size={14} />
               {estimatedWeightDisplay}
@@ -264,7 +246,6 @@ const PickupReq = () => {
               View Details
             </button>
 
-            {/* Allow cancellation only for pending or confirmed */}
             {(booking.status === 'pending' || booking.status === 'confirmed') && (
               <div className="dropdown">
                 <button className="dropdown-btn" aria-label="More actions">
@@ -313,7 +294,6 @@ const PickupReq = () => {
     );
   };
 
-  // Render the detailed view modal
   const renderDetailView = () => {
     if (!detailView) return null;
 
@@ -344,7 +324,7 @@ const PickupReq = () => {
                     className="cancel-booking-btn"
                     onClick={() => {
                       handleStatusChange(detailView.bookingId, 'cancelled');
-                      closeDetailView(); // Close modal after action
+                      closeDetailView(); 
                     }}
                   >
                     Cancel Booking
@@ -354,7 +334,6 @@ const PickupReq = () => {
             </div>
 
             <div className="detail-sections">
-              {/* Pickup Details Section */}
               <div className="detail-section">
                 <h4><CalendarIcon size={16} /> Pickup Details</h4>
                 <div className="detail-item">
@@ -375,23 +354,14 @@ const PickupReq = () => {
                 </div>
               </div>
 
-              {/* Item Details Section */}
               <div className="detail-section">
                 <h4><Package size={16} /> Item Details</h4>
                 <div className="detail-item">
                   <span className="detail-label">Est. Weight:</span>
                   <span className="detail-value">{formatWeight(detailView.estimatedWeight)}</span>
                 </div>
-                {/* User-submitted notes are not part of Booking.js model currently, only adminNotes */}
-                {/* If there were user notes:
-                {detailView.userNotes && (
-                  <div className="detail-item notes-item">
-                    <span className="detail-label">Your Notes:</span>
-                    <span className="detail-value notes-value">{detailView.userNotes}</span>
-                  </div>
-                )}
-                */}
-                {detailView.adminNotes && ( // Display admin notes if they exist
+
+                {detailView.adminNotes && ( 
                   <div className="detail-item notes-item">
                     <span className="detail-label">Admin Notes:</span>
                     <span className="detail-value notes-value">{detailView.adminNotes}</span>
@@ -399,7 +369,6 @@ const PickupReq = () => {
                 )}
               </div>
 
-              {/* Contact Information Section */}
               <div className="detail-section">
                 <h4><User size={16} /> Contact Information</h4>
                 <div className="detail-item">
@@ -416,7 +385,6 @@ const PickupReq = () => {
                 </div>
               </div>
 
-              {/* Completion Details Section (Only if Completed and data exists) */}
               {detailView.status === 'completed' && detailView.completionDetails && (
                 <div className="detail-section completion-section">
                   <h4><CheckSquare size={16} /> Completion Details</h4>
@@ -444,7 +412,6 @@ const PickupReq = () => {
               )}
             </div>
 
-            {/* Booking Timeline */}
             <div className="booking-timeline">
               <h4>Booking Timeline</h4>
               <div className="timeline">
@@ -490,7 +457,6 @@ const PickupReq = () => {
   };
 
 
-  // --- Main Component Return ---
   return (
     <div className="user-bookings-container">
       <div className="user-bookings-header">
@@ -508,7 +474,6 @@ const PickupReq = () => {
         </div>
       )}
 
-      {/* Filter Container */}
       <div className="filter-container">
         <div className="search-bar">
           <Search size={16} />
@@ -579,7 +544,6 @@ const PickupReq = () => {
         </div>
       </div>
 
-      {/* Bookings List Area */}
       <div className="bookings-list">
         {isLoading ? (
           <div className="loading-spinner">

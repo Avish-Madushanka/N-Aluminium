@@ -1,14 +1,10 @@
-// src/Components/Profile/ClientProfile.jsx
-// Allows updating profile, but form starts empty. Shows current email/photo.
-
-import React, { useState, useEffect, useRef } from "react"; // Added useRef
+import React, { useState, useEffect, useRef } from "react"; 
 import { FileImage, Mail, Truck, ShoppingCart, User, AlertCircle, CheckCircle } from "lucide-react";
-import { useNavigate } from "react-router-dom"; // Removed Link as it's not used
+import { useNavigate } from "react-router-dom";
 import axiosInstance from '../../api/axiosInstance';
 import API_ENDPOINTS from '../../apiConfig';
 import "./ClientProfile.css";
 
-// --- Helper Functions ---
 const getTokenFromStorage = () => localStorage.getItem("token");
 
 const getUserInfoFromStorage = (field = null) => {
@@ -21,7 +17,6 @@ const getUserInfoFromStorage = (field = null) => {
     } return null;
 };
 
-// --- Component ---
 export default function ClientProfile() {
     const [profileUpdateData, setProfileUpdateData] = useState({
         name: "",
@@ -33,7 +28,7 @@ export default function ClientProfile() {
     });
     const [profilePhotoFile, setProfilePhotoFile] = useState(null);
     const [photoPreviewUrl, setPhotoPreviewUrl] = useState(null);
-    const [currentBlobUrl, setCurrentBlobUrl] = useState(null); // For managing blob lifetime
+    const [currentBlobUrl, setCurrentBlobUrl] = useState(null);
 
     const [currentEmail, setCurrentEmail] = useState('');
     const [userId, setUserId] = useState('');
@@ -41,12 +36,12 @@ export default function ClientProfile() {
 
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
-    const [fieldValidationErrors, setFieldValidationErrors] = useState({}); // Renamed from 'errors'
+    const [fieldValidationErrors, setFieldValidationErrors] = useState({}); 
     const [success, setSuccess] = useState('');
     const [activeButton, setActiveButton] = useState(null);
 
     const navigate = useNavigate();
-    const fileInputRef = useRef(null); // For resetting file input
+    const fileInputRef = useRef(null); 
 
     useEffect(() => {
         const id = getUserInfoFromStorage('id');
@@ -66,7 +61,6 @@ export default function ClientProfile() {
         }
     }, [navigate]);
 
-    // Cleanup blob URL on unmount
     useEffect(() => {
         return () => {
             if (currentBlobUrl) {
@@ -80,11 +74,8 @@ export default function ClientProfile() {
         if (photoPath.startsWith('http') || photoPath.startsWith('blob:')) {
              return photoPath;
         }
-        const backendUrl = API_ENDPOINTS.BACKEND_ROOT_URL || ''; // Ensure this points to server root e.g. http://localhost:5003
+        const backendUrl = API_ENDPOINTS.BACKEND_ROOT_URL || ''; 
         const separator = backendUrl.endsWith('/') ? '' : '/';
-        // Assuming photoPath from DB already includes /uploads, e.g. /uploads/image.jpg
-        // If photoPath is just 'image.jpg', then it should be `${backendUrl}${separator}uploads/${photoPath}`
-        // Based on backend clientController, it stores as /uploads/filename.jpg
         return `${backendUrl}${photoPath.startsWith('/') ? photoPath.substring(1) : photoPath}`;
     };
 
@@ -98,27 +89,26 @@ export default function ClientProfile() {
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         setError(''); setSuccess(''); 
-        setFieldValidationErrors(prevErrors => ({ ...prevErrors, profilePhoto: '' })); // Clear only photo error initially
+        setFieldValidationErrors(prevErrors => ({ ...prevErrors, profilePhoto: '' })); 
 
-        // Revoke previous blob URL if it exists
         if (currentBlobUrl) {
             URL.revokeObjectURL(currentBlobUrl);
             setCurrentBlobUrl(null);
         }
         
-        setProfilePhotoFile(null); // Clear previous file state
+        setProfilePhotoFile(null);
 
         if (file) {
             if (!file.type.startsWith("image/")) {
                 setFieldValidationErrors({ profilePhoto: "Please select a valid image file." });
-                setPhotoPreviewUrl(constructPhotoUrl(currentSavedPhotoPath)); // Revert to saved
-                if(fileInputRef.current) fileInputRef.current.value = ""; // Reset file input
+                setPhotoPreviewUrl(constructPhotoUrl(currentSavedPhotoPath)); 
+                if(fileInputRef.current) fileInputRef.current.value = ""; 
                 return;
             }
-            if (file.size > 5 * 1024 * 1024) { // 5MB Limit
+            if (file.size > 5 * 1024 * 1024) {
                 setFieldValidationErrors({ profilePhoto: "Image file size should not exceed 5MB." });
-                setPhotoPreviewUrl(constructPhotoUrl(currentSavedPhotoPath)); // Revert to saved
-                if(fileInputRef.current) fileInputRef.current.value = ""; // Reset file input
+                setPhotoPreviewUrl(constructPhotoUrl(currentSavedPhotoPath)); 
+                if(fileInputRef.current) fileInputRef.current.value = ""; 
                 return;
             }
             setProfilePhotoFile(file);
@@ -126,8 +116,7 @@ export default function ClientProfile() {
             setPhotoPreviewUrl(newBlobUrl);
             setCurrentBlobUrl(newBlobUrl);
         } else {
-            // File selection was cleared
-            setPhotoPreviewUrl(constructPhotoUrl(currentSavedPhotoPath)); // Revert to saved
+            setPhotoPreviewUrl(constructPhotoUrl(currentSavedPhotoPath)); 
         }
     };
 
@@ -135,7 +124,7 @@ export default function ClientProfile() {
         e.preventDefault();
         setIsLoading(true);
         setError(''); setSuccess(''); 
-        // Preserve existing photo error if any, clear others
+
         const photoErr = fieldValidationErrors.profilePhoto;
         setFieldValidationErrors(photoErr ? { profilePhoto: photoErr } : {});
 
@@ -159,10 +148,8 @@ export default function ClientProfile() {
             newValidationErrors.password = 'New password must be at least 6 characters.';
             formIsValid = false;
         }
-        // District/Province are always sent due to default state values. Validation for them being empty isn't needed client-side here
-        // as <select> will always have a value. Server can validate if needed.
 
-        if (!formIsValid || fieldValidationErrors.profilePhoto) { // Also check existing photo error
+        if (!formIsValid || fieldValidationErrors.profilePhoto) { 
             setFieldValidationErrors(prev => ({...prev, ...newValidationErrors}));
             setError("Please correct the highlighted errors.");
             setIsLoading(false);
@@ -183,10 +170,6 @@ export default function ClientProfile() {
         if (profileUpdateData.contactNumber.trim()) { updateData.append('contactNumber', profileUpdateData.contactNumber.trim()); hasDataToUpdate = true; }
         if (profileUpdateData.address.trim()) { updateData.append('address', profileUpdateData.address.trim()); hasDataToUpdate = true; }
         
-        // Always send district/province if any other data is being sent, or if photo is being sent.
-        // Or, only send if they changed from some initial "not set" state.
-        // For simplicity, if user is submitting *anything*, these current selections go.
-        // This matches if profileUpdateData holds the current values.
         if (profileUpdateData.district) { updateData.append('district', profileUpdateData.district); hasDataToUpdate = true; }
         if (profileUpdateData.province) { updateData.append('province', profileUpdateData.province); hasDataToUpdate = true; }
         
@@ -210,10 +193,9 @@ export default function ClientProfile() {
                 const updatedUserInfo = response.data.data;
                 localStorage.setItem('userInfo', JSON.stringify(updatedUserInfo));
                 
-                setCurrentEmail(updatedUserInfo.email); // Should not change, but good to sync
+                setCurrentEmail(updatedUserInfo.email);
                 setCurrentSavedPhotoPath(updatedUserInfo.profilePhoto);
 
-                // If a blob URL was active, revoke it as we are now using the server URL
                 if (currentBlobUrl) {
                     URL.revokeObjectURL(currentBlobUrl);
                     setCurrentBlobUrl(null);
@@ -226,7 +208,7 @@ export default function ClientProfile() {
                     province: updatedUserInfo.province || "western",
                 });
                 setProfilePhotoFile(null);
-                if(fileInputRef.current) fileInputRef.current.value = ""; // Reset file input
+                if(fileInputRef.current) fileInputRef.current.value = ""; 
                 setFieldValidationErrors({});
 
                 setTimeout(() => setSuccess(''), 4000);
@@ -262,10 +244,10 @@ export default function ClientProfile() {
         navigate(path);
     };
 
-    if (!userId && !error) { // Show loading only if no user ID and no initial error
+    if (!userId && !error) { 
         return ( <div className="Client-Pro-container loading-state"><div>Loading user data...</div></div> );
     }
-    if (!userId && error) { // Show error if user ID failed to load
+    if (!userId && error) { 
          return ( <div className="Client-Pro-container loading-state"><div className="alert alert-danger profile-alert"><AlertCircle size={18} /> {error}</div></div> );
     }
 
@@ -344,19 +326,16 @@ export default function ClientProfile() {
                              <div className="Client-Pro-form-group Client-Pro-form-group-half">
                                <label className="Client-Pro-label" htmlFor="client-district">District</label>
                                <select id="client-district" name="district" value={profileUpdateData.district} onChange={handleChange} className={`Client-Pro-select ${fieldValidationErrors && fieldValidationErrors.district ? 'input-error' : ''}`} disabled={isLoading}>
-                                   {/* <option value="">Select District</option> */}
                                     <option value="colombo">Colombo</option>
                                     <option value="gampaha">Gampaha</option>
                                     <option value="kalutara">Kalutara</option>
                                     <option value="kandy">Kandy</option>
-                                    {/* Add all Sri Lankan districts */}
                                </select>
                                 {fieldValidationErrors && fieldValidationErrors.district && <div className="error-message">{fieldValidationErrors.district}</div>}
                              </div>
                              <div className="Client-Pro-form-group Client-Pro-form-group-half">
                                <label className="Client-Pro-label" htmlFor="client-province">Province</label>
                                <select id="client-province" name="province" value={profileUpdateData.province} onChange={handleChange} className={`Client-Pro-select ${fieldValidationErrors && fieldValidationErrors.province ? 'input-error' : ''}`} disabled={isLoading}>
-                                  {/* <option value="">Select Province</option> */}
                                    <option value="western">Western</option>
                                    <option value="central">Central</option>
                                    <option value="southern">Southern</option>

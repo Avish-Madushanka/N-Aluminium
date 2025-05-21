@@ -309,10 +309,7 @@
   border-color: var(--warning-color);
   color: var(--warning-color);
 }
-.UCal-calendar-day.UCal-special-available { /* Added for consistency if needed */
-  /* Define styles if special available needs to look different */
-  /* Example: Maybe a different border? */
-  /* border: 2px dashed var(--success-color); */
+.UCal-calendar-day.UCal-special-available { 
 }
 
 
@@ -340,7 +337,7 @@
 .UCal-legend-item.UCal-available::before { background-color: #8affc3; }
 .UCal-legend-item.UCal-selected::before { background-color: #8f8f8f; border-color: var(--primary-dark);}
 .UCal-legend-item.UCal-unavailable::before { background-color: #e99696; }
-.UCal-legend-item.UCal-past::before { background-color: var(--bg-tertiary); /*text-decoration: line-through;*/ border-color: #bdbdbd; } /* Slightly different look for past */
+.UCal-legend-item.UCal-past::before { background-color: var(--bg-tertiary);  border-color: #bdbdbd; } 
 
 
 .UCal-calendar-instructions {
@@ -428,7 +425,7 @@
   border-color: #989898;
   background-color:#0f2133;
   box-shadow: 0 0 0 2px var(--primary-color);
-  color: var(--primary-dark); /* Set text color for selected card */
+  color: var(--primary-dark);
 }
 .UCal-option-card.UCal-selected:hover {
     transform: none;
@@ -449,7 +446,7 @@
   color: var(--text-primary);
 }
 .UCal-option-card.UCal-selected h3 {
-  color: #ffffff; /* Ensure heading text is visible */
+  color: #ffffff; 
 }
 
 .UCal-option-card p {
@@ -458,7 +455,7 @@
   margin: 0;
 }
 .UCal-option-card.UCal-selected p {
-  color: var(--primary-light); /* Ensure paragraph text is visible */
+  color: var(--primary-light);
 }
 
 .UCal-material-icon {
@@ -470,7 +467,7 @@
   color: var(--primary-color);
 }
 .UCal-option-card.UCal-selected .UCal-material-rate {
-    color: var(--accent-color); /* Example: Make rate stand out on selected card */
+    color: var(--accent-color); 
 }
 
 .UCal-material-desc {
@@ -569,7 +566,7 @@
 
 .UCal-form-section {
   padding: 20px;
-  background-color: rgba(213, 213, 213, 0.9); /* Slightly transparent gray */
+  background-color: rgba(213, 213, 213, 0.9); 
   border-radius: var(--border-radius);
   border: 1px solid var(--border-color);
 }
@@ -630,7 +627,7 @@
   font-size: 0.875rem;
 }
 
-.UCal-error-text { /* Class for specific field errors */
+.UCal-error-text { 
     color: var(--error-color);
     font-size: 0.8rem;
     margin-top: 4px;
@@ -644,17 +641,17 @@
   display: grid;
   gap: 20px;
   margin-bottom: 30px;
-  grid-template-columns: 1fr; /* Default to single column */
+  grid-template-columns: 1fr; 
 }
 
-@media (min-width: 600px) { /* Stack sections side-by-side on larger screens */
+@media (min-width: 600px) { 
     
 }
 
 
 .UCal-review-section {
   padding: 20px;
-   background-color: rgba(213, 213, 213, 0.9); /* Slightly transparent gray */
+   background-color: rgba(213, 213, 213, 0.9); 
   border-radius: var(--border-radius);
   border: 1px solid var(--border-color);
 }
@@ -674,7 +671,7 @@
     color: var(--primary-color);
 }
 
-.UCal-review-section p.UCal-summary-item { /* Apply summary item styles here too */
+.UCal-review-section p.UCal-summary-item { 
   margin: 8px 0;
 }
 
@@ -743,7 +740,7 @@
   flex-shrink: 0;
 }
 
-/* --- Loading and Error States --- */
+
 .UCal-loading-overlay {
   position: absolute;
   top: 0;
@@ -755,16 +752,16 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  z-index: 1000; /* Ensure it's on top */
+  z-index: 1000; 
   gap: 10px;
   color: #555;
 }
 
 .UCal-animate-spin {
-  animation: UCal-spin 1s linear infinite; /* Prefixed animation name */
+  animation: UCal-spin 1s linear infinite; 
 }
 
-@keyframes UCal-spin { /* Prefixed keyframe name */
+@keyframes UCal-spin { 
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
@@ -778,11 +775,11 @@
   border: 1px solid var(--error-color);
   border-radius: 6px;
   color: var(--error-color);
-  margin: 15px 0; /* Spacing for errors */
+  margin: 15px 0; 
   font-size: 0.9rem;
 }
 .UCal-error-message-container.UCal-global-error {
-  margin: 0 24px 20px 24px; /* Position below header/progress */
+  margin: 0 24px 20px 24px;
 }
 .UCal-error-message-container svg {
     flex-shrink: 0;
@@ -799,7 +796,7 @@
 }
 
 
-/* --- Responsive Design --- */
+
 @media (max-width: 768px) {
   .UCal-user-header h1 {
     font-size: 1.3rem;
@@ -864,7 +861,7 @@
   .UCal-option-card h3 {
       font-size: 0.9rem;
   }
-   .UCal-step-navigation button { /* Make buttons full width on smallest screens */
+   .UCal-step-navigation button { 
        width: 100%;
    }
 }

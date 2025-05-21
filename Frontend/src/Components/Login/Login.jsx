@@ -126,10 +126,11 @@ function Login() {
     if (error.code === 'ECONNABORTED' || error.message.toLowerCase().includes('timeout')) {
       setErrorMessage('Login request timed out. The server might be busy.');
       setServerStatus('error');
+
     } else if (error.response) {
       const { status, data } = error.response;
       const msg = data?.message || `Login error (Status ${status}). Please try again.`;
-      // Specific messages for common auth errors
+      
       if (status === 400) setErrorMessage(msg || "Invalid input. Please check your details.");
       else if (status === 401) setErrorMessage(msg || 'Incorrect email or password.');
       else if (status === 403) setErrorMessage(msg || 'Access Denied.');

@@ -1,9 +1,8 @@
-// src/Components/Admin/AdNav/AdNav.jsx
 import React from 'react';
-import './AdNav.css'; // Make sure this CSS file exists and is correct
+import './AdNav.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCog, faQuestionCircle, faSignOutAlt, faTachometerAlt, faBox, faUsers, faStar, faCreditCard, faLink, faCalendarAlt, faEnvelope, faBuilding } from '@fortawesome/free-solid-svg-icons';
-import { NavLink, useNavigate } from 'react-router-dom'; // Use NavLink for active styling
+import { NavLink, useNavigate } from 'react-router-dom'; 
 
 function AdNavComponent({ handleLogout }) {
     const navigate = useNavigate();
@@ -11,33 +10,29 @@ function AdNavComponent({ handleLogout }) {
     const performLogout = (e) => {
         e.preventDefault();
         if (handleLogout) {
-            handleLogout(); // Use the function passed from AdminLayout/App
+            handleLogout(); 
         } else {
             console.warn("handleLogout prop not provided to AdNav");
-            navigate('/login'); // Fallback
+            navigate('/login');
         }
     };
 
     return (
-        // Sidebar container
-        <aside className="sidebar"> {/* Ensure CSS targets .sidebar */}
+        <aside className="sidebar"> 
             <div className="logo">
-                <span className="logo-text">Admin Panel</span> {/* Or your logo */}
+                <span className="logo-text">Admin Panel</span> 
             </div>
 
             <nav className="menu">
-                {/* General Section */}
                 <div className="menu-section">
                     <div className="menu-section-title">GENERAL</div>
                     <ul>
-                        {/* Update 'to' props to match App.jsx routes */}
                         <li>
                             <NavLink to="/Admin/Dashboard" className={({ isActive }) => isActive ? 'active' : ''}>
                                 <FontAwesomeIcon icon={faTachometerAlt} className="menu-icon" /> Dashboard
                             </NavLink>
                         </li>
                         <li>
-                            {/* Assuming AdCalendar component handles "Settings" or "Schedule" */}
                             <NavLink to="/Admin/Calendar" className={({ isActive }) => isActive ? 'active' : ''}>
                                 <FontAwesomeIcon icon={faCalendarAlt} className="menu-icon" /> Schedule Mgmt
                             </NavLink>
@@ -68,10 +63,8 @@ function AdNavComponent({ handleLogout }) {
                 
             </nav>
 
-            {/* Logout Section */}
             <div className="logout">
-                {/* Use button semantics for actions, styled as needed */}
-                <button onClick={performLogout} className="logout-button"> {/* Style .logout-button in CSS */}
+                <button onClick={performLogout} className="logout-button"> 
                     <FontAwesomeIcon icon={faSignOutAlt} className="menu-icon" />
                     Logout
                 </button>

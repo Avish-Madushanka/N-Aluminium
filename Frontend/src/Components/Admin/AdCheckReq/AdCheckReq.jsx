@@ -1,16 +1,14 @@
-// src/Components/Admin/AdCheckReq/AdCheckReq.jsx
 import React, { useState, useEffect, useCallback } from 'react';
 import axiosInstance from '../../../api/axiosInstance';
 import API_ENDPOINTS from '../../../apiConfig';
 import {
   User, Phone, Mail, MapPin, Package, Weight, Clock, Calendar, Edit,
   CheckSquare, XSquare, Eye, Trash2, AlertTriangle, RefreshCw, Map
-} from 'lucide-react'; // Removed Tags, not used.
+} from 'lucide-react'; 
 import { ClipLoader } from 'react-spinners';
 import EditBookingModal from './EditBookingModal';
 import './AdCheckReq.css';
 
-// --- Helper Functions ---
 const formatDate = (dateString) => {
     if (!dateString) return 'N/A';
     try { return new Date(dateString).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' }); }
@@ -33,7 +31,6 @@ const formatWeightDisplay = (weight) => {
     return `${Number(weight).toFixed(1)} kg`;
 };
 
-// --- Main Component ---
 const AdCheckReq = () => {
     const [requests, setRequests] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -93,21 +90,14 @@ const AdCheckReq = () => {
 
     const handleUpdateStatus = async (id, newStatus) => {
         setActionLoading(id); setError('');
-        const originalRequests = requests.map(r => ({...r})); // Simple deep copy for status
+        const originalRequests = requests.map(r => ({...r})); 
         setRequests(prev => prev.map(req => req._id === id ? { ...req, status: newStatus } : req));
         
         let payload = { status: newStatus };
-        // If cancelling, allow adding a default note if none exists
-        // This part is optional for quick actions. The edit modal is better for notes.
-        // if (newStatus === 'cancelled') {
-        //     const currentReq = originalRequests.find(r => r._id === id);
-        //     payload.adminNotes = currentReq?.adminNotes || "Request cancelled by admin.";
-        // }
 
         try {
             await axiosInstance.put(`${API_ENDPOINTS.BOOKINGS.UPDATE_STATUS_BASE || '/bookings'}/${id}/status`, payload);
-            // Optionally re-fetch for consistency if backend modifies more than just status/notes
-            // fetchRequests(false); 
+
         } catch (err) {
             setError(err.response?.data?.message || `Failed to update status for request ${id}.`);
             setRequests(originalRequests);
@@ -134,7 +124,7 @@ const AdCheckReq = () => {
         
         setEditingRequest({
             ...request,
-            initialStatus: request.status, // Store initial status for comparison on save
+            initialStatus: request.status, 
             selectedDate: localISODateTime,
             contactDetails: request.contactDetails || { name: '', phone: '', email: '' },
             adminNotes: request.adminNotes || '',
@@ -188,10 +178,10 @@ const AdCheckReq = () => {
                 payload.estimatedWeight = numWeight;
             }
             
-            payload.adminNotes = payload.adminNotes || ""; // Ensure adminNotes is at least an empty string
+            payload.adminNotes = payload.adminNotes || ""; 
 
-            const initialStatusBeforeEdit = payload.initialStatus; // Get the status before edits in modal
-            delete payload.initialStatus; // Don't send this to backend
+            const initialStatusBeforeEdit = payload.initialStatus; 
+            delete payload.initialStatus; 
 
             delete payload._id;
             delete payload.bookingId;
@@ -212,12 +202,8 @@ const AdCheckReq = () => {
                     )
                 );
                 handleCloseEditModal();
-                // Optional: Add toast/notification about email being sent if status changed
                 if (payload.status !== initialStatusBeforeEdit && (payload.status === 'confirmed' || payload.status === 'cancelled')) {
                     console.log("Booking status changed and relevant for email, user will be notified.");
-                    // You can set a temporary message here or use a toast library.
-                    // setError(`Booking ${payload.status}. User will be notified.`);
-                    // setTimeout(() => setError(''), 4000);
                 }
             } else {
                 throw new Error(response.data?.message || 'Failed to save changes.');
@@ -236,7 +222,7 @@ const AdCheckReq = () => {
     };
 
     const handleViewDetails = (request) => {
-        handleOpenEditModal(request); // Re-using edit modal for view, could be a read-only version later
+        handleOpenEditModal(request);
     };
 
     if (isLoading && requests.length === 0) {
@@ -285,7 +271,6 @@ const AdCheckReq = () => {
                                     </td>
                                     <td className="adcr-td-style">
                                         <div>{formatDate(req.selectedDate)}</div>
-                                        {/* req.timeSlotId will now display the time string directly */}
                                         <div className="adcr-sub-text"><Clock size={12} /> {req.timeSlotId || 'N/A'}</div>
                                     </td>
                                     <td className="adcr-td-style adcr-location-cell">
@@ -307,7 +292,7 @@ const AdCheckReq = () => {
                                                 {req.status === 'confirmed' && req.status !== 'completed' && (
                                                     <button onClick={() => handleUpdateStatus(req._id, 'completed')} className="adcr-action-btn adcr-complete-btn" title="Mark as Completed" disabled={!!actionLoading}> <CheckSquare size={16} /> Mark Done </button>
                                                 )}
-                                                {(req.status !== 'completed') && ( // Allow deleting pending/confirmed/cancelled
+                                                {(req.status !== 'completed') && ( 
                                                     <button onClick={() => handleDelete(req._id, req.bookingId)} className="adcr-action-btn adcr-delete-btn" title="Delete Request" disabled={!!actionLoading}> <Trash2 size={16} /> </button>
                                                 )}
                                             </>)}

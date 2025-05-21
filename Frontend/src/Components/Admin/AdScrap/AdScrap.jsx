@@ -1,18 +1,6 @@
-// src/Components/Admin/AdScrap/AdScrap.jsx
 import React, { useState, useEffect, useCallback } from 'react';
-
-// ====================================================================================
-// !!! IMPORTANT: THIS IS AN ASSUMPTION BASED ON A POSSIBLE FILE LOCATION !!!
-// !!! YOU MUST VERIFY THE ACTUAL LOCATION OF YOUR apiConfig.js FILE !!!
-//
-// This path assumes apiConfig.js is at: Frontend/src/apiConfig.js
-import API_ENDPOINTS from '../../../apiConfig'; // <<<<------- ADJUST THIS PATH BASED ON ACTUAL LOCATION
-//
-// If apiConfig.js is at Frontend/src/api/apiConfig.js, use:
-// import API_ENDPOINTS from '../../../api/apiConfig';
-// ====================================================================================
-
-import axiosInstance from '../../../api/axiosInstance'; // Also verify this path
+import API_ENDPOINTS from '../../../apiConfig';
+import axiosInstance from '../../../api/axiosInstance'; 
 import './AdScrap.css';
 import { ClipLoader } from 'react-spinners';
 import { FaEdit, FaTrash, FaPlus, FaToggleOn, FaToggleOff, FaSave, FaTimes } from 'react-icons/fa';

@@ -1,4 +1,3 @@
-/* src/Components/UserCalendar/CalendarDisplay.css */
 :root {
   --primary-color: #388e3c;
   --primary-hover: #2e7d32;
@@ -18,7 +17,6 @@
   --transition: all 0.2s ease;
 }
 
-/* --- Base Styles --- */
 .CDis-user-dashboard {
   display: flex;
   flex-direction: column;
@@ -30,7 +28,6 @@
   color: var(--text-dark);
 }
 
-/* --- Layout Grid --- */
 .CDis-dashboard-grid {
   display: grid;
   grid-template-columns: minmax(400px, 1fr) minmax(350px, 1fr);
@@ -38,7 +35,6 @@
   padding: 0 1.25rem 1.25rem;
 }
 
-/* --- Shared Column Styles --- */
 .CDis-calendar-column,
 .CDis-pickups-column {
   background-color: white;
@@ -63,7 +59,6 @@
   color: var(--text-dark);
 }
 
-/* --- Calendar Styles --- */
 .CDis-calendar-container {
   width: 100%;
 }
@@ -162,7 +157,6 @@
   cursor: default;
 }
 
-/* Day Status Styles */
 .CDis-calendar-day.CDis-available {
   background-color: #e8f5e9;
   border-color: #c8e6c9;
@@ -209,7 +203,6 @@
   border-radius: 50%;
 }
 
-/* Calendar Legend */
 .CDis-calendar-legend {
   display: flex;
   flex-wrap: wrap;
@@ -261,7 +254,6 @@
   color: var(--text-medium);
 }
 
-/* --- Quick Schedule Column --- */
 .CDis-available-slots-section {
   margin-top: 0.5rem;
 }
@@ -313,7 +305,6 @@
   background-color: var(--primary-hover);
 }
 
-/* --- Loading & Error States --- */
 .CDis-loading-overlay {
   position: absolute;
   top: 0;
@@ -370,7 +361,6 @@
   line-height: 1.5;
 }
 
-/* --- Responsive Design --- */
 @media (max-width: 900px) {
   .CDis-dashboard-grid {
     grid-template-columns: 1fr;

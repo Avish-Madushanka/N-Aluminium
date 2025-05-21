@@ -1,27 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import axiosInstance from '../../../api/axiosInstance'; // Update path as needed
-import API_ENDPOINTS from '../../../apiConfig'; // Update path as needed
+import axiosInstance from '../../../api/axiosInstance'; 
+import API_ENDPOINTS from '../../../apiConfig'; 
 import './HandleBOwners.css';
 
 function HandleBOwners() {
-  // State management
   const [businessOwners, setBusinessOwners] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   
-  // Email Modal State
   const [emailModalOpen, setEmailModalOpen] = useState(false);
   const [currentOwnerForEmail, setCurrentOwnerForEmail] = useState(null);
   const [emailData, setEmailData] = useState({ subject: '', message: '' });
 
-  // Details Modal State
   const [detailsModalOpen, setDetailsModalOpen] = useState(false);
   const [selectedOwnerForDetails, setSelectedOwnerForDetails] = useState(null);
 
-  // Notification State
   const [notification, setNotification] = useState({ show: false, message: '', type: '' });
 
-  // Fetch business owners data from API
   useEffect(() => {
     const fetchBusinessOwners = async () => {
       setLoading(true);
@@ -49,14 +44,9 @@ function HandleBOwners() {
     fetchBusinessOwners();
   }, []);
 
-  // Function to handle removal of a business owner
   const handleRemoveBOwner = async (ownerId) => {
     if (window.confirm('Are you sure you want to remove this business owner? This action might be irreversible.')) {
       try {
-        // TODO: Implement actual API call to remove/deactivate the business owner
-        // Example: await axiosInstance.delete(API_ENDPOINTS.BOWNERS.DELETE(ownerId));
-        
-        // For now, we'll just update the UI optimistically
         setBusinessOwners(prevOwners => 
           prevOwners.filter(owner => owner._id !== ownerId)
         );
@@ -68,7 +58,6 @@ function HandleBOwners() {
     }
   };
 
-  // Function to send email
   const handleSendEmail = async (e) => {
     e.preventDefault();
     if (!emailData.subject || !emailData.message) {
@@ -77,7 +66,6 @@ function HandleBOwners() {
     }
 
     try {
-      // TODO: Implement actual email sending API endpoint
       // Example: await axiosInstance.post(API_ENDPOINTS.ADMIN.SEND_EMAIL_TO_USER, { userId: currentOwnerForEmail._id, subject: emailData.subject, message: emailData.message });
       console.log('Sending email to:', currentOwnerForEmail.email, 'Data:', emailData);
       showNotification(`Email sent successfully to ${currentOwnerForEmail.ownerName} (simulated)`, 'success');
@@ -88,9 +76,6 @@ function HandleBOwners() {
     }
   };
 
-  // --- Modal Control Functions ---
-
-  // Email Modal
   const openEmailModal = (owner) => {
     setCurrentOwnerForEmail(owner);
     setEmailModalOpen(true);
@@ -102,7 +87,6 @@ function HandleBOwners() {
     setEmailData({ subject: '', message: '' });
   };
 
-  // Details Modal
   const openDetailsModal = (owner) => {
     setSelectedOwnerForDetails(owner);
     setDetailsModalOpen(true);
@@ -113,15 +97,11 @@ function HandleBOwners() {
     setSelectedOwnerForDetails(null);
   };
 
-  // --- Helper Functions ---
-
-  // Handle email form input changes
   const handleEmailChange = (e) => {
     const { name, value } = e.target;
     setEmailData(prev => ({ ...prev, [name]: value }));
   };
 
-  // Function to show notification
   const showNotification = (message, type) => {
     setNotification({ show: true, message, type });
     setTimeout(() => {
@@ -129,23 +109,19 @@ function HandleBOwners() {
     }, 3000);
   };
 
-  // --- JSX Rendering ---
   return (
     <div className="admin-bowners-container">
       <h2>Business Owners Management</h2>
       
-      {/* Notification */}
       {notification.show && (
         <div className={`notification ${notification.type}`}>
           {notification.message}
         </div>
       )}
 
-      {/* Loading and Error States */}
       {loading && <div className="loading">Loading business owners...</div>}
       {error && <div className="error-message">{error}</div>}
 
-      {/* --- Business Owners Table --- */}
       {!loading && !error && (
         <div className="table-container">
           <table className="bowners-table">
@@ -170,7 +146,7 @@ function HandleBOwners() {
                     <td>{owner.address}</td>
                     <td className="action-buttons">
                       <button 
-                        className="details-button" // Assuming you'll add styles for this
+                        className="details-button" 
                         onClick={() => openDetailsModal(owner)}
                         title="View Details"
                       >
@@ -203,7 +179,6 @@ function HandleBOwners() {
         </div>
       )}
 
-      {/* --- Email Modal --- */}
       {emailModalOpen && currentOwnerForEmail && (
         <div className="modal-overlay">
           <div className="email-modal">
@@ -219,7 +194,7 @@ function HandleBOwners() {
                   id="recipient"
                   value={currentOwnerForEmail.email}
                   readOnly
-                  className="read-only-input" // Add style for this if needed
+                  className="read-only-input" 
                 />
               </div>
               <div className="form-group">
@@ -259,15 +234,14 @@ function HandleBOwners() {
         </div>
       )}
 
-      {/* --- Details Modal --- */}
       {detailsModalOpen && selectedOwnerForDetails && (
         <div className="modal-overlay">
-          <div className="details-modal email-modal"> {/* Reusing email-modal for basic structure, can be customized */}
+          <div className="details-modal email-modal"> 
             <div className="modal-header">
               <h3>Business Owner Details</h3>
               <button className="close-button" onClick={closeDetailsModal}>×</button>
             </div>
-            <div className="modal-body details-content"> {/* Add specific class for content if needed */}
+            <div className="modal-body details-content"> 
               <h4>{selectedOwnerForDetails.businessName}</h4>
               <div className="detail-item">
                 <strong>Owner Name:</strong> {selectedOwnerForDetails.ownerName}
@@ -284,7 +258,7 @@ function HandleBOwners() {
               <div className="detail-item">
                 <strong>Address:</strong> {selectedOwnerForDetails.address}
               </div>
-              <hr className="details-divider"/> {/* Add style for this if needed */}
+              <hr className="details-divider"/> 
               <div className="detail-item">
                 <strong>Registration Date:</strong> {
                   selectedOwnerForDetails.createdAt 
@@ -304,7 +278,7 @@ function HandleBOwners() {
                   <img 
                     src={`${API_ENDPOINTS.BACKEND_ROOT_URL}${selectedOwnerForDetails.profilePhoto}`} 
                     alt="Profile" 
-                    className="owner-profile-thumbnail" // Add style for this
+                    className="owner-profile-thumbnail" 
                     style={{ maxWidth: '100px', maxHeight: '100px', marginTop: '10px', borderRadius: '4px', objectFit: 'cover' }}
                   />
                 </div>
@@ -315,7 +289,7 @@ function HandleBOwners() {
                   <img 
                     src={`${API_ENDPOINTS.BACKEND_ROOT_URL}${selectedOwnerForDetails.coverPhoto}`} 
                     alt="Cover" 
-                    className="owner-cover-thumbnail" // Add style for this
+                    className="owner-cover-thumbnail" 
                     style={{ maxWidth: '200px', maxHeight: '120px', marginTop: '10px', borderRadius: '4px', objectFit: 'cover' }}
                   />
                 </div>

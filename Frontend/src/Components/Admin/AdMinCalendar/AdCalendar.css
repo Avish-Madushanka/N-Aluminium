@@ -1,8 +1,4 @@
-/* src/Components/Admin/AdCalendar/AdCalendar.css */
-/* Improved version with better organization, performance and responsiveness */
-
 :root {
-  /* Color Variables */
   --primary: #ef0606;
   --primary-light: #fdba74;
   --primary-dark: #c2410c;
@@ -15,7 +11,6 @@
   --info: #2563eb;
   --info-light: #93c5fd;
   
-  /* Gray Scale */
   --gray-50: #f9fafb;
   --gray-100: #f3f4f6;
   --gray-200: #e5e7eb;
@@ -26,15 +21,12 @@
   --gray-700: #374151;
   --gray-800: #202224;
   
-  /* Shadows */
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
   
-  /* Animations & Transitions */
   --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   
-  /* Spacing */
   --space-xs: 0.25rem;
   --space-sm: 0.5rem;
   --space-md: 1rem;
@@ -42,7 +34,6 @@
   --space-xl: 2rem;
   --space-2xl: 2.5rem;
   
-  /* Font Sizes */
   --text-xs: 0.75rem;
   --text-sm: 0.8125rem;
   --text-base: 0.9375rem;
@@ -52,7 +43,6 @@
   --text-3xl: 1.75rem;
 }
 
-/* Base Container */
 .admin-calendar-container {
   padding: var(--space-lg) var(--space-xl);
   background-color: var(--gray-50);
@@ -61,7 +51,6 @@
   color: var(--gray-800);
 }
 
-/* Header Styles */
 .admin-header {
   display: flex;
   align-items: center;

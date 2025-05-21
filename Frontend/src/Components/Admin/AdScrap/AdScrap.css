@@ -1,4 +1,3 @@
-/* src/Components/Admin/AdScrap/AdScrap.css */
 .admin-scrap-management {
     padding: 20px;
     font-family: sans-serif;
@@ -32,7 +31,7 @@
 
 
 .add-new-scrap-btn {
-    background-color: #f97316; /* Orange */
+    background-color: #f97316; 
     color: white;
     border: none;
     padding: 10px 15px;
@@ -104,7 +103,7 @@
 .form-group-checkbox input[type="checkbox"] {
     width: auto;
     margin-right: 5px;
-    height: 18px; /* Larger checkbox */
+    height: 18px;
     width: 18px;
 }
 
@@ -127,14 +126,14 @@
     gap: 5px;
 }
 .form-actions .save-btn {
-    background-color: #4CAF50; /* Green */
+    background-color: #4CAF50; 
     color: white;
 }
 .form-actions .save-btn:hover {
     background-color: #45a049;
 }
 .form-actions .cancel-btn {
-    background-color: #f44336; /* Red */
+    background-color: #f44336; 
     color: white;
 }
 .form-actions .cancel-btn:hover {
@@ -146,7 +145,7 @@
 
 /* Table Styles */
 .scrap-types-table-container {
-    overflow-x: auto; /* For responsiveness on small screens */
+    overflow-x: auto; 
 }
 .scrap-types-table {
     width: 100%;
@@ -177,7 +176,7 @@
     background-color: #f1f1f1;
 }
 .inactive-row {
-    background-color: #fee2e2 !important; /* Light red for inactive */
+    background-color: #fee2e2 !important; 
     color: #777;
 }
 .inactive-row td {
@@ -186,7 +185,7 @@
 
 .description-cell {
     max-width: 250px;
-    white-space: pre-wrap; /* Allow line breaks from textarea */
+    white-space: pre-wrap;
     word-break: break-word;
 }
 

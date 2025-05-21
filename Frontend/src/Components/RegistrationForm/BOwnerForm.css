@@ -1,8 +1,4 @@
-/* BOwnerForm.css - Modern and Creative Styling */
-
-/* --- Root Variables --- */
 :root {
-  /* Core Colors */
   --primary-gradient: linear-gradient(90deg, #4a6cf7, #6a3cf7, #8f22ff);
   --form-bg: linear-gradient(145deg, #ffffff, #f5f7fa);
   --text-primary: #2d3748;
@@ -11,17 +7,14 @@
   --focus-color: #4a6cf7;
   --focus-shadow: rgba(74, 108, 247, 0.15);
   
-  /* Feedback Colors */
   --error-color: #e53e3e;
   --success-color: #38a169;
   --error-bg: #fff5f5;
   --success-bg: #f0fff4;
   
-  /* Animation */
   --transition-speed: 0.3s;
 }
 
-/* Main Container Styling */
 .BR-business-form-container {
   width: 100%;
   padding: 2rem;
@@ -52,7 +45,6 @@
   background: var(--primary-gradient);
 }
 
-/* Form Title */
 .BR-form-title {
   font-size: 2rem;
   font-weight: 700;
@@ -77,7 +69,6 @@
   border-radius: 3px;
 }
 
-/* Form Group Styling */
 .BR-form-group {
   margin-bottom: 1.5rem;
   position: relative;
@@ -99,7 +90,6 @@
   margin-bottom: 0.5rem;
 }
 
-/* Input Fields */
 .BR-form-group input[type="text"],
 .BR-form-group input[type="email"],
 .BR-form-group input[type="tel"],
@@ -137,7 +127,6 @@
   gap: 1rem;
 }
 
-/* Select Styling */
 .BR-form-group select {
   appearance: none;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%234a5568' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
@@ -147,7 +136,6 @@
   padding-right: 2.5rem;
 }
 
-/* File Upload Styling */
 .BR-file-input-group {
   position: relative;
 }
@@ -181,7 +169,7 @@
   cursor: not-allowed;
 }
 
-/* Image Preview Styling */
+
 .BR-image-preview-container {
   margin-top: 1rem;
   display: flex;
@@ -211,7 +199,6 @@
   object-fit: cover;
 }
 
-/* Alert Messages */
 .BR-error-message,
 .BR-success-message {
   padding: 1rem;
@@ -234,7 +221,6 @@
   border-left: 4px solid var(--success-color);
 }
 
-/* Submit Button */
 .BR-submit-button {
   display: flex;
   justify-content: center;
@@ -266,12 +252,10 @@
   box-shadow: none;
 }
 
-/* Input Group */
 .BR-input-group {
   width: 100%;
 }
 
-/* Responsive Adjustments */
 @media (max-width: 768px) {
   .BR-form-wrapper {
     padding: 2rem 1.5rem;

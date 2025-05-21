@@ -1,15 +1,10 @@
-// frontend/src/Components/Admin/AdMapUpdate/AdminLocationManager.jsx
-// (Adjust the path above if your component is located elsewhere)
-
 import React, { useState, useEffect, useCallback } from "react";
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 import { Search, MapPin, Phone, Clock, Info, Edit, Trash2, Plus, X, Check, AlertTriangle, Loader2 } from "lucide-react";
-import axiosInstance from '../../../api/axiosInstance'; // <<< ADJUST THIS PATH
-import "./LocationMap.css"; // <<< ENSURE THIS PATH IS CORRECT
+import axiosInstance from '../../../api/axiosInstance';
+import "./LocationMap.css";
 
-// Environment variables for Vite (loaded from frontend/.env)
 const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
-// VITE_API_BASE_URL is used by axiosInstance.js, so not directly needed here if axiosInstance is configured
 
 const mapContainerStyle = {
   width: "100%",
@@ -20,34 +15,32 @@ const mapContainerStyle = {
 const sriLankaCenter = { lat: 7.8731, lng: 80.7718 };
 
 const initialFormData = {
-  _id: null, // To track editing existing vs. adding new
+  _id: null,
   name: "",
   address: "",
   phone: "",
   hours: "",
   additional: "",
-  lat: "", // Stored as string for input fields
-  lng: "", // Stored as string for input fields
+  lat: "",
+  lng: "", 
   type: "main",
 };
 
-// Placeholder for actual token retrieval.
-// Replace with your auth logic (e.g., from context, localStorage)
 const getAuthToken = () => {
-  const token = localStorage.getItem('token'); // Example: using 'token' as storage key
+  const token = localStorage.getItem('token'); 
   if (!token) {
     console.warn("getAuthToken: No token found in localStorage. API calls requiring auth might fail.");
   }
-  return token || "FALLBACK_TOKEN_FOR_UNPROTECTED_GET_TESTING_ONLY"; // Fallback only for GET testing if routes are temp. unprotected
+  return token || "FALLBACK_TOKEN_FOR_UNPROTECTED_GET_TESTING_ONLY"; 
 };
 
 
 export default function AdminLocationManager() {
   const [locations, setLocations] = useState([]);
-  const [selectedLocationOnMap, setSelectedLocationOnMap] = useState(sriLankaCenter); // Initialize with a valid center
-  const [editingLocation, setEditingLocation] = useState(null); // null or the location object being edited
+  const [selectedLocationOnMap, setSelectedLocationOnMap] = useState(sriLankaCenter); 
+  const [editingLocation, setEditingLocation] = useState(null); 
   const [isAdding, setIsAdding] = useState(false);
-  const [formData, setFormData] = useState({ ...initialFormData }); // Initialize with a fresh copy
+  const [formData, setFormData] = useState({ ...initialFormData }); 
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -63,7 +56,7 @@ export default function AdminLocationManager() {
       }
     }
     console.warn("ensureNumericPosition: Invalid position data provided, using default.", position);
-    return sriLankaCenter; // Fallback to a known good center
+    return sriLankaCenter; 
   };
 
   const fetchLocations = useCallback(async () => {
@@ -71,31 +64,28 @@ export default function AdminLocationManager() {
     setError(null);
     console.log("[AdminLocationManager] Fetching locations...");
     try {
-      const response = await axiosInstance.get('/shop-locations'); // Relative path
+      const response = await axiosInstance.get('/shop-locations');
       const fetchedData = response.data.data.map(loc => {
         const numericPosition = ensureNumericPosition(loc.position);
         return {
           ...loc,
-          id: loc._id, // React key
-          position: numericPosition, // Ensure position has numeric lat/lng
+          id: loc._id,
+          position: numericPosition,
         };
       });
       setLocations(fetchedData);
       console.log(`[AdminLocationManager] Fetched ${fetchedData.length} locations.`);
-      // Set initial map center if locations are fetched, otherwise it stays sriLankaCenter
-      // if (fetchedData.length > 0) {
-      //   setSelectedLocationOnMap(fetchedData[0].position);
-      // }
+     
     } catch (err) {
       const errMsg = err.response?.data?.message || err.message || "Failed to fetch locations";
       console.error("[AdminLocationManager] Failed to fetch locations:", errMsg, err);
       setError(errMsg);
       setLocations([]);
-      setSelectedLocationOnMap(sriLankaCenter); // Fallback map center on error
+      setSelectedLocationOnMap(sriLankaCenter); 
     } finally {
       setIsLoading(false);
     }
-  }, []); // No dependencies needed here as axiosInstance and its baseURL are stable
+  }, []); 
 
   useEffect(() => {
     if (GOOGLE_MAPS_API_KEY) {
@@ -104,7 +94,7 @@ export default function AdminLocationManager() {
       setError("Google Maps API Key is missing. Map functionality disabled.");
       console.error("Google Maps API Key is not available from VITE_GOOGLE_MAPS_API_KEY.");
     }
-  }, [fetchLocations]); // Only depends on fetchLocations memoized function
+  }, [fetchLocations]); 
 
   useEffect(() => {
     console.log("[AdminLocationManager] Editing/Adding Effect. Editing:", editingLocation, "Adding:", isAdding);
@@ -117,17 +107,16 @@ export default function AdminLocationManager() {
         phone: editingLocation.phone || "",
         hours: editingLocation.hours || "",
         additional: editingLocation.additional || "",
-        lat: pos.lat.toString(), // Use validated numeric position
-        lng: pos.lng.toString(), // Use validated numeric position
+        lat: pos.lat.toString(), 
+        lng: pos.lng.toString(), 
         type: editingLocation.type || "main",
       });
       setSelectedLocationOnMap(pos);
     } else if (isAdding) {
-      setFormData({ ...initialFormData }); // Reset with a fresh copy, _id will be null
+      setFormData({ ...initialFormData }); 
       setSelectedLocationOnMap(sriLankaCenter);
     }
-    // No 'else' needed here to clear form, as form should persist if user clicks away
-    // unless specifically cancelled.
+
   }, [editingLocation, isAdding]);
 
   const handleFormChange = (event) => {
@@ -156,12 +145,10 @@ export default function AdminLocationManager() {
 
   const handleAddNewClick = () => {
     setIsAdding(true); setEditingLocation(null); setError(null);
-    // FormData and selectedLocationOnMap are set by the useEffect for isAdding
   };
 
   const handleEditClick = (location) => {
     setIsAdding(false); setEditingLocation(location); setError(null);
-    // FormData and selectedLocationOnMap are set by the useEffect for editingLocation
   };
 
   const handleFormSubmit = async (event) => {
@@ -192,7 +179,7 @@ export default function AdminLocationManager() {
     let requestPromise;
     const requestConfig = { headers: { Authorization: `Bearer ${getAuthToken()}` } };
 
-    if (editingLocation && formData._id) { // Check formData._id for existing item
+    if (editingLocation && formData._id) {
       console.log(`[AdminLocationManager] Updating location ${_id}:`, payload);
       requestPromise = axiosInstance.put(`/shop-locations/${formData._id}`, payload, requestConfig);
     } else {
@@ -211,9 +198,6 @@ export default function AdminLocationManager() {
 
       console.log("[AdminLocationManager] Save successful:", savedLocWithNumericPos);
 
-      // Optimistic update or re-fetch
-      // fetchLocations(); // Re-fetch for consistency (simpler)
-      // OR Optimistic update:
       if (editingLocation) {
         setLocations(prevLocs => prevLocs.map(l => l._id === savedLocWithNumericPos._id ? savedLocWithNumericPos : l));
       } else {
@@ -225,7 +209,7 @@ export default function AdminLocationManager() {
     } catch (err) {
       const errMsg = err.response?.data?.message || err.message || "Failed to save location";
       console.error("[AdminLocationManager] Failed to save location:", errMsg, err);
-      setError(errMsg); // This will be displayed to the user
+      setError(errMsg); 
     } finally {
       setIsLoading(false);
     }
@@ -244,7 +228,7 @@ export default function AdminLocationManager() {
         if (editingLocation && editingLocation._id === locationId) {
           setEditingLocation(null); setFormData({ ...initialFormData });
         }
-        setSelectedLocationOnMap(sriLankaCenter); // Reset map center
+        setSelectedLocationOnMap(sriLankaCenter); 
       } catch (err) {
         const errMsg = err.response?.data?.message || err.message || "Failed to delete location";
         console.error("[AdminLocationManager] Failed to delete location:", errMsg, err);
@@ -257,8 +241,7 @@ export default function AdminLocationManager() {
 
   const handleCancelEdit = () => {
     setIsAdding(false); setEditingLocation(null);
-    setFormData({ ...initialFormData }); // Clear form
-    //setSelectedLocationOnMap(sriLankaCenter); // Optionally reset map view or keep current
+    setFormData({ ...initialFormData }); 
     setError(null);
   };
 
@@ -273,7 +256,6 @@ export default function AdminLocationManager() {
   const formTitle = isAdding ? "Add New Location" : (editingLocation ? "Edit Location" : "");
 
 
-  // --- Render Logic ---
   if (!GOOGLE_MAPS_API_KEY) {
     return (
       <div className="adshopmap-container error-state">
@@ -284,14 +266,10 @@ export default function AdminLocationManager() {
     );
   }
 
-  // Current map center logic for the <GoogleMap> component
   const currentMapCenter = (selectedLocationOnMap && typeof selectedLocationOnMap.lat === 'number' && typeof selectedLocationOnMap.lng === 'number')
                            ? selectedLocationOnMap
                            : sriLankaCenter;
   const currentZoom = (selectedLocationOnMap && typeof selectedLocationOnMap.lat === 'number') ? 14 : 7;
-
-  // Debug log for map center just before rendering GoogleMap
-  // console.log("[AdminLocationManager] Rendering GoogleMap. Center:", currentMapCenter, "Zoom:", currentZoom);
 
 
   return (

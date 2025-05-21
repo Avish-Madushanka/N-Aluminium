@@ -1,9 +1,8 @@
-// frontend/src/Components/SaleForm/SaleForm.jsx
 import React, { useState, useEffect } from "react";
-import axiosInstance from "../../api/axiosInstance"; // Ensure this path is correct
-import API_ENDPOINTS from "../../apiConfig"; // Ensure this path is correct
+import axiosInstance from "../../api/axiosInstance"; 
+import API_ENDPOINTS from "../../apiConfig"; 
 import { useNavigate } from 'react-router-dom';
-import "./SaleForm.css"; // Ensure this path is correct
+import "./SaleForm.css"; 
 
 function SaleForm() {
   const [formData, setFormData] = useState({
@@ -32,11 +31,11 @@ function SaleForm() {
     const file = event.target.files[0];
     if (file) {
         console.log("[SaleForm handleImageUpload] Image selected:", file.name, "Type:", file.type, "Size:", file.size);
-        setImageFile(file); // Set the File object
+        setImageFile(file); 
         if (imagePreview) {
-            URL.revokeObjectURL(imagePreview); // Clean up previous preview
+            URL.revokeObjectURL(imagePreview); 
         }
-        setImagePreview(URL.createObjectURL(file)); // Create new preview
+        setImagePreview(URL.createObjectURL(file));
     } else {
         console.log("[SaleForm handleImageUpload] No file selected or selection cancelled.");
         setImageFile(null);
@@ -48,7 +47,6 @@ function SaleForm() {
   };
 
   useEffect(() => {
-    // Cleanup for image preview URL when component unmounts or preview changes
     return () => {
       if (imagePreview) {
         URL.revokeObjectURL(imagePreview);
@@ -64,39 +62,32 @@ function SaleForm() {
       return;
     }
 
-    // --- Debugging Logs for imageFile state ---
     console.log("[SaleForm Submit] Current imageFile state before appending to FormData:", imageFile);
     if (imageFile instanceof File) {
         console.log("[SaleForm Submit] imageFile is a valid File object. Name:", imageFile.name, "Type:", imageFile.type, "Size:", imageFile.size);
     } else {
         console.error("[SaleForm Submit] CRITICAL: imageFile is NOT a File object. Its current value is:", imageFile, ". This will likely cause upload failure.");
         setError("There was an error with the selected image file. Please try re-selecting the image.");
-        return; // Stop submission if imageFile is not a File
+        return; 
     }
-    // --- End Debugging Logs ---
 
     setLoading(true);
     setError('');
 
     const submissionData = new FormData();
-    // Append all text fields from formData state
     Object.keys(formData).forEach(key => {
       submissionData.append(key, formData[key]);
     });
-    // Append the file itself. The third argument (filename) is optional but good practice.
-    submissionData.append('image', imageFile, imageFile.name); // Field name 'image' must match backend multer config
+    submissionData.append('image', imageFile, imageFile.name); 
 
-    // Log FormData contents to help with debugging
     console.log("[SaleForm Submit] FormData prepared. Sending to backend.");
     for (var pair of submissionData.entries()) {
        console.log('[SaleForm FormData Entry]', pair[0]+ ': ' + (pair[1] instanceof File ? `File: ${pair[1].name}, Size: ${pair[1].size}` : pair[1]));
     }
 
     try {
-      // Explicitly ensure we're not setting Content-Type for FormData
       const response = await axiosInstance.post(API_ENDPOINTS.SALE_ITEMS.CREATE, submissionData, {
         headers: {
-          // Let axios set the correct multipart/form-data Content-Type with boundary
           'Content-Type': undefined
         }
       });
@@ -104,7 +95,7 @@ function SaleForm() {
       setLoading(false);
       console.log("[SaleForm Submit] Product added successfully:", response.data);
       alert("Product added successfully!");
-      navigate("/BuyandSell"); // Or to a page showing the user's listed items
+      navigate("/BuyandSell"); 
     } catch (err) {
       setLoading(false);
       console.error("[SaleForm Submit] Failed to add sale item. Error object:", err);
@@ -126,7 +117,6 @@ function SaleForm() {
       <h2 className="form-title">Add Sale Item</h2>
       {error && <p className="error-message">{error}</p>}
       <form onSubmit={handleSubmit}>
-        {/* Name and Price Row */}
         <div className="form-group-row">
           <input
             type="text"
@@ -151,7 +141,6 @@ function SaleForm() {
           />
         </div>
 
-        {/* Description */}
         <textarea
           id="description"
           name="description"
@@ -162,7 +151,6 @@ function SaleForm() {
           disabled={loading}
         />
 
-        {/* Address */}
         <input
           type="text"
           id="address"
@@ -174,17 +162,14 @@ function SaleForm() {
           disabled={loading}
         />
 
-        {/* District, Province, Type Row */}
         <div className="form-group-row">
           <select id="district" name="district" value={formData.district} onChange={handleChange} required disabled={loading}>
             <option value="">Select District</option>
-            {/* Add other district options here */}
             <option value="colombo">Colombo</option><option value="gampaha">Gampaha</option><option value="kalutara">Kalutara</option><option value="kandy">Kandy</option><option value="matale">Matale</option><option value="nuwara-eliya">Nuwara Eliya</option><option value="galle">Galle</option><option value="matara">Matara</option><option value="hambantota">Hambantota</option><option value="jaffna">Jaffna</option><option value="kilinochchi">Kilinochchi</option><option value="mannar">Mannar</option><option value="vavuniya">Vavuniya</option><option value="mullaitivu">Mullaitivu</option><option value="batticaloa">Batticaloa</option><option value="ampara">Ampara</option><option value="trincomalee">Trincomalee</option><option value="kurunegala">Kurunegala</option><option value="puttalam">Puttalam</option><option value="anuradhapura">Anuradhapura</option><option value="polonnaruwa">Polonnaruwa</option><option value="badulla">Badulla</option><option value="monaragala">Monaragala</option><option value="ratnapura">Ratnapura</option><option value="kegalle">Kegalle</option>
           </select>
 
           <select id="province" name="province" value={formData.province} onChange={handleChange} required disabled={loading}>
             <option value="">Select Province</option>
-            {/* Add other province options here */}
             <option value="western">Western</option><option value="central">Central</option><option value="southern">Southern</option><option value="northern">Northern</option><option value="eastern">Eastern</option><option value="north-western">North Western</option><option value="north-central">North Central</option><option value="uva">Uva</option><option value="sabaragamuwa">Sabaragamuwa</option>
           </select>
 
@@ -197,7 +182,6 @@ function SaleForm() {
           </select>
         </div>
 
-        {/* Contact Number */}
         <input
           type="tel"
           id="contact"
@@ -211,27 +195,24 @@ function SaleForm() {
           title="Please enter a 10-digit contact number"
         />
 
-        {/* Image Upload */}
         <label className={`file-upload ${loading ? 'disabled' : ''}`}>
           {imageFile ? imageFile.name : 'Upload Image (Max 5MB)'}
           <input
             type="file"
             id="imageUpload"
-            name="image" // Good practice to have name attribute
-            accept="image/png, image/jpeg, image/gif, image/webp" // Be more specific with accepted types
+            name="image" 
+            accept="image/png, image/jpeg, image/gif, image/webp" 
             onChange={handleImageUpload}
-            style={{ display: 'none' }} // Keep it hidden, label acts as button
+            style={{ display: 'none' }} 
             disabled={loading}
-            required // Image is required for form submission
+            required 
           />
         </label>
 
-        {/* Image Preview */}
         {imagePreview && !loading && (
           <img src={imagePreview} alt="Preview" className="image-preview" />
         )}
 
-        {/* Submit Button */}
         <button type="submit" className="submit-button" disabled={loading || !imageFile}>
           {loading ? 'Submitting...' : 'Submit'}
         </button>

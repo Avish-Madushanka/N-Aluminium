@@ -1,11 +1,11 @@
 
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom'; // For the "Add Projects" button
-import { ClipLoader } from 'react-spinners'; // For loading spinner
+import { Link } from 'react-router-dom'; 
+import { ClipLoader } from 'react-spinners'; 
 import './ProMain.css';
-import axiosInstance from '../../api/axiosInstance'; // Adjusted path
-import API_ENDPOINTS from '../../apiConfig'; // Adjust path if needed
-import { useAuth } from '../../context/AuthContext'; // To check if user can add projects
+import axiosInstance from '../../api/axiosInstance'; 
+import API_ENDPOINTS from '../../apiConfig'; 
+import { useAuth } from '../../context/AuthContext'; 
 
 const ImageSlider = ({ images, onClose, backendUrl }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -63,7 +63,6 @@ const ProjectCard = ({ project, backendUrl }) => {
         setShowSlider(false);
     };
 
-    // Use the first image as the main card image, or a placeholder if no images
     const mainImageUrl = project.images && project.images.length > 0 
         ? `${backendUrl}${project.images[0]}`
         : "https://via.placeholder.com/300x200?text=No+Image";
@@ -101,8 +100,7 @@ const ProMain = () => {
     const [filterType, setFilterType] = useState('');
     const { userInfo, isLoggedIn } = useAuth();
 
-    // Construct backend base URL for images (without /api)
-    const backendUrlForImages = `${API_ENDPOINTS.BACKEND_ROOT_URL}/uploads`; // <--- THE FIX
+    const backendUrlForImages = `${API_ENDPOINTS.BACKEND_ROOT_URL}/uploads`; 
 
     useEffect(() => {
         const fetchProjects = async () => {
@@ -135,7 +133,7 @@ const ProMain = () => {
             filterType ? project.projectType === filterType : true
         );
     
-    const projectTypes = ["web", "mobile", "design", "other"]; // Should match ProAddForm options
+    const projectTypes = ["web", "mobile", "design", "other"]; 
 
     const canAddProjects = isLoggedIn && userInfo && (userInfo.role === 'admin' || userInfo.role === 'businessOwner');
 
@@ -186,7 +184,7 @@ const ProMain = () => {
                 <div className="projects-grid">
                     {filteredProjects.map((project) => (
                         <ProjectCard
-                            key={project._id} // Use unique ID from backend
+                            key={project._id} 
                             project={project}
                             backendUrl={backendUrlForImages}
                         />

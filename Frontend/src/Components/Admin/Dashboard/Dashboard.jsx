@@ -14,12 +14,10 @@ import {
     Legend,
     Filler
 } from 'chart.js';
-import { useNavigate } from 'react-router-dom'; // Uncomment if you use it for navigation
+import { useNavigate } from 'react-router-dom'; 
 
-import axiosInstance from '../../../api/axiosInstance'; // Adjust path if needed
-import API_ENDPOINTS from '../../../apiConfig';     // Adjust path if needed
-
-// Register Chart.js components
+import axiosInstance from '../../../api/axiosInstance'; 
+import API_ENDPOINTS from '../../../apiConfig'; 
 ChartJS.register(
     CategoryScale,
     LinearScale,
@@ -33,7 +31,6 @@ ChartJS.register(
     Filler
 );
 
-// --- Initial Chart Data States (empty, to be filled by API) ---
 const initialUserStatsData = {
     labels: ['Clients', 'Business Owners', 'Admins'],
     datasets: [{
@@ -73,7 +70,6 @@ const initialSalesOverviewData = {
     }],
 };
 
-// --- Chart Options ---
 const userPieChartOptions = {
     responsive: true,
     maintainAspectRatio: false,
@@ -142,7 +138,6 @@ const salesLineChartOptions = {
 
 
 function Dashboard() {
-    // const navigate = useNavigate(); // For quick action navigation
     const [userStats, setUserStats] = useState(initialUserStatsData);
     const [bookingStats, setBookingStats] = useState(initialBookingStatsData);
     const [salesOverview, setSalesOverview] = useState(initialSalesOverviewData);
@@ -153,15 +148,10 @@ function Dashboard() {
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
-            setError(null); // Clear previous errors
-            let aggregatedErrorMessages = []; // Collect multiple error messages
+            setError(null); 
+            let aggregatedErrorMessages = []; 
 
             console.log("Dashboard: Fetching data...");
-            // console.log("API Endpoints used by Dashboard:"); // Optional: keep for debugging
-            // console.log("User Dist:", API_ENDPOINTS.ADMIN.STATS_USER_DISTRIBUTION);
-            // console.log("Booking Sum:", API_ENDPOINTS.ADMIN.STATS_BOOKING_SUMMARY);
-            // console.log("Sales Over:", API_ENDPOINTS.ADMIN.STATS_SALES_OVERVIEW);
-            // console.log("Recent Bookings:", API_ENDPOINTS.BOOKINGS.GET_ALL + with params);
 
 
             try {
@@ -179,7 +169,6 @@ function Dashboard() {
 
                 const [userDistResponse, bookingSumResponse, salesOverResponse, recentBookResponse] = results;
 
-                // Process User Distribution
                 if (userDistResponse.status === 'fulfilled' && userDistResponse.value.data.success) {
                     const data = userDistResponse.value.data.data;
                     setUserStats(prev => ({
@@ -192,7 +181,6 @@ function Dashboard() {
                     aggregatedErrorMessages.push(errorMsg);
                 }
 
-                // Process Booking Summary
                 if (bookingSumResponse.status === 'fulfilled' && bookingSumResponse.value.data.success) {
                     const counts = bookingSumResponse.value.data.data.statusCounts;
                     setBookingStats(prev => ({
@@ -205,7 +193,6 @@ function Dashboard() {
                     aggregatedErrorMessages.push(errorMsg);
                 }
 
-                // Process Sales Overview
                 if (salesOverResponse.status === 'fulfilled' && salesOverResponse.value.data.success) {
                     const data = salesOverResponse.value.data.data;
                     setSalesOverview(prev => ({
@@ -219,7 +206,6 @@ function Dashboard() {
                     aggregatedErrorMessages.push(errorMsg);
                 }
 
-                // Process Recent Bookings
                 if (recentBookResponse.status === 'fulfilled' && recentBookResponse.value.data.success) {
                     setRecentBookings(recentBookResponse.value.data.data);
                 } else {
@@ -233,7 +219,6 @@ function Dashboard() {
                 }
 
             } catch (err) { 
-                // This catch block is for errors in Promise.allSettled itself or general setup, less likely.
                 const generalErrorMsg = "An unexpected error occurred while initiating data fetch.";
                 setError(generalErrorMsg);
                 console.error("Dashboard fetch setup error:", err);
@@ -254,8 +239,6 @@ function Dashboard() {
             default: return 'status-unknown';
         }
     };
-
-    // const handleQuickAction = (path) => { navigate(path); }; // Example
 
     if (loading) {
         return <div className="admin-dashboard-message">Loading Dashboard Data...</div>;

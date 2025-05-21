@@ -12,7 +12,6 @@ const Navbar = ({ isLoggedIn, userInfo, handleLogout }) => {
   const navbarRef = useRef(null);
   const profileRef = useRef(null);
 
-  // Scroll handling
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener("scroll", handleScroll);
@@ -160,7 +159,6 @@ const Navbar = ({ isLoggedIn, userInfo, handleLogout }) => {
         </div>
       </div>
 
-      {/* Mobile Menu */}
       <div className={`mobile-menu ${isOpen ? 'active' : ''}`}>
         <div className="mobile-menu-items">
           <NavLink 

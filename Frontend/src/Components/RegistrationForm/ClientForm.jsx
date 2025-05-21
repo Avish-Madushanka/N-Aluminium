@@ -1,17 +1,15 @@
-// src/Components/RegistrationForm/ClientForm.jsx
 import React, { useState, useEffect } from 'react';
-import axiosInstance from '../../api/axiosInstance'; // Make sure path is correct
-import API_ENDPOINTS from '../../apiConfig';     // Make sure path is correct
+import axiosInstance from '../../api/axiosInstance'; 
+import API_ENDPOINTS from '../../apiConfig';     
 import { useNavigate } from 'react-router-dom';
 import { FileImage, AlertCircle, Mail, Phone, Lock, Home, MapPin, User } from 'lucide-react';
-import './ClientForm.css'; // Your CSS
+import './ClientForm.css'; 
 
-// --- VALIDATION PATTERNS (Ensure these are defined) ---
 const VALIDATION_PATTERNS = {
   NAME: /^[a-zA-Z\s]{3,50}$/,
   EMAIL: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
   PHONE: /^[0-9]{10}$/,
-  PASSWORD: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&]{6,}$/, // Example: Min 6 chars, 1 upper, 1 lower, 1 digit
+  PASSWORD: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&]{6,}$/, 
   ADDRESS_MIN_LENGTH: 10,
 };
 const MAX_FILE_SIZE_MB = 5;
@@ -22,7 +20,7 @@ const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/gif'];
 const ClientForm = () => {
   const [formData, setFormData] = useState({
     name: '', email: '', contactNumber: '', password: '',
-    address: '', district: 'colombo', province: 'western' // Set default values if desired
+    address: '', district: 'colombo', province: 'western'
   });
   const [profilePhoto, setProfilePhoto] = useState(null);
   const [profilePhotoPreview, setProfilePhotoPreview] = useState(null);
@@ -32,7 +30,6 @@ const ClientForm = () => {
   const [touchedFields, setTouchedFields] = useState({});
   const navigate = useNavigate();
 
-  // --- useEffect for revoking object URL ---
   useEffect(() => {
     return () => {
       if (profilePhotoPreview) {
@@ -42,7 +39,6 @@ const ClientForm = () => {
   }, [profilePhotoPreview]);
 
 
-  // --- MISSING HANDLER FUNCTIONS - RE-ADD THESE ---
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
@@ -61,7 +57,7 @@ const ClientForm = () => {
 
   const validateSingleField = (name, value) => {
     let fieldError = '';
-    const trimmedValue = typeof value === 'string' ? value.trim() : value; // Handle non-string values if any select uses them directly
+    const trimmedValue = typeof value === 'string' ? value.trim() : value; 
 
     switch (name) {
       case 'name':
@@ -77,7 +73,7 @@ const ClientForm = () => {
         else if (!VALIDATION_PATTERNS.PHONE.test(trimmedValue)) fieldError = 'Enter a 10-digit phone number.';
         break;
       case 'password':
-        if (!value) fieldError = 'Password is required.'; // Check original value for password, not trimmed
+        if (!value) fieldError = 'Password is required.'; 
         else if (!VALIDATION_PATTERNS.PASSWORD.test(value)) fieldError = 'Password: min 6 chars, with uppercase, lowercase, and number.';
         break;
       case 'address':
@@ -85,7 +81,7 @@ const ClientForm = () => {
         else if (trimmedValue.length < VALIDATION_PATTERNS.ADDRESS_MIN_LENGTH) fieldError = `Address must be at least ${VALIDATION_PATTERNS.ADDRESS_MIN_LENGTH} characters.`;
         break;
       case 'district':
-        if (!value) fieldError = 'District is required.'; // Selects usually don't need trimming for validation
+        if (!value) fieldError = 'District is required.'; 
         break;
       case 'province':
         if (!value) fieldError = 'Province is required.';
@@ -95,7 +91,6 @@ const ClientForm = () => {
     setErrors(prev => ({
       ...prev,
       [name]: fieldError,
-      // Clear general form error if this field becomes valid and no other field errors exist
       form: (prev.form && !fieldError && Object.values({...prev, [name]: ''}).every(err => !err || err === prev.form)) ? '' : prev.form
     }));
     return !fieldError;
@@ -106,15 +101,11 @@ const ClientForm = () => {
     const currentClientSideErrors = {};
     const allFieldsToTouch = {};
 
-    // Validate formData fields
     for (const key in formData) {
       if (Object.prototype.hasOwnProperty.call(formData, key)) {
-        allFieldsToTouch[key] = true; // Mark all as touched for error display
-        if (!validateSingleField(key, formData[key])) { // Re-use single field validation
-          // validateSingleField already updates errors state, so we just need to track validity
-          // We copy the error from the state because validateSingleField is async with setErrors
-          // A better approach would be for validateSingleField to return the error string or boolean
-          // For now, we'll manually re-check and populate currentClientSideErrors
+        allFieldsToTouch[key] = true; 
+        if (!validateSingleField(key, formData[key])) { 
+
           let tempError = '';
           const value = formData[key];
           const trimmedValue = typeof value === 'string' ? value.trim() : value;
@@ -135,9 +126,8 @@ const ClientForm = () => {
         }
       }
     }
-    setTouchedFields(allFieldsToTouch); // Show all errors
+    setTouchedFields(allFieldsToTouch);
 
-    // Validate profilePhoto
     if (profilePhoto) {
       if (!ALLOWED_IMAGE_TYPES.includes(profilePhoto.type)) {
         currentClientSideErrors.profilePhoto = `Invalid file type. Allowed: ${ALLOWED_IMAGE_TYPES.join(', ')}.`;
@@ -147,51 +137,44 @@ const ClientForm = () => {
         isFormValid = false;
       }
     }
-    // Update errors state with all found errors
     setErrors(prev => ({ ...prev, ...currentClientSideErrors }));
     return isFormValid;
   };
 
   const handleProfilePhotoChange = (e) => {
     const file = e.target.files?.[0] || null;
-    setErrors(prev => ({ ...prev, profilePhoto: '' })); // Clear previous photo error
+    setErrors(prev => ({ ...prev, profilePhoto: '' })); 
 
     if (profilePhotoPreview) {
       URL.revokeObjectURL(profilePhotoPreview);
       setProfilePhotoPreview(null);
     }
-    setProfilePhoto(null); // Reset file state
+    setProfilePhoto(null); 
 
     if (!file) return;
 
-    // Client-side validation for the photo
     if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
       setErrors(prev => ({ ...prev, profilePhoto: `Invalid file type. Allowed: ${ALLOWED_IMAGE_TYPES.join(', ')}.` }));
-      e.target.value = null; // Reset file input
+      e.target.value = null; 
       return;
     }
     if (file.size > MAX_FILE_SIZE_BYTES) {
       setErrors(prev => ({ ...prev, profilePhoto: `Image is too large (max ${MAX_FILE_SIZE_MB}MB).` }));
-      e.target.value = null; // Reset file input
+      e.target.value = null;
       return;
     }
 
     setProfilePhoto(file);
     setProfilePhotoPreview(URL.createObjectURL(file));
   };
-  // --- END OF MISSING HANDLER FUNCTIONS ---
 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     setSuccessMessage('');
-    setErrors({}); // Clear previous errors before new validation
+    setErrors({}); 
 
-    // Mark all fields as touched to show errors if validation fails
-    // const allTouched = {};
-    // Object.keys(formData).forEach(key => { allTouched[key] = true; });
-    // setTouchedFields(allTouched); // fullyValidateForm will handle setting touched via validateSingleField calls.
 
     if (!fullyValidateForm()) {
       setIsLoading(false);
@@ -212,25 +195,25 @@ const ClientForm = () => {
       
       if (response.data && response.data.success) {
         setSuccessMessage('Registration successful! Redirecting to login...');
-        setFormData({ // Reset form
+        setFormData({ 
           name: '', email: '', contactNumber: '', password: '',
           address: '', district: 'colombo', province: 'western'
         });
-        if (profilePhotoPreview) URL.revokeObjectURL(profilePhotoPreview); // Also revoke on success
+        if (profilePhotoPreview) URL.revokeObjectURL(profilePhotoPreview); 
         setProfilePhoto(null); setProfilePhotoPreview(null);
-        setTouchedFields({}); setErrors({}); // Clear touched fields and errors
+        setTouchedFields({}); setErrors({}); 
         setTimeout(() => navigate('/login'), 3000);
       } else {
         throw new Error(response.data?.message || 'Registration failed: Unexpected server response.');
       }
     } catch (err) {
-      handleApiError(err); // Ensure handleApiError is defined
+      handleApiError(err); 
     } finally {
       setIsLoading(false);
     }
   };
   
-  const handleApiError = (error) => { // Ensure this function is defined
+  const handleApiError = (error) => { 
     let topLevelFormError = 'An unexpected error occurred. Please try again.';
     const newErrorsFromServer = {};
 
@@ -251,11 +234,10 @@ const ClientForm = () => {
     if (Object.keys(newErrorsFromServer).length > 0) {
         setErrors(prev => ({ ...prev, ...newErrorsFromServer, form: 'Please correct the server-flagged errors.' }));
     } else {
-        setErrors({ form: topLevelFormError }); // Keep other field errors if any
+        setErrors({ form: topLevelFormError }); 
     }
   };
 
-  // --- JSX ---
   return (
     <div className="client-form-container">
       <div className="form-header">
@@ -275,15 +257,14 @@ const ClientForm = () => {
       )}
 
       <form onSubmit={handleSubmit} noValidate encType="multipart/form-data">
-        {/* Name Field */}
         <div className="form-group" style={{ "--index": 0 }}>
           <label htmlFor="name" className="form-label">
             <User size={16} className="mr-1 inline" /> Full Name *
           </label>
           <input
             id="name" type="text" name="name" value={formData.name}
-            onChange={handleInputChange} // Using the re-added function
-            onBlur={handleInputBlur}    // Using the re-added function
+            onChange={handleInputChange} 
+            onBlur={handleInputBlur}   
             required disabled={isLoading}
             className={`form-input ${errors.name ? 'input-error' : ''}`}
             placeholder="Enter your full name"
@@ -293,7 +274,6 @@ const ClientForm = () => {
           {errors.name && <div id="name-error" className="error-message">{errors.name}</div>}
         </div>
 
-        {/* Email Field */}
         <div className="form-group" style={{ "--index": 1 }}>
           <label htmlFor="email" className="form-label">
             <Mail size={16} className="mr-1 inline" /> Email *
@@ -311,7 +291,6 @@ const ClientForm = () => {
           {errors.email && <div id="email-error" className="error-message">{errors.email}</div>}
         </div>
 
-        {/* Contact Number */}
         <div className="form-group" style={{ "--index": 2 }}>
           <label htmlFor="contactNumber" className="form-label">
             <Phone size={16} className="mr-1 inline" /> Contact Number *
@@ -323,7 +302,7 @@ const ClientForm = () => {
             required disabled={isLoading}
             className={`form-input ${errors.contactNumber ? 'input-error' : ''}`}
             placeholder="07xxxxxxxx"
-            pattern="[0-9]{10}" // HTML5 pattern
+            pattern="[0-9]{10}" 
             title="Please enter a 10-digit phone number"
             aria-invalid={!!errors.contactNumber}
             aria-describedby={errors.contactNumber ? "contactNumber-error" : undefined}
@@ -331,7 +310,6 @@ const ClientForm = () => {
           {errors.contactNumber && <div id="contactNumber-error" className="error-message">{errors.contactNumber}</div>}
         </div>
         
-        {/* Password Field */}
         <div className="form-group" style={{ "--index": 3 }}>
             <label htmlFor="password" className="form-label">
               <Lock size={16} className="mr-1 inline" /> Password *
@@ -343,14 +321,13 @@ const ClientForm = () => {
               required disabled={isLoading}
               className={`form-input ${errors.password ? 'input-error' : ''}`}
               placeholder="Create a password"
-              minLength="6" // HTML5 minLength
+              minLength="6" 
               aria-invalid={!!errors.password}
               aria-describedby={errors.password ? "password-error" : undefined}
             />
             {errors.password && <div id="password-error" className="error-message">{errors.password}</div>}
         </div>
 
-        {/* Address */}
         <div className="form-group" style={{ "--index": 4 }}>
           <label htmlFor="address" className="form-label">
             <Home size={16} className="mr-1 inline" /> Address *
@@ -368,7 +345,6 @@ const ClientForm = () => {
           {errors.address && <div id="address-error" className="error-message">{errors.address}</div>}
         </div>
 
-        {/* District and Province Grid */}
         <div className="form-grid" style={{ "--index": 5 }}>
           <div className="form-group">
             <label htmlFor="district" className="form-label">
@@ -409,7 +385,6 @@ const ClientForm = () => {
           </div>
         </div>
 
-        {/* Profile Photo Upload */}
         <div className="form-group" style={{ "--index": 6 }}>
           <label className="form-label">Profile Photo (Optional)</label>
           <div className="profile-upload-container">
@@ -426,7 +401,7 @@ const ClientForm = () => {
             </label>
             <input
               id="profilePhotoFile" type="file"
-              onChange={handleProfilePhotoChange} // Using the re-added function
+              onChange={handleProfilePhotoChange} 
               accept={ALLOWED_IMAGE_TYPES.join(',')}
               className="hidden-file-input"
               disabled={isLoading}

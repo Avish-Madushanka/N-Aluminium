@@ -1,12 +1,11 @@
-// src/Components/WasteCollect/UserCalendar.jsx
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import {
     ChevronLeft, ChevronRight, Calendar, Recycle, Clock, MapPin, Truck,
     CheckCircle, AlertTriangle, Info, Plus, User, Phone, Mail, Package, Weight, Loader2
 } from 'lucide-react';
-import './USerCalendar.css'; // Make sure this CSS file exists and is correctly styled
-import axiosInstance from '../../api/axiosInstance'; // Adjust path as per your project structure
-import API_ENDPOINTS from '../../apiConfig';   // Adjust path as per your project structure
+import './USerCalendar.css'; 
+import axiosInstance from '../../api/axiosInstance'; 
+import API_ENDPOINTS from '../../apiConfig';   
 
 const formatWeight = (weightValue) => {
     if (!weightValue || isNaN(parseFloat(weightValue))) return "N/A";
@@ -15,7 +14,7 @@ const formatWeight = (weightValue) => {
     return `${weight.toFixed(1)} kg`;
 };
 
-const UserCalendar = ({ userInfo }) => { // Assuming userInfo is passed if needed
+const UserCalendar = ({ userInfo }) => { 
     const [backendSettings, setBackendSettings] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -24,13 +23,13 @@ const UserCalendar = ({ userInfo }) => { // Assuming userInfo is passed if neede
     const [currentDate, setCurrentDate] = useState(new Date());
     const [selectedDate, setSelectedDate] = useState(null);
     const [bookingStep, setBookingStep] = useState(0);
-    const [timeSlot, setTimeSlot] = useState(null); // Stores selected timeSlot ID
-    const [serviceArea, setServiceArea] = useState(null); // Stores selected serviceArea ID    
+    const [timeSlot, setTimeSlot] = useState(null); 
+    const [serviceArea, setServiceArea] = useState(null);  
     const [estimatedWeight, setEstimatedWeight] = useState("");
     const [pickupLocation, setPickupLocation] = useState("");
     const [contactDetails, setContactDetails] = useState({ 
         name: userInfo?.name || "", 
-        phone: userInfo?.contactNumber || "", // Assuming contactNumber is in userInfo
+        phone: userInfo?.contactNumber || "", 
         email: userInfo?.email || "" 
     });
     const [bookingConfirmed, setBookingConfirmed] = useState(false);
@@ -39,7 +38,7 @@ const UserCalendar = ({ userInfo }) => { // Assuming userInfo is passed if neede
     const daysOfWeek = useMemo(() => ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], []);
     const monthNames = useMemo(() => ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'], []);
 
-    // Fallback settings if API fails or returns incomplete data
+
     const fallbackSettings = useMemo(() => ({
         availableDays: new Map([['0',false],['1',false],['2',false],['3',false],['4',false],['5',false],['6',false]]),
         timeSlots: [],
@@ -64,8 +63,8 @@ const UserCalendar = ({ userInfo }) => { // Assuming userInfo is passed if neede
                     const apiDateSettingsObject = fetched.dateSettings || {};
 
                     setBackendSettings({
-                        ...fallbackSettings, // Base structure
-                        ...fetched,          // Overwrite with fetched data
+                        ...fallbackSettings, 
+                        ...fetched,         
                         availableDays: new Map(Object.entries(apiAvailableDaysObject)),
                         dateSettings: new Map(Object.entries(apiDateSettingsObject)),
                         timeSlots: fetched.timeSlots || fallbackSettings.timeSlots,
@@ -150,7 +149,7 @@ const UserCalendar = ({ userInfo }) => { // Assuming userInfo is passed if neede
         setCurrentDate(new Date()); setError(null); setIsSubmitting(false);
     }, [userInfo]);
 
-    const confirmBooking = async () => { // Make it async
+    const confirmBooking = async () => { 
         setIsSubmitting(true);
         setError(null);
     
@@ -158,33 +157,30 @@ const UserCalendar = ({ userInfo }) => { // Assuming userInfo is passed if neede
     
     
         const bookingData = {
-            selectedDate: selectedDateObj ? selectedDateObj.toISOString() : null, // Send full ISO string
+            selectedDate: selectedDateObj ? selectedDateObj.toISOString() : null, 
             timeSlotId: timeSlot,
             serviceAreaId: serviceArea,
             estimatedWeight: estimatedWeight ? parseFloat(estimatedWeight) : null,
             pickupLocation: pickupLocation,
             contactDetails: contactDetails,
-            // userId will be added by backend if user is authenticated
         };
     
         console.log("Submitting Booking Data:", JSON.stringify(bookingData, null, 2));
     
         try {
-            // Ensure API_ENDPOINTS.BOOKINGS.CREATE is defined
             if (!API_ENDPOINTS.BOOKINGS || !API_ENDPOINTS.BOOKINGS.CREATE) {
                 throw new Error("API endpoint for creating bookings is not defined.");
             }
             const response = await axiosInstance.post(API_ENDPOINTS.BOOKINGS.CREATE, bookingData);
     
             if (response.data && response.data.success) {
-                setBookingId(response.data.data.bookingId || response.data.data._id); // Use the short bookingId if available
+                setBookingId(response.data.data.bookingId || response.data.data._id); 
                 setBookingConfirmed(true);
             } else {
                 throw new Error(response.data?.message || 'Booking request failed.');
             }
         } catch (err) {
             console.error("Booking submission error:", err);
-            // ADD THIS LINE FOR DETAILED SERVER RESPONSE
             if (err.response) {
                 console.error("Server response data:", JSON.stringify(err.response.data, null, 2));
             }
@@ -230,7 +226,6 @@ const UserCalendar = ({ userInfo }) => { // Assuming userInfo is passed if neede
         return <p className="UCal-summary-item"><IconComponent size={16} /><strong>{label}:</strong> {value}</p>;
     };
 
-    // Determine available time slots for the selected date
     const timeSlotsForSelectedDate = useMemo(() => {
         if (!selectedDate || !settings.timeSlots || settings.timeSlots.length === 0) return [];
         const dateStr = `${selectedDate.getFullYear()}-${(selectedDate.getMonth() + 1).toString().padStart(2, '0')}-${selectedDate.getDate().toString().padStart(2, '0')}`;
@@ -239,14 +234,13 @@ const UserCalendar = ({ userInfo }) => { // Assuming userInfo is passed if neede
         if (dateSpecificConfig && dateSpecificConfig.timeSlots && dateSpecificConfig.timeSlots.length > 0) {
             return settings.timeSlots.filter(slot => slot.active && dateSpecificConfig.timeSlots.includes(slot.id));
         }
-        // If day is available and no specific overrides, use all globally active slots
+
         if (isCollectionDay(selectedDate.getDate(), selectedDate.getMonth(), selectedDate.getFullYear())) {
             return settings.timeSlots.filter(slot => slot.active);
         }
-        return []; // Default to no slots if day is not available or no active slots match
+        return []; 
     }, [selectedDate, settings.timeSlots, settings.dateSettings, isCollectionDay]);
 
-    // Determine available service areas for the selected date
     const serviceAreasForSelectedDate = useMemo(() => {
         if (!selectedDate || !settings.serviceAreas || settings.serviceAreas.length === 0) return [];
         const dateStr = `${selectedDate.getFullYear()}-${(selectedDate.getMonth() + 1).toString().padStart(2, '0')}-${selectedDate.getDate().toString().padStart(2, '0')}`;
@@ -255,7 +249,7 @@ const UserCalendar = ({ userInfo }) => { // Assuming userInfo is passed if neede
         if (dateSpecificConfig && dateSpecificConfig.serviceAreas && dateSpecificConfig.serviceAreas.length > 0) {
             return settings.serviceAreas.filter(area => area.active && dateSpecificConfig.serviceAreas.includes(area.id));
         }
-         // If day is available and no specific overrides, use all globally active areas
+
         if (isCollectionDay(selectedDate.getDate(), selectedDate.getMonth(), selectedDate.getFullYear())) {
             return settings.serviceAreas.filter(area => area.active);
         }

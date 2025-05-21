@@ -1,5 +1,3 @@
-/* src/Pages/MyItemsPage.css (NEW FILE) */
-
 .my-items-container {
     max-width: 1200px;
     margin: 30px auto;
@@ -173,14 +171,12 @@
     background-color: #f8d7da;
   }
   
-  /* Responsive adjustments for grid */
   @media (max-width: 600px) {
     .my-items-grid {
         grid-template-columns: 1fr;
     }
   }
   
-  /* Placeholder for Bought Items Section */
   .my-bought-items-section {
       margin-top: 40px;
       padding-top: 20px;

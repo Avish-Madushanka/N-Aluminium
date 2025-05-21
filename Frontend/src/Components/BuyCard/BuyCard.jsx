@@ -5,7 +5,6 @@ import API_ENDPOINTS from '../../apiConfig';
 const BuyCard = ({ onClose, product }) => { 
   console.log("BuyCard rendered with product:", product);
 
-  // Default product data in case none is provided
   const defaultProduct = {
     imagePath: "https://via.placeholder.com/300x200?text=No+Image",
     name: "Product Name",
@@ -18,24 +17,19 @@ const BuyCard = ({ onClose, product }) => {
     type: "Type not specified"
   };
 
-  // If no product is provided, use defaults
   if (!product) {
     console.warn("BuyCard: No product data provided, using defaults");
   }
 
-  // Get the full image URL
   const getImageUrl = (imagePath) => {
     if (!imagePath) return "https://via.placeholder.com/300x200?text=No+Image";
     
-    // If it's already a full URL, return it
     if (imagePath.startsWith('http')) return imagePath;
     
-    // Otherwise, construct the URL using the backend root
     const backendRoot = API_ENDPOINTS.BACKEND_ROOT_URL;
     return `${backendRoot}${imagePath}`;
   };
 
-  // Format address with district and province
   const formatAddress = (address, district, province) => {
     let formattedAddress = address || 'Address not available';
     
@@ -50,13 +44,11 @@ const BuyCard = ({ onClose, product }) => {
     return formattedAddress;
   };
 
-  // Format price with commas and currency
   const formatPrice = (price) => {
     if (price === undefined || price === null) return 'Price not available';
     return `Rs. ${Number(price).toLocaleString()}`;
   };
 
-  // Use the provided product or fall back to defaults
   const productData = product || defaultProduct;
   
   const imageUrl = getImageUrl(productData.imagePath);

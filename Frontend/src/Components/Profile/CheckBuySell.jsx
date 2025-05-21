@@ -6,7 +6,6 @@ import { useAuth } from '../../context/AuthContext';
 import axiosInstance from '../../api/axiosInstance';
 import API_ENDPOINTS from '../../apiConfig';
 
-// Update Modal Component
 const UpdateItemModal = ({ item, onClose, onUpdate }) => {
   const [formData, setFormData] = useState({
     name: item.name || '',
@@ -201,22 +200,17 @@ const UpdateItemModal = ({ item, onClose, onUpdate }) => {
   );
 };
 
-// MyItemCard Component
 const MyItemCard = ({ item, onDelete, onEdit }) => {
-  // Construct the full image URL
   const getImageUrl = (imagePath) => {
     if (!imagePath) return "https://via.placeholder.com/150";
     
-    // If it's already a full URL, return it
     if (imagePath.startsWith('http')) return imagePath;
     
-    // Otherwise, construct the URL using the backend root
     const backendRoot = API_ENDPOINTS.BACKEND_ROOT_URL;
     return `${backendRoot}${imagePath}`;
   };
 
   const handleDeleteClick = () => {
-    // Ask for confirmation before deleting
     if (window.confirm(`Are you sure you want to delete "${item.name}"? This cannot be undone.`)) {
       onDelete(item._id);
     }
@@ -249,7 +243,6 @@ const MyItemCard = ({ item, onDelete, onEdit }) => {
   );
 };
 
-// Main CheckBuySell Component
 const CheckBuySell = () => {
   const { userInfo } = useAuth();
   const [myItems, setMyItems] = useState([]);
@@ -257,35 +250,23 @@ const CheckBuySell = () => {
   const [error, setError] = useState('');
   const [editingItem, setEditingItem] = useState(null);
 
-  // Fetch user's sale items from the backend
   useEffect(() => {
     const fetchUserSaleItems = async () => {
-      // This check is now more robust thanks to the outer if-else in useEffect
-      // if (!userInfo || !userInfo.id) {
-      //   setError("User information not available. Please log in again.");
-      //   setIsLoading(false);
-      //   return;
-      // }
+
 
       try {
         setIsLoading(true);
         setError('');
         console.log('[CheckBuySell] Current User Info for fetching items:', JSON.stringify(userInfo, null, 2));
         
-        // Fetch all sale items
         const response = await axiosInstance.get(API_ENDPOINTS.SALE_ITEMS.GET_ALL);
         console.log('[CheckBuySell] API Response for GET_ALL Sale Items:', JSON.stringify(response.data, null, 2));
         
         if (response.data && response.data.data) {
           const allItems = response.data.data;
-          // Filter items by the current user's ID
           const userItems = allItems.filter(
             item => {
-              // After populate, item.userId is an object like { _id: '...', name: '...', email: '...' }
-              // or null if the user was deleted or populate failed for some reason.
-              // userInfo.id is expected to be a string.
               const isMatch = item.userId && typeof item.userId === 'object' && item.userId._id === userInfo.id;
-              // console.log(`[FilterDebug] ItemID: ${item._id}, item.userId: ${JSON.stringify(item.userId)}, userInfo.id: ${userInfo.id}, Match: ${isMatch}`);
               return isMatch;
             }
           );
@@ -310,22 +291,19 @@ const CheckBuySell = () => {
     } else if (!userInfo) {
       setError("User not logged in. Cannot fetch items.");
       setIsLoading(false);
-    } else if (!userInfo.id) { // This case handles if userInfo exists but id is missing for some reason
+    } else if (!userInfo.id) {
       setError("User ID missing from user information. Please re-login.");
       setIsLoading(false);
     }
 
   }, [userInfo]);
 
-  // Handle item deletion
   const handleDeleteItem = async (itemId) => {
     try {
       setIsLoading(true);
-      
-      // Delete the item from the backend
+
       await axiosInstance.delete(API_ENDPOINTS.SALE_ITEMS.DELETE_ONE(itemId));
-      
-      // Update the local state
+
       const updatedItems = myItems.filter(item => item._id !== itemId);
       setMyItems(updatedItems);
       
@@ -338,12 +316,10 @@ const CheckBuySell = () => {
     }
   };
 
-  // Handle item editing
   const handleEditItem = (item) => {
     setEditingItem(item);
   };
 
-  // Handle item update
   const handleUpdateItem = (updatedItem) => {
     const updatedItems = myItems.map(item => 
       item._id === updatedItem._id ? updatedItem : item
@@ -382,7 +358,6 @@ const CheckBuySell = () => {
         </>
       )}
 
-      {/* Update Modal */}
       {editingItem && (
         <UpdateItemModal
           item={editingItem}
