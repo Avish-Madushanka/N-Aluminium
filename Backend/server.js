@@ -3,8 +3,8 @@ require('dotenv').config();
 
 const express = require('express');
 const cors = require('cors');
-const actualPath = require('path'); // Renamed to avoid conflict if you use 'path' variable elsewhere
-const actualHttp = require('http'); // Renamed
+const actualPath = require('path');
+const actualHttp = require('http');
 const fs = require('fs');
 
 const connectDB = require('./config/db');
@@ -12,7 +12,7 @@ const connectDB = require('./config/db');
 console.log('[Server Startup] Initializing: Attempting to load route modules...');
 let clientRoutes, bOwnerRoutes, authRoutes, calendarSettingsRoutes,
     bookingRoutes, reviewRoutes, scrapTypeRoutes, shopLocationRoutes, adminRoutes,
-    saleItemRoutes; // <-- Added saleItemRoutes
+    saleItemRoutes, adminStatsRoutes, projectRoutes; // <-- Added projectRoutes
 
 const loadRoute = (routeName, path) => {
   try {
@@ -37,8 +37,10 @@ bookingRoutes = loadRoute('bookingRoutes', './routes/bookingRoutes');
 reviewRoutes = loadRoute('reviewRoutes', './routes/reviewRoutes');
 scrapTypeRoutes = loadRoute('scrapTypeRoutes', './routes/scrapTypeRoutes');
 shopLocationRoutes = loadRoute('shopLocationRoutes', './routes/shopLocationRoutes');
-adminRoutes = loadRoute('adminRoutes', './routes/adminRoutes');
-saleItemRoutes = loadRoute('saleItemRoutes', './routes/saleItemRoutes'); // <-- Load new routes
+adminRoutes = loadRoute('adminRoutes', './routes/adminRoutes'); // General admin routes
+saleItemRoutes = loadRoute('saleItemRoutes', './routes/saleItemRoutes');
+adminStatsRoutes = loadRoute('adminStatsRoutes', './routes/adminStatsRoutes'); // Admin statistics routes
+projectRoutes = loadRoute('projectRoutes', './routes/projectRoutes'); // Project routes
 
 console.log('[Server Startup] Loading controllers and middleware...');
 const { createInitialAdmin } = require('./controllers/adminController');
@@ -56,28 +58,33 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 const uploadsDirectory = actualPath.join(__dirname, 'uploads');
-app.use('/uploads', express.static(uploadsDirectory)); // This serves /uploads, /uploads/saleitems, etc.
+app.use('/uploads', express.static(uploadsDirectory));
 
 if (fs.existsSync(uploadsDirectory)) {
     console.log(`[Server Config] Serving static files from ${uploadsDirectory} at /uploads`);
-    // Check for saleitems subdirectory specifically (created by uploadMiddleware)
-    const saleItemsSubDir = actualPath.join(uploadsDirectory, 'saleitems');
-    if (fs.existsSync(saleItemsSubDir)) {
-        console.log(`[Server Config] 'uploads/saleitems' subdirectory exists.`);
-    } else {
-        console.warn(`[Server Config] 'uploads/saleitems' subdirectory NOT found. It should be created by uploadMiddleware.`);
-    }
+    const subdirectories = ['saleitems', 'projects', 'profiles']; // Add other subdirs as needed
+    subdirectories.forEach(subDir => {
+        const fullSubDirPath = actualPath.join(uploadsDirectory, subDir);
+        if (fs.existsSync(fullSubDirPath)) {
+            console.log(`[Server Config] 'uploads/${subDir}' subdirectory exists.`);
+        } else {
+            console.warn(`[Server Config] 'uploads/${subDir}' subdirectory NOT found. It should be created by relevant uploadMiddleware.`);
+        }
+    });
 } else {
     console.warn(`[Server Config] 'uploads' directory (${uploadsDirectory}) does not exist. Static file serving for /uploads might not work as expected. Attempting to create...`);
     try {
         fs.mkdirSync(uploadsDirectory, { recursive: true });
         console.log(`[Server Config] Successfully created 'uploads' directory at ${uploadsDirectory}`);
-        // Attempt to create saleitems subdir as well if main uploads was just created
-        const saleItemsSubDir = actualPath.join(uploadsDirectory, 'saleitems');
-         if (!fs.existsSync(saleItemsSubDir)) {
-            fs.mkdirSync(saleItemsSubDir, { recursive: true });
-            console.log(`[Server Config] Successfully created 'uploads/saleitems' subdirectory.`);
-        }
+        // Ensure subdirectories are also created if base uploads is created here
+        const subdirectoriesToCreate = ['saleitems', 'projects', 'profiles'];
+        subdirectoriesToCreate.forEach(subDir => {
+            const fullSubDirPath = actualPath.join(uploadsDirectory, subDir);
+            if (!fs.existsSync(fullSubDirPath)) {
+                fs.mkdirSync(fullSubDirPath, { recursive: true });
+                console.log(`[Server Config] Successfully created 'uploads/${subDir}' subdirectory.`);
+            }
+        });
     } catch (err) {
         console.error(`[Server Config] FAILED to create 'uploads' directory or subdirectories: ${err.message}`);
     }
@@ -109,8 +116,12 @@ const mountRoutes = () => {
     mount('/api/reviews', reviewRoutes, 'reviewRoutes');
     mount('/api/scrap-types', scrapTypeRoutes, 'scrapTypeRoutes');
     mount('/api/shop-locations', shopLocationRoutes, 'shopLocationRoutes');
-    mount('/api/admin', adminRoutes, 'adminRoutes');
-    mount('/api/saleitems', saleItemRoutes, 'saleItemRoutes'); // <-- Mount new routes
+    mount('/api/saleitems', saleItemRoutes, 'saleItemRoutes');
+    mount('/api/projects', projectRoutes, 'projectRoutes'); // <-- MOUNTED projectRoutes
+
+    // Admin specific routes
+    mount('/api/admin', adminRoutes, 'adminRoutes'); // For general admin actions (e.g., manage users, site settings)
+    mount('/api/admin/stats', adminStatsRoutes, 'adminStatsRoutes'); // For dashboard statistics
 
     console.log('[Server Config] Route mounting process completed.');
 };
@@ -120,7 +131,7 @@ mountRoutes();
 console.log('[Server Config] Applying global error handler.');
 app.use(errorHandler);
 
-const server = actualHttp.createServer(app); // Use renamed http
+const server = actualHttp.createServer(app);
 
 const startServer = async () => {
     try {
@@ -192,3 +203,4 @@ process.on('uncaughtException', (err) => {
 
 
 startServer();
+// --- END OF FILE server.js ---

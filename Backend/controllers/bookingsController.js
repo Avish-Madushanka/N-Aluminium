@@ -55,14 +55,34 @@ const createBooking = async (req, res, next) => {
 
 const getAllBookings = async (req, res, next) => {
     try {
-        // This is for admin to get ALL bookings
-        const bookings = await Booking.find({})
-            .populate('userId', 'name email')
-            .sort({ createdAt: -1 });
+        let query = Booking.find({}); // Base query for all bookings
+
+        // Sorting - for dashboard recent bookings: ?sort=-createdAt
+        if (req.query.sort) {
+            const sortBy = req.query.sort.split(',').join(' '); // Example: 'field1,field2' -> 'field1 field2'
+            query = query.sort(sortBy);
+        } else {
+            query = query.sort({ createdAt: -1 }); // Default sort: newest first
+        }
+
+        // Limiting - for dashboard recent bookings: ?limit=5
+        const limit = parseInt(req.query.limit, 10);
+        if (!isNaN(limit) && limit > 0) {
+            query = query.limit(limit);
+        }
+        
+        // Populate user details
+        query = query.populate('userId', 'name email');
+
+        const bookings = await query;
+
+        // If you were implementing full pagination, you would also calculate total count here
+        // const totalCount = await Booking.countDocuments({}); // Without limit
 
         res.status(200).json({
             success: true,
-            count: bookings.length,
+            // count: totalCount, // if paginating fully, send total
+            count: bookings.length, // For limited queries, this is the count of returned items
             data: bookings
         });
     } catch (error) {
@@ -78,10 +98,6 @@ const getMyBookings = async (req, res, next) => {
         }
 
         const bookings = await Booking.find({ userId: req.user.id })
-            // We don't populate userId here as it's the current user.
-            // timeSlotId and serviceAreaId are stored as strings.
-            // If richer data is needed, CalendarSettings would need to be queried
-            // and the IDs mapped, or frontend handles this.
             .sort({ createdAt: -1 });
 
         res.status(200).json({
@@ -102,7 +118,7 @@ const getBookingById = async (req, res, next) => {
             return res.status(404).json({ success: false, message: 'Booking not found.' });
         }
         // Add a check if the user is not admin and doesn't own the booking
-        if (req.user.role !== 'admin' && booking.userId._id.toString() !== req.user.id) {
+        if (req.user.role !== 'admin' && booking.userId && booking.userId._id.toString() !== req.user.id) {
             return res.status(403).json({ success: false, message: 'You are not authorized to view this booking.' });
         }
         res.status(200).json({ success: true, data: booking });
@@ -139,7 +155,6 @@ const updateBookingStatus = async (req, res, next) => {
                 return res.status(400).json({ success: false, message: `Bookings with status '${bookingBeforeUpdate.status}' cannot be cancelled by you at this stage.` });
             }
         } else if (req.user.role !== 'admin') {
-            // Should be caught by authorize middleware, but as a safeguard
             return res.status(403).json({ success: false, message: 'You do not have permission to change booking status.' });
         }
 
@@ -149,12 +164,11 @@ const updateBookingStatus = async (req, res, next) => {
 
         const updateData = { status };
 
-        // Only admin can modify adminNotes
         if (req.user.role === 'admin') {
             if (adminNotesFromRequest !== null) {
                 updateData.adminNotes = adminNotesFromRequest;
             } else if (status === 'cancelled' && adminNotesFromRequest === null && !oldAdminNotes) {
-                 updateData.adminNotes = ''; // Admin can explicitly clear notes if cancelling and notes were empty
+                 updateData.adminNotes = ''; 
             }
         }
         
@@ -162,8 +176,6 @@ const updateBookingStatus = async (req, res, next) => {
         if (req.user.role === 'admin' && adminNotesFromRequest !== null && oldAdminNotes !== adminNotesFromRequest) {
             notesChanged = true;
         } else if (req.user.role === 'admin' && status === 'cancelled' && adminNotesFromRequest === null && !oldAdminNotes && oldAdminNotes !== '') {
-             // This condition seems to imply if admin is cancelling, notes are empty in request, and old notes were not empty but also not ''
-             // This specific case might need refinement based on exact intent for admin clearing notes
              if (oldAdminNotes !== undefined) notesChanged = true;
         }
 
@@ -186,7 +198,11 @@ const updateBookingStatus = async (req, res, next) => {
 
         if (updatedBooking.status !== oldStatus && (updatedBooking.status === 'confirmed' || updatedBooking.status === 'cancelled')) {
             console.log(`[BookingsCtrl UpdateStatus] Email for booking ${bookingId}, new status: ${updatedBooking.status}`);
-            await sendBookingStatusUpdateEmail(updatedBooking, updatedBooking.status);
+            if (updatedBooking.userId && updatedBooking.contactDetails.email) { // Check if email is available
+                 await sendBookingStatusUpdateEmail(updatedBooking, updatedBooking.status);
+            } else {
+                console.warn(`[BookingsCtrl UpdateStatus] Cannot send email for booking ${bookingId}: user or email missing.`);
+            }
         }
 
         res.status(200).json({ success: true, message: 'Booking status updated.', data: updatedBooking });
@@ -201,7 +217,6 @@ const updateBookingStatus = async (req, res, next) => {
 };
 
 const updateBooking = async (req, res, next) => {
-    // This route is admin-only. Clients cannot use this for general updates.
     try {
         const bookingId = req.params.id;
         
@@ -233,7 +248,7 @@ const updateBooking = async (req, res, next) => {
             updateFields.status = status;
         }
         
-        if (adminNotes !== undefined) { // Admin can set/clear adminNotes
+        if (adminNotes !== undefined) { 
             updateFields.adminNotes = adminNotes;
         }
 
@@ -255,7 +270,11 @@ const updateBooking = async (req, res, next) => {
         const finalStatus = updatedBooking.status;
         if (finalStatus !== oldStatus && (finalStatus === 'confirmed' || finalStatus === 'cancelled')) {
             console.log(`[BookingsCtrl UpdateBooking] Email for booking ${bookingId}, new status: ${finalStatus}`);
-            await sendBookingStatusUpdateEmail(updatedBooking, finalStatus);
+            if (updatedBooking.userId && updatedBooking.contactDetails.email) { // Check if email is available
+                await sendBookingStatusUpdateEmail(updatedBooking, finalStatus);
+            } else {
+                console.warn(`[BookingsCtrl UpdateBooking] Cannot send email for booking ${bookingId}: user or email missing.`);
+            }
         }
 
         res.status(200).json({ success: true, message: 'Booking updated successfully.', data: updatedBooking });
@@ -276,7 +295,6 @@ const updateBooking = async (req, res, next) => {
 };
 
 const deleteBooking = async (req, res, next) => {
-    // This route is admin-only.
     try {
         const booking = await Booking.findByIdAndDelete(req.params.id);
         if (!booking) {
@@ -291,10 +309,10 @@ const deleteBooking = async (req, res, next) => {
 
 module.exports = {
     createBooking,
-    getAllBookings, // Admin: Gets all bookings
-    getMyBookings,  // Logged-in User: Gets their own bookings
+    getAllBookings, 
+    getMyBookings,  
     getBookingById,
     updateBookingStatus,
-    updateBooking,    // Admin: Full update capability
-    deleteBooking     // Admin: Deletes booking
+    updateBooking,    
+    deleteBooking     
 };
