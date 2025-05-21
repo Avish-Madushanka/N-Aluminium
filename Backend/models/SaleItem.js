@@ -1,4 +1,3 @@
-// backend/models/SaleItem.js
 const mongoose = require('mongoose');
 
 const saleItemSchema = new mongoose.Schema({
@@ -35,20 +34,20 @@ const saleItemSchema = new mongoose.Schema({
         required: [true, 'Contact number is required.'],
         trim: true,
     },
-    type: { // e.g., Doors, Windows, etc.
+    type: { 
         type: String,
         required: [true, 'Item type is required.'],
     },
-    imagePath: { // Path to the uploaded image, e.g., /uploads/saleitems/image.jpg
+    imagePath: { 
         type: String,
         required: [true, 'Image is required.'],
     },
-    userId: { // User who listed the item
+    userId: { 
         type: mongoose.Schema.Types.ObjectId,
         refPath: 'userModel',
         required: true,
     },
-    userModel: { // Model of the user (e.g., 'Client', 'BusinessOwner')
+    userModel: { 
         type: String,
         required: true,
         enum: ['Client', 'BusinessOwner', 'Admin'],
@@ -57,7 +56,7 @@ const saleItemSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
     },
-    // You might want to add categories, conditions, etc. later
+    
 }, { timestamps: true });
 
 module.exports = mongoose.model('SaleItem', saleItemSchema);

@@ -5,7 +5,6 @@ const BusinessOwner = require('../models/BusinessOwner');
 const Admin = require('../models/Admin');
 
 const findUserByEmail = async (email) => {
-    // Email is already lowercased by the caller (login function)
     console.log(`[AuthCtrl findUserByEmail] Searching for email: "${email}"`);
     let user = await Client.findOne({ email }).select('+password');
     if (user) {
@@ -28,7 +27,6 @@ const findUserByEmail = async (email) => {
 
 exports.login = async (req, res, next) => {
     const { email, password } = req.body;
-    // Capture original email for logging, then normalize for processing
     const originalEmail = email;
     console.log('[AuthCtrl Login] Endpoint hit. Request body:', { email: originalEmail, password: password ? '******' : 'Missing' });
 
@@ -38,17 +36,17 @@ exports.login = async (req, res, next) => {
             return res.status(400).json({ success: false, message: 'Please provide both email and password.' });
         }
 
-        const normalizedEmail = originalEmail.toLowerCase(); // Normalize email to lowercase
+        const normalizedEmail = originalEmail.toLowerCase(); 
 
         console.log(`[AuthCtrl Login] Finding user: ${normalizedEmail} (normalized from ${originalEmail})`);
-        const result = await findUserByEmail(normalizedEmail); // Use normalized email for lookup
+        const result = await findUserByEmail(normalizedEmail); 
         if (!result || !result.user) {
-            console.log(`[AuthCtrl Login] Failure: User not found: ${originalEmail}`); // Log original for clarity
+            console.log(`[AuthCtrl Login] Failure: User not found: ${originalEmail}`);
             return res.status(401).json({ success: false, message: 'Invalid email or password.' });
         }
         const { user, userModelName } = result;
         console.log(`[AuthCtrl Login] User found in ${userModelName}. ID: ${user._id}, Role: ${user.role}`);
-        console.log(`[AuthCtrl Login] Password status for ${user.email}: ${user.password ? 'Retrieved' : 'NOT RETRIEVED!'}`); // user.email is already lowercase from DB
+        console.log(`[AuthCtrl Login] Password status for ${user.email}: ${user.password ? 'Retrieved' : 'NOT RETRIEVED!'}`); 
 
         if (!user.password) {
             console.error(`[AuthCtrl Login] CRITICAL SERVER FAILURE: Password field missing for user ${user.email}.`);
@@ -73,7 +71,7 @@ exports.login = async (req, res, next) => {
 
         const payload = {
             id: user._id,
-            email: user.email, // user.email is already lowercase from the database
+            email: user.email, 
             role: user.role,
             name: nameForPayload,
             ...(user.role === 'businessOwner' && user.businessName && { businessName: user.businessName }),

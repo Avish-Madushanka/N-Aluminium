@@ -55,7 +55,7 @@ const createBooking = async (req, res, next) => {
 
 const getAllBookings = async (req, res, next) => {
     try {
-        // This is for admin to get ALL bookings
+
         const bookings = await Booking.find({})
             .populate('userId', 'name email')
             .sort({ createdAt: -1 });
@@ -78,10 +78,6 @@ const getMyBookings = async (req, res, next) => {
         }
 
         const bookings = await Booking.find({ userId: req.user.id })
-            // We don't populate userId here as it's the current user.
-            // timeSlotId and serviceAreaId are stored as strings.
-            // If richer data is needed, CalendarSettings would need to be queried
-            // and the IDs mapped, or frontend handles this.
             .sort({ createdAt: -1 });
 
         res.status(200).json({
@@ -101,7 +97,6 @@ const getBookingById = async (req, res, next) => {
         if (!booking) {
             return res.status(404).json({ success: false, message: 'Booking not found.' });
         }
-        // Add a check if the user is not admin and doesn't own the booking
         if (req.user.role !== 'admin' && booking.userId._id.toString() !== req.user.id) {
             return res.status(403).json({ success: false, message: 'You are not authorized to view this booking.' });
         }
@@ -139,7 +134,6 @@ const updateBookingStatus = async (req, res, next) => {
                 return res.status(400).json({ success: false, message: `Bookings with status '${bookingBeforeUpdate.status}' cannot be cancelled by you at this stage.` });
             }
         } else if (req.user.role !== 'admin') {
-            // Should be caught by authorize middleware, but as a safeguard
             return res.status(403).json({ success: false, message: 'You do not have permission to change booking status.' });
         }
 
@@ -149,12 +143,11 @@ const updateBookingStatus = async (req, res, next) => {
 
         const updateData = { status };
 
-        // Only admin can modify adminNotes
         if (req.user.role === 'admin') {
             if (adminNotesFromRequest !== null) {
                 updateData.adminNotes = adminNotesFromRequest;
             } else if (status === 'cancelled' && adminNotesFromRequest === null && !oldAdminNotes) {
-                 updateData.adminNotes = ''; // Admin can explicitly clear notes if cancelling and notes were empty
+                 updateData.adminNotes = ''; 
             }
         }
         
@@ -162,8 +155,6 @@ const updateBookingStatus = async (req, res, next) => {
         if (req.user.role === 'admin' && adminNotesFromRequest !== null && oldAdminNotes !== adminNotesFromRequest) {
             notesChanged = true;
         } else if (req.user.role === 'admin' && status === 'cancelled' && adminNotesFromRequest === null && !oldAdminNotes && oldAdminNotes !== '') {
-             // This condition seems to imply if admin is cancelling, notes are empty in request, and old notes were not empty but also not ''
-             // This specific case might need refinement based on exact intent for admin clearing notes
              if (oldAdminNotes !== undefined) notesChanged = true;
         }
 
@@ -201,7 +192,6 @@ const updateBookingStatus = async (req, res, next) => {
 };
 
 const updateBooking = async (req, res, next) => {
-    // This route is admin-only. Clients cannot use this for general updates.
     try {
         const bookingId = req.params.id;
         
@@ -233,7 +223,7 @@ const updateBooking = async (req, res, next) => {
             updateFields.status = status;
         }
         
-        if (adminNotes !== undefined) { // Admin can set/clear adminNotes
+        if (adminNotes !== undefined) { 
             updateFields.adminNotes = adminNotes;
         }
 
@@ -276,7 +266,6 @@ const updateBooking = async (req, res, next) => {
 };
 
 const deleteBooking = async (req, res, next) => {
-    // This route is admin-only.
     try {
         const booking = await Booking.findByIdAndDelete(req.params.id);
         if (!booking) {
@@ -291,10 +280,10 @@ const deleteBooking = async (req, res, next) => {
 
 module.exports = {
     createBooking,
-    getAllBookings, // Admin: Gets all bookings
-    getMyBookings,  // Logged-in User: Gets their own bookings
+    getAllBookings, 
+    getMyBookings,  
     getBookingById,
     updateBookingStatus,
-    updateBooking,    // Admin: Full update capability
-    deleteBooking     // Admin: Deletes booking
+    updateBooking,    
+    deleteBooking    
 };

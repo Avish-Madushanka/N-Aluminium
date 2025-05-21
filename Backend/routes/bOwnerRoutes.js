@@ -11,10 +11,8 @@ router.post( '/register', log, uploadBusinessPhotos, bOwnerController.registerBu
 
 router.get( '/', log, protect, authorize('admin'), bOwnerController.getAllBusinessOwners);
 
-// Route for business owner to get their own profile
 router.get('/me', log, protect, authorize('businessOwner'), bOwnerController.getMyBOwnerProfile);
 
-// Route for business owner to update their own profile
 router.put('/me', log, protect, authorize('businessOwner'), uploadBusinessPhotos, bOwnerController.updateMyBOwnerProfile);
 
 

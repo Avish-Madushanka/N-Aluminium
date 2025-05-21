@@ -1,13 +1,9 @@
-// backend/controllers/saleItemController.js
 const SaleItem = require('../models/SaleItem');
 const asyncHandler = require('../utils/async');
 const ErrorResponse = require('../utils/errorResponse');
 const fs =require('fs');
 const path = require('path');
 
-// @desc    Create a new sale item
-// @route   POST /api/saleitems
-// @access  Private
 exports.createSaleItem = asyncHandler(async (req, res, next) => {
     console.log(`[SaleItemCtrl Create @ ${new Date().toISOString()}] Handler started.`);
     console.log('[SaleItemCtrl Create] req.body received by controller:', req.body);
@@ -22,7 +18,7 @@ exports.createSaleItem = asyncHandler(async (req, res, next) => {
 
     if (!name || !description || !address || !district || !province || price === undefined || !contact || !type) {
         console.error('[SaleItemCtrl Create] Validation FAILED for text fields in controller.');
-        if (req.file && req.file.path) { // Clean up uploaded file if other fields fail
+        if (req.file && req.file.path) {
             fs.unlink(req.file.path, err => {
                 if (err) console.error(`[SaleItemCtrl Create] Error deleting orphaned file after text validation fail: ${req.file.path}`, err);
                 else console.log(`[SaleItemCtrl Create] Deleted orphaned file: ${req.file.path}`);
@@ -45,8 +41,6 @@ exports.createSaleItem = asyncHandler(async (req, res, next) => {
     res.status(201).json({ success: true, message: 'Sale item created successfully.', data: saleItem });
 });
 
-// ... (getAllSaleItems, getSaleItemById, updateSaleItem, deleteSaleItem remain the same as previously provided)
-// Ensure updateSaleItem also has robust req.file checking if it handles image updates.
 
 exports.getAllSaleItems = asyncHandler(async (req, res, next) => {
     console.log('[SaleItemCtrl GetAll] Fetching all sale items.');
@@ -78,12 +72,12 @@ exports.updateSaleItem = asyncHandler(async (req, res, next) => {
 
     let saleItem = await SaleItem.findById(req.params.id);
     if (!saleItem) {
-        if (req.file && req.file.path) fs.unlinkSync(req.file.path); // Clean new file
+        if (req.file && req.file.path) fs.unlinkSync(req.file.path); 
         return next(new ErrorResponse(`Sale item not found: ${req.params.id}`, 404));
     }
 
     if (saleItem.userId.toString() !== req.user.id && req.user.role !== 'admin') {
-        if (req.file && req.file.path) fs.unlinkSync(req.file.path); // Clean new file
+        if (req.file && req.file.path) fs.unlinkSync(req.file.path); 
         return next(new ErrorResponse('Not authorized to update this item', 403));
     }
 
