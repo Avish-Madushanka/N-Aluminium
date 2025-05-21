@@ -19,13 +19,11 @@ const Navbar = ({ isLoggedIn, userInfo, handleLogout }) => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Close menus on navigation
   useEffect(() => {
     setIsOpen(false);
     setIsProfileOpen(false);
   }, [location]);
 
-  // Close menus on outside click
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (navbarRef.current && !navbarRef.current.contains(event.target)) {
@@ -61,7 +59,6 @@ const Navbar = ({ isLoggedIn, userInfo, handleLogout }) => {
     return words[0][0].toUpperCase();
   };
 
-  // Determine Profile Info
   let profilePath = '/';
   let profileName = 'User';
   const userRole = userInfo?.role;

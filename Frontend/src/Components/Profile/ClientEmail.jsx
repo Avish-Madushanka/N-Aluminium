@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Star, StarOff, Flag, Trash2, Archive, Mail, MailOpen, Clock, Paperclip, ChevronDown } from 'lucide-react';
-import "./ClientEmail.css"; // Import the CSS file
+import "./ClientEmail.css"; 
 
-// Sample email data
 const emailData = [
   {
     id: 1,
@@ -72,7 +71,6 @@ export default function ClientEmai() {
   const [selectAll, setSelectAll] = useState(false);
   const [newEmailId, setNewEmailId] = useState(null);
 
-  // Simulate a new email arriving
   useEffect(() => {
     const timer = setTimeout(() => {
       const newEmail = {
@@ -91,11 +89,10 @@ export default function ClientEmai() {
       setEmails(prevEmails => [newEmail, ...prevEmails]);
       setNewEmailId(newEmail.id);
       
-      // Remove the "new email" effect after animation completes
       setTimeout(() => {
         setNewEmailId(null);
       }, 2000);
-    }, 5000); // Show new email after 5 seconds
+    }, 5000); 
     
     return () => clearTimeout(timer);
   }, []);
@@ -149,7 +146,6 @@ export default function ClientEmai() {
 
   return (
     <div className="profile-email-list-container">
-      {/* Email toolbar */}
       <div className="email-toolbar">
         <div className="flex items-center mr-4">
           <input 
@@ -181,7 +177,6 @@ export default function ClientEmai() {
         </div>
       </div>
       
-      {/* Email list */}
       <div className="flex-1 overflow-y-auto email-list">
         {emails.length > 0 ? (
           emails.map((email) => (
@@ -192,7 +187,6 @@ export default function ClientEmai() {
             >
               <div className="flex items-center p-4">
                 <div className="flex items-center space-x-4 w-full">
-                  {/* Selection and star */}
                   <div className="flex items-center space-x-3">
                     <input 
                       type="checkbox" 
@@ -216,7 +210,6 @@ export default function ClientEmai() {
                     </button>
                   </div>
                   
-                  {/* Email content */}
                   <div className="email-content">
                     <div className="email-content-row">
                       <div className="email-sender w-48 truncate">

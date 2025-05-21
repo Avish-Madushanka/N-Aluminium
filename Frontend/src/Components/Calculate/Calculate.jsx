@@ -1,34 +1,27 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import './Calculate.css';
-import axiosInstance from '../../api/axiosInstance'; // Adjust path as needed
+import axiosInstance from '../../api/axiosInstance';
 
 const Calculate = () => {
   const [weight, setWeight] = useState('');
-  const [scrapTypes, setScrapTypes] = useState([]); // To store fetched scrap types
-  const [selectedScrapId, setSelectedScrapId] = useState(''); // Store ID of selected scrap
+  const [scrapTypes, setScrapTypes] = useState([]);
+  const [selectedScrapId, setSelectedScrapId] = useState('');
   const [resultUSD, setResultUSD] = useState(null);
   const [showAnimation, setShowAnimation] = useState(false);
-  const [isLoading, setIsLoading] = useState(true); // For loading state of scrap types
-  const [error, setError] = useState(null); // For errors fetching scrap types
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const exchangeRate = 300; // 1 USD = 300 LKR (Keep this or make it dynamic if needed)
+  const exchangeRate = 300;
 
-  // Fetch scrap types from backend
   const fetchActiveScrapTypes = useCallback(async () => {
     setIsLoading(true);
     setError(null);
     try {
-      // Fetch only active scrap types for the public calculator
-      // Your backend controller for getAllScrapTypes should return only active=true by default for non-admins
-      // or if you implemented a query param like ?active=true, use that:
-      // const response = await axiosInstance.get('/scrap-types?active=true');
-      const response = await axiosInstance.get('/scrap-types'); // Assuming backend filters for public
-      
+      const response = await axiosInstance.get('/scrap-types');
       const activeTypes = response.data.data.filter(type => type.isActive);
-
       if (activeTypes.length > 0) {
         setScrapTypes(activeTypes);
-        setSelectedScrapId(activeTypes[0]._id); // Default to the first active scrap type
+        setSelectedScrapId(activeTypes[0]._id);
       } else {
         setScrapTypes([]);
         setError('No active scrap types available at the moment.');
@@ -62,11 +55,9 @@ const Calculate = () => {
       const totalUSD = weightValue * priceValue;
       setResultUSD(totalUSD);
       setShowAnimation(true);
-      setError(null); // Clear previous calculation errors
+      setError(null);
     } else {
       setResultUSD(null);
-      // Optionally set an error for invalid weight
-      // setError('Please enter a valid weight.');
     }
   };
 
@@ -87,7 +78,7 @@ const Calculate = () => {
           <p className="calculator-subtitle">Calculate the value of your aluminum scrap</p>
         </div>
 
-        {resultUSD !== null && ( // Check for not null to display 0.00 if it's the result
+        {resultUSD !== null && (
           <div className={`result-container ${showAnimation ? 'show' : ''}`}>
             <h3 className="result-label">Total Value:</h3>
             <div className="result-value">
@@ -138,11 +129,10 @@ const Calculate = () => {
             </button>
           </form>
         )}
-        
-        {!isLoading && scrapTypes.length === 0 && !error && (
-            <p className="info-message">Scrap price information is currently unavailable. Please check back later.</p>
-        )}
 
+        {!isLoading && scrapTypes.length === 0 && !error && (
+          <p className="info-message">Scrap price information is currently unavailable. Please check back later.</p>
+        )}
 
         {!isLoading && scrapTypes.length > 0 && (
           <div className="price-table">

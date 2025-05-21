@@ -1,74 +1,68 @@
-/* BOwnerProfile.css (Updated to match ClientProfile styles) */
-
-/* Container and Title */
 .BOwner-Pro-container {
-  max-width: 1100px; /* Adjusted max-width */
-  margin: 30px auto;  /* Add top/bottom margin */
+  max-width: 1100px;
+  margin: 30px auto;
   padding: 20px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Match font */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .BOwner-Pro-main-title {
   text-align: center;
-  font-size: 2rem; /* Match client */
+  font-size: 2rem;
   margin-bottom: 30px;
-  color: #1f2937; /* Match client */
+  color: #1f2937;
   font-weight: 700;
 }
 
-/* Columns layout */
 .BOwner-Pro-columns-wrapper {
   display: flex;
-  flex-wrap: wrap; /* Allow wrapping */
-  gap: 24px;      /* Match client */
+  flex-wrap: wrap;
+  gap: 24px;
 }
 
 .BOwner-Pro-column {
   flex: 1;
-  min-width: 300px; /* Ensure columns don't get too small */
-  padding: 25px; /* Keep slightly more padding potentially */
-  background-color: #f9fafb; /* Match client */
-  border-radius: 12px; /* Match client */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); /* Match client */
+  min-width: 300px;
+  padding: 25px;
+  background-color: #f9fafb;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
   transition: box-shadow 0.3s ease;
 }
 
 .BOwner-Pro-column-left {
-  flex-grow: 3; /* Keep original ratio or adjust */
+  flex-grow: 3;
 }
 
 .BOwner-Pro-column-right {
-  flex-grow: 2; /* Keep original ratio or adjust */
+  flex-grow: 2;
 }
 
-
 .BOwner-Pro-column:hover {
-  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.07); /* Match client */
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.07);
 }
 
 .BOwner-Pro-column-title {
-  font-size: 1.25rem; /* Match client */
+  font-size: 1.25rem;
   margin-bottom: 20px;
-  color: #1f2937; /* Match client */
+  color: #1f2937;
   font-weight: 700;
   padding-bottom: 10px;
-  border-bottom: 2px solid #e5e7eb; /* Match client */
+  border-bottom: 2px solid #e5e7eb;
 }
 
-/* Form elements */
 .BOwner-Pro-form-group {
-  margin-bottom: 16px; /* Match client */
+  margin-bottom: 16px;
 }
 
 .BOwner-Pro-label {
   display: block;
   margin-bottom: 8px;
-  font-weight: 600;   /* Match client */
-  color: #374151;    /* Match client */
+  font-weight: 600;
+  color: #374151;
 }
 
 .BOwner-Pro-input-wrapper {
-  position: relative; /* Keep for icon positioning */
+  position: relative;
 }
 
 .BOwner-Pro-input-icon {
@@ -76,12 +70,12 @@
   left: 12px;
   top: 50%;
   transform: translateY(-50%);
-  color: #6b7280; /* Match client icon color */
-  pointer-events: none; /* Prevent icon interfering with input */
+  color: #6b7280;
+  pointer-events: none;
 }
 
 .BOwner-Pro-textarea-icon {
-  top: 14px; /* Adjust for textarea */
+  top: 14px;
   transform: none;
 }
 
@@ -89,36 +83,35 @@
 .BOwner-Pro-textarea,
 .BOwner-Pro-select {
   width: 100%;
-  padding: 12px 12px 12px 40px; /* Padding left for icon */
-  border: 1px solid #d1d5db; /* Match client */
-  border-radius: 8px;        /* Match client */
-  font-size: 1rem;           /* Match client */
-  background-color: white;   /* Match client */
-  transition: all 0.2s ease; /* Match client */
+  padding: 12px 12px 12px 40px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: white;
+  transition: all 0.2s ease;
   box-sizing: border-box;
 }
+
 .BOwner-Pro-select {
-    /* Add specific padding for select if needed without icon */
-    padding-left: 12px; /* Override if select has no icon */
-    /* Basic appearance reset */
-    appearance: none;
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
-    background-position: right 0.7rem center;
-    background-repeat: no-repeat;
-    background-size: 1.2em 1.2em;
-    padding-right: 2.5rem; /* Space for arrow */
+  padding-left: 12px;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 0.7rem center;
+  background-repeat: no-repeat;
+  background-size: 1.2em 1.2em;
+  padding-right: 2.5rem;
 }
-/* Remove icon padding if select has no icon span */
+
 .BOwner-Pro-input-wrapper:not(:has(.BOwner-Pro-input-icon)) .BOwner-Pro-select {
-    padding-left: 12px;
+  padding-left: 12px;
 }
 
 .BOwner-Pro-input:focus,
 .BOwner-Pro-textarea:focus,
 .BOwner-Pro-select:focus {
   outline: none;
-  border-color: #3b82f6; /* Match client */
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25); /* Match client */
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
 }
 
 .BOwner-Pro-textarea {
@@ -128,208 +121,202 @@
 
 .BOwner-Pro-form-row {
   display: flex;
-  gap: 16px; /* Match client */
+  gap: 16px;
 }
 
 .BOwner-Pro-form-group-half {
   flex: 1;
 }
 
-/* File upload */
 .BOwner-Pro-file-input-hidden {
   display: none;
 }
 
 .BOwner-Pro-file-upload-btn {
-  display: inline-flex; /* Use inline-flex to allow text wrapping */
+  display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 10px 14px; /* Match client */
-  background-color: #e0e7ff; /* Match client */
-  color: #1e40af;        /* Match client */
-  border-radius: 8px;   /* Match client */
+  padding: 10px 14px;
+  background-color: #e0e7ff;
+  color: #1e40af;
+  border-radius: 8px;
   cursor: pointer;
   font-weight: 600;
-  transition: all 0.2s ease; /* Match client */
-  border: none; /* Remove default border */
-  text-align: left; /* Align text to left */
-  overflow: hidden; /* Prevent long filenames breaking layout */
+  transition: all 0.2s ease;
+  border: none;
+  text-align: left;
+  overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  max-width: 100%; /* Ensure it doesn't overflow container */
+  max-width: 100%;
 }
 
 .BOwner-Pro-file-upload-btn span {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    flex-shrink: 1; /* Allow text to shrink */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex-shrink: 1;
 }
-
 
 .BOwner-Pro-file-upload-btn:hover {
-  background-color: #c7d2fe; /* Match client */
-  transform: translateY(-2px); /* Match client */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Match client */
+  background-color: #c7d2fe;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Save button */
 .BOwner-Pro-save-btn {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
   width: 100%;
-  padding: 12px 20px; /* Match client */
-  background-color: #2563eb; /* Match client */
+  padding: 12px 20px;
+  background-color: #2563eb;
   color: white;
   border: none;
-  border-radius: 8px; /* Match client */
+  border-radius: 8px;
   font-size: 1rem;
   cursor: pointer;
   font-weight: 600;
-  transition: all 0.3s ease; /* Match client */
-  margin-top: 20px; /* Add margin top */
+  transition: all 0.3s ease;
+  margin-top: 20px;
 }
 
 .BOwner-Pro-save-btn:hover {
-  background-color: #1d4ed8; /* Match client */
-  transform: translateY(-2px); /* Match client */
-  box-shadow: 0 4px 8px rgba(37, 99, 235, 0.3); /* Match client */
+  background-color: #1d4ed8;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(37, 99, 235, 0.3);
 }
 
 .BOwner-Pro-save-btn:active {
-  transform: translateY(0); /* Match client */
-  box-shadow: 0 2px 4px rgba(37, 99, 235, 0.3); /* Match client */
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(37, 99, 235, 0.3);
 }
 
 .BOwner-Pro-save-btn:disabled {
-  background-color: #93c5fd; /* Match client */
+  background-color: #93c5fd;
   cursor: not-allowed;
   transform: none;
   box-shadow: none;
 }
 
-/* --- Action Buttons (Right Column - NEW) --- */
-/* Remove old nav button styles if they exist */
-/* .BOwner-Pro-nav-buttons, .BOwner-Pro-nav-button, etc. */
-
 .BOwner-Pro-action-btn {
   display: flex;
   align-items: center;
-  width: 100%; /* Changed to full width */
-  margin-bottom: 16px; /* Match client */
-  padding: 14px;        /* Match client */
+  width: 100%;
+  margin-bottom: 16px;
+  padding: 14px;
   border: none;
-  border-radius: 10px;   /* Match client */
+  border-radius: 10px;
   cursor: pointer;
   font-weight: 600;
   font-size: 1rem;
-  transition: all 0.3s ease; /* Match client */
+  transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
   color: white;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Match client */
-  text-align: left; /* Align text left */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: left;
 }
+
 .BOwner-Pro-action-btn:last-child {
-    margin-bottom: 0; /* Remove margin from last button */
+  margin-bottom: 0;
 }
 
-
-/* Specific button backgrounds (Adjust colors for B-Owner) */
 .BOwner-Pro-action-btn.dashboard {
-  background: linear-gradient(to right, #60a5fa, #2563eb); /* Blue */
+  background: linear-gradient(to right, #60a5fa, #2563eb);
 }
+
 .BOwner-Pro-action-btn.orders {
-  background: linear-gradient(to right, #4ade80, #16a34a); /* Green */
+  background: linear-gradient(to right, #4ade80, #16a34a);
 }
+
 .BOwner-Pro-action-btn.settings {
-  background: linear-gradient(to right, #c084fc, #7c3aed); /* Purple */
+  background: linear-gradient(to right, #c084fc, #7c3aed);
 }
+
 .BOwner-Pro-action-btn.logout {
-  background: linear-gradient(to right, #f87171, #dc2626); /* Red */
+  background: linear-gradient(to right, #f87171, #dc2626);
 }
 
-/* Button hover effects */
 .BOwner-Pro-action-btn:hover {
-  transform: translateY(-3px); /* Match client */
-  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15); /* Match client */
+  transform: translateY(-3px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
 }
 
-/* Button active effects */
 .BOwner-Pro-action-btn:active,
-.BOwner-Pro-action-btn.active { /* Add .active class handling */
-  transform: translateY(0) scale(0.98); /* Match client */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Match client */
+.BOwner-Pro-action-btn.active {
+  transform: translateY(0) scale(0.98);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Icon containers */
 .BOwner-Pro-btn-icon {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 36px;
   height: 36px;
-  background-color: rgba(255, 255, 255, 0.9); /* White background for icon circle */
+  background-color: rgba(255, 255, 255, 0.9);
   border-radius: 50%;
   margin-right: 12px;
-  flex-shrink: 0; /* Prevent icon shrinking */
+  flex-shrink: 0;
 }
 
-/* Specific icon colors */
-.BOwner-Pro-btn-icon.dashboard svg { color: #2563eb; }
-.BOwner-Pro-btn-icon.orders svg { color: #16a34a; }
-.BOwner-Pro-btn-icon.settings svg { color: #7c3aed; }
-.BOwner-Pro-btn-icon.logout svg { color: #dc2626; }
+.BOwner-Pro-btn-icon.dashboard svg {
+  color: #2563eb;
+}
 
+.BOwner-Pro-btn-icon.orders svg {
+  color: #16a34a;
+}
 
-/* Remove old Profile Summary styles */
-/* .BOwner-Pro-profile-summary, .BOwner-Pro-profile-summary-header, etc. */
+.BOwner-Pro-btn-icon.settings svg {
+  color: #7c3aed;
+}
 
+.BOwner-Pro-btn-icon.logout svg {
+  color: #dc2626;
+}
 
-/* Responsive adjustments */
-@media (max-width: 992px) { /* Changed breakpoint to match client */
+@media (max-width: 992px) {
   .BOwner-Pro-columns-wrapper {
     flex-direction: column;
   }
   .BOwner-Pro-column-right {
-      /* No need to reorder if preference is form first on mobile */
-       margin-bottom: 0; /* Remove bottom margin if it's last */
+    margin-bottom: 0;
   }
 }
 
-@media (max-width: 768px) { /* Added breakpoint for form row stacking */
-   .BOwner-Pro-form-row {
-      flex-direction: column;
-      gap: 12px; /* Adjust gap for stacked */
-   }
-   .BOwner-Pro-form-group-half {
-       flex-basis: auto; /* Reset flex basis */
-   }
-    .BOwner-Pro-action-btn {
-        width: 100%; /* Make buttons full width */
-    }
+@media (max-width: 768px) {
+  .BOwner-Pro-form-row {
+    flex-direction: column;
+    gap: 12px;
+  }
+  .BOwner-Pro-form-group-half {
+    flex-basis: auto;
+  }
+  .BOwner-Pro-action-btn {
+    width: 100%;
+  }
 }
 
 @media (max-width: 576px) {
-  /* Keep form row stacked from 768px */
   .BOwner-Pro-main-title {
-      font-size: 1.5rem; /* Slightly smaller */
+    font-size: 1.5rem;
   }
   .BOwner-Pro-column {
-      padding: 20px; /* Less padding */
+    padding: 20px;
   }
   .BOwner-Pro-action-btn {
-      padding: 12px 14px; /* Adjust padding */
-      font-size: 0.95rem;
+    padding: 12px 14px;
+    font-size: 0.95rem;
   }
   .BOwner-Pro-btn-icon {
-      width: 32px;
-      height: 32px;
-      margin-right: 10px;
+    width: 32px;
+    height: 32px;
+    margin-right: 10px;
   }
   .BOwner-Pro-save-btn {
-      font-size: 0.95rem;
+    font-size: 0.95rem;
   }
 }

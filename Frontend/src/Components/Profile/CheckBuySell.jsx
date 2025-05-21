@@ -1,27 +1,23 @@
-// src/Pages/MyItemsPage.jsx (NEW FILE)
+// src/Pages/MyItemsPage.jsx
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom'; // For linking to SaleForm
-import { Edit, Trash2, Package } from 'lucide-react'; // Icons
-import './CheckBuySell.css'; // We'll create this CSS file
+import { Link } from 'react-router-dom';
+import { Edit, Trash2, Package } from 'lucide-react';
+import './CheckBuySell.css';
 
-// Define Backend URL (for constructing image paths)
 const BACKEND_URL = 'http://localhost:5003';
-const LOCAL_STORAGE_KEY = 'mySaleItems'; // Consistent key
+const LOCAL_STORAGE_KEY = 'mySaleItems';
 
-// --- MyItemCard Component (Display individual item) ---
 const MyItemCard = ({ item, onDelete, onEdit }) => {
-  // Construct the full image URL
   const imageUrl = item.image ? `${BACKEND_URL}${item.image}` : "https://via.placeholder.com/150";
 
   const handleDeleteClick = () => {
-    // Ask for confirmation before deleting
     if (window.confirm(`Are you sure you want to delete "${item.name}"? This cannot be undone.`)) {
-      onDelete(item._id); // Pass the item's ID (assuming backend response includes _id)
+      onDelete(item._id);
     }
   };
 
   const handleEditClick = () => {
-    onEdit(item._id); // Pass ID to the edit handler
+    onEdit(item._id);
   };
 
   return (
@@ -30,7 +26,7 @@ const MyItemCard = ({ item, onDelete, onEdit }) => {
         src={imageUrl}
         alt={item.name || "Listed item"}
         className="my-item-image"
-        onError={(e) => { e.target.onerror = null; e.target.src="https://via.placeholder.com/150"; }} // Fallback
+        onError={(e) => { e.target.onerror = null; e.target.src="https://via.placeholder.com/150"; }}
       />
       <div className="my-item-details">
         <h3>{item.name || 'Unnamed Item'}</h3>
@@ -51,14 +47,11 @@ const MyItemCard = ({ item, onDelete, onEdit }) => {
   );
 };
 
-
-// --- MyItemsPage Component ---
 const CheckBuySell = () => {
   const [myItems, setMyItems] = useState([]);
-  const [isLoading, setIsLoading] = useState(true); // Indicate loading from local storage
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
 
-  // Load items from local storage on component mount
   useEffect(() => {
     setIsLoading(true);
     setError('');
@@ -69,32 +62,27 @@ const CheckBuySell = () => {
     } catch (err) {
       console.error("Error loading items from local storage:", err);
       setError("Could not load your items. Data might be corrupted.");
-      setMyItems([]); // Clear potentially bad data
+      setMyItems([]);
     } finally {
       setIsLoading(false);
     }
-  }, []); // Run only once on mount
+  }, []);
 
-  // Handle item deletion (updates state and local storage)
   const handleDeleteItem = (itemIdToDelete) => {
     try {
       const updatedItems = myItems.filter(item => item._id !== itemIdToDelete);
-      setMyItems(updatedItems); // Update component state
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedItems)); // Update local storage
-      alert("Item deleted successfully."); // Simple feedback
+      setMyItems(updatedItems);
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedItems));
+      alert("Item deleted successfully.");
     } catch (err) {
-       console.error("Error deleting item:", err);
-       setError("Failed to delete item from storage.");
+      console.error("Error deleting item:", err);
+      setError("Failed to delete item from storage.");
     }
   };
 
-  // Handle item editing (placeholder - navigates to form, needs SaleForm update)
   const handleEditItem = (itemIdToEdit) => {
-    // In a real app, you'd navigate to the SaleForm with the item ID
-    // so the form can fetch and pre-populate the data for editing.
     console.log("Edit item requested:", itemIdToEdit);
     alert("Edit functionality not fully implemented in this example. Would navigate to SaleForm.");
-    // navigate(`/SaleForm/edit/${itemIdToEdit}`); // Example navigation
   };
 
   return (
@@ -117,7 +105,7 @@ const CheckBuySell = () => {
             <div className="my-items-grid">
               {myItems.map((item) => (
                 <MyItemCard
-                  key={item._id || item.name} // Use _id if available from backend response
+                  key={item._id || item.name}
                   item={item}
                   onDelete={handleDeleteItem}
                   onEdit={handleEditItem}
@@ -127,13 +115,6 @@ const CheckBuySell = () => {
           )}
         </>
       )}
-       {/* Section for "Bought" items - Placeholder */}
-       {/*
-       <div className="my-bought-items-section">
-          <h2>Items I've Bought</h2>
-          <p>(This feature requires backend integration to track purchase history)</p>
-       </div>
-       */}
     </div>
   );
 };

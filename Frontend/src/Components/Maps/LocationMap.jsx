@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
-import axiosInstance from "../../api/axiosInstance"; // Adjust path to your axiosInstance
+import axiosInstance from "../../api/axiosInstance";
 import "./LocationMap.css";
 
 const mapContainerStyle = {
@@ -8,19 +8,12 @@ const mapContainerStyle = {
   height: "400px",
 };
 
-// Approximate center and zoom for Kalutara District
 const KALUTARA_DISTRICT_CENTER = { lat: 6.5853, lng: 79.9607 };
 const KALUTARA_DISTRICT_ZOOM = 10;
 
-// !! IMPORTANT: API KEY SECURITY !!
-// You have hardcoded the API key. This is a security risk if your code is public.
-// Please use environment variables for your API key.
-// 1. Create a .env file in your frontend project root (e.g., .env.local)
-// 2. Add: VITE_GOOGLE_MAPS_API_KEY=YOUR_ACTUAL_API_KEY_HERE
-// 3. Access it: import.meta.env.VITE_GOOGLE_MAPS_API_KEY
-const GOOGLE_MAPS_API_KEY = "AIzaSyBb_eKF3rpllpvWbYlfDHI1qyGKMjLhhYI"; // Replace with import.meta.env.VITE_GOOGLE_MAPS_API_KEY
+const GOOGLE_MAPS_API_KEY = "AIzaSyBb_eKF3rpllpvWbYlfDHI1qyGKMjLhhYI"; 
 
-if (GOOGLE_MAPS_API_KEY === "AIzaSyBb_eKF3rpllpvWbYlfDHI1qyGKMjLhhYI") { // Check against your actual key or a known placeholder if you temporarily hardcode
+if (GOOGLE_MAPS_API_KEY === "AIzaSyBb_eKF3rpllpvWbYlfDHI1qyGKMjLhhYI") { 
   console.warn(
     "Google Maps API Key is hardcoded or using a placeholder. For security, please set VITE_GOOGLE_MAPS_API_KEY in your .env file."
   );
@@ -172,8 +165,8 @@ function LocationMap() {
                     focusedLocationPosition &&
                     location.position.lat === focusedLocationPosition.lat &&
                     location.position.lng === focusedLocationPosition.lng
-                      ? "http://maps.google.com/mapfiles/ms/icons/blue-dot.png" // Focused marker
-                      : undefined // Uses the default Google Maps red pin for non-focused
+                      ? "http://maps.google.com/mapfiles/ms/icons/blue-dot.png" 
+                      : undefined 
                   }
                 />
               ))}
