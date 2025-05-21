@@ -1,4 +1,3 @@
-// --- START OF FILE server.js ---
 require('dotenv').config();
 
 const express = require('express');
@@ -12,7 +11,7 @@ const connectDB = require('./config/db');
 console.log('[Server Startup] Initializing: Attempting to load route modules...');
 let clientRoutes, bOwnerRoutes, authRoutes, calendarSettingsRoutes,
     bookingRoutes, reviewRoutes, scrapTypeRoutes, shopLocationRoutes, adminRoutes,
-    saleItemRoutes, adminStatsRoutes, projectRoutes; // <-- Added projectRoutes
+    saleItemRoutes, adminStatsRoutes, projectRoutes; 
 
 const loadRoute = (routeName, path) => {
   try {
