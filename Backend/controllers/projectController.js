@@ -1,16 +1,12 @@
-// backend/controllers/projectController.js
 const Project = require('../models/Project');
 const asyncHandler = require('../utils/async');
 const ErrorResponse = require('../utils/errorResponse');
 const fs = require('fs');
 const path = require('path');
 
-// Base directory for uploads, relative to this file's location
-const UPLOADS_BASE_DIR = path.join(__dirname, '..', 'uploads'); // Points to backend/uploads/
+const UPLOADS_BASE_DIR = path.join(__dirname, '..', 'uploads'); 
 
-// Helper function to delete files, ensuring paths are correct
 const deleteFileFromUploads = (filePathSegment) => {
-    // filePathSegment is like '/projects/project-123.jpg'
     const fullPath = path.join(UPLOADS_BASE_DIR, filePathSegment);
     if (fs.existsSync(fullPath)) {
         try {
@@ -25,9 +21,6 @@ const deleteFileFromUploads = (filePathSegment) => {
 };
 
 
-// @desc    Create a new project
-// @route   POST /api/projects
-// @access  Private (e.g., Admin, BusinessOwner)
 exports.createProject = asyncHandler(async (req, res, next) => {
     const { title, description, projectType } = req.body;
 
@@ -42,7 +35,6 @@ exports.createProject = asyncHandler(async (req, res, next) => {
         return next(new ErrorResponse('Please upload at least one image for the project.', 400));
     }
 
-    // Store paths relative to the /uploads route
     const images = req.files.map(file => `/projects/${file.filename}`);
 
     const projectData = {
@@ -63,20 +55,17 @@ exports.createProject = asyncHandler(async (req, res, next) => {
     });
 });
 
-// @desc    Get all projects
-// @route   GET /api/projects
-// @access  Public (can be changed)
 exports.getAllProjects = asyncHandler(async (req, res, next) => {
     let queryFilters = {};
     if (req.query.projectType) {
         queryFilters.projectType = req.query.projectType;
     }
-    if (req.query.userId) { // Filter by specific user
+    if (req.query.userId) { 
         queryFilters.userId = req.query.userId;
     }
 
     const projects = await Project.find(queryFilters)
-        .populate('userId', 'name email businessName') // Populate relevant creator details
+        .populate('userId', 'name email businessName')
         .sort({ createdAt: -1 });
 
     console.log(`[ProjectCtrl GetAll] Found ${projects.length} projects.`);
@@ -87,9 +76,6 @@ exports.getAllProjects = asyncHandler(async (req, res, next) => {
     });
 });
 
-// @desc    Get a single project by ID
-// @route   GET /api/projects/:id
-// @access  Public (can be changed)
 exports.getProjectById = asyncHandler(async (req, res, next) => {
     const project = await Project.findById(req.params.id)
         .populate('userId', 'name email businessName');
@@ -105,9 +91,6 @@ exports.getProjectById = asyncHandler(async (req, res, next) => {
     });
 });
 
-// @desc    Update a project
-// @route   PUT /api/projects/:id
-// @access  Private (Owner or Admin)
 exports.updateProject = asyncHandler(async (req, res, next) => {
     let project = await Project.findById(req.params.id);
 
@@ -136,7 +119,6 @@ exports.updateProject = asyncHandler(async (req, res, next) => {
 
     let currentImagePaths = [...project.images];
 
-    // Handle deletion of existing images
     if (imagesToDelete) {
         const imagesToDeleteArray = Array.isArray(imagesToDelete) ? imagesToDelete : [imagesToDelete];
         imagesToDeleteArray.forEach(imgPath => {
@@ -146,7 +128,6 @@ exports.updateProject = asyncHandler(async (req, res, next) => {
         console.log(`[ProjectCtrl Update] Images after deletion for project ${project._id}:`, currentImagePaths.length);
     }
     
-    // Handle addition of new images
     if (req.files && req.files.length > 0) {
         const newImagePaths = req.files.map(file => `/projects/${file.filename}`);
         currentImagePaths.push(...newImagePaths);
@@ -156,8 +137,6 @@ exports.updateProject = asyncHandler(async (req, res, next) => {
     updates.images = currentImagePaths;
 
     if (updates.images.length === 0) {
-        // If after all operations, no images remain, and projects must have images
-        // Clean up any newly uploaded files if this rule is enforced and caused them to be removed from `updates.images`
         if (req.files && req.files.length > 0) {
             req.files.forEach(file => deleteFileFromUploads(`projects/${file.filename}`));
         }
@@ -178,9 +157,6 @@ exports.updateProject = asyncHandler(async (req, res, next) => {
     });
 });
 
-// @desc    Delete a project
-// @route   DELETE /api/projects/:id
-// @access  Private (Owner or Admin)
 exports.deleteProject = asyncHandler(async (req, res, next) => {
     const project = await Project.findById(req.params.id);
 

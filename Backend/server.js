@@ -37,10 +37,10 @@ bookingRoutes = loadRoute('bookingRoutes', './routes/bookingRoutes');
 reviewRoutes = loadRoute('reviewRoutes', './routes/reviewRoutes');
 scrapTypeRoutes = loadRoute('scrapTypeRoutes', './routes/scrapTypeRoutes');
 shopLocationRoutes = loadRoute('shopLocationRoutes', './routes/shopLocationRoutes');
-adminRoutes = loadRoute('adminRoutes', './routes/adminRoutes'); // General admin routes
+adminRoutes = loadRoute('adminRoutes', './routes/adminRoutes'); 
 saleItemRoutes = loadRoute('saleItemRoutes', './routes/saleItemRoutes');
-adminStatsRoutes = loadRoute('adminStatsRoutes', './routes/adminStatsRoutes'); // Admin statistics routes
-projectRoutes = loadRoute('projectRoutes', './routes/projectRoutes'); // Project routes
+adminStatsRoutes = loadRoute('adminStatsRoutes', './routes/adminStatsRoutes'); 
+projectRoutes = loadRoute('projectRoutes', './routes/projectRoutes'); 
 
 console.log('[Server Startup] Loading controllers and middleware...');
 const { createInitialAdmin } = require('./controllers/adminController');
@@ -62,7 +62,7 @@ app.use('/uploads', express.static(uploadsDirectory));
 
 if (fs.existsSync(uploadsDirectory)) {
     console.log(`[Server Config] Serving static files from ${uploadsDirectory} at /uploads`);
-    const subdirectories = ['saleitems', 'projects', 'profiles']; // Add other subdirs as needed
+    const subdirectories = ['saleitems', 'projects', 'profiles']; 
     subdirectories.forEach(subDir => {
         const fullSubDirPath = actualPath.join(uploadsDirectory, subDir);
         if (fs.existsSync(fullSubDirPath)) {
@@ -76,7 +76,6 @@ if (fs.existsSync(uploadsDirectory)) {
     try {
         fs.mkdirSync(uploadsDirectory, { recursive: true });
         console.log(`[Server Config] Successfully created 'uploads' directory at ${uploadsDirectory}`);
-        // Ensure subdirectories are also created if base uploads is created here
         const subdirectoriesToCreate = ['saleitems', 'projects', 'profiles'];
         subdirectoriesToCreate.forEach(subDir => {
             const fullSubDirPath = actualPath.join(uploadsDirectory, subDir);
@@ -117,11 +116,10 @@ const mountRoutes = () => {
     mount('/api/scrap-types', scrapTypeRoutes, 'scrapTypeRoutes');
     mount('/api/shop-locations', shopLocationRoutes, 'shopLocationRoutes');
     mount('/api/saleitems', saleItemRoutes, 'saleItemRoutes');
-    mount('/api/projects', projectRoutes, 'projectRoutes'); // <-- MOUNTED projectRoutes
+    mount('/api/projects', projectRoutes, 'projectRoutes'); 
 
-    // Admin specific routes
-    mount('/api/admin', adminRoutes, 'adminRoutes'); // For general admin actions (e.g., manage users, site settings)
-    mount('/api/admin/stats', adminStatsRoutes, 'adminStatsRoutes'); // For dashboard statistics
+    mount('/api/admin', adminRoutes, 'adminRoutes'); 
+    mount('/api/admin/stats', adminStatsRoutes, 'adminStatsRoutes');
 
     console.log('[Server Config] Route mounting process completed.');
 };
@@ -203,4 +201,3 @@ process.on('uncaughtException', (err) => {
 
 
 startServer();
-// --- END OF FILE server.js ---

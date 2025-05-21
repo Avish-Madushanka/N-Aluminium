@@ -1,4 +1,3 @@
-// backend/models/Project.js
 const mongoose = require('mongoose');
 
 const projectSchema = new mongoose.Schema({
@@ -12,22 +11,22 @@ const projectSchema = new mongoose.Schema({
         required: [true, 'Project description is required.'],
         trim: true,
     },
-    projectType: { // Corresponds to the 'type' select element in ProAddForm.jsx
+    projectType: { 
         type: String,
         required: [true, 'Project type is required.'],
-        enum: ['web', 'mobile', 'design', 'other'], // 'other' added for flexibility
+        enum: ['web', 'mobile', 'design', 'other'], 
         trim: true,
     },
-    images: [{ // Array of strings (paths to images relative to /uploads)
+    images: [{ 
         type: String,
         required: [true, 'At least one project image is required.'],
     }],
-    userId: { // User who created the project
+    userId: { 
         type: mongoose.Schema.Types.ObjectId,
-        refPath: 'userModel', // Dynamic reference based on userModel
+        refPath: 'userModel', 
         required: true,
     },
-    userModel: { // Model of the user (e.g., 'Client', 'BusinessOwner', 'Admin')
+    userModel: { 
         type: String,
         required: true,
         enum: ['Client', 'BusinessOwner', 'Admin'],

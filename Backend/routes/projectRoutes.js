@@ -1,4 +1,3 @@
-// backend/routes/projectRoutes.js
 const express = require('express');
 const router = express.Router();
 const {
@@ -9,23 +8,17 @@ const {
     deleteProject
 } = require('../controllers/projectController');
 const { protect, authorize } = require('../middleware/authMiddleware');
-const { uploadProjectImages } = require('../middleware/uploadMiddleware'); // .array('projectImages', 10)
+const { uploadProjectImages } = require('../middleware/uploadMiddleware'); 
 
-// --- Middleware for logging requests to these routes ---
 const logProjectRequest = (req, res, next) => {
     console.log(`[ProjectRoutes] ${req.method} ${req.originalUrl} - User: ${req.user ? req.user.id + '(' + req.user.role + ')' : 'Guest'}`);
     next();
 };
 router.use(logProjectRequest);
 
-
-// --- Public Routes (adjust as needed) ---
 router.get('/', getAllProjects);
 router.get('/:id', getProjectById);
 
-// --- Private Routes ---
-
-// Middleware for handling multer errors specifically for project image uploads
 const handleProjectImageUploadError = (err, req, res, next) => {
     if (err) {
         console.error('[ProjectRoutes UploadError] Multer error:', err.message, 'Code:', err.code);
@@ -37,23 +30,23 @@ const handleProjectImageUploadError = (err, req, res, next) => {
         }
         return res.status(400).json({ success: false, message: err.message || 'File upload error.' });
     }
-    next(); // Proceed if no error from multer
+    next(); 
 };
 
 router.post(
     '/',
     protect,
-    authorize('admin', 'businessOwner'), // Example: Admins and Business Owners can create
-    uploadProjectImages, // This is multer().array('projectImages', 10)
-    handleProjectImageUploadError, // Handle errors from uploadProjectImages
+    authorize('admin', 'businessOwner'),
+    uploadProjectImages, 
+    handleProjectImageUploadError, 
     createProject
 );
 
 router.put(
     '/:id',
     protect,
-    authorize('admin', 'businessOwner'), // Controller also has ownership/admin check
-    uploadProjectImages, // For adding/replacing images during update
+    authorize('admin', 'businessOwner'), 
+    uploadProjectImages, 
     handleProjectImageUploadError,
     updateProject
 );
@@ -61,7 +54,7 @@ router.put(
 router.delete(
     '/:id',
     protect,
-    authorize('admin', 'businessOwner'), // Controller also has ownership/admin check
+    authorize('admin', 'businessOwner'), 
     deleteProject
 );
 

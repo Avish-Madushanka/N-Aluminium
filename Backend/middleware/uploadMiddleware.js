@@ -1,9 +1,7 @@
-// backend/middleware/uploadMiddleware.js
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-// --- Base Uploads Directory ---
 const uploadsDir = path.join(__dirname, '../uploads');
 console.log(`[Multer Config] Uploads directory target: ${uploadsDir}`);
 if (!fs.existsSync(uploadsDir)) {
@@ -17,7 +15,6 @@ if (!fs.existsSync(uploadsDir)) {
     console.log(`[Multer Config] Uploads directory exists: ${uploadsDir}`);
 }
 
-// --- Subdirectory for Sale Item Images ---
 const saleItemsUploadsDir = path.join(uploadsDir, 'saleitems');
 if (!fs.existsSync(saleItemsUploadsDir)) {
     try {
@@ -30,7 +27,6 @@ if (!fs.existsSync(saleItemsUploadsDir)) {
     console.log(`[Multer Config] 'saleitems' subdirectory exists at ${saleItemsUploadsDir}`);
 }
 
-// --- Subdirectory for Project Images ---
 const projectImagesUploadsDir = path.join(uploadsDir, 'projects');
 if (!fs.existsSync(projectImagesUploadsDir)) {
     try {
@@ -44,7 +40,6 @@ if (!fs.existsSync(projectImagesUploadsDir)) {
 }
 
 
-// --- Storage for Sale Items ---
 const saleItemStorage = multer.diskStorage({
     destination: function(req, file, cb) {
         if (!fs.existsSync(saleItemsUploadsDir)) {
@@ -64,7 +59,6 @@ const saleItemStorage = multer.diskStorage({
     }
 });
 
-// --- Storage for Project Images ---
 const projectImageStorage = multer.diskStorage({
     destination: function(req, file, cb) {
         if (!fs.existsSync(projectImagesUploadsDir)) {
@@ -84,7 +78,6 @@ const projectImageStorage = multer.diskStorage({
     }
 });
 
-// --- File Filter for Images ---
 const imageFileFilter = (req, file, cb) => {
     console.log(`[Multer FileFilter] Checking file - Fieldname: '${file.fieldname}', Original Filename: '${file.originalname}', Mimetype: '${file.mimetype}'`);
     if (file.mimetype && file.mimetype.startsWith('image/')) {
@@ -98,25 +91,19 @@ const imageFileFilter = (req, file, cb) => {
     }
 };
 
-// --- Direct Multer Middleware for Sale Item Image ---
 const directSaleItemUploadMiddleware = multer({
     storage: saleItemStorage,
-    limits: { fileSize: 5 * 1024 * 1024 }, // 5MB
+    limits: { fileSize: 5 * 1024 * 1024 }, 
     fileFilter: imageFileFilter
 }).single('image');
 
-// --- Multer Middleware for Project Images ---
-// The frontend ProAddForm.jsx sends files under the field name that corresponds to the input's `name` attribute,
-// or if using FormData explicitly, the name used in `formData.append(name, file)`.
-// Let's assume 'projectImages' will be used by the frontend.
 const uploadProjectImagesMiddleware = multer({
     storage: projectImageStorage,
-    limits: { fileSize: 10 * 1024 * 1024 }, // 10MB per file, adjust as needed
+    limits: { fileSize: 10 * 1024 * 1024 }, 
     fileFilter: imageFileFilter
-}).array('projectImages', 10); // 'projectImages' is the field name, allowing up to 10 files
+}).array('projectImages', 10); 
 
 
-// --- Other Uploaders (Kept for completeness, if used elsewhere) ---
 const generalStorage = multer.diskStorage({ destination: uploadsDir, filename: (req, file, cb) => { cb(null, `general-${Date.now()}-${file.originalname}`); } });
 const generalUpload = multer({ storage: generalStorage, limits: { fileSize: 5 * 1024 * 1024 } });
 const uploadProfilePhoto = generalUpload.single('profilePhoto');
@@ -127,5 +114,5 @@ module.exports = {
     uploadBusinessPhotos,
     upload: generalUpload,
     uploadSaleItemImage: directSaleItemUploadMiddleware,
-    uploadProjectImages: uploadProjectImagesMiddleware // New export
+    uploadProjectImages: uploadProjectImagesMiddleware 
 };
