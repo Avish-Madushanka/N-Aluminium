@@ -35,7 +35,7 @@ export default function MainHomePage() {
             
             <div className="MHP-categoryCard">
               <img
-                src="https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=600&q=80"
+                src="https://www.dcw.co.uk/wp-content/uploads/2021/09/The-Benefits-of-Waste-Collection-Services-for-Your-Business-scaled.jpg"
                 alt="Living Room"
                 className="MHP-categoryImage"
               />
@@ -55,7 +55,7 @@ export default function MainHomePage() {
 
             <div className="MHP-categoryCard">
               <img
-                src="https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=600&q=80"
+                src="https://media.sketchfab.com/models/a4865b88e73b4fde9bccf7e737af79f1/thumbnails/413e7489934c40a19b5e1c3bc349d8d2/9b5e29773a1a4381a699388b12a2aa02.jpeg"
                 alt="Dining Room"
                 className="MHP-categoryImage"
               />
@@ -75,7 +75,7 @@ export default function MainHomePage() {
 
             <div className="MHP-categoryCard">
               <img
-                src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=600&q=80"
+                src="https://image.made-in-china.com/318f0j00jTbfmRsKripd/12%E6%9C%885%E6%97%A5+%2813%29.mp4.webp"
                 alt="Bedroom"
                 className="MHP-categoryImage"
               />
@@ -95,7 +95,7 @@ export default function MainHomePage() {
 
             <div className="MHP-categoryCard">
               <img
-                src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=600&q=80"
+                src="https://builtoffsite.com.au/wp-content/uploads/2021/09/Modular-home-made-from-aluminium.jpg"
                 alt="Office"
                 className="MHP-categoryImage"
               />
@@ -115,7 +115,7 @@ export default function MainHomePage() {
 
             <div className="MHP-categoryCard">
               <img
-                src="https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?auto=format&fit=crop&w=600&q=80"
+                src="https://r2.erweima.ai/imgcompressed/compressed_0d88209b48f99ceb051065e52ecf260b.webp"
                 alt="Outdoor"
                 className="MHP-categoryImage"
               />
