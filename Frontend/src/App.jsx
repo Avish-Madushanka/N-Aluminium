@@ -58,6 +58,7 @@ import DisReview from './Components/Admin/DisReview/DisReview';
 import AdScrap from './Components/Admin/AdScrap/AdScrap';
 import AdminLocationManager from './Components/Admin/AdMapUpdate/AdminLocationManager';
 import FloatingChatbot from './Components/ChatBot/FloatingChatbot';
+import MainHomePage from './Components/MainPage/MainHomePage';
 
 const parseUserInfoFromToken = (token) => {
     if (!token) {
@@ -286,6 +287,7 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
             <main className="main-content">
                 <Routes>
                     <Route path="/" element={<HomePage />} />
+                    <Route path="/MainHomePage" element={<MainHomePage />} />
                     <Route path="/AboutUs" element={<AboutUs />} />
                     <Route path="/Service" element={<Service />} />
                     <Route path="/Collection" element={<Collection />} />

@@ -1,0 +1,271 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  color: #333;
+  background-color: #f9f9f9;
+  line-height: 1.6;
+}
+
+.MHP-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Header Styles */
+.MHP-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 5%;
+  background-color: #fff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.MHP-logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #3a7bd5;
+  text-decoration: none;
+}
+
+.MHP-nav {
+  display: flex;
+  gap: 2rem;
+}
+
+.MHP-navLink {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  transition: color 0.3s;
+  position: relative;
+}
+
+.MHP-navLink:hover {
+  color: #3a7bd5;
+}
+
+.MHP-navLink::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: #3a7bd5;
+  transition: width 0.3s;
+}
+
+.MHP-navLink:hover::after {
+  width: 100%;
+}
+
+.MHP-searchIcon {
+  font-size: 1.2rem;
+  color: #555;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.MHP-searchIcon:hover {
+  color: #3a7bd5;
+}
+
+/* Hero Section */
+.MHP-hero {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 6rem 2rem;
+  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1493663284031-b7e3aaa4c4b1?auto=format&fit=crop&w=1500&q=80') no-repeat center center/cover;
+  color: #fff;
+}
+
+.MHP-heroTitle {
+  font-family: 'Playfair Display', serif;
+  font-size: 3rem;
+  margin-bottom: 1.5rem;
+  max-width: 800px;
+  line-height: 1.2;
+}
+
+.MHP-heroText {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  max-width: 600px;
+  opacity: 0.9;
+}
+
+.MHP-heroButton {
+  padding: 1rem 2.5rem;
+  background-color: #3a7bd5;
+  color: white;
+  border: none;
+  border-radius: 30px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  box-shadow: 0 4px 15px rgba(58, 123, 213, 0.3);
+}
+
+.MHP-heroButton:hover {
+  background-color: #2c65b8;
+  transform: translateY(-3px);
+}
+
+/* Categories Section */
+.MHP-categories {
+  padding: 5rem 5%;
+  text-align: center;
+}
+
+.MHP-sectionTitle {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.5rem;
+  margin-bottom: 3rem;
+  color: #333;
+  position: relative;
+  display: inline-block;
+}
+
+.MHP-sectionTitle::after {
+  content: '';
+  position: absolute;
+  bottom: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 4px;
+  background-color: #3a7bd5;
+  border-radius: 2px;
+}
+
+.MHP-categoryGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+.MHP-categoryCard {
+  background-color: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.MHP-categoryCard:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
+
+.MHP-categoryImage {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.MHP-categoryContent {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.MHP-categoryName {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 0.8rem;
+  color: #333;
+}
+
+.MHP-categoryDesc {
+  color: #666;
+  margin-bottom: 1.5rem;
+  flex-grow: 1;
+}
+
+.MHP-categoryButton {
+  padding: 0.8rem 1.5rem;
+  background-color: transparent;
+  color: #3a7bd5;
+  border: 2px solid #3a7bd5;
+  border-radius: 25px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+  align-self: flex-start;
+  margin-top: auto;
+}
+
+.MHP-categoryButton:hover {
+  background-color: #3a7bd5;
+  color: white;
+}
+
+/* Footer */
+.MHP-footer {
+  background-color: #2c3e50;
+  color: #ecf0f1;
+  padding: 3rem 5%;
+  text-align: center;
+}
+
+.MHP-footerText {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+/* Responsive Design */
+@media (max-width: 900px) {
+  .MHP-categoryGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .MHP-nav {
+    display: none;
+  }
+
+  .MHP-heroTitle {
+    font-size: 2.2rem;
+  }
+
+  .MHP-heroText {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .MHP-categoryGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .MHP-hero {
+    padding: 4rem 1rem;
+  }
+
+  .MHP-heroTitle {
+    font-size: 1.8rem;
+  }
+}
