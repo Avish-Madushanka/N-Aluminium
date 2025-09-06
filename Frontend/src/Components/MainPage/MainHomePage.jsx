@@ -40,7 +40,7 @@ export default function MainHomePage() {
                 className="MHP-categoryImage"
               />
               <div className="MHP-categoryContent">
-                <h3 className="MHP-categoryName">Living Room</h3>
+                <h3 className="MHP-categoryName">Aluminum Scraps Collection</h3>
                 <p className="MHP-categoryDesc">
                   Create a cozy and inviting living space with our stylish furniture and decor.
                 </p>
