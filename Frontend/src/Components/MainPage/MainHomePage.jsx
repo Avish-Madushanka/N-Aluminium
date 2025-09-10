@@ -36,7 +36,6 @@ export default function MainHomePage() {
             <div className="MHP-categoryCard">
               <img
                 src="https://www.dcw.co.uk/wp-content/uploads/2021/09/The-Benefits-of-Waste-Collection-Services-for-Your-Business-scaled.jpg"
-                alt="Living Room"
                 className="MHP-categoryImage"
               />
               <div className="MHP-categoryContent">
@@ -75,7 +74,7 @@ export default function MainHomePage() {
 
             <div className="MHP-categoryCard">
               <img
-                src="https://image.made-in-china.com/318f0j00jTbfmRsKripd/12%E6%9C%885%E6%97%A5+%2813%29.mp4.webp"
+                src="https://www.ceylonsteel.com/wp-content/uploads/2020/06/box-bar-1.jpg"
                 alt="Bedroom"
                 className="MHP-categoryImage"
               />
