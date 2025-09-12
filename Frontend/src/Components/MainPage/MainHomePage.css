@@ -1,176 +1,128 @@
-.MHP-container {
-  margin: 0 auto;
-  padding: 0 20px;
+.hero-section {
+  width: 100%;
+  height: 500px;
+  background-image: url('https://images.adsttc.com/media/images/5a0e/c7f6/b22e/382f/e000/00b1/medium_jpg/EXT_Bedroom.jpg?1510918117');
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  padding: 30px;
+  box-sizing: border-box;
 }
 
-.MHP-hero {
+.hero-content {
+  background: rgba(0, 0, 0, 0.4);
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 600px;
+}
+
+.hero-content h1 {
+  font-size: 3.5rem;
+  margin-bottom: 10px;
+}
+
+.hero-content p {
+  font-size: 1.2rem;
+  margin: 0;
+  color: #ccc;
+}
+
+.releases-section {
+  margin-top: 40px;
+}
+
+.releases-section h3 {
+  font-size: 1.5rem;
+  font-weight: normal;
+  color: #eee;
+  margin-bottom: 20px;
+}
+
+.posters-row {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  padding-bottom: 50px;
+  -ms-overflow-style: none; 
+  scrollbar-width: none;   
+  justify-content: center;  
+  align-items: center; 
+}
+
+.posters-row::-webkit-scrollbar {
+  display: none; 
+}
+
+.poster-item {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
+  min-width: 180px;
+}
+
+.poster-box {
+  width: 300px;
+  height: 250px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
   text-align: center;
-  padding: 6rem 2rem;
-  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://www.reynaers.be/sites/default/files/public/styles/landscape_full_width_wide/public/2022-11/Private%20House%20Ukkel%202.1.jpg?h=1dd3cf61&itok=3g4o9n7f') no-repeat center center/cover;
-  color: #fff;
+  padding: 10px;
+  box-sizing: border-box;
+  transition: transform 0.2s ease-in-out;
 }
 
-.MHP-heroTitle {
-  font-family: 'Playfair Display', serif;
-  font-size: 5rem;
-  margin-bottom: 1.5rem;
-  max-width: 900px;
-  line-height: 1;
+.poster-box:hover {
+  transform: scale(1.05);
+  cursor: pointer;
 }
 
-.MHP-heroText {
-  font-size: 1.2rem;
-  margin-bottom: 2rem;
-  max-width: 600px;
-  opacity: 0.9;
-}
-
-.MHP-heroButton {
-  padding: 1rem 2.5rem;
-  background-color: #3a7bd5;
-  color: white;
-  border: none;
-  border-radius: 30px;
+.poster-box span {
   font-size: 1.1rem;
   font-weight: 500;
+  color: #fff;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+}
+
+
+.twin-poster {
+  background-image: url('https://www.dcw.co.uk/wp-content/uploads/2021/09/The-Benefits-of-Waste-Collection-Services-for-Your-Business-scaled.jpg');
+}
+.dogdays-poster {
+  background-image: url('https://media.sketchfab.com/models/a4865b88e73b4fde9bccf7e737af79f1/thumbnails/413e7489934c40a19b5e1c3bc349d8d2/9b5e29773a1a4381a699388b12a2aa02.jpeg');
+}
+.grandfather-poster {
+  background-image: url('https://www.ceylonsteel.com/wp-content/uploads/2020/06/box-bar-1.jpg');
+}
+.orange-poster {
+  background-image: url('https://builtoffsite.com.au/wp-content/uploads/2021/09/Modular-home-made-from-aluminium.jpg');
+}
+.zoo-poster {
+  background-image: url('https://r2.erweima.ai/imgcompressed/compressed_0d88209b48f99ceb051065e52ecf260b.webp');
+}
+
+
+.watch-button {
+  background-color: #e50914;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: bold;
   cursor: pointer;
-  transition: background-color 0.3s, transform 0.2s;
-  box-shadow: 0 4px 15px rgba(58, 123, 213, 0.3);
-}
-
-.MHP-heroButton:hover {
-  background-color: #2c65b8;
-  transform: translateY(-3px);
-}
-
-.MHP-categories {
-  padding: 4rem 5%;
-  text-align: center;
-}
-
-.MHP-sectionTitle {
-  font-family: 'Playfair Display', serif;
-  font-size: 2.5rem;
-  margin-bottom: 3rem;
-  color: #333;
-  position: relative;
-  display: inline-block;
-}
-
-.MHP-sectionTitle::after {
-  content: '';
-  position: absolute;
-  bottom: -15px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 80px;
-  height: 4px;
-  background-color: #3a7bd5;
-  border-radius: 2px;
-}
-
-.MHP-categoryGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 2rem;
-  margin-top: 3rem;
-}
-
-.MHP-categoryCard {
-  background-color: #fff;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s, box-shadow 0.3s;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-
-.MHP-categoryCard:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
-}
-
-.MHP-categoryImage {
+  margin-top: 10px;
   width: 100%;
-  height: 200px;
-  object-fit: cover;
+  transition: background-color 0.2s ease-in-out;
 }
 
-.MHP-categoryContent {
-  padding: 1.5rem;
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-}
-
-.MHP-categoryName {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.4rem;
-  font-weight: 700;
-  margin-bottom: 0.8rem;
-  color: #333;
-}
-
-.MHP-categoryDesc {
-  color: #666;
-  margin-bottom: 1.5rem;
-  flex-grow: 1;
-}
-
-.MHP-categoryButton {
-  padding: 0.8rem 1.5rem;
-  background-color: transparent;
-  color: #3a7bd5;
-  border: 2px solid #3a7bd5;
-  border-radius: 25px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s;
-  align-self: flex-start;
-  margin-top: auto;
-}
-
-.MHP-categoryButton:hover {
-  background-color: #3a7bd5;
-  color: white;
-}
-
-@media (max-width: 900px) {
-  .MHP-categoryGrid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 768px) {
-  .MHP-nav {
-    display: none;
-  }
-
-  .MHP-heroTitle {
-    font-size: 2.2rem;
-  }
-
-  .MHP-heroText {
-    font-size: 1rem;
-  }
-}
-
-@media (max-width: 600px) {
-  .MHP-categoryGrid {
-    grid-template-columns: 1fr;
-  }
-
-  .MHP-hero {
-    padding: 4rem 1rem;
-  }
-
-  .MHP-heroTitle {
-    font-size: 1.8rem;
-  }
+.watch-button:hover {
+  background-color: #f40612;
 }
