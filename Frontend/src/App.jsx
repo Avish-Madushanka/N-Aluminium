@@ -28,6 +28,7 @@ import Map from './Pages/Map';
 import ContactUs from './Pages/ContactUs';
 import UnauthorizedPage from './Pages/UnauthorizedPage';
 import Login from './Components/Login/Login';
+import ItemMarkert from './Components/ItemMarkert/ItemMarkert';
 
 import BOwnerForm from './Components/RegistrationForm/BOwnerForm';
 import ClientForm from './Components/RegistrationForm/ClientForm';
@@ -304,6 +305,7 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
                     <Route path="/unauthorized" element={<UnauthorizedPage />} />
                     <Route path="/LocationMap" element={<LocationMap />} />
                     <Route path="/AboutUSDiagram" element={<AboutUSDiagram />} />
+                    <Route path="/ItemMarkert" element={<ItemMarkert />} />
 
                     <Route path="/Login" element={ auth.isLoggedIn && auth.userInfo ? (<Navigate to={ (auth.userInfo.role === 'admin' && '/Admin/Dashboard') || (auth.userInfo.role === 'client' && '/') || (auth.userInfo.role === 'businessOwner' && '/BOwnerHome') || '/' } replace /> ) : ( <Login /> )} />
                     

@@ -78,7 +78,7 @@ const Navbar = ({ isLoggedIn, userInfo, handleLogout }) => {
       <div className="nav-container">
         <Link className="navbar-brand" to="/">
           <img src={logo} alt="Company Logo" className="nav-logo" />
-          <span className="logo-text1">ALUX</span>
+          <span className="logo-text1">MetaTrade</span>
         </Link>
 
         <div className="nav-links">
