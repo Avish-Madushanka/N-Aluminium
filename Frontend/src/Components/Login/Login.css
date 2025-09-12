@@ -81,7 +81,7 @@
 
 .form-header h2 {
   font-size: 2rem;
-  color: #2c3e50;
+  color: #42502c;
   margin-bottom: 10px;
   font-weight: 700;
 }
@@ -154,7 +154,7 @@
 .login-btn {
   width: 100%;
   padding: 15px;
-  background: linear-gradient(to right, #555555, #1d1d1d);
+  background: linear-gradient(to right, #0f3a1c, #082400);
   color: white;
   border: none;
   border-radius: 10px;
@@ -166,7 +166,7 @@
 }
 
 .login-btn:hover:not(:disabled) {
-  background: linear-gradient(to right, #1d1d1d, #555555);
+  background: linear-gradient(to right, #061b00, #0f3a1c);
   transform: translateY(-2px);
   box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
 }
@@ -189,14 +189,14 @@
 }
 
 .form-footer a {
-  color: #3498db;
+  color: #000c14;
   text-decoration: none;
   font-weight: 600;
   transition: all 0.3s;
 }
 
 .form-footer a:hover {
-  color: #2980b9;
+  color: #003d66;
   text-decoration: underline;
 }
 
