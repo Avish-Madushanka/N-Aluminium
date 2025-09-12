@@ -26,7 +26,6 @@ function Login() {
       setErrorMessage('');
     }
 
-
     const healthCheckEndpoint = API_ENDPOINTS?.HEALTH || '/health'; 
 
     if (!healthCheckEndpoint) {
@@ -50,11 +49,11 @@ function Login() {
       }
       return false;
     }
-  }, [errorMessage]); // errorMessage
+  }, [errorMessage]);
 
   useEffect(() => {
     checkBackendStatus();
-  }, [checkBackendStatus]); // checkBackendStatus
+  }, [checkBackendStatus]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -160,60 +159,74 @@ function Login() {
   }
 
   return (
-    <div className="LoginPage-container">
-      <div className="LoginPage-content">
-        <div className="LoginPage-left">
-          <h1 className="LoginPage-title">Welcome Back!</h1>
-          <p className="LoginPage-subtitle">Log in to manage your N-Aluminium account.</p>
+    <div className="travel-login-container">
+      <div className="travel-login-wrapper">
+        <div className="travel-quote-section">
+          <div className="travel-quote">
+            <h1>"Welcome to the future of aluminum – recycle, trade, design!"</h1>
+          </div>
+          <div className="travel-image">
+            <div className="image-placeholder"></div>
+          </div>
         </div>
-        <div className="LoginPage-right">
-          <h2 className="LoginPage-signinTitle">Sign In</h2>
-          <div className="LoginPage-status-message">
-            {serverStatus === 'checking' && <p className="status-checking">Connecting to server...</p>}
-          </div>
-          {errorMessage && <div className="LoginPage-error">{errorMessage}</div>}
-          
-          <form onSubmit={handleSubmit} noValidate>
-            <div className="LoginPage-formGroup">
-              <label htmlFor="login-email">Email Address</label>
-              <input
-                type="email"
-                id="login-email"
-                name="email" 
-                value={email}
-                onChange={(e) => setEmail(e.target.value)} 
-                placeholder="you@example.com"
-                autoComplete="email" 
-                required
-                disabled={isLoading || serverStatus === 'checking'}
-              />
+
+        <div className="login-form-section">
+          <div className="form-container">
+            <div className="form-header">
+              <h2>Welcome Back!</h2>
+              <p>Log in to manage your N-Aluminium account</p>
             </div>
-            <div className="LoginPage-formGroup">
-              <label htmlFor="login-password">Password</label>
-              <input
-                type="password"
-                id="login-password"
-                name="password" 
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Enter your password"
-                autoComplete="current-password" 
-                required
-                disabled={isLoading || serverStatus === 'checking'}
-              />
+
+            <div className="LoginPage-status-message">
+              {serverStatus === 'checking' && <p className="status-checking">Connecting to server...</p>}
             </div>
-            <button 
-              type="submit" 
-              className="LoginPage-submit" 
-              disabled={isLoading || serverStatus !== 'online'}
-            >
-              {isLoading ? 'Signing in...' : (serverStatus === 'checking' ? 'Connecting...' : 'Sign in')}
-            </button>
-          </form>
-          <div className="LoginPage-extraLinks">
-          </div>
-          <div className="LoginPage-signupLink">
-            Don't have an account? <Link to="/SignUp">Sign Up Now</Link>
+            {errorMessage && <div className="LoginPage-error">{errorMessage}</div>}
+            
+            <form onSubmit={handleSubmit} noValidate className="travel-form">
+              <div className="input-group">
+                <label htmlFor="login-email">Email Address</label>
+                <input
+                  type="email"
+                  id="login-email"
+                  name="email" 
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)} 
+                  placeholder="you@example.com"
+                  autoComplete="email" 
+                  required
+                  disabled={isLoading || serverStatus === 'checking'}
+                />
+              </div>
+              
+              <div className="input-group">
+                <label htmlFor="login-password">Password</label>
+                <input
+                  type="password"
+                  id="login-password"
+                  name="password" 
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Enter your password"
+                  autoComplete="current-password" 
+                  required
+                  disabled={isLoading || serverStatus === 'checking'}
+                />
+              </div>
+              
+              <button 
+                type="submit" 
+                className="login-btn" 
+                disabled={isLoading || serverStatus !== 'online'}
+              >
+                {isLoading ? 'Signing in...' : (serverStatus === 'checking' ? 'Connecting...' : 'Sign in')}
+              </button>
+            </form>
+
+            <div className="form-footer">
+              <p>
+                Don't have an account? <Link to="/SignUp">Sign Up Now</Link>
+              </p>
+            </div>
           </div>
         </div>
       </div>
