@@ -3,45 +3,44 @@ import './MainHomePage.css';
 
 const MainHomePage = () => {
   return (
-    <div className="streaming-container">
-      <div className="hero-section">
-        <div className="hero-content">
-          <h1>Catman 2: The Villain Returns</h1>
-          <p>The story continues, more mysteries, more darkness.</p>
+    <div className="MHP-container">
+      <div className="MHP-hero">
+        <div className="MHP-heroContent">
+          <h1>WELCOME</h1>
         </div>
       </div>
       
-      <div className="releases-section">
-        <div className="posters-row">
-          <div className="poster-item">
-            <div className="poster-box twin-poster">
+      <div className="MHP-releases">
+        <div className="MHP-postersRow">
+          <div className="MHP-posterItem">
+            <div className="MHP-posterBox MHP-twinPoster">
               <span>The Twins</span>
             </div>
-            <button className="watch-button">Watch Now</button>
+            <button className="MHP-watchBtn">Watch Now</button>
           </div>
-          <div className="poster-item">
-            <div className="poster-box dogdays-poster">
+          <div className="MHP-posterItem">
+            <div className="MHP-posterBox MHP-dogdaysPoster">
               <span>DOG DAYS</span>
             </div>
-            <button className="watch-button">Watch Now</button>
+            <button className="MHP-watchBtn">Watch Now</button>
           </div>
-          <div className="poster-item">
-            <div className="poster-box grandfather-poster">
+          <div className="MHP-posterItem">
+            <div className="MHP-posterBox MHP-grandfatherPoster">
               <span>How I Met Your Grand Father</span>
             </div>
-            <button className="watch-button">Watch Now</button>
+            <button className="MHP-watchBtn">Watch Now</button>
           </div>
-          <div className="poster-item">
-            <div className="poster-box orange-poster">
+          <div className="MHP-posterItem">
+            <div className="MHP-posterBox MHP-orangePoster">
               <span>Black Is The New Orange</span>
             </div>
-            <button className="watch-button">Watch Now</button>
+            <button className="MHP-watchBtn">Watch Now</button>
           </div>
-          <div className="poster-item">
-            <div className="poster-box zoo-poster">
+          <div className="MHP-posterItem">
+            <div className="MHP-posterBox MHP-zooPoster">
               <span>Zoo Park</span>
             </div>
-            <button className="watch-button">Watch Now</button>
+            <button className="MHP-watchBtn">Watch Now</button>
           </div>
         </div>
       </div>
