@@ -1,110 +1,118 @@
+.MHP-container {
+  font-family: Arial, sans-serif;
+  color: #fff;
+}
+
 .MHP-hero {
-  width: 100%;
-  height: 400px;
-  background-image: url('https://adrian.ee/wp-content/uploads/2023/03/lukanduksed-230307.jpg');
-  background-size: cover;
-  background-position: center;
   position: relative;
+  height: 80vh;
+  background: url('https://alteza.in/wp-content/uploads/2024/09/Aluminium-Sliding-Door-Prices-in-India-What-Homeowners-Need-to-Know.png') no-repeat center center/cover; 
   display: flex;
-  align-items: flex-end;
-  padding: 30px;
-  box-sizing: border-box;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+ 
+.MHP-hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7); 
+  z-index: 1;
 }
 
 .MHP-heroContent {
-  background: rgba(0, 0, 0, 0);
-  padding: 20px;
-  border-radius: 8px;
+  position: relative;
+  z-index: 2;
   max-width: 800px;
+  padding: 20px;
 }
 
-.MHP-heroContent h1 {
-  color: #ffffff;
-  font-size: 8.0rem;
+.MHP-newSingle {
+  font-size: 1.2em;
+  letter-spacing: 3px;
   margin-bottom: 10px;
-  font-family: Serif;
+  color: #e50914; 
 }
 
-.MHP-heroContent p {
-  font-size: 1.2rem;
-  margin: 0;
-  color: #ccc;
+.MHP-title {
+  font-size: 8em;
+  line-height: 1.1;
+}
+
+.MHP-description {
+  font-size: 2em;
+  line-height: 1.6;
+  margin-bottom: 30px;
 }
 
 .MHP-releases {
-  margin-top: 40px;
-}
-
-.MHP-releases h3 {
-  font-size: 1.5rem;
-  font-weight: normal;
-  color: #eee;
-  margin-bottom: 20px;
+  background-color: #ffffff;
+  padding: 50px 0;
 }
 
 .MHP-postersRow {
   display: flex;
-  gap: 20px;
-  overflow-x: auto;
-  padding-bottom: 50px;
-  -ms-overflow-style: none; 
-  scrollbar-width: none;   
-  justify-content: center;  
-  align-items: center; 
-}
-
-.MHP-postersRow::-webkit-scrollbar {
-  display: none; 
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 30px;
+  padding: 0 20px;
 }
 
 .MHP-posterItem {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-width: 180px;
+  text-align: center;
+  margin-bottom: 30px;
 }
 
 .MHP-posterBox {
-  width: 300px;
-  height: 250px;
+  width: 250px;
+  height: 350px;
+  background-color: #333; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
   background-size: cover;
   background-position: center;
-  border-radius: 8px;
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  text-align: center;
-  padding: 10px;
-  box-sizing: border-box;
-  transition: transform 0.2s ease-in-out;
-}
-
-.MHP-posterBox:hover {
-  transform: scale(1.05);
+  transition: transform 0.3s ease;
   cursor: pointer;
 }
 
+.MHP-posterBox:hover {
+  transform: translateY(-10px);
+}
+
 .MHP-posterBox span {
-  font-size: 1.1rem;
-  font-weight: 500;
-  color: #fff;
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 10px 15px;
+  border-radius: 5px;
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
 }
 
 .MHP-twinPoster {
   background-image: url('https://www.dcw.co.uk/wp-content/uploads/2021/09/The-Benefits-of-Waste-Collection-Services-for-Your-Business-scaled.jpg');
 }
+
 .MHP-dogdaysPoster {
   background-image: url('https://media.sketchfab.com/models/a4865b88e73b4fde9bccf7e737af79f1/thumbnails/413e7489934c40a19b5e1c3bc349d8d2/9b5e29773a1a4381a699388b12a2aa02.jpeg');
 }
+
 .MHP-grandfatherPoster {
   background-image: url('https://www.ceylonsteel.com/wp-content/uploads/2020/06/box-bar-1.jpg');
 }
+
 .MHP-orangePoster {
   background-image: url('https://builtoffsite.com.au/wp-content/uploads/2021/09/Modular-home-made-from-aluminium.jpg');
 }
+
 .MHP-zooPoster {
   background-image: url('https://r2.erweima.ai/imgcompressed/compressed_0d88209b48f99ceb051065e52ecf260b.webp');
 }
@@ -113,16 +121,82 @@
   background-color: #e50914;
   color: #fff;
   border: none;
-  border-radius: 4px;
-  padding: 10px 20px;
-  font-size: 1rem;
-  font-weight: bold;
+  padding: 12px 25px;
+  border-radius: 5px;
+  font-size: 1em;
   cursor: pointer;
-  margin-top: 10px;
-  width: 100%;
-  transition: background-color 0.2s ease-in-out;
+  transition: background-color 0.3s ease;
 }
 
 .MHP-watchBtn:hover {
-  background-color: #f40612;
+  background-color: #ff3344;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .MHP-postersRow {
+    gap: 20px;
+  }
+}
+
+@media (max-width: 992px) {
+  .MHP-title {
+    font-size: 3em;
+  }
+  .MHP-posterBox {
+    width: 220px;
+    height: 300px;
+  }
+}
+
+@media (max-width: 768px) {
+  .MHP-hero {
+    height: 70vh;
+  }
+  .MHP-title {
+    font-size: 2.5em;
+  }
+  .MHP-description {
+    font-size: 1em;
+  }
+  .MHP-playButton {
+    width: 60px;
+    height: 60px;
+  }
+  .MHP-playButton svg {
+    font-size: 1.8em;
+  }
+  .MHP-postersRow {
+    justify-content: center;
+    gap: 20px;
+  }
+  .MHP-posterBox {
+    width: 180px;
+    height: 250px;
+    font-size: 1.2em;
+  }
+  .MHP-watchBtn {
+    padding: 10px 20px;
+  }
+}
+
+@media (max-width: 576px) {
+  .MHP-newSingle {
+    font-size: 1em;
+  }
+  .MHP-title {
+    font-size: 2em;
+  }
+  .MHP-description {
+    font-size: 0.9em;
+  }
+  .MHP-postersRow {
+    flex-direction: column;
+    align-items: center;
+  }
+  .MHP-posterBox {
+    width: 250px;
+    height: 350px;
+    font-size: 1.5em;
+  }
 }
