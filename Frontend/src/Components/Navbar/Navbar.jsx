@@ -82,7 +82,7 @@ const Navbar = ({ isLoggedIn, userInfo, handleLogout }) => {
         </Link>
 
         <div className="nav-links">
-          <NavLink to="/MainHomePage" className={({ isActive }) => `nav-item ${isActive ? 'active-nav-item' : ''}`}>
+          <NavLink to="/" className={({ isActive }) => `nav-item ${isActive ? 'active-nav-item' : ''}`}>
             Home
           </NavLink>
           

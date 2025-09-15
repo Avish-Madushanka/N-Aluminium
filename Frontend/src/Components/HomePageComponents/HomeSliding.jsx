@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './HomeSliding.css';
 
-import Image1 from '../../assets/Main1.png';
+import Image1 from '../../assets/Main2.png';
 import Image2 from '../../assets/Main1.png';
-import Image3 from '../../assets/Main1.png';
+import Image3 from '../../assets/Main3.jpg';
 
 const HomeSliding = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -49,36 +49,13 @@ const HomeSliding = () => {
 
       <div className="hero-content">
         <div className="hero-text-container">
-          <div className="hero-badge">
-            <span>♻️ Eco-Friendly</span>
-          </div>
-          
           <h1 className="hero-title">
-            <span className="title-highlight">"Collect</span>
-            <span className="title-highlight">Recycle</span>
-            <span className="title-highlight">Renew."</span>
+            <span className="title-highlight">WELCOME</span>
           </h1>
           
           <p className="hero-subtitle">
-            Transform waste into wealth. Join our sustainable recycling program and make a positive impact on the environment.
+            To MetaTrade
           </p>
-
-          <div className="hero-buttons">
-            <button 
-              className="btn-primary"
-              onClick={() => handleButtonClick('/CalendarDisplay')}
-            >
-              <span>📅</span>
-              Check Pickup Dates
-            </button>
-            <button 
-              className="btn-secondary"
-              onClick={() => handleButtonClick('/Calculate')}
-            >
-              <span>💰</span>
-              Calculate Scrap Value
-            </button>
-          </div>
         </div>
       </div>
 

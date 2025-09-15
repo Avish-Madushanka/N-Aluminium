@@ -33,7 +33,22 @@ const HomeDes = () => {
       link: "/Project",
       image: "https://www.alumo.lk/wp-content/uploads/2017/10/Aluminum-Doors-Windows.jpg",
       alt: "Sustainable Projects"
+    },
+    {
+      title: "Latest Projects",
+      description: "Explore our recent work where innovation meets sustainability. From custom aluminum solutions to eco-friendly scrap pickups, each project reflects our commitment to quality, efficiency, and a greener future.",
+      link: "/Project",
+      image: "https://www.alumo.lk/wp-content/uploads/2017/10/Aluminum-Doors-Windows.jpg",
+      alt: "Sustainable Projects"
+    },
+    {
+      title: "Latest Projects",
+      description: "Explore our recent work where innovation meets sustainability. From custom aluminum solutions to eco-friendly scrap pickups, each project reflects our commitment to quality, efficiency, and a greener future.",
+      link: "/Project",
+      image: "https://www.alumo.lk/wp-content/uploads/2017/10/Aluminum-Doors-Windows.jpg",
+      alt: "Sustainable Projects"
     }
+    
   ];
 
   return (

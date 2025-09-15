@@ -92,9 +92,11 @@
 }
 
 .title-highlight {
+  font-family: 'Great Vibes', cursive;
+  font-size: 7.5rem;
   display: inline-block;
   margin: 0 0.5rem;
-  background: linear-gradient(135deg, #4ade80, #22d3ee, #a855f7);
+  background: #ffffff;
   background-size: 200% 200%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;

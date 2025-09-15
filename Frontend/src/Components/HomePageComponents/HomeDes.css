@@ -34,13 +34,11 @@
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 2rem;
   width: 100%;
-  max-width: 1200px;
 }
 
 .HomeDes-card {
   background-color: #f8f9fa;
   border-radius: 1.25rem;
-  padding: 1.5rem;
   text-align: center;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
