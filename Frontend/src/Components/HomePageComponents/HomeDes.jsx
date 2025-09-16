@@ -24,21 +24,21 @@ const HomeDes = () => {
       title: "Reuse Items Buy & Sell",
       description: "Buy and sell reusable items effortlessly! Give pre-owned goods a second life while saving money and reducing waste. Sustainable trading for a greener future!",
       link: "/BuyandSell",
-      image: "https://img.freepik.com/premium-vector/investment-analyst-holding-buy-sell-board-trading-stock-market-financial-investment-management_251235-575.jpg",
+      image: "https://caddcentre.com/blog/wp-content/uploads/2025/04/3d-image-of-interior-design.jpg",
       alt: "Buy and Sell Marketplace"
     },
     {
       title: "Latest Projects",
       description: "Explore our recent work where innovation meets sustainability. From custom aluminum solutions to eco-friendly scrap pickups, each project reflects our commitment to quality, efficiency, and a greener future.",
       link: "/Project",
-      image: "https://www.alumo.lk/wp-content/uploads/2017/10/Aluminum-Doors-Windows.jpg",
+      image: "https://img.freepik.com/premium-vector/investment-analyst-holding-buy-sell-board-trading-stock-market-financial-investment-management_251235-575.jpg",
       alt: "Sustainable Projects"
     },
     {
       title: "Latest Projects",
       description: "Explore our recent work where innovation meets sustainability. From custom aluminum solutions to eco-friendly scrap pickups, each project reflects our commitment to quality, efficiency, and a greener future.",
       link: "/Project",
-      image: "https://www.alumo.lk/wp-content/uploads/2017/10/Aluminum-Doors-Windows.jpg",
+      image: "https://www.mining.com/wp-content/uploads/2018/11/Aluminium.jpg",
       alt: "Sustainable Projects"
     },
     {
