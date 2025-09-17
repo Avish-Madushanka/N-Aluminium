@@ -50,6 +50,7 @@
 }
 
 .HomeDes-card.HomeDes-slide-up {
+  height: 550px;
   opacity: 1;
   transform: translateY(0);
 }

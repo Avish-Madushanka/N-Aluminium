@@ -1,22 +1,6 @@
 import React, { useEffect } from 'react';
 import './ServiceMain.css';
 
-const Card = ({ type, title, description, buttonText, imageSrc, altText, themeClass, cardSize = 'large' }) => {
-  return (
-    <div className={`Ser-card ${themeClass} ${cardSize === 'small' ? 'Ser-card-small' : 'Ser-card-large'}`}>
-      <div className="Ser-card-image-container">
-        <img src={imageSrc} alt={altText} className="Ser-card-image" />
-      </div>
-      <div className="Ser-card-content">
-        <p className="Ser-card-type">{type}</p>
-        <h2 className="Ser-card-title">{title}</h2>
-        {description && cardSize !== 'small' && <p className="Ser-card-description">{description}</p>}
-        {buttonText && cardSize !== 'small' && <button className="Ser-card-button">{buttonText}</button>}
-      </div>
-    </div>
-  );
-};
-
 const ServiceMain = () => {
   useEffect(() => {
     const cards = document.querySelectorAll('.Ser-card');
@@ -26,66 +10,37 @@ const ServiceMain = () => {
     });
   }, []);
 
-  const cardData = [
-    {
-      type: "Data Recovery",
-      title: "Get Rid of Your Electronic Debt",
-      description: "Transform your old electronics into valuable resources through our comprehensive recycling program.",
-      buttonText: "Learn More",
-      imageSrc: "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=400&h=300&fit=crop",
-      altText: "Electronic recycling",
-      themeClass: "Ser-card-theme-purple"
-    },
-    {
-      type: "Business Solutions",
-      title: "It's Exciting to Purchase a House",
-      description: "Discover sustainable building materials and eco-friendly construction solutions for your new home.",
-      buttonText: "Explore",
-      imageSrc: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=400&h=300&fit=crop",
-      altText: "Sustainable construction",
-      themeClass: "Ser-card-theme-orange"
-    },
-    {
-      type: "Smart Solutions",
-      title: "Get Rid of Your Electronic Debt",
-      description: "Smart recycling solutions for modern electronics and digital waste management.",
-      buttonText: "Get Started",
-      imageSrc: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=300&fit=crop",
-      altText: "Smart recycling",
-      themeClass: "Ser-card-theme-green"
-    },
-    {
-      type: "Home Services",
-      title: "It's Exciting to Purchase a House",
-      description: "Complete home sustainability makeover services.",
-      buttonText: "Contact Us",
-      imageSrc: "https://images.unsplash.com/photo-1460472178825-e5240623afd5?w=400&h=300&fit=crop",
-      altText: "Home services",
-      themeClass: "Ser-card-theme-blue"
-    },
-    {
-      type: "Quick Service",
-      title: "Electronic Recycling",
-      imageSrc: "https://images.unsplash.com/photo-1542744094-3a31f272c490?w=400&h=300&fit=crop",
-      altText: "Quick recycling",
-      themeClass: "Ser-card-theme-purple"
-    },
-    {
-      type: "Premium",
-      title: "Home Solutions",
-      imageSrc: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&h=300&fit=crop",
-      altText: "Premium services",
-      themeClass: "Ser-card-theme-orange"
-    }
+  const serviceData = [
+    { type: "Data Recovery", title: "Professional Data Recovery Services", description: "Recover lost data from damaged hard drives, SSDs, and mobile devices with our advanced recovery techniques.", buttonText: "Get Quote", imageSrc: "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=400&h=300&fit=crop", altText: "Data recovery technology", themeClass: "Ser-card-theme-purple" },
+    { type: "IT Consulting", title: "Strategic IT Solutions", description: "Transform your business with cutting-edge technology consulting and digital transformation services.", buttonText: "Learn More", imageSrc: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=300&fit=crop", altText: "IT consulting meeting", themeClass: "Ser-card-theme-blue" },
+    { type: "Cloud Services", title: "Cloud Migration & Management", description: "Seamlessly migrate to the cloud and optimize your infrastructure for maximum performance and security.", buttonText: "Start Migration", imageSrc: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400&h=300&fit=crop", altText: "Cloud computing infrastructure", themeClass: "Ser-card-theme-green" },
+    { type: "Cybersecurity", title: "Advanced Security Solutions", description: "Protect your business with comprehensive cybersecurity services and threat protection systems.", buttonText: "Secure Now", imageSrc: "https://images.unsplash.com/photo-1563206767-5b18f218e8de?w=400&h=300&fit=crop", altText: "Cybersecurity protection", themeClass: "Ser-card-theme-orange" },
+    { type: "24/7 Support", title: "Technical Support", imageSrc: "https://images.unsplash.com/photo-1553877522-43269d4ea984?w=400&h=300&fit=crop", altText: "Technical support team", themeClass: "Ser-card-theme-purple", cardSize: "small" },
+    { type: "Mobile Development", title: "Custom Mobile Applications", description: "Build powerful mobile apps for iOS and Android with our experienced development team.", buttonText: "Start Project", imageSrc: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=400&h=300&fit=crop", altText: "Mobile app development", themeClass: "Ser-card-theme-blue" },
+    { type: "Web Development", title: "Modern Web Solutions", description: "Create responsive, high-performance websites and web applications tailored to your business needs.", buttonText: "View Portfolio", imageSrc: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=300&fit=crop", altText: "Web development code", themeClass: "Ser-card-theme-green" }
   ];
+
+  const Card = ({ type, title, description, buttonText, imageSrc, altText, themeClass, cardSize = 'large' }) => (
+    <div className={`Ser-card ${themeClass} ${cardSize === 'small' ? 'Ser-card-small' : 'Ser-card-large'}`}>
+      <div className="Ser-card-image-container">
+        <img src={imageSrc} alt={altText} className="Ser-card-image" />
+      </div>
+      <div className="Ser-card-content">
+        <p className="Ser-card-type">{type}</p>
+        <h3 className="Ser-card-title">{title}</h3>
+        {description && cardSize !== 'small' && <p className="Ser-card-description">{description}</p>}
+        {buttonText && cardSize !== 'small' && <button className="Ser-card-button">{buttonText}</button>}
+      </div>
+    </div>
+  );
 
   return (
     <div className="Ser-homepage-container">
       <div className="Ser-hero">
         <div className="Ser-hero-content">
-          <h1 className="Ser-hero-title">Sustainable Solutions for a Greener Tomorrow</h1>
+          <h1 className="Ser-hero-title">Professional IT Services</h1>
           <p className="Ser-hero-subtitle">
-            Transforming waste into opportunity through innovative recycling and reuse services
+            Comprehensive technology solutions designed to accelerate your business growth
           </p>
           <div className="Ser-hero-scroll-indicator">
             <span>Explore Our Services</span>
@@ -95,12 +50,12 @@ const ServiceMain = () => {
       </div>
 
       <div className="Ser-cards-section">
+        <div className="Ser-section-header Ser-section-spacing">
+          <h2 className="Ser-section-title">Development Services</h2>
+          <p className="Ser-section-subtitle">Custom solutions built for your unique requirements</p>
+        </div>
         <div className="Ser-cards-grid">
-          <Card {...cardData[0]} />
-          <Card {...cardData[1]} />
-          <Card {...cardData[2]} />
-          <Card {...cardData[3]} />
-          <Card {...cardData[4]} />
+          {serviceData.slice(5).map((card, idx) => <Card key={idx + 5} {...card} />)}
         </div>
       </div>
     </div>

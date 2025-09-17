@@ -9,7 +9,7 @@ const Navbar = ({ isLoggedIn, userInfo, handleLogout }) => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
-  const navbarRef = useRef(null);
+  const headerRef = useRef(null);
   const profileRef = useRef(null);
 
   useEffect(() => {
@@ -25,7 +25,7 @@ const Navbar = ({ isLoggedIn, userInfo, handleLogout }) => {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (navbarRef.current && !navbarRef.current.contains(event.target)) {
+      if (headerRef.current && !headerRef.current.contains(event.target)) {
         setIsOpen(false);
         setIsProfileOpen(false);
       }
@@ -74,82 +74,72 @@ const Navbar = ({ isLoggedIn, userInfo, handleLogout }) => {
   }
 
   return (
-    <nav className={`navbar ${scrolled ? 'navbar-scrolled' : ''}`} ref={navbarRef}>
-      <div className="nav-container">
-        <Link className="navbar-brand" to="/">
-          <img src={logo} alt="Company Logo" className="nav-logo" />
-          <span className="logo-text1">MetaTrade</span>
+    <header className={`Nav-header-main ${scrolled ? 'Nav-header-scrolled' : ''}`} ref={headerRef}>
+      <div className="Nav-header-container">
+        <Link className="Nav-brand-logo" to="/">
+          <img src={logo} alt="Company Logo" className="Nav-brand-image" />
+          <span className="Nav-brand-text">MetaTrade</span>
         </Link>
 
-        <div className="nav-links">
-          <NavLink to="/" className={({ isActive }) => `nav-item ${isActive ? 'active-nav-item' : ''}`}>
+        <div className="Nav-menu-links">
+          <NavLink to="/" className={({ isActive }) => `Nav-menu-item ${isActive ? 'Nav-active-menu-item' : ''}`}>
             Home
           </NavLink>
           
-          <div className="has-dropdown">
-            <NavLink to="/AboutUs" className={({ isActive }) => `nav-item ${isActive ? 'active-nav-item' : ''}`}>
+          <div className="Nav-has-dropdown">
+            <NavLink to="/AboutUs" className={({ isActive }) => `Nav-menu-item ${isActive ? 'Nav-active-menu-item' : ''}`}>
               About Us
             </NavLink>
-            <div className="dropdown-menu">
-              <Link to="/AboutUs/Company" className="dropdown-item">Our Company</Link>
-              <Link to="/AboutUs/Team" className="dropdown-item">Our Team</Link>
-              <Link to="/AboutUs/History" className="dropdown-item">Our History</Link>
-            </div>
           </div>
           
-          <NavLink to="/Service" className={({ isActive }) => `nav-item ${isActive ? 'active-nav-item' : ''}`}>
+          <NavLink to="/Service" className={({ isActive }) => `Nav-menu-item ${isActive ? 'Nav-active-menu-item' : ''}`}>
             Services
           </NavLink>
           
-          <div className="has-dropdown">
-            <NavLink to="/ContactUs" className={({ isActive }) => `nav-item ${isActive ? 'active-nav-item' : ''}`}>
-              Contact
+          <div className="Nav-has-dropdown">
+            <NavLink to="/ContactUs" className={({ isActive }) => `Nav-menu-item ${isActive ? 'Nav-active-menu-item' : ''}`}>
+              Contact Us
             </NavLink>
-            <div className="dropdown-menu">
-              <Link to="/ContactUs/Form" className="dropdown-item">Contact Form</Link>
-              <Link to="/ContactUs/Locations" className="dropdown-item">Our Locations</Link>
-              <Link to="/ContactUs/Support" className="dropdown-item">Support</Link>
-            </div>
           </div>
           
           {isLoggedIn && userRole === 'admin' && (
-            <NavLink to="/Admin" className={({ isActive }) => `nav-item ${isActive ? 'active-nav-item' : ''}`}>
+            <NavLink to="/Admin" className={({ isActive }) => `Nav-menu-item ${isActive ? 'Nav-active-menu-item' : ''}`}>
               Admin Panel
             </NavLink>
           )}
         </div>
 
-        <div className="auth-section">
+        <div className="Nav-auth-section">
           {isLoggedIn && userInfo ? (
             <div 
-              className={`user-menu ${isProfileOpen ? 'active' : ''}`} 
+              className={`Nav-user-menu ${isProfileOpen ? 'active' : ''}`} 
               ref={profileRef}
               onClick={toggleProfile}
             >
-              <span className="profile-name">{profileName}</span>
-              <button className="profile-toggle">
-                <span className="profile-initials">{getInitials(displayName)}</span>
-                <ChevronDown size={16} className="profile-icon" />
+              <span className="Nav-profile-name">{profileName}</span>
+              <button className="Nav-profile-toggle">
+                <span className="Nav-profile-initials">{getInitials(displayName)}</span>
+                <ChevronDown size={16} className="Nav-profile-icon" />
               </button>
               
-              <div className="profile-dropdown">
-                <Link to={profilePath} className="profile-btn" onClick={() => setIsProfileOpen(false)}>
+              <div className="Nav-profile-dropdown">
+                <Link to={profilePath} className="Nav-profile-btn" onClick={() => setIsProfileOpen(false)}>
                   <User size={16} /> Profile
                 </Link>
-                <button onClick={triggerLogout} className="logout-btn">
+                <button onClick={triggerLogout} className="Nav-logout-btn">
                   <LogOut size={16} /> Logout
                 </button>
               </div>
             </div>
           ) : (
-            <div className="auth-buttons-container">
-              <Link to="/Login" className="login-btn">Login</Link>
-              <Link to="/SignUp" className="signup-btn">Sign Up</Link>
+            <div className="Nav-auth-buttons-container">
+              <Link to="/Login" className="Nav-login-btn">Login</Link>
+              <Link to="/SignUp" className="Nav-signup-btn">Sign Up</Link>
             </div>
           )}
 
           <button 
-            className="menu-toggle" 
+            className="Nav-menu-toggle" 
             onClick={toggleMenu} 
             aria-label={isOpen ? "Close menu" : "Open menu"}
             aria-expanded={isOpen}
@@ -159,46 +149,36 @@ const Navbar = ({ isLoggedIn, userInfo, handleLogout }) => {
         </div>
       </div>
 
-      <div className={`mobile-menu ${isOpen ? 'active' : ''}`}>
-        <div className="mobile-menu-items">
+      <div className={`Nav-mobile-menu ${isOpen ? 'active' : ''}`}>
+        <div className="Nav-mobile-menu-items">
           <NavLink 
             to="/" 
-            className={({ isActive }) => `mobile-nav-item ${isActive ? 'active-mobile-nav-item' : ''}`}
+            className={({ isActive }) => `Nav-mobile-menu-item ${isActive ? 'Nav-active-mobile-menu-item' : ''}`}
             onClick={() => setIsOpen(false)}
           >
             Home
           </NavLink>
           
-          <div className="mobile-nav-item" onClick={() => setIsOpen(false)}>
+          <div className="Nav-mobile-menu-item" onClick={() => setIsOpen(false)}>
             About Us
-            <div className="mobile-dropdown-items">
-              <NavLink to="/AboutUs/Company" className="mobile-dropdown-item">Our Company</NavLink>
-              <NavLink to="/AboutUs/Team" className="mobile-dropdown-item">Our Team</NavLink>
-              <NavLink to="/AboutUs/History" className="mobile-dropdown-item">Our History</NavLink>
-            </div>
           </div>
           
           <NavLink 
             to="/Service" 
-            className={({ isActive }) => `mobile-nav-item ${isActive ? 'active-mobile-nav-item' : ''}`}
+            className={({ isActive }) => `Nav-mobile-menu-item ${isActive ? 'Nav-active-mobile-menu-item' : ''}`}
             onClick={() => setIsOpen(false)}
           >
             Services
           </NavLink>
           
-          <div className="mobile-nav-item" onClick={() => setIsOpen(false)}>
-            Contact
-            <div className="mobile-dropdown-items">
-              <NavLink to="/ContactUs/Form" className="mobile-dropdown-item">Contact Form</NavLink>
-              <NavLink to="/ContactUs/Locations" className="mobile-dropdown-item">Our Locations</NavLink>
-              <NavLink to="/ContactUs/Support" className="mobile-dropdown-item">Support</NavLink>
-            </div>
+          <div className="Nav-mobile-menu-item" onClick={() => setIsOpen(false)}>
+            Contact Us
           </div>
 
           {isLoggedIn && userRole === 'admin' && (
             <NavLink 
               to="/Admin" 
-              className={({ isActive }) => `mobile-nav-item ${isActive ? 'active-mobile-nav-item' : ''}`}
+              className={({ isActive }) => `Nav-mobile-menu-item ${isActive ? 'Nav-active-mobile-menu-item' : ''}`}
               onClick={() => setIsOpen(false)}
             >
               Admin Panel
@@ -206,17 +186,17 @@ const Navbar = ({ isLoggedIn, userInfo, handleLogout }) => {
           )}
           
           {isLoggedIn && (
-            <div className="auth-buttons-mobile">
+            <div className="Nav-auth-buttons-mobile">
               <Link 
                 to={profilePath} 
-                className="login-btn mobile-btn"
+                className="Nav-login-btn Nav-mobile-btn"
                 onClick={() => setIsOpen(false)}
               >
                 <User size={18} /> My Profile
               </Link>
               <button 
                 onClick={triggerLogout} 
-                className="logout-btn mobile-btn"
+                className="Nav-logout-btn Nav-mobile-btn"
               >
                 <LogOut size={18} /> Logout
               </button>
@@ -224,17 +204,17 @@ const Navbar = ({ isLoggedIn, userInfo, handleLogout }) => {
           )}
           
           {!isLoggedIn && (
-            <div className="auth-buttons-mobile">
+            <div className="Nav-auth-buttons-mobile">
               <Link 
                 to="/Login" 
-                className="login-btn mobile-btn"
+                className="Nav-login-btn Nav-mobile-btn"
                 onClick={() => setIsOpen(false)}
               >
                 Login
               </Link>
               <Link 
                 to="/SignUp" 
-                className="signup-btn mobile-btn"
+                className="Nav-signup-btn Nav-mobile-btn"
                 onClick={() => setIsOpen(false)}
               >
                 Sign Up
@@ -243,7 +223,7 @@ const Navbar = ({ isLoggedIn, userInfo, handleLogout }) => {
           )}
         </div>
       </div>
-    </nav>
+    </header>
   );
 };
 
