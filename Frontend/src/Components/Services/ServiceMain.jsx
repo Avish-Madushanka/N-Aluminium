@@ -58,7 +58,21 @@ const ServiceMain = () => {
           {serviceData.slice(5).map((card, idx) => <Card key={idx + 5} {...card} />)}
         </div>
       </div>
+
+      <div className="Ser-cards-section">
+        <div className="Ser-cards-grid">
+          {serviceData.slice(5).map((card, idx) => <Card key={idx + 5} {...card} />)}
+        </div>
+      </div>
+
+      <div className="Ser-cards-section">
+        <div className="Ser-cards-grid">
+          {serviceData.slice(5).map((card, idx) => <Card key={idx + 5} {...card} />)}
+        </div>
+      </div>
     </div>
+
+    
   );
 };
 
