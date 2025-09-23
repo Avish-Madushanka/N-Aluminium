@@ -28,7 +28,7 @@ const HomeDes = () => {
       alt: "Buy and Sell Marketplace"
     },
     {
-      title: "Latest Projects",
+      title: "Reuse Items Buy & Sell",
       description: "Buy and sell reusable items effortlessly! Give pre-owned goods a second life while saving money and reducing waste. Sustainable trading for a greener future!",
       link: "/Project",
       image: "https://img.freepik.com/premium-vector/investment-analyst-holding-buy-sell-board-trading-stock-market-financial-investment-management_251235-575.jpg",

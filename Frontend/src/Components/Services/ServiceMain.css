@@ -4,8 +4,13 @@
   margin: 0 auto; 
 }
 
+.welcome-content1 {
+  position: relative;
+  z-index: 2; 
+}
+
 .welcome-section1 {
-  background-image: url('https://recyclers.com.au/wp-content/uploads/2023/03/How-Metal-Is-Recycled.jpg');
+   background-image: url('https://recyclers.com.au/wp-content/uploads/2023/03/How-Metal-Is-Recycled.jpg');
   background-size: cover;
   background-position: center;
   height: 400px;
@@ -14,20 +19,33 @@
   justify-content: center;
   align-items: center;
   color: white;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
   position: relative;
+  overflow: hidden;
+}
+
+.welcome-section1::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 1;
 }
 
 .welcome-section1 h1 {
   font-size: 4em;
   margin: 0;
   letter-spacing: 5px;
+  font-family: 'Montserrat', sans-serif;
 }
 
 .feature-section {
   display: flex;
   height: 350px;
-  width: 1300px;
+  width: 1100px;
   align-items: center;
   margin: 50px 50px;
   background-color: white;
@@ -48,12 +66,12 @@
 
 .feature-number {
   position: absolute;
-  top: 20px;
-  left: 20px;
-  font-size: 6em;
+  top: -40px;
+  left: 100px;
+  font-size: 11em;
   font-weight: bold;
   color: #f0f0f0;
-  z-index: 1;
+  z-index: 2;
 }
 
 .feature-icon {
@@ -147,7 +165,7 @@
 }
 
 .feature-section:nth-of-type(1) .feature-icon img {
-  content: url('');
+  content: url('https://www.freepik.com/icon/truck_474274#fromView=family&page=1&position=50&uuid=e2920105-8682-4e1d-9657-0270b84e0ab2');
 }
 .feature-section:nth-of-type(2) .feature-icon img {
   content: url('');
