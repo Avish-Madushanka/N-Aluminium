@@ -1,233 +1,186 @@
-:root {
-  --primary-color: #2e7d32;
-  --primary-dark: #1b5e20;
-  --secondary-color: #1565c0;
-  --accent-color: #ff8f00;
-  --purple-color: #9c27b0;
-  --orange-color: #ff9800;
-  --text-color: #333;
-  --text-light: #666;
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.15);
-  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.2);
-  --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+.App12 {
+  max-width: auto; 
+  justify-items: center;
+  margin: 0 auto; 
 }
 
-.Ser-homepage-container {
+.welcome-section1 {
+  background-image: url('https://recyclers.com.au/wp-content/uploads/2023/03/How-Metal-Is-Recycled.jpg');
+  background-size: cover;
+  background-position: center;
+  height: 400px;
   width: 100%;
-  margin: 0 auto;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  position: relative;
 }
 
-.Ser-hero {
-  height: 60vh;
-  min-height: 400px;
-  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+.welcome-section1 h1 {
+  font-size: 4em;
+  margin: 0;
+  letter-spacing: 5px;
+}
+
+.feature-section {
   display: flex;
+  height: 350px;
+  width: 1300px;
   align-items: center;
-  justify-content: center;
-  text-align: center;
-  color: white;
-  border-radius: 24px;
-  margin: 20px 0 60px;
-  position: relative;
+  margin: 50px 50px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
   overflow: hidden;
 }
 
-.Ser-hero::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: url('https://images.unsplash.com/photo-1605000797499-95a51c5269ae?w=1350&h=800&fit=crop') center/cover;
-  opacity: 0.2;
-  border-radius: 24px;
+.feature-section.reverse {
+  flex-direction: row-reverse;
 }
 
-.Ser-hero-content {
+.feature-text {
+  flex: 1;
+  padding: 40px;
+  position: relative;
+}
+
+.feature-number {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  font-size: 6em;
+  font-weight: bold;
+  color: #f0f0f0;
+  z-index: 1;
+}
+
+.feature-icon {
+  margin-bottom: 15px;
+  width: 60px;
+  height: 60px;
+  background-color: #e0f2f7;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+  position: relative;
+  border: 1px solid #cceeff;
+}
+
+.feature-icon img {
+  width: 30px;
+  height: 30px;
+}
+
+.feature-text h2 {
+  font-size: 2.2em;
+  margin-top: 10px;
+  margin-bottom: 15px;
+  color: #333;
+  z-index: 2;
+  position: relative;
+}
+
+.feature-text p {
+  font-size: 1.1em;
+  line-height: 1.6;
+  color: #666;
+  margin-bottom: 25px;
+  z-index: 2;
+  position: relative;
+}
+
+.read-more {
+  display: inline-block;
+  color: #007bff;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1em;
   position: relative;
   z-index: 2;
-  max-width: 800px;
-  padding: 0 20px;
 }
 
-.Ser-hero-title {
-  font-size: clamp(2.5rem, 5vw, 4rem);
-  font-weight: 800;
-  margin-bottom: 1.5rem;
-  opacity: 0;
-  animation: Ser-slideUp 1s ease forwards 0.3s;
+.read-more:hover {
+  text-decoration: underline;
 }
 
-.Ser-hero-subtitle {
-  font-size: clamp(1.1rem, 2vw, 1.6rem);
-  margin-bottom: 2rem;
-  opacity: 0;
-  animation: Ser-slideUp 1s ease forwards 0.6s;
-}
-
-.Ser-hero-scroll-indicator {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  font-size: 0.9rem;
-  margin-top: 2rem;
-  opacity: 0;
-  animation: Ser-fadeIn 1s ease forwards 1s;
-}
-
-.Ser-scroll-arrow {
-  width: 24px;
-  height: 24px;
-  margin-top: 8px;
-  border-left: 2px solid white;
-  border-bottom: 2px solid white;
-  transform: rotate(-45deg);
-  animation: Ser-bounce 2s infinite;
-}
-
-@keyframes Ser-slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes Ser-fadeIn { from { opacity: 0; } to { opacity: 1; } }
-@keyframes Ser-bounce {
-  0%,20%,50%,80%,100% { transform: rotate(-45deg) translateY(0); }
-  40% { transform: rotate(-45deg) translateY(-10px); }
-  60% { transform: rotate(-45deg) translateY(-5px); }
-}
-
-.Ser-section-header {
-  text-align: center;
-  margin-bottom: 50px;
-}
-.Ser-section-spacing { margin-top: 80px; }
-
-.Ser-section-title {
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: var(--text-color);
-  margin-bottom: 1rem;
-}
-.Ser-section-subtitle {
-  font-size: 1.2rem;
-  color: var(--text-light);
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-.Ser-cards-section { margin: 80px 0; }
-
-.Ser-cards-grid {
-  padding: 0 50px;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 30px;
-  margin-bottom: 40px;
-}
-
-.Ser-cards-center {
+.feature-image {
+  flex: 1;
   display: flex;
   justify-content: center;
-  margin-bottom: 40px;
+  align-items: center;
+  background-color: #f0f0f0;
 }
 
-.Ser-card {
-  background: white;
-  border-radius: 20px;
-  box-shadow: var(--shadow-md);
-  overflow: hidden;
-  transition: var(--transition);
-  opacity: 0;
-  transform: translateY(20px);
-}
-.Ser-card.Ser-animate-in { animation: Ser-cardSlideIn 0.6s ease forwards; }
-@keyframes Ser-cardSlideIn { to { opacity: 1; transform: translateY(0); } }
-.Ser-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-lg); }
-
-.Ser-card-large { display: flex; min-height: 280px; }
-.Ser-card-small { flex-direction: column; min-height: 300px; max-width: 350px; }
-
-.Ser-card-image-container { overflow: hidden; border-radius: 12px; }
-.Ser-card-large .Ser-card-image-container { flex: 0 0 45%; }
-.Ser-card-small .Ser-card-image-container { height: 180px; }
-
-.Ser-card-image {
+.feature-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: var(--transition);
-}
-.Ser-card:hover .Ser-card-image { transform: scale(1.05); }
-
-.Ser-card-content {
-  flex: 1;
-  padding: 30px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-.Ser-card-small .Ser-card-content { padding: 20px; text-align: center; }
-
-.Ser-card-type { font-size: 0.85rem; font-weight: 600; color: var(--text-light); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; }
-.Ser-card-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 15px; }
-.Ser-card-description { font-size: 1rem; color: var(--text-light); margin-bottom: 25px; line-height: 1.6; }
-
-.Ser-card-button {
-  align-self: flex-start;
-  padding: 12px 24px;
-  border: none;
-  border-radius: 25px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: var(--transition);
-  text-transform: uppercase;
-}
-.Ser-card-button:hover { transform: translateY(-2px); }
-
-.Ser-card-theme-purple { background: #f3e5f5; }
-.Ser-card-theme-purple .Ser-card-title { color: var(--purple-color); }
-.Ser-card-theme-purple .Ser-card-button { background: var(--purple-color); color: white; }
-
-.Ser-card-theme-orange { background: #fff3e0; }
-.Ser-card-theme-orange .Ser-card-title { color: var(--orange-color); }
-.Ser-card-theme-orange .Ser-card-button { background: var(--orange-color); color: white; }
-
-.Ser-card-theme-green { background: #e8f5e8; }
-.Ser-card-theme-green .Ser-card-title { color: var(--primary-color); }
-.Ser-card-theme-green .Ser-card-button { background: var(--primary-color); color: white; }
-
-.Ser-card-theme-blue { background: #e3f2fd; }
-.Ser-card-theme-blue .Ser-card-title { color: var(--secondary-color); }
-.Ser-card-theme-blue .Ser-card-button { background: var(--secondary-color); color: white; }
-
-.Ser-cta-section {
-  background: linear-gradient(135deg, var(--secondary-color), #0d47a1);
-  border-radius: 24px;
-  padding: 60px 20px;
-  text-align: center;
-  color: white;
-  margin: 80px 0 40px;
+  border-radius: 0 10px 10px 0;
 }
 
-.Ser-cta-content { max-width: 600px; margin: 0 auto; }
-.Ser-cta-title { font-size: 2.5rem; font-weight: 700; margin-bottom: 1rem; }
-.Ser-cta-subtitle { font-size: 1.2rem; margin-bottom: 2rem; opacity: 0.9; }
-
-.Ser-cta-button {
-  background: white;
-  color: var(--secondary-color);
-  padding: 15px 35px;
-  border: none;
-  border-radius: 25px;
-  font-size: 1.1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: var(--transition);
-  text-transform: uppercase;
+.feature-section.reverse .feature-image img {
+  border-radius: 10px 0 0 10px;
 }
-.Ser-cta-button:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
 
-@media (max-width: 1024px) { .Ser-cards-grid { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); padding: 0 30px; } }
+.welcome-section {
+  background-image: url('https://recyclers.com.au/wp-content/uploads/2023/03/How-Metal-Is-Recycled.jpg');
+}
+
+.feature-section:nth-of-type(1) .feature-image img {
+  content: url('https://www.villagelivingonline.com/downloads/18950/download/SUN-CITY-Garbage-collection-Republic_JA2.jpg?cb=4126bee154eaa68fcca69688c72291d0');
+}
+.feature-section:nth-of-type(2) .feature-image img {
+  content: url('https://toffu.co/cdn/shop/products/pp_3d-lowpoly-livingroom1.png?v=1734390656');
+}
+.feature-section:nth-of-type(3) .feature-image img {
+  content: url('https://media.istockphoto.com/id/532257210/vector/stock-market.jpg?s=612x612&w=0&k=20&c=wQuRxE5lO-9JbafjcEyhM6o2EfDuXhbWKNi2PzInSlA=');
+}
+.feature-section:nth-of-type(4) .feature-image img {
+  content: url('https://www.chipaik.com.sg/backend/web/upload/images/we-offer-comprehensive-aluminium-products.webp');
+}
+.feature-section:nth-of-type(5) .feature-image img {
+  content: url('https://aluelite.com/wp-content/uploads/2023/03/1-3_-scaled.jpg');
+}
+
+.feature-section:nth-of-type(1) .feature-icon img {
+  content: url('');
+}
+.feature-section:nth-of-type(2) .feature-icon img {
+  content: url('');
+}
+.feature-section:nth-of-type(3) .feature-icon img {
+  content: url('');
+}
+.feature-section:nth-of-type(4) .feature-icon img {
+  content: url('');
+}
+.feature-section:nth-of-type(5) .feature-icon img {
+  content: url('');
+}
+
 @media (max-width: 768px) {
-  .Ser-cards-grid { grid-template-columns: 1fr; padding: 0 20px; }
-  .Ser-card-large { flex-direction: column; }
-  .Ser-section-title { font-size: 2rem; }
-  .Ser-cta-title { font-size: 2rem; }
+  .feature-section, .feature-section.reverse {
+    flex-direction: column;
+  }
+
+  .feature-image {
+    width: 100%;
+    height: 250px;
+  }
+
+  .feature-image img {
+    border-radius: 0 0 10px 10px;
+  }
+
+  .feature-section.reverse .feature-image img {
+    border-radius: 0 0 10px 10px;
+  }
+
+  .welcome-section h1 {
+    font-size: 2.5em;
+  }
 }
