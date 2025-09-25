@@ -18,7 +18,7 @@
 .contact-right-panel {
   flex: 1;
   padding: 3rem;
-  background: linear-gradient(145deg, #3f37c9, #312e65);
+  background: linear-gradient(145deg, #292929, #000000);
   color: #fff;
   display: flex;
   flex-direction: column;
@@ -28,7 +28,7 @@
 
 .contact-header h2 {
   font-size: 2rem;
-  color: #4361ee;
+  color: #000000;
   margin-bottom: 1rem;
   text-transform: uppercase;
 }
@@ -96,7 +96,7 @@
 }
 
 .submit-btn {
-  background: #4361ee;
+  background: #444444;
   color: #fff;
   padding: 1rem;
   font-weight: 600;
@@ -112,7 +112,7 @@
 }
 
 .submit-btn:hover {
-  background: #3f37c9;
+  background: #272727;
   transform: translateY(-2px);
 }
 
