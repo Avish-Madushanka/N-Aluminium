@@ -1,42 +1,33 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
 
-body {
-  font-family: 'Poppins', sans-serif;
-  margin: 0;
-  background-color: #f0f2f5; /* Light background for the page outside the hero */
-}
-
 .hero-container {
   position: relative;
   width: 100%;
-  height: 80vh; /* Adjust height as needed, example looks rectangular */
-  min-height: 500px; /* Minimum height for larger screens */
-  max-height: 800px; /* Max height to prevent it from getting too tall */
+  height: 70vh;
+  min-height: 500px;
+  max-height: 800px;
   overflow: hidden;
-  display: flex; /* Using flex to help center the slider item vertically if needed */
+  display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #f0f2f5; /* Background behind the slider if it doesn't take full width */
-  padding: 20px; /* Padding around the slider itself */
-  box-sizing: border-box; /* Include padding in element's total width and height */
+  background-color: #f0f2f5;
+  padding: 30px;
+  box-sizing: border-box;
 }
 
-/* New: Slider Item Container for the Split Layout */
 .hero-slider-item {
   position: relative;
   width: 100%;
-  max-width: 1200px; /* Constrain the slider item width */
   height: 100%;
-  background-color: #000; /* Solid black background for the entire slider item */
+  background-color: #000;
   display: flex;
-  border-radius: 15px; /* Rounded corners for the whole slider */
-  overflow: hidden; /* Ensure image and content respect border-radius */
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); /* Soft shadow */
+  border-radius: 15px;     
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
 }
 
-/* Image Section - Left 50% */
 .hero-image-section {
-  flex: 0 0 50%; /* Takes exactly 50% width */
+  flex: 0 0 50%;
   position: relative;
   overflow: hidden;
 }
@@ -44,10 +35,10 @@ body {
 .hero-image {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* Cover the available space */
-  object-position: center; /* Center the image within its bounds */
-  filter: grayscale(100%); /* Apply grayscale filter as in the example */
-  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out; /* Only for fading and subtle scale */
+  object-fit: cover;
+  object-position: center;
+  filter: grayscale(100%);
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
 }
 
 .hero-image.fade-in {
@@ -56,85 +47,79 @@ body {
 }
 
 .hero-image.fade-out {
-  opacity: 0.7; /* Slight fade out effect */
-  transform: scale(1.02); /* Subtle zoom out */
+  opacity: 0.7;
+  transform: scale(1.02);
 }
 
-/* Content Section - Right 50% (Black background) */
 .hero-content-section {
-  flex: 0 0 50%; /* Takes exactly 50% width */
-  background-color: #000; /* Solid black background */
-  display: flex; /* Use flex to center content vertically */
+  flex: 0 0 50%;
+  background-color: #000;
+  display: flex;
   align-items: center;
-  justify-content: center; /* Center content horizontally within its own space */
-  padding: 2.5rem; /* Padding inside the black content area */
+  justify-content: center;
+  padding: 2.5rem;
   box-sizing: border-box;
-  color: white; /* Default text color for this section */
-  text-align: left; /* Align all text to the left */
+  color: white;
+  text-align: left;
 }
 
 .hero-content-inner {
-  max-width: 450px; /* Constrain content width within the section */
-  width: 100%; /* Ensure it takes full width up to max-width */
+  max-width: 450px;
+  width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 1rem; /* Space between elements */
+  gap: 1rem;
 }
 
-/* Badge Style */
 .hero-badge {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  background-color: rgba(255, 255, 255, 0.05); /* Very subtle background */
+  background-color: rgba(255, 255, 255, 0.05);
   border-radius: 20px;
   padding: 0.4rem 1rem;
   font-size: 0.85rem;
   font-weight: 500;
   color: rgba(255, 255, 255, 0.8);
-  margin-bottom: 0.5rem; /* Space below badge */
+  margin-bottom: 0.5rem;
 }
 
 .badge-dot {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background-color: #ffc107; /* Yellow dot */
+  background-color: #ffc107;
 }
 
-/* Title Styling */
 .hero-title {
-  font-size: clamp(2.5rem, 5vw, 3.5rem); /* Responsive font size */
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
   font-weight: 800;
   line-height: 1.2;
   color: white;
-  margin-bottom: 0.5rem; /* Space below title */
+  margin-bottom: 0.5rem;
 }
 
-/* Subtitle Styling */
 .hero-subtitle {
   font-size: 1rem;
   line-height: 1.6;
   color: rgba(255, 255, 255, 0.7);
-  margin-bottom: 1.5rem; /* Space below subtitle */
+  margin-bottom: 1.5rem;
 }
 
-/* Buttons Container */
 .hero-buttons {
   display: flex;
-  gap: 1rem; /* Space between buttons */
-  flex-wrap: wrap; /* Allow buttons to wrap on smaller screens */
+  gap: 1rem;
+  flex-wrap: wrap;
 }
 
-/* Primary Button */
 .btn-primary {
-  background-color: white; /* White background as in example */
-  color: #000; /* Black text */
+  background-color: white;
+  color: #000;
   padding: 0.9rem 2rem;
   font-size: 1rem;
   font-weight: 600;
   border: none;
-  border-radius: 8px; /* Slightly less rounded than example, but good standard */
+  border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s ease;
   min-width: 150px;
@@ -145,7 +130,7 @@ body {
 }
 
 .btn-primary:hover {
-  background-color: #f0f0f0; /* Slightly darker white on hover */
+  background-color: #f0f0f0;
   transform: translateY(-2px);
   box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
 }
@@ -154,17 +139,16 @@ body {
   transform: translateY(0);
 }
 
-/* Secondary (Play/Icon) Button */
 .btn-secondary {
-  background-color: #ffc107; /* Yellow background */
-  color: #000; /* Black icon */
-  padding: 0.9rem; /* Equal padding for a square/circular look */
-  font-size: 1.2rem; /* Larger icon size */
+  background-color: #ffc107;
+  color: #000;
+  padding: 0.9rem;
+  font-size: 1.2rem;
   border: none;
-  border-radius: 8px; /* Square with rounded corners */
+  border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s ease;
-  width: 50px; /* Fixed width and height for a square button */
+  width: 50px;
   height: 50px;
   display: flex;
   align-items: center;
@@ -172,7 +156,7 @@ body {
 }
 
 .btn-secondary:hover {
-  background-color: #e0a800; /* Darker yellow on hover */
+  background-color: #e0a800;
   transform: translateY(-2px);
   box-shadow: 0 4px 15px rgba(255, 193, 7, 0.3);
 }
@@ -181,23 +165,21 @@ body {
   transform: translateY(0);
 }
 
-
-/* Slide Indicators - Yellow dots below the slider */
 .slide-indicators {
   position: absolute;
-  bottom: 1.5rem; /* Position below the slider item */
+  bottom: 1rem;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
   gap: 0.75rem;
-  z-index: 4; /* Ensure indicators are on top of everything */
+  z-index: 4;
 }
 
 .indicator {
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.4); /* Lighter default color */
+  background: rgba(255, 255, 255, 0.4);
   cursor: pointer;
   transition: all 0.3s ease;
 }
@@ -208,69 +190,36 @@ body {
 }
 
 .indicator.active {
-  background: #ffc107; /* Active indicator is yellow */
+  background: #ffc107;
   transform: scale(1.2);
 }
 
-/* Remove unused styles and animations from previous version */
-.hero-overlay,
-.hero-text-container,
-.title-highlight, /* If you want to keep the original title highlight effect, re-add or adjust */
-.hero-stats,
-.stat-item,
-.stat-number,
-.stat-label,
-.stat-divider,
-.scroll-indicator,
-.scroll-arrow,
-.hero-image-container::before /* Shimmer effect */ {
-  display: none; /* Hide elements that are not part of the new design */
-}
-
-/* Keyframe Animations (adjusted or removed as needed) */
-
-/* The fade-in/fade-out for images is handled by opacity and transform */
-/* We'll keep the basic fade animations */
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes fadeOut {
-  from { opacity: 1; }
-  to { opacity: 0; }
-}
-
-/* Ensure no other animations interfere unless explicitly desired for the new design */
-/* Remove gradientShift, slideUp, bounce, shimmer, fadeInUp as they don't apply to this new layout */
-
-/* Media Queries */
 @media (max-width: 992px) {
   .hero-slider-item {
-    flex-direction: column; /* Stack image and content vertically on smaller screens */
-    height: auto; /* Allow height to adjust */
+    flex-direction: column;
+    height: auto;
     max-height: none;
   }
 
   .hero-image-section {
-    flex: 0 0 auto; /* No fixed width */
+    flex: 0 0 auto;
     width: 100%;
-    height: 300px; /* Fixed height for image when stacked */
+    height: 300px;
   }
 
   .hero-content-section {
     flex: 0 0 auto;
     width: 100%;
-    text-align: center; /* Center text when stacked */
+    text-align: center;
     padding: 2rem;
   }
 
   .hero-content-inner {
-    align-items: center; /* Center items in the column */
+    align-items: center;
   }
 
   .hero-buttons {
-    justify-content: center; /* Center buttons when stacked */
+    justify-content: center;
   }
 
   .hero-title {
@@ -314,22 +263,7 @@ body {
   }
 
   .btn-primary, .btn-secondary {
-    width: 100%; /* Full width buttons on very small screens */
-    max-width: 200px; /* Max width to prevent them from being too wide */
-  }
-}
-
-/* Dark mode adjustments (if needed for the new design) */
-@media (prefers-color-scheme: dark) {
-  /* You might want to keep the black content section as is,
-     or slightly adjust if the image itself is lighter in dark mode */
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .hero-image,
-  .btn-primary,
-  .btn-secondary,
-  .indicator {
-    transition: none !important;
+    width: 100%;
+    max-width: 200px;
   }
 }
