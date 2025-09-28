@@ -153,6 +153,7 @@
   flex: 1;
   overflow-y: auto;
   color: #333;
+  background-color: #fff;
 }
 
 .footer {
