@@ -1,11 +1,8 @@
-// HomeSliding.jsx
 import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './HomeSliding.css';
 
-// Import your actual images here.
-// For the example, I'll use placeholders.
-import Image1 from '../../assets/Main2.png'; // Assuming a good aspect ratio for the left side
+import Image1 from '../../assets/Main2.png'; 
 import Image2 from '../../assets/Main1.png';
 import Image3 from '../../assets/Main3.jpg';
 
@@ -19,7 +16,7 @@ const HomeSliding = () => {
       subtitle: "We provide best home services around the city. book us now and experience the best service.",
       button1Text: "Book Now",
       button1Link: "#",
-      button2Icon: "▶", // Play icon
+      button2Icon: "▶",
       button2Link: "#"
     },
     {
@@ -29,7 +26,7 @@ const HomeSliding = () => {
       subtitle: "Dedicated to excellence, we ensure every service is performed with precision and care.",
       button1Text: "Learn More",
       button1Link: "#",
-      button2Icon: "ⓘ", // Info icon
+      button2Icon: "ⓘ", 
       button2Link: "#"
     },
     {
@@ -39,7 +36,7 @@ const HomeSliding = () => {
       subtitle: "Don't wait! Get quick and efficient solutions for all your home service needs.",
       button1Text: "Contact Us",
       button1Link: "#",
-      button2Icon: "📞", // Phone icon
+      button2Icon: "📞", 
       button2Link: "#"
     },
   ]);
@@ -51,31 +48,29 @@ const HomeSliding = () => {
       setTimeout(() => {
         setCurrentIndex((prevIndex) => (prevIndex + 1) % slides.length);
         setIsAnimating(false);
-      }, 300); // This duration should match the CSS fade transition
-    }, 5000); // Change slide every 5 seconds
+      }, 300); 
+    }, 5000); 
 
     return () => clearInterval(intervalId);
   }, [slides.length]);
 
   const handleButtonClick = (url) => {
-    // This function can be used if you want custom logic beyond window.location.href
     window.location.href = url;
   };
 
   const goToSlide = (index) => {
-    if (index === currentIndex) return; // Prevent unnecessary animation if already on slide
+    if (index === currentIndex) return; 
     setIsAnimating(true);
     setTimeout(() => {
       setCurrentIndex(index);
       setIsAnimating(false);
-    }, 300); // This duration should match the CSS fade transition
+    }, 300);
   };
 
   const currentSlide = slides[currentIndex];
 
   return (
     <div className="hero-container">
-      {/* The hero-overlay will now cover the content section, not the image */}
       <div className="hero-overlay"></div> 
       
       <div className="hero-slider-item">

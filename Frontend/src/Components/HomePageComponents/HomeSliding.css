@@ -10,8 +10,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #f0f2f5;
-  padding: 30px;
+  background-color: #ffffff;
+  padding: 40px;
   box-sizing: border-box;
 }
 
@@ -190,7 +190,7 @@
 }
 
 .indicator.active {
-  background: #ffc107;
+  background: #5c5c5c;
   transform: scale(1.2);
 }
 
@@ -233,20 +233,34 @@
 
 @media (max-width: 576px) {
   .hero-container {
-    padding: 10px;
+    padding: 0;
     min-height: 400px;
+    height: auto;
   }
 
   .hero-slider-item {
-    border-radius: 10px;
+    flex-direction: column;
+    height: auto;
+    border-radius: 0; 
+    border: none;  
   }
 
   .hero-image-section {
-    height: 250px;
+    width: 100%;
+    height: 220px;       
+    flex: 0 0 auto;
   }
 
   .hero-content-section {
-    padding: 1.5rem;
+    width: 100%;
+    flex: 0 0 auto;
+    padding: 1.5rem 1rem;
+    text-align: center;
+  }
+
+  .hero-content-inner {
+    align-items: center;
+    max-width: 100%;
   }
 
   .hero-badge {
@@ -255,15 +269,23 @@
   }
 
   .hero-title {
-    font-size: clamp(1.8rem, 7vw, 2.5rem);
+    font-size: clamp(1.6rem, 6vw, 2.2rem);
   }
 
   .hero-subtitle {
     font-size: 0.9rem;
+    line-height: 1.4;
   }
 
-  .btn-primary, .btn-secondary {
+  .hero-buttons {
+    flex-direction: column;  
+    gap: 0.75rem;
     width: 100%;
-    max-width: 200px;
+  }
+
+  .btn-primary, 
+  .btn-secondary {
+    width: 100%;
+    max-width: none;
   }
 }

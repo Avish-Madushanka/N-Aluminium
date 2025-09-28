@@ -18,7 +18,7 @@
   opacity: 0;
   transform: translateY(-20px);
   transition: opacity 0.8s ease, transform 0.8s ease;
-  background: linear-gradient(90deg, #2b5876 0%, #4e4376 100%);
+  background: linear-gradient(90deg, #303030 0%, #000000 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
