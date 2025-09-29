@@ -5,29 +5,33 @@
   font-family: Arial, sans-serif;
   line-height: 1.6;
   color: #333;
-  padding-top: 50px;
+  padding-top: 100px;
   background-color: #ffffff;
 }
 
-/* Overview Section */
 .overview-section h2 {
   color: #2c3e50;
   margin-top: 0;
-  margin-bottom: 15px;
+  margin-bottom: 35px;
   font-size: 3rem;
   font-weight: bold;
 }
 
-/* Features Section */
+.p1 {
+  font-size: large;
+  text-align: justify;
+  padding-bottom: 40px;
+}
+
 .features-section {
   margin-top: 60px;
   text-align: center;
 }
 
 .features-title {
-  font-size: 36px;
+  font-size: 3rem;
   color: #1a2a5f;
-  margin-bottom: 40px;
+  margin-bottom: 50px;
   font-weight: bold;
 }
 
@@ -87,18 +91,13 @@
   line-height: 1.5;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .argus-scrap-markets {
-    padding: 15px;
-  }
-
+@media (max-width: 992px) {
   .overview-section h2 {
-    font-size: 2rem;
+    font-size: 2.4rem;
   }
 
   .features-title {
-    font-size: 28px;
+    font-size: 2.4rem;
   }
 
   .feature-item h3 {
@@ -106,6 +105,63 @@
   }
 
   .feature-item p {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 768px) {
+  .argus-scrap-markets {
+    padding: 15px;
+    padding-top: 80px;
+  }
+
+  .overview-section h2 {
+    font-size: 2rem;
+  }
+
+  .features-title {
+    font-size: 2rem;
+    margin-bottom: 40px;
+  }
+
+  .feature-item h3 {
+    font-size: 17px;
+  }
+
+  .feature-item p {
     font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .overview-section h2 {
+    font-size: 1.6rem;
+    margin-bottom: 20px;
+  }
+
+  .features-title {
+    font-size: 1.8rem;
+  }
+
+  .features-grid {
+    gap: 25px;
+  }
+
+  .icon-wrapper {
+    width: 80px;
+    height: 80px;
+  }
+
+  .icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .feature-item h3 {
+    font-size: 16px;
+  }
+
+  .feature-item p {
+    font-size: 13px;
   }
 }

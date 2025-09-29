@@ -1,15 +1,15 @@
 import React from 'react';
-import './HomeBar.css'; // single CSS file
+import './HomeBar.css'; 
 
 const HomeBar = () => {
   return (
     <div className="argus-scrap-markets">
 
-      {/* Overview Section */}
       <section className="overview-section">
         <h2>Overview</h2>
+        <div className='p1'>
         <p>
-          “Our aluminum digital platform is designed to transform the way aluminum is collected,
+          “ Our aluminum digital platform is designed to transform the way aluminum is collected,
           reused, and shared. We provide an innovative system where individuals, households, and
           businesses can easily schedule aluminum scrap collections, ensuring that valuable materials
           never go to waste. Through our marketplace, users can buy and sell reusable aluminum items,
@@ -20,17 +20,15 @@ const HomeBar = () => {
           manage, and utilize aluminum resources more efficiently. Designers and engineers can take
           advantage of integrated 3D modeling tools to visualize, plan, and innovate with aluminum-based
           projects, while business owners and creators can upload and showcase their aluminum projects
-          directly to our community.
-        </p>
-        <p>
-          By combining convenience, technology, and sustainability, our platform builds a connected
+          directly to our community. By combining convenience, technology, and sustainability, our platform builds a connected
           ecosystem where aluminum is not just recycled but given a new purpose — helping reduce
           environmental impact while empowering communities and industries to benefit from a stronger,
-          greener aluminum economy.”
+          greener aluminum economy. ”
         </p>
+        </div>
       </section>
 
-      {/* Features Section */}
+
       <section className="features-section">
         <h2 className="features-title">Key Features</h2>
         <div className="features-grid">
