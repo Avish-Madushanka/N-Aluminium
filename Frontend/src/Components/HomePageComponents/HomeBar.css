@@ -9,10 +9,24 @@
   background-color: #ffffff;
 }
 
+.overview-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  flex-wrap: wrap;
+  margin-bottom: 60px;
+}
+
+.overview-text {
+  flex: 1;
+  min-width: 300px;
+}
+
 .overview-section h2 {
   color: #2c3e50;
   margin-top: 0;
-  margin-bottom: 35px;
+  margin-bottom: 25px;
   font-size: 3rem;
   font-weight: bold;
 }
@@ -20,7 +34,19 @@
 .p1 {
   font-size: large;
   text-align: justify;
-  padding-bottom: 40px;
+}
+
+.overview-image {
+  flex: 1;
+  min-width: 300px;
+  text-align: center;
+}
+
+.overview-image img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .features-section {
@@ -113,6 +139,15 @@
   .argus-scrap-markets {
     padding: 15px;
     padding-top: 80px;
+  }
+
+  .overview-section {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .overview-text {
+    text-align: justify;
   }
 
   .overview-section h2 {

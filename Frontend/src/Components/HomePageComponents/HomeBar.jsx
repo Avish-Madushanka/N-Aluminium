@@ -6,28 +6,33 @@ const HomeBar = () => {
     <div className="argus-scrap-markets">
 
       <section className="overview-section">
-        <h2>Overview</h2>
-        <div className='p1'>
-        <p>
-          “ Our aluminum digital platform is designed to transform the way aluminum is collected,
-          reused, and shared. We provide an innovative system where individuals, households, and
-          businesses can easily schedule aluminum scrap collections, ensuring that valuable materials
-          never go to waste. Through our marketplace, users can buy and sell reusable aluminum items,
-          creating new opportunities for sustainable trade and circular economy practices.
-        </p>
-        <p>
-          For businesses and manufacturers, our smart inventory system makes it simple to track,
-          manage, and utilize aluminum resources more efficiently. Designers and engineers can take
-          advantage of integrated 3D modeling tools to visualize, plan, and innovate with aluminum-based
-          projects, while business owners and creators can upload and showcase their aluminum projects
-          directly to our community. By combining convenience, technology, and sustainability, our platform builds a connected
-          ecosystem where aluminum is not just recycled but given a new purpose — helping reduce
-          environmental impact while empowering communities and industries to benefit from a stronger,
-          greener aluminum economy. ”
-        </p>
+        <div className="overview-text">
+          <h2>Overview</h2>
+          <div className="p1">
+            <p>
+              “ Our MetaTrade platform is designed to transform the way aluminum is collected,
+              reused, and shared. We provide an innovative system where individuals, households, and
+              businesses can easily schedule aluminum scrap collections, ensuring that valuable materials
+              never go to waste. Through our marketplace, users can buy and sell reusable aluminum items,
+              creating new opportunities for sustainable trade and circular economy practices.
+            </p>
+            <p>
+              For businesses and manufacturers, our smart inventory system makes it simple to track,
+              manage, and utilize aluminum resources more efficiently. Designers and engineers can take
+              advantage of integrated 3D modeling tools to visualize, plan, and innovate with aluminum-based
+              projects, while business owners and creators can upload and showcase their aluminum projects
+              directly to our community. By combining convenience, technology, and sustainability, our platform builds a connected
+              ecosystem where aluminum is not just recycled but given a new purpose — helping reduce
+              environmental impact while empowering communities and industries to benefit from a stronger,
+              greener aluminum economy. ”
+            </p>
+          </div>
+        </div>
+
+        <div className="overview-image">
+          <img src="https://premier-metals.com.au/wp-content/uploads/2015/06/scrap-metal-recycling-perth.png" alt="Aluminum Recycling" />
         </div>
       </section>
-
 
       <section className="features-section">
         <h2 className="features-title">Key Features</h2>
