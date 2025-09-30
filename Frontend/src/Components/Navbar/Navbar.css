@@ -52,10 +52,11 @@
 
 .Nav-brand-text {
   color: rgb(0, 0, 0);
-  font-weight: bolder;
+  font-weight: bol;
   font-size: 1.8rem;
   margin-left: 12px;
   display: none;
+  font-weight: bolder;
 }
 
 .Nav-menu-links {
