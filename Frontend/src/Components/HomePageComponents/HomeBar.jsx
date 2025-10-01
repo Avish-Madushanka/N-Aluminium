@@ -1,5 +1,5 @@
 import React from 'react';
-import './HomeBar.css'; 
+import './HomeBar.css';
 
 const HomeBar = () => {
   return (
@@ -29,8 +29,9 @@ const HomeBar = () => {
           </div>
         </div>
 
-        <div className="overview-image">
-          <img src="https://premier-metals.com.au/wp-content/uploads/2015/06/scrap-metal-recycling-perth.png" alt="Aluminum Recycling" />
+        <div class="image-container">
+            <div class="image-wrapper top-left"> <img src="https://www.spitfiredoors.co.uk/wp-content/uploads/2024/05/Bauhaus-internal-double-doors-SH-scaled-1.jpg" /> </div>
+            <div class="image-wrapper bottom-right"> <img src="https://premier-metals.com.au/wp-content/uploads/2015/06/scrap-metal-recycling-perth.png" /> </div>
         </div>
       </section>
 
@@ -39,7 +40,7 @@ const HomeBar = () => {
         <div className="features-grid">
           <div className="feature-item">
             <div className="icon-wrapper">
-              <img src="/path/to/assessments-icon.svg" alt="Assessments" className="icon" />
+              <img src="https://via.placeholder.com/50?text=A" alt="Assessments" className="icon" />
             </div>
             <h3>Assessments</h3>
             <p>Over 600 scrap price assessments across ferrous and non-ferrous metals.</p>
@@ -47,7 +48,7 @@ const HomeBar = () => {
 
           <div className="feature-item">
             <div className="icon-wrapper">
-              <img src="/path/to/global-service-icon.svg" alt="Global Service" className="icon" />
+              <img src="https://via.placeholder.com/50?text=G" alt="Global Service" className="icon" />
             </div>
             <h3>Global Service</h3>
             <p>24/7 support with 28 offices across Asia-Pacific, Africa, Europe and the Americas.</p>
@@ -55,7 +56,7 @@ const HomeBar = () => {
 
           <div className="feature-item">
             <div className="icon-wrapper">
-              <img src="/path/to/exchange-data-icon.svg" alt="Exchange Data" className="icon" />
+              <img src="https://via.placeholder.com/50?text=E" alt="Exchange Data" className="icon" />
             </div>
             <h3>Exchange Data</h3>
             <p>Real-time and delayed exchange data from LME, CME, and SHFE.</p>
@@ -63,7 +64,7 @@ const HomeBar = () => {
 
           <div className="feature-item">
             <div className="icon-wrapper">
-              <img src="/path/to/news-icon.svg" alt="News" className="icon" />
+              <img src="https://via.placeholder.com/50?text=N" alt="News" className="icon" />
             </div>
             <h3>News</h3>
             <p>Receive email and app alerts on breaking scrap news, wherever you are.</p>
@@ -71,7 +72,7 @@ const HomeBar = () => {
 
           <div className="feature-item">
             <div className="icon-wrapper">
-              <img src="/path/to/key-developments-icon.svg" alt="Key Developments" className="icon" />
+              <img src="https://via.placeholder.com/50?text=K" alt="Key Developments" className="icon" />
             </div>
             <h3>Key Developments</h3>
             <p>In-depth analysis of key developments that impact your business.</p>
@@ -79,7 +80,7 @@ const HomeBar = () => {
 
           <div className="feature-item">
             <div className="icon-wrapper">
-              <img src="/path/to/methodology-icon.svg" alt="Methodology" className="icon" />
+              <img src="https://via.placeholder.com/50?text=M" alt="Methodology" className="icon" />
             </div>
             <h3>Methodology</h3>
             <p>Independent, transparent and trusted methodology.</p>

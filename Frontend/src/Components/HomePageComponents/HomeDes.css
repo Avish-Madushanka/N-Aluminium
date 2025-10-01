@@ -13,7 +13,7 @@
   font-size: clamp(2rem, 5vw, 3.5rem);
   font-weight: 800;
   margin-bottom: 3rem;
-  color: #222;
+  color: #2c3e50;
   text-align: center;
   opacity: 0;
   transform: translateY(-20px);
@@ -30,10 +30,13 @@
 }
 
 .HomeDes-services {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 3rem;
   width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
 .HomeDes-card {
@@ -47,6 +50,14 @@
   opacity: 0;
   transform: translateY(40px);
   overflow: hidden;
+  flex: 1 1 calc(33.333% - 2rem);
+  max-width: calc(33.333% - 2rem);
+}
+
+.HomeDes-card:nth-child(4),
+.HomeDes-card:nth-child(5) {
+  flex: 1 1 calc(40% - 2rem);
+  max-width: calc(40% - 2rem);
 }
 
 .HomeDes-card.HomeDes-slide-up {
@@ -221,14 +232,20 @@
   transform: scale(1);
 }
 
-/* Responsive Styles */
 @media (max-width: 992px) {
   .HomeDes-container {
     padding: 3rem 1.5rem;
   }
-  
+
   .HomeDes-services {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
     gap: 1.5rem;
+  }
+
+  .HomeDes-card {
+    flex: unset;
+    max-width: unset;
   }
 }
 
@@ -236,29 +253,29 @@
   .HomeDes-container {
     padding: 2.5rem 1rem;
   }
-  
+
   .HomeDes-heading {
     margin-bottom: 2rem;
   }
-  
+
   .HomeDes-services {
     grid-template-columns: 1fr;
     max-width: 500px;
   }
-  
+
   .HomeDes-card {
     padding: 1.25rem;
   }
-  
+
   .HomeDes-image-container {
     height: 200px;
   }
-  
+
   .HomeDes-title {
     font-size: 1.3rem;
     margin: 1.25rem 0 0.75rem;
   }
-  
+
   .HomeDes-description {
     font-size: 0.95rem;
     margin-bottom: 1.5rem;
@@ -269,28 +286,28 @@
   .HomeDes-container {
     padding: 2rem 1rem;
   }
-  
+
   .HomeDes-heading {
     margin-bottom: 1.5rem;
   }
-  
+
   .HomeDes-card {
     padding: 1rem;
   }
-  
+
   .HomeDes-image-container {
     height: 180px;
   }
-  
+
   .HomeDes-title {
     font-size: 1.2rem;
   }
-  
+
   .HomeDes-description {
     font-size: 0.9rem;
     padding: 0;
   }
-  
+
   .HomeDes-link {
     width: 45px;
     height: 45px;

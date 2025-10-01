@@ -28,7 +28,7 @@ const HomeDes = () => {
       alt: "Buy and Sell Marketplace"
     },
     {
-      title: "Reuse Items Buy & Sell",
+      title: "Sustainable Marketplace",
       description: "Buy and sell reusable items effortlessly! Give pre-owned goods a second life while saving money and reducing waste. Sustainable trading for a greener future!",
       link: "/Project",
       image: "https://img.freepik.com/premium-vector/investment-analyst-holding-buy-sell-board-trading-stock-market-financial-investment-management_251235-575.jpg",
@@ -42,13 +42,12 @@ const HomeDes = () => {
       alt: "Sustainable Projects"
     },
     {
-      title: "Latest Projects",
+      title: "Eco-Friendly Solutions",
       description: "From custom aluminum solutions to eco-friendly scrap pickups, each project reflects our commitment to quality, efficiency, and a greener future.",
       link: "/Project",
       image: "https://www.alumo.lk/wp-content/uploads/2017/10/Aluminum-Doors-Windows.jpg",
       alt: "Sustainable Projects"
     }
-    
   ];
 
   return (
@@ -78,7 +77,6 @@ const HomeDes = () => {
             </div>
 
             <h3 className="HomeDes-title">{service.title}</h3>
-
             <p className="HomeDes-description">{service.description}</p>
 
             <a href={service.link} className="HomeDes-link">
