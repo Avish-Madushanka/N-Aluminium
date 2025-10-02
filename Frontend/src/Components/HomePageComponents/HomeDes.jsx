@@ -1,91 +1,32 @@
-import React, { useEffect, useState } from 'react';
-import '../HomePageComponents/HomeDes.css'; 
+import React from 'react';
+import { Link } from 'react-router-dom';
+import './HomeDes.css';
 
-const HomeDes = () => {
-  const [isVisible, setIsVisible] = useState(false);
-  
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsVisible(true);
-    }, 300);
-    
-    return () => clearTimeout(timer);
-  }, []);
-
-  const services = [
-    {
-      title: "Aluminum Scraps Pickup",
-      description: "Effortless scrap pickup—recycle aluminum waste with ease! Fast, reliable, and eco-friendly collection services to keep your space clean while supporting sustainability.",
-      link: "/Collection",
-      image: "https://pic.uhomes.com/onlineblog/cdn/uploads/2024/02/CAM16816-Edit-860x573.jpg",
-      alt: "Aluminum Recycling Truck"
-    },
-    {
-      title: "Reuse Items Buy & Sell",
-      description: "Buy and sell reusable items effortlessly! Give pre-owned goods a second life while saving money and reducing waste. Sustainable trading for a greener future!",
-      link: "/BuyandSell",
-      image: "https://caddcentre.com/blog/wp-content/uploads/2025/04/3d-image-of-interior-design.jpg",
-      alt: "Buy and Sell Marketplace"
-    },
-    {
-      title: "Sustainable Marketplace",
-      description: "Buy and sell reusable items effortlessly! Give pre-owned goods a second life while saving money and reducing waste. Sustainable trading for a greener future!",
-      link: "/Project",
-      image: "https://img.freepik.com/premium-vector/investment-analyst-holding-buy-sell-board-trading-stock-market-financial-investment-management_251235-575.jpg",
-      alt: "Sustainable Projects"
-    },
-    {
-      title: "Latest Projects",
-      description: "From custom aluminum solutions to eco-friendly scrap pickups, each project reflects our commitment to quality, efficiency, and a greener future.",
-      link: "/Project",
-      image: "https://www.mining.com/wp-content/uploads/2018/11/Aluminium.jpg",
-      alt: "Sustainable Projects"
-    },
-    {
-      title: "Eco-Friendly Solutions",
-      description: "From custom aluminum solutions to eco-friendly scrap pickups, each project reflects our commitment to quality, efficiency, and a greener future.",
-      link: "/Project",
-      image: "https://www.alumo.lk/wp-content/uploads/2017/10/Aluminum-Doors-Windows.jpg",
-      alt: "Sustainable Projects"
-    }
-  ];
-
+const HomeDes = ({ backgroundImage = "https://www.nlc.org/wp-content/uploads/2023/01/Five-Ways-to-Run-an-Effective-Solid-Waste-Collection-Operation-2.png" }) => {
   return (
-    <div className="HomeDes-container">
-      <h1 className={`HomeDes-heading ${isVisible ? 'HomeDes-fade-in' : ''}`}>
-        Our Features & Services
-      </h1>
-
-      <div className="HomeDes-services">
-        {services.map((service, index) => (
-          <div 
-            key={index}
-            className={`HomeDes-card ${isVisible ? 'HomeDes-slide-up' : ''}`} 
-            style={{ animationDelay: `${index * 0.2}s` }}
-          >
-            <div className="HomeDes-image-container">
-              <img
-                src={service.image}
-                alt={service.alt}
-                className="HomeDes-image"
-              />
-              <div className="HomeDes-image-overlay">
-                <div className="HomeDes-overlay-icon">
-                  <div className="HomeDes-pulse-circle"></div>
-                </div>
-              </div>
-            </div>
-
-            <h3 className="HomeDes-title">{service.title}</h3>
-            <p className="HomeDes-description">{service.description}</p>
-
-            <a href={service.link} className="HomeDes-link">
-              <span className="HomeDes-arrow-icon">→</span>
-            </a>
-          </div>
-        ))}
+    <section 
+      className="HSB-services-hero"
+      style={{ '--bg-image': `url(${backgroundImage})` }}
+    >
+      <div className="HSB-services-hero__overlay"></div>
+      <div className="HSB-services-hero__container">
+        <div className="HSB-services-hero__content">
+          <h1 className="HSB-services-hero__title">
+            Our Features  
+            <span className="HSB-services-hero__ampersand">&</span>  
+            Services
+          </h1>
+          
+          <p className="HSB-services-hero__description">
+            Explore our services designed to transform aluminum waste into value while supporting a greener future.
+          </p>
+          
+          <Link to="/Service" className="HSB-services-hero__cta">
+            View All Services
+          </Link>
+        </div>
       </div>
-    </div>
+    </section>
   );
 };
 
