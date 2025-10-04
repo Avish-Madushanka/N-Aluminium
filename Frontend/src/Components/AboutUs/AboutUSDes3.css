@@ -1,6 +1,6 @@
 .AB3-container {
   font-family: 'Montserrat', sans-serif;
-  background: linear-gradient(135deg, #1a3a3a 0%, #2F4550 100%);
+  background: linear-gradient(135deg, #353535 0%, #0e0e0e 100%);
   color: #fff;
   padding: 40px;
   text-align: center;
@@ -37,7 +37,7 @@
   transform: translateX(-50%);
   width: 80px;
   height: 4px;
-  background: #4CAF50;
+  background: #ffffff;
   border-radius: 4px;
   animation: pulse 2s infinite;
 }
@@ -89,8 +89,8 @@
 }
 
 .AB3-item:hover .AB3-image {
-  border-color: #4CAF50;
-  box-shadow: 0 15px 30px rgba(0,0,0,0.3), 0 0 0 8px rgba(76,175,80,0.2);
+  border-color: rgb(197, 197, 197);
+  box-shadow: 0 15px 30px rgba(65, 65, 65, 0.3), 0 0 0 8px rgba(0, 0, 0, 0.2);
 }
 
 .AB3-text {
@@ -102,7 +102,7 @@
 }
 
 .AB3-item:hover .AB3-text {
-  color: #4CAF50;
+  color: #e4e4e4;
 }
 
 @media (max-width: 1024px) {

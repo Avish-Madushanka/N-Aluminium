@@ -38,7 +38,7 @@
 .ABtitle {
   font-size: 2.75rem;
   font-weight: 700;
-  color: #1f3b53;
+  color: #2c3e50;
   margin-bottom: 20px;
 }
 
@@ -54,6 +54,154 @@
   line-height: 1.8;
   text-align: justify;
 }
+
+.AD2-container {
+  text-align: center;
+  padding: 50px 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  max-width: 1200px;
+  margin: 0 auto;
+  border-radius: 15px;
+}
+
+.AD2-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #2c3e50;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.AD2-subtitle {
+  font-size: 1.2rem;
+  color: #546e7a;
+  margin-bottom: 60px;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.AD2-steps {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start;
+  position: relative;
+  margin-bottom: 50px;
+}
+
+.AD2-steps::before {
+  content: '';
+  position: absolute;
+  top: 40px;
+  left: 20%;
+  right: 20%;
+  height: 3px;
+  background: linear-gradient(to right, #4CAF50, #2196F3, #3f51b5);
+  z-index: 0;
+}
+
+.AD2-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  width: 30%;
+  z-index: 1;
+}
+
+.AD2-circle {
+  width: 80px;
+  height: 80px;
+  background: white;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  margin-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+  border: 3px solid #e0e0e0;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.AD2-step:hover .AD2-circle {
+  transform: scale(1.1);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+.AD2-step:nth-child(1) .AD2-circle {
+  background: linear-gradient(135deg, #43a047, #66bb6a);
+}
+
+.AD2-step:nth-child(2) .AD2-circle {
+  background: linear-gradient(135deg, #0288d1, #29b6f6);
+}
+
+.AD2-step:nth-child(3) .AD2-circle {
+  background: linear-gradient(135deg, #303f9f, #5c6bc0);
+}
+
+.AD2-number {
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: white;
+  line-height: 1;
+}
+
+.AD2-icon {
+  font-size: 1.4rem;
+  margin-top: 2px;
+}
+
+.AD2-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  height: 100%;
+  width: 100%;
+  transition: transform 0.3s ease;
+}
+
+.AD2-step:hover .AD2-content {
+  transform: translateY(-5px);
+}
+
+.AD2-step-title {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #333333;
+  margin-top: 0;
+  margin-bottom: 12px;
+}
+
+.AD2-description {
+  font-size: 1rem;
+  color: #555555;
+  line-height: 1.5;
+}
+
+
+@media (max-width: 900px) {
+  .AD2-steps {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .AD2-steps::before {
+    display: none;
+  }
+  
+  .AD2-step {
+    width: 90%;
+    max-width: 400px;
+    margin-bottom: 40px;
+  }
+}
+
 
 @media (max-width: 768px) {
   .ABrecycling-container {
