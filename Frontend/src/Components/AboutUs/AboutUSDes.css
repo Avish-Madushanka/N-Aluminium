@@ -1,71 +1,65 @@
+.AB-main-container {
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh; 
+  background-color: #ffffff;
+  padding: 20px;
+}
+
 .ABrecycling-container {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
+  align-items: center; 
   justify-content: center;
   padding: 60px 30px;
-  background: linear-gradient(to right, #ffffff, #ffffff);
-  gap: 40px;
-  transition: all 0.3s ease;
+  background-color: #ffffff;
+  gap: 40px; 
+  max-width: 1500px;
+  width: 100%;
 }
 
 .ABimage-section {
   flex: 1;
   display: flex;
   justify-content: center;
-  animation: fadeInLeft 1s ease-in-out;
 }
 
 .ABrecycling-image {
   width: 100%;
-  max-width: 500px;
+  max-width: 420px;
   height: auto;
-  border-radius: 16px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0);
-  transition: transform 0.3s ease;
-}
-
-.ABrecycling-image:hover {
-  transform: scale(1.03);
 }
 
 .ABtext-section {
   flex: 1;
-  padding: 10px 20px;
-  animation: fadeInRight 1s ease-in-out;
+  max-width: 550px;
+  text-align: left;
 }
 
 .ABtitle {
-  font-size: 2.75rem;
+  font-family: 'Playfair Display', serif;
+  font-size: 2.5rem;
   font-weight: 700;
   color: #2c3e50;
   margin-bottom: 20px;
 }
 
-.ABtitle .highlight {
-  background: linear-gradient(45deg, #1f3b53, #1f3b53);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
 .ABdescription {
-  font-size: 1.15rem;
-  color: #333;
+  font-family: 'Roboto', sans-serif;
+  font-size: 1.1rem;
+  color: #555;
   line-height: 1.8;
-  text-align: justify;
 }
 
+/* --- Guide Section --- */
 .AD2-container {
   text-align: center;
-  padding: 50px 20px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding: 60px 20px;
   max-width: 1200px;
   margin: 0 auto;
-  border-radius: 15px;
 }
 
 .AD2-title {
-  font-size: 2.5rem;
+  font-size: 2.3rem;
   font-weight: bold;
   color: #2c3e50;
   margin-bottom: 15px;
@@ -74,9 +68,9 @@
 }
 
 .AD2-subtitle {
-  font-size: 1.2rem;
+  font-size: 1.15rem;
   color: #546e7a;
-  margin-bottom: 60px;
+  margin-bottom: 50px;
   max-width: 700px;
   margin-left: auto;
   margin-right: auto;
@@ -105,7 +99,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  position: relative;
   width: 30%;
   z-index: 1;
 }
@@ -113,18 +106,25 @@
 .AD2-circle {
   width: 80px;
   height: 80px;
-  background: white;
   border-radius: 50%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
   margin-bottom: 20px;
-  position: relative;
-  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
   border: 3px solid #e0e0e0;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.AD2-step:nth-child(1) .AD2-circle {
+  background: linear-gradient(135deg, #43a047, #66bb6a);
+}
+.AD2-step:nth-child(2) .AD2-circle {
+  background: linear-gradient(135deg, #0288d1, #29b6f6);
+}
+.AD2-step:nth-child(3) .AD2-circle {
+  background: linear-gradient(135deg, #303f9f, #5c6bc0);
 }
 
 .AD2-step:hover .AD2-circle {
@@ -132,28 +132,15 @@
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
 }
 
-.AD2-step:nth-child(1) .AD2-circle {
-  background: linear-gradient(135deg, #43a047, #66bb6a);
-}
-
-.AD2-step:nth-child(2) .AD2-circle {
-  background: linear-gradient(135deg, #0288d1, #29b6f6);
-}
-
-.AD2-step:nth-child(3) .AD2-circle {
-  background: linear-gradient(135deg, #303f9f, #5c6bc0);
-}
-
 .AD2-number {
-  font-size: 1.6rem;
+  font-size: 1.5rem;
   font-weight: bold;
   color: white;
-  line-height: 1;
 }
 
 .AD2-icon {
-  font-size: 1.4rem;
-  margin-top: 2px;
+  font-size: 1.2rem;
+  margin-top: 3px;
 }
 
 .AD2-content {
@@ -161,8 +148,6 @@
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  height: 100%;
-  width: 100%;
   transition: transform 0.3s ease;
 }
 
@@ -171,47 +156,30 @@
 }
 
 .AD2-step-title {
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   font-weight: bold;
-  color: #333333;
-  margin-top: 0;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
+  color: #333;
 }
 
 .AD2-description {
   font-size: 1rem;
-  color: #555555;
+  color: #555;
   line-height: 1.5;
 }
 
-
-@media (max-width: 900px) {
-  .AD2-steps {
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .AD2-steps::before {
-    display: none;
-  }
-  
-  .AD2-step {
-    width: 90%;
-    max-width: 400px;
-    margin-bottom: 40px;
-  }
-}
-
-
-@media (max-width: 768px) {
+/* --- Responsive --- */
+@media (max-width: 992px) {
   .ABrecycling-container {
     flex-direction: column;
-    padding: 40px 20px;
     text-align: center;
+    gap: 30px;
+    padding: 40px 20px;
   }
 
   .ABtext-section {
-    padding: 0;
+    text-align: center;
+    max-width: 100%;
   }
 
   .ABtitle {
@@ -221,26 +189,28 @@
   .ABdescription {
     font-size: 1rem;
   }
+
+  .AD2-steps {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .AD2-steps::before {
+    display: none;
+  }
+
+  .AD2-step {
+    width: 90%;
+    max-width: 400px;
+    margin-bottom: 30px;
+  }
 }
 
-@keyframes fadeInLeft {
-  0% {
-    opacity: 0;
-    transform: translateX(-30px);
+@media (max-width: 600px) {
+  .ABtitle {
+    font-size: 1.75rem;
   }
-  100% {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes fadeInRight {
-  0% {
-    opacity: 0;
-    transform: translateX(30px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateX(0);
+  .AD2-title {
+    font-size: 2rem;
   }
 }

@@ -1,16 +1,16 @@
 .App12 {
-  max-width: auto; 
-  justify-items: center;
-  margin: 0 auto; 
+  margin: 0 auto;
+  overflow-x: hidden; 
 }
 
 .welcome-content1 {
   position: relative;
-  z-index: 2; 
+  z-index: 2;
+  text-align: center; 
 }
 
 .welcome-section1 {
-   background-image: url('https://recyclers.com.au/wp-content/uploads/2023/03/How-Metal-Is-Recycled.jpg');
+  background-image: url('https://recyclers.com.au/wp-content/uploads/2023/03/How-Metal-Is-Recycled.jpg');
   background-size: cover;
   background-position: center;
   height: 400px;
@@ -22,6 +22,7 @@
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
   position: relative;
   overflow: hidden;
+  margin-bottom: 50px; 
 }
 
 .welcome-section1::after {
@@ -31,7 +32,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.5); 
   z-index: 1;
 }
 
@@ -40,18 +41,26 @@
   margin: 0;
   letter-spacing: 5px;
   font-family: 'Montserrat', sans-serif;
+  text-align: center;
 }
 
 .feature-section {
   display: flex;
-  height: 350px;
-  width: 1100px;
+  min-height: 350px;
+  width: 100%;
+  max-width: 1100px;
   align-items: center;
-  margin: 50px 50px;
+  margin: 50px auto;
   background-color: white;
   border-radius: 10px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
   overflow: hidden;
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.feature-section:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
 }
 
 .feature-section.reverse {
@@ -62,16 +71,20 @@
   flex: 1;
   padding: 40px;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .feature-number {
   position: absolute;
-  top: -40px;
-  left: 100px;
-  font-size: 11em;
+  top: -20px;
+  left: 20px;
+  font-size: 10em;
   font-weight: bold;
   color: #f0f0f0;
-  z-index: 2;
+  z-index: 0;
+  pointer-events: none;
 }
 
 .feature-icon {
@@ -86,26 +99,28 @@
   z-index: 2;
   position: relative;
   border: 1px solid #cceeff;
+  box-shadow: 0 2px 5px rgba(0, 123, 255, 0.2);
 }
 
 .feature-icon img {
-  width: 30px;
-  height: 30px;
+  width: 35px;
+  height: 35px;
+  object-fit: contain;
 }
 
 .feature-text h2 {
-  font-size: 2.2em;
+  font-size: 2em;
   margin-top: 10px;
   margin-bottom: 15px;
-  color: #333;
+  color: #2c3e50;
   z-index: 2;
   position: relative;
 }
 
 .feature-text p {
-  font-size: 1.1em;
-  line-height: 1.6;
-  color: #666;
+  font-size: 1em;
+  line-height: 1.7;
+  color: #555;
   margin-bottom: 25px;
   z-index: 2;
   position: relative;
@@ -119,9 +134,12 @@
   font-size: 1em;
   position: relative;
   z-index: 2;
+  padding-bottom: 2px;
+  transition: color 0.2s ease-in-out;
 }
 
 .read-more:hover {
+  color: #0056b3;
   text-decoration: underline;
 }
 
@@ -130,7 +148,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #f0f0f0;
+  background-color: #f8f8f8;
+  min-height: 250px;
 }
 
 .feature-image img {
@@ -138,14 +157,15 @@
   height: 100%;
   object-fit: cover;
   border-radius: 0 10px 10px 0;
+  transition: transform 0.3s ease-in-out;
+}
+
+.feature-image img:hover {
+  transform: scale(1.03);
 }
 
 .feature-section.reverse .feature-image img {
   border-radius: 10px 0 0 10px;
-}
-
-.welcome-section {
-  background-image: url('https://recyclers.com.au/wp-content/uploads/2023/03/How-Metal-Is-Recycled.jpg');
 }
 
 .feature-section:nth-of-type(1) .feature-image img {
@@ -165,29 +185,31 @@
 }
 
 .feature-section:nth-of-type(1) .feature-icon img {
-  content: url('https://www.freepik.com/icon/truck_474274#fromView=family&page=1&position=50&uuid=e2920105-8682-4e1d-9657-0270b84e0ab2');
+  content: url('https://img.icons8.com/ios-filled/50/007bff/truck.png');
 }
 .feature-section:nth-of-type(2) .feature-icon img {
-  content: url('');
+  content: url('https://img.icons8.com/ios-filled/50/007bff/food-waste.png');
 }
 .feature-section:nth-of-type(3) .feature-icon img {
-  content: url('');
+  content: url('https://img.icons8.com/ios-filled/50/007bff/recycle-bin.png');
 }
 .feature-section:nth-of-type(4) .feature-icon img {
-  content: url('');
+  content: url('https://img.icons8.com/ios-filled/50/007bff/aluminium-foil.png');
 }
 .feature-section:nth-of-type(5) .feature-icon img {
-  content: url('');
+  content: url('https://img.icons8.com/ios-filled/50/007bff/project.png');
 }
 
-@media (max-width: 768px) {
+@media (max-width: 992px) {
   .feature-section, .feature-section.reverse {
     flex-direction: column;
+    margin: 30px auto;
   }
 
   .feature-image {
     width: 100%;
     height: 250px;
+    border-radius: 0 0 10px 10px;
   }
 
   .feature-image img {
@@ -198,7 +220,54 @@
     border-radius: 0 0 10px 10px;
   }
 
-  .welcome-section h1 {
-    font-size: 2.5em;
+  .feature-text {
+    padding: 30px;
+    align-items: flex-start;
+  }
+
+  .feature-number {
+    top: -10px;
+    left: 10px;
+    font-size: 8em;
+  }
+
+  .welcome-section1 h1 {
+    font-size: 2.8em;
+  }
+}
+
+@media (max-width: 576px) {
+  .welcome-section1 h1 {
+    font-size: 2em;
+    letter-spacing: 3px;
+    padding: 0 15px;
+  }
+
+  .feature-section {
+    margin: 20px auto;
+  }
+
+  .feature-text h2 {
+    font-size: 1.8em;
+  }
+
+  .feature-text p {
+    font-size: 0.95em;
+  }
+
+  .feature-number {
+    font-size: 6em;
+    top: -5px;
+    left: 5px;
+  }
+
+  .feature-icon {
+    width: 50px;
+    height: 50px;
+  }
+
+  .feature-icon img {
+    width: 25px;
+    height: 25px;
   }
 }
