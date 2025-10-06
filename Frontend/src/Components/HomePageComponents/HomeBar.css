@@ -38,40 +38,39 @@
 }
 
 .image-container {
-    position: relative;
-    width: 800px; 
-    height: 150px; 
+  position: relative;
+  width: 600px;
+  height: 150px;
 }
 
 .image-wrapper {
-    position: absolute;
-    width: 400px; 
-    height: 300px; 
-    background-color: #fff; 
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
-    border-radius: 8px; 
-    overflow: hidden; 
+  position: absolute;
+  width: 400px;
+  height: 300px;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 .image-wrapper img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 .top-left {
-    top: 50px;
-    left: 80px; 
-    z-index: 2; 
+  top: 50px;
+  left: 80px;
+  z-index: 2;
 }
 
 .bottom-right {
-    bottom: 50px;
-    right: 80px; 
-    z-index: 1; 
+  bottom: 50px;
+  right: 80px;
+  z-index: 1;
 }
-
 
 .features-section {
   margin-top: 60px;
@@ -81,6 +80,7 @@
 .features-title {
   font-size: 3rem;
   color: #2c3e50;
+  padding-top: 30px;
   margin-bottom: 50px;
   font-weight: bold;
 }
@@ -89,16 +89,27 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 40px;
-  max-width: 1100px;
+  max-width: 1200px;
   margin: 0 auto;
+  padding-bottom: 40px;
 }
 
 .feature-item {
   text-align: center;
-  padding: 20px;
+  padding: 25px 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  background-color: #ffffff;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.feature-item:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
 }
 
 .icon-wrapper {
@@ -125,32 +136,34 @@
 .icon {
   width: 50px;
   height: 50px;
-  filter: invert(15%) sepia(50%) saturate(2000%) hue-rotate(200deg) brightness(80%) contrast(90%); 
+  filter: invert(15%) sepia(50%) saturate(2000%) hue-rotate(200deg) brightness(80%) contrast(90%);
 }
 
 .feature-item h3 {
   font-size: 20px;
-  color: #1a2a5f;
-  margin-bottom: 10px;
+  color: #2c3e50;
+  margin-bottom: 15px;
   font-weight: 600;
 }
 
 .feature-item p {
-  font-size: 16px;
-  color: #666;
+  font-size: 15px;
+  color: #646464;
   line-height: 1.5;
+  width: 100%;
+  max-width: 280px;
 }
 
 @media (max-width: 768px) {
   .argus-scrap-markets {
-    padding: 25px;
-    padding-top: 80px;
+    padding: 50px;
+    padding-top: 70px;
   }
 
   .overview-section {
     flex-direction: column;
     text-align: center;
-    gap: 30px;
+    gap: 25px;
   }
 
   .overview-text {
@@ -159,19 +172,19 @@
 
   .overview-section h2 {
     font-size: 2rem;
+    margin-bottom: 15px;
   }
 
   .image-container {
-    position: relative;
     width: 100%;
     height: auto;
   }
 
   .image-wrapper {
-    position: relative;
     width: 100%;
     height: auto;
     margin: 10px 0;
+    position: relative;
   }
 
   .top-left,
@@ -186,21 +199,28 @@
   .image-wrapper img {
     width: 100%;
     height: auto;
+    object-fit: cover;
   }
 
   .features-title {
-    font-size: 2rem;
-    margin-bottom: 40px;
+    font-size: 1.9rem;
+    margin-bottom: 30px;
+  }
+
+  .feature-item {
+    padding: 20px 15px;
   }
 
   .feature-item h3 {
-    font-size: 17px;
+    font-size: 1rem;
+    margin-bottom: 10px;
   }
 
   .feature-item p {
-    font-size: 14px;
+    font-size: 0.95rem;
   }
 }
+
 
 @media (max-width: 480px) {
   .overview-section h2 {
@@ -209,28 +229,34 @@
   }
 
   .features-title {
-    font-size: 1.8rem;
+    font-size: 1.6rem;
+    margin-bottom: 25px;
   }
 
   .features-grid {
-    gap: 25px;
+    grid-template-columns: 1fr; 
+    gap: 20px;
   }
 
   .icon-wrapper {
-    width: 80px;
-    height: 80px;
+    width: 70px;
+    height: 70px;
   }
 
   .icon {
-    width: 40px;
-    height: 40px;
+    width: 35px;
+    height: 35px;
   }
 
   .feature-item h3 {
-    font-size: 16px;
+    font-size: 0.95rem;
   }
 
   .feature-item p {
-    font-size: 13px;
+    font-size: 0.85rem;
+  }
+
+  .feature-item {
+    padding: 15px 10px;
   }
 }

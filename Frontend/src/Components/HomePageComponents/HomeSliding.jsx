@@ -3,41 +3,48 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './HomeSliding.css';
 
 import Image1 from '../../assets/Main2.png'; 
-import Image2 from '../../assets/Main1.png';
+import Image2 from '../../assets/Main1.jpg';
 import Image3 from '../../assets/Main3.jpg';
+import Image4 from '../../assets/Main4.jpg';
 
 const HomeSliding = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [slides] = useState([
+     {
+      image: Image3,
+      badge: "Eco-Friendly & Efficient",
+      title: "Aluminum Scrap Collection",
+      subtitle: "Schedule pickups easily and contribute to a sustainable future. We ensure fast, reliable, and responsible collection of all aluminum waste, helping you recycle efficiently.",
+      button1Text: "Check Pickups",
+      button1Link: "/Collection",
+      button2Icon: "📞", 
+    },
     {
       image: Image1,
-      badge: "Best Home Services",
-      title: "Experience the best Home Services",
-      subtitle: "We provide best home services around the city. book us now and experience the best service.",
+      badge: "Durable & Sustainable",
+      title: "Aluminum Solutions for Construction",
+      subtitle: "We provide top-grade aluminum materials and components for construction projects, ensuring durability, precision, and eco-friendly building solutions. Build stronger, lighter, and sustainable structures with us.",
       button1Text: "Book Now",
       button1Link: "#",
       button2Icon: "▶",
-      button2Link: "#"
     },
     {
       image: Image2,
-      badge: "Quality Work Guaranteed",
-      title: "Your Trust, Our Priority",
-      subtitle: "Dedicated to excellence, we ensure every service is performed with precision and care.",
+      badge: "Premium Aluminum Products",
+      title: "High-Quality Aluminum for Every Build",
+      subtitle: "Explore our wide range of aluminum construction items, from panels and profiles to sheets and fittings. Durable, reliable, and designed for modern construction projects.",
       button1Text: "Learn More",
       button1Link: "#",
       button2Icon: "ⓘ", 
-      button2Link: "#"
     },
     {
-      image: Image3,
-      badge: "Fast & Reliable",
-      title: "Prompt Service, Every Time",
-      subtitle: "Don't wait! Get quick and efficient solutions for all your home service needs.",
-      button1Text: "Contact Us",
+      image: Image4,
+      badge: "Innovate & Compete",
+      title: "Aluminum Trainers Competition",
+      subtitle: "Showcase your skills and creativity in aluminum design and fabrication. Participate in exciting competitions, learn from experts, and stand out in the world of aluminum engineering.",
+      button1Text: "Learn More",
       button1Link: "#",
-      button2Icon: "📞", 
-      button2Link: "#"
+      button2Icon: "ⓘ", 
     },
   ]);
   const [isAnimating, setIsAnimating] = useState(false);
