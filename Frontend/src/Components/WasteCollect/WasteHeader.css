@@ -1,7 +1,7 @@
 .latest-projects-container1 {
   position: relative;
   display: flex;
-  background-image: url("https://glescrap.com/wp-content/uploads/2022/08/High-tech-scrap-metal-recycling-scaled.jpeg");
+  background-image: url("https://www.metaloop.com/static/d4efc42c4c1a40870a8cb6544ac02e3d/27976/aluminiumHero.png");
   background-size: cover;
   background-position: center;
   padding: 40px;
@@ -34,12 +34,12 @@
 }
 
 .title1 {
-  font-size: 3rem;
+  font-size: 3.5rem;
   font-weight: bold;
 }
 
 .subtitle1 {
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   margin-bottom: 15px;
   opacity: 0.9;
 }
