@@ -1,17 +1,17 @@
-.Wrecycling-section {
+.Co-recycling-section {
   font-family: Arial, sans-serif;
   padding: 60px 0;
-  background-color: #f7fcf9;
+  background-color: #ffffff;
   color: #333;
 }
 
-.container {
+.Co-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 20px;
 }
 
-.section-title {
+.Co-section-title {
   font-size: 2.5em;
   font-weight: bold;
   color: #2c3e50;
@@ -19,23 +19,22 @@
   text-align: left;
 }
 
-.section-description {
-  font-size: 1em;
-  line-height: 1.6;
+.Co-section-description {
+  font-size: 1.1em;
+  line-height: 1.7;
   color: #555;
   margin-bottom: 40px;
   text-align: left;
-  max-width: 800px;
 }
 
-.features-grid {
+.Co-features-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 30px;
   margin-bottom: 60px;
 }
 
-.feature-item {
+.Co-feature-item {
   background-color: #fff;
   padding: 25px;
   border-radius: 8px;
@@ -46,7 +45,7 @@
   align-items: flex-start;
 }
 
-.feature-icon {
+.Co-feature-icon {
   width: 60px;
   height: 60px;
   border-radius: 50%;
@@ -56,60 +55,62 @@
   margin-bottom: 15px;
 }
 
-.feature-icon.electro {
+.Co-electro {
   background-color: #e0f2f1;
 }
-.feature-icon.demo {
+
+.Co-demo {
   background-color: #ffe0b2;
 }
-.feature-icon.recovery {
+
+.Co-recovery {
   background-color: #e8f5e9;
 }
 
-.feature-icon img {
+.Co-feature-icon img {
   width: 30px;
   height: 30px;
 }
 
-.feature-item h3 {
+.Co-feature-item h3 {
   font-size: 1.2em;
   color: #333;
   margin-bottom: 10px;
   font-weight: 600;
 }
 
-.feature-item p {
+.Co-feature-item p {
   font-size: 0.9em;
   color: #666;
   line-height: 1.5;
 }
 
 /* Image + Accordion Layout */
-.content-and-accordion-grid {
+.Co-content-and-accordion-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 40px;
   align-items: flex-start;
 }
 
-.image-container {
+.Co-image-container {
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
 }
 
-.image-container img {
+.Co-image-container img {
   width: 100%;
   height: auto;
   display: block;
 }
 
-.accordion-section {
+.Co-accordion-section {
   display: flex;
   flex-direction: column;
 }
 
-.accordion-item {
+.Co-accordion-item {
   margin-bottom: 15px;
   background-color: #f0fdf4;
   border-radius: 8px;
@@ -118,11 +119,11 @@
   border: 1px solid #d0f0d0;
 }
 
-.accordion-item.active {
+.Co-active {
   background-color: #e6ffe6;
 }
 
-.accordion-header {
+.Co-accordion-header {
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -138,15 +139,15 @@
   transition: background-color 0.3s ease;
 }
 
-.accordion-item.active .accordion-header {
+.Co-accordion-item.Co-active .Co-accordion-header {
   color: #28a745;
 }
 
-.accordion-header:hover {
+.Co-accordion-header:hover {
   background-color: rgba(0, 0, 0, 0.02);
 }
 
-.accordion-toggle-icon {
+.Co-accordion-toggle-icon {
   font-size: 1.5em;
   font-weight: bold;
   color: #28a745;
@@ -154,37 +155,28 @@
   line-height: 1;
 }
 
-.accordion-content {
+.Co-accordion-content {
   padding: 0 25px 20px;
   font-size: 0.95em;
   line-height: 1.6;
   color: #555;
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.3s ease-out, padding 0.3s ease-out;
 }
 
-.accordion-item.active .accordion-content {
-  max-height: 150px;
-  padding: 10px 25px 20px;
-  transition: max-height 0.4s ease-in, padding 0.4s ease-in;
-}
-
-.waste-section {
+.Co-waste-section {
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 40px;
 }
 
-.waste-card-container {
+.Co-waste-card-container {
   display: flex;
   gap: 20px;
   width: 90%;
   max-width: 1200px;
 }
 
-.waste-card {
+.Co-waste-card {
   position: relative;
   flex: 1;
   border-radius: 8px;
@@ -192,18 +184,18 @@
   cursor: pointer;
 }
 
-.waste-card-image {
+.Co-waste-card-image {
   width: 100%;
   height: 350px;
   object-fit: cover;
   transition: transform 0.3s ease;
 }
 
-.waste-card:hover .waste-card-image {
+.Co-waste-card:hover .Co-waste-card-image {
   transform: scale(1.05);
 }
 
-.waste-card-content {
+.Co-waste-card-content {
   position: absolute;
   bottom: 0;
   left: 0;
@@ -213,20 +205,20 @@
   color: white;
 }
 
-.waste-card-title {
+.Co-waste-card-title {
   font-size: 1.8em;
   font-weight: bold;
   margin-bottom: 10px;
 }
 
-.waste-card-description {
+.Co-waste-card-description {
   font-size: 1em;
   line-height: 1.4;
   opacity: 0.9;
   max-width: 70%;
 }
 
-.waste-learn-more {
+.Co-waste-learn-more {
   position: absolute;
   bottom: 20px;
   right: 20px;
@@ -243,40 +235,40 @@
   transition: background 0.3s ease;
 }
 
-.waste-learn-more:hover {
+.Co-waste-learn-more:hover {
   background: white;
   color: black;
 }
 
 
 @media (max-width: 992px) {
-  .content-and-accordion-grid {
+  .Co-content-and-accordion-grid {
     grid-template-columns: 1fr;
   }
-  .image-container {
+  .Co-image-container {
     margin-bottom: 30px;
   }
 }
 
 @media (max-width: 768px) {
-  .section-title {
+  .Co-section-title {
     font-size: 2em;
   }
 
-  .features-grid {
+  .Co-features-grid {
     grid-template-columns: 1fr;
   }
 
-  .feature-item {
+  .Co-feature-item {
     align-items: center;
     text-align: center;
   }
 
-  .waste-section {
+  .Co-waste-section {
     padding: 0;
   }
 
-  .waste-card-container {
+  .Co-waste-card-container {
     flex-direction: column;
     align-items: center;
     gap: 20px;
@@ -284,7 +276,7 @@
     padding: 0 15px;
   }
 
-  .waste-card {
+  .Co-waste-card {
     width: 100%;
     max-width: 500px;
     height: 350px;
@@ -293,28 +285,28 @@
     border-radius: 10px;
   }
 
-  .waste-card-image {
+  .Co-waste-card-image {
     width: 100%;
     height: 100%;
     object-fit: cover;
   }
 
-  .waste-card-content {
+  .Co-waste-card-content {
     background: rgba(0, 0, 0, 0.7);
     padding: 15px;
   }
 
-  .waste-card-title {
+  .Co-waste-card-title {
     font-size: 1.3em;
   }
 
-  .waste-card-description {
+  .Co-waste-card-description {
     font-size: 1em;
     opacity: 0.95;
     max-width: 100%;
   }
 
-  .waste-learn-more {
+  .Co-waste-learn-more {
     bottom: 15px;
     right: 15px;
   }
