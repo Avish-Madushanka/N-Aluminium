@@ -9,9 +9,9 @@ const WasteMain = () => {
   };
 
   const imageUrlSell =
-    "https://ewasa.org/wp-content/uploads/2022/12/post-scrap-metal-export-prohibition-1024x576.png";
-  const imageUrlValue =
-    "https://bsmedia.business-standard.com/_media/bs/img/article/2016-12/12/full/1481562212-9804.jpg?im=FeatureCrop,size=(826,465)";
+    "https://westchicago.org/wp-content/uploads/2022/12/Garbage-Pickup-02.png";
+  const imageUrlSell1 =
+    "https://www.newswire.lk/wp-content/uploads/2023/12/US-Dollar-1.jpg";
 
   return (
     <div className="Co-recycling-section">
@@ -26,42 +26,39 @@ const WasteMain = () => {
             <div className="Co-feature-item">
               <div className="Co-feature-icon Co-electro">
                 <img
-                  src="https://via.placeholder.com/30x30?text=E"
+                  src="https://cdn-icons-png.flaticon.com/128/17187/17187687.png"
                   alt="Electronic Waste Icon"
                 />
               </div>
-              <h3>Electronic waste</h3>
+              <h3>Electronic Waste</h3>
               <p>
-                First, you stand for recycling than your family also help. Be
-                aware of your family.
+                Handling discarded electronics responsibly is crucial to prevent harmful substances from contaminating the environment. By recycling aluminum parts found in electronic waste, we help recover valuable metals while reducing pollution and landfill impact. Encourage your family to join in these efforts and build recycling habits together.
               </p>
             </div>
 
             <div className="Co-feature-item">
               <div className="Co-feature-icon Co-demo">
                 <img
-                  src="https://via.placeholder.com/30x30?text=D"
+                  src="https://cdn-icons-png.flaticon.com/128/4285/4285861.png"
                   alt="Demolition Icon"
                 />
               </div>
-              <h3>Demolition</h3>
+              <h3>Demolition Waste</h3>
               <p>
-                First, you stand for recycling than your family also help. Be
-                aware of your family.
+                Construction and demolition sites generate a large amount of aluminum waste from windows, doors, and frames. Proper recycling ensures that these materials are reused effectively, reducing the need for raw aluminum extraction. Take the first step toward recycling—your actions can inspire others to help too.
               </p>
             </div>
 
             <div className="Co-feature-item">
               <div className="Co-feature-icon Co-recovery">
                 <img
-                  src="https://via.placeholder.com/30x30?text=R"
+                  src="https://cdn-icons-png.flaticon.com/128/5058/5058346.png"
                   alt="Recovery Icon"
                 />
               </div>
-              <h3>Recovery</h3>
+              <h3>Recovery Process</h3>
               <p>
-                First, you stand for recycling than your family also help. Be
-                aware of your family.
+                Our recovery process focuses on collecting, sorting, and purifying aluminum scraps to ensure they’re ready for reuse in new products. This process supports resource efficiency and sustainability. Start recycling today—when one person acts, others follow, creating a community that values the environment.
               </p>
             </div>
           </div>
@@ -148,49 +145,48 @@ const WasteMain = () => {
         </div>
       </section>
 
-      <div className="Co-waste-section">
-        <div className="Co-waste-card-container">
-          <div className="Co-waste-card">
-            <img
-              src={imageUrlSell}
-              alt="Sell to Us"
-              className="Co-waste-card-image"
-            />
-            <div className="Co-waste-card-content">
-              <h3 className="Co-waste-card-title">Sell to Us</h3>
-              <p className="Co-waste-card-description">
-                Metal Source is a buyer of all scrap metal grades including
-                aluminum, steel, copper, stainless, and all ferrous and
-                nonferrous metals, offering competitive prices and reliable
-                service.
-              </p>
-              <a href="/UserCalendar" className="Co-waste-learn-more">
-                →
-              </a>
-            </div>
-          </div>
-
-          <div className="Co-waste-card">
-            <img
-              src={imageUrlValue}
-              alt="Scrap Value"
-              className="Co-waste-card-image"
-            />
-            <div className="Co-waste-card-content">
-              <h3 className="Co-waste-card-title">Know Your Scrap Value</h3>
-              <p className="Co-waste-card-description">
-                Know your scrap value in seconds. Enter the weight, get an
-                instant estimate, and see how much cash you’ll earn for
-                recycling your aluminum. It’s fast, accurate, and helps the
-                planet too!
-              </p>
-              <a href="/Calculate" className="Co-waste-learn-more">
-                →
-              </a>
-            </div>
-          </div>
+      <section className="scrap-info-section">
+      <div
+        className="scrap-card left-card"
+        style={{
+          backgroundImage: `url(${imageUrlSell})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
+        <div className="scrap-overlay"></div>
+        <div className="scrap-content">
+          <h2 className="scrap-title">Sell to Us</h2>
+          <p className="scrap-text">
+            Metal Source is a buyer of all scrap metal grades including aluminum,
+            steel, copper, stainless, and all ferrous and nonferrous metals,
+            offering competitive prices and reliable service.
+          </p>
+          <button className="scrap-btn">→</button>
         </div>
       </div>
+
+      <div
+        className="scrap-card right-card"
+        style={{
+          backgroundImage: `url(${imageUrlSell1})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
+        <div className="scrap-overlay"></div>
+        <div className="scrap-content">
+          <h2 className="scrap-title">Know Your Scrap Value</h2>
+          <p className="scrap-text">
+            Know your scrap value in seconds. Enter the weight, get an instant
+            estimate, and see how much cash you’ll earn for recycling your
+            aluminum. It’s fast, accurate, and helps the planet too!
+          </p>
+          <button className="scrap-btn">→</button>
+        </div>
+      </div>
+    </section>
+
     </div>
   );
 };
