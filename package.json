@@ -1,0 +1,24 @@
+{
+  "name": "n-aluminium",
+  "version": "1.0.0",
+  "description": "This project is a smart recycling platform that helps users, business owners, and administrators manage aluminum scrap and reusable items digitally.\r It includes features like pickup scheduling, item selling, wallet payments, chatbot support, admin control panel, and map-based tracking.\r It is developed as part of a Final Year Project to address environmental waste challenges using digital tools.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Avish-Madushanka/N-Aluminium.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Avish-Madushanka/N-Aluminium/issues"
+  },
+  "homepage": "https://github.com/Avish-Madushanka/N-Aluminium#readme",
+  "dependencies": {
+    "dotenv": "^17.2.3"
+  }
+}
