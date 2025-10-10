@@ -1,12 +1,10 @@
 .AB4-container {
     background-color: #ffffff;
-    padding: 70px 40px;
+    padding: 40px 40px;
     text-align: center;
     border-radius: 0px;
     margin: 40px auto;
     max-width: 950px;
-    border-top: 3px solid #3d3d3d;
-    border-bottom: 3px solid #3d3d3d;
     overflow: hidden;
     position: relative;
   }
@@ -34,7 +32,7 @@
   
   .AB4-button {
     display: inline-block;
-    background: linear-gradient(to right, #313131, #2c3e50);
+    background-color:#2b2b2b ;
     color: #ffffff;
     padding: 14px 35px;
     border-radius: 30px;
@@ -51,7 +49,7 @@
   
   .AB4-button:hover,
   .AB4-button:focus {
-    background: linear-gradient(to right, #000000, #444a51);
+    background-color: #3f3f3f;
     color: #ffffff;
     transform: translateY(-3px);
     box-shadow: 0 7px 15px rgba(0, 86, 179, 0.3);

@@ -37,6 +37,7 @@
   position: relative;
   z-index: 2;
   max-width: 60%;
+  text-align: center;
 }
 
 .hero-title {
@@ -88,46 +89,91 @@
 }
 
 @media (max-width: 1200px) {
-  .hero-content {
-    max-width: 50%;
+  .hero-section {
+    margin: 0 30px;
+    height: 50vh;
   }
-}
 
-@media (max-width: 992px) {
+  .hero-content {
+    max-width: 70%;
+  }
+
   .hero-title {
     font-size: 3.5rem;
   }
-  
+}
+
+/* Tablets */
+@media (max-width: 992px) {
+  .hero-section {
+    margin: 0 20px;
+    height: 55vh;
+    border-radius: 40px;
+  }
+
+  .hero-content {
+    max-width: 80%;
+  }
+
+  .hero-title {
+    font-size: 3rem;
+  }
+
   .two-column-grid {
     gap: 3rem;
   }
 }
 
+/* Small tablets / large phones */
 @media (max-width: 768px) {
+  .hero-section {
+    margin: 0 15px;
+    height: auto;
+    padding: 40px 15px;
+    border-radius: 30px;
+  }
+
   .hero-content {
-    max-width: 80%;
+    max-width: 90%;
   }
-  
+
   .hero-title {
-    font-size: 3rem;
+    font-size: 2.5rem;
   }
-  
+
   .two-column-grid {
     grid-template-columns: 1fr;
     gap: 2rem;
   }
 }
 
+/* Phones */
 @media (max-width: 576px) {
+  .hero-section {
+    margin: 0 10px;
+    padding: 30px 10px;
+    border-radius: 20px;
+    height: auto;
+  }
+
   .hero-content {
-    max-width: 90%;
+    max-width: 95%;
   }
-  
+
   .hero-title {
-    font-size: 2.5rem;
+    font-size: 2rem;
+    line-height: 1.2;
   }
-  
+
   .content-section {
-    padding: 3rem 5%;
+    padding: 2rem 5%;
+  }
+
+  .section-title {
+    font-size: 1.6rem;
+  }
+
+  .section-text {
+    font-size: 0.95rem;
   }
 }

@@ -31,12 +31,14 @@ const AboutUsDes = () => {
       <div className="AB-ocean-container">
         <div className="AB-main-content">
           <div className="AB-left-section">
-            <h1 className="AB-title">Work Together to Clean The Ocean</h1>
+            <h1 className="AB-title">Work Together to Collect Aluminum Scrap</h1>
             <p className="AB-description">
-              Ocean pollution is a growing environmental crisis. Every year,{" "}
-              <strong>over 8 million tons of plastic</strong> end up in our
-              oceans, harming marine life, disrupting ecosystems, and
-              threatening coastal communities.
+              Aluminum waste is a growing environmental and economic concern. Every year, 
+              <strong>thousands of tons of aluminum scraps</strong> are discarded, 
+              ending up in landfills instead of being recycled. Improper disposal wastes 
+              valuable resources, increases energy consumption, and contributes to pollution. 
+              By collecting and recycling aluminum, we conserve natural resources, reduce 
+              greenhouse gas emissions, and support a circular economy.
             </p>
             <div className="AB-image-card">
               <img
@@ -52,16 +54,16 @@ const AboutUsDes = () => {
               <div className="AB-info-item">
                 <div className="AB-info-icon AB-vision">
                   <img
-                    src="https://api.iconify.design/heroicons-solid:eye.svg?color=%238bc34a"
+                    src="https://cdn-icons-png.flaticon.com/128/3412/3412082.png"
                     alt="Vision Icon"
                   />
                 </div>
                 <div className="AB-info-content">
                   <h3>Our Vision</h3>
                   <p>
-                    Our vision is to become a leading source of trusted
-                    information and solutions in the waste and disposal industry
-                    by attracting, engaging.
+                    Our vision is to promote efficient aluminum scrap collection and recycling, 
+                    reduce environmental impact, and foster a circular economy where materials 
+                    are reused instead of wasted.
                   </p>
                 </div>
               </div>
@@ -69,16 +71,17 @@ const AboutUsDes = () => {
               <div className="AB-info-item">
                 <div className="AB-info-icon AB-mission">
                   <img
-                    src="https://api.iconify.design/heroicons-solid:clock.svg?color=%238bc34a"
+                    src="https://cdn-icons-png.flaticon.com/128/2006/2006789.png"
                     alt="Mission Icon"
                   />
                 </div>
                 <div className="AB-info-content">
                   <h3>Our Mission</h3>
                   <p>
-                    Our mission is to drive meaningful growth by delivering
-                    high-quality, search-optimized content that connects with a
-                    targeted audience.
+                    Our mission is to provide efficient, reliable, and easily accessible aluminum scrap 
+                    collection services, while actively educating and engaging communities on the 
+                    importance and benefits of recycling, responsible waste management, and 
+                    sustainable living.
                   </p>
                 </div>
               </div>
@@ -86,23 +89,24 @@ const AboutUsDes = () => {
               <div className="AB-info-item">
                 <div className="AB-info-icon AB-goals">
                   <img
-                    src="https://api.iconify.design/heroicons-solid:cog.svg?color=%238bc34a"
+                    src="https://cdn-icons-png.flaticon.com/128/18370/18370444.png"
                     alt="Goals Icon"
                   />
                 </div>
                 <div className="AB-info-content">
                   <h3>Our Goals</h3>
                   <p>
-                    To support our mission and vision, we've defined key goals
-                    to increase organic traffic and engage the right audience
-                    effectively.
+                    Our goals are to significantly increase aluminum recycling rates, minimize 
+                    environmental waste, support and empower local communities, raise awareness 
+                    about sustainable practices, and promote a circular economy where materials 
+                    are reused efficiently for future generations.
                   </p>
                 </div>
               </div>
             </div>
 
-            <a href="#" className="AB-learn-more-button">
-              LEARN MORE
+            <a href="/ContactUs" className="AB-learn-more-button">
+              Contact Us
             </a>
           </div>
         </div>

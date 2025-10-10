@@ -1,7 +1,6 @@
 .AB-main-container {
   justify-content: center;
   align-items: center;
-  min-height: 100vh; 
   background-color: #ffffff;
   padding: 20px;
 }
@@ -48,6 +47,7 @@
   font-size: 1.1rem;
   color: #555;
   line-height: 1.8;
+  text-align: justify;
 }
 
 .AB2-container {
@@ -169,7 +169,7 @@
 
 .AB-ocean-container {
   max-width: 1200px;
-  margin: 80px auto;
+  margin: 50px auto;
   padding: 20px;
   font-family: "Poppins", sans-serif;
   color: #333;
@@ -250,7 +250,7 @@
 .AB-info-card-container {
   background-color: #fff;
   border-radius: 18px;
-  padding: 40px 40px 60px;
+  padding: 40px 40px 42px;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
   position: relative;
   overflow: hidden;
@@ -279,9 +279,9 @@
   left: 25px;
   top: 45px;
   height: calc(100% - 45px);
-  width: 3px;
-  background-color: #cce5c9;
-  height: 200px;
+  width: 2px;
+  background-color: #777777;
+  height: 140px;
 }
 
 .AB-info-item:last-child::before {
@@ -291,8 +291,8 @@
 .AB-info-icon {
   width: 50px;
   height: 50px;
-  background-color: #f1f9f1;
-  border: 2px solid #8bc34a;
+  background-color: #ffffff;
+  border: 2px solid #777777;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -302,8 +302,8 @@
 }
 
 .AB-info-icon img {
-  width: 24px;
-  height: 24px;
+  width: 30px;
+  height: 30px;
 }
 
 .AB-info-content h3 {
@@ -318,12 +318,13 @@
   color: #555;
   line-height: 1.6;
   margin: 0;
+  text-align: justify;
 }
 
 .AB-learn-more-button {
   display: inline-block;
-  margin-top: 30px;
-  background-color: #8bc34a;
+  margin-top: 25px;
+  background-color: #2b2b2b;
   color: #fff;
   font-weight: 600;
   padding: 14px 34px;
@@ -334,7 +335,7 @@
 }
 
 .AB-learn-more-button:hover {
-  background-color: #7cb342;
+  background-color: #3f3f3f;
   transform: translateY(-2px);
 }
 
