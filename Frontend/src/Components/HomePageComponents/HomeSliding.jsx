@@ -102,7 +102,7 @@ const HomeSliding = () => {
               </div>
             )}
 
-            <h1 className="hero-title">{currentSlide.title}</h1>
+            <h1 className="hero-title1">{currentSlide.title}</h1>
             <p className="hero-subtitle">{currentSlide.subtitle}</p>
 
             <div className="hero-buttons">
