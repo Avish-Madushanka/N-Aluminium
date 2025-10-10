@@ -3,271 +3,163 @@
   overflow-x: hidden; 
 }
 
-.welcome-content1 {
-  position: relative;
-  z-index: 2;
-  text-align: center; 
+.Ser-container {
+  width: 100%;
+  font-family: 'Inter', sans-serif;
+  color: #333;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.welcome-section1 {
-  background-image: url('https://recyclers.com.au/wp-content/uploads/2023/03/How-Metal-Is-Recycled.jpg');
+.Ser-hero-section {
+  position: relative;
+  height: 45vh;
+  background-image: url('https://www.alimax.ltd/files/thumbs/Aluminium_window_faqs_w1920_h525.jpg');
   background-size: cover;
   background-position: center;
-  height: 400px;
-  width: 100%;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  align-items: center;       
+  justify-content: center;   
+  text-align: center;     
   color: white;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
-  position: relative;
   overflow: hidden;
-  margin-bottom: 50px; 
+  margin: 0 50px;
+  border-radius: 50px;
 }
 
-.welcome-section1::after {
-  content: "";
+.Ser-overlay {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5); 
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
   z-index: 1;
 }
 
-.welcome-section1 h1 {
-  font-size: 4em;
-  margin: 0;
-  letter-spacing: 5px;
-  font-family: 'Montserrat', sans-serif;
+.Ser-hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 60%;
   text-align: center;
 }
 
-.feature-section {
-  display: flex;
-  min-height: 350px;
-  width: 100%;
-  max-width: 1100px;
-  align-items: center;
-  margin: 50px auto;
+.Ser-hero-title {
+  font-size: 4rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.Ser-content-section {
+  padding: 4rem 10%;
   background-color: white;
-  border-radius: 10px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
 
-.feature-section:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+.Ser-two-column-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  margin-bottom: 3rem;
 }
 
-.feature-section.reverse {
-  flex-direction: row-reverse;
+.Ser-column {
+  max-width: 100%;
 }
 
-.feature-text {
-  flex: 1;
-  padding: 40px;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+.Ser-section-title {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: #2d3748;
 }
 
-.feature-number {
-  position: absolute;
-  top: -20px;
-  left: 20px;
-  font-size: 10em;
-  font-weight: bold;
-  color: #f0f0f0;
-  z-index: 0;
-  pointer-events: none;
-}
-
-.feature-icon {
-  margin-bottom: 15px;
-  width: 60px;
-  height: 60px;
-  background-color: #e0f2f7;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 2;
-  position: relative;
-  border: 1px solid #cceeff;
-  box-shadow: 0 2px 5px rgba(0, 123, 255, 0.2);
-}
-
-.feature-icon img {
-  width: 35px;
-  height: 35px;
-  object-fit: contain;
-}
-
-.feature-text h2 {
-  font-size: 2em;
-  margin-top: 10px;
-  margin-bottom: 15px;
-  color: #2c3e50;
-  z-index: 2;
-  position: relative;
-}
-
-.feature-text p {
-  font-size: 1em;
+.Ser-section-text {
+  font-size: 1rem;
   line-height: 1.7;
-  color: #555;
-  margin-bottom: 25px;
-  z-index: 2;
-  position: relative;
+  color: #4a5568;
+  margin-bottom: 1.5rem;
 }
 
-.read-more {
-  display: inline-block;
-  color: #007bff;
-  text-decoration: none;
-  font-weight: bold;
-  font-size: 1em;
-  position: relative;
-  z-index: 2;
-  padding-bottom: 2px;
-  transition: color 0.2s ease-in-out;
+.Ser-accent-divider {
+  width: 3rem;
+  height: 4px;
+  background-color: #e53e3e;
+  margin-bottom: 1.5rem;
 }
 
-.read-more:hover {
-  color: #0056b3;
-  text-decoration: underline;
+.Ser-full-width {
+  width: 100%;
 }
 
-.feature-image {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #f8f8f8;
-  min-height: 250px;
+.Ser-gallery-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 60px auto;
+  text-align: center;
+  font-family: "Inter", sans-serif;
+  padding: 0 20px;
 }
 
-.feature-image img {
+.Ser-gallery-title {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #2c2c2c;
+  margin-bottom: 40px;
+}
+
+.Ser-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+  height: 600px;
+}
+
+.Ser-gallery-item {
+  display: block;
+  overflow: hidden;
+  border-radius: 16px;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.Ser-gallery-item:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+.Ser-gallery-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 0 10px 10px 0;
-  transition: transform 0.3s ease-in-out;
+  border-radius: 16px;
+  transition: transform 0.4s ease;
 }
 
-.feature-image img:hover {
-  transform: scale(1.03);
+.Ser-gallery-item:hover .Ser-gallery-image {
+  transform: scale(1.05);
 }
 
-.feature-section.reverse .feature-image img {
-  border-radius: 10px 0 0 10px;
-}
-
-.feature-section:nth-of-type(1) .feature-image img {
-  content: url('https://www.villagelivingonline.com/downloads/18950/download/SUN-CITY-Garbage-collection-Republic_JA2.jpg?cb=4126bee154eaa68fcca69688c72291d0');
-}
-.feature-section:nth-of-type(2) .feature-image img {
-  content: url('https://toffu.co/cdn/shop/products/pp_3d-lowpoly-livingroom1.png?v=1734390656');
-}
-.feature-section:nth-of-type(3) .feature-image img {
-  content: url('https://media.istockphoto.com/id/532257210/vector/stock-market.jpg?s=612x612&w=0&k=20&c=wQuRxE5lO-9JbafjcEyhM6o2EfDuXhbWKNi2PzInSlA=');
-}
-.feature-section:nth-of-type(4) .feature-image img {
-  content: url('https://www.chipaik.com.sg/backend/web/upload/images/we-offer-comprehensive-aluminium-products.webp');
-}
-.feature-section:nth-of-type(5) .feature-image img {
-  content: url('https://aluelite.com/wp-content/uploads/2023/03/1-3_-scaled.jpg');
-}
-
-.feature-section:nth-of-type(1) .feature-icon img {
-  content: url('https://img.icons8.com/ios-filled/50/007bff/truck.png');
-}
-.feature-section:nth-of-type(2) .feature-icon img {
-  content: url('https://img.icons8.com/ios-filled/50/007bff/food-waste.png');
-}
-.feature-section:nth-of-type(3) .feature-icon img {
-  content: url('https://img.icons8.com/ios-filled/50/007bff/recycle-bin.png');
-}
-.feature-section:nth-of-type(4) .feature-icon img {
-  content: url('https://img.icons8.com/ios-filled/50/007bff/aluminium-foil.png');
-}
-.feature-section:nth-of-type(5) .feature-icon img {
-  content: url('https://img.icons8.com/ios-filled/50/007bff/project.png');
-}
-
-@media (max-width: 992px) {
-  .feature-section, .feature-section.reverse {
-    flex-direction: column;
-    margin: 30px auto;
+@media (max-width: 1024px) {
+  .Ser-gallery-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
   }
 
-  .feature-image {
-    width: 100%;
-    height: 250px;
-    border-radius: 0 0 10px 10px;
-  }
-
-  .feature-image img {
-    border-radius: 0 0 10px 10px;
-  }
-
-  .feature-section.reverse .feature-image img {
-    border-radius: 0 0 10px 10px;
-  }
-
-  .feature-text {
-    padding: 30px;
-    align-items: flex-start;
-  }
-
-  .feature-number {
-    top: -10px;
-    left: 10px;
-    font-size: 8em;
-  }
-
-  .welcome-section1 h1 {
-    font-size: 2.8em;
+  .Ser-gallery-title {
+    font-size: 1.8rem;
   }
 }
 
-@media (max-width: 576px) {
-  .welcome-section1 h1 {
-    font-size: 2em;
-    letter-spacing: 3px;
-    padding: 0 15px;
+@media (max-width: 640px) {
+  .Ser-gallery-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
   }
 
-  .feature-section {
-    margin: 20px auto;
-  }
-
-  .feature-text h2 {
-    font-size: 1.8em;
-  }
-
-  .feature-text p {
-    font-size: 0.95em;
-  }
-
-  .feature-number {
-    font-size: 6em;
-    top: -5px;
-    left: 5px;
-  }
-
-  .feature-icon {
-    width: 50px;
-    height: 50px;
-  }
-
-  .feature-icon img {
-    width: 25px;
-    height: 25px;
+  .Ser-gallery-title {
+    font-size: 1.5rem;
+    margin-bottom: 25px;
   }
 }

@@ -1,5 +1,5 @@
 import React from "react";
-import "./AboutUsDes.css"; 
+import "./AboutUsDes.css";
 
 const AboutUsDes = () => {
   const steps = [
@@ -27,51 +27,88 @@ const AboutUsDes = () => {
   ];
 
   return (
-     <div className="AB-main-container">
-      <div className="ABrecycling-container">
-        <div className="ABimage-section">
-          <img
-            src="https://fairsalvage.com/wp-content/uploads/2022/05/A-Guide-To-Metal-Recycling-Process_image1.webp"
-            alt="Person meditating" 
-            className="ABrecycling-image"
-          />
-        </div>
-        <div className="ABtext-section">
-          <h2 className="ABtitle">
-            Why Recycle Aluminum?
-          </h2>
-          <p className="ABdescription">
-            Aluminum recycling is crucial for environmental sustainability, economic growth,
-            and energy conservation. Unlike many materials, aluminum can be recycled
-            indefinitely without losing quality. Recycling aluminum saves up to
-            95% of the energy required to produce new aluminum, significantly
-            reducing greenhouse gas emissions and the carbon footprint. It also
-            minimizes landfill waste, protects natural resources, and supports
-            local jobs. Together, we can build a circular economy that benefits
-            both the planet and future generations.
-          </p>
-        </div>
-      </div>
+    <div className="AB-main-container">
+      <div className="AB-ocean-container">
+        <div className="AB-main-content">
+          <div className="AB-left-section">
+            <h1 className="AB-title">Work Together to Collect Aluminum Scrap</h1>
+            <p className="AB-description">
+              Aluminum waste is a growing environmental and economic concern. Every year, 
+              <strong>thousands of tons of aluminum scraps</strong> are discarded, 
+              ending up in landfills instead of being recycled. Improper disposal wastes 
+              valuable resources, increases energy consumption, and contributes to pollution. 
+              By collecting and recycling aluminum, we conserve natural resources, reduce 
+              greenhouse gas emissions, and support a circular economy.
+            </p>
+            <div className="AB-image-card">
+              <img
+                src="https://media.istockphoto.com/id/688587628/photo/aluminium-and-pvc-industry-worker.jpg?s=612x612&w=0&k=20&c=j3W5LQbi0yV0RH0-DLqGs6VeFGlV60Vm_OaiIAMPoTo="
+                alt="People cleaning up trash"
+              />
+              <div className="AB-years-of-experience">20+ Years of Experience</div>
+            </div>
+          </div>
 
-      <div className="AD2-container">
-        <h2 className="AD2-title">Aluminum Scrap Collection Guide</h2>
-        <p className="AD2-subtitle">
-          Schedule your aluminum pickup in just three easy steps and support a greener planet!
-        </p>
-
-        <div className="AD2-steps">
-          {steps.map((step, index) => (
-            <div key={index} className="AD2-step">
-              <div className="AD2-circle">
-                <div className="AD2-number">{step.number}</div>
-                <span className="AD2-icon">{step.icon}</span>
+          <div className="AB-right-section">
+            <div className="AB-info-card-container">
+              <div className="AB-info-item">
+                <div className="AB-info-icon AB-vision">
+                  <img
+                    src="https://cdn-icons-png.flaticon.com/128/3412/3412082.png"
+                    alt="Vision Icon"
+                  />
+                </div>
+                <div className="AB-info-content">
+                  <h3>Our Vision</h3>
+                  <p>
+                    Our vision is to promote efficient aluminum scrap collection and recycling, 
+                    reduce environmental impact, and foster a circular economy where materials 
+                    are reused instead of wasted.
+                  </p>
+                </div>
               </div>
-              <div className="AD2-content">
-                <h3 className="AD2-step-title">{step.title}</h3>
-                <p className="AD2-description">{step.description}</p>
+
+              <div className="AB-info-item">
+                <div className="AB-info-icon AB-mission">
+                  <img
+                    src="https://cdn-icons-png.flaticon.com/128/2006/2006789.png"
+                    alt="Mission Icon"
+                  />
+                </div>
+                <div className="AB-info-content">
+                  <h3>Our Mission</h3>
+                  <p>
+                    Our mission is to provide efficient, reliable, and easily accessible aluminum scrap 
+                    collection services, while actively educating and engaging communities on the 
+                    importance and benefits of recycling, responsible waste management, and 
+                    sustainable living.
+                  </p>
+                </div>
+              </div>
+
+              <div className="AB-info-item">
+                <div className="AB-info-icon AB-goals">
+                  <img
+                    src="https://cdn-icons-png.flaticon.com/128/18370/18370444.png"
+                    alt="Goals Icon"
+                  />
+                </div>
+                <div className="AB-info-content">
+                  <h3>Our Goals</h3>
+                  <p>
+                    Our goals are to significantly increase aluminum recycling rates, minimize 
+                    environmental waste, support and empower local communities, raise awareness 
+                    about sustainable practices, and promote a circular economy where materials 
+                    are reused efficiently for future generations.
+                  </p>
+                </div>
               </div>
             </div>
-          ))}
+
+            <a href="/ContactUs" className="AB-learn-more-button">
+              Contact Us
+            </a>
+          </div>
         </div>
       </div>
     </div>

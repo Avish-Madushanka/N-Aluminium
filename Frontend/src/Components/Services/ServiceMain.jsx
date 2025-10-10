@@ -2,89 +2,65 @@ import React from 'react';
 import './ServiceMain.css';
 
 function ServiceMain() {
+   const items = [
+    {
+      img: "https://images.pexels.com/photos/3735212/pexels-photo-3735212.jpeg",
+      link: "/recycling-tips",
+    },
+    {
+      img: "https://images.pexels.com/photos/4682452/pexels-photo-4682452.jpeg",
+      link: "/community-cleanup",
+    },
+    {
+      img: "https://images.pexels.com/photos/1300977/pexels-photo-1300977.jpeg",
+      link: "/waste-management",
+    },
+    {
+      img: "https://images.pexels.com/photos/4239091/pexels-photo-4239091.jpeg",
+      link: "/volunteer-program",
+    },
+    {
+      img: "https://images.pexels.com/photos/4167541/pexels-photo-4167541.jpeg",
+      link: "/sanitation-safety",
+    },
+    {
+      img: "https://images.pexels.com/photos/1302189/pexels-photo-1302189.jpeg",
+      link: "/collection-services",
+    },
+  ];
+
   return (
-    <div className="App12">
-      <header className="welcome-section1">
-        <div className="welcome-content1">
-          <h1>Our Services</h1>
+    <div className="Ser-App12">
+      <div className="Ser-container">
+        <div className="Ser-hero-section">
+          <div className="Ser-overlay"></div>
+          <div className="Ser-hero-content">
+            <h1 className="Ser-hero-title">Our Services </h1>
+          </div>
+          <div className="Ser-wave-divider"></div>
         </div>
-      </header>
+      </div>
 
       <main>
-        <section className="feature-section">
-          <div className="feature-text">
-            <span className="feature-number">01</span>
-            <div className="feature-icon">
-              <img src="/path/to/balance-icon.svg" alt="Balance Icon" />
-            </div>
-            <h2>Aluminum Scraps Pickup</h2>
-            <p>Effortless scrap pickup—recycle aluminum waste with ease! Fast, reliable, and eco-friendly collection services to keep your space clean while supporting sustainability.</p>
-            <a href="#read-more-1" className="read-more">Read More</a>
+        <div className="Ser-gallery-container">
+          <h2 className="Ser-gallery-title">Rest & Plan Secure for Future</h2>
+          <div className="Ser-gallery-grid">
+            {items.map((item, index) => (
+              <a
+                key={index}
+                href={item.link}
+                className="Ser-gallery-item"
+                target="_blank"
+                rel="noopener noreferrer">
+                <img
+                  src={item.img}
+                  alt={`Gallery ${index + 1}`}
+                  className="Ser-gallery-image"
+                />
+              </a>
+            ))}
           </div>
-          <div className="feature-image">
-            <img src="/assets/1.png" alt="Woman with healthy food" />
-          </div>
-        </section>
-
-        <section className="feature-section reverse">
-          <div className="feature-text">
-            <span className="feature-number">02</span>
-            <div className="feature-icon">
-              <img src="/path/to/nutrition-icon.svg" alt="Nutrition Icon" />
-            </div>
-            <h2>Personalized Nutrition</h2>
-            <p>Your health goals guide a fully customized nutrition plan.</p>
-            <a href="#read-more-2" className="read-more">Read More</a>
-          </div>
-          <div className="feature-image">
-            <img src="/path/to/personalized-nutrition.jpg" alt="Couple cooking" />
-          </div>
-        </section>
-
-        <section className="feature-section">
-          <div className="feature-text">
-            <span className="feature-number">03</span>
-            <div className="feature-icon">
-              <img src="/path/to/fitness-icon.svg" alt="Fitness Icon" />
-            </div>
-            <h2>Reuse Items Buy & Sell</h2>
-            <p>Buy and sell reusable items effortlessly! Give pre-owned goods a second life while saving money and reducing waste. Sustainable trading for a greener future!</p>
-            <a href="#read-more-3" className="read-more">Read More</a>
-          </div>
-          <div className="feature-image">
-            <img src="/path/to/fitness-performance.jpg" alt="People preparing food" />
-          </div>
-        </section>
-
-        <section className="feature-section reverse">
-          <div className="feature-text">
-            <span className="feature-number">04</span>
-            <div className="feature-icon">
-              <img src="/path/to/nutrition-icon.svg" alt="Nutrition Icon" />
-            </div>
-            <h2>Personalized Nutrition</h2>
-            <p>Your health goals guide a fully customized nutrition plan.</p>
-            <a href="#read-more-2" className="read-more">Read More</a>
-          </div>
-          <div className="feature-image">
-            <img src="/path/to/personalized-nutrition.jpg" alt="Couple cooking" />
-          </div>
-        </section>
-
-        <section className="feature-section">
-          <div className="feature-text">
-            <span className="feature-number">05</span>
-            <div className="feature-icon">
-              <img src="/path/to/fitness-icon.svg" alt="Fitness Icon" />
-            </div>
-            <h2>Latest Projects</h2>
-            <p>From custom aluminum solutions to eco-friendly scrap pickups, each project reflects our commitment to quality, efficiency, and a greener future.</p>
-            <a href="#read-more-3" className="read-more">Read More</a>
-          </div>
-          <div className="feature-image">
-            <img src="/path/to/fitness-performance.jpg" alt="People preparing food" />
-          </div>
-        </section>
+        </div>
       </main>
     </div>
   );

@@ -10,7 +10,7 @@ const HomeBar = () => {
           <h2>Overview</h2>
           <div className="p1">
             <p>
-              “ Our MetaTrade platform is designed to transform the way aluminum is collected,
+              Our MetaTrade platform is designed to transform the way aluminum is collected,
               reused, and shared. We provide an innovative system where individuals, households, and
               businesses can easily schedule aluminum scrap collections, ensuring that valuable materials
               never go to waste. Through our marketplace, users can buy and sell reusable aluminum items,
@@ -24,7 +24,7 @@ const HomeBar = () => {
               directly to our community. By combining convenience, technology, and sustainability, our platform builds a connected
               ecosystem where aluminum is not just recycled but given a new purpose — helping reduce
               environmental impact while empowering communities and industries to benefit from a stronger,
-              greener aluminum economy. ”
+              greener aluminum economy.
             </p>
           </div>
         </div>

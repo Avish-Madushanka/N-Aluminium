@@ -2,11 +2,11 @@ import React from 'react';
 import './AboutUSDes3.css';
 
 const AboutUSDes3 = () => {
-  const imageUrl1 = 'https://media.istockphoto.com/id/133993685/photo/scrap-metal-pieces-laying-in-a-pile.jpg?s=612x612&w=0&k=20&c=255eq6JeJao2iO5w-pXhmFkBGDHLabXH5Kn9SaA1lxw=';
+  const imageUrl1 = 'https://media.istockphoto.com/id/645897288/photo/abtract-of-metal-scrap.jpg?s=612x612&w=0&k=20&c=LVynqe8WK5q7m1YL2ldXcy44qjRrY3RyD-solAxi-Lc=';
   const imageUrl2 = 'https://s.alicdn.com/@sc04/kf/H72424df1f0d749e3bf5ce42a8e3ebac5y.png';
   const imageUrl3 = 'https://3.imimg.com/data3/VW/XS/MY-9845636/aluminium-composite-panel-scrap-500x500.jpg';
-  const imageUrl4 = 'https://www.foodandwine.com/thmb/EEiGergUpA5z0TABZ_gRclGBexk=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/Why-Cans-Brewers-Use-Aluminum-for-a-Variety-of-Reasons-FT-BLOG0424-295c506644e0435088d08439ab822311.jpg';
-  const imageUrl5 = 'https://africangoldcompanygroup.com/wp-content/uploads/2023/11/557513186601830.jpg';
+  const imageUrl4 = 'https://www.aluminum.org/sites/default/files/styles/gallery_square_480x480/public/2021-11/can%20line.jpg?itok=pLzI12Gv';
+  const imageUrl5 = 'https://5.imimg.com/data5/SELLER/Default/2024/12/472805369/PK/QX/TR/6771719/aluminum-wire-scrap-500x500.jpg';
 
   return (
     <div className="AB3-container">
