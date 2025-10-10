@@ -1,5 +1,5 @@
 import React from "react";
-import "./AboutUsDes.css"; 
+import "./AboutUsDes.css";
 
 const AboutUsDes = () => {
   const steps = [
@@ -27,51 +27,84 @@ const AboutUsDes = () => {
   ];
 
   return (
-     <div className="AB-main-container">
-      <div className="ABrecycling-container">
-        <div className="ABimage-section">
-          <img
-            src="https://fairsalvage.com/wp-content/uploads/2022/05/A-Guide-To-Metal-Recycling-Process_image1.webp"
-            alt="Person meditating" 
-            className="ABrecycling-image"
-          />
-        </div>
-        <div className="ABtext-section">
-          <h2 className="ABtitle">
-            Why Recycle Aluminum?
-          </h2>
-          <p className="ABdescription">
-            Aluminum recycling is crucial for environmental sustainability, economic growth,
-            and energy conservation. Unlike many materials, aluminum can be recycled
-            indefinitely without losing quality. Recycling aluminum saves up to
-            95% of the energy required to produce new aluminum, significantly
-            reducing greenhouse gas emissions and the carbon footprint. It also
-            minimizes landfill waste, protects natural resources, and supports
-            local jobs. Together, we can build a circular economy that benefits
-            both the planet and future generations.
-          </p>
-        </div>
-      </div>
+    <div className="AB-main-container">
+      <div className="AB-ocean-container">
+        <div className="AB-main-content">
+          <div className="AB-left-section">
+            <h1 className="AB-title">Work Together to Clean The Ocean</h1>
+            <p className="AB-description">
+              Ocean pollution is a growing environmental crisis. Every year,{" "}
+              <strong>over 8 million tons of plastic</strong> end up in our
+              oceans, harming marine life, disrupting ecosystems, and
+              threatening coastal communities.
+            </p>
+            <div className="AB-image-card">
+              <img
+                src="https://media.istockphoto.com/id/688587628/photo/aluminium-and-pvc-industry-worker.jpg?s=612x612&w=0&k=20&c=j3W5LQbi0yV0RH0-DLqGs6VeFGlV60Vm_OaiIAMPoTo="
+                alt="People cleaning up trash"
+              />
+              <div className="AB-years-of-experience">20+ Years of Experience</div>
+            </div>
+          </div>
 
-      <div className="AD2-container">
-        <h2 className="AD2-title">Aluminum Scrap Collection Guide</h2>
-        <p className="AD2-subtitle">
-          Schedule your aluminum pickup in just three easy steps and support a greener planet!
-        </p>
-
-        <div className="AD2-steps">
-          {steps.map((step, index) => (
-            <div key={index} className="AD2-step">
-              <div className="AD2-circle">
-                <div className="AD2-number">{step.number}</div>
-                <span className="AD2-icon">{step.icon}</span>
+          <div className="AB-right-section">
+            <div className="AB-info-card-container">
+              <div className="AB-info-item">
+                <div className="AB-info-icon AB-vision">
+                  <img
+                    src="https://api.iconify.design/heroicons-solid:eye.svg?color=%238bc34a"
+                    alt="Vision Icon"
+                  />
+                </div>
+                <div className="AB-info-content">
+                  <h3>Our Vision</h3>
+                  <p>
+                    Our vision is to become a leading source of trusted
+                    information and solutions in the waste and disposal industry
+                    by attracting, engaging.
+                  </p>
+                </div>
               </div>
-              <div className="AD2-content">
-                <h3 className="AD2-step-title">{step.title}</h3>
-                <p className="AD2-description">{step.description}</p>
+
+              <div className="AB-info-item">
+                <div className="AB-info-icon AB-mission">
+                  <img
+                    src="https://api.iconify.design/heroicons-solid:clock.svg?color=%238bc34a"
+                    alt="Mission Icon"
+                  />
+                </div>
+                <div className="AB-info-content">
+                  <h3>Our Mission</h3>
+                  <p>
+                    Our mission is to drive meaningful growth by delivering
+                    high-quality, search-optimized content that connects with a
+                    targeted audience.
+                  </p>
+                </div>
+              </div>
+
+              <div className="AB-info-item">
+                <div className="AB-info-icon AB-goals">
+                  <img
+                    src="https://api.iconify.design/heroicons-solid:cog.svg?color=%238bc34a"
+                    alt="Goals Icon"
+                  />
+                </div>
+                <div className="AB-info-content">
+                  <h3>Our Goals</h3>
+                  <p>
+                    To support our mission and vision, we've defined key goals
+                    to increase organic traffic and engage the right audience
+                    effectively.
+                  </p>
+                </div>
               </div>
             </div>
-          ))}
+
+            <a href="#" className="AB-learn-more-button">
+              LEARN MORE
+            </a>
+          </div>
         </div>
       </div>
     </div>

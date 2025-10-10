@@ -9,16 +9,18 @@
 
 .hero-section {
   position: relative;
-  height: 60vh;
-  background-image: url('https://careers.cushmanwakefield.com/media/330ba5hc/workers.jpg?width=1500&height=500&v=1dbda10a5a4bb50&rmode=crop&quality=75'); 
+  height: 45vh;
+  background-image: url('https://careers.cushmanwakefield.com/media/330ba5hc/workers.jpg?width=1500&height=500&v=1dbda10a5a4bb50&rmode=crop&quality=75');
   background-size: cover;
   background-position: center;
   display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  padding-left: 10%;
+  align-items: center;       
+  justify-content: center;   
+  text-align: center;     
   color: white;
   overflow: hidden;
+  margin: 0 50px;
+  border-radius: 50px;
 }
 
 .overlay {
@@ -34,29 +36,14 @@
 .hero-content {
   position: relative;
   z-index: 2;
-  max-width: 40%;
+  max-width: 60%;
 }
 
 .hero-title {
   font-size: 4rem;
   font-weight: 700;
   margin-bottom: 1rem;
-}
-
-.hero-text {
-  font-size: 1.1rem;
-  line-height: 1.6;
-}
-
-.wave-divider {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 80px;
-  background-color: white;
-  border-radius: 100% 100% 0 0;
-  z-index: 3;
+  text-align: center;
 }
 
 .content-section {

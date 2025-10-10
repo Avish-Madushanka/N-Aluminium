@@ -10,43 +10,44 @@ import Image4 from '../../assets/Main4.jpg';
 const HomeSliding = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [slides] = useState([
-     {
+    {
       image: Image3,
       badge: "Eco-Friendly & Efficient",
       title: "Aluminum Scrap Collection",
-      subtitle: "Schedule pickups easily and contribute to a sustainable future. We ensure fast, reliable, and responsible collection of all aluminum waste, helping you recycle efficiently.",
+      subtitle:
+        "Schedule pickups easily and contribute to a sustainable future. We ensure fast, reliable, and responsible collection of all aluminum waste, helping you recycle efficiently.",
       button1Text: "Check Pickups",
       button1Link: "/Collection",
-      button2Icon: "📞", 
     },
     {
       image: Image1,
       badge: "Durable & Sustainable",
       title: "Aluminum Solutions for Construction",
-      subtitle: "We provide top-grade aluminum materials and components for construction projects, ensuring durability, precision, and eco-friendly building solutions. Build stronger, lighter, and sustainable structures with us.",
-      button1Text: "Book Now",
-      button1Link: "#",
-      button2Icon: "▶",
+      subtitle:
+        "We provide top-grade aluminum materials and components for construction projects, ensuring durability, precision, and eco-friendly building solutions. Build stronger, lighter, and sustainable structures with us.",
+      button1Text: "View Projects",
+      button1Link: "#projects",
     },
     {
       image: Image2,
       badge: "Premium Aluminum Products",
-      title: "High-Quality Aluminum for Every Build",
-      subtitle: "Explore our wide range of aluminum construction items, from panels and profiles to sheets and fittings. Durable, reliable, and designed for modern construction projects.",
-      button1Text: "Learn More",
-      button1Link: "#",
-      button2Icon: "ⓘ", 
+      title: "High-Quality Aluminum for Build",
+      subtitle:
+        "Explore our wide range of aluminum construction items, from panels and profiles to sheets and fittings. Durable, reliable, and designed for modern construction projects.",
+      button1Text: "Order Now",
+      button1Link: "#order",
     },
     {
       image: Image4,
       badge: "Innovate & Compete",
       title: "Aluminum Trainers Competition",
-      subtitle: "Showcase your skills and creativity in aluminum design and fabrication. Participate in exciting competitions, learn from experts, and stand out in the world of aluminum engineering.",
-      button1Text: "Learn More",
-      button1Link: "#",
-      button2Icon: "ⓘ", 
+      subtitle:
+        "Showcase your skills and creativity in aluminum design and fabrication. Participate in exciting competitions, learn from experts, and stand out in the world of aluminum engineering.",
+      button1Text: "Registration",
+      button1Link: "#register",
     },
   ]);
+
   const [isAnimating, setIsAnimating] = useState(false);
 
   useEffect(() => {
@@ -55,18 +56,21 @@ const HomeSliding = () => {
       setTimeout(() => {
         setCurrentIndex((prevIndex) => (prevIndex + 1) % slides.length);
         setIsAnimating(false);
-      }, 300); 
-    }, 5000); 
-
+      }, 300);
+    }, 5000);
     return () => clearInterval(intervalId);
   }, [slides.length]);
 
   const handleButtonClick = (url) => {
-    window.location.href = url;
+    if (url.startsWith("http") || url.startsWith("tel:")) {
+      window.open(url, "_blank");
+    } else {
+      window.location.href = url;
+    }
   };
 
   const goToSlide = (index) => {
-    if (index === currentIndex) return; 
+    if (index === currentIndex) return;
     setIsAnimating(true);
     setTimeout(() => {
       setCurrentIndex(index);
@@ -78,8 +82,8 @@ const HomeSliding = () => {
 
   return (
     <div className="hero-container">
-      <div className="hero-overlay"></div> 
-      
+      <div className="hero-overlay"></div>
+
       <div className="hero-slider-item">
         <div className="hero-image-section">
           <img
@@ -97,9 +101,8 @@ const HomeSliding = () => {
                 {currentSlide.badge}
               </div>
             )}
-            
+
             <h1 className="hero-title">{currentSlide.title}</h1>
-            
             <p className="hero-subtitle">{currentSlide.subtitle}</p>
 
             <div className="hero-buttons">
@@ -109,12 +112,15 @@ const HomeSliding = () => {
               >
                 {currentSlide.button1Text}
               </button>
-              <button
-                className="btn-secondary"
-                onClick={() => handleButtonClick(currentSlide.button2Link)}
-              >
-                {currentSlide.button2Icon}
-              </button>
+
+              {currentSlide.button2Link && (
+                <button
+                  className="btn-secondary"
+                  onClick={() => handleButtonClick(currentSlide.button2Link)}
+                >
+                  {currentSlide.button2Icon}
+                </button>
+              )}
             </div>
           </div>
         </div>
