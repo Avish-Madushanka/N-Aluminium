@@ -4,29 +4,36 @@ import './ServiceMain.css';
 function ServiceMain() {
    const items = [
     {
-      img: "https://images.pexels.com/photos/3735212/pexels-photo-3735212.jpeg",
-      link: "/recycling-tips",
-    },
-    {
-      img: "https://images.pexels.com/photos/4682452/pexels-photo-4682452.jpeg",
-      link: "/community-cleanup",
-    },
-    {
-      img: "https://images.pexels.com/photos/1300977/pexels-photo-1300977.jpeg",
-      link: "/waste-management",
-    },
-    {
-      img: "https://images.pexels.com/photos/4239091/pexels-photo-4239091.jpeg",
-      link: "/volunteer-program",
-    },
-    {
-      img: "https://images.pexels.com/photos/4167541/pexels-photo-4167541.jpeg",
-      link: "/sanitation-safety",
-    },
-    {
-      img: "https://images.pexels.com/photos/1302189/pexels-photo-1302189.jpeg",
-      link: "/collection-services",
-    },
+    img: "https://www.rcmscrapmetal.com/images/blog/1718919338blog-24-06-20.jpg",
+    link: "/eco-friendly",
+    title: "Eco-Friendly Waste Disposal",
+  },
+  {
+    img: "https://images.pexels.com/photos/4682452/pexels-photo-4682452.jpeg",
+    link: "/community-cleanup",
+    title: "Community Cleanup Drives",
+  },
+  {
+    img: "https://images.pexels.com/photos/3735212/pexels-photo-3735212.jpeg",
+    link: "/eco-friendly",
+    title: "Eco-Friendly Waste Disposal",
+  },
+  {
+    img: "https://images.pexels.com/photos/4682452/pexels-photo-4682452.jpeg",
+    link: "/community-cleanup",
+    title: "Community Cleanup Drives",
+  },
+  {
+    img: "https://images.pexels.com/photos/3735212/pexels-photo-3735212.jpeg",
+    link: "/eco-friendly",
+    title: "Eco-Friendly Waste Disposal",
+  },
+  {
+    img: "https://images.pexels.com/photos/4682452/pexels-photo-4682452.jpeg",
+    link: "/community-cleanup",
+    title: "Community Cleanup Drives",
+  },
+
   ];
 
   return (
@@ -42,25 +49,31 @@ function ServiceMain() {
       </div>
 
       <main>
-        <div className="Ser-gallery-container">
-          <h2 className="Ser-gallery-title">Rest & Plan Secure for Future</h2>
-          <div className="Ser-gallery-grid">
-            {items.map((item, index) => (
-              <a
-                key={index}
-                href={item.link}
-                className="Ser-gallery-item"
-                target="_blank"
-                rel="noopener noreferrer">
-                <img
+      <div className="Ser-gallery-container">
+          <h2 className="Ser-gallery-title">What Makes Us Stand Out From the Rest & Plan Secure for Future</h2>
+            <div className="Ser-gallery-grid">
+              {items.map((item, index) => (
+           <div key={index} className="Ser-gallery-item">
+               <img
                   src={item.img}
                   alt={`Gallery ${index + 1}`}
                   className="Ser-gallery-image"
-                />
+              />
+          <div className="Ser-gallery-overlay">
+            <h3 className="Ser-gallery-overlay-title">{item.title}</h3>
+            <div className="Ser-gallery-icons">
+              <a href={item.img} target="_blank" rel="noopener noreferrer" className="Ser-icon">
+                <i className="fas fa-search-plus"></i>
               </a>
-            ))}
+              <a href={item.link} target="_blank" rel="noopener noreferrer" className="Ser-icon">
+                <i className="fas fa-link"></i>
+              </a>
+            </div>
+            </div>
           </div>
-        </div>
+          ))}
+          </div>
+      </div>
       </main>
     </div>
   );

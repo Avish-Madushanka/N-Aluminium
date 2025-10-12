@@ -113,14 +113,15 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 25px;
-  height: 600px;
+  height: 550px;
 }
 
 .Ser-gallery-item {
-  display: block;
-  overflow: hidden;
+  position: relative;
   border-radius: 16px;
+  overflow: hidden;
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -133,7 +134,6 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 16px;
   transition: transform 0.4s ease;
 }
 
@@ -141,10 +141,62 @@
   transform: scale(1.05);
 }
 
+.Ser-gallery-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(27, 61, 25, 0.85);
+  color: #fff;
+  opacity: 0;
+  visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 16px;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+.Ser-gallery-item:hover .Ser-gallery-overlay {
+  opacity: 1;
+  visibility: visible;
+}
+
+.Ser-gallery-overlay-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+
+.Ser-gallery-icons {
+  display: flex;
+  gap: 12px;
+}
+
+.Ser-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  background: #a4d37c;
+  color: #1c1c1c;
+  border-radius: 8px;
+  font-size: 18px;
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.Ser-icon:hover {
+  background: #8bc34a;
+  transform: scale(1.1);
+}
+
+/* Responsive */
 @media (max-width: 1024px) {
   .Ser-gallery-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
   }
 
   .Ser-gallery-title {
@@ -155,7 +207,6 @@
 @media (max-width: 640px) {
   .Ser-gallery-grid {
     grid-template-columns: 1fr;
-    gap: 18px;
   }
 
   .Ser-gallery-title {
