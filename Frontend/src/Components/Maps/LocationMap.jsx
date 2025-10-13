@@ -11,13 +11,7 @@ const mapContainerStyle = {
 const KALUTARA_DISTRICT_CENTER = { lat: 6.5853, lng: 79.9607 };
 const KALUTARA_DISTRICT_ZOOM = 10;
 
-const GOOGLE_MAPS_API_KEY = "AIzaSyBb_eKF3rpllpvWbYlfDHI1qyGKMjLhhYI"; 
-
-if (GOOGLE_MAPS_API_KEY === "AIzaSyBb_eKF3rpllpvWbYlfDHI1qyGKMjLhhYI") { 
-  console.warn(
-    "Google Maps API Key is hardcoded or using a placeholder. For security, please set VITE_GOOGLE_MAPS_API_KEY in your .env file."
-  );
-}
+const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
 function LocationMap() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -63,7 +57,7 @@ function LocationMap() {
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
     if (!event.target.value.trim()) {
-        setFocusedLocationPosition(null);
+      setFocusedLocationPosition(null);
     }
   };
 
@@ -85,6 +79,15 @@ function LocationMap() {
 
   const mapCenter = focusedLocationPosition || KALUTARA_DISTRICT_CENTER;
   const mapZoom = focusedLocationPosition ? 15 : KALUTARA_DISTRICT_ZOOM;
+
+  if (!GOOGLE_MAPS_API_KEY) {
+    return (
+      <div style={{ color: "red", textAlign: "center", padding: "50px" }}>
+        <h2>Error</h2>
+        <p>Google Maps API key is not set. Please add <code>VITE_GOOGLE_MAPS_API_KEY</code> to your .env file.</p>
+      </div>
+    );
+  }
 
   if (isLoading) {
     return (
@@ -142,7 +145,7 @@ function LocationMap() {
             ))
           ) : (
             <p style={{ padding: "20px", textAlign: "center" }}>
-              {searchTerm ? "No locations found matching your search." : (allLocations.length === 0 ? "No locations available at the moment." : "Enter a search term to find locations.") }
+              {searchTerm ? "No locations found matching your search." : (allLocations.length === 0 ? "No locations available at the moment." : "Enter a search term to find locations.")}
             </p>
           )}
         </div>
@@ -165,8 +168,8 @@ function LocationMap() {
                     focusedLocationPosition &&
                     location.position.lat === focusedLocationPosition.lat &&
                     location.position.lng === focusedLocationPosition.lng
-                      ? "http://maps.google.com/mapfiles/ms/icons/blue-dot.png" 
-                      : undefined 
+                      ? "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
+                      : undefined
                   }
                 />
               ))}
