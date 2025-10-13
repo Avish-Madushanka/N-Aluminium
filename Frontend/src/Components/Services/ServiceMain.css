@@ -1,15 +1,11 @@
-.App12 {
+.Ser-App12 {
   margin: 0 auto;
-  overflow-x: hidden; 
+  overflow-x: hidden;
+  font-family: 'Inter', sans-serif;
 }
 
 .Ser-container {
   width: 100%;
-  font-family: 'Inter', sans-serif;
-  color: #333;
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
 }
 
 .Ser-hero-section {
@@ -19,78 +15,29 @@
   background-size: cover;
   background-position: center;
   display: flex;
-  align-items: center;       
-  justify-content: center;   
-  text-align: center;     
-  color: white;
+  align-items: center;
+  justify-content: center;
+  border-radius: 30px;
+  margin: 0 20px;
   overflow: hidden;
-  margin: 0 50px;
-  border-radius: 50px;
+  color: white;
 }
 
 .Ser-overlay {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   background: rgba(0, 0, 0, 0.5);
-  z-index: 1;
 }
 
 .Ser-hero-content {
   position: relative;
   z-index: 2;
-  max-width: 60%;
   text-align: center;
 }
 
 .Ser-hero-title {
-  font-size: 4rem;
+  font-size: 3rem;
   font-weight: 700;
-  margin-bottom: 1rem;
-  text-align: center;
-}
-
-.Ser-content-section {
-  padding: 4rem 10%;
-  background-color: white;
-}
-
-.Ser-two-column-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4rem;
-  margin-bottom: 3rem;
-}
-
-.Ser-column {
-  max-width: 100%;
-}
-
-.Ser-section-title {
-  font-size: 2rem;
-  font-weight: 600;
-  margin-bottom: 1.5rem;
-  color: #2d3748;
-}
-
-.Ser-section-text {
-  font-size: 1rem;
-  line-height: 1.7;
-  color: #4a5568;
-  margin-bottom: 1.5rem;
-}
-
-.Ser-accent-divider {
-  width: 3rem;
-  height: 4px;
-  background-color: #e53e3e;
-  margin-bottom: 1.5rem;
-}
-
-.Ser-full-width {
-  width: 100%;
 }
 
 .Ser-gallery-container {
@@ -98,12 +45,11 @@
   max-width: 1200px;
   margin: 60px auto;
   text-align: center;
-  font-family: "Inter", sans-serif;
   padding: 0 20px;
 }
 
 .Ser-gallery-title {
-  font-size: 2.2rem;
+  font-size: 2rem;
   font-weight: 700;
   color: #2c2c2c;
   margin-bottom: 40px;
@@ -113,7 +59,6 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 25px;
-  height: 550px;
 }
 
 .Ser-gallery-item {
@@ -143,11 +88,8 @@
 
 .Ser-gallery-overlay {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(27, 61, 25, 0.85);
+  inset: 0;
+  background: rgba(11, 11, 11, 0.85);
   color: #fff;
   opacity: 0;
   visibility: hidden;
@@ -165,14 +107,9 @@
 }
 
 .Ser-gallery-overlay-title {
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   font-weight: 600;
   margin-bottom: 15px;
-}
-
-.Ser-gallery-icons {
-  display: flex;
-  gap: 12px;
 }
 
 .Ser-icon {
@@ -181,7 +118,7 @@
   justify-content: center;
   width: 38px;
   height: 38px;
-  background: #a4d37c;
+  background: #ffffff;
   color: #1c1c1c;
   border-radius: 8px;
   font-size: 18px;
@@ -189,28 +126,43 @@
 }
 
 .Ser-icon:hover {
-  background: #8bc34a;
+  background: #d6d6d6;
   transform: scale(1.1);
 }
 
-/* Responsive */
+/* Tablet View */
 @media (max-width: 1024px) {
-  .Ser-gallery-grid {
-    grid-template-columns: repeat(2, 1fr);
+  .Ser-hero-title {
+    font-size: 2.4rem;
   }
 
-  .Ser-gallery-title {
-    font-size: 1.8rem;
+  .Ser-gallery-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (max-width: 640px) {
-  .Ser-gallery-grid {
-    grid-template-columns: 1fr;
+  .Ser-hero-section {
+    height: 35vh;
+    margin: 0 10px;
+    border-radius: 20px;
+  }
+
+  .Ser-hero-title {
+    font-size: 1.8rem;
   }
 
   .Ser-gallery-title {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     margin-bottom: 25px;
+  }
+
+  .Ser-gallery-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .Ser-gallery-item {
+    height: 250px;
   }
 }
