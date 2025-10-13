@@ -2,8 +2,15 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 80px 20px;
-  background-color: white;
+  padding: 100px 20px;
+  background: linear-gradient(135deg, #f4f8ff 0%, #eaf2fb 100%);
+  width: 1200px;
+  height: 500px;
+  align-content: center;
+  justify-self: center;
+  border-radius: 10px;
+  margin-bottom: 50px;
+  padding: 50px;
 }
 
 .Collect-map-content-container {
@@ -11,33 +18,36 @@
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
+  gap: 80px;
   max-width: 1200px;
   width: 100%;
-  gap: 60px;
 }
 
 .Collect-map-text-content {
   flex: 1;
-  min-width: 300px;
+  min-width: 320px;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: flex-start;
   text-align: left;
 }
 
 .Collect-map-main-title {
   font-size: 3em;
-  color: #1c599d;
-  font-weight: 600;
-  line-height: 1.2;
-  margin-bottom: 25px;
+  color: #2c3e50;
+  font-weight: 700;
+  margin-bottom: 20px;
+  position: relative;
 }
 
 .Collect-map-description-text {
   font-size: 1em;
-  color: #555555;
-  margin-bottom: 35px;
-  max-width: 450px;
+  color: #444444;
+  line-height: 1.7;
+  margin-bottom: 40px;
+  max-width: 480px;
+  text-align: justify;
 }
 
 .Collect-map-buttons {
@@ -48,67 +58,104 @@
 .Collect-map-button-primary,
 .Collect-map-button-secondary {
   text-decoration: none;
-  padding: 12px 25px;
-  font-size: 0.9em;
+  padding: 12px 28px;
+  font-size: 0.95em;
   font-weight: 600;
-  border-radius: 4px;
+  border-radius: 6px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  transition: background-color 0.3s, color 0.3s;
+  transition: all 0.3s ease;
 }
 
 .Collect-map-button-primary {
-  background-color: #1c599d;
-  color: white;
-  border: 1px solid #1c599d;
+  background-color: #555555;
+  color: #fff;
+  border: none;
+  box-shadow: 0 4px 12px rgba(28, 89, 157, 0.3);
 }
 
 .Collect-map-button-primary:hover {
   background-color: #174a7f;
-  border-color: #174a7f;
-}
-
-.Collect-map-button-secondary {
-  background-color: #f0f0f0;
-  color: #333333;
-  border: 1px solid #f0f0f0;
-}
-
-.Collect-map-button-secondary:hover {
-  background-color: #e0e0e0;
-  border-color: #e0e0e0;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(23, 74, 127, 0.4);
 }
 
 .Collect-map-image-container {
   flex: 1;
-  min-width: 300px;
+  min-width: 320px;
   display: flex;
   justify-content: center;
   align-items: center;
+  animation: float 4s ease-in-out infinite;
 }
 
 .Collect-map-image-container img {
-  width: 400px;
-  max-width: 100%;
-  height: auto;
-  display: block;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  width: 500px;
+  height: 350px;
+  border-radius: 14px;
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1);
+  transition: transform 0.4s ease;
+}
+
+.Collect-map-image-container img:hover {
+  transform: scale(1.05);
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0);
+  }
 }
 
 @media (max-width: 900px) {
+  .Collect-map-section {
+    flex-direction: column;
+    width: 100%;
+    height: auto;
+    padding: 40px 20px;
+  }
+
   .Collect-map-content-container {
     flex-direction: column;
     gap: 40px;
+    text-align: center;
   }
 
   .Collect-map-text-content {
-    text-align: center;
     align-items: center;
+    text-align: center;
   }
 
   .Collect-map-main-title {
-    font-size: 2.5em;
+    font-size: 1.8em;
+  }
+
+  .Collect-map-main-title::after {
+    margin: 10px auto 0 auto;
+  }
+
+  .Collect-map-description-text {
+    font-size: 1em;
+    margin-bottom: 30px;
+    max-width: 90%;
+  }
+
+  .Collect-map-buttons {
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .Collect-map-button-primary,
+  .Collect-map-button-secondary {
+    width: 80%;
+    text-align: center;
   }
 
   .Collect-map-image-container img {

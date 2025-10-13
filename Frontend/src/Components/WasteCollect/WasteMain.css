@@ -131,10 +131,10 @@
 
 .Co-accordion-item {
   margin-bottom: 15px;
-  background-color: #ebf9ef;
+  background-color: #fbfbfb;
   border-radius: 10px;
   overflow: hidden;
-  border: 1px solid #c9e9cf;
+  border: 1px solid #2b2b2b;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
   transition: background-color 0.3s ease;
 }
@@ -149,7 +149,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 18px 25px;
-  background-color: #e9f5ec;
+  background-color: #fbfbfb;
   border: none;
   font-size: 1.1em;
   font-weight: 600;
@@ -164,7 +164,7 @@
 }
 
 .Co-accordion-header:hover {
-  background-color: #d8f5e0;
+  background-color: #e2e2e2;
 }
 
 .Co-accordion-toggle-icon {
@@ -179,7 +179,7 @@
   font-size: 0.95em;
   line-height: 1.6;
   color: #333;
-  background-color: #f0fff3;
+  background-color: #f0f0f0;
 }
 
 .scrap-info-section {
@@ -258,6 +258,7 @@
   font-size: 1.4rem;
   cursor: pointer;
   transition: all 0.3s ease;
+  text-decoration: none;
 }
 
 .scrap-btn:hover {

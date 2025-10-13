@@ -7,25 +7,21 @@ const CollectMap = () => {
       <div className="Collect-map-content-container">
         <div className="Collect-map-text-content">
           <h1 className="Collect-map-main-title">
-            Grow your skills, <br /> define your future
+            Find Collection <br /> Centers Near You
           </h1>
           <p className="Collect-map-description-text">
-            Presenting Academy, the tech school of the future. We teach you the
-            right skills to be prepared for tomorrow.
+            Quickly find nearby aluminum scrap collection centers and partner shops through our interactive map. Discover convenient, eco-friendly locations with service details and contact info for easy recycling.
           </p>
           <div className="Collect-map-buttons">
-            <a href="#" className="Collect-map-button-primary">
-              EXPLORE COURSES
-            </a>
-            <a href="#" className="Collect-map-button-secondary">
-              LEARN MORE
+            <a href="/LocationMap" className="Collect-map-button-primary">
+              View Map
             </a>
           </div>
         </div>
 
         <div className="Collect-map-image-container">
           <img 
-            src="https://static.vecteezy.com/system/resources/previews/047/442/457/non_2x/sri-lanka-map-map-of-sri-lanka-on-map-pin-icon-red-color-isolated-vector.jpg" 
+            src="https://t4.ftcdn.net/jpg/13/50/66/51/360_F_1350665151_6gCBJAyV8BkRda90ECkWzRHkG938t2BU.jpg" 
             alt="Sri Lanka Map" 
           />
         </div>

@@ -64,6 +64,8 @@ const WasteMain = () => {
             </div>
           </div>
 
+          
+
           <div className="Co-content-and-accordion-grid">
             <div className="Co-image-container">
               <img
@@ -137,6 +139,29 @@ const WasteMain = () => {
                   <div className="Co-accordion-content">
                     <p>
                       Yes! Aluminum is infinitely recyclable without losing its strength or quality. This makes it one of the most sustainable materials in the world.
+                    </p>
+                  </div>
+                )}
+              </div>
+
+              <div
+                className={`Co-accordion-item ${
+                  openAccordion === 3 ? "active" : ""
+                }`}
+              >
+                <button
+                  className="Co-accordion-header"
+                  onClick={() => toggleAccordion(3)}
+                >
+                  What are the environmental benefits of recycling aluminum?
+                  <span className="Co-accordion-toggle-icon">
+                    {openAccordion === 3 ? "−" : "+"}
+                  </span>
+                </button>
+                {openAccordion === 3 && (
+                  <div className="Co-accordion-content">
+                    <p>
+                     Recycling aluminum saves up to 95% of the energy required to produce new aluminum from raw materials. It also reduces greenhouse gas emissions, conserves natural resources, and minimizes landfill waste—making it a key step toward a cleaner, more sustainable planet.
                     </p>
                   </div>
                 )}
