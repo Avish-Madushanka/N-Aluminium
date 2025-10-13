@@ -63,10 +63,6 @@
   background-position: center;
 }
 
-.image-2 {
-  background-image: url("../../assets/wall.png");
-}
-
 @media (max-width: 1024px) {
   .latest-projects-container1 {
       flex-direction: column;

@@ -1,59 +1,119 @@
 .Collect-map-section {
-    position: relative;
-    width: 100%; 
-    height: 400px;
-    background: url('https://t3.ftcdn.net/jpg/10/19/40/44/360_F_1019404480_QWIBZ9GNgjmp0jN6hmw0AV8bo4SBMs3K.jpg') center/cover no-repeat;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    margin: 0; 
-    border-radius: 0%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 80px 20px;
+  background-color: white;
 }
 
-.Collect-map-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%; 
-    background: rgba(0, 0, 0, 0.5); 
-    display: flex;
+.Collect-map-content-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  max-width: 1200px;
+  width: 100%;
+  gap: 60px;
+}
+
+.Collect-map-text-content {
+  flex: 1;
+  min-width: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: left;
+}
+
+.Collect-map-main-title {
+  font-size: 3em;
+  color: #1c599d;
+  font-weight: 600;
+  line-height: 1.2;
+  margin-bottom: 25px;
+}
+
+.Collect-map-description-text {
+  font-size: 1em;
+  color: #555555;
+  margin-bottom: 35px;
+  max-width: 450px;
+}
+
+.Collect-map-buttons {
+  display: flex;
+  gap: 20px;
+}
+
+.Collect-map-button-primary,
+.Collect-map-button-secondary {
+  text-decoration: none;
+  padding: 12px 25px;
+  font-size: 0.9em;
+  font-weight: 600;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.Collect-map-button-primary {
+  background-color: #1c599d;
+  color: white;
+  border: 1px solid #1c599d;
+}
+
+.Collect-map-button-primary:hover {
+  background-color: #174a7f;
+  border-color: #174a7f;
+}
+
+.Collect-map-button-secondary {
+  background-color: #f0f0f0;
+  color: #333333;
+  border: 1px solid #f0f0f0;
+}
+
+.Collect-map-button-secondary:hover {
+  background-color: #e0e0e0;
+  border-color: #e0e0e0;
+}
+
+.Collect-map-image-container {
+  flex: 1;
+  min-width: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.Collect-map-image-container img {
+  width: 400px;
+  max-width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+@media (max-width: 900px) {
+  .Collect-map-content-container {
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    border-radius: 0%;
-}
+    gap: 40px;
+  }
 
-.Collect-map-title {
-    font-size: 2em;
-    font-weight: bold;
-    margin-bottom: 10px;
-    color:#ffffff;
-}
-
-.Collect-map-description {
-    font-size: 1.2em;
-    line-height: 1.5;
-    font-weight: bold;
+  .Collect-map-text-content {
     text-align: center;
-    color: #c5c5c5;
-}
+    align-items: center;
+  }
 
-.Collect-map-button {
-    display: inline-block;
-    margin-top: 15px;
-    padding: 10px 20px;
-    font-size: 1.2em;
-    background: #c40000;
-    color: rgb(255, 255, 255);
-    border: none;
-    cursor: pointer;
-    transition: 0.3s;
-}
+  .Collect-map-main-title {
+    font-size: 2.5em;
+  }
 
-.Collect-map-button:hover {
-    background: #7d0000;
-    color: white;
+  .Collect-map-image-container img {
+    width: 90%;
+    max-width: 350px;
+    height: auto;
+  }
 }

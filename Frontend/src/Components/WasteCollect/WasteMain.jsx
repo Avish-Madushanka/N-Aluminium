@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./WasteMain.css";
+import think from '../../assets/think.png';
 
 const WasteMain = () => {
   const [openAccordion, setOpenAccordion] = useState(null);
@@ -66,8 +67,8 @@ const WasteMain = () => {
           <div className="Co-content-and-accordion-grid">
             <div className="Co-image-container">
               <img
-                src="https://www.steelradar.com/i/l/011/0118089_glencore-to-take-role-in-aluminium-scrap-recycling.jpeg"
-                alt="Waste Management"
+                src={think}
+                className=".Co-image-container img"
               />
             </div>
 
