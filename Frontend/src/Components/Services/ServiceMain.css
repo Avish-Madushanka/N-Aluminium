@@ -2,6 +2,8 @@
   margin: 0 auto;
   overflow-x: hidden;
   font-family: 'Inter', sans-serif;
+  color: #333;
+  box-sizing: border-box;
 }
 
 .Ser-container {
@@ -17,9 +19,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 30px;
-  margin: 0 20px;
+  border-radius: 50px;
+  margin: 0 50px;
   overflow: hidden;
+  text-align: center;
   color: white;
 }
 
@@ -27,19 +30,63 @@
   position: absolute;
   inset: 0;
   background: rgba(0, 0, 0, 0.5);
+  z-index: 1;
 }
 
 .Ser-hero-content {
   position: relative;
   z-index: 2;
+  max-width: 60%;
   text-align: center;
 }
 
 .Ser-hero-title {
-  font-size: 3rem;
+  font-size: 4rem;
   font-weight: 700;
+  margin-bottom: 1rem;
+  text-align: center;
 }
 
+.Ser-content-section {
+  padding: 4rem 10%;
+  background-color: white;
+}
+
+.Ser-two-column-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  margin-bottom: 3rem;
+}
+
+.Ser-column {
+  max-width: 100%;
+}
+
+.Ser-section-title {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: #2d3748;
+}
+
+.Ser-section-text {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #4a5568;
+  margin-bottom: 1.5rem;
+}
+
+.Ser-accent-divider {
+  width: 3rem;
+  height: 4px;
+  background-color: #e53e3e;
+  margin-bottom: 1.5rem;
+}
+
+.Ser-full-width {
+  width: 100%;
+}
 .Ser-gallery-container {
   width: 100%;
   max-width: 1200px;
@@ -130,7 +177,6 @@
   transform: scale(1.1);
 }
 
-/* Tablet View */
 @media (max-width: 1024px) {
   .Ser-hero-title {
     font-size: 2.4rem;

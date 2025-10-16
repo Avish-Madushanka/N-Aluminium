@@ -60,6 +60,7 @@ import AdScrap from './Components/Admin/AdScrap/AdScrap';
 import AdminLocationManager from './Components/Admin/AdMapUpdate/AdminLocationManager';
 import FloatingChatbot from './Components/ChatBot/FloatingChatbot';
 import MainHomePage from './Components/MainPage/MainHomePage';
+import AluTReg from './Pages/AluTReg';
 
 const parseUserInfoFromToken = (token) => {
     if (!token) {
@@ -306,6 +307,7 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
                     <Route path="/LocationMap" element={<LocationMap />} />
                     <Route path="/AboutUSDiagram" element={<AboutUSDiagram />} />
                     <Route path="/ItemMarkert" element={<ItemMarkert />} />
+                    <Route path="/AluTReg" element={<AluTReg />} />
 
                     <Route path="/Login" element={ auth.isLoggedIn && auth.userInfo ? (<Navigate to={ (auth.userInfo.role === 'admin' && '/Admin/Dashboard') || (auth.userInfo.role === 'client' && '/') || (auth.userInfo.role === 'businessOwner' && '/BOwnerHome') || '/' } replace /> ) : ( <Login /> )} />
                     

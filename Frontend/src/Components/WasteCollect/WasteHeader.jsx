@@ -1,19 +1,23 @@
 import React from "react";
 import "./WasteHeader.css";
-import "../../assets/wall.png"
 
 const WasteHeader = () => {
   return (
-    <div className="latest-projects-container1">
-      <div className="overlay1"></div>
-      <div className="left-section1">
-        <h1 className="title1">Collect Recycle 
-        <p> Renew Repeat</p>
-        </h1>
-        <p className="subtitle1">Innovative Metal Recycling Solutions</p>
+    <div className="Was-header-container">
+      <div className="Was-header-banner">
       </div>
-      <div className="right-section1">
-        <div className="image-container1">
+      <div className="Was-header-content">
+        <div className="Was-text-section">
+          <h1 className="Was-main-title">Aluminum Scrap Collection Center</h1>
+          <p className="Was-description">
+            We collect and recycle aluminum waste responsibly, turning discarded materials into valuable resources for a greener planet.
+          </p>
+          <button className="Was-learn-more-button">Learn more</button>
+        </div>
+        <div className="Was-image-grid">
+          <div className="Was-grid-item Was-item-1"></div>
+          <div className="Was-grid-item Was-item-2"></div>
+          <div className="Was-grid-item Was-item-3"></div>
         </div>
       </div>
     </div>

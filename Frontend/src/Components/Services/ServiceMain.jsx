@@ -15,22 +15,22 @@ function ServiceMain() {
     },
     {
       img: "https://www.ohra.net/fileadmin/_processed_/7/f/csm_kragarmregal_alu12_b0ab15b121.jpg",
-      link: "/eco-friendly",
+      link: "/ItemMarkert",
       title: "Eco-Friendly Waste Disposal",
     },
     {
       img: "https://www.musgroves.co.nz/wp-content/uploads/2020/04/how-to-repair-aluminium-window-frames-retina-1.jpg",
-      link: "/community-cleanup",
+      link: "/BuyandSell",
       title: "Community Cleanup Drives",
     },
     {
       img: "https://pbs.twimg.com/media/FfCEKerXEAA6dOV?format=jpg&name=large",
-      link: "/eco-friendly",
+      link: "/Project",
       title: "Eco-Friendly Waste Disposal",
     },
     {
       img: "https://antonaluminium.com/wp-content/uploads/2021/01/anton-aluminium.jpg",
-      link: "/community-cleanup",
+      link: "/AluTReg",
       title: "Community Cleanup Drives",
     },
   ];

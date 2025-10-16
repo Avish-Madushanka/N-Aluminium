@@ -1,130 +1,178 @@
-.latest-projects-container1 {
-  position: relative;
+.Was-header-container {
+  font-family: Arial, sans-serif;
+  padding-bottom: 50px;
+}
+
+.Was-header-banner {
+  width: 100%;
+  height: 250px;
+  background-image: url('https://www.metaloop.com/static/d4efc42c4c1a40870a8cb6544ac02e3d/27976/aluminiumHero.png');
+  background-size: cover;
+  margin-bottom: 40px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.Was-header-content {
   display: flex;
-  background-image: url("https://www.metaloop.com/static/d4efc42c4c1a40870a8cb6544ac02e3d/27976/aluminiumHero.png");
+  justify-content: center;
+  gap: 50px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  align-items: flex-start;
+}
+
+.Was-text-section {
+  flex: 1;
+  max-width: 450px;
+  padding-top: 20px;
+}
+
+.Was-main-title {
+  font-size: 2.8rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
+  line-height: 1.2;
+}
+
+.Was-description {
+  font-size: 1.1rem;
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 30px;
+}
+
+.Was-learn-more-button {
+  background-color: #508D69;
+  color: white;
+  padding: 12px 25px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.Was-learn-more-button:hover {
+  background-color: #3f7055;
+}
+
+.Was-image-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  flex: 1;
+  max-width: 650px;
+}
+
+.Was-grid-item {
+  width: 100%;
+  height: 220px;
+  background-color: #eee;
   background-size: cover;
   background-position: center;
-  padding: 40px;
-  color: white;
-  align-items: center;
-  height: 370px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
   overflow: hidden;
 }
 
-.latest-projects-container1::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.6);
-  z-index: 1;
+.Was-grid-item.Was-item-1 {
+  background-image: url('https://smartcdn.gprod.postmedia.digital/financialpost/wp-content/uploads/2022/12/metal-trimmings-vw1208.jpg');
 }
-
-.left-section1,
-.right-section1 {
-  position: relative;
-  z-index: 2;
+.Was-grid-item.Was-item-2 {
+  background-image: url('https://lirp.cdn-website.com/79d309aa/dms3rep/multi/opt/GettyImages-180404765-640w.JPG');
 }
-
-.left-section1 {
-  flex: 1;
-  padding: 20px;
-}
-
-.title1 {
-  font-size: 3.5rem;
-  font-weight: bold;
-}
-
-.subtitle1 {
-  font-size: 1.8rem;
-  margin-bottom: 15px;
-  opacity: 0.9;
-}
-
-.right-section1 {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.image-container1 {
-  display: flex;
-  gap: 10px;
-}
-
-.Bimage1 {
-  width: 400px;
-  height: 370px;
-  background-size: cover;
-  background-position: center;
+.Was-grid-item.Was-item-3 {
+  background-image: url('https://cdn.prod.website-files.com/661004157039807ca0c29f40/67b88bf9aa3ee3d4fd70f169_responsible-scrap-collection-edinburgh-processing.webp');
 }
 
 @media (max-width: 1024px) {
-  .latest-projects-container1 {
-      flex-direction: column;
-      height: auto;
-      padding: 30px 20px;
-      text-align: center;
+  .Was-header-content {
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
   }
 
-  .left-section1 {
-      padding: 10px;
+  .Was-text-section {
+    max-width: 700px;
+    text-align: center;
+    padding-top: 0;
   }
 
-  .title1 {
-      font-size: 2.5rem;
+  .Was-main-title {
+    font-size: 2.2rem;
   }
 
-  .subtitle1 {
-      font-size: 1.2rem;
+  .Was-description {
+    font-size: 1rem;
   }
 
-  .right-section1 {
-      margin-top: 20px;
+  .Was-image-grid {
+    grid-template-columns: repeat(3, 1fr);
+    max-width: 700px;
   }
 
-  .image-container1 {
-      flex-direction: column;
-      gap: 15px;
-  }
-
-  .image1 {
-      width: 80%;
-      height: auto;
-      max-width: 300px;
+  .Was-header-banner {
+    height: 200px;
   }
 }
 
 @media (max-width: 768px) {
-  .title1 {
-      font-size: 2rem;
+  .Was-header-banner {
+    height: 180px;
+    margin-bottom: 30px;
   }
 
-  .subtitle1 {
-      font-size: 1rem;
+  .Was-header-content {
+    gap: 30px;
+    padding: 0 15px;
   }
 
-  .image1 {
-      width: 90%;
-      max-width: 250px;
+  .Was-main-title {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+  }
+
+  .Was-description {
+    font-size: 0.95rem;
+    margin-bottom: 25px;
+  }
+
+  .Was-learn-more-button {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+  }
+
+  .Was-image-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    max-width: 500px;
+  }
+
+  .Was-grid-item {
+    height: 180px;
   }
 }
 
 @media (max-width: 480px) {
-  .title1 {
-      font-size: 1.8rem;
+  .Was-header-banner {
+    height: 150px;
+    margin-bottom: 20px;
   }
 
-  .subtitle1 {
-      font-size: 1rem;
+  .Was-main-title {
+    font-size: 1.5rem;
   }
 
-  .image1 {
-      width: 100%;
-      max-width: 200px;
+  .Was-image-grid {
+    grid-template-columns: 1fr;
+    max-width: 300px;
+  }
+
+  .Was-grid-item {
+    height: 160px;
   }
 }
