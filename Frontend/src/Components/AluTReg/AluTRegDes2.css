@@ -1,0 +1,285 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap');
+
+:root {
+  --primary-green: #2ecc71;
+  --dark-green: #27ae60;
+  --secondary-blue: #3498db;
+  --dark-blue: #2980b9;
+  --text-dark: #34495e;
+  --text-medium: #7f8c8d;
+  --background-light: #ecf0f1;
+  --card-background: #ffffff;
+  --border-light: #dcdcdc;
+  --shadow-light: rgba(0, 0, 0, 0.08);
+  --shadow-medium: rgba(0, 0, 0, 0.15);
+}
+
+.Alu-Container {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    max-width: 900px; /* Constrain width for better readability */
+    margin: 40px auto; /* Center the container with some vertical spacing */
+    padding: 30px;
+    background-color: #ffffff; /* Clean white background */
+    border-radius: 12px; /* Softly rounded corners */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); /* Subtle shadow for depth */
+    line-height: 1.6;
+    color: #333;
+}
+
+/* Section Specific Styling */
+.Alu-Section {
+    margin-bottom: 40px; /* Space out sections if you add more */
+}
+
+.Alu-Section:last-child {
+    margin-bottom: 0;
+}
+
+.Alu-SectionTitle {
+    font-size: 2.5em; /* Larger, more impactful title */
+    color: #007bff; /* A vibrant blue for key headings */
+    text-align: center; /* Center the title */
+    margin-bottom: 25px;
+    position: relative;
+    padding-bottom: 15px; /* Space for the underline effect */
+}
+
+.Alu-SectionTitle::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+    width: 80px; /* Short underline */
+    height: 4px;
+    background-color: #28a745; /* A complementary green */
+    border-radius: 2px;
+}
+
+.Alu-SectionContent {
+    font-size: 1.1em;
+    color: #555;
+    text-align: center; /* Center the introductory paragraph */
+    margin-bottom: 35px;
+    max-width: 700px; /* Constrain paragraph width within the container */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Benefit List Styling */
+.Alu-BenefitList {
+    list-style: none; /* Remove default bullet points */
+    padding: 0;
+    display: grid; /* Use CSS Grid for a responsive, modern layout */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* 2 columns on wider screens, single on narrow */
+    gap: 20px; /* Space between grid items */
+}
+
+.Alu-BenefitItem {
+    background-color: #f8f9fa; /* Light background for each item */
+    padding: 20px 25px;
+    border-radius: 8px;
+    border-left: 5px solid #007bff; /* Accent border on the left */
+    display: flex;
+    align-items: flex-start; /* Align icon and text at the top */
+    font-size: 1.05em;
+    color: #444;
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth hover effects */
+}
+
+.Alu-BenefitItem:hover {
+    transform: translateY(-5px); /* Lift effect on hover */
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12); /* More pronounced shadow on hover */
+}
+
+.Alu-BenefitIcon {
+    color: #28a745; /* Green checkmark */
+    font-size: 1.5em; /* Larger icon */
+    margin-right: 15px;
+    flex-shrink: 0; /* Prevent icon from shrinking */
+    margin-top: 2px; /* Slight adjustment for vertical alignment */
+}
+
+
+/* ----------- MAIN CONTENT CONTAINER ----------- */
+.Alu-Container {
+  font-family: 'Open Sans', sans-serif;
+  line-height: 1.6;
+  color: var(--text-dark);
+  padding: 30px;
+  background-color: var(--background-light);
+  border-radius: 12px;
+  box-shadow: 0 10px 30px var(--shadow-light);
+}
+
+/* ----------- HEADER ----------- */
+.Alu-Header {
+  text-align: center;
+  margin-bottom: 50px;
+  padding-bottom: 30px;
+  border-bottom: 1px solid var(--border-light);
+  position: relative;
+}
+
+.Alu-Title {
+  font-family: 'Montserrat', sans-serif;
+  color: var(--dark-blue);
+  font-size: 3em;
+  font-weight: 700;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+}
+
+.Alu-Tagline {
+  font-size: 1.1em;
+  color: var(--text-medium);
+  margin-top: 10px;
+}
+
+/* ----------- CATEGORY CARDS ----------- */
+.Alu-CategoryGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+  margin-top: 25px;
+}
+
+.Alu-CategoryCard {
+  background-color: var(--card-background);
+  border: 1px solid var(--border-light);
+  border-radius: 10px;
+  padding: 25px;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+}
+
+.Alu-CategoryCard:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 25px var(--shadow-medium);
+  background-color: var(--primary-green);
+  color: white;
+}
+
+.Alu-CategoryCardIcon {
+  font-size: 3em;
+  color: var(--secondary-blue);
+  margin-bottom: 15px;
+}
+
+.Alu-CategoryTitle {
+  font-family: 'Montserrat', sans-serif;
+  color: var(--dark-blue);
+  font-size: 1.4em;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.Alu-CategoryDescription {
+  color: var(--text-medium);
+  font-size: 1em;
+}
+
+/* ----------- FORM ----------- */
+.Alu-Form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.Alu-FormField {
+  display: flex;
+  flex-direction: column;
+}
+
+.Alu-Label {
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.Alu-Input,
+.Alu-Select {
+  padding: 12px 15px;
+  border: 1px solid var(--border-light);
+  border-radius: 6px;
+  font-size: 1em;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.Alu-Input:focus,
+.Alu-Select:focus {
+  border-color: var(--secondary-blue);
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.2);
+}
+
+.Alu-SubmitButton {
+  background-color: var(--primary-green);
+  color: white;
+  padding: 15px 25px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  align-self: center;
+  width: fit-content;
+  box-shadow: 0 4px 10px rgba(46, 204, 113, 0.3);
+}
+
+.Alu-SubmitButton:hover {
+  background-color: var(--dark-green);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(46, 204, 113, 0.4);
+}
+
+/* ----------- FOOTER ----------- */
+.Alu-Footer {
+  text-align: center;
+  margin-top: 50px;
+  padding: 30px 0;
+  border-top: 1px solid var(--border-light);
+  color: var(--text-medium);
+  background-color: rgba(46, 204, 113, 0.05);
+  border-radius: 0 0 12px 12px;
+}
+
+.Alu-FooterText {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.6em;
+  color: var(--dark-green);
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+/* ----------- RESPONSIVE ----------- */
+@media (max-width: 768px) {
+  .Alu-hero-container {
+    flex-direction: column;
+    text-align: center;
+    gap: 40px;
+  }
+
+  .Alu-hero-title {
+    font-size: 36px;
+  }
+
+  .Alu-CategoryGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .Alu-SubmitButton {
+    width: 80%;
+  }
+}
+
+@media (max-width: 480px) {
+  .Alu-hero-title {
+    font-size: 28px;
+  }
+  .Alu-SubmitButton {
+    width: 90%;
+  }
+}

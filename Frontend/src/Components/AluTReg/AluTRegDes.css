@@ -1,0 +1,110 @@
+.practice-areas-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 60px 20px;
+    text-align: center;
+}
+
+.practice-areas-header {
+    margin-bottom: 20px;
+}
+
+.main-title {
+    font-size: 3.5em; /* Large title size */
+    color: #2c3e50; /* Dark blue/purple from the image */
+    margin-bottom: 20px;
+    font-weight: bold; /* Appears bold in the image */
+}
+
+.description {
+    font-size: 1.1em;
+    line-height: 1.6;
+    margin-bottom: 40px;
+    color: #7d7d8f; /* Slightly lighter grey for description */
+}
+
+.practice-areas-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 columns */
+    /* Add lines between cards */
+    border-top: 1px solid #e0e6ed; 
+    border-left: 1px solid #e0e6ed;
+}
+
+.practice-area-card {
+    background-color: #ffffff; /* White background for cards */
+    padding: 40px;
+    text-align: left;
+    border-right: 1px solid #e0e6ed; /* Vertical line */
+    border-bottom: 1px solid #e0e6ed; /* Horizontal line */
+    box-sizing: border-box; /* Include padding and border in element's total width and height */
+}
+
+.card-number {
+    font-size: 0.9em;
+    color: #a0a0b0; /* Light grey for the number */
+    margin-bottom: 15px;
+    display: block; /* Ensures it takes its own line */
+}
+
+.card-title {
+    font-size: 1.7em; /* Title of the practice area */
+    color: #4a4a68; /* Dark blue/purple */
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+
+.card-underline {
+    width: 60px; /* Short underline */
+    height: 3px;
+    background-color: #c09b6e; /* Golden brown underline color */
+    margin-bottom: 25px;
+}
+
+.card-description {
+    font-size: 1em;
+    color: #7d7d8f; /* Lighter grey for description text */
+    line-height: 1.7;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+    .practice-areas-grid {
+        grid-template-columns: repeat(2, 1fr); /* 2 columns on medium screens */
+    }
+}
+
+@media (max-width: 768px) {
+    .main-title {
+        font-size: 2.8em;
+    }
+    .description {
+        font-size: 1em;
+    }
+    .practice-area-card {
+        padding: 30px;
+    }
+    .card-title {
+        font-size: 1.5em;
+    }
+    .card-description {
+        font-size: 0.95em;
+    }
+}
+
+@media (max-width: 576px) {
+    .practice-areas-grid {
+        grid-template-columns: 1fr; /* 1 column on small screens */
+        border-right: 1px solid #e0e6ed; /* Ensure right border appears on single column */
+    }
+    .main-title {
+        font-size: 2.2em;
+    }
+    .book-appointment-button {
+        padding: 12px 25px;
+        font-size: 0.9em;
+    }
+    .practice-area-card {
+        border-right: 1px solid #e0e6ed; /* Ensure border is consistent */
+    }
+}
