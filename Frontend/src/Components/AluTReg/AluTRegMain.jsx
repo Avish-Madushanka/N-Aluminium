@@ -34,12 +34,12 @@ function AluTRegMain() {
         </div>
         <div className="Alu-hero-card">
           <img
-            src="https://www.reynaers.se/sites/default/files/public/styles/image_square/public/2023-09/_RVV0365.jpg?h=fb602626&itok=qNZA7v1q"
+            src="https://media.istockphoto.com/id/2048609690/photo/professional-man-worker-engaged-in-assembly-of-pvc-doors-and-windows.jpg?s=612x612&w=0&k=20&c=qudVdpjl43XYSHE7UjhVWWiDXlf1AQ6F-L27IMJHR_c="
           />
         </div>
-        <div className="Alu-hero-card">
+         <div className="Alu-hero-card">
           <img
-            src="https://uk.aluk.com/uploads/editor/images/Academy-Training-AluK.JPG"
+            src="https://www.reynaers.se/sites/default/files/public/styles/image_square/public/2023-09/_RVV0365.jpg?h=fb602626&itok=qNZA7v1q"
           />
         </div>
       </div>
