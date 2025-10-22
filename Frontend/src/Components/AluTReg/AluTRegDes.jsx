@@ -1,79 +1,70 @@
 import React from "react";
 import "./AluTRegDes.css";
-import { FaCheckCircle, FaHandsHelping, FaTools, FaRecycle, FaUsers } from "react-icons/fa"; 
+import { FaCut, FaDoorOpen, FaHammer, FaTools, FaCogs, FaRecycle } from "react-icons/fa";
 
 function AluTRegDes() {
   return (
-    <div className="practice-areas-page">
-      <div className="practice-areas-header">
-        <h1 className="main-title">Practice areas</h1>
-        <p className="description">
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod<br />
-          tempor incididunt ut labore et dolore magna aliqua.
+    <div className="AluT-container">
+      <header className="AluT-header">
+        <h1 className="AluT-title">Aluminum Workshop Training</h1>
+        <p className="AluT-subtitle">
+          Learn hands-on aluminum fabrication skills — from precise cutting to elegant product design. 
+          Join our beginner-friendly training courses and start your journey toward a professional aluminum career.
         </p>
-      </div>
+      </header>
 
-      <div className="practice-areas-grid">
-        <div className="practice-area-card">
-          <span className="card-number">01</span>
-          <h2 className="card-title">Domestic Assault</h2>
-          <div className="card-underline"></div>
-          <p className="card-description">
-            Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
-            nisi ut aliquip ex ea commodo consequat duis aute.
+      <section className="AluT-grid">
+        <div className="AluT-card">
+          <FaCut className="AluT-icon" />
+          <h2>Aluminum Cutting Techniques</h2>
+          <p>
+            Learn how to measure, mark, and cut aluminum profiles accurately using hand and machine tools.
+            Focus on precision, edge finishing, and tool safety.
           </p>
         </div>
 
-        <div className="practice-area-card">
-          <span className="card-number">02</span>
-          <h2 className="card-title">Weapons Offences</h2>
-          <div className="card-underline"></div>
-          <p className="card-description">
-            Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
-            nisi ut aliquip ex ea commodo consequat duis aute.
+        <div className="AluT-card">
+          <FaDoorOpen className="AluT-icon" />
+          <h2>Window & Door Fabrication</h2>
+          <p>
+            Gain knowledge in designing and assembling modern aluminum doors and windows
+            with practical installation guidance.
           </p>
         </div>
 
-        <div className="practice-area-card">
-          <span className="card-number">03</span>
-          <h2 className="card-title">Drug Offences</h2>
-          <div className="card-underline"></div>
-          <p className="card-description">
-            Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
-            nisi ut aliquip ex ea commodo consequat duis aute.
+        <div className="AluT-card">
+          <FaHammer className="AluT-icon" />
+          <h2>Frame Assembly & Fittings</h2>
+          <p>
+            Understand how to assemble aluminum frames securely and efficiently with professional finishing standards.
           </p>
         </div>
 
-        <div className="practice-area-card">
-          <span className="card-number">04</span>
-          <h2 className="card-title">Bail Hearings</h2>
-          <div className="card-underline"></div>
-          <p className="card-description">
-            Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
-            nisi ut aliquip ex ea commodo consequat duis aute.
+        <div className="AluT-card">
+          <FaCogs className="AluT-icon" />
+          <h2>Pantry Cupboards & Custom Designs</h2>
+          <p>
+            Master the creation of pantry cupboards, cabinets, and decorative furniture using stylish aluminum frames.
           </p>
         </div>
 
-        <div className="practice-area-card">
-          <span className="card-number">05</span>
-          <h2 className="card-title">Property Crime</h2>
-          <div className="card-underline"></div>
-          <p className="card-description">
-            Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
-            nisi ut aliquip ex ea commodo consequat duis aute.
+        <div className="AluT-card">
+          <FaTools className="AluT-icon" />
+          <h2>Tool Handling & Safety</h2>
+          <p>
+            Learn how to properly use workshop tools and ensure personal and environmental safety during operations.
           </p>
         </div>
 
-        <div className="practice-area-card">
-          <span className="card-number">06</span>
-          <h2 className="card-title">Criminal Harassment</h2>
-          <div className="card-underline"></div>
-          <p className="card-description">
-            Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
-            nisi ut aliquip ex ea commodo consequat duis aute.
+        <div className="AluT-card">
+          <FaRecycle className="AluT-icon" />
+          <h2>Recycling & Sustainability</h2>
+          <p>
+            Discover the importance of recycling leftover materials and using eco-friendly methods 
+            to reduce industrial waste.
           </p>
         </div>
-      </div>
+      </section>
     </div>
   );
 }
