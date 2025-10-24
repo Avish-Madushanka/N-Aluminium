@@ -16,7 +16,7 @@
 }
 
 .Alu-hero-subtitle {
-  color: #e53935;
+  color: #d30905;
   font-size: 15px;
   font-weight: 700;
   letter-spacing: 2px;
@@ -33,7 +33,7 @@
 }
 
 .Alu-hero-title span {
-  color: #e53935;
+  color: #e9120e;
 }
 
 .Alu-hero-description {
@@ -44,44 +44,26 @@
   text-align: justify;
 }
 
-.Alu-hero-search {
-  display: flex;
-  align-items: center;
-  background: #fff;
-  border-radius: 50px;
-  border: 1px solid #e2e8f0;
-  overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  max-width: 420px;
-}
-
-.Alu-search-input {
-  flex: 1;
-  border: none;
-  outline: none;
-  padding: 14px 20px;
-  font-size: 16px;
-  color: #333;
-}
-
-.Alu-search-button {
-  background: #1a9f5a;
+.Alu-hero-btn {
+  display: inline-block;
+  padding: 14px 32px;
+  font-size: 17px;
+  font-weight: 600;
   color: #fff;
+  background-color: #131313;
   border: none;
-  padding: 14px 25px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background 0.3s ease, transform 0.2s ease;
-  border-radius: 0 50px 50px 0;
+  border-radius: 30px;
+  text-decoration: none;
+  transition: all 0.3s ease;
 }
 
-.Alu-search-button:hover {
-  background: #157d47;
-  transform: scale(1.05);
+.Alu-hero-btn:hover {
+  background-color: #2b2b2b;
+  box-shadow: 0 6px 20px rgba(55, 55, 55, 0.4);
+  transform: translateY(-3px);
 }
 
 .Alu-hero-right {
-  flex: 1;
   display: flex;
   justify-content: center;
   align-items: flex-end;
@@ -109,7 +91,6 @@
   object-fit: cover;
 }
 
-
 @media (max-width: 992px) {
   .Alu-hero-container {
     flex-direction: column;
@@ -129,6 +110,10 @@
   .Alu-hero-description {
     font-size: 16px;
     text-align: center;
+  }
+
+  .Alu-hero-btn {
+    margin: 0 auto;
   }
 
   .Alu-hero-right {
@@ -172,13 +157,9 @@
     border-radius: 20px;
   }
 
-  .Alu-hero-search {
-    max-width: 100%;
-  }
-
-  .Alu-search-button {
-    font-size: 14px;
-    padding: 12px 18px;
+  .Alu-hero-btn {
+    font-size: 15px;
+    padding: 12px 26px;
   }
 }
 
@@ -194,5 +175,10 @@
 
   .Alu-hero-description {
     font-size: 14px;
+  }
+
+  .Alu-hero-btn {
+    font-size: 14px;
+    padding: 10px 22px;
   }
 }

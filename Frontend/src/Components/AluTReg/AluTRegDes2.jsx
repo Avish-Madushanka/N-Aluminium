@@ -16,18 +16,41 @@ function AluTRegDes2() {
     <div className="AluTRegMain">
       <div className="Alu-Container">
 
-        <section className="Alu-Section Alu-Schedule">
-          <h2 className="Alu-SectionTitle">📅 Training Schedule & Duration</h2>
-          <ul className="Alu-ScheduleList">
-            <li className="Alu-ScheduleItem"><strong className="Alu-ScheduleLabel">Frequency:</strong> Weekly and Monthly sessions available.</li>
-            <li className="Alu-ScheduleItem"><strong className="Alu-ScheduleLabel">Mode:</strong> Online and On-Site (select based on preference).</li>
-            <li className="Alu-ScheduleItem"><strong className="Alu-ScheduleLabel">Duration:</strong> Each training session lasts 2–3 hours.</li>
-            <li className="Alu-ScheduleItem"><strong className="Alu-ScheduleLabel">Trainers:</strong> Certified recycling experts and environmental professionals.</li>
-          </ul>
-          <p className="Alu-ScheduleNote">
-            You’ll receive all session details via email after successful registration.
-          </p>
-        </section>
+        <section className="ATW1-our-location-section">
+      <div className="ATW1-container">
+        <p className="ATW1-subtitle">OUR LOCATION</p>
+        <h2 className="ATW1-main-title">FIND THE PIZZERIA NEAR YOU</h2>
+        <p className="ATW1-description">
+          Cursus ultricies in maecenas pulvinar ultrices integer quam amet, semper dictumst
+          <br />
+          sit interdum ut venenatis pellentesque.
+        </p>
+
+        <div className="ATW1-locations-grid">
+          {locations.map((location, index) => (
+            <div key={index} className="ATW1-location-card">
+              <h3 className="ATW1-city-title">{location.city}</h3>
+              <p className="ATW1-address">{location.address.split('\n').map((line, i) => <React.Fragment key={i}>{line}<br/></React.Fragment>)}</p>
+              <p className="ATW1-phone">{location.phone}</p>
+              <div className="ATW1-social-icons">
+                <a href={location.social.facebook} aria-label="Facebook">
+                  <i className="fab fa-facebook-f"></i> {/* Font Awesome icon */}
+                </a>
+                <a href={location.social.twitter} aria-label="Twitter">
+                  <i className="fab fa-twitter"></i> {/* Font Awesome icon */}
+                </a>
+                <a href={location.social.youtube} aria-label="YouTube">
+                  <i className="fab fa-youtube"></i> {/* Font Awesome icon */}
+                </a>
+              </div>
+              <a href="#" className="ATW1-discover-link">
+                DISCOVER <span className="ATW1-arrow">&rarr;</span>
+              </a>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
 
         <section className="Alu-Section Alu-WhyJoin">
           <h2 className="Alu-SectionTitle">💡 Why Join Our Program?</h2>
