@@ -1,6 +1,5 @@
 import React from 'react';
 import './AluTRegDes2.css';
-import { FaCalendarAlt, FaLaptopHouse, FaClock, FaUserGraduate } from 'react-icons/fa';
 
 function AluTRegDes2() {
   const scheduleDetails = [
@@ -48,6 +47,93 @@ function AluTRegDes2() {
           </div>
         </section>
 
+        <div className="AReg1--main-container">
+          <div className="AReg1--ocean-container">
+            <div className="AReg1--main-content">
+              <div className="AReg1--left-section">
+                <h1 className="AReg1--title">Work Together to Collect Aluminum Scrap</h1>
+                <p className="AReg1--description">
+                  Aluminum waste is a growing environmental and economic concern. Every year, 
+                  <strong> thousands of tons of aluminum scraps </strong> are discarded, 
+                  ending up in landfills instead of being recycled. Improper disposal wastes 
+                  valuable resources, increases energy consumption, and contributes to pollution. 
+                  By collecting and recycling aluminum, we conserve natural resources, reduce 
+                  greenhouse gas emissions, and support a circular economy.
+                </p>
+                <div className="AReg1--image-card">
+                  <img
+                    src="https://media.istockphoto.com/id/688587628/photo/aluminium-and-pvc-industry-worker.jpg?s=612x612&w=0&k=20&c=j3W5LQbi0yV0RH0-DLqGs6VeFGlV60Vm_OaiIAMPoTo="
+                    alt="People cleaning up trash"
+                  />
+                  <div className="AReg1--years-of-experience">20+ Years of Experience</div>
+                </div>
+              </div>
+
+              <div className="AReg1--right-section">
+                <div className="AReg1--info-card-container">
+                  <div className="AReg1--info-item">
+                    <div className="AReg1--info-icon AReg1--vision">
+                      <img
+                        src="https://cdn-icons-png.flaticon.com/128/3412/3412082.png"
+                        alt="Vision Icon"
+                      />
+                    </div>
+                    <div className="AReg1--info-content">
+                      <h3>Our Vision</h3>
+                      <p>
+                        Our vision is to promote efficient aluminum scrap collection and recycling, 
+                        reduce environmental impact, and foster a circular economy where materials 
+                        are reused instead of wasted.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="AReg1--info-item">
+                    <div className="AReg1--info-icon AReg1--mission">
+                      <img
+                        src="https://cdn-icons-png.flaticon.com/128/2006/2006789.png"
+                        alt="Mission Icon"
+                      />
+                    </div>
+                    <div className="AReg1--info-content">
+                      <h3>Our Mission</h3>
+                      <p>
+                        Our mission is to provide efficient, reliable, and easily accessible aluminum scrap 
+                        collection services, while actively educating and engaging communities on the 
+                        importance and benefits of recycling, responsible waste management, and 
+                        sustainable living.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="AReg1--info-item">
+                    <div className="AReg1--info-icon AReg1--goals">
+                      <img
+                        src="https://cdn-icons-png.flaticon.com/128/18370/18370444.png"
+                        alt="Goals Icon"
+                      />
+                    </div>
+                    <div className="AReg1--info-content">
+                      <h3>Our Goals</h3>
+                      <p>
+                        Our goals are to significantly increase aluminum recycling rates, minimize 
+                        environmental waste, support and empower local communities, raise awareness 
+                        about sustainable practices, and promote a circular economy where materials 
+                        are reused efficiently for future generations.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <a href="/ContactUs" className="AReg1--learn-more-button">
+                  Contact Us
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
         <section className="Alu-Section Alu-WhyJoin">
           <h2 className="Alu-SectionTitle">💡 Why Join Our Training Program?</h2>
           <ul className="Alu-WhyJoinList">
@@ -56,22 +142,6 @@ function AluTRegDes2() {
             <li className="Alu-WhyJoinItem">✅ Get hands-on training in real recycling centers.</li>
             <li className="Alu-WhyJoinItem">✅ Network with green innovators and industry leaders.</li>
             <li className="Alu-WhyJoinItem">✅ Participate in live demonstrations and sustainability workshops.</li>
-          </ul>
-        </section>
-
-        <section className="Alu-Section Alu-RegistrationGuidelines">
-          <h2 className="Alu-SectionTitle">🧾 Registration Guidelines</h2>
-          <p className="Alu-SectionContent">Before registering, please make sure you:</p>
-          <ul className="Alu-GuidelineList">
-            <li className="Alu-GuidelineItem">Have a valid email and contact number.</li>
-            <li className="Alu-GuidelineItem">Select your training category and preferred date.</li>
-            <li className="Alu-GuidelineItem">Upload a valid ID or proof of occupation (optional).</li>
-            <li className="Alu-GuidelineItem">Read and agree to the terms and conditions.</li>
-          </ul>
-          <p className="Alu-SectionContent">After registration, you will receive:</p>
-          <ul className="Alu-GuidelineList">
-            <li className="Alu-GuidelineItem">A confirmation email with session details.</li>
-            <li className="Alu-GuidelineItem">A QR code or registration ID for verification.</li>
           </ul>
         </section>
       </div>
