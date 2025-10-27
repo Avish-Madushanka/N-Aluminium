@@ -51,21 +51,15 @@ function AluTRegDes2() {
           <div className="AReg1--ocean-container">
             <div className="AReg1--main-content">
               <div className="AReg1--left-section">
-                <h1 className="AReg1--title">Work Together to Collect Aluminum Scrap</h1>
+                <h1 className="AReg1--title">Register Details</h1>
                 <p className="AReg1--description">
-                  Aluminum waste is a growing environmental and economic concern. Every year, 
-                  <strong> thousands of tons of aluminum scraps </strong> are discarded, 
-                  ending up in landfills instead of being recycled. Improper disposal wastes 
-                  valuable resources, increases energy consumption, and contributes to pollution. 
-                  By collecting and recycling aluminum, we conserve natural resources, reduce 
-                  greenhouse gas emissions, and support a circular economy.
+                  Fill out the form below to join the Aluminum Training Program. Our team will review your registration and confirm your participation through email within <strong>24–48 hours.</strong>  
                 </p>
                 <div className="AReg1--image-card">
                   <img
-                    src="https://media.istockphoto.com/id/688587628/photo/aluminium-and-pvc-industry-worker.jpg?s=612x612&w=0&k=20&c=j3W5LQbi0yV0RH0-DLqGs6VeFGlV60Vm_OaiIAMPoTo="
-                    alt="People cleaning up trash"
+                    src="https://aluminiumacademy.com/wp-content/uploads/2022/07/DSC_1435R.jpg"
                   />
-                  <div className="AReg1--years-of-experience">20+ Years of Experience</div>
+                  <div className="AReg1--years-of-experience">6-Month Training Program</div>
                 </div>
               </div>
 
@@ -74,59 +68,40 @@ function AluTRegDes2() {
                   <div className="AReg1--info-item">
                     <div className="AReg1--info-icon AReg1--vision">
                       <img
-                        src="https://cdn-icons-png.flaticon.com/128/3412/3412082.png"
-                        alt="Vision Icon"
+                        src="https://cdn-icons-png.flaticon.com/128/4301/4301554.png"
+                        alt="submit details"
                       />
                     </div>
                     <div className="AReg1--info-content">
-                      <h3>Our Vision</h3>
-                      <p>
-                        Our vision is to promote efficient aluminum scrap collection and recycling, 
-                        reduce environmental impact, and foster a circular economy where materials 
-                        are reused instead of wasted.
-                      </p>
-                    </div>
+                    <h3>Before registering, please make sure you:</h3>
+                    <ul>
+                      <li>Have a valid email address and active contact number.</li>
+                      <li>Select your preferred training category and starting date.</li>
+                      <li>Upload a valid ID or proof of occupation (optional).</li>
+                      <li>Read and agree to the terms and conditions before submitting your registration.</li>
+                    </ul>
+                  </div>
                   </div>
 
                   <div className="AReg1--info-item">
                     <div className="AReg1--info-icon AReg1--mission">
                       <img
-                        src="https://cdn-icons-png.flaticon.com/128/2006/2006789.png"
-                        alt="Mission Icon"
+                        src="https://cdn-icons-png.flaticon.com/128/624/624955.png"
+                        alt="recieve details"
                       />
                     </div>
                     <div className="AReg1--info-content">
-                      <h3>Our Mission</h3>
-                      <p>
-                        Our mission is to provide efficient, reliable, and easily accessible aluminum scrap 
-                        collection services, while actively educating and engaging communities on the 
-                        importance and benefits of recycling, responsible waste management, and 
-                        sustainable living.
-                      </p>
-                    </div>
+                    <h3>After registration, you will receive:</h3>
+                    <ul>
+                      <li>A confirmation email with your session details.</li>
+                      <li>A QR code or registration ID for verification at the venue.</li>
+                    </ul>
                   </div>
-
-                  <div className="AReg1--info-item">
-                    <div className="AReg1--info-icon AReg1--goals">
-                      <img
-                        src="https://cdn-icons-png.flaticon.com/128/18370/18370444.png"
-                        alt="Goals Icon"
-                      />
-                    </div>
-                    <div className="AReg1--info-content">
-                      <h3>Our Goals</h3>
-                      <p>
-                        Our goals are to significantly increase aluminum recycling rates, minimize 
-                        environmental waste, support and empower local communities, raise awareness 
-                        about sustainable practices, and promote a circular economy where materials 
-                        are reused efficiently for future generations.
-                      </p>
-                    </div>
                   </div>
                 </div>
 
-                <a href="/ContactUs" className="AReg1--learn-more-button">
-                  Contact Us
+                <a href="/AluTRegForm" className="AReg1--learn-more-button">
+                  Register Now
                 </a>
               </div>
             </div>

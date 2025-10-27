@@ -29,7 +29,7 @@ function AluTRegMain() {
             a part of the circular economy movement.
           </p>
 
-          <a href="/training-register" className="Alu-hero-btn">
+          <a href="/AluTRegForm" className="Alu-hero-btn">
             Register Now
           </a>
         </div>
