@@ -58,6 +58,7 @@ function AluTRegDes2() {
                 <div className="AReg1--image-card">
                   <img
                     src="https://aluminiumacademy.com/wp-content/uploads/2022/07/DSC_1435R.jpg"
+                    alt="Training program"
                   />
                   <div className="AReg1--years-of-experience">6-Month Training Program</div>
                 </div>
@@ -73,30 +74,30 @@ function AluTRegDes2() {
                       />
                     </div>
                     <div className="AReg1--info-content">
-                    <h3>Before registering, please make sure you:</h3>
-                    <ul>
-                      <li>Have a valid email address and active contact number.</li>
-                      <li>Select your preferred training category and starting date.</li>
-                      <li>Upload a valid ID or proof of occupation (optional).</li>
-                      <li>Read and agree to the terms and conditions before submitting your registration.</li>
-                    </ul>
-                  </div>
+                      <h3>Before registering, please make sure you:</h3>
+                      <ul>
+                        <li>Have a valid email address and active contact number.</li>
+                        <li>Select your preferred training category and starting date.</li>
+                        <li>Upload a valid ID or proof of occupation (optional).</li>
+                        <li>Read and agree to the terms and conditions before submitting your registration.</li>
+                      </ul>
+                    </div>
                   </div>
 
                   <div className="AReg1--info-item">
                     <div className="AReg1--info-icon AReg1--mission">
                       <img
                         src="https://cdn-icons-png.flaticon.com/128/624/624955.png"
-                        alt="recieve details"
+                        alt="receive details"
                       />
                     </div>
                     <div className="AReg1--info-content">
-                    <h3>After registration, you will receive:</h3>
-                    <ul>
-                      <li>A confirmation email with your session details.</li>
-                      <li>A QR code or registration ID for verification at the venue.</li>
-                    </ul>
-                  </div>
+                      <h3>After registration, you will receive:</h3>
+                      <ul>
+                        <li>A confirmation email with your session details.</li>
+                        <li>A QR code or registration ID for verification at the venue.</li>
+                      </ul>
+                    </div>
                   </div>
                 </div>
 
@@ -107,18 +108,109 @@ function AluTRegDes2() {
             </div>
           </div>
         </div>
+      </div>
+      <div className="AT3-stats-section">
+        <div className="AT3-stats-container">
+          <div className="AT3-stat-item">
+            <img src="https://cdn-icons-png.flaticon.com/128/18718/18718281.png" className="AT3-stat-icon" />
+            <div className="AT3-stat-number">45<sup>+</sup></div>
+            <div className="AT3-stat-label">Practical Sessions</div>
+          </div>
 
+          <div className="AT3-stat-item">
+            <img src="https://cdn-icons-png.flaticon.com/128/1018/1018662.png" className="AT3-stat-icon" />
+            <div className="AT3-stat-number">150<sup>+</sup></div>
+            <div className="AT3-stat-label">Trained Students</div>
+          </div>
 
-        <section className="Alu-Section Alu-WhyJoin">
-          <h2 className="Alu-SectionTitle">💡 Why Join Our Training Program?</h2>
-          <ul className="Alu-WhyJoinList">
-            <li className="Alu-WhyJoinItem">✅ Learn from certified aluminum recycling experts.</li>
-            <li className="Alu-WhyJoinItem">✅ Earn an official completion certificate.</li>
-            <li className="Alu-WhyJoinItem">✅ Get hands-on training in real recycling centers.</li>
-            <li className="Alu-WhyJoinItem">✅ Network with green innovators and industry leaders.</li>
-            <li className="Alu-WhyJoinItem">✅ Participate in live demonstrations and sustainability workshops.</li>
-          </ul>
-        </section>
+          <div className="AT3-stat-item">
+            <img src="https://cdn-icons-png.flaticon.com/128/8644/8644515.png" className="AT3-stat-icon" />
+            <div className="AT3-stat-number">85<sup>+</sup></div>
+            <div className="AT3-stat-label">Successful Projects</div>
+          </div>
+
+          <div className="AT3-stat-item">
+            <img src="https://cdn-icons-png.flaticon.com/128/4559/4559359.png" className="AT3-stat-icon" />
+            <div className="AT3-stat-number">79<sup>%</sup></div>
+            <div className="AT3-stat-label">Job Placement Rate</div>
+          </div>
+        </div>
+      </div>
+
+      <div className="AT5-offer-section">
+      <div className="AT5-header-container">
+        <h2 className="AT5-main-heading">Why Join Our Aluminum Training Program?</h2>
+      </div>
+      
+      <div className="AT5-content-layout"> 
+        <div className="AT5-programs-column AT5-column-left">
+          <div className="AT5-program-item AT5-align-right">
+            <div className="AT5-program-icon-wrapper">
+              <img 
+                src="https://cdn-icons-png.flaticon.com/128/5190/5190582.png" 
+                alt="Industry Experts Icon" 
+                className="AT5-program-icon-img"
+              />
+            </div>
+            <h3 className="AT5-program-title">Learn from Industry Experts</h3>
+            <p className="AT5-program-text">
+              Gain hands-on knowledge directly from certified aluminum fabricators, recycling specialists, and experienced trainers in the field.
+            </p>
+          </div>
+
+          <div className="AT5-program-item AT5-align-right">
+            <div className="AT5-program-icon-wrapper">
+              <img 
+                src="https://cdn-icons-png.flaticon.com/128/8982/8982004.png" 
+                alt="Career Opportunities Icon" 
+                className="AT5-program-icon-img"
+              />
+            </div>
+            <h3 className="AT5-program-title">Expand Your Career Opportunities</h3>
+            <p className="AT5-program-text">
+              Network with construction professionals, recycling entrepreneurs, and sustainability leaders to build your future career in aluminum manufacturing and eco-friendly practices.
+            </p>
+          </div>
+        </div>
+
+        <div className="AT5-main-image-wrapper">
+          <img
+            src="https://manpower.ae/wp-content/uploads/2023/03/aluminium.png"
+            alt="aluminum worker"
+            className="AT5-main-image"
+          />
+        </div>
+
+        <div className="AT5-programs-column AT5-column-right">
+          <div className="AT5-program-item AT5-align-left">
+            <div className="AT5-program-icon-wrapper">
+              <img 
+                src="https://cdn-icons-png.flaticon.com/128/9953/9953680.png" 
+                alt="Practical Skills Icon" 
+                className="AT5-program-icon-img"
+              />
+            </div>
+            <h3 className="AT5-program-title">Practical Aluminum Skills</h3>
+            <p className="AT5-program-text">
+              Develop real-world skills in aluminum cutting, shaping, window and door frame fabrication, and recycling applications used in modern industries.
+            </p>
+          </div>
+
+          <div className="AT5-program-item AT5-align-left">
+            <div className="AT5-program-icon-wrapper">
+              <img 
+                src="https://cdn-icons-png.flaticon.com/128/6528/6528841.png" 
+                alt="Live Demonstrations Icon" 
+                className="AT5-program-icon-img"
+              />
+            </div>
+            <h3 className="AT5-program-title">Experience Live Demonstrations</h3>
+            <p className="AT5-program-text">
+              Participate in interactive workshops, safety training, and project-based learning that simulate real industrial environments.
+            </p>
+          </div>
+        </div>
+        </div>
       </div>
     </div>
   );

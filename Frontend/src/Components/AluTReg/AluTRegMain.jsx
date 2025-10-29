@@ -55,6 +55,18 @@ function AluTRegMain() {
           </div>
         </div>
       </section>
+
+       <div className="AT4-cta-bar">
+      <div className="AT4-content">
+        <p className="AT4-subheading">GET A QUOTE —</p>
+        <h2 className="AT4-heading">HAVE A QUESTION? WE’RE HAPPY TO HELP!</h2>
+        <p className="AT4-description">
+          Our team is ready to assist you with any inquiries or custom requirements.
+          Reach out today to get personalized guidance and the best solutions for your aluminum recycling or training needs.
+        </p>
+      </div>
+      <button className="AT4-button">CONTACT US</button>
+    </div>
     </div>
   );
 }
