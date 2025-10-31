@@ -6,7 +6,7 @@ import { useAuth } from '../../context/AuthContext';
 
 import './Login.css'; 
 
-function Login() {
+function Login() { 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -234,4 +234,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Login; 

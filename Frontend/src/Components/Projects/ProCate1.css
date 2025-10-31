@@ -94,13 +94,6 @@
   font-weight: bold;
 }
 
-.Proj2-project-description {
-  font-size: 0.95em;
-  color: #666;
-  margin-bottom: 20px;
-  line-height: 1.5;
-}
-
 .Proj2-project-meta {
   display: flex;
   justify-content: space-between;

@@ -322,6 +322,7 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
                         <Route path="/BuyCard" element={<BuyCard />} />
                         <Route path="/WastePickForm" element={<WastePickForm />} />
                         <Route path="/SaleForm" element={<SaleForm />} />
+                        <Route path="/ProAddForm" element={<ProAddForm />} />
                     </Route>
 
                     <Route element={<ProtectedRoute requiredRole="businessOwner" />}>
