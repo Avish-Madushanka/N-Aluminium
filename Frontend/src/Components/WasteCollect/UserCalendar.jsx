@@ -263,6 +263,7 @@ const UserCalendar = ({ userInfo }) => {
 
         switch (bookingStep) {
             case 0: return (
+
                  <div className="UCal1-calendar-container">
                     <div className="UCal1-calendar-header">
                         <button 
@@ -593,8 +594,9 @@ const UserCalendar = ({ userInfo }) => {
             <div className="UCal6-user-calendar-wrapper">
                 <div className="UCal6-user-calendar-container">
                     <div className="UCal6-user-header">
-                    <h1>Schedule Aluminum Recycling Pickup</h1>
+                    <h1 class="UserT-title">Aluminum Scraps Collection Schedule</h1>
                     </div>
+
 
                     {(isLoading && bookingStep === 0 && !backendSettings) && (
                     <div className="UCal6-loading-overlay">

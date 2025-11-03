@@ -1,4 +1,12 @@
-/* ==== MAIN CONTAINER ==== */
+.UserT-title {
+  font-size: 2.8rem;
+  font-weight: 700;
+  text-align: center;
+  margin-top: 20px;
+}
+
+/* ........ Code 1 ........*/
+
 .UCal1-calendar-container {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   background: rgba(255, 255, 255, 0.9);
@@ -17,7 +25,6 @@
   box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
 }
 
-/* ==== HEADER ==== */
 .UCal1-calendar-header {
   display: flex;
   align-items: center;
@@ -33,9 +40,9 @@
 }
 
 .UCal1-nav-button {
-  background: #e8f5e9;
+  background:#f0f0f0;
   border: none;
-  color: #388e3c;
+  color: #000000;
   border-radius: 50%;
   width: 38px;
   height: 38px;
@@ -47,7 +54,7 @@
 }
 
 .UCal1-nav-button:hover {
-  background: #388e3c;
+  background: #292929;
   color: #fff;
   transform: scale(1.1);
 }
@@ -57,7 +64,6 @@
   cursor: not-allowed;
 }
 
-/* ==== WEEKDAY HEADER ==== */
 .UCal1-weekday-header {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
@@ -75,7 +81,6 @@
   letter-spacing: 0.3px;
 }
 
-/* ==== CALENDAR GRID ==== */
 .UCal1-calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
@@ -84,7 +89,6 @@
   margin-bottom: 20px;
 }
 
-/* ==== DAY CELLS ==== */
 .UCal1-day {
   background: #fff;
   border-radius: 10px;
@@ -103,7 +107,6 @@
   transform: scale(1.05);
 }
 
-/* ==== STATE COLORS ==== */
 .UCal1-day.available {
   background: #c8e6c9;
   border: 1px solid #388e3c;
@@ -116,20 +119,19 @@
 }
 
 .UCal1-day.unavailable {
-  background: #f5f5f5;
+  background: #ffaeae;
   color: #aaa;
   cursor: not-allowed;
   border: 1px dashed #ddd;
 }
 
 .UCal1-day.past {
-  background: #fafafa;
+  background: #e0e0e0;
   color: #bbb;
   cursor: not-allowed;
   border: 1px dashed #eee;
 }
 
-/* ==== LOADING STATE ==== */
 .UCal1-loading-calendar-days {
   grid-column: 1 / -1;
   display: flex;
@@ -150,7 +152,6 @@
   to { transform: rotate(360deg); }
 }
 
-/* ==== LEGEND ==== */
 .UCal1-calendar-legend {
   display: flex;
   justify-content: space-around;
@@ -173,10 +174,10 @@
   color: #333;
 }
 
-.UCal1-available { background: #c8e6c9; }
+.UCal1-available { background: #c8e6c9; color: #252525; }
 .UCal1-selected { background: #43a047; color: white; }
-.UCal1-unavailable { background: #f5f5f5; color: #888; }
-.UCal1-past { background: #e0e0e0; color: #777; }
+.UCal1-unavailable { background: #ffaeae; color: #252525; }
+.UCal1-past { background: #e0e0e0; color: #252525; }
 
 .UCal1-calendar-instructions {
   display: flex;
