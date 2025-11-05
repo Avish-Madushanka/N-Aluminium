@@ -263,62 +263,20 @@ const UserCalendar = ({ userInfo }) => {
 
         switch (bookingStep) {
             case 0: return (
-
-                 <div className="UCal1-calendar-container">
-                    <div className="UCal1-calendar-header">
-                        <button 
-                        onClick={goToPrevMonth} 
-                        className="UCal1-nav-button" 
-                        aria-label="Previous month" 
-                        disabled={isLoading}
-                        >
-                        <ChevronLeft size={20} />
-                        </button>
-
-                        <h2 className="UCal1-current-month">
-                        {monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}
-                        </h2>
-
-                        <button 
-                        onClick={goToNextMonth} 
-                        className="UCal1-nav-button" 
-                        aria-label="Next month" 
-                        disabled={isLoading}
-                        >
-                        <ChevronRight size={20} />
-                        </button>
+                <div className="UCal-calendar-container">
+                    <div className="UCal-calendar-header">
+                        <button onClick={goToPrevMonth} className="UCal-nav-button" aria-label="Previous month" disabled={isLoading}><ChevronLeft size={20} /></button>
+                        <h2 className="UCal-current-month">{monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}</h2>
+                        <button onClick={goToNextMonth} className="UCal-nav-button" aria-label="Next month" disabled={isLoading}><ChevronRight size={20} /></button>
                     </div>
-
-                    <div className="UCal1-weekday-header">
-                        {daysOfWeek.map(day => (
-                        <div key={day} className="UCal1-weekday">{day}</div>
-                        ))}
+                    <div className="UCal-weekday-header">{daysOfWeek.map(day => <div key={day} className="UCal-weekday">{day}</div>)}</div>
+                    <div className="UCal-calendar-grid">{isLoading ? <div className="UCal-loading-calendar-days"><Loader2 size={32} className="UCal-animate-spin"/> <p>Loading days...</p></div> : renderCalendar()}</div>
+                    <div className="UCal-calendar-legend">
+                        <span className="UCal-legend-item UCal-available">Available</span> <span className="UCal-legend-item UCal-selected">Selected</span>
+                        <span className="UCal-legend-item UCal-unavailable">Unavailable</span> <span className="UCal-legend-item UCal-past">Past</span>
                     </div>
-
-                    <div className="UCal1-calendar-grid">
-                        {isLoading ? (
-                        <div className="UCal1-loading-calendar-days">
-                            <Loader2 size={32} className="UCal1-animate-spin" />
-                            <p>Loading days...</p>
-                        </div>
-                        ) : (
-                        renderCalendar()
-                        )}
-                    </div>
-
-                    <div className="UCal1-calendar-legend">
-                        <span className="UCal1-legend-item UCal1-available">Available</span>
-                        <span className="UCal1-legend-item UCal1-selected">Selected</span>
-                        <span className="UCal1-legend-item UCal1-unavailable">Unavailable</span>
-                        <span className="UCal1-legend-item UCal1-past">Past</span>
-                    </div>
-
-                    <div className="UCal1-calendar-instructions">
-                        <Info size={16} /> Select an available collection day (green) to begin scheduling.
-                    </div>
-                    </div>
-
-
+                    <div className="UCal-calendar-instructions"><Info size={16} /> Select an available collection day (green) to begin scheduling.</div>
+                </div>
             );
             case 1: return (
                 <div className="UCal-step-container UCal-time-slot-selection">
@@ -338,314 +296,144 @@ const UserCalendar = ({ userInfo }) => {
                 </div>
             );
             case 2: return (
-                <div className="UCal2-step-container UCal2-service-area-selection">
-                    <div className="UCal2-booking-step-header">
+                <div className="UCal-step-container UCal-service-area-selection">
+                    <div className="UCal-booking-step-header">
                         <h2>Select Your Service Area</h2>
                         {renderSummaryItem(Calendar, "Date", formatDate(selectedDate))}
                         {renderSummaryItem(Clock, "Time", selectedTimeSlotObj?.label)}
                     </div>
-
-                    {serviceAreasForSelectedDate.length === 0 && !isLoading && (
-                        <p className="UCal2-info-message">No service areas available for the selected date.</p>
-                    )}
-
-                    <div className="UCal2-options-grid UCal2-service-areas-grid">
+                    {serviceAreasForSelectedDate.length === 0 && !isLoading && <p className="UCal-info-message">No service areas available for the selected date.</p>}
+                    <div className="UCal-options-grid UCal-service-areas-grid">
                         {serviceAreasForSelectedDate.map(area => (
-                        <button
-                            key={area.id}
-                            className={`UCal2-option-card UCal2-service-area-card ${serviceArea === area.id ? 'UCal2-selected' : ''}`}
-                            onClick={() => setServiceArea(area.id)}
-                            aria-pressed={serviceArea === area.id}
-                        >
-                            <MapPin size={24} />
-                            <h3>{area.name}</h3>
-                        </button>
+                            <button key={area.id} className={`UCal-option-card UCal-service-area-card ${serviceArea === area.id ? 'UCal-selected' : ''}`} onClick={() => setServiceArea(area.id)} aria-pressed={serviceArea === area.id}>
+                                <MapPin size={24} /><h3>{area.name}</h3>
+                            </button>
                         ))}
                     </div>
-
-                    <div className="UCal2-step-navigation">
-                        <button onClick={prevStep} className="UCal2-back-button">
-                        <ChevronLeft size={16} /> Change Time
-                        </button>
-                        <button
-                        onClick={nextStep}
-                        className="UCal2-next-button"
-                        disabled={!serviceArea}
-                        >
-                        Next: Details <ChevronRight size={16} />
-                        </button>
+                    <div className="UCal-step-navigation">
+                        <button onClick={prevStep} className="UCal-back-button"><ChevronLeft size={16} /> Change Time</button>
+                        <button onClick={nextStep} className="UCal-next-button" disabled={!serviceArea}>Next: Details <ChevronRight size={16} /></button>
                     </div>
-                    </div>
-
+                </div>
             );
             case 3: return ( 
-                <div className="UCal3-step-container UCal3-details-collection">
-                    <div className="UCal3-booking-step-header">
+                <div className="UCal-step-container UCal-details-collection">
+                    <div className="UCal-booking-step-header">
                         <h2>Pickup & Contact Details</h2>
                         {renderSummaryItem(Calendar, "Date", formatDate(selectedDate))}
                         {renderSummaryItem(Clock, "Time", selectedTimeSlotObj?.label)}
                         {renderSummaryItem(MapPin, "Area", selectedServiceAreaObj?.name)}
                     </div>
-
-                    <div className="UCal3-pickup-details-form">
-                        <div className="UCal3-form-section">
-                        <h3><Truck size={18} /> Pickup Information</h3>
-                        <div className="UCal3-form-field">
-                            <label htmlFor="pickupLocation">Pickup Address*</label>
-                            <input
-                            type="text"
-                            id="pickupLocation"
-                            value={pickupLocation}
-                            onChange={(e) => setPickupLocation(e.target.value)}
-                            placeholder="Full address including street, city"
-                            required
-                            />
+                    <div className="UCal-pickup-details-form">
+                        <div className="UCal-form-section">
+                            <h3><Truck size={18} /> Pickup Information</h3>
+                            <div className="UCal-form-field"><label htmlFor="pickupLocation">Pickup Address*</label><input type="text" id="pickupLocation" value={pickupLocation} onChange={(e) => setPickupLocation(e.target.value)} placeholder="Full address including street, city" required /></div>
+                            <div className="UCal-form-field"><label htmlFor="weight">Estimated Weight (kg)</label><input type="number" id="weight" value={estimatedWeight} onChange={(e) => setEstimatedWeight(e.target.value)} placeholder="e.g., 5.5" min="0" step="0.1" />
+                                {estimatedWeight && (isNaN(parseFloat(estimatedWeight)) || parseFloat(estimatedWeight) < 0) && <p className="UCal-error-text">Please enter a valid non-negative weight.</p>}</div>
                         </div>
-
-                        <div className="UCal3-form-field">
-                            <label htmlFor="weight">Estimated Weight (kg)</label>
-                            <input
-                            type="number"
-                            id="weight"
-                            value={estimatedWeight}
-                            onChange={(e) => setEstimatedWeight(e.target.value)}
-                            placeholder="e.g., 5.5"
-                            min="0"
-                            step="0.1"
-                            />
-                            {estimatedWeight && (isNaN(parseFloat(estimatedWeight)) || parseFloat(estimatedWeight) < 0) && (
-                            <p className="UCal3-error-text">Please enter a valid non-negative weight.</p>
-                            )}
-                        </div>
-                        </div>
-
-                        <div className="UCal3-form-section">
-                        <h3><User size={18} /> Contact Information</h3>
-                        <div className="UCal3-form-field">
-                            <label htmlFor="name">Full Name*</label>
-                            <input
-                            type="text"
-                            id="name"
-                            value={contactDetails.name}
-                            onChange={(e) => setContactDetails({ ...contactDetails, name: e.target.value })}
-                            placeholder="Your full name"
-                            required
-                            />
-                        </div>
-
-                        <div className="UCal3-form-field">
-                            <label htmlFor="phone">Phone Number*</label>
-                            <input
-                            type="tel"
-                            id="phone"
-                            value={contactDetails.phone}
-                            onChange={(e) => setContactDetails({ ...contactDetails, phone: e.target.value })}
-                            placeholder="e.g., 07xxxxxxxx"
-                            required
-                            />
-                        </div>
-
-                        <div className="UCal3-form-field">
-                            <label htmlFor="email">Email Address*</label>
-                            <input
-                            type="email"
-                            id="email"
-                            value={contactDetails.email}
-                            onChange={(e) => setContactDetails({ ...contactDetails, email: e.target.value })}
-                            placeholder="you@example.com"
-                            required
-                            />
-                        </div>
+                        <div className="UCal-form-section">
+                            <h3><User size={18} /> Contact Information</h3>
+                            <div className="UCal-form-field"><label htmlFor="name">Full Name*</label><input type="text" id="name" value={contactDetails.name} onChange={(e) => setContactDetails({...contactDetails, name: e.target.value})} placeholder="Your full name" required /></div>
+                            <div className="UCal-form-field"><label htmlFor="phone">Phone Number*</label><input type="tel" id="phone" value={contactDetails.phone} onChange={(e) => setContactDetails({...contactDetails, phone: e.target.value})} placeholder="e.g., 07xxxxxxxx" required /></div>
+                            <div className="UCal-form-field"><label htmlFor="email">Email Address*</label><input type="email" id="email" value={contactDetails.email} onChange={(e) => setContactDetails({...contactDetails, email: e.target.value})} placeholder="you@example.com" required /></div>
                         </div>
                     </div>
-
-                    <div className="UCal3-step-navigation">
-                        <button onClick={prevStep} className="UCal3-back-button">
-                        <ChevronLeft size={16} /> Change Area
-                        </button>
-                        <button
-                        onClick={nextStep}
-                        className="UCal3-next-button"
-                        disabled={
-                            !pickupLocation.trim() ||
-                            !contactDetails.name.trim() ||
-                            !contactDetails.phone.trim() ||
-                            !contactDetails.email.trim() ||
-                            (estimatedWeight && (isNaN(parseFloat(estimatedWeight)) || parseFloat(estimatedWeight) < 0))
-                        }
-                        >
-                        Review Booking <ChevronRight size={16} />
+                    <div className="UCal-step-navigation">
+                        <button onClick={prevStep} className="UCal-back-button"><ChevronLeft size={16} /> Change Area</button>
+                        <button onClick={nextStep} className="UCal-next-button"
+                            disabled={!pickupLocation.trim() || !contactDetails.name.trim() || !contactDetails.phone.trim() || !contactDetails.email.trim() || (estimatedWeight && (isNaN(parseFloat(estimatedWeight)) || parseFloat(estimatedWeight) < 0))}>
+                            Review Booking <ChevronRight size={16} />
                         </button>
                     </div>
-                    </div>
-
+                </div>
             );
-
-
             case 4: return bookingConfirmed ? ( 
-                 <div className="UCal4-step-container UCal4-booking-confirmation">
-                    <div className="UCal4-confirmation-header">
-                        <CheckCircle size={48} className="UCal4-confirmation-icon" />
-                        <h2>Booking Confirmed!</h2>
-                        <p className="UCal4-booking-id">
-                        Booking ID: <strong>{bookingId}</strong>
-                        </p>
-                    </div>
-
-                    <div className="UCal4-confirmation-details UCal4-review-details">
-                        <div className="UCal4-review-section UCal4-confirmation-section">
-                        <h3><Calendar size={18} /> Pickup</h3>
-                        {renderSummaryItem(Calendar, "Date", formatDate(selectedDate))}
-                        {renderSummaryItem(Clock, "Time", selectedTimeSlotObj?.time)}
-                        {renderSummaryItem(MapPin, "Area", selectedServiceAreaObj?.name)}
-                        {renderSummaryItem(Truck, "Address", pickupLocation)}
+                <div className="UCal-step-container UCal-booking-confirmation">
+                    <div className="UCal-confirmation-header"><CheckCircle size={48} className="UCal-confirmation-icon" /><h2>Booking Confirmed!</h2><p className="UCal-booking-id">Booking ID: <strong>{bookingId}</strong></p></div>
+                    <div className="UCal-confirmation-details UCal-review-details">
+                        <div className="UCal-review-section UCal-confirmation-section"><h3><Calendar size={18} /> Pickup</h3>
+                            {renderSummaryItem(Calendar, "Date", formatDate(selectedDate))} {renderSummaryItem(Clock, "Time", selectedTimeSlotObj?.time)}
+                            {renderSummaryItem(MapPin, "Area", selectedServiceAreaObj?.name)} {renderSummaryItem(Truck, "Address", pickupLocation)}
                         </div>
-
-                        <div className="UCal4-review-section UCal4-confirmation-section">
-                        <h3><Recycle size={18} /> Material</h3>
-                        {renderSummaryItem(Weight, "Est. Weight", estimatedWeight)}
+                        <div className="UCal-review-section UCal-confirmation-section"><h3><Recycle size={18} /> Material</h3>
+                            {renderSummaryItem(Weight, "Est. Weight", estimatedWeight)}
                         </div>
-
-                        <div className="UCal4-review-section UCal4-confirmation-section">
-                        <h3><User size={18} /> Contact</h3>
-                        {renderSummaryItem(User, "Name", contactDetails.name)}
-                        {renderSummaryItem(Phone, "Phone", contactDetails.phone)}
-                        {renderSummaryItem(Mail, "Email", contactDetails.email)}
+                        <div className="UCal-review-section UCal-confirmation-section"><h3><User size={18} /> Contact</h3>
+                            {renderSummaryItem(User, "Name", contactDetails.name)} {renderSummaryItem(Phone, "Phone", contactDetails.phone)} {renderSummaryItem(Mail, "Email", contactDetails.email)}
                         </div>
                     </div>
-
-                    <div className="UCal4-confirmation-instructions">
-                        <Info size={16} /> A confirmation email has been sent to {contactDetails.email} (mock). Please keep your Booking ID for reference.
-                    </div>
-
-                    <button onClick={resetForm} className="UCal4-new-booking-button">
-                        <Plus size={16} /> Schedule Another Pickup
-                    </button>
-                    </div>
-
-
+                    <div className="UCal-confirmation-instructions"><Info size={16} /> A confirmation email has been sent to {contactDetails.email} (mock). Please keep your Booking ID for reference.</div>
+                    <button onClick={resetForm} className="UCal-new-booking-button"><Plus size={16} /> Schedule Another Pickup</button>
+                </div>
             ) : ( 
-                <div className="UCal5-step-container UCal5-booking-review">
-                    <div className="UCal5-booking-step-header">
-                        <h2>Review Your Booking</h2>
-                        <p>Please check all details carefully before confirming.</p>
-                    </div>
-
-                    {error && (
-                        <div className="UCal5-error-message-container">
-                        <AlertTriangle size={16} /> {error}
+                <div className="UCal-step-container UCal-booking-review">
+                    <div className="UCal-booking-step-header"><h2>Review Your Booking</h2><p>Please check all details carefully before confirming.</p></div>
+                    {error && <div className="UCal-error-message-container"><AlertTriangle size={16} /> {error}</div>}
+                    <div className="UCal-review-details">
+                        <div className="UCal-review-section"><h3><Calendar size={18} /> Pickup</h3>
+                            {renderSummaryItem(Calendar, "Date", formatDate(selectedDate))} {renderSummaryItem(Clock, "Time", selectedTimeSlotObj?.time)}
+                            {renderSummaryItem(MapPin, "Area", selectedServiceAreaObj?.name)} {renderSummaryItem(Truck, "Address", pickupLocation)}
                         </div>
-                    )}
-
-                    <div className="UCal5-review-details">
-                        <div className="UCal5-review-section">
-                        <h3><Calendar size={18} /> Pickup</h3>
-                        {renderSummaryItem(Calendar, "Date", formatDate(selectedDate))}
-                        {renderSummaryItem(Clock, "Time", selectedTimeSlotObj?.time)}
-                        {renderSummaryItem(MapPin, "Area", selectedServiceAreaObj?.name)}
-                        {renderSummaryItem(Truck, "Address", pickupLocation)}
+                        <div className="UCal-review-section"><h3><Recycle size={18} /> Material</h3>
+                            {renderSummaryItem(Weight, "Est. Weight", estimatedWeight)}
                         </div>
-
-                        <div className="UCal5-review-section">
-                        <h3><Recycle size={18} /> Material</h3>
-                        {renderSummaryItem(Weight, "Est. Weight", estimatedWeight)}
-                        </div>
-
-                        <div className="UCal5-review-section">
-                        <h3><User size={18} /> Contact</h3>
-                        {renderSummaryItem(User, "Name", contactDetails.name)}
-                        {renderSummaryItem(Phone, "Phone", contactDetails.phone)}
-                        {renderSummaryItem(Mail, "Email", contactDetails.email)}
+                        <div className="UCal-review-section"><h3><User size={18} /> Contact</h3>
+                            {renderSummaryItem(User, "Name", contactDetails.name)} {renderSummaryItem(Phone, "Phone", contactDetails.phone)} {renderSummaryItem(Mail, "Email", contactDetails.email)}
                         </div>
                     </div>
-
-                    <div className="UCal5-step-navigation UCal5-review-actions">
-                        <button
-                        onClick={prevStep}
-                        className="UCal5-back-button"
-                        disabled={isSubmitting}
-                        >
-                        <ChevronLeft size={16} /> Edit Details
-                        </button>
-
-                        <button
-                        onClick={confirmBooking}
-                        className="UCal5-confirm-button"
-                        disabled={isSubmitting}
-                        >
-                        {isSubmitting ? (
-                            <Loader2 size={16} className="UCal5-animate-spin" />
-                        ) : (
-                            <CheckCircle size={16} />
-                        )}{" "}
-                        {isSubmitting ? "Confirming..." : "Confirm Booking"}
+                    <div className="UCal-step-navigation UCal-review-actions">
+                        <button onClick={prevStep} className="UCal-back-button" disabled={isSubmitting}><ChevronLeft size={16} /> Edit Details</button>
+                        <button onClick={confirmBooking} className="UCal-confirm-button" disabled={isSubmitting}>
+                            {isSubmitting ? <Loader2 size={16} className="UCal-animate-spin" /> : <CheckCircle size={16} />} {isSubmitting ? 'Confirming...' : 'Confirm Booking'}
                         </button>
                     </div>
-                    </div>
+                </div>
             );
-         default: return null;
+            default: return null;
         }
     };
 
     const progressBarLabels = ['Date', 'Time', 'Area', 'Details', 'Confirm'];
-    
 
     return (
-            <div className="UCal6-user-calendar-wrapper">
-                <div className="UCal6-user-calendar-container">
-                    <div className="UCal6-user-header">
-                    <h1 class="UserT-title">Aluminum Scraps Collection Schedule</h1>
-                    </div>
-
-
-                    {(isLoading && bookingStep === 0 && !backendSettings) && (
-                    <div className="UCal6-loading-overlay">
-                        <Loader2 size={48} className="UCal6-animate-spin" />
+        <div className="UCal-user-calendar-wrapper">
+            <div className="UCal-user-calendar-container">
+                <div className="UCal-user-header"><h1>Schedule Aluminum Recycling Pickup</h1></div>
+                {(isLoading && bookingStep === 0 && !backendSettings) && 
+                    <div className="UCal-loading-overlay">
+                        <Loader2 size={48} className="UCal-animate-spin" />
                         <p>Loading Schedule...</p>
                     </div>
-                    )}
-
-                    {!isLoading && error && bookingStep === 0 && (
-                    <div className="UCal6-error-message-container UCal6-global-error">
+                }
+                {!isLoading && error && bookingStep === 0 && 
+                    <div className="UCal-error-message-container UCal-global-error">
                         <AlertTriangle size={18} />
                         <span>{error} Please try refreshing. If the problem persists, contact support.</span>
                     </div>
-                    )}
+                }
 
-                    {!isLoading && !error && bookingStep > 0 && bookingStep < progressBarLabels.length && !bookingConfirmed && (
-                    <div className="UCal6-booking-progress">
-                        <div className="UCal6-progress-bar">
-                        <div className="UCal6-progress-steps">
-                            {progressBarLabels.map((label, index) => (
-                            <div
-                                key={label}
-                                className={`UCal6-progress-step ${bookingStep > index ? 'UCal6-completed' : ''} ${bookingStep === index ? 'UCal6-active' : ''}`}
-                            >
-                                <div className="UCal6-step-circle">
-                                {bookingStep > index ? <CheckCircle size={16} /> : index + 1}
-                                </div>
-                                <span className="UCal6-step-label">{label}</span>
+                {!isLoading && !error && bookingStep > 0 && bookingStep < progressBarLabels.length && !bookingConfirmed && (
+                    <div className="UCal-booking-progress">
+                        <div className="UCal-progress-bar">
+                            <div className="UCal-progress-steps">
+                                {progressBarLabels.map((label, index) => (
+                                    <div key={label} className={`UCal-progress-step ${bookingStep > index ? 'UCal-completed' : ''} ${bookingStep === index ? 'UCal-active' : ''}`}>
+                                        <div className="UCal-step-circle">{bookingStep > index ? <CheckCircle size={16} /> : index + 1}</div>
+                                        <span className="UCal-step-label">{label}</span>
+                                    </div>
+                                ))}
                             </div>
-                            ))}
-                        </div>
-                        <div className="UCal6-progress-track">
-                            <div
-                            className="UCal6-progress-fill"
-                            style={{
-                                width: `${Math.min(bookingStep, progressBarLabels.length - 1) * (100 / (progressBarLabels.length - 1))}%`,
-                            }}
-                            ></div>
-                        </div>
+                            <div className="UCal-progress-track">
+                                <div className="UCal-progress-fill" style={{ width: `${Math.min(bookingStep, progressBarLabels.length - 1) * (100 / (progressBarLabels.length -1 ))}%` }}></div>
+                            </div>
                         </div>
                     </div>
-                    )}
-
-                    <div className="UCal6-booking-content">
+                )}
+                <div className="UCal-booking-content">
                     {(!isLoading || bookingStep > 0 || (error && bookingStep === 0)) && renderBookingStep()}
-                    </div>
                 </div>
-                </div>
-
+            </div>
+        </div>
     );
 };
 
