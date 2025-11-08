@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "./BSHeader.css";
 import BuyCard from "../BuyCard/BuyCard";
 import axiosInstance from "../../api/axiosInstance";
 import API_ENDPOINTS from "../../apiConfig";
 
 const BSHeader = () => {
+  const navigate = useNavigate();
   const [isBuyCardOpen, setIsBuyCardOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedFilter, setSelectedFilter] = useState("");
@@ -18,24 +20,21 @@ const BSHeader = () => {
       try {
         setLoading(true);
         const response = await axiosInstance.get(API_ENDPOINTS.SALE_ITEMS.GET_ALL);
-        console.log("[BSHeader] Sale items fetched:", response.data);
-        
         if (response.data && response.data.data) {
           setSaleItems(response.data.data);
         } else {
           setSaleItems([]);
-          console.warn("[BSHeader] Unexpected response format:", response.data);
+          console.warn("Unexpected response format:", response.data);
         }
         setError(null);
       } catch (err) {
-        console.error("[BSHeader] Error fetching sale items:", err);
+        console.error("Error fetching sale items:", err);
         setError("Failed to load items. Please try again later.");
         setSaleItems([]);
       } finally {
         setLoading(false);
       }
     };
-
     fetchSaleItems();
   }, []);
 
@@ -43,43 +42,29 @@ const BSHeader = () => {
     setSelectedProduct(product);
     setIsBuyCardOpen(true);
   };
-  
+
   const closeBuyCard = () => {
     setIsBuyCardOpen(false);
     setSelectedProduct(null);
   };
 
   const filteredProducts = saleItems.filter((product) => {
-    const nameMatch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
+    const nameMatch = product.name?.toLowerCase().includes(searchQuery.toLowerCase());
     const filterMatch = selectedFilter ? product.type === selectedFilter : true;
     return nameMatch && filterMatch;
   });
 
   const getImageUrl = (imagePath) => {
     if (!imagePath) return "https://via.placeholder.com/300x200?text=No+Image";
-    
-    if (imagePath.startsWith('http')) return imagePath;
-    
-    const backendRoot = API_ENDPOINTS.BACKEND_ROOT_URL;
-    return `${backendRoot}${imagePath}`;
+    if (imagePath.startsWith("http")) return imagePath;
+    return `${API_ENDPOINTS.BACKEND_ROOT_URL}${imagePath}`;
   };
 
   return (
     <div className="bs-container">
-      <div className="bs-header">
-        <h1 className="bs-title">Buy & Sell Reuse Items</h1>
-        <p className="bs-subtitle">Find quality used aluminum items or sell your own</p>
-      </div>
-
-      <div className="bs-controls">
-        <div className="bs-search-container">
-          <input
-            type="text"
-            placeholder="Search by item name..."
-            className="bs-search-bar"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
+      <div className="filter-sort-controls">
+        <div className="dropdown-wrapper">
+          <label className="dropdown-label">Category</label>
           <select
             className="bs-filter-dropdown"
             value={selectedFilter}
@@ -93,9 +78,36 @@ const BSHeader = () => {
             <option value="Others">Others</option>
           </select>
         </div>
-        <a href="/SaleForm" className="bs-sell-button">
-          <i className="fas fa-plus"></i> Sell Item
-        </a>
+
+        <div className="dropdown-wrapper">
+          <label className="dropdown-label">Color</label>
+          <select className="bs-filter-dropdown">
+            <option value="">All Colors</option>
+          </select>
+        </div>
+
+        <div className="dropdown-wrapper">
+          <label className="dropdown-label">Features</label>
+          <select className="bs-filter-dropdown">
+            <option value="">All Features</option>
+          </select>
+        </div>
+
+        <div className="dropdown-wrapper">
+          <label className="dropdown-label">Price</label>
+          <select className="bs-filter-dropdown">
+            <option value="">From €0 - €1000</option>
+          </select>
+        </div>
+
+        <div className="sort-button-wrapper">
+          <button
+            className="bs-sort-button"
+            onClick={() => navigate("/SaleForm")}
+          >
+            Add Sale Items
+          </button>
+        </div>
       </div>
 
       {loading && (
@@ -109,10 +121,7 @@ const BSHeader = () => {
         <div className="bs-error">
           <i className="fas fa-exclamation-circle"></i>
           <p>{error}</p>
-          <button 
-            className="bs-retry-button"
-            onClick={() => window.location.reload()}
-          >
+          <button className="bs-retry-button" onClick={() => window.location.reload()}>
             Retry
           </button>
         </div>
@@ -134,17 +143,22 @@ const BSHeader = () => {
                     }}
                   />
                 </div>
+
                 <div className="bs-product-details">
                   <h3 className="bs-product-name">{product.name}</h3>
+                  <p className="bs-product-price">
+                    €{Number(product.price || 0).toLocaleString()}
+                  </p>
                   <p className="bs-product-description">{product.description}</p>
+
                   <div className="bs-product-meta">
-                    <span className="bs-product-price">Rs. {product.price.toLocaleString()}</span>
                     <span className="bs-product-location">
                       <i className="fas fa-map-marker-alt"></i> {product.address}
                     </span>
                   </div>
+
                   <button className="bs-buy-button" onClick={() => openBuyCard(product)}>
-                    <i className="fas fa-phone-alt"></i> Contact Seller
+                    Contact Seller
                   </button>
                 </div>
               </div>
@@ -153,7 +167,7 @@ const BSHeader = () => {
             <div className="bs-no-products">
               <i className="fas fa-search"></i>
               <p>No products found matching your criteria</p>
-              <button 
+              <button
                 className="bs-clear-filters"
                 onClick={() => {
                   setSearchQuery("");
