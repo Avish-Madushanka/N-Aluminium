@@ -1,178 +1,169 @@
-.Was-header-container {
-  font-family: Arial, sans-serif;
-  padding-bottom: 50px;
+
+.WS1-hero-bg {
+    width: 100%;
+    height: 70%;
+    position: relative; 
+    background-image: url("https://scrap-city.com/wp-content/uploads/2025/09/112761-768x430.webp");
+    background-size: cover;
+    background-position:70%;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
 }
 
-.Was-header-banner {
-  width: 100%;
-  height: 250px;
-  background-image: url('https://www.metaloop.com/static/d4efc42c4c1a40870a8cb6544ac02e3d/27976/aluminiumHero.png');
-  background-size: cover;
-  margin-bottom: 40px;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+.WS1-hero-bg::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    z-index: 0;
 }
 
-.Was-header-content {
-  display: flex;
-  justify-content: center;
-  gap: 50px;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
-  align-items: flex-start;
+.WS1-hero-section {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    width: 100%;
+    height: 70vh;
+    padding-top: 60px;
+    padding-bottom: 60px;
+    background: transparent !important;
 }
 
-.Was-text-section {
-  flex: 1;
-  max-width: 450px;
-  padding-top: 20px;
+.WS1-container {
+    max-width: 1920px;
+    margin: 0 auto;
+    overflow: hidden;
 }
 
-.Was-main-title {
-  font-size: 2.8rem;
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 20px;
-  line-height: 1.2;
-}
-
-.Was-description {
-  font-size: 1.1rem;
-  color: #666;
-  line-height: 1.6;
-  margin-bottom: 30px;
-}
-
-.Was-learn-more-button {
-  background-color: #508D69;
-  color: white;
-  padding: 12px 25px;
-  border: none;
-  border-radius: 5px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.Was-learn-more-button:hover {
-  background-color: #3f7055;
-}
-
-.Was-image-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 15px;
-  flex: 1;
-  max-width: 650px;
-}
-
-.Was-grid-item {
-  width: 100%;
-  height: 220px;
-  background-color: #eee;
-  background-size: cover;
-  background-position: center;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
-  overflow: hidden;
-}
-
-.Was-grid-item.Was-item-1 {
-  background-image: url('https://smartcdn.gprod.postmedia.digital/financialpost/wp-content/uploads/2022/12/metal-trimmings-vw1208.jpg');
-}
-.Was-grid-item.Was-item-2 {
-  background-image: url('https://lirp.cdn-website.com/79d309aa/dms3rep/multi/opt/GettyImages-180404765-640w.JPG');
-}
-.Was-grid-item.Was-item-3 {
-  background-image: url('https://cdn.prod.website-files.com/661004157039807ca0c29f40/67b88bf9aa3ee3d4fd70f169_responsible-scrap-collection-edinburgh-processing.webp');
-}
-
-@media (max-width: 1024px) {
-  .Was-header-content {
+.WS1-hero-content {
+    flex-basis: 55%;
+    padding: 60px 80px;
+    display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 40px;
-  }
+    justify-content: center;
+}
 
-  .Was-text-section {
-    max-width: 700px;
-    text-align: center;
-    padding-top: 0;
-  }
+.WS1-text-content {
+    max-width: 600px;
+}
 
-  .Was-main-title {
-    font-size: 2.2rem;
-  }
+.WS1-text-content h1 {
+    font-size: 55px;
+    font-weight: 700;
+    line-height: 1.1;
+    margin: 0 0 20px 0;
+    color: #ffffff;
+}
 
-  .Was-description {
-    font-size: 1rem;
-  }
+.WS1-text-green {
+    color: #8cc63f;
+}
 
-  .Was-image-grid {
-    grid-template-columns: repeat(3, 1fr);
-    max-width: 700px;
-  }
+.WS1-subtitle {
+    font-size: 18px;
+    color: #e0e0e0;
+    margin-bottom: 35px;
+}
 
-  .Was-header-banner {
-    height: 200px;
-  }
+.WS1-button-group {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 60px;
+}
+
+.WS1-btn {
+    padding: 18px 35px;
+    border-radius: 50px;
+    border: none;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    letter-spacing: 0.5px;
+}
+
+.WS1-btn-green {
+    background-color: #8cc63f;
+    color: #ffffff;
+}
+.WS1-btn-green:hover {
+    background-color: #7ab42f;
+    transform: translateY(-2px);
+}
+
+.WS1-btn-dark {
+    background-color: #2f312c;
+    color: #ffffff;
+}
+.WS1-btn-dark:hover {
+    background-color: #1a1b18;
+    transform: translateY(-2px);
+}
+
+.WS1-features-section {
+    display: flex;
+    width: 100%;
+}
+
+.WS1-feature-box {
+    flex: 1;
+    padding: 50px 40px;
+    color: #ffffff;
+}
+
+.WS1-bg-light-green { background-color: #72b055; }
+.WS1-bg-dark-green { background-color: #2f312c; }
+.WS1-bg-orange { background-color: #f06e28; }
+
+.WS1-feature-title {
+    font-size: 24px;
+    font-weight: 600;
+    margin: 0 0 10px 0;
+}
+
+.WS1-feature-text {
+    font-size: 16px;
+    line-height: 1.6;
+    opacity: 0.9;
+    margin: 0;
+}
+
+/* ✅ Responsiveness */
+@media (max-width: 1200px) {
+    .WS1-hero-section {
+        flex-direction: column;
+        text-align: center;
+    }
+    .WS1-hero-image {
+        width: 100%;
+        height: 350px;
+        clip-path: none;
+    }
+    .WS1-hero-content {
+        padding: 40px;
+    }
+    .WS1-button-group {
+        justify-content: center;
+    }
+    .WS1-features-section {
+        flex-direction: column;
+    }
 }
 
 @media (max-width: 768px) {
-  .Was-header-banner {
-    height: 180px;
-    margin-bottom: 30px;
-  }
-
-  .Was-header-content {
-    gap: 30px;
-    padding: 0 15px;
-  }
-
-  .Was-main-title {
-    font-size: 1.8rem;
-    margin-bottom: 15px;
-  }
-
-  .Was-description {
-    font-size: 0.95rem;
-    margin-bottom: 25px;
-  }
-
-  .Was-learn-more-button {
-    padding: 10px 20px;
-    font-size: 0.9rem;
-  }
-
-  .Was-image-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    max-width: 500px;
-  }
-
-  .Was-grid-item {
-    height: 180px;
-  }
-}
-
-@media (max-width: 480px) {
-  .Was-header-banner {
-    height: 150px;
-    margin-bottom: 20px;
-  }
-
-  .Was-main-title {
-    font-size: 1.5rem;
-  }
-
-  .Was-image-grid {
-    grid-template-columns: 1fr;
-    max-width: 300px;
-  }
-
-  .Was-grid-item {
-    height: 160px;
-  }
+    .WS1-text-content h1 {
+        font-size: 42px;
+    }
+    .WS1-subtitle {
+        font-size: 16px;
+    }
+    .WS1-button-group {
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 40px;
+    }
+    .WS1-btn {
+        width: 80%;
+        max-width: 300px;
+    }
 }

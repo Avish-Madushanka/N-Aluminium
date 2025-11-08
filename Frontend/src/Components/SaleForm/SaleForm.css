@@ -1,88 +1,118 @@
-.sale-form-container {
-  margin: auto;
-  padding: 20px;
-  background-color: #11182c;
-  color: white;
-  text-align: center;
-  justify-items: center;
+.BS1-sale-form-container { 
+  max-width: 800px; 
+  margin: 40px auto; 
+  padding: 30px 25px; 
+  background-color: #1a1f3a; 
+  color: #ffffff; 
+  border-radius: 12px; 
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4); 
+  text-align: center; 
+  font-family: 'Inter', sans-serif; 
 }
 
-.form-title {
-  font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 15px;
-  border-bottom: 1px solid #fff;
+.BS1-form-title {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 25px;
+  border-bottom: 2px solid #ffcc00;
+  display: inline-block;
   padding-bottom: 10px;
+  color: #ffcc00;
 }
 
-input, select, textarea {
+input, select, textarea, .BS1-file-upload {
   width: 100%;
-  padding: 10px;
+  padding: 12px 15px;
   background-color: #d9d9d9;
-  border: none;
-  border-radius: 5px;
-  font-size: 14px;
-  color: black;
-  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 15px;
+  color: #333;
+  margin-bottom: 15px;
+  transition: all 0.2s ease-in-out;
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: #ffcc00;
+  box-shadow: 0 0 8px rgba(255, 204, 0, 0.4);
 }
 
 textarea {
-  height: 80px;
-  resize: none;
-}
-
-.form-group-row {
-  display: flex;
-  gap: 10px;
-}
-
-.form-group-row input {
-  width: 50%;
-}
-
-.form-group-row select {
-  width: 33%;
-}
-
-.file-upload {
-  display: block;
+  min-height: 100px;
+  resize: vertical;
   background-color: #d9d9d9;
-  color: black;
-  padding: 10px;
-  text-align: center;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-bottom: 10px;
 }
 
-.file-upload input {
+.BS1-form-group-row {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.BS1-form-group-row input,
+.BS1-form-group-row select {
+  flex: 1;
+}
+
+.BS1-file-upload {
+  display: block;
+  text-align: center;
+  cursor: pointer;
+  font-weight: 500;
+  background-color: #d9d9d9;
+  border-radius: 8px;
+  transition: all 0.2s ease-in-out;
+}
+
+.BS1-file-upload:hover {
+  background-color: #e0e0e0;
+  border-color: #ffcc00;
+}
+
+.BS1-file-upload input {
   display: none;
 }
 
-.submit-button {
-  background-color: #333;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-.submit-button:hover {
-  background-color: #555;
-}
-
-.image-preview {
+.BS1-image-preview {
   width: 100%;
   max-height: 250px;
   object-fit: contain;
-  margin-bottom: 15px;
-  border-radius: 8px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
 
-.error-message {
+.BS1-submit-button {
+  background: linear-gradient(90deg, #ffcc00, #ff9900);
+  color: #1a1f3a;
+  padding: 14px 25px;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.BS1-submit-button:hover {
+  background: linear-gradient(90deg, #ff9900, #ffcc00);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+}
+
+.BS1-submit-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.BS1-error-message {
   color: #ff4d4d;
-  margin-bottom: 10px;
-  font-weight: bold;
+  font-weight: 600;
+  margin-bottom: 15px;
+  font-size: 14px;
+  text-align: left;
 }
