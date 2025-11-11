@@ -7,11 +7,11 @@ const WasteMain = () => {
   const categories = [
         { name: 'Aluminum Scraps', imgSrc: 'https://media.istockphoto.com/id/645897288/photo/abtract-of-metal-scrap.jpg?s=612x612&w=0&k=20&c=LVynqe8WK5q7m1YL2ldXcy44qjRrY3RyD-solAxi-Lc=' },
         { name: 'Aluminum Wires', imgSrc: 'https://africangoldcompanygroup.com/wp-content/uploads/2023/11/557513186601830.jpg' },
-        { name: 'Aluminum Dust', imgSrc: 'https://previews.123rf.com/images/faruki2017/faruki20171702/faruki2017170200190/71630074-iron-dust-aluminum-dust.jpg' },
-        { name: 'Aluminum Sheets', imgSrc: 'https://5.imimg.com/data5/SELLER/Default/2024/11/466263246/RB/WO/HL/155423973/coated-aluminum-scrap.jpg' },
-        { name: 'Cradding Boards', imgSrc: 'https://i.ytimg.com/vi/S7O8WJ2BFWY/maxresdefault.jpg' },
         { name: 'Aluminum Cans', imgSrc: 'https://speed-tradespzoo.com/wp-content/uploads/2022/11/F_20150217155954zJ5cEe.jpg' },
+        { name: 'Aluminum Dust', imgSrc: 'https://previews.123rf.com/images/faruki2017/faruki20171702/faruki2017170200190/71630074-iron-dust-aluminum-dust.jpg' },  
+        { name: 'Cradding Boards', imgSrc: 'https://i.ytimg.com/vi/S7O8WJ2BFWY/maxresdefault.jpg' },
         { name: 'Glass Scraps', imgSrc: 'https://agecko.com/wp-content/uploads/2025/01/types-of-glass-recycling-window-panes.webp' },
+        { name: 'Aluminum Sheets', imgSrc: 'https://5.imimg.com/data5/SELLER/Default/2024/11/466263246/RB/WO/HL/155423973/coated-aluminum-scrap.jpg' },
       
       ];
 

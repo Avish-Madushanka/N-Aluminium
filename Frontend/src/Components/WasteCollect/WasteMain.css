@@ -335,7 +335,8 @@
 }
 
 .WS4-button {
-    border: none;
+    border: 2px solid #ffffff;
+    background: transparent;
     color: #ffffff;
     padding: 1rem 2.5rem;
     font-size: 0.9rem;
@@ -344,48 +345,116 @@
     letter-spacing: 1px;
     border-radius: 20px;
     text-decoration: none;
+    transition: 0.3s ease;
+}
+
+.WS4-button:hover {
+    background-color: #ffffff;
+    color: #000000;
 }
 
 .WS4-button-2 {
-    background-color: #131313;
+    background: transparent;
+    border: 2px solid #ffffff;
 }
+
+
 
 @media (max-width: 992px) {
   .Co-content-and-accordion-grid {
     grid-template-columns: 1fr;
   }
+
   .WS2-main-heading {
-    font-size: 2.1rem;
+     font-size: 2.1rem;
+  }
+
+  .WS4-container {
+     height: auto;
+     flex-direction: column;
+  }
+
+  .WS4-content {
+     width: 90%;
   }
 }
 
 @media (max-width: 768px) {
+
   .WS2-container {
-    flex-direction: column;
-    padding: 2rem 2rem;
+     flex-direction: column;
+     padding: 1.5rem;
+     gap: 1.5rem;
   }
+
   .WS2-left-section,
   .WS2-right-section {
-    padding: 0;
+     padding: 0;
+     text-align: center;
   }
+
+  .WS2-feature-card {
+     min-width: 100%;
+  }
+
   .WS2-main-heading {
-    font-size: 1.9rem;
+     font-size: 1.8rem;
   }
+
   .WS3-category-image {
-    width: 120px;
-    height: 120px;
+     width: 110px;
+     height: 110px;
   }
+
+  .WS3-category-section {
+     padding: 30px 20px;
+  }
+
+  .WS3-title {
+     font-size: 2rem;
+     text-align: center;
+  }
+
   .scrap-info-section {
-    flex-direction: column;
-    height: auto;
+     flex-direction: column;
+     height: auto;
   }
+
   .scrap-card {
-    height: 55vh;
+     height: 55vh;
   }
+
   .scrap-content {
-    text-align: center;
+     text-align: center;
+     padding: 20px;
   }
+
   .scrap-btn {
-    margin: auto;
+     margin: auto;
+  }
+
+  .WS4-container {
+     flex-direction: column;
+     height: auto;
+  }
+
+  .WS4-section {
+     width: 100%;
+     height: 60vh;
+     padding: 2rem;
+  }
+
+  .WS4-title {
+     font-size: 2rem;
+     margin-bottom: 1rem;
+  }
+
+  .WS4-subtitle {
+     font-size: 0.9rem;
+     max-width: 100%;
+  }
+
+  .WS4-content {
+     width: 90%;
   }
 }
