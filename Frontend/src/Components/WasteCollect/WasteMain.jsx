@@ -1,8 +1,20 @@
 import React, { useState } from "react";
 import "./WasteMain.css";
-import think from '../../assets/think.png';
 
 const WasteMain = () => {
+
+  const categories = [
+        { name: 'Aluminum Scraps', imgSrc: 'https://media.istockphoto.com/id/645897288/photo/abtract-of-metal-scrap.jpg?s=612x612&w=0&k=20&c=LVynqe8WK5q7m1YL2ldXcy44qjRrY3RyD-solAxi-Lc=' },
+        { name: 'Aluminum Wires', imgSrc: 'https://africangoldcompanygroup.com/wp-content/uploads/2023/11/557513186601830.jpg' },
+        { name: 'Aluminum Dust', imgSrc: 'https://previews.123rf.com/images/faruki2017/faruki20171702/faruki2017170200190/71630074-iron-dust-aluminum-dust.jpg' },
+        { name: 'Aluminum Sheets', imgSrc: 'https://5.imimg.com/data5/SELLER/Default/2024/11/466263246/RB/WO/HL/155423973/coated-aluminum-scrap.jpg' },
+        { name: 'Cradding Boards', imgSrc: 'https://i.ytimg.com/vi/S7O8WJ2BFWY/maxresdefault.jpg' },
+        { name: 'Aluminum Cans', imgSrc: 'https://speed-tradespzoo.com/wp-content/uploads/2022/11/F_20150217155954zJ5cEe.jpg' },
+        { name: 'Glass Scraps', imgSrc: 'https://agecko.com/wp-content/uploads/2025/01/types-of-glass-recycling-window-panes.webp' },
+      
+      ];
+
+      
   const [openAccordion, setOpenAccordion] = useState(null);
 
   const toggleAccordion = (index) => {
@@ -15,66 +27,24 @@ const WasteMain = () => {
     "https://www.newswire.lk/wp-content/uploads/2023/12/US-Dollar-1.jpg";
 
   return (
+
+    
     <div className="Co-recycling-section">
       <section className="Co-waste-management-section">
-        <div className="Co-container">
-          <h2 className="Co-section-title">Why Should Aluminum Scraps Be Managed?</h2>
-          <p className="Co-section-description">
-            Effective management of aluminum scraps is essential for both environmental protection and economic sustainability. Aluminum is a highly recyclable material that retains its original properties even after multiple recycling cycles, making it a valuable resource. However, without proper collection and management, large quantities of aluminum waste end up in landfills, contributing to pollution and resource loss. By implementing efficient aluminum scrap management systems, we can minimize raw material extraction, reduce energy consumption by up to 95% compared to primary production, and lower greenhouse gas emissions. Moreover, managing aluminum waste creates job opportunities, supports local industries, and promotes a circular economy where materials are reused and repurposed instead of discarded. Proper scrap management not only conserves natural resources but also helps build a cleaner, more sustainable future.
-          </p>
 
-          <div className="Co-features-grid">
-            <div className="Co-feature-item">
-              <div className="Co-feature-icon Co-electro">
-                <img
-                  src="https://cdn-icons-png.flaticon.com/128/17187/17187687.png"
-                  alt="Electronic Waste Icon"
-                />
-              </div>
-              <h3>Electronic Waste</h3>
-              <p>
-                Handling discarded electronics responsibly is crucial to prevent harmful substances from contaminating the environment. By recycling aluminum parts found in electronic waste, we help recover valuable metals while reducing pollution and landfill impact. Encourage your family to join in these efforts and build recycling habits together.
-              </p>
+        <div className="WS2-container">
+            <div className="WS2-left-section">
+                <div className="WS2-image-container">
+                    <img src="https://agmetalrecycling.com/wp-content/uploads/2024/09/Untitled-3.png" className="WS2-wall-image" />
+                </div>
             </div>
+            <div className="WS2-right-section">
+                <h1 className="WS2-main-heading">Why Should Aluminum Scraps Be Managed?</h1>
+                <p className="WS2-description">
+                     Effective aluminum scrap management is crucial for environmental protection and economic growth. Since aluminum can be recycled repeatedly without losing quality, proper collection prevents valuable material from ending up in landfills. Recycling saves up to 95% of the energy used in primary production and significantly reduces emissions. Efficient scrap systems support local industries, create jobs, and promote a circular economy where resources are reused, helping build a cleaner and more sustainable future.
+                </p>
 
-            <div className="Co-feature-item">
-              <div className="Co-feature-icon Co-demo">
-                <img
-                  src="https://cdn-icons-png.flaticon.com/128/4285/4285861.png"
-                  alt="Demolition Icon"
-                />
-              </div>
-              <h3>Demolition Waste</h3>
-              <p>
-                Construction and demolition sites generate a large amount of aluminum waste from windows, doors, and frames. Proper recycling ensures that these materials are reused effectively, reducing the need for raw aluminum extraction. Take the first step toward recycling—your actions can inspire others to help too.
-              </p>
-            </div>
-
-            <div className="Co-feature-item">
-              <div className="Co-feature-icon Co-recovery">
-                <img
-                  src="https://cdn-icons-png.flaticon.com/128/5058/5058346.png"
-                  alt="Recovery Icon"
-                />
-              </div>
-              <h3>Recovery Process</h3>
-              <p>
-                Our recovery process focuses on collecting, sorting, and purifying aluminum scraps to ensure they’re ready for reuse in new products. This process supports resource efficiency and sustainability. Start recycling today—when one person acts, others follow, creating a community that values the environment.
-              </p>
-            </div>
-          </div>
-
-          
-
-          <div className="Co-content-and-accordion-grid">
-            <div className="Co-image-container">
-              <img
-                src={think}
-                className=".Co-image-container img"
-              />
-            </div>
-
-            <div className="Co-accordion-section">
+                <div className="Co-accordion-section">
               <div
                 className={`Co-accordion-item ${
                   openAccordion === 0 ? "active" : ""
@@ -123,29 +93,6 @@ const WasteMain = () => {
 
               <div
                 className={`Co-accordion-item ${
-                  openAccordion === 2 ? "active" : ""
-                }`}
-              >
-                <button
-                  className="Co-accordion-header"
-                  onClick={() => toggleAccordion(2)}
-                >
-                  Can aluminum be recycled multiple times?
-                  <span className="Co-accordion-toggle-icon">
-                    {openAccordion === 2 ? "−" : "+"}
-                  </span>
-                </button>
-                {openAccordion === 2 && (
-                  <div className="Co-accordion-content">
-                    <p>
-                      Yes! Aluminum is infinitely recyclable without losing its strength or quality. This makes it one of the most sustainable materials in the world.
-                    </p>
-                  </div>
-                )}
-              </div>
-
-              <div
-                className={`Co-accordion-item ${
                   openAccordion === 3 ? "active" : ""
                 }`}
               >
@@ -153,7 +100,7 @@ const WasteMain = () => {
                   className="Co-accordion-header"
                   onClick={() => toggleAccordion(3)}
                 >
-                  What are the environmental benefits of recycling aluminum?
+                  Environmental benefits of recycling aluminum?
                   <span className="Co-accordion-toggle-icon">
                     {openAccordion === 3 ? "−" : "+"}
                   </span>
@@ -167,9 +114,21 @@ const WasteMain = () => {
                 )}
               </div>
             </div>
-          </div>
+            </div>
         </div>
-      </section>
+
+        <div className="WS3-category-section">
+            <h2 className="WS3-title">What We Collect</h2>
+            <div className="WS3-category-container">
+                {categories.map((category, index) => (
+                    <div key={index} className="WS3-category-item">
+                        <img src={category.imgSrc} alt={category.name} className="WS3-category-image" />
+                        <p className="WS3-category-name">{category.name}</p>
+                    </div>
+                ))}
+            </div>
+        </div>
+        </section>
 
       <section className="scrap-info-section">
       <div
@@ -212,8 +171,7 @@ const WasteMain = () => {
         </div>
       </div>
     </section>
-
-    </div>
+</div>
   );
 };
 

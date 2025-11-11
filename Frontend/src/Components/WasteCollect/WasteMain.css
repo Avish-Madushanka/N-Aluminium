@@ -1,97 +1,146 @@
+.WS2-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 2rem;
+    font-family: 'Roboto', sans-serif;
+    background-color: #fff;
+    max-width: 1200px;
+    margin: auto;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.WS2-left-section {
+    flex: 1;
+    padding-right: 2rem;
+    min-width: 300px;
+}
+
+.WS2-image-container {
+    position: relative;
+}
+
+.WS2-wall-image {
+    width: 100%;
+    height: auto;
+    border-radius: 200px 5px 5px 5px;
+}
+
+.WS2-right-section {
+    flex: 1.2;
+    padding-left: 2rem;
+    min-width: 320px;
+}
+
+.WS2-main-heading {
+    font-family: 'Merriweather', serif;
+    font-size: 2.4rem;
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+    line-height: 1.2;
+}
+
+.WS2-description {
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 2.5rem;
+    text-align: justify;
+}
+
+.WS2-features-container {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.WS2-feature-card {
+    background-color: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 10px;
+    flex: 1;
+    min-width: 260px;
+}
+
+.WS2-icon-wrapper {
+    background-color: #f1f1f1;
+    border-radius: 50%;
+    padding: 0.75rem;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+.WS2-feature-icon {
+    width: 100%;
+}
+
+.WS2-feature-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1f1616;
+    margin-bottom: 0.5rem;
+}
+
+.WS2-feature-description {
+    color: #666;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    text-align: justify;
+}
+
+.WS3-category-section {
+    padding: 40px 20px;
+    background-color: #ffffff;
+    max-width: 1400px;
+    margin: auto;
+}
+
+.WS3-title {
+    font-family: 'Roboto', sans-serif;
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 50px;
+    text-align: left;
+}
+
+.WS3-category-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.WS3-category-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.WS3-category-image {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 15px;
+    background-color: #f0f0f0;
+}
+
+.WS3-category-name {
+    font-size: 1rem;
+    color: #555;
+}
+
 .Co-recycling-section {
   font-family: "Poppins", Arial, sans-serif;
   padding: 60px 0;
   background-color: #f9fdfb;
-  color: #333;
-}
-
-.Co-container {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 0 20px;
-}
-
-.Co-section-title {
-  font-size: 2.6em;
-  font-weight: 700;
-  color: #1e3a34;
-  margin-bottom: 20px;
-  text-align: left;
-  letter-spacing: 0.5px;
-}
-
-.Co-section-description {
-  font-size: 1.1em;
-  line-height: 1.7;
-  color: #4b5563;
-  margin: 0 auto 40px;
-  text-align: justify;
-  text-justify: inter-word;
-}
-
-.Co-features-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 30px;
-  margin-bottom: 60px;
-}
-
-.Co-feature-item {
-  background-color: #ffffff;
-  padding: 25px;
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-  text-align: left;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.Co-feature-item:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-}
-
-.Co-feature-icon {
-  width: 65px;
-  height: 65px;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 15px;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
-}
-
-.Co-electro {
-  background-color: #d1f7ff;
-}
-
-.Co-demo {
-  background-color: #fff2cc;
-}
-
-.Co-recovery {
-  background-color: #dafbe1;
-}
-
-.Co-feature-icon img {
-  width: 30px;
-  height: 30px;
-}
-
-.Co-feature-item h3 {
-  font-size: 1.2em;
-  color: #1f2937;
-  margin-bottom: 10px;
-  font-weight: 600;
-}
-
-.Co-feature-item p {
-  font-size: 0.95em;
-  color: #555;
-  line-height: 1.6;
 }
 
 .Co-content-and-accordion-grid {
@@ -100,20 +149,11 @@
   align-items: center;
   justify-items: center;
   padding-bottom: 40px;
-}
-
-.Co-image-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-  padding: 20px;
+  gap: 30px;
 }
 
 .Co-image-container img {
   width: 80%;
-  height: auto;
-  display: block;
   border-radius: 10px;
   transition: transform 0.4s ease;
 }
@@ -122,64 +162,40 @@
   transform: scale(1.05);
 }
 
-.Co-accordion-section {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  width: 100%;
-}
-
 .Co-accordion-item {
   margin-bottom: 15px;
-  background-color: #fbfbfb;
+  background: #fbfbfb;
   border-radius: 10px;
-  overflow: hidden;
   border: 1px solid #2b2b2b;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
-  transition: background-color 0.3s ease;
-}
-
-.Co-active {
-  background-color: #d9fce2;
+  overflow: hidden;
 }
 
 .Co-accordion-header {
   width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   padding: 18px 25px;
-  background-color: #fbfbfb;
+  background: #fbfbfb;
   border: none;
   font-size: 1.1em;
   font-weight: 600;
-  color: #1e3a34;
   cursor: pointer;
-  text-align: left;
-  transition: background-color 0.3s ease;
-}
-
-.Co-accordion-item.Co-active .Co-accordion-header {
-  color: #2e7d32;
+  display: flex;
+  justify-content: space-between;
+  transition: 0.3s ease;
 }
 
 .Co-accordion-header:hover {
-  background-color: #e2e2e2;
+  background: #e2e2e2;
 }
 
 .Co-accordion-toggle-icon {
   font-size: 1.5em;
-  font-weight: bold;
-  color: #1b1b1b;
-  margin-left: 15px;
 }
 
 .Co-accordion-content {
   padding: 0 25px 20px;
+  background: #f0f0f0;
   font-size: 0.95em;
   line-height: 1.6;
-  color: #333;
-  background-color: #f0f0f0;
 }
 
 .scrap-info-section {
@@ -187,35 +203,21 @@
   flex-wrap: wrap;
   width: 100%;
   height: 50vh;
-  overflow: hidden;
 }
 
 .scrap-card {
-  position: relative;
   flex: 1 1 50%;
   display: flex;
-  align-items: center;
   justify-content: center;
-  color: #fff;
+  align-items: center;
+  position: relative;
+  transition: 0.4s ease;
   overflow: hidden;
-  transition: transform 0.4s ease, filter 0.4s ease;
 }
 
 .scrap-card:hover {
   transform: scale(1.02);
   filter: brightness(1.15);
-}
-
-.left-card {
-  background-image: url("https://i.ibb.co/YdVMvGp/sell.jpg");
-  background-size: cover;
-  background-position: center;
-}
-
-.right-card {
-  background-image: url("https://i.ibb.co/gZMYG8z/value.jpg");
-  background-size: cover;
-  background-position: center;
 }
 
 .scrap-overlay {
@@ -230,22 +232,20 @@
   z-index: 2;
   max-width: 600px;
   padding: 30px;
-  text-align: left;
+  color: #fff;
 }
 
 .scrap-title {
   font-size: 2.2rem;
-  font-weight: 600;
   margin-bottom: 12px;
-  color: #ffffff;
+  font-weight: 600;
 }
 
 .scrap-text {
   font-size: 1.05rem;
-  line-height: 1.6;
   margin-bottom: 25px;
+  line-height: 1.6;
   text-align: justify;
-  text-justify: inter-word;
 }
 
 .scrap-btn {
@@ -254,15 +254,13 @@
   border: 2px solid #fff;
   border-radius: 50%;
   background: transparent;
-  color: #fff;
   font-size: 1.4rem;
   cursor: pointer;
-  transition: all 0.3s ease;
-  text-decoration: none;
+  transition: 0.3s ease;
 }
 
 .scrap-btn:hover {
-  background: #ffffff;
+  background: #fff;
   color: #1e3a34;
 }
 
@@ -270,37 +268,38 @@
   .Co-content-and-accordion-grid {
     grid-template-columns: 1fr;
   }
+  .WS2-main-heading {
+    font-size: 2.1rem;
+  }
 }
 
 @media (max-width: 768px) {
-  .Co-section-title {
-    font-size: 2em;
+  .WS2-container {
+    flex-direction: column;
+    padding: 2rem 2rem;
   }
-
-  .Co-features-grid {
-    grid-template-columns: 1fr;
+  .WS2-left-section,
+  .WS2-right-section {
+    padding: 0;
   }
-
-  .Co-feature-item {
-    align-items: center;
-    text-align: center;
+  .WS2-main-heading {
+    font-size: 1.9rem;
   }
-
+  .WS3-category-image {
+    width: 120px;
+    height: 120px;
+  }
   .scrap-info-section {
     flex-direction: column;
     height: auto;
   }
-
   .scrap-card {
-    flex: 1 1 100%;
-    height: 60vh;
+    height: 55vh;
   }
-
   .scrap-content {
     text-align: center;
   }
-
   .scrap-btn {
-    margin: 0 auto;
+    margin: auto;
   }
 }

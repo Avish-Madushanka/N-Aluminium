@@ -11,6 +11,7 @@
 }
 
 .WS1-hero-bg::before {
+  height: 70vh;
     content: "";
     position: absolute;
     inset: 0;
@@ -80,14 +81,15 @@
     cursor: pointer;
     transition: all 0.3s ease;
     letter-spacing: 0.5px;
+    text-decoration: none;
 }
 
 .WS1-btn-green {
-    background-color: #8cc63f;
+    background-color: #044c27;
     color: #ffffff;
 }
 .WS1-btn-green:hover {
-    background-color: #7ab42f;
+    background-color: #065a2f;
     transform: translateY(-2px);
 }
 
@@ -107,28 +109,29 @@
 
 .WS1-feature-box {
     flex: 1;
-    padding: 50px 40px;
+    padding: 20px 50px;
     color: #ffffff;
 }
 
-.WS1-bg-light-green { background-color: #72b055; }
+.WS1-bg-light-green { background-color: #044c27; }
 .WS1-bg-dark-green { background-color: #2f312c; }
-.WS1-bg-orange { background-color: #f06e28; }
+.WS1-bg-orange { background-color: #ca5110; }
 
 .WS1-feature-title {
-    font-size: 24px;
-    font-weight: 600;
+    font-size: 20px;
+    color: #ffffff;
+    font-weight: 700;
     margin: 0 0 10px 0;
 }
 
 .WS1-feature-text {
-    font-size: 16px;
+    font-size: 14px;
+    color: #c7c7c7;
     line-height: 1.6;
     opacity: 0.9;
     margin: 0;
 }
 
-/* ✅ Responsiveness */
 @media (max-width: 1200px) {
     .WS1-hero-section {
         flex-direction: column;

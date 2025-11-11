@@ -1,5 +1,6 @@
 import React from "react";
 import "./WasteHeader.css";
+import { Link } from "react-router-dom";
 
 const WasteHeader = () => {
   return (
@@ -17,9 +18,14 @@ const WasteHeader = () => {
               </p>
 
               <div className="WS1-button-group">
-                <button className="WS1-btn WS1-btn-green">Check Pickup Days</button>
-                <button className="WS1-btn WS1-btn-dark">Collection Centers</button>
-              </div>
+              <Link to="/CalendarDisplay" className="WS1-btn WS1-btn-green">
+                Check Pickup Days
+              </Link>
+
+              <Link to="/LocationMap" className="WS1-btn WS1-btn-dark">
+                Collection Centers
+              </Link>
+            </div>
             </div>
           </div>
 
@@ -28,7 +34,7 @@ const WasteHeader = () => {
 
         <section className="WS1-features-section">
           <div className="WS1-feature-box WS1-bg-light-green">
-            <svg className="WS1-feature-icon" width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+            <svg className="WS1-feature-icon" width="45" height="45" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
               <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
               <path d="M3 3v5h5" />
               <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16" />
@@ -39,7 +45,7 @@ const WasteHeader = () => {
           </div>
 
           <div className="WS1-feature-box WS1-bg-dark-green">
-            <svg className="WS1-feature-icon" width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+            <svg className="WS1-feature-icon" width="45" height="45" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
               <path d="M10.4 2.2c-.3-.3-.8-.3-1.1 0L3.5 8c-1.6 1.6-1.6 4.2 0 5.8s4.2 1.6 5.8 0l6.8-6.8c.3-.3.3-.8 0-1.1L10.4 2.2z" />
               <path d="m19.5 12.5-5.8-5.8" />
               <path d="m9.2 2.5 5.8 5.8" />
@@ -50,7 +56,7 @@ const WasteHeader = () => {
           </div>
 
           <div className="WS1-feature-box WS1-bg-orange">
-            <svg className="WS1-feature-icon" width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+            <svg className="WS1-feature-icon" width="45" height="45" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
               <path d="M5 18H3c-.6 0-1-.4-1-1V7c0-.6.4-1 1-1h10c.6 0 1 .4 1 1v11" />
               <path d="M14 9h4l4 4v5h-3" />
               <circle cx="7.5" cy="18.5" r="2.5" />
