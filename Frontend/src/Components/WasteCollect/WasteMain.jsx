@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./WasteMain.css";
+import { Link } from "react-router-dom";
 
 const WasteMain = () => {
 
@@ -130,49 +131,46 @@ const WasteMain = () => {
         </div>
         </section>
 
-      <section className="scrap-info-section">
-      <div
-        className="scrap-card left-card"
-        style={{
-          backgroundImage: `url(${imageUrlSell})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      >
-        <div className="scrap-overlay"></div>
-        <div className="scrap-content">
-          <h2 className="scrap-title">Sell to Us</h2>
-          <p className="scrap-text">
-            Metal Source is a buyer of all scrap metal grades including aluminum,
-            steel, copper, stainless, and all ferrous and nonferrous metals,
-            offering competitive prices and reliable service.
-          </p>
-          <button className="scrap-btn">→</button>
-        </div>
-      </div>
+        <section className="scrap-info-section">
+            <div className="WS4-container">
+              <div className="WS4-section WS4-m">
+                <div className="WS4-content">
+                  <h2 className="WS4-title">
+                    <span className="WS4-highlight-blue">Sell</span> to Us
+                  </h2>
+                  <p className="WS4-subtitle">
+                    Metal Source is a buyer of all scrap metal grades including aluminum,
+                    steel, copper, stainless, and all ferrous and nonferrous metals,
+                    offering competitive prices and reliable service.
+                  </p>
+                  <br /><br />
+                  <Link to="/UserCalendar" className="WS4-button WS4-button-2">
+                    Pickup Request
+                  </Link>
+                </div>
+              </div>
 
-      <div
-        className="scrap-card right-card"
-        style={{
-          backgroundImage: `url(${imageUrlSell1})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      >
-        <div className="scrap-overlay"></div>
-        <div className="scrap-content">
-          <h2 className="scrap-title">Know Your Scrap Value</h2>
-          <p className="scrap-text">
-            Know your scrap value in seconds. Enter the weight, get an instant
-            estimate, and see how much cash you’ll earn for recycling your
-            aluminum. It’s fast, accurate, and helps the planet too!
-          </p>
-          <button className="scrap-btn">→</button>
+              <div className="WS4-section WS4-w">
+                <div className="WS4-content">
+                  <h2 className="WS4-title">
+                    Know Your<br />
+                    <span className="WS4-highlight-pink">Scrap Value</span>
+                  </h2>
+                  <p className="WS4-subtitle">
+                    Know your scrap value in seconds. Enter the weight, get an instant
+                    estimate, and see how much cash you’ll earn for recycling your
+                    aluminum. It’s fast, accurate, and helps the planet too!
+                  </p>
+                  <Link to="/Calculate" className="WS4-button WS4-button-2">
+                    Check Scraps Values
+                  </Link>
+                </div>
+              </div>
+            </div>
+
+         </section>
         </div>
-      </div>
-    </section>
-</div>
-  );
-};
+          );
+        };
 
 export default WasteMain;
