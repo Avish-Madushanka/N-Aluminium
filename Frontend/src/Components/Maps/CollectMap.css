@@ -53,7 +53,7 @@
 .MP1-headline {
     font-size: 2.8rem;
     font-weight: 800;
-    line-height: 1;
+    line-height: 1.3;
     margin: 0;
     margin-bottom: 1rem;
 }
@@ -63,11 +63,12 @@
 }
 
 .MP1-description {
-    font-size: 0.9rem;
+    font-size: 1rem;
     color: #666;
     margin: 0;
     margin-bottom: 2.5rem;
-    max-width: 350px;
+    max-width: 370px;
+    text-align: justify;
 }
 
 .MP1-stats {
@@ -80,6 +81,7 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    align-items: center;
 }
 
 .MP1-stat-number {

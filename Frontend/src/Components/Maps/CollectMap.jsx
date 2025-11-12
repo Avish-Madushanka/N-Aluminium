@@ -10,8 +10,8 @@ const CollectMap = () => {
       </div>
       <div className="MP1-content-section">
         <h1 className="MP1-headline">
-          Find Collection <br />
-          <span className="MP1-a">Centers Near You </span>
+          Find Collection <br /> Centers <span></span>
+          <span className="MP1-a">Near You </span>
         </h1>
         <p className="MP1-description">
           Quickly find nearby aluminum scrap collection centers and partner shops through our interactive map. Discover convenient, eco-friendly locations with service details and contact info for easy recycling.
@@ -19,17 +19,17 @@ const CollectMap = () => {
         <div className="MP1-stats">
           <div className="MP1-stat-item">
             <span className="MP1-stat-number">20+</span>
-            <span className="MP1-stat-label">Shops</span>
+            <span className="MP1-stat-label">Collection Points</span>
           </div>
           <div className="MP1-stat-divider"></div>
           <div className="MP1-stat-item">
-            <span className="MP1-stat-number">1K+</span>
-            <span className="MP1-stat-label">Partnerships</span>
+            <span className="MP1-stat-number">24/7</span>
+            <span className="MP1-stat-label">Pickup Availability</span>
           </div>
-           <div className="MP1-stat-divider"></div>
+          <div className="MP1-stat-divider"></div>
           <div className="MP1-stat-item">
-            <span className="MP1-stat-number">★ 4.8</span>
-            <span className="MP1-stat-label">App Rating</span>
+            <span className="MP1-stat-number">100%</span>
+            <span className="MP1-stat-label">Coverage area</span>
           </div>
         </div>
          <Link to="/LocationMap" className="MP1-btn">
