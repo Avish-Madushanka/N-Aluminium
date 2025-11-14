@@ -1,263 +1,296 @@
-import React, { useState } from "react";
-import {
-  Search,
-  ShoppingCart,
-  Star,
-  Filter,
-  Grid,
-  List,
-  ArrowRight,
-  Truck,
-  Shield,
-  Award,
-} from "lucide-react";
-import "./ItemMarkert.css"; 
+import React, { useState, useEffect } from "react";
+import { Filter, Bookmark, BookmarkCheck, X } from "lucide-react";
+import "./ItemMarkert.css";
+
+const slides = [
+  {
+    id: 1,
+    title: "Sharpen Your Skills, with Us",
+    description:
+      "Enhance your expertise through hands-on aluminum recycling and sustainability programs.",
+    image:
+      "https://aberturasleon.com.ar/wp-content/uploads/2024/04/modelos-de-vidrio.jpg",
+    button: "Join Our Club!",
+  },
+  {
+    id: 2,
+    title: "Master Modern Recycling Practices",
+    description:
+      "Discover innovative techniques and eco-friendly methods that make a real impact.",
+    image:
+      "https://www.unleashedsoftware.com/media/scraper/011_COPY-JOPA-CID037.jpg",
+    button: "Explore Courses",
+  },
+];
 
 const ItemMarkert = () => {
-  const [viewMode, setViewMode] = useState("grid");
-  const [selectedCategory, setSelectedCategory] = useState("all");
-  const [searchQuery, setSearchQuery] = useState("");
-
-  const categories = [
-    { id: "all", name: "All Products", count: 248 },
-    { id: "sheets", name: "Aluminum Sheets", count: 67 },
-    { id: "profiles", name: "Profiles & Extrusions", count: 89 },
-    { id: "tubes", name: "Tubes & Pipes", count: 45 },
-    { id: "bars", name: "Bars & Rods", count: 47 },
-  ];
-
   const products = [
     {
       id: 1,
-      name: "6061-T6 Aluminum Sheet",
-      price: "$89.99",
-      rating: 4.8,
-      reviews: 124,
-      image:
-        "https://images.unsplash.com/photo-1565814329452-e1efa11c5b89?w=300&h=200&fit=crop",
-      category: "sheets",
-      specifications: `0.125" x 12" x 24"`,
+      name: "Aluminum Scrap Bundle",
+      category: "Raw Aluminum",
+      price: 25,
+      rating: 4.5,
       inStock: true,
+      image: "https://images.unsplash.com/photo-1602526432604-b6a8b0c3c6c3",
     },
     {
       id: 2,
-      name: "Aluminum T-Slot Extrusion",
-      price: "$24.50",
-      rating: 4.9,
-      reviews: 89,
-      image:
-        "https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=300&h=200&fit=crop",
-      category: "profiles",
-      specifications: "20mm x 20mm x 1000mm",
+      name: "Recycled Aluminum Sheets",
+      category: "Processed Aluminum",
+      price: 40,
+      rating: 4.8,
       inStock: true,
+      image: "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952",
     },
     {
       id: 3,
-      name: "Seamless Aluminum Tube",
-      price: "$156.75",
-      rating: 4.7,
-      reviews: 56,
-      image:
-        "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=300&h=200&fit=crop",
-      category: "tubes",
-      specifications: `2" OD x 0.125" Wall`,
+      name: "Aluminum Ingots",
+      category: "Refined Products",
+      price: 55,
+      rating: 4.2,
       inStock: false,
+      image: "https://images.unsplash.com/photo-1616628182509-6c7e2b49c146",
     },
     {
       id: 4,
-      name: "7075-T6 Aluminum Bar",
-      price: "$78.99",
-      rating: 4.6,
-      reviews: 34,
-      image:
-        "https://images.unsplash.com/photo-1587293852726-70cdb56c2866?w=300&h=200&fit=crop",
-      category: "bars",
-      specifications: `1" x 1" x 12"`,
+      name: "Aluminum Can Collection",
+      category: "Raw Aluminum",
+      price: 15,
+      rating: 4.0,
       inStock: true,
-    },
-    {
-      id: 5,
-      name: "Perforated Aluminum Panel",
-      price: "$134.99",
-      rating: 4.5,
-      reviews: 78,
-      image:
-        "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&h=200&fit=crop",
-      category: "sheets",
-      specifications: `24" x 36" x 0.063"`,
-      inStock: true,
-    },
-    {
-      id: 6,
-      name: "Aluminum Angle Extrusion",
-      price: "$45.50",
-      rating: 4.8,
-      reviews: 92,
-      image:
-        "https://images.unsplash.com/photo-1572981779307-38b8cabb2407?w=300&h=200&fit=crop",
-      category: "profiles",
-      specifications: `2" x 2" x 1/8" x 8ft`,
-      inStock: true,
+      image: "https://images.unsplash.com/photo-1590794064817-748e0a195a7d",
     },
   ];
 
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [bookmarked, setBookmarked] = useState([]);
+  const [showBookmarked, setShowBookmarked] = useState(false);
+  const [showCategories, setShowCategories] = useState(false);
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const toggleBookmark = (id) => {
+    setBookmarked((prev) =>
+      prev.includes(id) ? prev.filter((pid) => pid !== id) : [...prev, id]
+    );
+  };
+
   const filteredProducts = products.filter((product) => {
-    const matchesCategory =
+    const matchCategory =
       selectedCategory === "all" || product.category === selectedCategory;
-    const matchesSearch = product.name
+    const matchSearch = product.name
       .toLowerCase()
       .includes(searchQuery.toLowerCase());
-    return matchesCategory && matchesSearch;
+    const matchBookmark = showBookmarked
+      ? bookmarked.includes(product.id)
+      : true;
+    return matchCategory && matchSearch && matchBookmark;
   });
 
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, []);
+
   return (
-    <div className="am-market">
-      <header className="am-header">
-        <div className="am-container">
-          <div className="am-header-inner">
-            <div className="am-logo-wrap">
-              <div className="am-logo">
-                <span className="am-logo-text">Al</span>
-              </div>
-              <div>
-                <h1 className="am-title">AlumTech Market</h1>
-                <p className="am-subtitle">Premium Aluminum Solutions</p>
+    <>
+      <div className="ITNav-wrapper">
+        <nav className="ITNav-bottom-nav">
+          <button
+            className="ITNav-shop-by-cat-btn"
+            onClick={() => setShowCategories(true)}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+            <span>SHOP BY CATEGORIES</span>
+          </button>
+
+          <ul className="ITNav-nav-links">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Shop</a></li>
+            <li>
+              <a href="#">
+                Categories <span className="ITNav-badge ITNav-badge-sale">SALE</span>
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                Products <span className="ITNav-badge ITNav-badge-hot">HOT</span>
+              </a>
+            </li>
+            <li><a href="#">Top Deals</a></li>
+            <li><a href="#">Elements</a></li>
+          </ul>
+
+          <div className="ITNav-todays-deals">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M21 10V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v2"></path>
+              <path d="M21 14v1a2 2 0 0 1-1 1.73l-7 4a2 2 0 0 1-2 0l-7-4A2 2 0 0 1 3 15v-1"></path>
+              <line x1="21" y1="10" x2="3" y2="10"></line>
+              <line x1="12" y1="22" x2="12" y2="10"></line>
+              <line x1="12" y1="2.27" x2="12" y2="4"></line>
+              <polyline points="18.5 7.5 12 11 5.5 7.5"></polyline>
+            </svg>
+            <span>Today's Deals</span>
+          </div>
+        </nav>
+      </div>
+
+      <div className="am-container">
+        <div className="am-slider">
+          {slides.map((slide, index) => (
+            <div
+              key={slide.id}
+              className={`am-slide ${index === currentSlide ? "active" : ""}`}
+              style={{ backgroundImage: `url(${slide.image})` }}
+            >
+              <div className="am-overlay"></div>
+              <div className="am-slide-content">
+                <h1>{slide.title}</h1>
+                <p>{slide.description}</p>
+                <button>{slide.button}</button>
               </div>
             </div>
+          ))}
+        </div>
 
-            <div className="am-search-cart">
-              <div className="am-search">
-                <input
-                  type="text"
-                  placeholder="Search aluminum products..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="am-search-input"
-                />
-              </div>
-              <button className="am-cart-btn">
-                <ShoppingCart className="am-cart-icon" />
-                <span className="am-cart-badge">3</span>
+        <div className="am-toolbar">
+          <button
+            className={`am-bookmark-toggle ${
+              showBookmarked ? "active" : ""
+            }`}
+            onClick={() => setShowBookmarked(!showBookmarked)}
+          >
+            <BookmarkCheck />
+            {showBookmarked ? "Show All" : "Show Liked"}
+          </button>
+        </div>
+
+        <div
+          className={`am-sidebar-overlay ${
+            showCategories ? "visible" : ""
+          }`}
+        >
+          <div className="am-sidebar">
+            <div className="am-sidebar-header">
+              <h3>Categories</h3>
+              <button
+                className="am-close-sidebar"
+                onClick={() => setShowCategories(false)}
+              >
+                <X />
               </button>
             </div>
+
+            <ul>
+              <li
+                className={selectedCategory === "all" ? "active" : ""}
+                onClick={() => {
+                  setSelectedCategory("all");
+                  setShowCategories(false);
+                }}
+              >
+                All Items
+              </li>
+              <li
+                className={
+                  selectedCategory === "Raw Aluminum" ? "active" : ""
+                }
+                onClick={() => {
+                  setSelectedCategory("Raw Aluminum");
+                  setShowCategories(false);
+                }}
+              >
+                Raw Aluminum
+              </li>
+              <li
+                className={
+                  selectedCategory === "Processed Aluminum" ? "active" : ""
+                }
+                onClick={() => {
+                  setSelectedCategory("Processed Aluminum");
+                  setShowCategories(false);
+                }}
+              >
+                Processed Aluminum
+              </li>
+              <li
+                className={
+                  selectedCategory === "Refined Products" ? "active" : ""
+                }
+                onClick={() => {
+                  setSelectedCategory("Refined Products");
+                  setShowCategories(false);
+                }}
+              >
+                Refined Products
+              </li>
+            </ul>
           </div>
         </div>
-      </header>
 
-      
-      <div className="am-container am-layout">
-        <aside className="am-sidebar">
-          <div className="am-sidebar-header">
-            <h3>Categories</h3>
-            <Filter />
-          </div>
-          <div className="am-categories">
-            {categories.map((category) => (
-              <button
-                key={category.id}
-                onClick={() => setSelectedCategory(category.id)}
-                className={`am-category-btn ${
-                  selectedCategory === category.id ? "active" : ""
-                }`}
-              >
-                <span>{category.name}</span>
-                <span className="am-category-count">{category.count}</span>
-              </button>
-            ))}
-          </div>
-        </aside>
-
-        <main className="am-main">
-          <div className="am-toolbar">
-            <div>
-              <h2>
-                {selectedCategory === "all"
-                  ? "All Products"
-                  : categories.find((c) => c.id === selectedCategory)?.name}
-              </h2>
-              <p>{filteredProducts.length} products found</p>
-            </div>
-            <div className="am-toolbar-actions">
-              <div className="am-view-toggle">
+        <div className="am-products">
+          {filteredProducts.map((product) => (
+            <div key={product.id} className="am-product-card">
+              <div className="am-product-img">
+                <img src={product.image} alt={product.name} />
                 <button
-                  onClick={() => setViewMode("grid")}
-                  className={viewMode === "grid" ? "active" : ""}
+                  className={`am-bookmark-btn ${
+                    bookmarked.includes(product.id)
+                      ? "active"
+                      : ""
+                  }`}
+                  onClick={() => toggleBookmark(product.id)}
                 >
-                  <Grid />
+                  {bookmarked.includes(product.id) ? (
+                    <BookmarkCheck />
+                  ) : (
+                    <Bookmark />
+                  )}
                 </button>
-                <button
-                  onClick={() => setViewMode("list")}
-                  className={viewMode === "list" ? "active" : ""}
-                >
-                  <List />
-                </button>
+
+                {!product.inStock && (
+                  <div className="am-outstock">Out of Stock</div>
+                )}
               </div>
-              <select>
-                <option>Sort by: Relevance</option>
-                <option>Price: Low to High</option>
-                <option>Price: High to Low</option>
-                <option>Rating: High to Low</option>
-                <option>Newest First</option>
-              </select>
+
+              <div className="am-product-info">
+                <h4>{product.name}</h4>
+                <p className="am-category">{product.category}</p>
+                <p className="am-price">${product.price}</p>
+                <p className="am-rating">⭐ {product.rating}</p>
+              </div>
             </div>
-          </div>
-
-          <div
-            className={`am-products ${viewMode === "list" ? "list" : "grid"}`}
-          >
-            {filteredProducts.map((product) => (
-              <div
-                key={product.id}
-                className={`am-product-card ${
-                  viewMode === "list" ? "list" : ""
-                }`}
-              >
-                <div className="am-product-img">
-                  <img src={product.image} alt={product.name} />
-                  {product.discount && (
-                    <div className="am-discount">-{product.discount}%</div>
-                  )}
-                  {!product.inStock && (
-                    <div className="am-outstock">Out of Stock</div>
-                  )}
-                </div>
-                <div className="am-product-details">
-                  <h3>{product.name}</h3>
-                  <p className="am-specs">{product.specifications}</p>
-                  <div className="am-rating">
-                    <Star className="star" />
-                    <span>{product.rating}</span>
-                    <span className="reviews">({product.reviews} reviews)</span>
-                  </div>
-                  <div className="am-price-cart">
-                    <div className="am-price">
-                      <span className="current">{product.price}</span>
-                      {product.originalPrice && (
-                        <span className="old">{product.originalPrice}</span>
-                      )}
-                    </div>
-                    <button
-                      disabled={!product.inStock}
-                      className={`am-cart-add ${
-                        product.inStock ? "" : "disabled"
-                      }`}
-                    >
-                      <ShoppingCart />
-                      <span>Add to Cart</span>
-                      <ArrowRight />
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="am-loadmore">
-            <button>Load More Products</button>
-          </div>
-        </main>
+          ))}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

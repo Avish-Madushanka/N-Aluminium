@@ -60,12 +60,12 @@
 }
 
 .Nav-menu-links {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
-  justify-content: center;
   align-items: center;
   gap: 28px;
-  margin: 0 auto;
-  padding: 0 20px;
 }
 
 .Nav-menu-item {
