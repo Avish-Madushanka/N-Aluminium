@@ -1,7 +1,7 @@
 .am-container {
   font-family: "Inter", sans-serif;
   background: #f9fafb;
-  padding: 1rem;
+  padding: 1.5rem;
   min-height: 100vh;
 }
 
@@ -522,3 +522,121 @@
 .ITNav-todays-deals svg {
     stroke: #333;
 }
+
+
+.am-products-grid { 
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
+  gap: 15px; /* Smaller gap */
+  padding: 20px 0;
+}
+
+.am-product-card-new { 
+  background-color: #ffffff;
+  border-radius: 8px; 
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08); 
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.2s ease-in-out;
+}
+
+.am-product-card-new:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.am-product-card-image-wrapper {
+  position: relative;
+  width: 100%;
+  height: 180px; 
+  background-color: #f8f8f8; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden; 
+}
+
+.am-product-card-image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain; 
+  padding: 10px;
+}
+
+.am-product-card-add-button {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 12px;
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  opacity: 0; 
+  transform: translateY(10px); 
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.am-product-card-new:hover .am-product-card-add-button {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.am-product-card-add-button:hover {
+  background-color: #45a049; 
+}
+
+.am-product-card-info {
+  padding: 10px 15px 15px; 
+  text-align: left;
+  flex-grow: 1; 
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; 
+}
+
+.am-product-card-price-row {
+  display: flex;
+  align-items: baseline;
+  margin-bottom: 5px;
+}
+
+.am-product-card-current-price {
+  font-size: 18px;
+  font-weight: 700;
+  color: #333;
+}
+
+.am-product-card-unit {
+  font-size: 13px;
+  color: #666;
+  margin-left: 5px;
+}
+
+.am-product-card-name {
+  font-size: 15px;
+  color: #333;
+  margin: 0;
+  line-height: 1.3;
+  min-height: 38px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; 
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.am-products {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+

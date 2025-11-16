@@ -1,0 +1,84 @@
+.ItAddF-container {
+  width: 100%;
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 30px;
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  font-family: "Inter", sans-serif;
+}
+
+.ItAddF-title {
+  text-align: center;
+  font-size: 26px;
+  margin-bottom: 25px;
+  font-weight: 600;
+  color: #333;
+}
+
+.ItAddF-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.ItAddF-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ItAddF-input,
+.ItAddF-input-file {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #d0d0d0;
+  font-size: 15px;
+}
+
+.ItAddF-input:focus {
+  border-color: #0077ff;
+  outline: none;
+}
+
+.ItAddF-color-box {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.ItAddF-color-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.ItAddF-color-btn:hover {
+  transform: scale(1.1);
+}
+
+.ItAddF-color-selected {
+  border: 3px solid #0077ff;
+  transform: scale(1.15);
+}
+
+.ItAddF-submit {
+  padding: 14px;
+  font-size: 16px;
+  background: #0077ff;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: 0.25s;
+}
+
+.ItAddF-submit:hover {
+  background: #005fcc;
+}

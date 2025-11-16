@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { Filter, Bookmark, BookmarkCheck, X } from "lucide-react";
+import { Filter, Bookmark, BookmarkCheck, X, Plus } from "lucide-react";
 import "./ItemMarkert.css";
 
 const slides = [
   {
     id: 1,
-    title: "Sharpen Your Skills, with Us",
+    title: "Build Better with Quality Glass",
     description:
-      "Enhance your expertise through hands-on aluminum recycling and sustainability programs.",
+      "Upgrade your projects with premium construction glass designed for strength, safety, and clarity.",
     image:
       "https://aberturasleon.com.ar/wp-content/uploads/2024/04/modelos-de-vidrio.jpg",
-    button: "Join Our Club!",
+    button: "Order Now!",
   },
   {
     id: 2,
@@ -27,39 +27,63 @@ const ItemMarkert = () => {
   const products = [
     {
       id: 1,
-      name: "Aluminum Scrap Bundle",
-      category: "Raw Aluminum",
-      price: 25,
-      rating: 4.5,
-      inStock: true,
-      image: "https://images.unsplash.com/photo-1602526432604-b6a8b0c3c6c3",
+      name: "Ambawela Full Cream Fresh Milk Tetra 1L",
+      category: "Unit",
+      price: 500.00,
+      image: "https://media.istockphoto.com/id/488827891/photo/sheet-metal.jpg?s=612x612&w=0&k=20&c=3HONo5ffmfJS26pjkfHGuxJX1zm5CyjLGBg1KRM2_M4=", 
+      unitType: "Unit",
+      originalPrice: null, 
+      discount: null, 
     },
     {
       id: 2,
-      name: "Recycled Aluminum Sheets",
-      category: "Processed Aluminum",
-      price: 40,
-      rating: 4.8,
-      inStock: true,
-      image: "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952",
+      name: "Big Onions",
+      category: "KG",
+      price: 200.00,
+      image: "https://www.alcirclebiz.com//Uploads/ProductImage/16257/aluminiumboxbar.jpg", 
+      unitType: "KG",
+      originalPrice: null,
+      discount: null,
     },
     {
       id: 3,
-      name: "Aluminum Ingots",
-      category: "Refined Products",
-      price: 55,
-      rating: 4.2,
-      inStock: false,
-      image: "https://images.unsplash.com/photo-1616628182509-6c7e2b49c146",
+      name: "Sprite Can 250ml",
+      category: "Unit",
+      price: 300.00,
+      image: "https://eberbachlabtools.com/cdn/shop/files/e6040_1200x.png?v=1686583211", 
+      unitType: "Unit",
+      originalPrice: null,
+      discount: null,
     },
     {
       id: 4,
-      name: "Aluminum Can Collection",
-      category: "Raw Aluminum",
-      price: 15,
-      rating: 4.0,
-      inStock: true,
-      image: "https://images.unsplash.com/photo-1590794064817-748e0a195a7d",
+      name: "Potatoes",
+      category: "KG",
+      price: 290.00,
+      image: "https://embilipitiyastores.com/style/images/products/1612266782_Aluminium%20Box%20Bar.jpg", 
+      unitType: "KG",
+      originalPrice: null,
+      discount: null,
+    },
+    {
+      id: 5,
+      name: "Rice Red Kekulu Bulk Kg - Local",
+      category: "KG",
+      price: 195.00,
+      image: "https://www.embilipitiyastores.com/style/images/products/1612266884_Aluminium%20L%20Angle.jpg", 
+      unitType: "KG",
+      originalPrice: null,
+      discount: null,
+    },
+    {
+      id: 6,
+      name: "Banana - Kolikuttu",
+      category: "KG",
+      price: 390.00,
+      image: "https://i.ebayimg.com/images/g/ufYAAOSwjXRXas1z/s-l400.jpg",
+      unitType: "KG",
+      originalPrice: null,
+      discount: null,
     },
   ];
 
@@ -77,15 +101,17 @@ const ItemMarkert = () => {
   };
 
   const filteredProducts = products.filter((product) => {
-    const matchCategory =
-      selectedCategory === "all" || product.category === selectedCategory;
+    // For the new layout, we don't have categories to filter by yet,
+    // so we'll just show all products for now, or you can use the `category` field from the new product data if desired.
+    // const matchCategory =
+    //   selectedCategory === "all" || product.category === selectedCategory;
     const matchSearch = product.name
       .toLowerCase()
       .includes(searchQuery.toLowerCase());
     const matchBookmark = showBookmarked
       ? bookmarked.includes(product.id)
       : true;
-    return matchCategory && matchSearch && matchBookmark;
+    return /* matchCategory && */ matchSearch && matchBookmark;
   });
 
   useEffect(() => {
@@ -218,6 +244,7 @@ const ItemMarkert = () => {
               >
                 All Items
               </li>
+              {/* These categories are from the original product data, you might want to update them based on the new product structure */}
               <li
                 className={
                   selectedCategory === "Raw Aluminum" ? "active" : ""
@@ -255,36 +282,23 @@ const ItemMarkert = () => {
           </div>
         </div>
 
-        <div className="am-products">
+        <div className="am-products-grid"> {/* Changed from am-products to am-products-grid */}
           {filteredProducts.map((product) => (
-            <div key={product.id} className="am-product-card">
-              <div className="am-product-img">
-                <img src={product.image} alt={product.name} />
-                <button
-                  className={`am-bookmark-btn ${
-                    bookmarked.includes(product.id)
-                      ? "active"
-                      : ""
-                  }`}
-                  onClick={() => toggleBookmark(product.id)}
-                >
-                  {bookmarked.includes(product.id) ? (
-                    <BookmarkCheck />
-                  ) : (
-                    <Bookmark />
-                  )}
+            <div key={product.id} className="am-product-card-new"> {/* Changed class name */}
+              <div className="am-product-card-image-wrapper">
+                <img src={product.image} alt={product.name} className="am-product-card-image" />
+                <button className="am-product-card-add-button">
+                  <Plus size={20} /> Add
                 </button>
-
-                {!product.inStock && (
-                  <div className="am-outstock">Out of Stock</div>
-                )}
               </div>
-
-              <div className="am-product-info">
-                <h4>{product.name}</h4>
-                <p className="am-category">{product.category}</p>
-                <p className="am-price">${product.price}</p>
-                <p className="am-rating">⭐ {product.rating}</p>
+              <div className="am-product-card-info">
+                <div className="am-product-card-price-row">
+                  <span className="am-product-card-current-price">
+                    Rs {product.price.toFixed(2)}
+                  </span>
+                  <span className="am-product-card-unit"> / {product.unitType}</span>
+                </div>
+                <p className="am-product-card-name">{product.name}</p>
               </div>
             </div>
           ))}
