@@ -1,140 +1,392 @@
 .GlaOrd-container {
-  width: 100%;
-  padding: 40px;
-  font-family: "Inter", sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f5f7fa;
+  padding: 30px;
+  min-height: 100vh;
+  color: #333;
 }
 
-.GlaOrd-title {
-  font-size: 36px;
-  font-weight: 700;
+.GlaOrd-mainTitle {
   text-align: center;
+  font-size: 3em;
+  color: #2c3e50;
   margin-bottom: 40px;
+  font-weight: 700;
+  letter-spacing: -1px;
 }
 
-.GlaOrd-grid {
+.GlaOrd-glassGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 25px;
+  max-width: 1200px;
+  margin: 0 auto 50px auto;
 }
 
-.GlaOrd-card {
-  background: #ffffff;
-  border-radius: 14px;
-  padding: 20px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+.GlaOrd-glassCard {
+  background-color: #ffffff;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  padding: 25px;
   display: flex;
   flex-direction: column;
-  gap: 15px;
-  transition: 0.3s;
+  align-items: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden;
 }
 
-.GlaOrd-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.18);
+.GlaOrd-glassCard:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
 }
 
-.GlaOrd-image {
+.GlaOrd-glassImage {
   width: 100%;
-  height: 180px;
-  object-fit: cover;
-  border-radius: 12px;
+  max-height: 180px;
+  object-fit: contain;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  background-color: #fcfcfc;
+  padding: 10px;
 }
 
-.GlaOrd-name {
-  font-size: 20px;
+.GlaOrd-glassName {
+  font-size: 1.6em;
+  color: #34495e;
+  margin-bottom: 20px;
   font-weight: 600;
+  text-align: center;
 }
 
-.GlaOrd-select-group {
+.GlaOrd-selectorGroup {
+  width: 100%;
+  margin-bottom: 15px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  align-items: flex-start;
+}
+
+.GlaOrd-label {
+  font-size: 0.9em;
+  color: #6c7a89;
+  margin-bottom: 8px;
+  font-weight: 500;
 }
 
 .GlaOrd-select {
-  padding: 10px;
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #dcdcdc;
   border-radius: 8px;
-  border: 1px solid #ccc;
-  font-size: 15px;
-}
-
-.GlaOrd-price {
-  font-size: 18px;
-  font-weight: 600;
-  color: #008000;
-}
-
-.GlaOrd-add-btn {
-  background: #007bff;
-  color: white;
-  padding: 12px;
-  border: none;
-  border-radius: 10px;
-  font-size: 16px;
+  font-size: 1em;
+  color: #555;
+  background-color: #f8f8f8;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%236c7a89'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 20px;
   cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.GlaOrd-add-btn:disabled {
-  background: #aaa;
+.GlaOrd-select:focus {
+  outline: none;
+  border-color: #4CAF50;
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
 }
 
-.GlaOrd-selected-section {
-  margin-top: 50px;
-  background: #f7f7f7;
-  padding: 30px;
-  border-radius: 14px;
-}
-
-.GlaOrd-subtitle {
-  font-size: 28px;
+.GlaOrd-priceDisplay {
+  font-size: 1.2em;
+  color: #2ecc71;
+  margin-top: 10px;
   margin-bottom: 25px;
-}
-
-.GlaOrd-empty {
-  color: #666;
-  font-size: 16px;
-}
-
-.GlaOrd-selected-card {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: white;
-  padding: 15px 20px;
-  border-radius: 10px;
-  margin-bottom: 12px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-}
-
-.GlaOrd-remove-btn {
-  background: #ff4d4d;
-  color: white;
-  border: none;
-  padding: 10px 16px;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-.GlaOrd-total {
-  margin-top: 20px;
-  font-size: 22px;
   font-weight: 700;
 }
 
-.GlaOrd-lorry-section {
-  margin-top: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+.GlaOrd-currentPrice {
+  color: #e67e22;
 }
 
-.GlaOrd-order-btn {
-  margin-top: 25px;
-  padding: 14px;
-  background: #28a745;
+.GlaOrd-addToOrderBtn {
+  background-color: #4CAF50;
   color: white;
-  font-size: 18px;
-  border-radius: 10px;
   border: none;
+  border-radius: 10px;
+  padding: 14px 25px;
+  font-size: 1.1em;
+  font-weight: 600;
   cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  width: 100%;
+  box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3);
+}
+
+.GlaOrd-addToOrderBtn:hover {
+  background-color: #45a049;
+  transform: translateY(-2px);
+}
+
+.GlaOrd-orderSummary {
+  background-color: #ffffff;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  padding: 30px;
+  max-width: 900px;
+  margin: 40px auto;
+  border-left: 5px solid #3498db;
+}
+
+.GlaOrd-sectionTitle {
+  font-size: 2em;
+  color: #34495e;
+  margin-bottom: 25px;
+  font-weight: 600;
+  border-bottom: 2px solid #ecf0f1;
+  padding-bottom: 10px;
+}
+
+.GlaOrd-transportTitle {
+  margin-top: 40px;
+  border-color: #f39c12;
+}
+
+.GlaOrd-itemList {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 30px;
+}
+
+.GlaOrd-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px dashed #ecf0f1;
+}
+
+.GlaOrd-item:last-child {
+  border-bottom: none;
+}
+
+.GlaOrd-itemName {
+  font-weight: 600;
+  color: #555;
+  flex-grow: 1;
+}
+
+.GlaOrd-itemDetails {
+  color: #7f8c8d;
+  font-size: 0.95em;
+  margin-right: 15px;
+}
+
+.GlaOrd-removeItemBtn {
+  background: none;
+  border: none;
+  color: #e74c3c;
+  font-size: 1.5em;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  padding: 5px;
+}
+
+.GlaOrd-removeItemBtn:hover {
+  color: #c0392b;
+}
+
+.GlaOrd-totalGlassPrice,
+.GlaOrd-lorryPrice,
+.GlaOrd-grandTotal {
+  text-align: right;
+  font-size: 1.3em;
+  font-weight: 600;
+  color: #34495e;
+  margin-top: 15px;
+}
+
+.GlaOrd-grandTotal {
+  font-size: 1.8em;
+  color: #2980b9;
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 2px solid #ecf0f1;
+}
+
+.GlaOrd-priceValue {
+  color: #e67e22;
+  font-weight: 700;
+}
+
+.GlaOrd-lorrySelection {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.GlaOrd-lorryOption {
+  display: flex;
+  align-items: center;
+  font-size: 1.1em;
+  color: #555;
+  cursor: pointer;
+  padding: 10px;
+  background-color: #f8f8f8;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+}
+
+.GlaOrd-lorryOption:hover {
+  background-color: #f0f3f6;
+}
+
+.GlaOrd-lorryOption input[type="radio"] {
+  margin-right: 15px;
+  transform: scale(1.2);
+  accent-color: #f39c12;
+}
+
+.GlaOrd-confirmOrderBtn {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 15px 30px;
+  font-size: 1.2em;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  width: 100%;
+  margin-top: 40px;
+  box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
+}
+
+.GlaOrd-confirmOrderBtn:hover:not(:disabled) {
+  background-color: #2980b9;
+  transform: translateY(-2px);
+}
+
+.GlaOrd-confirmOrderBtn:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+@media (max-width: 768px) {
+  .GlaOrd-mainTitle {
+    font-size: 2.5em;
+    margin-bottom: 30px;
+  }
+
+  .GlaOrd-glassGrid {
+    grid-template-columns: 1fr;
+    padding: 0 15px;
+  }
+
+  .GlaOrd-glassCard {
+    padding: 20px;
+  }
+
+  .GlaOrd-glassName {
+    font-size: 1.4em;
+    margin-bottom: 15px;
+  }
+
+  .GlaOrd-addToOrderBtn {
+    padding: 12px 20px;
+    font-size: 1em;
+  }
+
+  .GlaOrd-orderSummary {
+    margin: 30px 15px;
+    padding: 25px;
+  }
+
+  .GlaOrd-sectionTitle {
+    font-size: 1.8em;
+    margin-bottom: 20px;
+  }
+
+  .GlaOrd-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .GlaOrd-itemDetails {
+    margin-top: 5px;
+    margin-right: 0;
+  }
+
+  .GlaOrd-removeItemBtn {
+    align-self: flex-end;
+    margin-top: -30px;
+  }
+
+  .GlaOrd-totalGlassPrice,
+  .GlaOrd-lorryPrice,
+  .GlaOrd-grandTotal {
+    font-size: 1.1em;
+  }
+
+  .GlaOrd-grandTotal {
+    font-size: 1.5em;
+  }
+
+  .GlaOrd-confirmOrderBtn {
+    padding: 12px 25px;
+    font-size: 1.1em;
+  }
+}
+
+@media (max-width: 480px) {
+  .GlaOrd-container {
+    padding: 15px;
+  }
+
+  .GlaOrd-mainTitle {
+    font-size: 2em;
+    margin-bottom: 25px;
+  }
+
+  .GlaOrd-glassCard {
+    padding: 15px;
+  }
+
+  .GlaOrd-glassImage {
+    max-height: 150px;
+    margin-bottom: 15px;
+  }
+
+  .GlaOrd-glassName {
+    font-size: 1.2em;
+  }
+
+  .GlaOrd-select {
+    padding: 10px 12px;
+    font-size: 0.9em;
+  }
+
+  .GlaOrd-priceDisplay {
+    font-size: 1.1em;
+    margin-bottom: 20px;
+  }
+
+  .GlaOrd-addToOrderBtn {
+    padding: 10px 18px;
+    font-size: 0.9em;
+  }
+
+  .GlaOrd-orderSummary {
+    padding: 20px;
+  }
+
+  .GlaOrd-sectionTitle {
+    font-size: 1.5em;
+    margin-bottom: 15px;
+  }
+
+  .GlaOrd-lorryOption {
+    font-size: 1em;
+  }
 }
