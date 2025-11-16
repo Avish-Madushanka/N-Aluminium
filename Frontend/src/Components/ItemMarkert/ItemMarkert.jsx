@@ -11,6 +11,7 @@ const slides = [
     image:
       "https://aberturasleon.com.ar/wp-content/uploads/2024/04/modelos-de-vidrio.jpg",
     button: "Order Now!",
+    link: "/GlassOrder"
   },
   {
     id: 2,
@@ -19,7 +20,8 @@ const slides = [
       "Discover innovative techniques and eco-friendly methods that make a real impact.",
     image:
       "https://www.unleashedsoftware.com/media/scraper/011_COPY-JOPA-CID037.jpg",
-    button: "Explore Courses",
+    button1: "Explore Courses",
+    link: "/"
   },
 ];
 
@@ -101,10 +103,6 @@ const ItemMarkert = () => {
   };
 
   const filteredProducts = products.filter((product) => {
-    // For the new layout, we don't have categories to filter by yet,
-    // so we'll just show all products for now, or you can use the `category` field from the new product data if desired.
-    // const matchCategory =
-    //   selectedCategory === "all" || product.category === selectedCategory;
     const matchSearch = product.name
       .toLowerCase()
       .includes(searchQuery.toLowerCase());
@@ -148,8 +146,6 @@ const ItemMarkert = () => {
           </button>
 
           <ul className="ITNav-nav-links">
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Shop</a></li>
             <li>
               <a href="#">
                 Categories <span className="ITNav-badge ITNav-badge-sale">SALE</span>
@@ -200,7 +196,7 @@ const ItemMarkert = () => {
               <div className="am-slide-content">
                 <h1>{slide.title}</h1>
                 <p>{slide.description}</p>
-                <button>{slide.button}</button>
+                <button onClick={() => window.location.href = slide.link}>Order Now</button>
               </div>
             </div>
           ))}
@@ -244,7 +240,7 @@ const ItemMarkert = () => {
               >
                 All Items
               </li>
-              {/* These categories are from the original product data, you might want to update them based on the new product structure */}
+
               <li
                 className={
                   selectedCategory === "Raw Aluminum" ? "active" : ""

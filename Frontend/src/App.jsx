@@ -62,6 +62,7 @@ import AdminLocationManager from './Components/Admin/AdMapUpdate/AdminLocationMa
 import FloatingChatbot from './Components/ChatBot/FloatingChatbot';
 import AluTReg from './Pages/AluTReg';
 import ItemAddForm from './Components/ItemMarkert/ItemAddForm';
+import GlassOrder from './Components/ItemMarkert/GlassOrder';
 
 const parseUserInfoFromToken = (token) => {
     if (!token) {
@@ -323,6 +324,7 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
                         <Route path="/WastePickForm" element={<WastePickForm />} />
                         <Route path="/SaleForm" element={<SaleForm />} />
                         <Route path="/ProAddForm" element={<ProAddForm />} />
+                        <Route path="/GlassOrder" element={<GlassOrder /> } />
                     </Route>
 
                     <Route element={<ProtectedRoute requiredRole="businessOwner" />}>

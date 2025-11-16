@@ -1,0 +1,140 @@
+.GlaOrd-container {
+  width: 100%;
+  padding: 40px;
+  font-family: "Inter", sans-serif;
+}
+
+.GlaOrd-title {
+  font-size: 36px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.GlaOrd-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+}
+
+.GlaOrd-card {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 20px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  transition: 0.3s;
+}
+
+.GlaOrd-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.18);
+}
+
+.GlaOrd-image {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.GlaOrd-name {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.GlaOrd-select-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.GlaOrd-select {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 15px;
+}
+
+.GlaOrd-price {
+  font-size: 18px;
+  font-weight: 600;
+  color: #008000;
+}
+
+.GlaOrd-add-btn {
+  background: #007bff;
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.GlaOrd-add-btn:disabled {
+  background: #aaa;
+}
+
+.GlaOrd-selected-section {
+  margin-top: 50px;
+  background: #f7f7f7;
+  padding: 30px;
+  border-radius: 14px;
+}
+
+.GlaOrd-subtitle {
+  font-size: 28px;
+  margin-bottom: 25px;
+}
+
+.GlaOrd-empty {
+  color: #666;
+  font-size: 16px;
+}
+
+.GlaOrd-selected-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  padding: 15px 20px;
+  border-radius: 10px;
+  margin-bottom: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+.GlaOrd-remove-btn {
+  background: #ff4d4d;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.GlaOrd-total {
+  margin-top: 20px;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.GlaOrd-lorry-section {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.GlaOrd-order-btn {
+  margin-top: 25px;
+  padding: 14px;
+  background: #28a745;
+  color: white;
+  font-size: 18px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+}
