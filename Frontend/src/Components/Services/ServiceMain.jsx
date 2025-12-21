@@ -1,78 +1,92 @@
-import React from 'react';
-import './ServiceMain.css';
+import React from "react";
+import "./ServiceMain.css";
 
 function ServiceMain() {
-  const items = [
+  const services = [
     {
+      title: "Waste Collection",
+      desc: "Door-to-door aluminum and recyclable waste collection with scheduled pickups.",
       img: "https://www.rcmscrapmetal.com/images/blog/1718919338blog-24-06-20.jpg",
       link: "/Collection",
-      title: "Eco-Friendly Waste Disposal",
     },
     {
-      img: "https://img.freepik.com/free-photo/high-angle-living-room-interior-design_23-2149647173.jpg?semt=ais_hybrid&w=740&q=80",
+      title: "Community Cleanup",
+      desc: "Organized community programs to promote environmental responsibility.",
+      img: "https://img.freepik.com/free-photo/high-angle-living-room-interior-design_23-2149647173.jpg",
       link: "/community-cleanup",
-      title: "Community Cleanup Drives",
     },
     {
+      title: "Material Marketplace",
+      desc: "Buy and sell recyclable materials with transparent pricing.",
       img: "https://www.ohra.net/fileadmin/_processed_/7/f/csm_kragarmregal_alu12_b0ab15b121.jpg",
       link: "/ItemMarkert",
-      title: "Eco-Friendly Waste Disposal",
     },
     {
+      title: "Buy & Sell Aluminum",
+      desc: "Direct trading platform for aluminum scraps and processed materials.",
       img: "https://www.musgroves.co.nz/wp-content/uploads/2020/04/how-to-repair-aluminium-window-frames-retina-1.jpg",
       link: "/BuyandSell",
-      title: "Community Cleanup Drives",
     },
     {
+      title: "Industrial Projects",
+      desc: "Support for industrial recycling and large-scale sustainability projects.",
       img: "https://pbs.twimg.com/media/FfCEKerXEAA6dOV?format=jpg&name=large",
       link: "/Project",
-      title: "Eco-Friendly Waste Disposal",
     },
     {
+      title: "Training & Registration",
+      desc: "Skill development and registration programs for recycling professionals.",
       img: "https://antonaluminium.com/wp-content/uploads/2021/01/anton-aluminium.jpg",
       link: "/AluTReg",
-      title: "Community Cleanup Drives",
     },
   ];
 
   return (
-    <div className="Ser-App12">
-      <div className="Ser-container">
-        <div className="Ser-hero-section">
-          <div className="Ser-overlay"></div>
-          <div className="Ser-hero-content">
-            <h1 className="Ser-hero-title">Our Services</h1>
-          </div>
+    <div className="Ser-root">
+      <section className="Ser-hero">
+        <div className="Ser-hero-overlay"></div>
+        <div className="Ser-hero-content">
+          <h1>Our Services</h1>
+          <p>Sustainable aluminum waste management solutions</p>
         </div>
-      </div>
+      </section>
 
-      <main>
-        <div className="Ser-gallery-container">
-          <h2 className="Ser-gallery-title">
-            Building a Sustainable Future Together
-          </h2>
-          <div className="Ser-gallery-grid">
-            {items.map((item, index) => (
-              <div key={index} className="Ser-gallery-item">
-                <img
-                  src={item.img}
-                  alt={`Gallery ${index + 1}`}
-                  className="Ser-gallery-image"
-                />
-                <div className="Ser-gallery-overlay">
-                  <h3 className="Ser-gallery-overlay-title">{item.title}</h3>
-                  <div className="Ser-gallery-icons">
-                    <a href={item.link} className="Ser-icon">
-                      <i className="fas fa-link"></i>
-                    </a>
-                  </div>
-                </div>
+      <section className="Ser-services">
+        <div className="Ser-service-grid">
+          {services.map((service, index) => (
+            <div className="Ser-card" key={index}>
+              <div
+                className="Ser-card-image"
+                style={{ backgroundImage: `url(${service.img})` }}
+              ></div>
+
+              <div className="Ser-card-content">
+                <h3>{service.title}</h3>
+                <p>{service.desc}</p>
+                <a href={service.link} className="Ser-card-btn">
+                  Explore Service
+                </a>
               </div>
-            ))}
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="Ser-App-hero">
+        <div className="Ser-App-hero-overlay"></div>
+
+        <div className="Ser-App-hero-content">
+          <span className="Ser-App-hero-tag">DOWNLOAD APP</span>
+          <h1>Download Meta Trade app</h1>
+
+          <div className="Ser-App-hero-buttons">
+            <button className="Ser-App-btn apple">Get in App Store</button>
+            <button className="Ser-App-btn google">Google Play</button>
           </div>
         </div>
-      </main>
-    </div>
+      </section>
+      </div>
+    
   );
 }
 

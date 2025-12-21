@@ -81,33 +81,33 @@ const HomeSliding = () => {
   const currentSlide = slides[currentIndex];
 
   return (
-    <div className="hero-container">
-      <div className="hero-overlay"></div>
+    <div className="MHC-hero-container">
+      <div className="MHC-hero-overlay"></div>
 
-      <div className="hero-slider-item">
-        <div className="hero-image-section">
+      <div className="MHC-hero-slider-item">
+        <div className="MHC-hero-image-section">
           <img
             src={currentSlide.image}
             alt={`Slide ${currentIndex + 1}`}
-            className={`hero-image ${isAnimating ? 'fade-out' : 'fade-in'}`}
+            className={`MHC-hero-image ${isAnimating ? 'MHC-fade-out' : 'MHC-fade-in'}`}
           />
         </div>
 
-        <div className="hero-content-section">
-          <div className="hero-content-inner">
+        <div className="MHC-hero-content-section">
+          <div className="MHC-hero-content-inner">
             {currentSlide.badge && (
-              <div className="hero-badge">
-                <span className="badge-dot"></span>
+              <div className="MHC-hero-badge">
+                <span className="MHC-badge-dot"></span>
                 {currentSlide.badge}
               </div>
             )}
 
-            <h1 className="hero-title1">{currentSlide.title}</h1>
-            <p className="hero-subtitle">{currentSlide.subtitle}</p>
+            <h1 className="MHC-hero-title1">{currentSlide.title}</h1>
+            <p className="MHC-hero-subtitle">{currentSlide.subtitle}</p>
 
-            <div className="hero-buttons">
+            <div className="MHC-hero-buttons">
               <button
-                className="btn-primary"
+                className="MHC-btn-primary"
                 onClick={() => handleButtonClick(currentSlide.button1Link)}
               >
                 {currentSlide.button1Text}
@@ -115,7 +115,7 @@ const HomeSliding = () => {
 
               {currentSlide.button2Link && (
                 <button
-                  className="btn-secondary"
+                  className="MHC-btn-secondary"
                   onClick={() => handleButtonClick(currentSlide.button2Link)}
                 >
                   {currentSlide.button2Icon}
@@ -126,11 +126,11 @@ const HomeSliding = () => {
         </div>
       </div>
 
-      <div className="slide-indicators">
+      <div className="MHC-slide-indicators">
         {slides.map((_, index) => (
           <button
             key={index}
-            className={`indicator ${index === currentIndex ? 'active' : ''}`}
+            className={`MHC-indicator ${index === currentIndex ? 'MHC-active' : ''}`}
             onClick={() => goToSlide(index)}
             aria-label={`Go to slide ${index + 1}`}
           />

@@ -1,214 +1,255 @@
-.Ser-App12 {
-  margin: 0 auto;
-  overflow-x: hidden;
-  font-family: 'Inter', sans-serif;
-  color: #333;
-  box-sizing: border-box;
+.Ser-root {
+  font-family: "Inter", sans-serif;
+  color: #2d2d2d;
 }
 
-.Ser-container {
-  width: 100%;
-}
-
-.Ser-hero-section {
+.Ser-hero {
   position: relative;
-  height: 45vh;
-  background-image: url('https://www.alimax.ltd/files/thumbs/Aluminium_window_faqs_w1920_h525.jpg');
+  height: 50vh;
+  margin: 40px;
+  border-radius: 40px;
+  background-image: url("https://www.alimax.ltd/files/thumbs/Aluminium_window_faqs_w1920_h525.jpg");
   background-size: cover;
   background-position: center;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 50px;
-  margin: 0 50px;
   overflow: hidden;
-  text-align: center;
-  color: white;
 }
 
-.Ser-overlay {
+.Ser-hero-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 1;
+  background: rgba(0, 0, 0, 0.6);
 }
 
 .Ser-hero-content {
   position: relative;
-  z-index: 2;
-  max-width: 60%;
   text-align: center;
+  max-width: 700px;
+  color: #ffffff;
 }
 
-.Ser-hero-title {
-  font-size: 4rem;
+.Ser-hero-content h1 {
+  font-size: 3.5rem;
   font-weight: 700;
-  margin-bottom: 1rem;
-  text-align: center;
+  margin-bottom: 16px;
 }
 
-.Ser-content-section {
-  padding: 4rem 10%;
-  background-color: white;
+.Ser-hero-content p {
+  font-size: 1.1rem;
+  line-height: 1.6;
 }
 
-.Ser-two-column-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4rem;
-  margin-bottom: 3rem;
-}
-
-.Ser-column {
-  max-width: 100%;
+.Ser-services {
+  padding: 80px 6%;
 }
 
 .Ser-section-title {
-  font-size: 2rem;
-  font-weight: 600;
-  margin-bottom: 1.5rem;
-  color: #2d3748;
-}
-
-.Ser-section-text {
-  font-size: 1rem;
-  line-height: 1.7;
-  color: #4a5568;
-  margin-bottom: 1.5rem;
-}
-
-.Ser-accent-divider {
-  width: 3rem;
-  height: 4px;
-  background-color: #e53e3e;
-  margin-bottom: 1.5rem;
-}
-
-.Ser-full-width {
-  width: 100%;
-}
-.Ser-gallery-container {
-  width: 100%;
-  max-width: 1200px;
-  margin: 60px auto;
-  text-align: center;
-  padding: 0 20px;
-}
-
-.Ser-gallery-title {
-  font-size: 2rem;
+  font-size: 2.2rem;
   font-weight: 700;
-  color: #2c2c2c;
-  margin-bottom: 40px;
+  text-align: center;
+  margin-bottom: 60px;
 }
 
-.Ser-gallery-grid {
+.Ser-service-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 25px;
+  gap: 32px;
 }
 
-.Ser-gallery-item {
-  position: relative;
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
-  cursor: pointer;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.Ser-gallery-item:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-}
-
-.Ser-gallery-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.4s ease;
-}
-
-.Ser-gallery-item:hover .Ser-gallery-image {
-  transform: scale(1.05);
-}
-
-.Ser-gallery-overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(11, 11, 11, 0.85);
-  color: #fff;
-  opacity: 0;
-  visibility: hidden;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  border-radius: 16px;
-  transition: opacity 0.4s ease, visibility 0.4s ease;
-}
-
-.Ser-gallery-item:hover .Ser-gallery-overlay {
-  opacity: 1;
-  visibility: visible;
-}
-
-.Ser-gallery-overlay-title {
-  font-size: 1.2rem;
-  font-weight: 600;
-  margin-bottom: 15px;
-}
-
-.Ser-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 38px;
-  height: 38px;
+.Ser-card {
   background: #ffffff;
-  color: #1c1c1c;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.Ser-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.15);
+}
+
+.Ser-card-image {
+  height: 240px;
+  background-size: cover;
+  background-position: center;
+}
+
+.Ser-card-content {
+  padding: 26px;
+}
+
+.Ser-card-content h3 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.Ser-card-content p {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #555;
+  margin-bottom: 22px;
+}
+
+.Ser-card-btn {
+  display: inline-block;
+  padding: 10px 22px;
+  background: #1e7f4f;
+  color: #ffffff;
   border-radius: 8px;
-  font-size: 18px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-decoration: none;
   transition: background 0.3s ease, transform 0.3s ease;
 }
 
-.Ser-icon:hover {
-  background: #d6d6d6;
-  transform: scale(1.1);
+.Ser-card-btn:hover {
+  background: #145c38;
+  transform: translateY(-2px);
 }
 
-@media (max-width: 1024px) {
-  .Ser-hero-title {
-    font-size: 2.4rem;
+.Ser-App-hero {
+  position: relative;
+  width: 1300px;
+  height: 400px;
+  margin: 40px auto;
+  margin-top: 10px;
+  border-radius: 0px 100px 0px 100px;
+  overflow: hidden;
+  background: linear-gradient(
+    110deg,
+    #081722 0%,
+    #081722 30%,
+    #ff8a1c 95%,
+    #ff8a1c 100%
+  );
+  display: flex;
+  align-items: center;
+}
+
+.Ser-App-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(
+    rgba(255, 255, 255, 0.04) 1px,
+    transparent 1px
+  );
+  background-size: 25px 25px;
+  pointer-events: none;
+}
+
+.Ser-App-hero-content {
+  position: relative;
+  z-index: 2;
+  padding: 80px;
+  max-width: 50%;
+  color: #ffffff;
+}
+
+.Ser-App-hero-tag {
+  display: inline-block;
+  font-size: 13px;
+  letter-spacing: 2px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #ffb76b;
+}
+
+.Ser-App-hero-content h1 {
+  font-size: 48px;
+  font-weight: 800;
+  line-height: 1.2;
+  margin-bottom: 18px;
+}
+
+.Ser-App-hero-content p {
+  font-size: 17px;
+  line-height: 1.6;
+  color: #d6d6d6;
+  max-width: 480px;
+}
+
+.Ser-App-hero-buttons {
+  display: flex;
+  gap: 20px;
+  margin-top: 35px;
+}
+
+.Ser-App-btn {
+  padding: 14px 28px;
+  border-radius: 40px;
+  font-size: 18px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.Ser-App-btn.apple {
+  background: #ff0033;
+  color: #ffffff;
+}
+
+.Ser-App-btn.apple:hover {
+  background: #e6002d;
+  transform: translateY(-2px);
+}
+
+.Ser-App-btn.google {
+  background: transparent;
+  color: #ffffff;
+  border: 2px solid #ffffff;
+}
+
+.Ser-App-btn.google:hover {
+  background: #ffffff;
+  color: #000000;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 900px) {
+  .Ser-App-hero {
+    height: auto;
+    background: linear-gradient(180deg, #081722 0%, #ff8a1c 100%);
   }
 
-  .Ser-gallery-grid {
+  .Ser-App-hero-content {
+    max-width: 100%;
+    padding: 60px 40px;
+  }
+
+  .Ser-App-hero-content h1 {
+    font-size: 36px;
+  }
+}
+
+
+@media (max-width: 1024px) {
+  .Ser-service-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .Ser-hero-content h1 {
+    font-size: 2.6rem;
   }
 }
 
 @media (max-width: 640px) {
-  .Ser-hero-section {
-    height: 35vh;
-    margin: 0 10px;
-    border-radius: 20px;
+  .Ser-hero {
+    height: 40vh;
+    margin: 20px;
+    border-radius: 24px;
   }
 
-  .Ser-hero-title {
-    font-size: 1.8rem;
+  .Ser-hero-content h1 {
+    font-size: 2rem;
   }
 
-  .Ser-gallery-title {
-    font-size: 1.4rem;
-    margin-bottom: 25px;
-  }
-
-  .Ser-gallery-grid {
+  .Ser-service-grid {
     grid-template-columns: 1fr;
-    gap: 20px;
-  }
-
-  .Ser-gallery-item {
-    height: 250px;
   }
 }
+
