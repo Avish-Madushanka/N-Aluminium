@@ -1,89 +1,154 @@
-import React from 'react';
-import './ProCate1.css'; 
+import React, { useState } from "react";
+import "./ProCate1.css";
 
 const ProCate1 = () => {
-  const categories = ["All", "Aviation", "Building", "Commercial", "Electrical", "Energy", "Residential", "Stadium"];
+  const categories = [
+    "All",
+    "Windows",
+    "Doors",
+    "Pantry Cupboards",
+    "Sivilims",
+    "Others"
+  ];
 
   const projects = [
     {
-      image: "https://i.pinimg.com/564x/30/27/ec/3027ecd92d36874cf5ee4a9b1a85a60d.jpg", 
+      category: "Windows",
       title: "Modern Urban Housing Project",
       location: "102.2 Sylhet, Bangladesh",
-      date: "12-2024"
+      date: "12-2024",
+      coverImage:
+        "https://i.pinimg.com/564x/30/27/ec/3027ecd92d36874cf5ee4a9b1a85a60d.jpg",
+      galleryImages: [
+        "https://rodo-group.com/wp-content/uploads/2024/04/Pirnar-alu-front-doors-optimum-8410-scaled.jpg",
+        "https://images.squarespace-cdn.com/content/v1/5f647022efc1f85ee3544116/b008c749-31b4-4635-b09f-af20910fc841/PIC17-scaled.jpg"
+      ]
     },
     {
-      image: "https://rodo-group.com/wp-content/uploads/2024/04/Pirnar-alu-front-doors-optimum-8410-scaled.jpg",
+      category: "Doors",
       title: "Downtown Office Tower Build",
       location: "102.2 Sylhet, Bangladesh",
-      date: "12-2024"
+      date: "12-2024",
+      coverImage:
+        "https://rodo-group.com/wp-content/uploads/2024/04/Pirnar-alu-front-doors-optimum-8410-scaled.jpg",
+      galleryImages: [
+        "https://i.pinimg.com/564x/30/27/ec/3027ecd92d36874cf5ee4a9b1a85a60d.jpg"
+      ]
     },
     {
-      image: "https://images.squarespace-cdn.com/content/v1/5f647022efc1f85ee3544116/b008c749-31b4-4635-b09f-af20910fc841/PIC17-scaled.jpg",
-      title: "Coastal Bridge Expansion Project",
-      location: "102.2 Sylhet, Bangladesh",
-      date: "12-2024"
-    },
-    {
-      image: "https://i.pinimg.com/564x/30/27/ec/3027ecd92d36874cf5ee4a9b1a85a60d.jpg",
+      category: "Slidings",
       title: "Green Valley Apartment Complex",
       location: "102.2 Sylhet, Bangladesh",
-      date: "12-2024"
+      date: "12-2024",
+      coverImage:
+        "https://images.squarespace-cdn.com/content/v1/5f647022efc1f85ee3544116/b008c749-31b4-4635-b09f-af20910fc841/PIC17-scaled.jpg",
+      galleryImages: []
     },
     {
-      image: "https://rodo-group.com/wp-content/uploads/2024/04/Pirnar-alu-front-doors-optimum-8410-scaled.jpg",
-      title: "Skyline Commercial Office Tower",
+      category: "Sivilims",
+      title: "test",
       location: "102.2 Sylhet, Bangladesh",
-      date: "12-2024"
+      date: "12-2025",
+      coverImage:
+        "https://srilankaconstruction.lk/wp-content/uploads/2020/08/13.jpeg",
+      galleryImages: []
     },
     {
-      image: "https://images.squarespace-cdn.com/content/v1/5f647022efc1f85ee3544116/b008c749-31b4-4635-b09f-af20910fc841/PIC17-scaled.jpg",
-      title: "Heritage Urban Retail Plaza",
+      category: "Sivilims",
+      title: "test",
       location: "102.2 Sylhet, Bangladesh",
-      date: "12-2024"
+      date: "12-2025",
+      coverImage:
+        "https://srilankaconstruction.lk/wp-content/uploads/2020/08/13.jpeg",
+      galleryImages: []
     }
   ];
 
+  const [activeProject, setActiveProject] = useState(null);
+  const [activeCategory, setActiveCategory] = useState("All");
+
+  const filteredProjects =
+    activeCategory === "All"
+      ? projects
+      : projects.filter(p => p.category === activeCategory);
+
   return (
     <div className="Proj2-container">
+
       <div className="Proj2-header">
         <div className="Proj2-categories">
-          {categories.map((category, index) => (
-            <button key={index} className={`Proj2-category-button ${category === "All" ? "Proj2-active" : ""}`}>
-              {category}
+          {categories.map((cat, index) => (
+            <button
+              key={index}
+              className={`Proj2-category-button ${
+                cat === activeCategory ? "Proj2-active" : ""
+              }`}
+              onClick={() => setActiveCategory(cat)}
+            >
+              {cat}
             </button>
           ))}
         </div>
       </div>
+
       <div className="Proj2-projects-grid">
-        {projects.map((project, index) => (
+        {filteredProjects.map((project, index) => (
           <div key={index} className="Proj2-project-card">
-            <img src={project.image} alt={project.title} className="Proj2-project-image" />
+            <img
+              src={project.coverImage}
+              alt={project.title}
+              className="Proj2-project-image"
+            />
+
             <div className="Proj2-project-details">
               <h3 className="Proj2-project-title">{project.title}</h3>
-              <p className="Proj2-project-description">{project.description}</p>
+
               <div className="Proj2-project-meta">
-                <div className="Proj2-meta-item">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-map-pin">
-                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                    <circle cx="12" cy="10" r="3"></circle>
-                  </svg>
-                  <span>{project.location}</span>
-                </div>
-                <div className="Proj2-meta-item">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-calendar">
-                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                    <line x1="16" y1="2" x2="16" y2="6"></line>
-                    <line x1="8" y1="2" x2="8" y2="6"></line>
-                    <line x1="3" y1="10" x2="21" y2="10"></line>
-                  </svg>
-                  <span>{project.date}</span>
-                </div>
+                <span>{project.location}</span>
+                <span>{project.date}</span>
               </div>
-              <a href="#" className="Proj2-view-more">View More →</a>
+
+              {project.galleryImages.length > 0 && (
+                <button
+                  className="Proj2-view-more"
+                  onClick={() => setActiveProject(project)}
+                >
+                  View More →
+                </button>
+              )}
             </div>
           </div>
         ))}
       </div>
+
+      {activeProject && (
+        <div
+          className="Proj2-modal-overlay"
+          onClick={() => setActiveProject(null)}
+        >
+          <div
+            className="Proj2-modal"
+            onClick={e => e.stopPropagation()}
+          >
+            <button
+              className="Proj2-close"
+              onClick={() => setActiveProject(null)}
+            >
+              ✕
+            </button>
+
+            <h2 className="Proj2-modal-title">
+              {activeProject.title}
+            </h2>
+
+            <div className="Proj2-modal-gallery">
+              {activeProject.galleryImages.map((img, i) => (
+                <img key={i} src={img} alt={`Gallery ${i}`} />
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
