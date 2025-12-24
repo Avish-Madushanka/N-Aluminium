@@ -47,7 +47,6 @@ function ServiceMain() {
         <div className="Ser-hero-overlay"></div>
         <div className="Ser-hero-content">
           <h1>Our Services</h1>
-          <p>Sustainable aluminum waste management solutions</p>
         </div>
       </section>
 
@@ -84,6 +83,9 @@ function ServiceMain() {
             <button className="Ser-App-btn google">Google Play</button>
           </div>
         </div>
+
+        <div className="Ser-App-hero-image"
+         style={{ backgroundImage: `url('https://www.alimax.ltd/files/thumbs/Aluminium_window_faqs_w1920_h525.jpg')` }}></div>
       </section>
       </div>
     
