@@ -63,6 +63,7 @@ import FloatingChatbot from './Components/ChatBot/FloatingChatbot';
 import AluTReg from './Pages/AluTReg';
 import ItemAddForm from './Components/ItemMarkert/ItemAddForm';
 import GlassOrder from './Components/ItemMarkert/GlassOrder';
+import Payment from './Pages/Payment';
 
 const parseUserInfoFromToken = (token) => {
     if (!token) {
@@ -311,6 +312,7 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
                     <Route path="/AluTReg" element={<AluTReg />} />
                     <Route path="/AluRegForm" element={<AluTRegForm />} />
                     <Route path="/ItemAddForm" element={<ItemAddForm />} />
+                    <Route path="/Payment" element={<Payment />} />
 
                     <Route path="/Login" element={ auth.isLoggedIn && auth.userInfo ? (<Navigate to={ (auth.userInfo.role === 'admin' && '/Admin/Dashboard') || (auth.userInfo.role === 'client' && '/') || (auth.userInfo.role === 'businessOwner' && '/BOwnerHome') || '/' } replace /> ) : ( <Login /> )} />
                     
