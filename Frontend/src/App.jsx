@@ -64,6 +64,10 @@ import AluTReg from './Pages/AluTReg';
 import ItemAddForm from './Components/ItemMarkert/ItemAddForm';
 import GlassOrder from './Components/ItemMarkert/GlassOrder';
 import Payment from './Pages/Payment';
+import PaymentMethod from './Components/Payment/PaymentMethod';
+import Payments from './Components/Payment/Payments';
+import PromoCode from './Components/Payment/PromoCode';
+import UserDetails from './Components/Payment/UserDetails';
 
 const parseUserInfoFromToken = (token) => {
     if (!token) {
@@ -313,6 +317,10 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
                     <Route path="/AluRegForm" element={<AluTRegForm />} />
                     <Route path="/ItemAddForm" element={<ItemAddForm />} />
                     <Route path="/Payment" element={<Payment />} />
+                    <Route path="/PaymentMethod" element={<PaymentMethod />} />
+                    <Route path="/Payments" element={<Payments /> } />
+                    <Route path="/PromoCode" element={<PromoCode /> } />
+                    <Route path="/Userdetails" element={<UserDetails /> } />
 
                     <Route path="/Login" element={ auth.isLoggedIn && auth.userInfo ? (<Navigate to={ (auth.userInfo.role === 'admin' && '/Admin/Dashboard') || (auth.userInfo.role === 'client' && '/') || (auth.userInfo.role === 'businessOwner' && '/BOwnerHome') || '/' } replace /> ) : ( <Login /> )} />
                     

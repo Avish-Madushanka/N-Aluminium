@@ -36,7 +36,7 @@ const WasteMain = () => {
         <div className="WS2-container">
             <div className="WS2-left-section">
                 <div className="WS2-image-container">
-                    <img src="https://agmetalrecycling.com/wp-content/uploads/2024/09/Untitled-3.png" className="WS2-wall-image" />
+                    <img src="https://www.cliftonmetals.com/wp-content/uploads/2024/07/A-Guide-to-Choosing-a-Responsible-Scrap-Metal-Recycler-Clifton-Metals-Blog-632x764.jpg" className="WS2-wall-image" />
                 </div>
             </div>
             <div className="WS2-right-section">
