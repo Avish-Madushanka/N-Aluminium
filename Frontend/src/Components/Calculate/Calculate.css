@@ -1,190 +1,275 @@
-.scrap-calculator-container {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    padding: 40px;
-    min-height: 100vh;
-    background-image: url('https://bsmedia.business-standard.com/_media/bs/img/article/2016-12/12/full/1481562212-9804.jpg?im=FeatureCrop,size=(826,465)');
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: #2e7d32;
-  }
-  
-  .calculator-card {
-    background: #ffffff;
-    border-radius: 20px;
-    padding: 40px;
-    max-width: 600px;
-    width: 100%;
-    margin: auto;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.10), 0 0 10px rgba(102, 187, 106, 0.1);
-  }
-  
-  .calculator-header {
-    text-align: center;
-    margin-bottom: 24px;
-    position: relative;
-    padding-bottom: 1rem;
-  }
-  
-  .calculator-header::after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    height: 3px;
-    width: 60px;
-    background: linear-gradient(90deg, #3b3b3b, #747474);
-    border-radius: 3px;
-  }
-  
-  .calculator-title {
-    font-size: 34px;
-    color: #00001d;
-    font-weight: bold;
-    margin-bottom: 0.25rem;
-  }
-  
-  .calculator-subtitle {
-    font-size: 20px;
-    color: #555;
-  }
-  
-  .calculator-form {
-    display: flex;
+
+.calculate-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 50px;
+}
+
+.calculate-wrapper {
+  display: flex;
+  max-width: 1000px;
+  width: 100%;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+}
+
+.calculate-quote-section {
+  flex: 1;
+  background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+              url('https://images.hl.uk/vvl3z0p6qtad/1VpLgg2J31ecmnCXfKvP7V/50cea0bdb973e8686675c5181500c299/US_dollars__50_and__100_bills.jpg') center/cover;
+  color: white;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+
+.calculate-quote-section h1 {
+  font-size: 3rem;
+  font-weight: bold;
+  margin-bottom: -150px;
+  font-family: Vegawanty font;
+}
+
+.calculate-image-placeholder {
+  height: 200px;
+  background: url('https://www.everest.co.uk/49de97/globalassets/everest/windows/aluminium-windows/aluminium-windows-top-min.jpg') center/cover;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  margin: 0 auto;
+}
+
+.calculate-form-section {
+  flex: 1;
+  padding: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f9f9f9;
+}
+
+.calculate-form-container {
+  width: 100%;
+  max-width: 400px;
+}
+
+.scrap-calculator-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  color: #42502c;
+}
+
+.scrap-calculator-header h2 {
+  margin: 0;
+  font-size: 1.8rem;
+}
+
+.scrap-calculator-header i {
+  font-size: 1.5rem;
+  color: #42502c;
+}
+
+.calculator-subtitle {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 25px;
+}
+
+.input-group {
+  margin-bottom: 20px;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.input-group input,
+.input-group select {
+  width: 100%;
+  padding: 12px;
+  font-size: 1rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  transition: all 0.3s;
+}
+
+.input-group input:focus,
+.input-group select:focus {
+  border-color: #3498db;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+}
+
+.weight-input-group {
+  display: flex;
+  gap: 10px;
+}
+
+.weight-input-group input {
+  flex: 2;
+}
+
+.weight-input-group .unit-select {
+  flex: 1;
+  width: auto; 
+}
+
+.typical-price {
+  font-size: 0.85rem;
+  color: #777;
+  margin-top: 5px;
+}
+
+.current-price-input {
+  background-color: #e9ecef;
+  cursor: not-allowed;
+}
+
+.check-local {
+  font-size: 0.8rem;
+  color: #777;
+  margin-top: 5px;
+}
+
+button {
+  width: 100%;
+  padding: 15px;
+  background: linear-gradient(to right, #0f3a1c, #082400);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+button .button-icon {
+  font-size: 1rem;
+}
+
+button:hover:not(:disabled) {
+  background: linear-gradient(to right, #061b00, #0f3a1c);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+}
+
+button:disabled {
+  background: #95a5a6;
+  cursor: not-allowed;
+  animation: pulse 1.5s infinite;
+}
+
+.result-section {
+  background-color: #e8f5e9; 
+  border: 1px solid #c8e6c9; 
+  border-radius: 10px;
+  padding: 20px;
+  margin-top: 30px;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+  text-align: center;
+}
+
+.result-section.show {
+  opacity: 1;
+}
+
+.result-section h3 {
+  color: #2e7d32; 
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+}
+
+.total-value-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.total-value-row .value {
+  color: #0f3a1c;
+  font-size: 1.5rem;
+}
+
+.lkr-value {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+.request-custom-btn {
+  background-color: #3498db;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: auto;
+  margin: 0 auto;
+}
+
+.request-custom-btn:hover {
+  background-color: #2980b9;
+}
+
+
+.error-message {
+  background-color: rgba(255,0,0,0.2);
+  color: #e74c3c;
+  padding: 10px 15px;
+  border-radius: 8px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.loading-message {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #3498db;
+}
+
+@media (max-width: 768px) {
+  .calculate-wrapper {
     flex-direction: column;
-    gap: 16px;
   }
-  
-  .input-focus-effect {
-    margin-bottom: 1rem;
+
+  .calculate-quote-section {
+    text-align: center;
+    padding: 30px 20px;
   }
-  
-  .form-label {
-    font-size: 16px;
-    font-weight: 600;
-    color: #444;
-    margin-bottom: 6px;
-    display: block;
+
+  .calculate-image-placeholder {
+    height: 150px;
   }
-  
-  .scrap-form-control {
-    color: #000000;
-    padding: 12px;
-    font-size: 16px;
-    border: 2px solid #e0e0e0;
-    border-radius: 10px;
-    background-color: #ffffff;
-    transition: border 0.3s ease, box-shadow 0.3s ease;
-    width: 100%;
+
+  .calculate-form-section {
+    padding: 30px 20px;
   }
-  
-  .scrap-form-control:focus {
-    border-color: #3b3b3b;
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(59, 59, 59, 0.1);
+
+  .scrap-calculator-header h2 {
+    font-size: 1.5rem;
   }
-  
-  .calculate-button {
-    background: linear-gradient(135deg, #3b3b3b 0%, #202020 100%);
-    color: #fff;
-    padding: 14px;
-    font-size: 16px;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-  
-  .calculate-button:hover {
-    background: linear-gradient(135deg, #202020 0%, #000000 100%);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-  }
-  
-  .calculate-button:active {
-    transform: translateY(1px);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  .result-container {
-    background: linear-gradient(145deg, #3f3f3f, #9b9b9b);
-    margin: 1.5rem 0;
-    padding: 1.25rem;
-    border-radius: 8px;
-    transform: translateY(10px);
-    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  }
-  
-  .result-container.show {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  
-  .result-label {
-    font-size: 16px;
-    font-weight: 600;
-    color: #ffffff;
-  }
-  
-  .result-value {
-    margin-top: 8px;
-    font-size: 20px;
-    font-weight: bold;
-    color: #ffffff;
-    line-height: 1.6rem;
-  }
-  
-  .result-value span {
-    display: block;
-    margin-bottom: 4px;
-  }
-  
-  .price-table {
-    margin-top: 24px;
-    padding-top: 16px;
-    border-top: 1px solid #eaeaea;
-  }
-  
-  .price-table-title {
-    font-size: 18px;
-    font-weight: 600;
-    color: #333;
-    margin-bottom: 12px;
-  }
-  
-  .price-table-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 8px;
-  }
-  
-  .price-table-item {
-    display: flex;
-    justify-content: space-between;
-    font-size: 14px;
-  }
-  
-  .price-table-name {
-    color: #333;
-  }
-  
-  .price-table-value {
-    font-weight: bold;
-    color: #444;
-  }
-  
-  @media (max-width: 640px) {
-    .calculator-card {
-      padding: 20px;
-    }
-  
-    .price-table-grid {
-      grid-template-columns: 1fr;
-    }
-  }
-  
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}

@@ -10,8 +10,9 @@ const Calculate = () => {
   const [showAnimation, setShowAnimation] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [selectedUnit, setSelectedUnit] = useState('kg'); 
 
-  const exchangeRate = 300;
+  const exchangeRate = 300; 
 
   const fetchActiveScrapTypes = useCallback(async () => {
     setIsLoading(true);
@@ -40,7 +41,7 @@ const Calculate = () => {
 
   const handleCalculate = (e) => {
     e.preventDefault();
-    const weightValue = parseFloat(weight);
+    let weightValue = parseFloat(weight);
     const selectedScrapType = scrapTypes.find(type => type._id === selectedScrapId);
 
     if (!selectedScrapType) {
@@ -49,7 +50,13 @@ const Calculate = () => {
       return;
     }
 
-    const priceValue = selectedScrapType.price;
+    if (selectedUnit === 'lbs') {
+      weightValue = weightValue * 0.453592; 
+    } else if (selectedUnit === 'tons') {
+      weightValue = weightValue * 907.185; 
+    }
+
+    const priceValue = selectedScrapType.price; 
 
     if (!isNaN(weightValue) && weightValue > 0) {
       const totalUSD = weightValue * priceValue;
@@ -58,95 +65,116 @@ const Calculate = () => {
       setError(null);
     } else {
       setResultUSD(null);
+      setError('Please enter a valid weight.');
     }
   };
 
   useEffect(() => {
     if (showAnimation) {
-      const timer = setTimeout(() => {
-        setShowAnimation(false);
-      }, 1500);
+      const timer = setTimeout(() => setShowAnimation(false), 1500);
       return () => clearTimeout(timer);
     }
   }, [showAnimation]);
 
+  const selectedScrapType = scrapTypes.find(type => type._id === selectedScrapId);
+  const currentPriceDisplay = selectedScrapType ? selectedScrapType.price.toFixed(2) : 'N/A';
+  const currentUnit = selectedScrapType ? (selectedScrapType.unit || 'kg') : 'kg';
+
   return (
-    <div className="scrap-calculator-container">
-      <div className="calculator-card">
-        <div className="calculator-header">
-          <h2 className="calculator-title">Aluminum Scrap Calculator</h2>
-          <p className="calculator-subtitle">Calculate the value of your aluminum scrap</p>
+    <div className="calculate-container">
+      <div className="calculate-wrapper">
+        <div className="calculate-quote-section">
+          <h1>Know Your <br></br> Scrap’s Worth</h1>
+          <div className="calculate-image-placeholder"></div>
         </div>
 
-        {resultUSD !== null && (
-          <div className={`result-container ${showAnimation ? 'show' : ''}`}>
-            <h3 className="result-label">Total Value:</h3>
-            <div className="result-value">
-              USD: ${resultUSD.toFixed(2)} <br />
-              LKR: Rs. {(resultUSD * exchangeRate).toFixed(2)}
+        <div className="calculate-form-section">
+          <div className="calculate-form-container">
+            <div className="scrap-calculator-header">
+              <i className="fas fa-calculator-alt"></i>
+              <h2>Scrap Metal Calculator</h2>
             </div>
-          </div>
-        )}
+            <p className="calculator-subtitle">Calculate scrap metal value and estimated payout</p>
 
-        {isLoading && <p className="loading-message">Loading scrap prices...</p>}
-        {error && <p className="error-message">{error}</p>}
+            {isLoading && <p className="loading-message">Loading scrap prices...</p>}
+            {error && <p className="error-message">{error}</p>}
 
-        {!isLoading && scrapTypes.length > 0 && (
-          <form onSubmit={handleCalculate} className="calculator-form">
-            <div className="input-focus-effect">
-              <label className="form-label">Scrap Type</label>
-              <select
-                className="scrap-form-control scrap-select"
-                value={selectedScrapId}
-                onChange={(e) => setSelectedScrapId(e.target.value)}
-                disabled={isLoading || scrapTypes.length === 0}
-              >
-                {scrapTypes.map((type) => (
-                  <option key={type._id} value={type._id}>
-                    {type.name} (${type.price.toFixed(2)}/{type.unit || 'kg'})
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="input-focus-effect">
-              <label className="form-label">Weight (kg)</label>
-              <input
-                type="number"
-                step="0.01"
-                min="0"
-                value={weight}
-                onChange={(e) => setWeight(e.target.value)}
-                required
-                placeholder="Enter weight in kg"
-                className="scrap-form-control"
-                disabled={isLoading || scrapTypes.length === 0}
-              />
-            </div>
-
-            <button type="submit" className="calculate-button" disabled={isLoading || scrapTypes.length === 0 || !weight}>
-              Calculate Value
-            </button>
-          </form>
-        )}
-
-        {!isLoading && scrapTypes.length === 0 && !error && (
-          <p className="info-message">Scrap price information is currently unavailable. Please check back later.</p>
-        )}
-
-        {!isLoading && scrapTypes.length > 0 && (
-          <div className="price-table">
-            <h3 className="price-table-title">Current Scrap Prices (per {scrapTypes[0]?.unit || 'kg'})</h3>
-            <div className="price-table-grid">
-              {scrapTypes.map((type) => (
-                <div key={type._id} className="price-table-item">
-                  <span className="price-table-name">{type.name}:</span>
-                  <span className="price-table-value">${type.price.toFixed(2)}</span>
+            {!isLoading && scrapTypes.length > 0 && (
+              <form onSubmit={handleCalculate} className="calculator-form">
+                <div className="input-group">
+                  <label htmlFor="scrap-type">Scrap Type</label>
+                  <select
+                    id="scrap-type"
+                    value={selectedScrapId}
+                    onChange={(e) => setSelectedScrapId(e.target.value)}
+                  >
+                    {scrapTypes.map((type) => (
+                      <option key={type._id} value={type._id}>
+                        {type.name} 
+                      </option>
+                    ))}
+                  </select>
+                  {selectedScrapType && (
+                    <p className="typical-price">Typical price: ${selectedScrapType.price.toFixed(2)}/{currentUnit}</p>
+                  )}
                 </div>
-              ))}
-            </div>
+
+                <div className="input-group">
+                  <label htmlFor="weight">Weight</label>
+                  <div className="weight-input-group">
+                    <input
+                      id="weight"
+                      type="number"
+                      step="0.01"
+                      min="0"
+                      value={weight}
+                      onChange={(e) => setWeight(e.target.value)}
+                      placeholder="Enter weight"
+                    />
+                    <select
+                      value={selectedUnit}
+                      onChange={(e) => setSelectedUnit(e.target.value)}
+                      className="unit-select"
+                    >
+                      <option value="kg">Kilograms (kg)</option>
+                      <option value="lbs">Pounds (lbs)</option>
+                      <option value="tons">Tons</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="input-group">
+                  <label>Current Price per {currentUnit === 'kg' ? 'Kilogram' : (currentUnit === 'lbs' ? 'Pound' : 'Ton')}</label>
+                  <input
+                    type="text"
+                    value={`$ ${currentPriceDisplay}`}
+                    readOnly
+                    className="current-price-input"
+                  />
+                  <p className="check-local">Check local scrap yard for current prices</p>
+                </div>
+
+                <button type="submit" disabled={!weight || !selectedScrapId || isLoading}>
+                  <i className="fas fa-calculator-alt button-icon"></i> Calculate Scrap Value
+                </button>
+              </form>
+            )}
+
+            {resultUSD !== null && (
+              <div className={`result-section ${showAnimation ? 'show' : ''}`}>
+                <h3>Scrap Value Results</h3>
+                <div className="total-value-row">
+                  <p>Total Scrap Value</p>
+                  <p className="value">${resultUSD.toFixed(2)}</p>
+                </div>
+                <div className="lkr-value">
+                  <p>LKR: Rs. {(resultUSD * exchangeRate).toFixed(2)}</p>
+                </div>
+                <button className="request-custom-btn">Request Custom Quote</button>
+              </div>
+            )}
           </div>
-        )}
+        </div>
       </div>
     </div>
   );
