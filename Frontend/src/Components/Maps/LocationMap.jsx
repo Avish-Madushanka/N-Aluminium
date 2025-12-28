@@ -28,18 +28,29 @@ function LocationMap() {
       try {
         const response = await axiosInstance.get("/shop-locations");
 
-        if (response.data && response.data.success && Array.isArray(response.data.data)) {
+        if (
+          response.data?.success &&
+          Array.isArray(response.data.data)
+        ) {
           const validLocations = response.data.data.filter(
-            loc => loc.position && typeof loc.position.lat === 'number' && typeof loc.position.lng === 'number'
+            (loc) =>
+              loc.position &&
+              typeof loc.position.lat === "number" &&
+              typeof loc.position.lng === "number"
           );
           setAllLocations(validLocations);
         } else {
-          throw new Error(response.data?.message || "Fetched data is not in the expected format or request failed.");
+          throw new Error(
+            response.data?.message || "Invalid location data format."
+          );
         }
       } catch (err) {
         console.error("Error fetching locations:", err);
-        const errorMessage = err.response?.data?.message || err.message || "Failed to fetch locations. Please try again later.";
-        setError(errorMessage);
+        setError(
+          err.response?.data?.message ||
+            err.message ||
+            "Failed to fetch locations."
+        );
       } finally {
         setIsLoading(false);
       }
@@ -48,15 +59,16 @@ function LocationMap() {
     fetchLocations();
   }, []);
 
-  const filteredLocationsFromSearch = allLocations.filter(
-    (location) =>
-      (location.name && location.name.toLowerCase().includes(searchTerm.toLowerCase())) ||
-      (location.address && location.address.toLowerCase().includes(searchTerm.toLowerCase()))
+  const filteredLocationsFromSearch = allLocations.filter((location) =>
+    (location.name &&
+      location.name.toLowerCase().includes(searchTerm.toLowerCase())) ||
+    (location.address &&
+      location.address.toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
-  const handleSearchChange = (event) => {
-    setSearchTerm(event.target.value);
-    if (!event.target.value.trim()) {
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+    if (!e.target.value.trim()) {
       setFocusedLocationPosition(null);
     }
   };
@@ -69,11 +81,12 @@ function LocationMap() {
     }
   };
 
-  const handleFocusLocation = (locationItem) => {
-    setFocusedLocationPosition(locationItem.position);
+  const handleFocusLocation = (location) => {
+    setFocusedLocationPosition(location.position);
+
     const mapElement = document.querySelector(".map-area");
     if (mapElement) {
-      mapElement.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      mapElement.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   };
 
@@ -84,7 +97,10 @@ function LocationMap() {
     return (
       <div style={{ color: "red", textAlign: "center", padding: "50px" }}>
         <h2>Error</h2>
-        <p>Google Maps API key is not set. Please add <code>VITE_GOOGLE_MAPS_API_KEY</code> to your .env file.</p>
+        <p>
+          Google Maps API key is missing.  
+          Add <code>VITE_GOOGLE_MAPS_API_KEY</code> to your <code>.env</code> file.
+        </p>
       </div>
     );
   }
@@ -108,7 +124,7 @@ function LocationMap() {
 
   return (
     <div className="store-locator-container">
-      <h2 className="locator-title">Store Locator - Find near you.</h2>
+      <h2 className="locator-title">Store Locator – Find Near You</h2>
 
       <div className="search-container">
         <input
@@ -133,19 +149,24 @@ function LocationMap() {
                 {location.phone && <p className="store-phone">Phone: {location.phone}</p>}
                 {location.hours && <p className="store-hours">Hours: {location.hours}</p>}
                 {location.additional && <p className="store-additional">{location.additional}</p>}
+
                 <div className="store-actions">
                   <button
                     className="view-map-button"
                     onClick={() => handleFocusLocation(location)}
                   >
-                    View On Map
+                    View on Map
                   </button>
                 </div>
               </div>
             ))
           ) : (
             <p style={{ padding: "20px", textAlign: "center" }}>
-              {searchTerm ? "No locations found matching your search." : (allLocations.length === 0 ? "No locations available at the moment." : "Enter a search term to find locations.")}
+              {searchTerm
+                ? "No locations found matching your search."
+                : allLocations.length === 0
+                ? "No locations available."
+                : "Enter a search term to find locations."}
             </p>
           )}
         </div>
@@ -156,7 +177,7 @@ function LocationMap() {
               mapContainerStyle={mapContainerStyle}
               center={mapCenter}
               zoom={mapZoom}
-              onLoad={(map) => { mapRef.current = map; }}
+              onLoad={(map) => (mapRef.current = map)}
             >
               {allLocations.map((location) => (
                 <Marker
@@ -168,7 +189,7 @@ function LocationMap() {
                     focusedLocationPosition &&
                     location.position.lat === focusedLocationPosition.lat &&
                     location.position.lng === focusedLocationPosition.lng
-                      ? "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
+                      ? "https://maps.google.com/mapfiles/ms/icons/blue-dot.png"
                       : undefined
                   }
                 />

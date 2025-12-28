@@ -81,27 +81,27 @@ const Calculate = () => {
   const currentUnit = selectedScrapType ? (selectedScrapType.unit || 'kg') : 'kg';
 
   return (
-    <div className="calculate-container">
-      <div className="calculate-wrapper">
-        <div className="calculate-quote-section">
+    <div className="Cal-2-calculate-container">
+      <div className="Cal-2-calculate-wrapper">
+        <div className="Cal-2-calculate-quote-section">
           <h1>Know Your <br></br> Scrap’s Worth</h1>
-          <div className="calculate-image-placeholder"></div>
+          <div className="Cal-2-calculate-image-placeholder"></div>
         </div>
 
-        <div className="calculate-form-section">
-          <div className="calculate-form-container">
-            <div className="scrap-calculator-header">
+        <div className="Cal-2-calculate-form-section">
+          <div className="Cal-2-calculate-form-container">
+            <div className="Cal-2-scrap-calculator-header">
               <i className="fas fa-calculator-alt"></i>
               <h2>Scrap Metal Calculator</h2>
             </div>
-            <p className="calculator-subtitle">Calculate scrap metal value and estimated payout</p>
+            <p className="Cal-2-calculator-subtitle">Calculate scrap metal value and estimated payout</p>
 
-            {isLoading && <p className="loading-message">Loading scrap prices...</p>}
-            {error && <p className="error-message">{error}</p>}
+            {isLoading && <p className="Cal-2-loading-message">Loading scrap prices...</p>}
+            {error && <p className="Cal-2-error-message">{error}</p>}
 
             {!isLoading && scrapTypes.length > 0 && (
-              <form onSubmit={handleCalculate} className="calculator-form">
-                <div className="input-group">
+              <form onSubmit={handleCalculate} className="Cal-2-calculator-form">
+                <div className="Cal-2-input-group">
                   <label htmlFor="scrap-type">Scrap Type</label>
                   <select
                     id="scrap-type"
@@ -110,18 +110,15 @@ const Calculate = () => {
                   >
                     {scrapTypes.map((type) => (
                       <option key={type._id} value={type._id}>
-                        {type.name} 
+                        {type.name} ${type.price.toFixed(2)}/{type.unit || 'kg'}
                       </option>
                     ))}
                   </select>
-                  {selectedScrapType && (
-                    <p className="typical-price">Typical price: ${selectedScrapType.price.toFixed(2)}/{currentUnit}</p>
-                  )}
                 </div>
 
-                <div className="input-group">
+                <div className="Cal-2-input-group">
                   <label htmlFor="weight">Weight</label>
-                  <div className="weight-input-group">
+                  <div className="Cal-2-weight-input-group">
                     <input
                       id="weight"
                       type="number"
@@ -129,12 +126,12 @@ const Calculate = () => {
                       min="0"
                       value={weight}
                       onChange={(e) => setWeight(e.target.value)}
-                      placeholder="Enter weight"
+                      placeholder="Enter Weight"
                     />
                     <select
                       value={selectedUnit}
                       onChange={(e) => setSelectedUnit(e.target.value)}
-                      className="unit-select"
+                      className="Cal-2-unit-select"
                     >
                       <option value="kg">Kilograms (kg)</option>
                       <option value="lbs">Pounds (lbs)</option>
@@ -143,34 +140,24 @@ const Calculate = () => {
                   </div>
                 </div>
 
-                <div className="input-group">
-                  <label>Current Price per {currentUnit === 'kg' ? 'Kilogram' : (currentUnit === 'lbs' ? 'Pound' : 'Ton')}</label>
-                  <input
-                    type="text"
-                    value={`$ ${currentPriceDisplay}`}
-                    readOnly
-                    className="current-price-input"
-                  />
-                  <p className="check-local">Check local scrap yard for current prices</p>
-                </div>
-
                 <button type="submit" disabled={!weight || !selectedScrapId || isLoading}>
-                  <i className="fas fa-calculator-alt button-icon"></i> Calculate Scrap Value
+                  <i className="fas fa-calculator-alt Cal-2-button-icon"></i> Calculate Scrap Value
                 </button>
               </form>
             )}
 
             {resultUSD !== null && (
-              <div className={`result-section ${showAnimation ? 'show' : ''}`}>
+              <div className={`Cal-2-result-section ${showAnimation ? 'show' : ''}`}>
                 <h3>Scrap Value Results</h3>
-                <div className="total-value-row">
+                <div className="Cal-2-total-value-row">
                   <p>Total Scrap Value</p>
-                  <p className="value">${resultUSD.toFixed(2)}</p>
                 </div>
-                <div className="lkr-value">
+                <div className="Cal-2-value">
+                  <p>${resultUSD.toFixed(2)}</p>
+                </div>
+                <div className="Cal-2-lkr-value">
                   <p>LKR: Rs. {(resultUSD * exchangeRate).toFixed(2)}</p>
                 </div>
-                <button className="request-custom-btn">Request Custom Quote</button>
               </div>
             )}
           </div>

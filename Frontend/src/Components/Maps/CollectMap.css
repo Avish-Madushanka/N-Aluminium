@@ -1,124 +1,167 @@
-.MP1-hero-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Poppins', sans-serif;
-    background-color: #fff;
-    padding: 2rem 4rem;
-    overflow: hidden;
-    position: relative;
-    max-width: 1200px;
-    margin: auto;
-    margin-bottom: 30px;
+.CollectMap-Cal-hero-container {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #ffffff;
+  padding: 20px;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
 }
 
-.MP1-image-section {
-    flex-basis: 55%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.CollectMap-Cal-image-section {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
 }
 
-.MP1-map-image {
-    width: 100%;
-    max-width: 550px;
-    height: auto;
-    object-fit: contain;
+.CollectMap-Cal-map-image {
+  max-width: 100%;
+  height: auto;
+  display: block;
 }
 
-.MP1-content-section {
-    flex-basis: 45%;
-    padding-left: 2rem;
-    color: #333;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+.CollectMap-Cal-content-section {
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
 }
 
-.MP1-logo {
-    font-size: 2.5rem;
-    font-weight: 700;
-    margin: 0;
-    margin-bottom: 1rem;
+.CollectMap-Cal-calculator-wrapper {
+  background-color: #ffffff;
+  padding: 30px;
+  width: 100%;
+  max-width: 500px;
 }
 
-.MP1-logo-food {
-    color: #FFC107;
+
+.CollectMap-Cal-calculator-wrapper .Cal-2-calculate-container {
+  padding: 0;
 }
 
-.MP1-logo-health {
-    color: #FF7043;
+.CollectMap-Cal-calculator-wrapper .Cal-2-calculate-wrapper {
+  box-shadow: none;
+  border-radius: 0;
+  display: block;
 }
 
-.MP1-headline {
-    font-size: 2.8rem;
-    font-weight: 800;
-    line-height: 1.3;
-    margin: 0;
-    margin-bottom: 1rem;
+.CollectMap-Cal-calculator-wrapper .Cal-2-calculate-quote-section {
+  display: none;
 }
 
-.MP1-a {
-    color: #d11414;
-}
-
-.MP1-description {
-    font-size: 1rem;
-    color: #666;
-    margin: 0;
-    margin-bottom: 2.5rem;
-    max-width: 370px;
-    text-align: justify;
-}
-
-.MP1-stats {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-}
-
-.MP1-stat-item {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    align-items: center;
-}
-
-.MP1-stat-number {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #000;
-}
-
-.MP1-stat-label {
-    font-size: 0.8rem;
-    color: #777;
-}
-
-.MP1-stat-divider {
-    height: 40px;
-    width: 1px;
-    background-color: #E0E0E0;
-}
-
-.MP1-btn {
-  width: fit-content;
-  display: inline-block;
-  margin-top: 1.8rem;
-  padding: 0.75rem 2rem;
-  background-color: #2c2c2c; 
-  color: #fff;
-  font-size: 1rem;
-  font-weight: 600;
-  border-radius: 30px;
-  text-decoration: none;
-  transition: 0.3s ease;
-  border: 2px solid #000000;
-}
-
-.MP1-btn:hover {
+.CollectMap-Cal-calculator-wrapper .Cal-2-calculate-form-section {
+  flex: none;
+  width: 100%;
+  padding: 0;
   background-color: transparent;
-  color: #000000;
 }
 
+.CollectMap-Cal-calculator-wrapper .Cal-2-calculate-form-container h2 {
+  text-align: left;
+  font-size: 1.8rem;
+  color: #333;
+  margin-bottom: 10px;
+}
 
+.CollectMap-Cal-calculator-wrapper .Cal-2-calculator-subtitle {
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.CollectMap-Cal-calculator-wrapper .Cal-2-input-group label {
+  font-size: 0.9rem;
+  color: #444;
+  margin-bottom: 5px;
+}
+
+.CollectMap-Cal-calculator-wrapper .Cal-2-input-group select,
+.CollectMap-Cal-calculator-wrapper .Cal-2-input-group input {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 10px;
+  background-color: #eee;
+  color: #333;
+}
+
+.CollectMap-Cal-calculator-wrapper
+  .Cal-2-input-group
+  select:focus,
+.CollectMap-Cal-calculator-wrapper
+  .Cal-2-input-group
+  input:focus {
+  border-color: #5cb85c;
+  box-shadow: 0 0 0 2px rgba(92, 184, 92, 0.2);
+}
+
+.CollectMap-Cal-calculator-wrapper .Cal-2-weight-input-group {
+  gap: 8px;
+}
+
+.CollectMap-Cal-calculator-wrapper button {
+  background: #4CAF50;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 1rem;
+  margin-top: 20px;
+}
+
+.CollectMap-Cal-calculator-wrapper button:hover:not(:disabled) {
+  background: #45a049;
+  transform: none;
+  box-shadow: none;
+}
+
+.CollectMap-Cal-calculator-wrapper .Cal-2-result-section {
+  padding-top: 20px;
+  text-align: left;
+}
+
+.CollectMap-Cal-calculator-wrapper .Cal-2-result-section h3 {
+  font-size: 1.2rem;
+  color: #333;
+}
+
+.CollectMap-Cal-calculator-wrapper .Cal-2-total-value-row {
+  font-size: 1rem;
+  color: #555;
+  justify-content: flex-start;
+  gap: 5px;
+}
+
+.CollectMap-Cal-calculator-wrapper .Cal-2-value {
+  font-size: 1.5rem;
+  color: #333;
+  font-weight: bold;
+  margin-top: 5px;
+}
+
+.CollectMap-Cal-calculator-wrapper .Cal-2-lkr-value {
+  font-size: 1rem;
+  color: #666;
+}
+
+@media (max-width: 768px) {
+  .CollectMap-Cal-hero-container {
+    flex-direction: column;
+  }
+
+  .CollectMap-Cal-image-section {
+    padding: 10px;
+  }
+
+  .CollectMap-Cal-map-image {
+    max-width: 80%;
+  }
+
+  .CollectMap-Cal-content-section {
+    padding: 10px;
+  }
+
+  .CollectMap-Cal-calculator-wrapper {
+    padding: 20px;
+  }
+}
