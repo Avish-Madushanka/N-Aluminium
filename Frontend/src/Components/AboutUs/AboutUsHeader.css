@@ -1,4 +1,4 @@
-.about-container {
+.ABH-about-container {
   width: 100%;
   font-family: 'Inter', sans-serif;
   color: #333;
@@ -7,10 +7,10 @@
   box-sizing: border-box;
 }
 
-.hero-section {
+.ABH-hero-section {
   position: relative;
   height: 45vh;
-  background-image: url('https://careers.cushmanwakefield.com/media/330ba5hc/workers.jpg?width=1500&height=500&v=1dbda10a5a4bb50&rmode=crop&quality=75');
+  background-image: url('https://www.spanhome.lk/wp-content/uploads/2016/12/Aluminium-1024x379.jpg');
   background-size: cover;
   background-position: center;
   display: flex;
@@ -23,7 +23,7 @@
   border-radius: 50px;
 }
 
-.overlay {
+.ABH-overlay {
   position: absolute;
   top: 0;
   left: 0;
@@ -33,146 +33,114 @@
   z-index: 1;
 }
 
-.hero-content {
+.ABH-hero-content {
   position: relative;
   z-index: 2;
   max-width: 60%;
   text-align: center;
 }
 
-.hero-title {
+.ABH-hero-title {
   font-size: 4rem;
   font-weight: 700;
   margin-bottom: 1rem;
   text-align: center;
 }
 
-.content-section {
+.ABH-content-section {
   padding: 4rem 10%;
   background-color: white;
 }
 
-.two-column-grid {
+.ABH-two-column-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 4rem;
   margin-bottom: 3rem;
 }
 
-.column {
+.ABH-column {
   max-width: 100%;
 }
 
-.section-title {
+.ABH-section-title {
   font-size: 2rem;
   font-weight: 600;
   margin-bottom: 1.5rem;
   color: #2d3748;
 }
 
-.section-text {
+.ABH-section-text {
   font-size: 1rem;
   line-height: 1.7;
   color: #4a5568;
   margin-bottom: 1.5rem;
 }
 
-.accent-divider {
+.ABH-accent-divider {
   width: 3rem;
   height: 4px;
   background-color: #e53e3e;
   margin-bottom: 1.5rem;
 }
 
-.full-width {
+.ABH-full-width {
   width: 100%;
 }
 
 @media (max-width: 1200px) {
-  .hero-section {
+  .ABH-hero-section {
     margin: 0 30px;
     height: 50vh;
   }
 
-  .hero-content {
+  .ABH-hero-content {
     max-width: 70%;
   }
 
-  .hero-title {
+  .ABH-hero-title {
     font-size: 3.5rem;
   }
 }
 
 @media (max-width: 992px) {
-  .hero-section {
+  .ABH-hero-section {
     margin: 0 20px;
     height: 55vh;
     border-radius: 40px;
   }
 
-  .hero-content {
+  .ABH-hero-content {
     max-width: 80%;
   }
 
-  .hero-title {
+  .ABH-hero-title {
     font-size: 3rem;
   }
 
-  .two-column-grid {
+  .ABH-two-column-grid {
     gap: 3rem;
   }
 }
 
-/* Small tablets / large phones */
 @media (max-width: 768px) {
-  .hero-section {
+  .ABH-hero-section {
     margin: 0 15px;
     height: auto;
     padding: 40px 15px;
     border-radius: 30px;
   }
 
-  .hero-content {
+  .ABH-hero-content {
     max-width: 90%;
   }
 
-  .hero-title {
+  .ABH-hero-title {
     font-size: 2.5rem;
   }
 
-  .two-column-grid {
+  .ABH-two-column-grid {
     grid-template-columns: 1fr;
     gap: 2rem;
-  }
-}
-
-/* Phones */
-@media (max-width: 576px) {
-  .hero-section {
-    margin: 0 10px;
-    padding: 30px 10px;
-    border-radius: 20px;
-    height: auto;
-  }
-
-  .hero-content {
-    max-width: 95%;
-  }
-
-  .hero-title {
-    font-size: 2rem;
-    line-height: 1.2;
-  }
-
-  .content-section {
-    padding: 2rem 5%;
-  }
-
-  .section-title {
-    font-size: 1.6rem;
-  }
-
-  .section-text {
-    font-size: 0.95rem;
   }
 }

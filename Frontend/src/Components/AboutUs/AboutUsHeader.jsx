@@ -3,13 +3,13 @@ import './AboutUsHeader.css';
 
 const AboutUsHeader = () => {
   return (
-    <div className="about-container">
-      <div className="hero-section">
-        <div className="overlay"></div>
-        <div className="hero-content">
-          <h1 className="hero-title">About Us</h1>
+    <div className="ABH-about-container">
+      <div className="ABH-hero-section">
+        <div className="ABH-overlay"></div>
+        <div className="ABH-hero-content">
+          <h1 className="ABH-hero-title">About Us</h1>
         </div>
-        <div className="wave-divider"></div>
+        <div className="ABH-wave-divider"></div>
       </div>
     </div>
   );

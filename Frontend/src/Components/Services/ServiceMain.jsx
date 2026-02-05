@@ -51,15 +51,15 @@ function ServiceMain() {
       </section>
 
       <section className="Ser-services">
-        <div className="Ser-service-grid">
+        <div className="Ser-masonry-grid">
           {services.map((service, index) => (
-            <div className="Ser-card" key={index}>
+            <div className={`Ser-masonry-card card-${index + 1}`} key={index}>
               <div
-                className="Ser-card-image"
+                className="Ser-masonry-image"
                 style={{ backgroundImage: `url(${service.img})` }}
               ></div>
 
-              <div className="Ser-card-content">
+              <div className="Ser-masonry-content">
                 <h3>{service.title}</h3>
                 <p>{service.desc}</p>
                 <a href={service.link} className="Ser-card-btn">
