@@ -36,7 +36,7 @@ function ServiceMain() {
     {
       title: "Training & Registration",
       desc: "Skill development and registration programs for recycling professionals.",
-      img: "https://antonaluminium.com/wp-content/uploads/2021/01/anton-aluminium.jpg",
+      img: "https://www.alideck.co.uk/wp-content/uploads/2020/08/AliDeck-Non-Combustible-Aluminium-Metal-Balcony-Decking-Rochester-Training-Academy-013.jpg",
       link: "/AluTReg",
     },
   ];
