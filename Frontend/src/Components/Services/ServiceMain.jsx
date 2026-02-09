@@ -22,10 +22,10 @@ function ServiceMain() {
       link: "/ItemMarkert",
     },
     {
-      title: "Buy & Sell Aluminum",
-      desc: "Direct trading platform for aluminum scraps and processed materials.",
-      img: "https://www.musgroves.co.nz/wp-content/uploads/2020/04/how-to-repair-aluminium-window-frames-retina-1.jpg",
-      link: "/BuyandSell",
+      title: "Training & Registration",
+      desc: "Skill development and registration programs for recycling professionals.",
+      img: "https://www.alideck.co.uk/wp-content/uploads/2020/08/AliDeck-Non-Combustible-Aluminium-Metal-Balcony-Decking-Rochester-Training-Academy-013.jpg",
+      link: "/AluTReg",
     },
     {
       title: "Industrial Projects",
@@ -34,10 +34,10 @@ function ServiceMain() {
       link: "/Project",
     },
     {
-      title: "Training & Registration",
-      desc: "Skill development and registration programs for recycling professionals.",
-      img: "https://www.alideck.co.uk/wp-content/uploads/2020/08/AliDeck-Non-Combustible-Aluminium-Metal-Balcony-Decking-Rochester-Training-Academy-013.jpg",
-      link: "/AluTReg",
+      title: "Buy & Sell Aluminum",
+      desc: "Direct trading platform for aluminum scraps and processed materials.",
+      img: "https://www.musgroves.co.nz/wp-content/uploads/2020/04/how-to-repair-aluminium-window-frames-retina-1.jpg",
+      link: "/BuyandSell/AluTReg",
     },
   ];
 
