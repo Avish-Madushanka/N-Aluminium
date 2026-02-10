@@ -37,7 +37,7 @@ function ServiceMain() {
       title: "Buy & Sell Aluminum",
       desc: "Direct trading platform for aluminum scraps and processed materials.",
       img: "https://www.musgroves.co.nz/wp-content/uploads/2020/04/how-to-repair-aluminium-window-frames-retina-1.jpg",
-      link: "/BuyandSell/AluTReg",
+      link: "/BuyandSell",
     },
   ];
 
