@@ -21,11 +21,10 @@ const ItemMarkert = () => {
 
       <main className="ItemMAR-mainContent">
         <section className="ItemMAR-heroSection">
-          {/* The image is set as a background in CSS for better control */}
         </section>
 
         <section className="ItemMAR-categorySection">
-          <h2 className="ItemMAR-categoryTitle">Shop By Category</h2>
+          <h2 className="ItemMAR-categoryTitle">Category</h2>
           <div className="ItemMAR-categoriesGrid">
             <div className="ItemMAR-categoryCard">
               <img src="https://i.ibb.co/QpHp4Q4/desserts.png" alt="Desserts" className="ItemMAR-categoryImage" />
@@ -79,20 +78,20 @@ const ItemMarkert = () => {
         </section>
 
         <section className="ItemMAR-mainCategories">
-          <div className="ItemMAR-mainCategoryCard ItemMAR-vegetables">
-            <span className="ItemMAR-mainCategoryName">Vegetables</span>
+          <div className="ItemMAR-mainCategoryCard ItemMAR-Glass">
+            <span className="ItemMAR-mainCategoryName">Glass</span>
           </div>
-          <div className="ItemMAR-mainCategoryCard ItemMAR-poultry">
-            <span className="ItemMAR-mainCategoryName">Poultry</span>
+          <div className="ItemMAR-mainCategoryCard ItemMAR-cradding-boards">
+            <span className="ItemMAR-mainCategoryName">Cradding Boards</span>
           </div>
-          <div className="ItemMAR-mainCategoryCard ItemMAR-seafood">
-            <span className="ItemMAR-mainCategoryName">Seafood</span>
+          <div className="ItemMAR-mainCategoryCard ItemMAR-silicon">
+            <span className="ItemMAR-mainCategoryName">Silicon Gum</span>
           </div>
-          <div className="ItemMAR-mainCategoryCard ItemMAR-redMeat">
-            <span className="ItemMAR-mainCategoryName">Red Meat</span>
+          <div className="ItemMAR-mainCategoryCard ItemMAR-rubber">
+            <span className="ItemMAR-mainCategoryName">Rubber</span>
           </div>
-          <div className="ItemMAR-mainCategoryCard ItemMAR-fruits">
-            <span className="ItemMAR-mainCategoryName">Fruits</span>
+          <div className="ItemMAR-mainCategoryCard ItemMAR-PVC-Marble">
+            <span className="ItemMAR-mainCategoryName">PVC-Marble</span>
           </div>
         </section>
 

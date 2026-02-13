@@ -55,7 +55,6 @@
   color: #fff;
 }
 
-/* Hero Section (Banner) */
 .ItemMAR-heroSection {
   height: 350px;
   background-image: url('https://www.alineautomation.com/wp-content/uploads/2024/08/ALineAutomation-301227-Aluminum-Square-Bars-Blogbanner1-1024x536.jpg'); /* Replace with your hero banner image */
@@ -76,8 +75,8 @@
 
 /* "Shop By Category" Section */
 .ItemMAR-categorySection {
-  max-width: 1280px;
-  margin: 0 auto 40px auto;
+  max-width: 1100px;
+  margin: 0 auto 70px auto;
   padding: 0 20px;
 }
 
@@ -85,43 +84,41 @@
   font-size: 28px;
   color: #333;
   text-align: center;
-  margin-bottom: 30px;
+  margin-bottom: 50px;
   font-weight: 700;
 }
 
 .ItemMAR-categoriesGrid {
   display: grid;
   grid-template-columns: repeat(6, 1fr); /* FOR 6 ITEMS IN A ROW */
-  gap: 15px;
+  gap: 40px;
   justify-items: center;
 }
 
 .ItemMAR-categoryCard {
-  background-color: #fff;
   border-radius: 8px;
   padding: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 1px 4px rgba(99, 99, 99, 0.08);
   transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
   width: 100%; /* Make card fill its grid column */
   max-width: 100px; /* Optional: cap max width if columns become too wide */
-  height: 100px;
+  height: 120px;
   justify-content: center;
   text-align: center;
 }
 
 .ItemMAR-categoryCard:hover {
   transform: translateY(-3px);
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
 }
 
 .ItemMAR-categoryImage {
-  width: 55px;
-  height: 55px;
+  width: 100px;
+  height: 100px;
   object-fit: contain;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
 .ItemMAR-categoryName {
@@ -133,7 +130,7 @@
 
 /* Main Category Cards (Vegetables, Poultry, etc.) */
 .ItemMAR-mainCategories {
-  max-width: 1280px;
+  max-width: 1600px;
   margin: 0 auto 40px auto;
   padding: 0 20px;
   display: grid;
@@ -142,8 +139,9 @@
 }
 
 .ItemMAR-mainCategoryCard {
-  height: 200px;
-  border-radius: 8px;
+  height: 250px;
+  width: 300px;
+  border-radius: 25px;
   overflow: hidden;
   position: relative;
   display: flex;
@@ -181,14 +179,15 @@
   z-index: 2;
   margin-top: auto;
   text-align: left;
+  font-size: 25px;
 }
 
 /* Specific background images for main category cards */
-.ItemMAR-mainCategoryCard.ItemMAR-vegetables { background-image: url('https://i.ibb.co/jT88W4k/vegetables.png'); }
-.ItemMAR-mainCategoryCard.ItemMAR-poultry { background-image: url('https://i.ibb.co/xL3kQ6K/poultry.png'); }
-.ItemMAR-mainCategoryCard.ItemMAR-seafood { background-image: url('https://i.ibb.co/gP1R80J/sea.png'); }
-.ItemMAR-mainCategoryCard.ItemMAR-redMeat { background-image: url('https://i.ibb.co/fQ1R80J/meat.png'); }
-.ItemMAR-mainCategoryCard.ItemMAR-fruits { background-image: url('https://i.ibb.co/P9tP1Q5/fruits.png'); }
+.ItemMAR-mainCategoryCard.ItemMAR-Glass { background-image: url('https://www.flemingconstructiongroup.com/wp-content/uploads/2022/09/AdobeStock_216792368-scaled.jpeg'); }
+.ItemMAR-mainCategoryCard.ItemMAR-cradding-boards { background-image: url('https://www.alucom.ae/images/aluminium-composite-panels-1.jpg'); }
+.ItemMAR-mainCategoryCard.ItemMAR-silicon { background-image: url('https://media.screwfix.com/is/image/ae235/988HP_A3'); }
+.ItemMAR-mainCategoryCard.ItemMAR-rubber { background-image: url('https://s.alicdn.com/@sc04/kf/H7f14b0d69a7944b7a844d22a2f180ff5x/Factory-Customized-Cheap-Price-Aluminum-Profile-Rubber-Sealing-Gasket-Strip-for-Door-Windows-Filling-PVC-EPDM-Seal-Strips.jpg'); }
+.ItemMAR-mainCategoryCard.ItemMAR-PVC-Marble { background-image: url('https://www.xq-decorative-materials.com/Uploads/pro/UV-PVC-Marble-Sheet.21.3-1.jpg'); }
 
 
 /* Products Carousel Section */
