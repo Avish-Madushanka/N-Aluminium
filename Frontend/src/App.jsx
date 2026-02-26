@@ -31,7 +31,6 @@ import Login from './Components/Login/Login';
 import ItemMarkert from './Components/ItemMarkert/ItemMarkert';
 import AluTRegForm from './Components/AluTReg/AluTRegForm';
 
-import BOwnerForm from './Components/RegistrationForm/BOwnerForm';
 import ClientForm from './Components/RegistrationForm/ClientForm';
 import Calculate from './Components/Calculate/Calculate';
 import SaleForm from './Components/SaleForm/SaleForm';
@@ -305,7 +304,6 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
                     <Route path="/Calculate" element={<Calculate />} />
                     <Route path="/ContactUs" element={<ContactUs />} />
                     <Route path="/SignUp" element={<SignUp />} />
-                    <Route path="/BOwnerForm" element={<BOwnerForm />} />
                     <Route path="/ClientForm" element={<ClientForm />} />
                     <Route path="/CalendarDisplay" element={<CalendarDisplay />} />
                     <Route path="/BSHeader" element={<BSHeader />} />

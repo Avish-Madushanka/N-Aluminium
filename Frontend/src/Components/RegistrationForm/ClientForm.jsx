@@ -1,425 +1,123 @@
-import React, { useState, useEffect } from 'react';
-import axiosInstance from '../../api/axiosInstance'; 
-import API_ENDPOINTS from '../../apiConfig';     
+import React, { useState } from 'react';
+import axiosInstance from '../../api/axiosInstance';
+import API_ENDPOINTS from '../../apiConfig';
 import { useNavigate } from 'react-router-dom';
-import { FileImage, AlertCircle, Mail, Phone, Lock, Home, MapPin, User } from 'lucide-react';
-import './ClientForm.css'; 
+import { Mail, Phone, Lock, User, AlertCircle } from 'lucide-react';
+import './ClientForm.css';
 
 const VALIDATION_PATTERNS = {
   NAME: /^[a-zA-Z\s]{3,50}$/,
   EMAIL: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
   PHONE: /^[0-9]{10}$/,
-  PASSWORD: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&]{6,}$/, 
-  ADDRESS_MIN_LENGTH: 10,
+  PASSWORD: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&]{6,}$/
 };
-const MAX_FILE_SIZE_MB = 5;
-const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
-const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/gif'];
-
 
 const ClientForm = () => {
   const [formData, setFormData] = useState({
-    name: '', email: '', contactNumber: '', password: '',
-    address: '', district: 'colombo', province: 'western'
+    name: '',
+    email: '',
+    contactNumber: '',
+    password: ''
   });
-  const [profilePhoto, setProfilePhoto] = useState(null);
-  const [profilePhotoPreview, setProfilePhotoPreview] = useState(null);
   const [errors, setErrors] = useState({});
   const [successMessage, setSuccessMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [touchedFields, setTouchedFields] = useState({});
   const navigate = useNavigate();
 
-  useEffect(() => {
-    return () => {
-      if (profilePhotoPreview) {
-        URL.revokeObjectURL(profilePhotoPreview);
-      }
-    };
-  }, [profilePhotoPreview]);
-
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-    if (touchedFields[name]) {
-      validateSingleField(name, value);
-    }
+  const handleChange = e => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleInputBlur = (e) => {
-    const { name, value } = e.target;
-    if (!touchedFields[name]) {
-      setTouchedFields(prev => ({ ...prev, [name]: true }));
-    }
-    validateSingleField(name, value);
+  const validate = () => {
+    const newErrors = {};
+    if (!VALIDATION_PATTERNS.NAME.test(formData.name)) newErrors.name = 'Enter valid name';
+    if (!VALIDATION_PATTERNS.EMAIL.test(formData.email)) newErrors.email = 'Enter valid email';
+    if (!VALIDATION_PATTERNS.PHONE.test(formData.contactNumber)) newErrors.contactNumber = 'Enter 10 digit phone';
+    if (!VALIDATION_PATTERNS.PASSWORD.test(formData.password)) newErrors.password = 'Weak password';
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
-  const validateSingleField = (name, value) => {
-    let fieldError = '';
-    const trimmedValue = typeof value === 'string' ? value.trim() : value; 
-
-    switch (name) {
-      case 'name':
-        if (!trimmedValue) fieldError = 'Name is required.';
-        else if (!VALIDATION_PATTERNS.NAME.test(trimmedValue)) fieldError = 'Name must be 3-50 letters and spaces only.';
-        break;
-      case 'email':
-        if (!trimmedValue) fieldError = 'Email is required.';
-        else if (!VALIDATION_PATTERNS.EMAIL.test(trimmedValue)) fieldError = 'Please enter a valid email address.';
-        break;
-      case 'contactNumber':
-        if (!trimmedValue) fieldError = 'Contact number is required.';
-        else if (!VALIDATION_PATTERNS.PHONE.test(trimmedValue)) fieldError = 'Enter a 10-digit phone number.';
-        break;
-      case 'password':
-        if (!value) fieldError = 'Password is required.'; 
-        else if (!VALIDATION_PATTERNS.PASSWORD.test(value)) fieldError = 'Password: min 6 chars, with uppercase, lowercase, and number.';
-        break;
-      case 'address':
-        if (!trimmedValue) fieldError = 'Address is required.';
-        else if (trimmedValue.length < VALIDATION_PATTERNS.ADDRESS_MIN_LENGTH) fieldError = `Address must be at least ${VALIDATION_PATTERNS.ADDRESS_MIN_LENGTH} characters.`;
-        break;
-      case 'district':
-        if (!value) fieldError = 'District is required.'; 
-        break;
-      case 'province':
-        if (!value) fieldError = 'Province is required.';
-        break;
-      default: break;
-    }
-    setErrors(prev => ({
-      ...prev,
-      [name]: fieldError,
-      form: (prev.form && !fieldError && Object.values({...prev, [name]: ''}).every(err => !err || err === prev.form)) ? '' : prev.form
-    }));
-    return !fieldError;
-  };
-
-  const fullyValidateForm = () => {
-    let isFormValid = true;
-    const currentClientSideErrors = {};
-    const allFieldsToTouch = {};
-
-    for (const key in formData) {
-      if (Object.prototype.hasOwnProperty.call(formData, key)) {
-        allFieldsToTouch[key] = true; 
-        if (!validateSingleField(key, formData[key])) { 
-
-          let tempError = '';
-          const value = formData[key];
-          const trimmedValue = typeof value === 'string' ? value.trim() : value;
-           switch (key) {
-                case 'name': if (!trimmedValue) tempError = 'Name is required.'; else if (!VALIDATION_PATTERNS.NAME.test(trimmedValue)) tempError = 'Name must be 3-50 letters and spaces only.'; break;
-                case 'email': if (!trimmedValue) tempError = 'Email is required.'; else if (!VALIDATION_PATTERNS.EMAIL.test(trimmedValue)) tempError = 'Please enter a valid email address.'; break;
-                case 'contactNumber': if (!trimmedValue) tempError = 'Contact number is required.'; else if (!VALIDATION_PATTERNS.PHONE.test(trimmedValue)) tempError = 'Enter a 10-digit phone number.'; break;
-                case 'password': if (!value) tempError = 'Password is required.'; else if (!VALIDATION_PATTERNS.PASSWORD.test(value)) tempError = 'Password: min 6 chars, with uppercase, lowercase, and number.'; break;
-                case 'address': if (!trimmedValue) tempError = 'Address is required.'; else if (trimmedValue.length < VALIDATION_PATTERNS.ADDRESS_MIN_LENGTH) tempError = `Address must be at least ${VALIDATION_PATTERNS.ADDRESS_MIN_LENGTH} characters.`; break;
-                case 'district': if (!value) tempError = 'District is required.'; break;
-                case 'province': if (!value) tempError = 'Province is required.'; break;
-                default: break;
-            }
-            if (tempError) {
-                currentClientSideErrors[key] = tempError;
-                isFormValid = false;
-            }
-        }
-      }
-    }
-    setTouchedFields(allFieldsToTouch);
-
-    if (profilePhoto) {
-      if (!ALLOWED_IMAGE_TYPES.includes(profilePhoto.type)) {
-        currentClientSideErrors.profilePhoto = `Invalid file type. Allowed: ${ALLOWED_IMAGE_TYPES.join(', ')}.`;
-        isFormValid = false;
-      } else if (profilePhoto.size > MAX_FILE_SIZE_BYTES) {
-        currentClientSideErrors.profilePhoto = `Image size must be less than ${MAX_FILE_SIZE_MB}MB.`;
-        isFormValid = false;
-      }
-    }
-    setErrors(prev => ({ ...prev, ...currentClientSideErrors }));
-    return isFormValid;
-  };
-
-  const handleProfilePhotoChange = (e) => {
-    const file = e.target.files?.[0] || null;
-    setErrors(prev => ({ ...prev, profilePhoto: '' })); 
-
-    if (profilePhotoPreview) {
-      URL.revokeObjectURL(profilePhotoPreview);
-      setProfilePhotoPreview(null);
-    }
-    setProfilePhoto(null); 
-
-    if (!file) return;
-
-    if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
-      setErrors(prev => ({ ...prev, profilePhoto: `Invalid file type. Allowed: ${ALLOWED_IMAGE_TYPES.join(', ')}.` }));
-      e.target.value = null; 
-      return;
-    }
-    if (file.size > MAX_FILE_SIZE_BYTES) {
-      setErrors(prev => ({ ...prev, profilePhoto: `Image is too large (max ${MAX_FILE_SIZE_MB}MB).` }));
-      e.target.value = null;
-      return;
-    }
-
-    setProfilePhoto(file);
-    setProfilePhotoPreview(URL.createObjectURL(file));
-  };
-
-
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault();
+    if (!validate()) return;
     setIsLoading(true);
-    setSuccessMessage('');
-    setErrors({}); 
-
-
-    if (!fullyValidateForm()) {
-      setIsLoading(false);
-      setErrors(prev => ({ ...prev, form: 'Please correct the errors highlighted below.' }));
-      return;
-    }
-
-    const clientData = new FormData();
-    for (const key in formData) {
-        clientData.append(key, formData[key]);
-    }
-    if (profilePhoto) {
-      clientData.append('profilePhoto', profilePhoto);
-    }
-
     try {
-      const response = await axiosInstance.post(API_ENDPOINTS.CLIENT.REGISTER, clientData);
-      
-      if (response.data && response.data.success) {
-        setSuccessMessage('Registration successful! Redirecting to login...');
-        setFormData({ 
-          name: '', email: '', contactNumber: '', password: '',
-          address: '', district: 'colombo', province: 'western'
-        });
-        if (profilePhotoPreview) URL.revokeObjectURL(profilePhotoPreview); 
-        setProfilePhoto(null); setProfilePhotoPreview(null);
-        setTouchedFields({}); setErrors({}); 
-        setTimeout(() => navigate('/login'), 3000);
-      } else {
-        throw new Error(response.data?.message || 'Registration failed: Unexpected server response.');
+      const response = await axiosInstance.post(API_ENDPOINTS.CLIENT.REGISTER, formData);
+      if (response.data.success) {
+        setSuccessMessage('Registration successful! Redirecting...');
+        setTimeout(() => navigate('/login'), 2000);
       }
     } catch (err) {
-      handleApiError(err); 
+      setErrors({ form: err.response?.data?.message || 'Registration failed' });
     } finally {
       setIsLoading(false);
     }
   };
-  
-  const handleApiError = (error) => { 
-    let topLevelFormError = 'An unexpected error occurred. Please try again.';
-    const newErrorsFromServer = {};
-
-    if (error.response) {
-        console.error("Backend Response Data (error.response.data):", error.response.data);
-        topLevelFormError = error.response.data?.message || `Server Error (${error.response.status}).`;
-        if (error.response.data?.errors && typeof error.response.data.errors === 'object') {
-            for (const fieldKey in error.response.data.errors) {
-                newErrorsFromServer[fieldKey] = error.response.data.errors[fieldKey];
-            }
-        }
-    } else if (error.request) {
-        topLevelFormError = 'No response from the server. Check your network connection.';
-    } else {
-        topLevelFormError = error.message || topLevelFormError;
-    }
-
-    if (Object.keys(newErrorsFromServer).length > 0) {
-        setErrors(prev => ({ ...prev, ...newErrorsFromServer, form: 'Please correct the server-flagged errors.' }));
-    } else {
-        setErrors({ form: topLevelFormError }); 
-    }
-  };
 
   return (
-    <div className="client-form-container">
-      <div className="form-header">
-        <h2 className="form-title1">Client Registration</h2>
-      </div>
-
-      {errors.form && (
-        <div className="alert alert-error" role="alert">
-          <AlertCircle size={20} />
-          <span>{errors.form}</span>
-        </div>
-      )}
-      {successMessage && (
-        <div className="alert alert-success" role="alert">
-          <span>{successMessage}</span>
-        </div>
-      )}
-
-      <form onSubmit={handleSubmit} noValidate encType="multipart/form-data">
-        <div className="form-group" style={{ "--index": 0 }}>
-          <label htmlFor="name" className="form-label">
-            <User size={16} className="mr-1 inline" /> Full Name *
-          </label>
-          <input
-            id="name" type="text" name="name" value={formData.name}
-            onChange={handleInputChange} 
-            onBlur={handleInputBlur}   
-            required disabled={isLoading}
-            className={`form-input ${errors.name ? 'input-error' : ''}`}
-            placeholder="Enter your full name"
-            aria-invalid={!!errors.name}
-            aria-describedby={errors.name ? "name-error" : undefined}
-          />
-          {errors.name && <div id="name-error" className="error-message">{errors.name}</div>}
-        </div>
-
-        <div className="form-group" style={{ "--index": 1 }}>
-          <label htmlFor="email" className="form-label">
-            <Mail size={16} className="mr-1 inline" /> Email *
-          </label>
-          <input
-            id="email" type="email" name="email" value={formData.email}
-            onChange={handleInputChange}
-            onBlur={handleInputBlur}
-            required disabled={isLoading}
-            className={`form-input ${errors.email ? 'input-error' : ''}`}
-            placeholder="your.email@example.com"
-            aria-invalid={!!errors.email}
-            aria-describedby={errors.email ? "email-error" : undefined}
-          />
-          {errors.email && <div id="email-error" className="error-message">{errors.email}</div>}
-        </div>
-
-        <div className="form-group" style={{ "--index": 2 }}>
-          <label htmlFor="contactNumber" className="form-label">
-            <Phone size={16} className="mr-1 inline" /> Contact Number *
-          </label>
-          <input
-            id="contactNumber" type="tel" name="contactNumber" value={formData.contactNumber}
-            onChange={handleInputChange}
-            onBlur={handleInputBlur}
-            required disabled={isLoading}
-            className={`form-input ${errors.contactNumber ? 'input-error' : ''}`}
-            placeholder="07xxxxxxxx"
-            pattern="[0-9]{10}" 
-            title="Please enter a 10-digit phone number"
-            aria-invalid={!!errors.contactNumber}
-            aria-describedby={errors.contactNumber ? "contactNumber-error" : undefined}
-          />
-          {errors.contactNumber && <div id="contactNumber-error" className="error-message">{errors.contactNumber}</div>}
-        </div>
-        
-        <div className="form-group" style={{ "--index": 3 }}>
-            <label htmlFor="password" className="form-label">
-              <Lock size={16} className="mr-1 inline" /> Password *
-            </label>
-            <input
-              id="password" type="password" name="password" value={formData.password}
-              onChange={handleInputChange}
-              onBlur={handleInputBlur}
-              required disabled={isLoading}
-              className={`form-input ${errors.password ? 'input-error' : ''}`}
-              placeholder="Create a password"
-              minLength="6" 
-              aria-invalid={!!errors.password}
-              aria-describedby={errors.password ? "password-error" : undefined}
-            />
-            {errors.password && <div id="password-error" className="error-message">{errors.password}</div>}
-        </div>
-
-        <div className="form-group" style={{ "--index": 4 }}>
-          <label htmlFor="address" className="form-label">
-            <Home size={16} className="mr-1 inline" /> Address *
-          </label>
-          <textarea
-            id="address" name="address" value={formData.address}
-            onChange={handleInputChange}
-            onBlur={handleInputBlur}
-            required disabled={isLoading} rows="3"
-            className={`form-textarea ${errors.address ? 'input-error' : ''}`}
-            placeholder="Enter your full street address"
-            aria-invalid={!!errors.address}
-            aria-describedby={errors.address ? "address-error" : undefined}
-          />
-          {errors.address && <div id="address-error" className="error-message">{errors.address}</div>}
-        </div>
-
-        <div className="form-grid" style={{ "--index": 5 }}>
-          <div className="form-group">
-            <label htmlFor="district" className="form-label">
-              <MapPin size={16} className="mr-1 inline" /> District *
-            </label>
-            <select
-              id="district" name="district" value={formData.district}
-              onChange={handleInputChange}
-              onBlur={handleInputBlur}
-              required disabled={isLoading}
-              className={`form-select ${errors.district ? 'input-error' : ''}`}
-              aria-invalid={!!errors.district}
-              aria-describedby={errors.district ? "district-error" : undefined}
-            >
-              <option value="" disabled>Select District</option>
-              <option value="colombo">Colombo</option><option value="gampaha">Gampaha</option><option value="kalutara">Kalutara</option><option value="kandy">Kandy</option><option value="matale">Matale</option><option value="nuwara-eliya">Nuwara Eliya</option><option value="galle">Galle</option><option value="matara">Matara</option><option value="hambantota">Hambantota</option><option value="jaffna">Jaffna</option><option value="kilinochchi">Kilinochchi</option><option value="mannar">Mannar</option><option value="vavuniya">Vavuniya</option><option value="mullaitivu">Mullaitivu</option><option value="batticaloa">Batticaloa</option><option value="ampara">Ampara</option><option value="trincomalee">Trincomalee</option><option value="kurunegala">Kurunegala</option><option value="puttalam">Puttalam</option><option value="anuradhapura">Anuradhapura</option><option value="polonnaruwa">Polonnaruwa</option><option value="badulla">Badulla</option><option value="monaragala">Monaragala</option><option value="ratnapura">Ratnapura</option><option value="kegalle">Kegalle</option>
-            </select>
-            {errors.district && <div id="district-error" className="error-message">{errors.district}</div>}
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="province" className="form-label">
-              <MapPin size={16} className="mr-1 inline" /> Province *
-            </label>
-            <select
-              id="province" name="province" value={formData.province}
-              onChange={handleInputChange}
-              onBlur={handleInputBlur}
-              required disabled={isLoading}
-              className={`form-select ${errors.province ? 'input-error' : ''}`}
-              aria-invalid={!!errors.province}
-              aria-describedby={errors.province ? "province-error" : undefined}
-            >
-               <option value="" disabled>Select Province</option>
-               <option value="western">Western</option><option value="central">Central</option><option value="southern">Southern</option><option value="northern">Northern</option><option value="eastern">Eastern</option><option value="north-western">North Western</option><option value="north-central">North Central</option><option value="uva">Uva</option><option value="sabaragamuwa">Sabaragamuwa</option>
-            </select>
-            {errors.province && <div id="province-error" className="error-message">{errors.province}</div>}
+    <div className="SignUp-container">
+      <div className="SignUp-wrapper">
+        <div className="SignUp-left">
+          <div className="SignUp-overlay">
+            <h1>"Start your journey in aluminum trade and recycling today!"</h1>
           </div>
         </div>
 
-        <div className="form-group" style={{ "--index": 6 }}>
-          <label className="form-label">Profile Photo (Optional)</label>
-          <div className="profile-upload-container">
-            {profilePhotoPreview ? (
-              <img src={profilePhotoPreview} alt="Profile Preview" className="profile-preview"/>
-            ) : (
-              <div className="profile-preview-placeholder">
-                <User size={36} color="#a0aec0" />
+        <div className="SignUp-right">
+          <div className="SignUp-form-box">
+            <h2>Create Account</h2>
+            <p>Register to manage your N-Aluminium account</p>
+
+            {errors.form && (
+              <div className="SignUp-alert-error">
+                <AlertCircle size={18} />
+                <span>{errors.form}</span>
               </div>
             )}
-            <label htmlFor="profilePhotoFile" className="upload-button1">
-              <FileImage size={18} />
-              <span>{profilePhoto ? profilePhoto.name : 'Choose Image'}</span>
-            </label>
-            <input
-              id="profilePhotoFile" type="file"
-              onChange={handleProfilePhotoChange} 
-              accept={ALLOWED_IMAGE_TYPES.join(',')}
-              className="hidden-file-input"
-              disabled={isLoading}
-              aria-describedby={errors.profilePhoto ? "profilePhoto-error" : undefined}
-            />
-          </div>
-          {errors.profilePhoto && <div id="profilePhoto-error" className="error-message">{errors.profilePhoto}</div>}
-        </div>
 
-        <button type="submit" disabled={isLoading} className="submit-button1">
-          {isLoading ? (
-            <svg className="spinner" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-             <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" strokeOpacity="0.25" />
-             <path d="M12 2C6.47715 2 2 6.47715 2 12C2 12.5523 2.44772 13 3 13C3.55228 13 4 12.5523 4 12C4 7.58172 7.58172 4 12 4C16.4183 4 20 7.58172 20 12C20 16.4183 16.4183 20 12 20C11.4477 20 11 20.4477 11 21C11 21.5523 11.4477 22 12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2Z" fill="currentColor" />
-            </svg>
-          ) : 'Register Account'}
-        </button>
-      </form>
+            {successMessage && (
+              <div className="SignUp-alert-success">
+                {successMessage}
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit}>
+              <div className="SignUp-group">
+                <label><User size={16}/> Full Name</label>
+                <input type="text" name="name" value={formData.name} onChange={handleChange} />
+                {errors.name && <span className="SignUp-error">{errors.name}</span>}
+              </div>
+
+              <div className="SignUp-group">
+                <label><Mail size={16}/> Email</label>
+                <input type="email" name="email" value={formData.email} onChange={handleChange} />
+                {errors.email && <span className="SignUp-error">{errors.email}</span>}
+              </div>
+
+              <div className="SignUp-group">
+                <label><Phone size={16}/> Phone</label>
+                <input type="text" name="contactNumber" value={formData.contactNumber} onChange={handleChange} />
+                {errors.contactNumber && <span className="SignUp-error">{errors.contactNumber}</span>}
+              </div>
+
+              <div className="SignUp-group">
+                <label><Lock size={16}/> Password</label>
+                <input type="password" name="password" value={formData.password} onChange={handleChange} />
+                {errors.password && <span className="SignUp-error">{errors.password}</span>}
+              </div>
+
+              <button type="submit" disabled={isLoading} className="SignUp-btn">
+                {isLoading ? 'Creating Account...' : 'Register'}
+              </button>
+
+              <div className="SignUp-login-link">
+                Already have an account? <a href="/login">Sign In</a>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
