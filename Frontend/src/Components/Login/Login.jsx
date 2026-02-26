@@ -3,7 +3,6 @@ import axiosInstance from '../../api/axiosInstance';
 import API_ENDPOINTS from '../../apiConfig';        
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';  
-
 import './Login.css'; 
 
 function Login() { 
@@ -12,6 +11,13 @@ function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [serverStatus, setServerStatus] = useState('checking'); 
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [resetEmail, setResetEmail] = useState('');
+  const [resetMessage, setResetMessage] = useState('');
+  const [resetError, setResetError] = useState('');
+  const [isResetting, setIsResetting] = useState(false);
+  const [resetSuccess, setResetSuccess] = useState(false);
+
   const auth = useAuth();
   const navigate = useNavigate();
 
@@ -19,9 +25,7 @@ function Login() {
     msg && /connection error|cannot reach|timed out|network error|failed to fetch/i.test(String(msg).toLowerCase());
 
   const checkBackendStatus = useCallback(async () => {
-    console.log('[Login.jsx] checkBackendStatus called.');
     setServerStatus('checking');
-    // Clear connection
     if (isConnectionError(errorMessage)) {
       setErrorMessage('');
     }
@@ -29,20 +33,16 @@ function Login() {
     const healthCheckEndpoint = API_ENDPOINTS?.HEALTH || '/health'; 
 
     if (!healthCheckEndpoint) {
-      console.warn("[Login.jsx] Health check endpoint is not configured in API_ENDPOINTS.HEALTH.");
       setServerStatus('error');
       setErrorMessage("Client configuration error for server health check.");
       return false;
     }
 
     try {
-      console.log(`[Login.jsx] Pinging backend health at: ${healthCheckEndpoint}`);
       await axiosInstance.get(healthCheckEndpoint, { timeout: 7000 }); 
-      console.log('[Login.jsx] Backend health check successful.');
       setServerStatus('online');
       return true;
     } catch (err) {
-      console.error("[Login.jsx] Backend health check failed:", err.message, err.code, err.response?.status);
       setServerStatus(err.code === 'ECONNABORTED' || !err.response ? 'offline' : 'error');
       if (!errorMessage || isConnectionError(errorMessage)) {
         setErrorMessage('Connection Error: Cannot reach the server. Please ensure it is running and accessible.');
@@ -64,9 +64,7 @@ function Login() {
     }
     setIsLoading(true);
 
-    // Re-check server
     if (serverStatus !== 'online') {
-      console.log("[Login.jsx handleSubmit] Server not online, re-checking status...");
       const isOnline = await checkBackendStatus();
       if (!isOnline) {
         setIsLoading(false);
@@ -75,24 +73,20 @@ function Login() {
     }
 
     if (typeof auth?.login !== 'function') {
-      console.error("[Login.jsx handleSubmit] CRITICAL: auth.login is not a function!");
-      setErrorMessage("Login system error (auth context). Please contact support.");
+      setErrorMessage("Login system error. Please contact support.");
       setIsLoading(false);
       return;
     }
     if (typeof API_ENDPOINTS?.AUTH?.LOGIN !== 'string') {
-      console.error("[Login.jsx handleSubmit] CRITICAL: Login API Endpoint missing in API_ENDPOINTS.AUTH.LOGIN");
-      setErrorMessage("Configuration error: Login endpoint missing. Cannot proceed.");
+      setErrorMessage("Configuration error: Login endpoint missing.");
       setIsLoading(false);
       return;
     }
 
     try {
-      console.log(`[Login.jsx handleSubmit] Attempting login to: ${API_ENDPOINTS.AUTH.LOGIN}`);
       const response = await axiosInstance.post(API_ENDPOINTS.AUTH.LOGIN, { email, password });
 
       if (response.data?.success && response.data?.token && response.data?.data) {
-        console.log("[Login.jsx] Login successful for user:", response.data.data.email, "Role:", response.data.data.role);
         auth.login(response.data.token, response.data.data); 
         
         const userRole = response.data.data.role;
@@ -102,30 +96,96 @@ function Login() {
           navigate('/client/dashboard'); 
         } else if (userRole === 'businessOwner') {
           navigate('/bo/dashboard'); 
-        }
-        else {
+        } else {
           navigate('/');
         }
-
       } else {
         const errMsg = response.data?.message || 'Login failed: Unexpected response from server.';
-        console.warn("[Login.jsx] Login API call succeeded but indicates failure:", response.data);
         setErrorMessage(errMsg);
       }
     } catch (err) {
-      console.error("[Login.jsx handleSubmit] Login API call failed:", err);
       handleApiError(err);
     } finally {
       setIsLoading(false);
     }
   };
 
+  const handleForgotPasswordClick = () => {
+    setShowForgotPassword(true);
+    setResetEmail('');
+    setResetMessage('');
+    setResetError('');
+    setResetSuccess(false);
+  };
+
+  const handleBackToLogin = () => {
+    setShowForgotPassword(false);
+    setResetEmail('');
+    setResetMessage('');
+    setResetError('');
+    setResetSuccess(false);
+  };
+
+  const handleResetPassword = async (e) => {
+    e.preventDefault();
+    setResetError('');
+    setResetMessage('');
+    
+    if (!resetEmail) {
+      setResetError("Please enter your email address.");
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(resetEmail)) {
+      setResetError("Please enter a valid email address.");
+      return;
+    }
+
+    setIsResetting(true);
+
+    if (serverStatus !== 'online') {
+      const isOnline = await checkBackendStatus();
+      if (!isOnline) {
+        setIsResetting(false);
+        return;
+      }
+    }
+
+    try {
+      const forgotPasswordEndpoint = API_ENDPOINTS?.AUTH?.FORGOT_PASSWORD || '/api/auth/forgot-password';
+      const response = await axiosInstance.post(forgotPasswordEndpoint, { email: resetEmail });
+
+      if (response.data?.success) {
+        setResetSuccess(true);
+        setResetMessage(response.data?.message || 'Password reset instructions have been sent to your email.');
+      } else {
+        setResetError(response.data?.message || 'Failed to process password reset request.');
+      }
+    } catch (err) {
+      if (err.response) {
+        const { status, data } = err.response;
+        if (status === 404) {
+          setResetError('Email address not found in our records.');
+        } else if (status === 400) {
+          setResetError(data?.message || 'Invalid request. Please check your email address.');
+        } else {
+          setResetError(data?.message || `Error (${status}). Please try again later.`);
+        }
+      } else if (err.request) {
+        setResetError('Network error. Unable to connect to the server.');
+      } else {
+        setResetError('An unexpected error occurred. Please try again.');
+      }
+    } finally {
+      setIsResetting(false);
+    }
+  };
+
   const handleApiError = (error) => {
-    console.warn("[Login.jsx handleApiError]", error); 
     if (error.code === 'ECONNABORTED' || error.message.toLowerCase().includes('timeout')) {
       setErrorMessage('Login request timed out. The server might be busy.');
       setServerStatus('error');
-
     } else if (error.response) {
       const { status, data } = error.response;
       const msg = data?.message || `Login error (Status ${status}). Please try again.`;
@@ -146,87 +206,164 @@ function Login() {
   };
 
   if (typeof API_ENDPOINTS === 'undefined' || typeof auth === 'undefined' || typeof auth.login !== 'function') {
-    const errorDetails = `API_ENDPOINTS: ${API_ENDPOINTS ? 'Loaded' : 'MISSING! Check import/config.'}. Auth Context: ${auth ? 'Loaded' : 'MISSING! Check AuthProvider.'}. Auth.login function: ${auth && typeof auth.login === 'function' ? 'Available' : 'MISSING on AuthContext!'}`;
-    console.error("[Login.jsx] Critical dependency error on mount:", errorDetails);
     return (
-      <div className="LoginPage-container error-page" style={{ padding: '20px', textAlign: 'center' }}>
+      <div className="LOG-error-page">
         <h2>Application Setup Error</h2>
-        <p style={{ color: 'red', fontWeight: 'bold' }}>A critical part of the application is not working.</p>
-        <p>Details: {errorDetails}</p>
-        <p>Please check the browser console and ensure API_ENDPOINTS are configured and the AuthProvider is correctly set up in your application's root (e.g., App.jsx or main.jsx).</p>
+        <p>A critical part of the application is not working.</p>
       </div>
     );
   }
 
   return (
-    <div className="travel-login-container">
-      <div className="travel-login-wrapper">
-        <div className="travel-quote-section">
-          <div className="travel-quote">
-            <h1>"Welcome to the future of aluminum – recycle, trade, design!"</h1>
-          </div>
-          <div className="travel-image">
-            <div className="image-placeholder"></div>
+    <div className="LOG-container">
+      <div className="LOG-wrapper">
+        <div className="LOG-quote-section">
+          <div className="LOG-quote-content">
+            <h1>"Welcome to the future <br/>of aluminum – recycle, <br/>trade, design!"</h1>
           </div>
         </div>
 
-        <div className="login-form-section">
-          <div className="form-container">
-            <div className="form-header">
-              <h2>Welcome Back!</h2>
-              <p>Log in to manage your N-Aluminium account</p>
-            </div>
+        <div className="LOG-form-section">
+          <div className="LOG-form-content">
+            {!showForgotPassword ? (
+              <>
+                <div className="LOG-header">
+                  <h2>Welcome Back!</h2>
+                  <p>Log in to manage your N-Aluminium account</p>
+                </div>
 
-            <div className="LoginPage-status-message">
-              {serverStatus === 'checking' && <p className="status-checking">Connecting to server...</p>}
-            </div>
-            {errorMessage && <div className="LoginPage-error">{errorMessage}</div>}
-            
-            <form onSubmit={handleSubmit} noValidate className="travel-form">
-              <div className="input-group">
-                <label htmlFor="login-email">Email Address</label>
-                <input
-                  type="email"
-                  id="login-email"
-                  name="email" 
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)} 
-                  placeholder="you@example.com"
-                  autoComplete="email" 
-                  required
-                  disabled={isLoading || serverStatus === 'checking'}
-                />
-              </div>
-              
-              <div className="input-group">
-                <label htmlFor="login-password">Password</label>
-                <input
-                  type="password"
-                  id="login-password"
-                  name="password" 
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Enter your password"
-                  autoComplete="current-password" 
-                  required
-                  disabled={isLoading || serverStatus === 'checking'}
-                />
-              </div>
-              
-              <button 
-                type="submit" 
-                className="login-btn" 
-                disabled={isLoading || serverStatus !== 'online'}
-              >
-                {isLoading ? 'Signing in...' : (serverStatus === 'checking' ? 'Connecting...' : 'Sign in')}
-              </button>
-            </form>
+                {serverStatus === 'checking' && (
+                  <div className="LOG-status-message">
+                    <p>Connecting to server...</p>
+                  </div>
+                )}
+                
+                {errorMessage && (
+                  <div className="LOG-error-message">
+                    {errorMessage}
+                  </div>
+                )}
+                
+                <form onSubmit={handleSubmit} className="LOG-form">
+                  <div className="LOG-form-group">
+                    <label htmlFor="LOG-email">Email Address</label>
+                    <input
+                      type="email"
+                      id="LOG-email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="you@example.com"
+                      disabled={isLoading || serverStatus === 'checking'}
+                    />
+                  </div>
+                  
+                  <div className="LOG-form-group">
+                    <label htmlFor="LOG-password">Password</label>
+                    <input
+                      type="password"
+                      id="LOG-password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      placeholder="Enter your password"
+                      disabled={isLoading || serverStatus === 'checking'}
+                    />
+                  </div>
+                  
+                  <div className="LOG-forgot-password">
+                    <button 
+                      type="button"
+                      onClick={handleForgotPasswordClick}
+                      className="LOG-forgot-btn"
+                      disabled={isLoading}
+                    >
+                      Forgot Password?
+                    </button>
+                  </div>
+                  
+                  <button 
+                    type="submit" 
+                    className="LOG-submit-btn"
+                    disabled={isLoading || serverStatus !== 'online'}
+                  >
+                    {isLoading ? 'Signing in...' : 'Sign in'}
+                  </button>
+                </form>
 
-            <div className="form-footer">
-              <p>
-                Don't have an account? <Link to="/SignUp">Sign Up Now</Link>
-              </p>
-            </div>
+                <div className="LOG-signup-link">
+                  <p>
+                    Don't have an account? <Link to="/SignUp">Sign Up Now</Link>
+                  </p>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="LOG-header">
+                  <h2>Reset Password</h2>
+                  <p>Enter your email to receive reset instructions</p>
+                </div>
+
+                {resetSuccess ? (
+                  <div className="LOG-success-message">
+                    <i className="fas fa-check-circle"></i>
+                    <p>{resetMessage || 'Password reset instructions have been sent to your email.'}</p>
+                    <button onClick={handleBackToLogin} className="LOG-back-btn">
+                      Back to Login
+                    </button>
+                  </div>
+                ) : (
+                  <>
+                    {serverStatus === 'checking' && (
+                      <div className="LOG-status-message">
+                        <p>Connecting to server...</p>
+                      </div>
+                    )}
+                    
+                    {resetError && (
+                      <div className="LOG-error-message">
+                        {resetError}
+                      </div>
+                    )}
+                    
+                    {resetMessage && (
+                      <div className="LOG-info-message">
+                        {resetMessage}
+                      </div>
+                    )}
+                    
+                    <form onSubmit={handleResetPassword} className="LOG-form">
+                      <div className="LOG-form-group">
+                        <label htmlFor="LOG-reset-email">Email Address</label>
+                        <input
+                          type="email"
+                          id="LOG-reset-email"
+                          value={resetEmail}
+                          onChange={(e) => setResetEmail(e.target.value)}
+                          placeholder="Enter your registered email"
+                          disabled={isResetting || serverStatus === 'checking'}
+                        />
+                      </div>
+                      
+                      <button 
+                        type="submit" 
+                        className="LOG-reset-btn"
+                        disabled={isResetting || serverStatus !== 'online'}
+                      >
+                        {isResetting ? 'Sending...' : 'Send Reset Instructions'}
+                      </button>
+                      
+                      <button 
+                        type="button"
+                        onClick={handleBackToLogin}
+                        className="LOG-back-link"
+                        disabled={isResetting}
+                      >
+                        ← Back to Login
+                      </button>
+                    </form>
+                  </>
+                )}
+              </>
+            )}
           </div>
         </div>
       </div>
@@ -234,4 +371,4 @@ function Login() {
   );
 }
 
-export default Login; 
+export default Login;

@@ -90,7 +90,7 @@
 
 .ItemMAR-categoriesGrid {
   display: grid;
-  grid-template-columns: repeat(6, 1fr); /* FOR 6 ITEMS IN A ROW */
+  grid-template-columns: repeat(6, 1fr); 
   gap: 40px;
   justify-items: center;
 }
@@ -182,7 +182,6 @@
   font-size: 25px;
 }
 
-/* Specific background images for main category cards */
 .ItemMAR-mainCategoryCard.ItemMAR-Glass { background-image: url('https://www.flemingconstructiongroup.com/wp-content/uploads/2022/09/AdobeStock_216792368-scaled.jpeg'); }
 .ItemMAR-mainCategoryCard.ItemMAR-cradding-boards { background-image: url('https://www.alucom.ae/images/aluminium-composite-panels-1.jpg'); }
 .ItemMAR-mainCategoryCard.ItemMAR-silicon { background-image: url('https://media.screwfix.com/is/image/ae235/988HP_A3'); }
@@ -190,7 +189,6 @@
 .ItemMAR-mainCategoryCard.ItemMAR-PVC-Marble { background-image: url('https://www.xq-decorative-materials.com/Uploads/pro/UV-PVC-Marble-Sheet.21.3-1.jpg'); }
 
 
-/* Products Carousel Section */
 .ItemMAR-productsSection {
   max-width: 1280px;
   margin: 0 auto 40px auto;
@@ -199,11 +197,10 @@
 }
 
 .ItemMAR-productCarousel {
-  display: grid; /* Changed to grid for consistent rows */
-  grid-template-columns: repeat(6, 1fr); /* FOR 6 ITEMS IN A ROW */
+  display: grid; 
+  grid-template-columns: repeat(6, 1fr); 
   gap: 20px;
   padding-bottom: 20px;
-  /* Removed overflow-x: auto and scrollbar styles as grid handles layout */
 }
 
 .ItemMAR-productCard {
@@ -216,7 +213,7 @@
   align-items: center;
   text-align: center;
   border: 1px solid #eee;
-  width: 100%; /* Make card fill its grid column */
+  width: 100%; 
 }
 
 .ItemMAR-productImage {

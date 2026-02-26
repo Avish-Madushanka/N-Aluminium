@@ -1,274 +1,316 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css');
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-.travel-login-container {
+.LOG-container {
+  min-height: 80vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 50px;
+  padding: 20px;
 }
 
-.travel-login-wrapper {
+.LOG-wrapper {
+  display: flex;
   width: 100%;
-  max-width: 1000px;
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 20px;
+  max-width: 1200px;
+  background: white;
+  border-radius: 12px;
   overflow: hidden;
-  display: flex;
-  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
-.travel-quote-section {
+.LOG-quote-section {
   flex: 1;
-  background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
-              url('https://www.mining.com/wp-content/uploads/2024/06/AdobeStock_280351595-1024x578.jpeg') center/cover;
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+              url('https://www.mining.com/wp-content/uploads/2024/06/AdobeStock_280351595-1024x578.jpeg');
+  background-size: cover;
+  background-position: center;
+  padding: 60px 40px;
+  display: flex;
+}
+
+.LOG-quote-content h1 {
   color: white;
-  padding: 40px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  position: relative;
-}
-
-.travel-quote h1 {
-  font-size: 2.2rem;
+  font-size: 2.4rem;
   font-weight: 700;
-  line-height: 1.2;
-  margin-bottom: 15px;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  line-height: 1.1;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-.highlight {
-  color: #FFD700;
-  font-style: italic;
-}
-
-.travel-image {
-  margin-top: 40px;
-}
-
-.image-placeholder {
-  height: 200px;
-  background: url('https://www.everest.co.uk/49de97/globalassets/everest/windows/aluminium-windows/aluminium-windows-top-min.jpg') center/cover;
-  border-radius: 10px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-}
-
-.login-form-section {
+.LOG-form-section {
   flex: 1;
-  padding: 40px;
+  padding: 60px 50px;
   display: flex;
   align-items: center;
   justify-content: center;
+  background: white;
 }
 
-.form-container {
+.LOG-form-content {
   width: 100%;
   max-width: 400px;
 }
 
-.form-header {
-  text-align: center;
-  margin-bottom: 30px;
+.LOG-header {
+  margin-bottom: 40px;
 }
 
-.form-header h2 {
+.LOG-header h2 {
   font-size: 2rem;
-  color: #42502c;
-  margin-bottom: 10px;
   font-weight: 700;
+  color: #333;
+  margin-bottom: 8px;
 }
 
-.form-header p {
-  color: #7f8c8d;
+.LOG-header p {
+  color: #666;
   font-size: 1rem;
 }
 
-.LoginPage-status-message {
-  text-align: center;
-  margin-bottom: 15px;
-  min-height: 20px;
-}
-
-.status-checking {
-  color: #3498db;
-  font-size: 0.9rem;
-}
-
-.LoginPage-error {
-  background-color: rgba(255, 0, 0, 0.2);
-  color: #e74c3c;
-  border: 1px solid rgba(231, 76, 60, 0.3);
-  padding: 10px 15px;
+.LOG-status-message {
+  background-color: #e3f2fd;
+  color: #1976d2;
+  padding: 12px 16px;
   border-radius: 8px;
+  margin-bottom: 20px;
   font-size: 14px;
   text-align: center;
+}
+
+.LOG-error-message {
+  background-color: #ffebee;
+  color: #d32f2f;
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.LOG-info-message {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.LOG-success-message {
+  text-align: center;
+  padding: 20px 0;
+}
+
+.LOG-success-message i {
+  font-size: 4rem;
+  color: #4caf50;
   margin-bottom: 20px;
 }
 
-.travel-form {
+.LOG-success-message p {
+  color: #333;
+  font-size: 1.1rem;
+  margin-bottom: 30px;
+  line-height: 1.5;
+}
+
+.LOG-form {
   width: 100%;
 }
 
-.input-group {
-  margin-bottom: 20px;
+.LOG-form-group {
+  margin-bottom: 25px;
 }
 
-.input-group label {
+.LOG-form-group label {
   display: block;
   margin-bottom: 8px;
-  color: #2c3e50;
-  font-weight: 600;
-  font-size: 0.9rem;
+  color: #555;
+  font-weight: 500;
+  font-size: 0.95rem;
 }
 
-.input-group input {
+.LOG-form-group input {
   width: 100%;
-  padding: 15px;
+  padding: 14px 16px;
   border: 2px solid #e0e0e0;
-  border-radius: 10px;
+  border-radius: 8px;
   font-size: 1rem;
   transition: all 0.3s;
-  background-color: #fff;
+  background-color: #fafafa;
 }
 
-.input-group input:focus {
-  border-color: #3498db;
+.LOG-form-group input:focus {
+  border-color: #2c3e50;
   outline: none;
-  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+  background-color: white;
 }
 
-.input-group input:disabled {
-  background-color: #f8f9fa;
+.LOG-form-group input:disabled {
+  background-color: #f5f5f5;
   cursor: not-allowed;
   opacity: 0.7;
 }
 
-.login-btn {
-  width: 100%;
-  padding: 15px;
-  background: linear-gradient(to right, #0f3a1c, #082400);
-  color: white;
-  border: none;
-  border-radius: 10px;
-  font-size: 1.1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s;
-  margin-top: 10px;
-}
-
-.login-btn:hover:not(:disabled) {
-  background: linear-gradient(to right, #061b00, #0f3a1c);
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
-}
-
-.login-btn:disabled {
-  background: #95a5a6;
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
-}
-
-.form-footer {
-  text-align: center;
-  margin-top: 30px;
-}
-
-.form-footer p {
-  color: #7f8c8d;
+.LOG-forgot-password {
+  text-align: right;
   margin-bottom: 20px;
 }
 
-.form-footer a {
-  color: #000c14;
-  text-decoration: none;
-  font-weight: 600;
-  transition: all 0.3s;
+.LOG-forgot-btn {
+  background: none;
+  border: none;
+  color: #2c3e50;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 5px;
 }
 
-.form-footer a:hover {
-  color: #003d66;
+.LOG-forgot-btn:hover:not(:disabled) {
   text-decoration: underline;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-  .travel-login-wrapper {
+.LOG-forgot-btn:disabled {
+  color: #999;
+  cursor: not-allowed;
+}
+
+.LOG-submit-btn,
+.LOG-reset-btn,
+.LOG-back-btn {
+  width: 100%;
+  padding: 14px;
+  background-color: #2c3e50;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 10px;
+}
+
+.LOG-submit-btn:hover:not(:disabled),
+.LOG-reset-btn:hover:not(:disabled) {
+  background-color: #34495e;
+}
+
+.LOG-submit-btn:disabled,
+.LOG-reset-btn:disabled {
+  background-color: #95a5a6;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.LOG-back-btn {
+  background-color: #4caf50;
+  margin-top: 20px;
+  max-width: 200px;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+
+.LOG-back-btn:hover {
+  background-color: #43a047;
+}
+
+.LOG-back-link {
+  background: none;
+  border: none;
+  color: #666;
+  font-size: 0.95rem;
+  cursor: pointer;
+  width: 100%;
+  text-align: center;
+  padding: 15px 0 0;
+  transition: color 0.3s;
+}
+
+.LOG-back-link:hover:not(:disabled) {
+  color: #333;
+}
+
+.LOG-back-link:disabled {
+  color: #999;
+  cursor: not-allowed;
+}
+
+.LOG-signup-link {
+  text-align: center;
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+}
+
+.LOG-signup-link p {
+  color: #666;
+  font-size: 0.95rem;
+}
+
+.LOG-signup-link a {
+  color: #2c3e50;
+  text-decoration: none;
+  font-weight: 600;
+  margin-left: 5px;
+}
+
+.LOG-signup-link a:hover {
+  text-decoration: underline;
+}
+
+.LOG-error-page {
+  padding: 20px;
+  text-align: center;
+}
+
+.LOG-error-page h2 {
+  color: #d32f2f;
+  margin-bottom: 10px;
+}
+
+@media (max-width: 968px) {
+  .LOG-wrapper {
     flex-direction: column;
     max-width: 500px;
   }
   
-  .travel-quote-section {
-    padding: 30px 20px;
+  .LOG-quote-section {
+    padding: 40px 30px;
+  }
+  
+  .LOG-quote-content h1 {
+    font-size: 1.8rem;
     text-align: center;
   }
   
-  .travel-quote h1 {
-    font-size: 1.8rem;
-  }
-  
-  .travel-image {
-    margin-top: 30px;
-  }
-  
-  .image-placeholder {
-    height: 150px;
-  }
-  
-  .login-form-section {
-    padding: 30px 20px;
-  }
-  
-  .form-header h2 {
-    font-size: 1.8rem;
+  .LOG-form-section {
+    padding: 40px 30px;
   }
 }
 
 @media (max-width: 576px) {
-  .travel-login-container {
+  .LOG-container {
     padding: 10px;
   }
   
-  .travel-quote h1 {
-    font-size: 1.5rem;
+  .LOG-form-section {
+    padding: 30px 20px;
   }
   
-  .form-header h2 {
-    font-size: 1.6rem;
+  .LOG-header h2 {
+    font-size: 1.8rem;
   }
   
-  .input-group input {
+  .LOG-form-group input {
+    padding: 12px 14px;
+  }
+  
+  .LOG-submit-btn,
+  .LOG-reset-btn {
     padding: 12px;
   }
-  
-  .login-btn {
-    padding: 12px;
-    font-size: 1rem;
-  }
-}
-
-/* Animation for loading state */
-@keyframes pulse {
-  0% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-
-.login-btn:disabled {
-  animation: pulse 1.5s infinite;
 }
