@@ -45,12 +45,27 @@
 }
 
 .Alu-hero-btn {
+  margin-right: 15px;
   display: inline-block;
   padding: 14px 32px;
   font-size: 17px;
   font-weight: 600;
   color: #fff;
   background-color: #131313;
+  border: none;
+  border-radius: 30px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.Alu-hero-btn1 {
+  margin-right: 15px;
+  display: inline-block;
+  padding: 14px 32px;
+  font-size: 17px;
+  font-weight: 600;
+  color: #000000;
+  background-color: #a5a5a5;
   border: none;
   border-radius: 30px;
   text-decoration: none;
