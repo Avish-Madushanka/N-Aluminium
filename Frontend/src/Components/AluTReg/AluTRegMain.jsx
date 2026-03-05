@@ -32,7 +32,7 @@ function AluTRegMain() {
           <a href="/AluTRegForm" className="Alu-hero-btn">
             Register Now
           </a>
-          <a href="/AluTRegForm" className="Alu-hero-btn1">
+          <a href="/AluRegVideoUp" className="Alu-hero-btn1">
             Register Now
           </a>
         </div>

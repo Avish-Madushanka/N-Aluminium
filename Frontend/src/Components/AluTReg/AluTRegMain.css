@@ -65,8 +65,8 @@
   font-size: 17px;
   font-weight: 600;
   color: #000000;
-  background-color: #a5a5a5;
-  border: none;
+  background-color: #ffffff;
+  border: 2px solid #000000;
   border-radius: 30px;
   text-decoration: none;
   transition: all 0.3s ease;
@@ -75,6 +75,12 @@
 .Alu-hero-btn:hover {
   background-color: #2b2b2b;
   box-shadow: 0 6px 20px rgba(55, 55, 55, 0.4);
+  transform: translateY(-3px);
+}
+
+.Alu-hero-btn1:hover {
+  background-color: #f1f1f1;
+  box-shadow: 0 6px 20px rgba(167, 167, 167, 0.4);
   transform: translateY(-3px);
 }
 

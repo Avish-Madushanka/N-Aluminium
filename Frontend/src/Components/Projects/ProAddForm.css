@@ -50,8 +50,7 @@ select {
   border-radius: 8px;
   border: 1px solid #44484f;
   font-size: 1rem;
-  color: #e0e0e0; 
-  background-color: #1e2024; 
+  color: #e0e0e0;  
   box-sizing: border-box;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
