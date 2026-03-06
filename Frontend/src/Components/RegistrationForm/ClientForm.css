@@ -1,14 +1,14 @@
 .SignUp-container {
-  min-height: 100vh;
+  min-height: 80vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f4f4f4;
+  background: #ffffff;
   font-family: 'Inter', sans-serif;
 }
 
 .SignUp-wrapper {
-  width: 1100px;
+  width: 1200px;
   height: 650px;
   background: #fff;
   display: flex;
@@ -50,6 +50,7 @@
 
 .SignUp-form-box h2 {
   font-size: 28px;
+  font-weight: 900;
   margin-bottom: 10px;
 }
 

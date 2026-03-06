@@ -14,10 +14,13 @@ const VALIDATION_PATTERNS = {
 
 const ClientForm = () => {
   const [formData, setFormData] = useState({
-    name: '',
+    fullName: '',
     email: '',
-    contactNumber: '',
-    password: ''
+    phone: '',
+    phoneNumber: '',
+    contact: '',
+    password: '',
+    confirmPassword: ''
   });
   const [errors, setErrors] = useState({});
   const [successMessage, setSuccessMessage] = useState('');
@@ -26,30 +29,74 @@ const ClientForm = () => {
 
   const handleChange = e => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    if (errors[e.target.name]) {
+      setErrors({ ...errors, [e.target.name]: '' });
+    }
   };
 
   const validate = () => {
     const newErrors = {};
-    if (!VALIDATION_PATTERNS.NAME.test(formData.name)) newErrors.name = 'Enter valid name';
-    if (!VALIDATION_PATTERNS.EMAIL.test(formData.email)) newErrors.email = 'Enter valid email';
-    if (!VALIDATION_PATTERNS.PHONE.test(formData.contactNumber)) newErrors.contactNumber = 'Enter 10 digit phone';
-    if (!VALIDATION_PATTERNS.PASSWORD.test(formData.password)) newErrors.password = 'Weak password';
+    
+    if (!formData.fullName.trim()) newErrors.fullName = 'Name is required';
+    else if (!VALIDATION_PATTERNS.NAME.test(formData.fullName)) newErrors.fullName = 'Enter valid name (3-50 characters, letters only)';
+    
+    if (!formData.email.trim()) newErrors.email = 'Email is required';
+    else if (!VALIDATION_PATTERNS.EMAIL.test(formData.email)) newErrors.email = 'Enter valid email';
+    
+    const phoneValue = formData.phone || formData.phoneNumber || formData.contact;
+    if (!phoneValue.trim()) newErrors.phone = 'Phone number is required';
+    else if (!VALIDATION_PATTERNS.PHONE.test(phoneValue)) newErrors.phone = 'Enter 10 digit phone number';
+    
+    if (!formData.password) newErrors.password = 'Password is required';
+    else if (!VALIDATION_PATTERNS.PASSWORD.test(formData.password)) newErrors.password = 'Password must be at least 6 characters with uppercase, lowercase and number';
+    
+    if (formData.password !== formData.confirmPassword) {
+      newErrors.confirmPassword = 'Passwords do not match';
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async e => {
     e.preventDefault();
+    
+    setErrors({});
+    setSuccessMessage('');
+    
     if (!validate()) return;
+    
     setIsLoading(true);
+    
     try {
-      const response = await axiosInstance.post(API_ENDPOINTS.CLIENT.REGISTER, formData);
-      if (response.data.success) {
-        setSuccessMessage('Registration successful! Redirecting...');
+      const phoneValue = formData.phone || formData.phoneNumber || formData.contact;
+      
+      const requestData = {
+        name: formData.fullName,
+        fullName: formData.fullName,
+        email: formData.email,
+        phone: phoneValue,
+        phoneNumber: phoneValue,
+        contactNumber: phoneValue,
+        contact: phoneValue,
+        password: formData.password
+      };
+      
+      const response = await axiosInstance.post(API_ENDPOINTS.CLIENT.REGISTER, requestData);
+      
+      if (response.data.success || response.data.message) {
+        setSuccessMessage('Registration successful! Redirecting to login...');
         setTimeout(() => navigate('/login'), 2000);
       }
     } catch (err) {
-      setErrors({ form: err.response?.data?.message || 'Registration failed' });
+      console.error('Registration error:', err.response?.data);
+      
+      if (err.response?.data?.errors) {
+        setErrors(err.response.data.errors);
+      } else {
+        const errorMessage = err.response?.data?.message || err.response?.data?.error || 'Registration failed. Please try again.';
+        setErrors({ form: errorMessage });
+      }
     } finally {
       setIsLoading(false);
     }
@@ -67,7 +114,7 @@ const ClientForm = () => {
         <div className="SignUp-right">
           <div className="SignUp-form-box">
             <h2>Create Account</h2>
-            <p>Register to manage your N-Aluminium account</p>
+            <p>Register to manage your account</p>
 
             {errors.form && (
               <div className="SignUp-alert-error">
@@ -82,29 +129,75 @@ const ClientForm = () => {
               </div>
             )}
 
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} noValidate>
               <div className="SignUp-group">
                 <label><User size={16}/> Full Name</label>
-                <input type="text" name="name" value={formData.name} onChange={handleChange} />
-                {errors.name && <span className="SignUp-error">{errors.name}</span>}
+                <input 
+                  type="text" 
+                  name="fullName" 
+                  value={formData.fullName} 
+                  onChange={handleChange}
+                  placeholder="Enter your full name"
+                  className={errors.fullName ? 'error' : ''}
+                  required
+                />
+                {errors.fullName && <span className="SignUp-error">{errors.fullName}</span>}
               </div>
 
               <div className="SignUp-group">
                 <label><Mail size={16}/> Email</label>
-                <input type="email" name="email" value={formData.email} onChange={handleChange} />
+                <input 
+                  type="email" 
+                  name="email" 
+                  value={formData.email} 
+                  onChange={handleChange}
+                  placeholder="Enter your email"
+                  className={errors.email ? 'error' : ''}
+                  required
+                />
                 {errors.email && <span className="SignUp-error">{errors.email}</span>}
               </div>
 
               <div className="SignUp-group">
-                <label><Phone size={16}/> Phone</label>
-                <input type="text" name="contactNumber" value={formData.contactNumber} onChange={handleChange} />
-                {errors.contactNumber && <span className="SignUp-error">{errors.contactNumber}</span>}
+                <label><Phone size={16}/> Phone Number</label>
+                <input 
+                  type="tel" 
+                  name="phone" 
+                  value={formData.phone} 
+                  onChange={handleChange}
+                  placeholder="Enter 10 digit phone number"
+                  className={errors.phone ? 'error' : ''}
+                  required
+                />
+                {errors.phone && <span className="SignUp-error">{errors.phone}</span>}
               </div>
 
               <div className="SignUp-group">
                 <label><Lock size={16}/> Password</label>
-                <input type="password" name="password" value={formData.password} onChange={handleChange} />
+                <input 
+                  type="password" 
+                  name="password" 
+                  value={formData.password} 
+                  onChange={handleChange}
+                  placeholder="Enter password"
+                  className={errors.password ? 'error' : ''}
+                  required
+                />
                 {errors.password && <span className="SignUp-error">{errors.password}</span>}
+              </div>
+
+              <div className="SignUp-group">
+                <label><Lock size={16}/> Confirm Password</label>
+                <input 
+                  type="password" 
+                  name="confirmPassword" 
+                  value={formData.confirmPassword} 
+                  onChange={handleChange}
+                  placeholder="Confirm your password"
+                  className={errors.confirmPassword ? 'error' : ''}
+                  required
+                />
+                {errors.confirmPassword && <span className="SignUp-error">{errors.confirmPassword}</span>}
               </div>
 
               <button type="submit" disabled={isLoading} className="SignUp-btn">

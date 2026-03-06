@@ -134,7 +134,7 @@ const Navbar = ({ isLoggedIn, userInfo, handleLogout }) => {
           ) : (
             <div className="Nav-auth-buttons-container">
               <Link to="/Login" className="Nav-login-btn">Login</Link>
-              <Link to="/SignUp" className="Nav-signup-btn">Sign Up</Link>
+              <Link to="/ClientForm" className="Nav-signup-btn">Sign Up</Link>
             </div>
           )}
 
