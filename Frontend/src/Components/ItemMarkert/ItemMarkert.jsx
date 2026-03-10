@@ -1,5 +1,16 @@
 import React from 'react';
 import './ItemMarkert.css';
+import box from "../../assets/box.png";
+import l from "../../assets/l.png";
+import u from "../../assets/u.png";
+import j from "../../assets/j.png";
+import rivert from "../../assets/rivert.png";
+import cut from "../../assets/cut.png";
+import grill from "../../assets/grill.png";
+import knife from "../../assets/knife.png";
+import Rmac from "../../assets/Rmac.png";
+import sivilim from "../../assets/sivilim.png";
+import glass from "../../assets/glass.png";
 
 const ItemMarkert = () => {
   return (
@@ -20,59 +31,59 @@ const ItemMarkert = () => {
       </header>
 
       <main className="ItemMAR-mainContent">
-        <section className="ItemMAR-heroSection">
-        </section>
+        <section className="ItemMAR-heroSection"></section>
 
         <section className="ItemMAR-categorySection">
           <h2 className="ItemMAR-categoryTitle">Category</h2>
           <div className="ItemMAR-categoriesGrid">
+
             <div className="ItemMAR-categoryCard">
-              <img src="https://i.ibb.co/QpHp4Q4/desserts.png" alt="Desserts" className="ItemMAR-categoryImage" />
-              <span className="ItemMAR-categoryName">Desserts</span>
+              <img src={box} className="ItemMAR-categoryImage" />
+              <span className="ItemMAR-categoryName">Box Bars</span>
             </div>
             <div className="ItemMAR-categoryCard">
-              <img src="https://i.ibb.co/3zdJg8Q/snacks.png" alt="Snacks" className="ItemMAR-categoryImage" />
-              <span className="ItemMAR-categoryName">Snacks</span>
+              <img src={u} className="ItemMAR-categoryImage" />
+              <span className="ItemMAR-categoryName">U Channels</span>
             </div>
             <div className="ItemMAR-categoryCard">
-              <img src="https://i.ibb.co/jR09J9s/biscuits.png" alt="Biscuits" className="ItemMAR-categoryImage" />
-              <span className="ItemMAR-categoryName">Biscuits</span>
+              <img src={l} className="ItemMAR-categoryImage" />
+              <span className="ItemMAR-categoryName">L-Bars</span>
             </div>
             <div className="ItemMAR-categoryCard">
-              <img src="https://i.ibb.co/pL3kQ6K/coffee.png" alt="Coffee" className="ItemMAR-categoryImage" />
-              <span className="ItemMAR-categoryName">Coffee</span>
+              <img src={box} className="ItemMAR-categoryImage" />
+              <span className="ItemMAR-categoryName">Box Bars</span>
             </div>
             <div className="ItemMAR-categoryCard">
-              <img src="https://i.ibb.co/N7B9zF1/eggs.png" alt="Eggs" className="ItemMAR-categoryImage" />
-              <span className="ItemMAR-categoryName">Eggs</span>
+              <img src={j} className="ItemMAR-categoryImage" />
+              <span className="ItemMAR-categoryName">J-Channel Bars</span>
             </div>
             <div className="ItemMAR-categoryCard">
-              <img src="https://i.ibb.co/k3kG3rL/bakery.png" alt="Bakery" className="ItemMAR-categoryImage" />
-              <span className="ItemMAR-categoryName">Bakery</span>
+              <img src={sivilim} className="ItemMAR-categoryImage" />
+              <span className="ItemMAR-categoryName">Sivilim Boards</span>
+            </div>
+           <div className="ItemMAR-categoryCard">
+              <img src={cut} className="ItemMAR-categoryImage" />
+              <span className="ItemMAR-categoryName">Aluminum Cutters</span>
             </div>
             <div className="ItemMAR-categoryCard">
-              <img src="https://i.ibb.co/9hF3g78/family.png" alt="Family Consumption Beverages" className="ItemMAR-categoryImage" />
-              <span className="ItemMAR-categoryName">Family Consumption Beverages</span>
+              <img src={grill} className="ItemMAR-categoryImage" />
+              <span className="ItemMAR-categoryName">Grill Machines</span>
             </div>
             <div className="ItemMAR-categoryCard">
-              <img src="https://i.ibb.co/zXn0w7b/individual.png" alt="Individual Consumption Beverages" className="ItemMAR-categoryImage" />
-              <span className="ItemMAR-categoryName">Individual Consumption Beverages</span>
+              <img src={Rmac} className="ItemMAR-categoryImage" />
+              <span className="ItemMAR-categoryName">Rivet Guns</span>
             </div>
             <div className="ItemMAR-categoryCard">
-              <img src="https://i.ibb.co/xS2kM9r/water.png" alt="Water" className="ItemMAR-categoryImage" />
-              <span className="ItemMAR-categoryName">Water</span>
+              <img src={knife} className="ItemMAR-categoryImage" />
+              <span className="ItemMAR-categoryName">Rubber Blade</span>
             </div>
             <div className="ItemMAR-categoryCard">
-              <img src="https://i.ibb.co/Gdk8cQW/hotandcold.png" alt="Hot & Cold Drinks" className="ItemMAR-categoryImage" />
-              <span className="ItemMAR-categoryName">Hot & Cho. Drinks</span>
+              <img src={glass} className="ItemMAR-categoryImage" />
+              <span className="ItemMAR-categoryName">Glass Cutters</span>
             </div>
             <div className="ItemMAR-categoryCard">
-              <img src="https://i.ibb.co/dK5z5T0/freshmilk.png" alt="Fresh Milk" className="ItemMAR-categoryImage" />
-              <span className="ItemMAR-categoryName">Fresh Milk & Liq.-Milk</span>
-            </div>
-            <div className="ItemMAR-categoryCard">
-              <img src="https://i.ibb.co/Wc6395N/tea.png" alt="Tea" className="ItemMAR-categoryImage" />
-              <span className="ItemMAR-categoryName">Tea</span>
+              <img src={rivert} className="ItemMAR-categoryImage" />
+              <span className="ItemMAR-categoryName">Rivet Boxs</span>
             </div>
           </div>
         </section>
@@ -148,84 +159,6 @@ const ItemMarkert = () => {
                 <span className="ItemMAR-productPrice">Rs 799.00</span>
                 <span className="ItemMAR-productUnit">/ Unit</span>
                 <p className="ItemMAR-productDescription">Fresh Farm Eggs Large 10S</p>
-                <button className="ItemMAR-addButton">+ Add</button>
-              </div>
-            </div>
-             <div className="ItemMAR-productCard">
-              <img src="https://i.ibb.co/r71X71S/coconut.png" alt="Coconut" className="ItemMAR-productImage" />
-              <div className="ItemMAR-productDetails">
-                <span className="ItemMAR-productPrice">Rs 155.00</span>
-                <span className="ItemMAR-productUnit">/ Unit</span>
-                <p className="ItemMAR-productDescription">Coconut</p>
-                <button className="ItemMAR-addButton">+ Add</button>
-              </div>
-            </div>
-          </div>
-          <div className="ItemMAR-carouselNav ItemMAR-right">›</div>
-        </section>
-
-        <section className="ItemMAR-productsSection">
-          <div className="ItemMAR-productCarousel">
-            <div className="ItemMAR-productCard">
-              <img src="https://i.ibb.co/r71X71S/coconut.png" alt="Coconut" className="ItemMAR-productImage" />
-              <div className="ItemMAR-productDetails">
-                <span className="ItemMAR-productPrice">Rs 155.00</span>
-                <span className="ItemMAR-productUnit">/ Unit</span>
-                <p className="ItemMAR-productDescription">Coconut</p>
-                <button className="ItemMAR-addButton">+ Add</button>
-              </div>
-            </div>
-            <div className="ItemMAR-productCard">
-              <img src="https://i.ibb.co/tZ5N1N6/milk.png" alt="Anchor Full Cream Fresh Milk Tetra 1L" className="ItemMAR-productImage" />
-              <div className="ItemMAR-productDetails">
-                <span className="ItemMAR-productPrice">Rs 599.00</span>
-                <span className="ItemMAR-productUnit">/ Unit</span>
-                <p className="ItemMAR-productDescription">Anchor Full Cream Fresh Milk Tetra 1L</p>
-                <button className="ItemMAR-addButton">+ Add</button>
-              </div>
-            </div>
-            <div className="ItemMAR-productCard">
-              <img src="https://i.ibb.co/tZ5N1N6/milk.png" alt="Kotmale Full Cream Milk Tetra 1L" className="ItemMAR-productImage" />
-              <div className="ItemMAR-productDetails">
-                <span className="ItemMAR-productPrice">Rs 599.00</span>
-                <span className="ItemMAR-productUnit">/ Unit</span>
-                <p className="ItemMAR-productDescription">Kotmale Full Cream Milk Tetra 1L</p>
-                <button className="ItemMAR-addButton">+ Add</button>
-              </div>
-            </div>
-            <div className="ItemMAR-productCard">
-              <img src="https://i.ibb.co/G9N1G4P/onion.png" alt="Onion" className="ItemMAR-productImage" />
-              <div className="ItemMAR-productDetails">
-                <span className="ItemMAR-productPrice">Rs 210.00</span>
-                <span className="ItemMAR-productUnit">/ Kg</span>
-                <p className="ItemMAR-productDescription">Onion</p>
-                <button className="ItemMAR-addButton">+ Add</button>
-              </div>
-            </div>
-            <div className="ItemMAR-productCard">
-              <img src="https://i.ibb.co/jT88W4k/vegetables.png" alt="Red Dhal Whole KG - Local" className="ItemMAR-productImage" />
-              <div className="ItemMAR-productDetails">
-                <span className="ItemMAR-productPrice">Rs 202.00</span>
-                <span className="ItemMAR-productUnit">/ Kg</span>
-                <p className="ItemMAR-productDescription">Red Dhal Whole KG - Local</p>
-                <button className="ItemMAR-addButton">+ Add</button>
-              </div>
-            </div>
-            <div className="ItemMAR-productCard">
-              <img src="https://i.ibb.co/zXn0w7b/individual.png" alt="Fresh Farm Eggs Large 10S" className="ItemMAR-productImage" />
-              <div className="ItemMAR-productDetails">
-                <span className="ItemMAR-productPrice">Rs 799.00</span>
-                <span className="ItemMAR-productUnit">/ Unit</span>
-                <p className="ItemMAR-productDescription">Fresh Farm Eggs Large 10S</p>
-                <button className="ItemMAR-addButton">+ Add</button>
-              </div>
-            </div>
-            <div className="ItemMAR-productCard">
-              <img src="https://i.ibb.co/r71X71S/coconut.png" alt="Coconut" className="ItemMAR-productImage" />
-              <div className="ItemMAR-productDetails">
-                <span className="ItemMAR-productPrice">Rs 155.00</span>
-                <span className="ItemMAR-productUnit">/ Unit</span>
-                <p className="ItemMAR-productDescription">Coconut</p>
                 <button className="ItemMAR-addButton">+ Add</button>
               </div>
             </div>
