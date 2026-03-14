@@ -29,8 +29,6 @@ import ContactUs from './Pages/ContactUs';
 import UnauthorizedPage from './Pages/UnauthorizedPage';
 import Login from './Components/Login/Login';
 import ItemMarkert from './Components/ItemMarkert/ItemMarkert';
-import AluTRegForm from './Components/AluTReg/AluTRegForm';
-
 
 import ClientForm from './Components/RegistrationForm/ClientForm';
 import Calculate from './Components/Calculate/Calculate';
@@ -69,6 +67,7 @@ import PromoCode from './Components/Payment/PromoCode';
 import UserDetails from './Components/Payment/UserDetails';
 import AluRegVideoUp from './Components/AluTReg/AluRegVideoUp';
 import ItemAddForm from './Components/Admin/ItemsAddForm/ItemsAddForm';
+import AluTRegForm from './Components/AluTReg/AluTRegForm';
 
 const parseUserInfoFromToken = (token) => {
     if (!token) {
@@ -314,7 +313,6 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
                     <Route path="/AboutUSDiagram" element={<AboutUSDiagram />} />
                     <Route path="/ItemMarkert" element={<ItemMarkert />} />
                     <Route path="/AluTReg" element={<AluTReg />} />
-                    <Route path="/AluRegForm" element={<AluTRegForm />} />
                     <Route path="/Payment" element={<Payment />} />
                     <Route path="/PaymentMethod" element={<PaymentMethod />} />
                     <Route path="/Payments" element={<Payments /> } />
@@ -322,6 +320,7 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
                     <Route path="/Userdetails" element={<UserDetails /> } />
                     <Route path="/AluRegVideoUp" element={<AluRegVideoUp /> } />
                     <Route path="/ItemsAddForm" element={<ItemAddForm /> } />
+                    <Route path="/AluTRegForm" element={<AluTRegForm /> } />
 
                     <Route path="/Login" element={ auth.isLoggedIn && auth.userInfo ? (<Navigate to={ (auth.userInfo.role === 'admin' && '/Admin/Dashboard') || (auth.userInfo.role === 'client' && '/') || (auth.userInfo.role === 'businessOwner' && '/BOwnerHome') || '/' } replace /> ) : ( <Login /> )} />
                     
