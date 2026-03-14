@@ -61,12 +61,12 @@ const ItemMarkert = () => {
   ];
 
   const colorOptions = [
-    { id: 'red', color: '#ffffff' },
-    { id: 'blue', color: '#000000' },
-    { id: 'green', color: '#646464' },
-    { id: 'yellow', color: '#332008' },
-    { id: 'purple', color: '#500f0f' },
-    { id: 'orange', color: '#141263' },
+    { id: 'white', color: '#ffffff' },
+    { id: 'black', color: '#000000' },
+    { id: 'grey', color: '#646464' },
+    { id: 'wood', color: '#332008' },
+    { id: 'maroon', color: '#500f0f' },
+    { id: 'blue', color: '#141263' },
   ];
 
   // Categories that should show color options

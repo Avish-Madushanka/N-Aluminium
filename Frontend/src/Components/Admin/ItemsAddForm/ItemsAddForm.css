@@ -1,0 +1,428 @@
+.ITADD-page {
+  font-family: 'Roboto', sans-serif;
+  background-color: #f5f5f5;
+  min-height: 100vh;
+  padding: 30px;
+}
+
+.ITADD-header {
+  background: #1a1a1a;
+  color: white;
+  padding: 20px 30px;
+  border-radius: 20px;
+  margin-bottom: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.ITADD-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0;
+  position: relative;
+  padding-left: 15px;
+}
+
+.ITADD-title:before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 5px;
+  height: 35px;
+  background: #4CAF50;
+  border-radius: 3px;
+}
+
+.ITADD-close {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  font-size: 32px;
+  cursor: pointer;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+}
+
+.ITADD-close:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: rotate(90deg);
+}
+
+.ITADD-form {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.ITADD-twoColumn {
+  display: grid;
+  grid-template-columns: 350px 1fr;
+  gap: 30px;
+  margin-bottom: 30px;
+}
+
+.ITADD-card {
+  background: white;
+  border-radius: 20px;
+  padding: 25px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  border: 1px solid #f0f0f0;
+}
+
+.ITADD-sectionTitle {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 20px 0;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #f0f0f0;
+  position: relative;
+}
+
+.ITADD-sectionTitle:after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 50px;
+  height: 2px;
+  background: #4CAF50;
+}
+
+.ITADD-imageUpload {
+  width: 100%;
+  height: 280px;
+  border: 3px dashed #ddd;
+  border-radius: 15px;
+  overflow: hidden;
+  transition: all 0.3s;
+  background: #f9f9f9;
+}
+
+.ITADD-imageUpload:hover {
+  border-color: #4CAF50;
+}
+
+.ITADD-uploadLabel {
+  width: 100%;
+  height: 100%;
+  display: block;
+  cursor: pointer;
+}
+
+.ITADD-uploadPlaceholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #999;
+}
+
+.ITADD-uploadIcon {
+  font-size: 48px;
+  font-weight: 300;
+  color: #4CAF50;
+}
+
+.ITADD-uploadHint {
+  font-size: 12px;
+  color: #ccc;
+}
+
+.ITADD-imagePreview {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.ITADD-imagePreview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ITADD-removeImage {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #f44336;
+  transition: all 0.3s;
+}
+
+.ITADD-removeImage:hover {
+  background: white;
+  transform: scale(1.1);
+}
+
+.ITADD-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.ITADD-fieldGroup {
+  width: 100%;
+}
+
+.ITADD-label {
+  display: block;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.ITADD-required {
+  color: #f44336;
+  margin-left: 4px;
+}
+
+.ITADD-input,
+.ITADD-select,
+.ITADD-textarea {
+  width: 100%;
+  padding: 12px 15px;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  font-size: 14px;
+  transition: all 0.3s;
+  font-family: 'Roboto', sans-serif;
+}
+
+.ITADD-input:focus,
+.ITADD-select:focus,
+.ITADD-textarea:focus {
+  outline: none;
+  border-color: #4CAF50;
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+}
+
+.ITADD-input.error,
+.ITADD-select.error,
+.ITADD-textarea.error {
+  border-color: #f44336;
+}
+
+.ITADD-textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.ITADD-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.ITADD-colorHint {
+  font-size: 13px;
+  color: #666;
+  margin: -5px 0 15px 0;
+}
+
+.ITADD-colorGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.ITADD-colorItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+  background: white;
+}
+
+.ITADD-colorItem:hover {
+  border-color: #a1a1a1;
+  background: #f5f5f5;
+}
+
+.ITADD-colorItem.selected {
+  border-color: #777777;
+  background: #d8d8d8;
+}
+
+.ITADD-colorSwatch {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.ITADD-colorName {
+  font-size: 13px;
+  font-weight: 500;
+  color: #333;
+  flex: 1;
+}
+
+.ITADD-colorCheck {
+  color: #7e7e7e;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.ITADD-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-weight: 500;
+  color: #555;
+  padding: 5px 0;
+}
+
+.ITADD-checkbox input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: #4CAF50;
+}
+
+.ITADD-error {
+  color: #f44336;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.ITADD-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 2px solid #f0f0f0;
+  background: white;
+  border-radius: 15px;
+  padding: 20px 30px;
+}
+
+.ITADD-cancel {
+  padding: 12px 35px;
+  background: #f5f5f5;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-family: 'Roboto', sans-serif;
+}
+
+.ITADD-cancel:hover {
+  background: #e0e0e0;
+  border-color: #ccc;
+}
+
+.ITADD-submit {
+  padding: 12px 35px;
+  background: #4CAF50;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3);
+  font-family: 'Roboto', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.ITADD-submit:hover {
+  background: #45a049;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(76, 175, 80, 0.4);
+}
+
+@media (max-width: 1024px) {
+  .ITADD-twoColumn {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .ITADD-page {
+    padding: 20px;
+  }
+  
+  .ITADD-colorGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .ITADD-header {
+    padding: 15px 20px;
+  }
+  
+  .ITADD-title {
+    font-size: 22px;
+  }
+  
+  .ITADD-row {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  .ITADD-actions {
+    flex-direction: column;
+  }
+  
+  .ITADD-cancel,
+  .ITADD-submit {
+    width: 100%;
+  }
+  
+  .ITADD-colorGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
