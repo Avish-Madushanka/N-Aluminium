@@ -93,7 +93,6 @@ if (fs.existsSync(uploadsDirectory)) {
     }
 }
 
-// Test routes
 app.get('/api/health', (req, res) => {
     console.log('[Health Check] /api/health endpoint was hit.');
     res.status(200).json({ status: 'ok', message: 'Backend API is running and healthy.' });
@@ -103,10 +102,8 @@ app.get('/api/test', (req, res) => {
     res.json({ message: 'Server is working', timestamp: new Date().toISOString() });
 });
 
-// DIRECT ROUTE MOUNTING - SIMPLIFIED
 console.log('[Server Config] Mounting routes directly...');
 
-// Mount all routes directly
 if (authRoutes) app.use('/api/auth', authRoutes);
 if (clientRoutes) app.use('/api/clients', clientRoutes);
 if (bOwnerRoutes) app.use('/api/b-owners', bOwnerRoutes);
@@ -120,15 +117,13 @@ if (projectRoutes) app.use('/api/projects', projectRoutes);
 if (adminRoutes) app.use('/api/admin', adminRoutes);
 if (adminStatsRoutes) app.use('/api/admin/stats', adminStatsRoutes);
 
-// CRITICAL: Mount items route
 if (itemRoutes) {
     app.use('/api/items', itemRoutes);
-    console.log('[Server Config] ✅ SUCCESS: Mounted itemRoutes at /api/items');
+    console.log('[Server Config]  SUCCESS: Mounted itemRoutes at /api/items');
 } else {
-    console.error('[Server Config] ❌ ERROR: itemRoutes is null or undefined!');
+    console.error('[Server Config]  ERROR: itemRoutes is null or undefined!');
 }
 
-// List all registered routes for debugging
 console.log('\n=== REGISTERED ROUTES ===');
 app._router.stack.forEach(function(layer){
     if (layer.route) {

@@ -12,7 +12,7 @@ router.get('/:id', itemController.getItemById);
 router.post(
     '/',
     protect,
-    authorize('client', 'businessOwner', 'admin'),
+    authorize('admin', 'client', 'businessOwner'),
     uploadItemImage,
     itemController.createItem
 );
@@ -20,7 +20,7 @@ router.post(
 router.put(
     '/:id',
     protect,
-    authorize('client', 'businessOwner', 'admin'),
+    authorize('admin', 'client', 'businessOwner'),
     uploadItemImage,
     itemController.updateItem
 );
@@ -28,10 +28,10 @@ router.put(
 router.delete(
     '/:id',
     protect,
-    authorize('client', 'businessOwner', 'admin'),
+    authorize('admin', 'client', 'businessOwner'),
     itemController.deleteItem
 );
 
-console.log('[ItemRoutes] Routes loaded successfully');
+console.log(' Item routes loaded');
 
 module.exports = router;

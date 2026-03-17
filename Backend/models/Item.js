@@ -79,13 +79,11 @@ const itemSchema = new mongoose.Schema({
     timestamps: true
 });
 
-// Pre-save middleware to update inStock based on stock value
 itemSchema.pre('save', function(next) {
     this.inStock = this.stock > 0;
     next();
 });
 
-// Pre-save middleware to calculate discounted price
 itemSchema.pre('save', function(next) {
     if (this.discount > 0) {
         this.discountedPrice = this.price * (1 - this.discount / 100);

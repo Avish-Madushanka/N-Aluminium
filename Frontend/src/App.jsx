@@ -68,6 +68,13 @@ import UserDetails from './Components/Payment/UserDetails';
 import AluRegVideoUp from './Components/AluTReg/AluRegVideoUp';
 import ItemAddForm from './Components/Admin/ItemsAddForm/ItemsAddForm';
 import AluTRegForm from './Components/AluTReg/AluTRegForm';
+import ItemsManage from './Components/Admin/ItemsAddForm/ItemsManage';
+
+console.log('=== IMPORT DEBUG ===');
+console.log('ItemsManage imported:', ItemsManage);
+console.log('AdminLayout imported:', AdminLayout);
+console.log('ProtectedRoute imported:', ProtectedRoute);
+console.log('=== END IMPORT DEBUG ===');
 
 const parseUserInfoFromToken = (token) => {
     if (!token) {
@@ -223,6 +230,12 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
     const location = useLocation();
     const auth = useAuth();
 
+    console.log('AppContentWrapper - Auth state:', { 
+        isLoggedIn: auth.isLoggedIn, 
+        role: auth.userInfo?.role,
+        pathname: location.pathname 
+    });
+
     useEffect(() => {
         if (navigateRef) navigateRef.current = navigate;
         return () => { if (navigateRef) navigateRef.current = null; };
@@ -321,6 +334,8 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
                     <Route path="/AluRegVideoUp" element={<AluRegVideoUp /> } />
                     <Route path="/ItemsAddForm" element={<ItemAddForm /> } />
                     <Route path="/AluTRegForm" element={<AluTRegForm /> } />
+                    
+                    <Route path="/test-items" element={<ItemsManage />} />
 
                     <Route path="/Login" element={ auth.isLoggedIn && auth.userInfo ? (<Navigate to={ (auth.userInfo.role === 'admin' && '/Admin/Dashboard') || (auth.userInfo.role === 'client' && '/') || (auth.userInfo.role === 'businessOwner' && '/BOwnerHome') || '/' } replace /> ) : ( <Login /> )} />
                     
@@ -343,10 +358,9 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
                          <Route path="/BOwnerProfile" element={<BOwnerProfile />} />
                          <Route path="/b-owner/profile/edit" element={<EditBOwnerProfilePage />} />
                          <Route path="/ProAddForm" element={<ProAddForm />} />
-                         
                     </Route>
 
-                     <Route element={<ProtectedRoute requiredRole="admin" />}>
+                    <Route element={<ProtectedRoute requiredRole="admin" />}>
                         <Route element={<AdminLayout handleLogout={auth.logout} userInfo={auth.userInfo} />}>
                            <Route path="/Admin" element={<Navigate to="/Admin/Dashboard" replace />} /> 
                            <Route path="/Admin/Dashboard" element={<Dashboard />} />
@@ -357,6 +371,7 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
                            <Route path="/Admin/ManageOwners" element={<HandleBOwners />} />
                            <Route path="/Admin/Reviews" element={<DisReview />} />
                            <Route path="/Admin/AdminLocationManager" element={<AdminLocationManager />} />
+                           <Route path="/Admin/ItemsManage" element={<ItemsManage /> } />
                         </Route>
                      </Route>
 

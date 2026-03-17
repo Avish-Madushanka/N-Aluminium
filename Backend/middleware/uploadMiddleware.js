@@ -15,7 +15,6 @@ if (!fs.existsSync(uploadsDir)) {
     console.log(`[Multer Config] Uploads directory exists: ${uploadsDir}`);
 }
 
-// Create subdirectories
 const subdirectories = ['saleitems', 'projects', 'profiles', 'items'];
 subdirectories.forEach(subDir => {
     const subDirPath = path.join(uploadsDir, subDir);
@@ -31,7 +30,6 @@ subdirectories.forEach(subDir => {
     }
 });
 
-// Common image file filter
 const imageFileFilter = (req, file, cb) => {
     console.log(`[Multer FileFilter] Checking file - Fieldname: '${file.fieldname}', Original Filename: '${file.originalname}', Mimetype: '${file.mimetype}'`);
     if (file.mimetype && file.mimetype.startsWith('image/')) {
@@ -45,7 +43,6 @@ const imageFileFilter = (req, file, cb) => {
     }
 };
 
-// Sale Item Storage
 const saleItemStorage = multer.diskStorage({
     destination: function(req, file, cb) {
         const saleItemsUploadsDir = path.join(uploadsDir, 'saleitems');
@@ -66,7 +63,6 @@ const saleItemStorage = multer.diskStorage({
     }
 });
 
-// Project Image Storage
 const projectImageStorage = multer.diskStorage({
     destination: function(req, file, cb) {
         const projectImagesUploadsDir = path.join(uploadsDir, 'projects');
@@ -87,7 +83,6 @@ const projectImageStorage = multer.diskStorage({
     }
 });
 
-// Item Storage (for market items)
 const itemStorage = multer.diskStorage({
     destination: function(req, file, cb) {
         const itemsUploadsDir = path.join(uploadsDir, 'items');
@@ -108,7 +103,6 @@ const itemStorage = multer.diskStorage({
     }
 });
 
-// Profile Photo Storage (General)
 const generalStorage = multer.diskStorage({ 
     destination: function(req, file, cb) {
         cb(null, uploadsDir);
@@ -119,7 +113,6 @@ const generalStorage = multer.diskStorage({
     } 
 });
 
-// Multer instances
 const directSaleItemUploadMiddleware = multer({
     storage: saleItemStorage,
     limits: { fileSize: 5 * 1024 * 1024 },
@@ -144,7 +137,6 @@ const generalUpload = multer({
     fileFilter: imageFileFilter
 });
 
-// Export all middleware
 module.exports = {
     uploadProfilePhoto: generalUpload.single('profilePhoto'),
     uploadBusinessPhotos: generalUpload.fields([

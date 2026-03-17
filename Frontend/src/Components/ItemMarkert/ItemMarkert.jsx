@@ -83,6 +83,22 @@ const ItemMarkert = () => {
 
   useEffect(() => {
     fetchProducts();
+    
+    const handleStorageChange = () => {
+      fetchProducts();
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    window.addEventListener('products-updated', handleStorageChange);
+    
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('products-updated', handleStorageChange);
+    };
+  }, []);
+
+  useEffect(() => {
+    fetchProducts();
   }, [selectedCategory, selectedMainCategory]);
 
   const fetchProducts = async () => {
@@ -92,9 +108,9 @@ const ItemMarkert = () => {
     try {
       const params = new URLSearchParams();
       
-      if (selectedCategory !== 'all') {
+      if (selectedCategory !== 'all' && selectedCategory !== 'undefined' && selectedCategory !== 'null') {
         params.append('category', selectedCategory);
-      } else if (selectedMainCategory !== 'all') {
+      } else if (selectedMainCategory !== 'all' && selectedMainCategory !== 'undefined' && selectedMainCategory !== 'null') {
         params.append('category', selectedMainCategory);
       }
       
@@ -142,7 +158,8 @@ const ItemMarkert = () => {
   const getImageUrl = (imagePath) => {
     if (!imagePath) return 'https://via.placeholder.com/200';
     if (imagePath.startsWith('http')) return imagePath;
-    return `http://localhost:5003${imagePath}`;
+    if (imagePath.startsWith('/uploads')) return `http://localhost:5003${imagePath}`;
+    return imagePath;
   };
 
   const getFilteredProducts = () => {
@@ -151,7 +168,7 @@ const ItemMarkert = () => {
 
   const filteredProducts = getFilteredProducts();
 
-  if (loading) {
+  if (loading && products.length === 0) {
     return (
       <div className="ItemMAR-container">
         <div className="ItemMAR-loading">Loading products...</div>
