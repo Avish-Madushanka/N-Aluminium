@@ -105,7 +105,7 @@ const ClientForm = () => {
         <div className="SignUp-right">
           <div className="SignUp-form-box">
             <h2>Create Account</h2>
-            <p>Register to manage your account</p>
+            <p className="SignUp-subtitle">Register to manage your account</p>
 
             {errors.form && (
               <div className="SignUp-alert-error">
@@ -121,74 +121,76 @@ const ClientForm = () => {
             )}
 
             <form onSubmit={handleSubmit} noValidate>
-              <div className="SignUp-group">
-                <label><User size={16}/> Full Name</label>
-                <input 
-                  type="text" 
-                  name="fullName" 
-                  value={formData.fullName} 
-                  onChange={handleChange}
-                  placeholder="Enter your full name"
-                  className={errors.fullName ? 'error' : ''}
-                  required
-                />
-                {errors.fullName && <span className="SignUp-error">{errors.fullName}</span>}
-              </div>
+              <div className="SignUp-form-grid">
+                <div className="SignUp-group">
+                  <label><User size={16}/> Full Name</label>
+                  <input 
+                    type="text" 
+                    name="fullName" 
+                    value={formData.fullName} 
+                    onChange={handleChange}
+                    placeholder="Enter your full name"
+                    className={errors.fullName ? 'error' : ''}
+                    required
+                  />
+                  {errors.fullName && <span className="SignUp-error">{errors.fullName}</span>}
+                </div>
 
-              <div className="SignUp-group">
-                <label><Mail size={16}/> Email</label>
-                <input 
-                  type="email" 
-                  name="email" 
-                  value={formData.email} 
-                  onChange={handleChange}
-                  placeholder="Enter your email"
-                  className={errors.email ? 'error' : ''}
-                  required
-                />
-                {errors.email && <span className="SignUp-error">{errors.email}</span>}
-              </div>
+                <div className="SignUp-group">
+                  <label><Mail size={16}/> Email</label>
+                  <input 
+                    type="email" 
+                    name="email" 
+                    value={formData.email} 
+                    onChange={handleChange}
+                    placeholder="Enter your email"
+                    className={errors.email ? 'error' : ''}
+                    required
+                  />
+                  {errors.email && <span className="SignUp-error">{errors.email}</span>}
+                </div>
 
-              <div className="SignUp-group">
-                <label><Phone size={16}/> Phone Number</label>
-                <input 
-                  type="tel" 
-                  name="phone" 
-                  value={formData.phone} 
-                  onChange={handleChange}
-                  placeholder="Enter 10 digit phone number"
-                  className={errors.phone ? 'error' : ''}
-                  required
-                />
-                {errors.phone && <span className="SignUp-error">{errors.phone}</span>}
-              </div>
+                <div className="SignUp-group">
+                  <label><Phone size={16}/> Phone Number</label>
+                  <input 
+                    type="tel" 
+                    name="phone" 
+                    value={formData.phone} 
+                    onChange={handleChange}
+                    placeholder="Enter 10 digit phone number"
+                    className={errors.phone ? 'error' : ''}
+                    required
+                  />
+                  {errors.phone && <span className="SignUp-error">{errors.phone}</span>}
+                </div>
 
-              <div className="SignUp-group">
-                <label><Lock size={16}/> Password</label>
-                <input 
-                  type="password" 
-                  name="password" 
-                  value={formData.password} 
-                  onChange={handleChange}
-                  placeholder="Enter password"
-                  className={errors.password ? 'error' : ''}
-                  required
-                />
-                {errors.password && <span className="SignUp-error">{errors.password}</span>}
-              </div>
+                <div className="SignUp-group">
+                  <label><Lock size={16}/> Password</label>
+                  <input 
+                    type="password" 
+                    name="password" 
+                    value={formData.password} 
+                    onChange={handleChange}
+                    placeholder="Enter password"
+                    className={errors.password ? 'error' : ''}
+                    required
+                  />
+                  {errors.password && <span className="SignUp-error">{errors.password}</span>}
+                </div>
 
-              <div className="SignUp-group">
-                <label><Lock size={16}/> Confirm Password</label>
-                <input 
-                  type="password" 
-                  name="confirmPassword" 
-                  value={formData.confirmPassword} 
-                  onChange={handleChange}
-                  placeholder="Confirm your password"
-                  className={errors.confirmPassword ? 'error' : ''}
-                  required
-                />
-                {errors.confirmPassword && <span className="SignUp-error">{errors.confirmPassword}</span>}
+                <div className="SignUp-group SignUp-group-full">
+                  <label><Lock size={16}/> Confirm Password</label>
+                  <input 
+                    type="password" 
+                    name="confirmPassword" 
+                    value={formData.confirmPassword} 
+                    onChange={handleChange}
+                    placeholder="Confirm your password"
+                    className={errors.confirmPassword ? 'error' : ''}
+                    required
+                  />
+                  {errors.confirmPassword && <span className="SignUp-error">{errors.confirmPassword}</span>}
+                </div>
               </div>
 
               <button type="submit" disabled={isLoading} className="SignUp-btn">
