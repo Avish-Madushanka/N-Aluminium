@@ -19,17 +19,20 @@ const ItemsAddForm = ({ onAddItem, onClose }) => {
   const [imagePreview, setImagePreview] = useState(null);
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
 
   const colorOptions = [
     { id: 'white', name: 'White', color: '#ffffff' },
     { id: 'black', name: 'Black', color: '#000000' },
     { id: 'grey', name: 'Grey', color: '#646464' },
     { id: 'wood', name: 'Wood', color: '#332008' },
-    { id: 'meroon', name: 'Meroon', color: '#500f0f' },
+    { id: 'maroon', name: 'Maroon', color: '#500f0f' },
     { id: 'blue', name: 'Blue', color: '#141263' },
     { id: 'red', name: 'Red', color: '#c20000' },
     { id: 'green', name: 'Green', color: '#052401' },
-    { id: 'Cream', name: 'Cream', color: '#fceaba' },
+    { id: 'cream', name: 'Cream', color: '#fceaba' },
   ];
 
   const mainCategories = [
@@ -74,18 +77,38 @@ const ItemsAddForm = ({ onAddItem, onClose }) => {
 
   const units = ['piece', 'kg', 'meter', 'sq ft', 'tube', 'box', 'set', 'dozen'];
 
+  const resetForm = () => {
+    setFormData({
+      name: '',
+      description: '',
+      price: '',
+      unit: 'piece',
+      category: '',
+      subCategory: '',
+      image: '',
+      stock: '',
+      discount: '0',
+      featured: false,
+      colors: []
+    });
+    setImagePreview(null);
+    setErrors({});
+    setTouched({});
+    setIsSubmitting(false);
+  };
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData({
-      ...formData,
+    setFormData(prev => ({
+      ...prev,
       [name]: type === 'checkbox' ? checked : value
-    });
+    }));
     
     if (errors[name]) {
-      setErrors({
-        ...errors,
+      setErrors(prev => ({
+        ...prev,
         [name]: null
-      });
+      }));
     }
   };
 
@@ -100,77 +123,187 @@ const ItemsAddForm = ({ onAddItem, onClose }) => {
 
   const handleBlur = (e) => {
     const { name } = e.target;
-    setTouched({
-      ...touched,
+    setTouched(prev => ({
+      ...prev,
       [name]: true
-    });
+    }));
   };
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      if (file.size > 5000000) {
-        setErrors({
-          ...errors,
+      if (file.size > 5 * 1024 * 1024) {
+        setErrors(prev => ({
+          ...prev,
           image: 'Image size should be less than 5MB'
-        });
+        }));
+        return;
+      }
+      
+      if (!file.type.match('image.*')) {
+        setErrors(prev => ({
+          ...prev,
+          image: 'Please upload an image file'
+        }));
         return;
       }
       
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result);
-        setFormData({
-          ...formData,
+        setFormData(prev => ({
+          ...prev,
           image: reader.result
-        });
+        }));
+        if (errors.image) {
+          setErrors(prev => ({
+            ...prev,
+            image: null
+          }));
+        }
       };
       reader.readAsDataURL(file);
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    
+  const validateForm = () => {
     const newErrors = {};
     
-    if (!formData.name.trim()) newErrors.name = 'Product name is required';
-    if (!formData.price) newErrors.price = 'Price is required';
-    else if (isNaN(formData.price) || formData.price <= 0) newErrors.price = 'Price must be a positive number';
-    if (!formData.category) newErrors.category = 'Category is required';
-    if (!formData.stock) newErrors.stock = 'Stock is required';
-    else if (isNaN(formData.stock) || formData.stock < 0) newErrors.stock = 'Stock must be a valid number';
+    if (!formData.name?.trim()) {
+      newErrors.name = 'Product name is required';
+    } else if (formData.name.trim().length < 3) {
+      newErrors.name = 'Product name must be at least 3 characters';
+    }
+    
+    if (!formData.price) {
+      newErrors.price = 'Price is required';
+    } else if (isNaN(formData.price) || parseFloat(formData.price) <= 0) {
+      newErrors.price = 'Price must be a positive number';
+    }
+    
+    if (!formData.category) {
+      newErrors.category = 'Category is required';
+    }
+    
+    if (!formData.stock && formData.stock !== '0') {
+      newErrors.stock = 'Stock is required';
+    } else if (isNaN(formData.stock) || parseInt(formData.stock) < 0) {
+      newErrors.stock = 'Stock must be a valid number';
+    }
     
     if (formData.discount && (isNaN(formData.discount) || formData.discount < 0 || formData.discount > 100)) {
       newErrors.discount = 'Discount must be between 0 and 100';
     }
     
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
+    if (!formData.image) {
+      newErrors.image = 'Product image is required';
+    }
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    
+    if (isSubmitting) return;
+    
+    if (!validateForm()) {
+      const allTouched = {};
+      Object.keys(formData).forEach(key => {
+        allTouched[key] = true;
+      });
+      setTouched(allTouched);
       return;
     }
     
-    const discountedPrice = formData.discount > 0 
-      ? (formData.price * (1 - formData.discount / 100)).toFixed(2)
-      : formData.price;
+    setIsSubmitting(true);
     
-    const newItem = {
-      ...formData,
-      id: Date.now(),
-      discountedPrice,
-      createdAt: new Date().toISOString(),
-      inStock: parseInt(formData.stock) > 0
-    };
-    
-    onAddItem(newItem);
+    try {
+      const discountedPrice = formData.discount > 0 
+        ? (parseFloat(formData.price) * (1 - parseFloat(formData.discount) / 100)).toFixed(2)
+        : parseFloat(formData.price).toFixed(2);
+      
+      const newItem = {
+        id: Date.now() + Math.random(),
+        name: formData.name,
+        description: formData.description || '',
+        price: formData.price.toString(),
+        discountedPrice: discountedPrice.toString(),
+        unit: formData.unit,
+        category: formData.category,
+        subCategory: formData.subCategory || formData.category,
+        image: formData.image,
+        stock: formData.stock.toString(),
+        discount: formData.discount.toString(),
+        featured: formData.featured || false,
+        colors: formData.colors || [],
+        createdAt: new Date().toISOString(),
+        inStock: parseInt(formData.stock) > 0
+      };
+      
+      const existingProducts = JSON.parse(localStorage.getItem('marketProducts') || '[]');
+      const updatedProducts = [...existingProducts, newItem];
+      localStorage.setItem('marketProducts', JSON.stringify(updatedProducts));
+      
+      window.dispatchEvent(new Event('storage'));
+      
+      setSuccessMessage(`✅ "${formData.name}" has been added successfully!`);
+      setShowSuccess(true);
+      
+      if (onAddItem) {
+        onAddItem(newItem);
+      }
+      
+      resetForm();
+      
+      setTimeout(() => {
+        setShowSuccess(false);
+        setSuccessMessage('');
+      }, 3000);
+      
+    } catch (error) {
+      console.error('Add product error:', error);
+      setErrors(prev => ({
+        ...prev,
+        form: 'Failed to add product. Please try again.'
+      }));
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleAddAnother = () => {
+    resetForm();
+    setShowSuccess(false);
   };
 
   return (
     <div className="ITADD-page">
       <div className="ITADD-header">
         <h2 className="ITADD-title">Add New Product</h2>
-        <button className="ITADD-close" onClick={onClose}>×</button>
+        <button type="button" className="ITADD-close" onClick={onClose}>×</button>
       </div>
+
+      {showSuccess && (
+        <div className="ITADD-success-message">
+          <div className="ITADD-success-content">
+            <span className="ITADD-success-icon">✓</span>
+            <span className="ITADD-success-text">{successMessage}</span>
+          </div>
+          <button type="button" className="ITADD-success-close" onClick={() => setShowSuccess(false)}>×</button>
+        </div>
+      )}
+
+      {errors.form && (
+        <div className="ITADD-error-message">
+          <div className="ITADD-error-content">
+            <span className="ITADD-error-icon">!</span>
+            <span>{errors.form}</span>
+          </div>
+          <button type="button" className="ITADD-error-close" onClick={() => setErrors(prev => ({...prev, form: null}))}>×</button>
+        </div>
+      )}
 
       <form onSubmit={handleSubmit} className="ITADD-form">
         <div className="ITADD-twoColumn">
@@ -186,7 +319,7 @@ const ItemsAddForm = ({ onAddItem, onClose }) => {
                       className="ITADD-removeImage"
                       onClick={() => {
                         setImagePreview(null);
-                        setFormData({...formData, image: ''});
+                        setFormData(prev => ({...prev, image: ''}));
                       }}
                     >
                       ×
@@ -359,7 +492,7 @@ const ItemsAddForm = ({ onAddItem, onClose }) => {
                     {colorOptions.map(color => (
                       <div
                         key={color.id}
-                        className={`ITADD-colorItem ${formData.colors.includes(color.id) ? 'selected' : ''}`}
+                        className={`ITADD-colorItem ${formData.colors?.includes(color.id) ? 'selected' : ''}`}
                         onClick={() => handleColorToggle(color.id)}
                       >
                         <span 
@@ -367,7 +500,7 @@ const ItemsAddForm = ({ onAddItem, onClose }) => {
                           style={{ backgroundColor: color.color }}
                         />
                         <span className="ITADD-colorName">{color.name}</span>
-                        {formData.colors.includes(color.id) && (
+                        {formData.colors?.includes(color.id) && (
                           <span className="ITADD-colorCheck">✓</span>
                         )}
                       </div>
@@ -395,8 +528,20 @@ const ItemsAddForm = ({ onAddItem, onClose }) => {
           <button type="button" className="ITADD-cancel" onClick={onClose}>
             Cancel
           </button>
-          <button type="submit" className="ITADD-submit">
-            Add Product
+          <button 
+            type="button" 
+            className="ITADD-addAnother" 
+            onClick={handleAddAnother}
+            disabled={isSubmitting}
+          >
+            Add Another
+          </button>
+          <button 
+            type="submit" 
+            className="ITADD-submit" 
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? 'Adding...' : 'Add Product'}
           </button>
         </div>
       </form>

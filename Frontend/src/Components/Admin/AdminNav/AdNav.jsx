@@ -57,6 +57,11 @@ function AdNavComponent({ handleLogout }) {
                                 <FontAwesomeIcon icon={faCreditCard} className="menu-icon" /> Add Shop Location
                             </NavLink>
                         </li> 
+                        <li>
+                            <NavLink to="/ItemsAddForm" className={({ isActive }) => isActive ? 'active' : ''}>
+                                <FontAwesomeIcon icon={faCreditCard} className="menu-icon" /> Add Items for Marketplace
+                            </NavLink>
+                        </li> 
                     </ul>
                 </div>
 

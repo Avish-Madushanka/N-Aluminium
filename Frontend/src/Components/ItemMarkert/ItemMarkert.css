@@ -505,6 +505,37 @@
   border: 2px dashed #ddd;
 }
 
+.ItemMAR-loading {
+  text-align: center;
+  padding: 50px;
+  font-size: 18px;
+  color: #666;
+}
+
+.ItemMAR-discountBadge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #f44336;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  z-index: 2;
+}
+
+.ItemMAR-productCard {
+  position: relative;
+}
+
+.ItemMAR-productDescription {
+  font-size: 13px;
+  color: #666;
+  margin: 10px 0;
+  line-height: 1.4;
+}
+
 @media (max-width: 1024px) {
   .ItemMAR-categoriesGrid {
     grid-template-columns: repeat(4, 1fr);

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './ItemMarkert.css';
 import box from "../../assets/box.png";
 import l from "../../assets/l.png";
@@ -18,6 +18,8 @@ const ItemMarkert = () => {
   const [selectedMainCategory, setSelectedMainCategory] = useState('all');
   const [currentHeroSlide, setCurrentHeroSlide] = useState(0);
   const [selectedColors, setSelectedColors] = useState({});
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const heroSlides = [
     {
@@ -69,7 +71,6 @@ const ItemMarkert = () => {
     { id: 'blue', color: '#141263' },
   ];
 
-  // Categories that should show color options
   const colorEnabledCategories = [
     'box-bars',
     'u-channels',
@@ -79,26 +80,63 @@ const ItemMarkert = () => {
     'cradding'
   ];
 
-  const allProducts = [
-    { id: 1, name: 'Tempered Glass 5mm', price: '2,500.00', unit: '/ sq ft', image: 'https://i.ibb.co/r71X71S/coconut.png', category: 'glass', subCategory: 'glass-cutters', description: 'Tempered Glass 5mm - Clear', inStock: true },
-    { id: 2, name: 'Frosted Glass', price: '3,200.00', unit: '/ sq ft', image: 'https://i.ibb.co/tZ5N1N6/milk.png', category: 'glass', subCategory: 'glass-cutters', description: 'Frosted Glass for Privacy', inStock: true },
-    { id: 3, name: 'Glass Cutter Tool', price: '450.00', unit: '/ piece', image: 'https://i.ibb.co/G9N1G4P/onion.png', category: 'glass', subCategory: 'glass-cutters', description: 'Professional Glass Cutter', inStock: true },
-    { id: 4, name: 'PVC Cradding Board', price: '1,800.00', unit: '/ piece', image: 'https://i.ibb.co/jT88W4k/vegetables.png', category: 'cradding', subCategory: 'sivilim', description: 'White PVC Cradding Board', inStock: true },
-    { id: 5, name: 'Wood Finish Cradding', price: '2,100.00', unit: '/ piece', image: 'https://i.ibb.co/zXn0w7b/individual.png', category: 'cradding', subCategory: 'sivilim', description: 'Wood Finish Design', inStock: true },
-    { id: 6, name: 'Silicon Sealant', price: '350.00', unit: '/ tube', image: 'https://i.ibb.co/r71X71S/coconut.png', category: 'silicon', subCategory: 'rivet-guns', description: 'Clear Silicon Sealant', inStock: true },
-    { id: 7, name: 'Silicon Gun', price: '650.00', unit: '/ piece', image: 'https://i.ibb.co/tZ5N1N6/milk.png', category: 'silicon', subCategory: 'rivet-guns', description: 'Heavy Duty Silicon Gun', inStock: true },
-    { id: 8, name: 'Rubber Seal Strip', price: '120.00', unit: '/ meter', image: 'https://i.ibb.co/G9N1G4P/onion.png', category: 'rubber', subCategory: 'rubber-blade', description: 'Rubber Seal for Doors', inStock: true },
-    { id: 9, name: 'Rubber Blade', price: '280.00', unit: '/ piece', image: 'https://i.ibb.co/jT88W4k/vegetables.png', category: 'rubber', subCategory: 'rubber-blade', description: 'Rubber Squeegee Blade', inStock: true },
-    { id: 10, name: 'PVC Marble Sheet', price: '4,500.00', unit: '/ sheet', image: 'https://i.ibb.co/zXn0w7b/individual.png', category: 'pvc', subCategory: 'rivet-box', description: 'PVC Marble Finish Sheet', inStock: true },
-    { id: 11, name: 'Marble Edge Trim', price: '150.00', unit: '/ piece', image: 'https://i.ibb.co/r71X71S/coconut.png', category: 'pvc', subCategory: 'rivet-box', description: 'PVC Marble Edge Trim', inStock: true },
-    { id: 12, name: 'Aluminum Box Bar', price: '950.00', unit: '/ piece', image: 'https://i.ibb.co/tZ5N1N6/milk.png', category: 'box-bars', subCategory: 'box-bars', description: 'Aluminum Box Bar 1 inch', inStock: true },
-    { id: 13, name: 'U Channel Trim', price: '320.00', unit: '/ piece', image: 'https://i.ibb.co/G9N1G4P/onion.png', category: 'u-channels', subCategory: 'u-channels', description: 'Aluminum U Channel', inStock: true },
-    { id: 14, name: 'L Angle Bar', price: '280.00', unit: '/ piece', image: 'https://i.ibb.co/jT88W4k/vegetables.png', category: 'l-bars', subCategory: 'l-bars', description: 'Aluminum L Angle', inStock: true },
-    { id: 15, name: 'J Channel Trim', price: '350.00', unit: '/ piece', image: 'https://i.ibb.co/zXn0w7b/individual.png', category: 'j-channels', subCategory: 'j-channels', description: 'Aluminum J Channel', inStock: true },
-    { id: 16, name: 'Aluminum Cutter Blade', price: '890.00', unit: '/ piece', image: 'https://i.ibb.co/r71X71S/coconut.png', category: 'cutters', subCategory: 'cutters', description: 'Professional Cutter Blade', inStock: true },
-    { id: 17, name: 'Grill Machine', price: '12,500.00', unit: '/ piece', image: 'https://i.ibb.co/tZ5N1N6/milk.png', category: 'grill', subCategory: 'grill', description: 'Electric Grill Machine', inStock: true },
-    { id: 18, name: 'T-Channel Trim', price: '340.00', unit: '/ piece', image: 'https://i.ibb.co/tZ5N1N6/milk.png', category: 't-channels', subCategory: 't-channels', description: 'Aluminum T Channel', inStock: true },
+  const defaultProducts = [
+    { id: 1, name: 'Tempered Glass 5mm', price: '2500.00', unit: '/ sq ft', image: 'https://i.ibb.co/r71X71S/coconut.png', category: 'glass', subCategory: 'glass-cutters', description: 'Tempered Glass 5mm - Clear', inStock: true, stock: '50' },
+    { id: 2, name: 'Frosted Glass', price: '3200.00', unit: '/ sq ft', image: 'https://i.ibb.co/tZ5N1N6/milk.png', category: 'glass', subCategory: 'glass-cutters', description: 'Frosted Glass for Privacy', inStock: true, stock: '30' },
+    { id: 3, name: 'Glass Cutter Tool', price: '450.00', unit: '/ piece', image: 'https://i.ibb.co/G9N1G4P/onion.png', category: 'glass', subCategory: 'glass-cutters', description: 'Professional Glass Cutter', inStock: true, stock: '100' },
+    { id: 4, name: 'PVC Cradding Board', price: '1800.00', unit: '/ piece', image: 'https://i.ibb.co/jT88W4k/vegetables.png', category: 'cradding', subCategory: 'sivilim', description: 'White PVC Cradding Board', inStock: true, stock: '25' },
+    { id: 5, name: 'Wood Finish Cradding', price: '2100.00', unit: '/ piece', image: 'https://i.ibb.co/zXn0w7b/individual.png', category: 'cradding', subCategory: 'sivilim', description: 'Wood Finish Design', inStock: true, stock: '15' },
+    { id: 6, name: 'Silicon Sealant', price: '350.00', unit: '/ tube', image: 'https://i.ibb.co/r71X71S/coconut.png', category: 'silicon', subCategory: 'rivet-guns', description: 'Clear Silicon Sealant', inStock: true, stock: '200' },
+    { id: 7, name: 'Silicon Gun', price: '650.00', unit: '/ piece', image: 'https://i.ibb.co/tZ5N1N6/milk.png', category: 'silicon', subCategory: 'rivet-guns', description: 'Heavy Duty Silicon Gun', inStock: true, stock: '45' },
+    { id: 8, name: 'Rubber Seal Strip', price: '120.00', unit: '/ meter', image: 'https://i.ibb.co/G9N1G4P/onion.png', category: 'rubber', subCategory: 'rubber-blade', description: 'Rubber Seal for Doors', inStock: true, stock: '500' },
+    { id: 9, name: 'Rubber Blade', price: '280.00', unit: '/ piece', image: 'https://i.ibb.co/jT88W4k/vegetables.png', category: 'rubber', subCategory: 'rubber-blade', description: 'Rubber Squeegee Blade', inStock: true, stock: '75' },
+    { id: 10, name: 'PVC Marble Sheet', price: '4500.00', unit: '/ sheet', image: 'https://i.ibb.co/zXn0w7b/individual.png', category: 'pvc', subCategory: 'rivet-box', description: 'PVC Marble Finish Sheet', inStock: true, stock: '20' },
+    { id: 11, name: 'Marble Edge Trim', price: '150.00', unit: '/ piece', image: 'https://i.ibb.co/r71X71S/coconut.png', category: 'pvc', subCategory: 'rivet-box', description: 'PVC Marble Edge Trim', inStock: true, stock: '150' },
+    { id: 12, name: 'Aluminum Box Bar', price: '950.00', unit: '/ piece', image: 'https://i.ibb.co/tZ5N1N6/milk.png', category: 'box-bars', subCategory: 'box-bars', description: 'Aluminum Box Bar 1 inch', inStock: true, stock: '60' },
+    { id: 13, name: 'U Channel Trim', price: '320.00', unit: '/ piece', image: 'https://i.ibb.co/G9N1G4P/onion.png', category: 'u-channels', subCategory: 'u-channels', description: 'Aluminum U Channel', inStock: true, stock: '80' },
+    { id: 14, name: 'L Angle Bar', price: '280.00', unit: '/ piece', image: 'https://i.ibb.co/jT88W4k/vegetables.png', category: 'l-bars', subCategory: 'l-bars', description: 'Aluminum L Angle', inStock: true, stock: '90' },
+    { id: 15, name: 'J Channel Trim', price: '350.00', unit: '/ piece', image: 'https://i.ibb.co/zXn0w7b/individual.png', category: 'j-channels', subCategory: 'j-channels', description: 'Aluminum J Channel', inStock: true, stock: '70' },
+    { id: 16, name: 'Aluminum Cutter Blade', price: '890.00', unit: '/ piece', image: 'https://i.ibb.co/r71X71S/coconut.png', category: 'cutters', subCategory: 'cutters', description: 'Professional Cutter Blade', inStock: true, stock: '40' },
+    { id: 17, name: 'Grill Machine', price: '12500.00', unit: '/ piece', image: 'https://i.ibb.co/tZ5N1N6/milk.png', category: 'grill', subCategory: 'grill', description: 'Electric Grill Machine', inStock: true, stock: '10' },
+    { id: 18, name: 'T-Channel Trim', price: '340.00', unit: '/ piece', image: 'https://i.ibb.co/tZ5N1N6/milk.png', category: 't-channels', subCategory: 't-channels', description: 'Aluminum T Channel', inStock: true, stock: '85' },
   ];
+
+  const loadProducts = () => {
+    try {
+      const savedProducts = localStorage.getItem('marketProducts');
+      if (savedProducts) {
+        const parsedProducts = JSON.parse(savedProducts);
+        setProducts(parsedProducts);
+      } else {
+        setProducts(defaultProducts);
+        localStorage.setItem('marketProducts', JSON.stringify(defaultProducts));
+      }
+    } catch (error) {
+      console.error('Error loading products:', error);
+      setProducts(defaultProducts);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadProducts();
+
+    const handleStorageChange = () => {
+      loadProducts();
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    
+    const interval = setInterval(() => {
+      loadProducts();
+    }, 1000);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      clearInterval(interval);
+    };
+  }, []);
 
   const handleCategoryClick = (category) => {
     setSelectedCategory(category);
@@ -126,18 +164,24 @@ const ItemMarkert = () => {
   };
 
   const getFilteredProducts = () => {
+    if (!products || products.length === 0) return [];
+    
     if (selectedCategory !== 'all') {
-      return allProducts.filter(product => 
+      return products.filter(product => 
         product.subCategory === selectedCategory || product.category === selectedCategory
       );
     } else if (selectedMainCategory !== 'all') {
-      return allProducts.filter(product => product.category === selectedMainCategory);
+      return products.filter(product => product.category === selectedMainCategory);
     } else {
-      return allProducts;
+      return products;
     }
   };
 
   const filteredProducts = getFilteredProducts();
+
+  if (loading) {
+    return <div className="ItemMAR-loading">Loading products...</div>;
+  }
 
   return (
     <div className="ItemMAR-container">
@@ -229,32 +273,48 @@ const ItemMarkert = () => {
             <div className="ItemMAR-productsGrid">
               {filteredProducts.map((product) => (
                 <div key={product.id} className="ItemMAR-productCard">
-                  <img src={product.image} alt={product.name} className="ItemMAR-productImage" />
+                  <img 
+                    src={product.image || 'https://via.placeholder.com/200'} 
+                    alt={product.name} 
+                    className="ItemMAR-productImage" 
+                  />
                   <div className="ItemMAR-productDetails">
                     <h4 className="ItemMAR-productName">{product.name}</h4>
                     <div className="ItemMAR-productPriceRow">
-                      <span className="ItemMAR-productPrice">${product.price}</span>
+                      <span className="ItemMAR-productPrice">Rs. {product.price}</span>
                       <span className="ItemMAR-productUnit">{product.unit}</span>
                     </div>
                     
-                    {product.inStock && (
-                      <div className="ItemMAR-stockStatus">In stock</div>
+                    {product.discount > 0 && (
+                      <div className="ItemMAR-discountBadge">
+                        {product.discount}% OFF
+                      </div>
                     )}
 
-                    {colorEnabledCategories.includes(product.category) && (
+                    {product.inStock && (
+                      <div className="ItemMAR-stockStatus">In stock ({product.stock} available)</div>
+                    )}
+
+                    {colorEnabledCategories.includes(product.category) && product.colors && product.colors.length > 0 && (
                       <div className="ItemMAR-colorOptions">
-                        <span className="ItemMAR-colorLabel">Color</span>
+                        <span className="ItemMAR-colorLabel">Available Colors</span>
                         <div className="ItemMAR-colorPicker">
-                          {colorOptions.map((color) => (
-                            <span
-                              key={color.id}
-                              className={`ItemMAR-colorCircle ${selectedColors[product.id] === color.id ? 'selected' : ''}`}
-                              style={{ backgroundColor: color.color }}
-                              onClick={() => handleColorSelect(product.id, color.id)}
-                            />
-                          ))}
+                          {colorOptions
+                            .filter(color => product.colors.includes(color.id))
+                            .map((color) => (
+                              <span
+                                key={color.id}
+                                className={`ItemMAR-colorCircle ${selectedColors[product.id] === color.id ? 'selected' : ''}`}
+                                style={{ backgroundColor: color.color }}
+                                onClick={() => handleColorSelect(product.id, color.id)}
+                              />
+                            ))}
                         </div>
                       </div>
+                    )}
+
+                    {product.description && (
+                      <p className="ItemMAR-productDescription">{product.description.substring(0, 50)}...</p>
                     )}
 
                     <span className="ItemMAR-sizeGuide">Size Guide</span>
