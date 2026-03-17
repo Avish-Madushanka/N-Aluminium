@@ -17,8 +17,6 @@ const ClientForm = () => {
     fullName: '',
     email: '',
     phone: '',
-    phoneNumber: '',
-    contact: '',
     password: '',
     confirmPassword: ''
   });
@@ -43,9 +41,8 @@ const ClientForm = () => {
     if (!formData.email.trim()) newErrors.email = 'Email is required';
     else if (!VALIDATION_PATTERNS.EMAIL.test(formData.email)) newErrors.email = 'Enter valid email';
     
-    const phoneValue = formData.phone || formData.phoneNumber || formData.contact;
-    if (!phoneValue.trim()) newErrors.phone = 'Phone number is required';
-    else if (!VALIDATION_PATTERNS.PHONE.test(phoneValue)) newErrors.phone = 'Enter 10 digit phone number';
+    if (!formData.phone.trim()) newErrors.phone = 'Phone number is required';
+    else if (!VALIDATION_PATTERNS.PHONE.test(formData.phone)) newErrors.phone = 'Enter 10 digit phone number';
     
     if (!formData.password) newErrors.password = 'Password is required';
     else if (!VALIDATION_PATTERNS.PASSWORD.test(formData.password)) newErrors.password = 'Password must be at least 6 characters with uppercase, lowercase and number';
@@ -69,16 +66,10 @@ const ClientForm = () => {
     setIsLoading(true);
     
     try {
-      const phoneValue = formData.phone || formData.phoneNumber || formData.contact;
-      
       const requestData = {
-        name: formData.fullName,
         fullName: formData.fullName,
         email: formData.email,
-        phone: phoneValue,
-        phoneNumber: phoneValue,
-        contactNumber: phoneValue,
-        contact: phoneValue,
+        phone: formData.phone,
         password: formData.password
       };
       
