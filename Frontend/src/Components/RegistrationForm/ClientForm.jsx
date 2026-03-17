@@ -97,9 +97,6 @@ const ClientForm = () => {
     <div className="SignUp-container">
       <div className="SignUp-wrapper">
         <div className="SignUp-left">
-          <div className="SignUp-overlay">
-            <h1>"Start your journey in aluminum trade and recycling today!"</h1>
-          </div>
         </div>
 
         <div className="SignUp-right">
