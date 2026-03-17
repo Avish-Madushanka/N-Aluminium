@@ -17,11 +17,13 @@ const ItemsAddForm = ({ onAddItem, onClose }) => {
   });
 
   const [imagePreview, setImagePreview] = useState(null);
+  const [imageFile, setImageFile] = useState(null);
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
+  const [apiError, setApiError] = useState('');
 
   const colorOptions = [
     { id: 'white', name: 'White', color: '#ffffff' },
@@ -92,8 +94,10 @@ const ItemsAddForm = ({ onAddItem, onClose }) => {
       colors: []
     });
     setImagePreview(null);
+    setImageFile(null);
     setErrors({});
     setTouched({});
+    setApiError('');
     setIsSubmitting(false);
   };
 
@@ -151,6 +155,7 @@ const ItemsAddForm = ({ onAddItem, onClose }) => {
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result);
+        setImageFile(file);
         setFormData(prev => ({
           ...prev,
           image: reader.result
@@ -195,7 +200,7 @@ const ItemsAddForm = ({ onAddItem, onClose }) => {
       newErrors.discount = 'Discount must be between 0 and 100';
     }
     
-    if (!formData.image) {
+    if (!imageFile && !imagePreview) {
       newErrors.image = 'Product image is required';
     }
     
@@ -203,10 +208,11 @@ const ItemsAddForm = ({ onAddItem, onClose }) => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
     if (isSubmitting) return;
+    setApiError('');
     
     if (!validateForm()) {
       const allTouched = {};
@@ -220,54 +226,61 @@ const ItemsAddForm = ({ onAddItem, onClose }) => {
     setIsSubmitting(true);
     
     try {
-      const discountedPrice = formData.discount > 0 
-        ? (parseFloat(formData.price) * (1 - parseFloat(formData.discount) / 100)).toFixed(2)
-        : parseFloat(formData.price).toFixed(2);
+      const formDataToSend = new FormData();
       
-      const newItem = {
-        id: Date.now() + Math.random(),
-        name: formData.name,
-        description: formData.description || '',
-        price: formData.price.toString(),
-        discountedPrice: discountedPrice.toString(),
-        unit: formData.unit,
-        category: formData.category,
-        subCategory: formData.subCategory || formData.category,
-        image: formData.image,
-        stock: formData.stock.toString(),
-        discount: formData.discount.toString(),
-        featured: formData.featured || false,
-        colors: formData.colors || [],
-        createdAt: new Date().toISOString(),
-        inStock: parseInt(formData.stock) > 0
-      };
+      formDataToSend.append('name', formData.name.trim());
+      formDataToSend.append('description', formData.description.trim() || '');
+      formDataToSend.append('price', formData.price);
+      formDataToSend.append('unit', formData.unit);
+      formDataToSend.append('category', formData.category);
+      formDataToSend.append('subCategory', formData.subCategory || formData.category);
+      formDataToSend.append('stock', formData.stock);
+      formDataToSend.append('discount', formData.discount || '0');
+      formDataToSend.append('featured', formData.featured);
       
-      const existingProducts = JSON.parse(localStorage.getItem('marketProducts') || '[]');
-      const updatedProducts = [...existingProducts, newItem];
-      localStorage.setItem('marketProducts', JSON.stringify(updatedProducts));
-      
-      window.dispatchEvent(new Event('storage'));
-      
-      setSuccessMessage(`✅ "${formData.name}" has been added successfully!`);
-      setShowSuccess(true);
-      
-      if (onAddItem) {
-        onAddItem(newItem);
+      if (formData.colors && formData.colors.length > 0) {
+        formData.colors.forEach(color => {
+          formDataToSend.append('colors[]', color);
+        });
       }
       
-      resetForm();
+      if (imageFile) {
+        formDataToSend.append('image', imageFile);
+      }
       
-      setTimeout(() => {
-        setShowSuccess(false);
-        setSuccessMessage('');
-      }, 3000);
+      const token = localStorage.getItem('token');
+      
+      const response = await fetch('http://localhost:5003/api/items', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+        body: formDataToSend
+      });
+      
+      const result = await response.json();
+      
+      if (result.success) {
+        setSuccessMessage(`✅ "${formData.name}" has been added successfully!`);
+        setShowSuccess(true);
+        
+        if (onAddItem) {
+          onAddItem(result.data);
+        }
+        
+        resetForm();
+        
+        setTimeout(() => {
+          setShowSuccess(false);
+          setSuccessMessage('');
+        }, 3000);
+      } else {
+        setApiError(result.message || 'Failed to add product');
+      }
       
     } catch (error) {
       console.error('Add product error:', error);
-      setErrors(prev => ({
-        ...prev,
-        form: 'Failed to add product. Please try again.'
-      }));
+      setApiError(error.message || 'Failed to add product. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -295,13 +308,13 @@ const ItemsAddForm = ({ onAddItem, onClose }) => {
         </div>
       )}
 
-      {errors.form && (
+      {apiError && (
         <div className="ITADD-error-message">
           <div className="ITADD-error-content">
             <span className="ITADD-error-icon">!</span>
-            <span>{errors.form}</span>
+            <span>{apiError}</span>
           </div>
-          <button type="button" className="ITADD-error-close" onClick={() => setErrors(prev => ({...prev, form: null}))}>×</button>
+          <button type="button" className="ITADD-error-close" onClick={() => setApiError('')}>×</button>
         </div>
       )}
 
@@ -319,6 +332,7 @@ const ItemsAddForm = ({ onAddItem, onClose }) => {
                       className="ITADD-removeImage"
                       onClick={() => {
                         setImagePreview(null);
+                        setImageFile(null);
                         setFormData(prev => ({...prev, image: ''}));
                       }}
                     >
