@@ -41,10 +41,6 @@ import LocationMap from './Components/Maps/LocationMap';
 import CalendarDisplay from './Components/UserCalendar/CalendarDisplay';
 
 import BSHeader from './Components/BuyandSell/BSHeader';
-import BOwnerHome from './Pages/BOwnerHome';
-import ClientProfile from './Components/Profile/ClientProfile';
-import BOwnerProfile from './Components/Profile/BOwnerProfile';
-import EditBOwnerProfilePage from './Pages/EditBOwnerProfilePage';
 import ClientEmail from './Components/Profile/ClientEmail';
 import PickupReq from './Components/Profile/PickupReq';
 import CheckBuySell from './Components/Profile/CheckBuySell';
@@ -341,7 +337,6 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
                     
                     <Route element={<ProtectedRoute requiredRole="client" />}>
                         <Route path="/UserCalendar" element={<UserCalendar userInfo={auth.userInfo} />} />
-                        <Route path="/ClientProfile" element={<ClientProfile />} />
                         <Route path="/PickupReq" element={<PickupReq />} />
                         <Route path="/CheckBuySell" element={<CheckBuySell />} />
                         <Route path="/ClientEmail" element={<ClientEmail />} />
@@ -353,10 +348,6 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
                     </Route>
 
                     <Route element={<ProtectedRoute requiredRole="businessOwner" />}>
-                         <Route path="/BOwnerHome" element={<BOwnerHome userInfo={auth.userInfo} />} />
-                         <Route path="/BusinessDashboard" element={<Navigate to="/BOwnerHome" replace />} />
-                         <Route path="/BOwnerProfile" element={<BOwnerProfile />} />
-                         <Route path="/b-owner/profile/edit" element={<EditBOwnerProfilePage />} />
                          <Route path="/ProAddForm" element={<ProAddForm />} />
                     </Route>
 
