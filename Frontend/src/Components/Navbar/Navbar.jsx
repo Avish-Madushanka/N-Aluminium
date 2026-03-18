@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, NavLink, useLocation } from 'react-router-dom';
-import { User, Menu, X, LogOut, ChevronDown } from 'lucide-react';
+import { User, Menu, X, LogOut, ChevronDown, ShoppingCart } from 'lucide-react';
 import "./Navbar.css";
 import logo from "../../assets/logo.png";
 
-const Navbar = ({ isLoggedIn, userInfo, handleLogout }) => {
+const Navbar = ({ isLoggedIn, userInfo, handleLogout, cartItemCount = 0 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -111,25 +111,16 @@ const Navbar = ({ isLoggedIn, userInfo, handleLogout }) => {
 
         <div className="Nav-auth-section">
           {isLoggedIn && userInfo ? (
-            <div 
-              className={`Nav-user-menu ${isProfileOpen ? 'active' : ''}`} 
-              ref={profileRef}
-              onClick={toggleProfile}
-            >
-              <span className="Nav-profile-name">{profileName}</span>
-              <button className="Nav-profile-toggle">
-                <span className="Nav-profile-initials">{getInitials(displayName)}</span>
-                <ChevronDown size={16} className="Nav-profile-icon" />
+            <div className="Nav-user-actions">
+              <Link to="/cart" className="Nav-cart-icon">
+                <ShoppingCart size={22} />
+                {cartItemCount > 0 && (
+                  <span className="Nav-cart-badge">{cartItemCount}</span>
+                )}
+              </Link>
+              <button onClick={triggerLogout} className="Nav-logout-btn-navbar">
+                <LogOut size={18} /> Logout
               </button>
-              
-              <div className="Nav-profile-dropdown">
-                <Link to={profilePath} className="Nav-profile-btn" onClick={() => setIsProfileOpen(false)}>
-                  <User size={16} /> Profile
-                </Link>
-                <button onClick={triggerLogout} className="Nav-logout-btn">
-                  <LogOut size={16} /> Logout
-                </button>
-              </div>
             </div>
           ) : (
             <div className="Nav-auth-buttons-container">
@@ -183,24 +174,6 @@ const Navbar = ({ isLoggedIn, userInfo, handleLogout }) => {
             >
               Admin Panel
             </NavLink>
-          )}
-          
-          {isLoggedIn && (
-            <div className="Nav-auth-buttons-mobile">
-              <Link 
-                to={profilePath} 
-                className="Nav-login-btn Nav-mobile-btn"
-                onClick={() => setIsOpen(false)}
-              >
-                <User size={18} /> My Profile
-              </Link>
-              <button 
-                onClick={triggerLogout} 
-                className="Nav-logout-btn Nav-mobile-btn"
-              >
-                <LogOut size={18} /> Logout
-              </button>
-            </div>
           )}
           
           {!isLoggedIn && (
