@@ -19,7 +19,8 @@ const ItemsManage = () => {
     stock: '',
     discount: '0',
     featured: false,
-    colors: []
+    colors: [],
+    sizes: []
   });
   const [imagePreview, setImagePreview] = useState(null);
   const [imageFile, setImageFile] = useState(null);
@@ -37,6 +38,16 @@ const ItemsManage = () => {
     { id: 'red', name: 'Red', color: '#c20000' },
     { id: 'green', name: 'Green', color: '#052401' },
     { id: 'cream', name: 'Cream', color: '#fceaba' },
+  ];
+
+  const sizeOptions = [
+    { id: '10mm', name: '10mm' },
+    { id: '15mm', name: '15mm' },
+    { id: '45mm', name: '45mm' },
+    { id: '50mm', name: '50mm' },
+    { id: '60mm', name: '60mm' },
+    { id: '80mm', name: '80mm' },
+    { id: '100mm', name: '100mm' },
   ];
 
   const mainCategories = [
@@ -132,7 +143,8 @@ const ItemsManage = () => {
       stock: '',
       discount: '0',
       featured: false,
-      colors: []
+      colors: [],
+      sizes: []
     });
     setImagePreview(null);
     setImageFile(null);
@@ -157,6 +169,15 @@ const ItemsManage = () => {
         ? prev.colors.filter(id => id !== colorId)
         : [...prev.colors, colorId];
       return { ...prev, colors: newColors };
+    });
+  };
+
+  const handleSizeToggle = (sizeId) => {
+    setFormData(prev => {
+      const newSizes = prev.sizes.includes(sizeId)
+        ? prev.sizes.filter(id => id !== sizeId)
+        : [...prev.sizes, sizeId];
+      return { ...prev, sizes: newSizes };
     });
   };
 
@@ -222,6 +243,12 @@ const ItemsManage = () => {
       if (formData.colors && formData.colors.length > 0) {
         formData.colors.forEach(color => {
           formDataToSend.append('colors[]', color);
+        });
+      }
+
+      if (formData.sizes && formData.sizes.length > 0) {
+        formData.sizes.forEach(size => {
+          formDataToSend.append('sizes[]', size);
         });
       }
       
@@ -304,7 +331,8 @@ const ItemsManage = () => {
       stock: item.stock || '',
       discount: item.discount || '0',
       featured: item.featured || false,
-      colors: item.colors || []
+      colors: item.colors || [],
+      sizes: item.sizes || []
     });
     if (item.image) {
       setImagePreview(`http://localhost:5003${item.image}`);
@@ -546,6 +574,21 @@ const ItemsManage = () => {
                         >
                           <span className="ItemMng-colorSwatch" style={{ backgroundColor: color.color }} />
                           <span className="ItemMng-colorName">{color.name}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="ItemMng-fieldGroup">
+                    <label className="ItemMng-label">Available Sizes</label>
+                    <div className="ItemMng-sizeGrid">
+                      {sizeOptions.map(size => (
+                        <div
+                          key={size.id}
+                          className={`ItemMng-sizeItem ${formData.sizes.includes(size.id) ? 'ItemMng-sizeSelected' : ''}`}
+                          onClick={() => handleSizeToggle(size.id)}
+                        >
+                          <span className="ItemMng-sizeName">{size.name}</span>
                         </div>
                       ))}
                     </div>

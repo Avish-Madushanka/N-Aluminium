@@ -1,6 +1,6 @@
 const Item = require('../models/Item');
-const fs = require('fs');
 const path = require('path');
+const fs = require('fs');
 
 exports.createItem = async (req, res, next) => {
     try {
@@ -9,7 +9,7 @@ exports.createItem = async (req, res, next) => {
 
         const {
             name, description, price, unit, category, subCategory,
-            stock, discount, featured, colors
+            stock, discount, featured, colors, sizes
         } = req.body;
 
         if (!name || !price || !category || stock === undefined) {
@@ -22,10 +22,7 @@ exports.createItem = async (req, res, next) => {
             });
         }
 
-        let imagePath = '';
-        if (req.file) {
-            imagePath = `/uploads/items/${req.file.filename}`;
-        } else {
+        if (!req.file) {
             return res.status(400).json({
                 success: false,
                 message: 'Product image is required'
@@ -41,6 +38,17 @@ exports.createItem = async (req, res, next) => {
             }
         }
 
+        let sizesArray = [];
+        if (sizes) {
+            if (Array.isArray(sizes)) {
+                sizesArray = sizes;
+            } else if (typeof sizes === 'string') {
+                sizesArray = sizes.split(',').map(s => s.trim());
+            }
+        }
+
+        const imagePath = `/uploads/items/${req.file.filename}`;
+
         const itemData = {
             name,
             description: description || '',
@@ -49,22 +57,22 @@ exports.createItem = async (req, res, next) => {
             category,
             subCategory: subCategory || category,
             image: imagePath,
-            stock: parseInt(stock),
-            discount: discount ? parseFloat(discount) : 0,
+            stock: parseInt(stock) || 0,
+            discount: parseFloat(discount) || 0,
             featured: featured === 'true' || featured === true,
             colors: colorsArray,
+            sizes: sizesArray,
             inStock: parseInt(stock) > 0
         };
 
         if (itemData.discount > 0) {
             itemData.discountedPrice = itemData.price * (1 - itemData.discount / 100);
-        } else {
-            itemData.discountedPrice = itemData.price;
         }
 
         if (req.user) {
-            itemData.userId = req.user.id;
-            itemData.userModel = req.user.constructor.modelName;
+            itemData.userId = req.user._id;
+            itemData.userModel = req.user.role === 'admin' ? 'Admin' : 
+                                req.user.role === 'businessOwner' ? 'BusinessOwner' : 'Client';
         }
 
         const item = await Item.create(itemData);
@@ -76,11 +84,25 @@ exports.createItem = async (req, res, next) => {
         });
 
     } catch (error) {
-        console.error('Create error:', error);
+        console.error('Create item error:', error);
+        
         if (req.file) {
             fs.unlink(req.file.path, () => {});
         }
-        next(error);
+        
+        if (error.name === 'ValidationError') {
+            const messages = Object.values(error.errors).map(val => val.message);
+            return res.status(400).json({
+                success: false,
+                message: messages.join(' ')
+            });
+        }
+        
+        res.status(500).json({
+            success: false,
+            message: 'Failed to create item',
+            error: error.message
+        });
     }
 };
 
@@ -137,7 +159,7 @@ exports.getAllItems = async (req, res, next) => {
             sortOption = { [field]: order === 'asc' ? 1 : -1 };
         }
 
-        let query = Item.find(filter).sort(sortOption);
+        let query = Item.find(filter).sort(sortOption).populate('userId', 'name email');
 
         const limitNum = parseInt(limit);
         if (!isNaN(limitNum) && limitNum > 0) {
@@ -155,14 +177,18 @@ exports.getAllItems = async (req, res, next) => {
         });
 
     } catch (error) {
-        console.error('Get all error:', error);
-        next(error);
+        console.error('Get all items error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to fetch items',
+            error: error.message
+        });
     }
 };
 
 exports.getItemById = async (req, res, next) => {
     try {
-        const item = await Item.findById(req.params.id);
+        const item = await Item.findById(req.params.id).populate('userId', 'name email');
 
         if (!item) {
             return res.status(404).json({
@@ -177,8 +203,18 @@ exports.getItemById = async (req, res, next) => {
         });
 
     } catch (error) {
-        console.error('Get by id error:', error);
-        next(error);
+        console.error('Get item by id error:', error);
+        if (error.name === 'CastError') {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid item ID format'
+            });
+        }
+        res.status(500).json({
+            success: false,
+            message: 'Failed to fetch item',
+            error: error.message
+        });
     }
 };
 
@@ -199,7 +235,7 @@ exports.updateItem = async (req, res, next) => {
         }
 
         if (req.user && req.user.role !== 'admin' && 
-            item.userId && item.userId.toString() !== req.user.id) {
+            item.userId && item.userId.toString() !== req.user._id.toString()) {
             if (req.file) {
                 fs.unlink(req.file.path, () => {});
             }
@@ -227,6 +263,14 @@ exports.updateItem = async (req, res, next) => {
             }
         }
 
+        if (req.body.sizes) {
+            if (Array.isArray(req.body.sizes)) {
+                updates.sizes = req.body.sizes;
+            } else if (typeof req.body.sizes === 'string') {
+                updates.sizes = req.body.sizes.split(',').map(s => s.trim());
+            }
+        }
+
         if (req.file) {
             if (item.image && item.image.startsWith('/uploads/items/')) {
                 const oldImagePath = path.join(__dirname, '..', item.image);
@@ -249,7 +293,7 @@ exports.updateItem = async (req, res, next) => {
             itemId,
             { $set: updates },
             { new: true, runValidators: true }
-        );
+        ).populate('userId', 'name email');
 
         res.status(200).json({
             success: true,
@@ -258,11 +302,25 @@ exports.updateItem = async (req, res, next) => {
         });
 
     } catch (error) {
-        console.error('Update error:', error);
+        console.error('Update item error:', error);
+        
         if (req.file) {
             fs.unlink(req.file.path, () => {});
         }
-        next(error);
+        
+        if (error.name === 'ValidationError') {
+            const messages = Object.values(error.errors).map(val => val.message);
+            return res.status(400).json({
+                success: false,
+                message: messages.join(' ')
+            });
+        }
+        
+        res.status(500).json({
+            success: false,
+            message: 'Failed to update item',
+            error: error.message
+        });
     }
 };
 
@@ -278,7 +336,7 @@ exports.deleteItem = async (req, res, next) => {
         }
 
         if (req.user && req.user.role !== 'admin' && 
-            item.userId && item.userId.toString() !== req.user.id) {
+            item.userId && item.userId.toString() !== req.user._id.toString()) {
             return res.status(403).json({
                 success: false,
                 message: 'Not authorized to delete this item'
@@ -300,8 +358,18 @@ exports.deleteItem = async (req, res, next) => {
         });
 
     } catch (error) {
-        console.error('Delete error:', error);
-        next(error);
+        console.error('Delete item error:', error);
+        if (error.name === 'CastError') {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid item ID format'
+            });
+        }
+        res.status(500).json({
+            success: false,
+            message: 'Failed to delete item',
+            error: error.message
+        });
     }
 };
 
@@ -309,7 +377,8 @@ exports.getFeaturedItems = async (req, res, next) => {
     try {
         const items = await Item.find({ featured: true, inStock: true })
             .sort({ createdAt: -1 })
-            .limit(8);
+            .limit(8)
+            .populate('userId', 'name email');
 
         res.status(200).json({
             success: true,
@@ -318,8 +387,12 @@ exports.getFeaturedItems = async (req, res, next) => {
         });
 
     } catch (error) {
-        console.error('Get featured error:', error);
-        next(error);
+        console.error('Get featured items error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to fetch featured items',
+            error: error.message
+        });
     }
 };
 
@@ -328,7 +401,8 @@ exports.getItemsByCategory = async (req, res, next) => {
         const { category } = req.params;
 
         const items = await Item.find({ category, inStock: true })
-            .sort({ createdAt: -1 });
+            .sort({ createdAt: -1 })
+            .populate('userId', 'name email');
 
         res.status(200).json({
             success: true,
@@ -337,7 +411,11 @@ exports.getItemsByCategory = async (req, res, next) => {
         });
 
     } catch (error) {
-        console.error('Get by category error:', error);
-        next(error);
+        console.error('Get items by category error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to fetch items',
+            error: error.message
+        });
     }
 };

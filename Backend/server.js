@@ -104,36 +104,80 @@ app.get('/api/test', (req, res) => {
 
 console.log('[Server Config] Mounting routes directly...');
 
-if (authRoutes) app.use('/api/auth', authRoutes);
-if (clientRoutes) app.use('/api/clients', clientRoutes);
-if (bOwnerRoutes) app.use('/api/b-owners', bOwnerRoutes);
-if (calendarSettingsRoutes) app.use('/api/calendar-settings', calendarSettingsRoutes);
-if (bookingRoutes) app.use('/api/bookings', bookingRoutes);
-if (reviewRoutes) app.use('/api/reviews', reviewRoutes);
-if (scrapTypeRoutes) app.use('/api/scrap-types', scrapTypeRoutes);
-if (shopLocationRoutes) app.use('/api/shop-locations', shopLocationRoutes);
-if (saleItemRoutes) app.use('/api/saleitems', saleItemRoutes);
-if (projectRoutes) app.use('/api/projects', projectRoutes);
-if (adminRoutes) app.use('/api/admin', adminRoutes);
-if (adminStatsRoutes) app.use('/api/admin/stats', adminStatsRoutes);
+// --- Track mount paths manually alongside app.use() ---
+const routeMountMap = new WeakMap();
+
+function mountRoute(app, path, router) {
+    if (!router) return;
+    app.use(path, router);
+    // After mounting, find the last added router layer and tag it
+    const stack = app._router.stack;
+    for (let i = stack.length - 1; i >= 0; i--) {
+        const layer = stack[i];
+        if (layer.handle === router) {
+            routeMountMap.set(layer, path);
+            break;
+        }
+    }
+}
+
+mountRoute(app, '/api/auth', authRoutes);
+mountRoute(app, '/api/clients', clientRoutes);
+mountRoute(app, '/api/b-owners', bOwnerRoutes);
+mountRoute(app, '/api/calendar-settings', calendarSettingsRoutes);
+mountRoute(app, '/api/bookings', bookingRoutes);
+mountRoute(app, '/api/reviews', reviewRoutes);
+mountRoute(app, '/api/scrap-types', scrapTypeRoutes);
+mountRoute(app, '/api/shop-locations', shopLocationRoutes);
+mountRoute(app, '/api/saleitems', saleItemRoutes);
+mountRoute(app, '/api/projects', projectRoutes);
+mountRoute(app, '/api/admin', adminRoutes);
+mountRoute(app, '/api/admin/stats', adminStatsRoutes);
 
 if (itemRoutes) {
-    app.use('/api/items', itemRoutes);
+    mountRoute(app, '/api/items', itemRoutes);
     console.log('[Server Config]  SUCCESS: Mounted itemRoutes at /api/items');
 } else {
     console.error('[Server Config]  ERROR: itemRoutes is null or undefined!');
 }
 
+// Route listing using the WeakMap for accurate mount paths
 console.log('\n=== REGISTERED ROUTES ===');
-app._router.stack.forEach(function(layer){
-    if (layer.route) {
-        const methods = Object.keys(layer.route.methods).join(', ').toUpperCase();
-        console.log(`${methods} ${layer.route.path}`);
-    } else if (layer.name === 'router' && layer.handle.stack) {
-        console.log(`Router: ${layer.regexp}`);
-    }
-});
-console.log('=== END ROUTES ===\n');
+
+function printRoutes(stack, basePath = '') {
+    const routes = [];
+
+    stack.forEach(layer => {
+        if (layer.route) {
+            const methods = Object.keys(layer.route.methods).join(', ').toUpperCase();
+            const fullPath = (basePath + layer.route.path).replace(/\/+/g, '/');
+            routes.push(`${methods} ${fullPath}`);
+        } else if (layer.handle && layer.handle.stack) {
+            // Use the WeakMap tag if available, otherwise fall back to regexp parsing
+            let mountPath = routeMountMap.get(layer) || '';
+
+            if (!mountPath && layer.regexp) {
+                // Fallback: decode regexp — handles Express 4's path-to-regexp encoding
+                const src = layer.regexp.source;
+                // Express encodes /api/items as: ^\/api\/items\/?(?=\/|$)
+                const match = src.match(/^\^((?:\\\/[^\\?*()|]+)+)/);
+                if (match) {
+                    mountPath = match[1].replace(/\\\//g, '/');
+                }
+            }
+
+            const nestedRoutes = printRoutes(layer.handle.stack, basePath + mountPath);
+            routes.push(...nestedRoutes);
+        }
+    });
+
+    return routes;
+}
+
+const allRoutes = printRoutes(app._router.stack);
+allRoutes.sort().forEach(route => console.log(route));
+
+console.log('\n=== END ROUTES ===\n');
 
 console.log('[Server Config] Applying global error handler.');
 app.use(errorHandler);
@@ -161,9 +205,7 @@ const startServer = async () => {
     } catch (error) {
         console.error('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
         console.error('[Server Startup] CRITICAL FAILURE TO START SERVER:', error.message);
-        if (error.stack) {
-            console.error(error.stack);
-        }
+        if (error.stack) console.error(error.stack);
         console.error('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
         process.exit(1);
     }
@@ -172,18 +214,12 @@ const startServer = async () => {
 process.on('unhandledRejection', (reason, promise) => {
     console.error('!!!!!!!!!!!!!!!! UNHANDLED PROMISE REJECTION !!!!!!!!!!!!!!!!');
     console.error('Reason:', reason.message || reason);
-    if (reason && reason.stack) {
-        console.error(reason.stack);
-    }
+    if (reason && reason.stack) console.error(reason.stack);
     console.error('Promise:', promise);
     console.error('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
 
     if (server && server.listening) {
-        console.log('Closing server due to unhandled rejection...');
-        server.close(() => {
-            console.error('Server closed.');
-            process.exit(1);
-        });
+        server.close(() => { process.exit(1); });
     } else {
         process.exit(1);
     }
@@ -192,17 +228,11 @@ process.on('unhandledRejection', (reason, promise) => {
 process.on('uncaughtException', (err) => {
     console.error('!!!!!!!!!!!!!!!! UNCAUGHT EXCEPTION !!!!!!!!!!!!!!!!');
     console.error('Error:', err.message);
-    if (err.stack) {
-        console.error(err.stack);
-    }
+    if (err.stack) console.error(err.stack);
     console.error('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
 
     if (server && server.listening) {
-        console.log('Closing server due to uncaught exception...');
-        server.close(() => {
-            console.error('Server closed.');
-            process.exit(1);
-        });
+        server.close(() => { process.exit(1); });
     } else {
         process.exit(1);
     }
