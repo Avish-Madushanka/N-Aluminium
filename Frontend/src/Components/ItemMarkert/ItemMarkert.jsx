@@ -17,10 +17,15 @@ const ItemMarkert = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedMainCategory, setSelectedMainCategory] = useState('all');
   const [currentHeroSlide, setCurrentHeroSlide] = useState(0);
-  const [selectedColors, setSelectedColors] = useState({});
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [selectedColor, setSelectedColor] = useState('');
+  const [selectedSize, setSelectedSize] = useState('');
+  const [quantity, setQuantity] = useState(1);
+  const [showModal, setShowModal] = useState(false);
 
   const heroSlides = [
     {
@@ -64,21 +69,25 @@ const ItemMarkert = () => {
   ];
 
   const colorOptions = [
-    { id: 'white', color: '#ffffff' },
-    { id: 'black', color: '#000000' },
-    { id: 'grey', color: '#646464' },
-    { id: 'wood', color: '#332008' },
-    { id: 'maroon', color: '#500f0f' },
-    { id: 'blue', color: '#141263' },
+    { id: 'white', name: 'White', color: '#ffffff' },
+    { id: 'black', name: 'Black', color: '#000000' },
+    { id: 'grey', name: 'Grey', color: '#646464' },
+    { id: 'wood', name: 'Wood', color: '#332008' },
+    { id: 'maroon', name: 'Maroon', color: '#500f0f' },
+    { id: 'blue', name: 'Blue', color: '#141263' },
+    { id: 'red', name: 'Red', color: '#c20000' },
+    { id: 'green', name: 'Green', color: '#052401' },
+    { id: 'cream', name: 'Cream', color: '#fceaba' },
   ];
 
-  const colorEnabledCategories = [
-    'box-bars',
-    'u-channels',
-    'l-bars',
-    't-channels',
-    'j-channels',
-    'cradding'
+  const sizeOptions = [
+    { id: '10mm', name: '10mm' },
+    { id: '15mm', name: '15mm' },
+    { id: '45mm', name: '45mm' },
+    { id: '50mm', name: '50mm' },
+    { id: '60mm', name: '60mm' },
+    { id: '80mm', name: '80mm' },
+    { id: '100mm', name: '100mm' },
   ];
 
   useEffect(() => {
@@ -118,7 +127,14 @@ const ItemMarkert = () => {
       const result = await response.json();
       
       if (result.success) {
-        setProducts(result.data);
+        // Ensure each product has sizes and colors arrays
+        const processedData = result.data.map(product => ({
+          ...product,
+          sizes: product.sizes || [],
+          colors: product.colors || []
+        }));
+        setProducts(processedData);
+        console.log('Fetched products:', processedData); // Debug log
       } else {
         setError(result.message || 'Failed to fetch products');
       }
@@ -148,11 +164,30 @@ const ItemMarkert = () => {
     setCurrentHeroSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length);
   };
 
-  const handleColorSelect = (productId, colorId) => {
-    setSelectedColors(prev => ({
-      ...prev,
-      [productId]: colorId
-    }));
+  const handleBuyNow = (product) => {
+    console.log('Selected product:', product); // Debug log
+    setSelectedProduct(product);
+    setSelectedColor(product.colors && product.colors.length > 0 ? product.colors[0] : '');
+    setSelectedSize(product.sizes && product.sizes.length > 0 ? product.sizes[0] : '');
+    setQuantity(1);
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+    setSelectedProduct(null);
+  };
+
+  const handleAddToCart = () => {
+    console.log('Added to cart:', {
+      product: selectedProduct,
+      color: selectedColor,
+      size: selectedSize,
+      quantity: quantity
+    });
+  
+    alert('Product added to cart!');
+    closeModal();
   };
 
   const getImageUrl = (imagePath) => {
@@ -298,31 +333,12 @@ const ItemMarkert = () => {
                       <div className="ItemMAR-stockStatus">In stock ({product.stock} available)</div>
                     )}
 
-                    {colorEnabledCategories.includes(product.category) && product.colors && product.colors.length > 0 && (
-                      <div className="ItemMAR-colorOptions">
-                        <span className="ItemMAR-colorLabel">Available Colors</span>
-                        <div className="ItemMAR-colorPicker">
-                          {colorOptions
-                            .filter(color => product.colors.includes(color.id))
-                            .map((color) => (
-                              <span
-                                key={color.id}
-                                className={`ItemMAR-colorCircle ${selectedColors[product._id] === color.id ? 'selected' : ''}`}
-                                style={{ backgroundColor: color.color }}
-                                onClick={() => handleColorSelect(product._id, color.id)}
-                              />
-                            ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {product.description && (
-                      <p className="ItemMAR-productDescription">{product.description.substring(0, 50)}...</p>
-                    )}
-
-                    <span className="ItemMAR-sizeGuide">Size Guide</span>
-
-                    <button className="ItemMAR-buyButton">Buy now</button>
+                    <button 
+                      className="ItemMAR-buyButton" 
+                      onClick={() => handleBuyNow(product)}
+                    >
+                      Buy now
+                    </button>
                   </div>
                 </div>
               ))}
@@ -334,6 +350,128 @@ const ItemMarkert = () => {
           )}
         </section>
       </main>
+
+      {showModal && selectedProduct && (
+        <div className="ItemMAR-modal-overlay" onClick={closeModal}>
+          <div className="ItemMAR-modal-content" onClick={(e) => e.stopPropagation()}>
+            <button className="ItemMAR-modal-close" onClick={closeModal}>×</button>
+            
+            <div className="ItemMAR-modal-grid">
+              <div className="ItemMAR-modal-image">
+                <img 
+                  src={getImageUrl(selectedProduct.image)} 
+                  alt={selectedProduct.name} 
+                />
+              </div>
+              
+              <div className="ItemMAR-modal-details">
+                <h2>{selectedProduct.name}</h2>
+                <div className="ItemMAR-modal-price">
+                  Rs. {selectedProduct.discountedPrice || selectedProduct.price} 
+                  <span className="ItemMAR-modal-unit">{selectedProduct.unit}</span>
+                </div>
+                
+                {selectedProduct.description && (
+                  <p className="ItemMAR-modal-description">{selectedProduct.description}</p>
+                )}
+
+                {selectedProduct.colors && selectedProduct.colors.length > 0 ? (
+                  <div className="ItemMAR-modal-option">
+                    <label>Color:</label>
+                    <div className="ItemMAR-modal-colors">
+                      {colorOptions
+                        .filter(color => selectedProduct.colors.includes(color.id))
+                        .map((color) => (
+                          <button
+                            key={color.id}
+                            className={`ItemMAR-modal-color-btn ${selectedColor === color.id ? 'selected' : ''}`}
+                            onClick={() => setSelectedColor(color.id)}
+                          >
+                            <span 
+                              className="ItemMAR-modal-color-dot" 
+                              style={{ backgroundColor: color.color }}
+                            />
+                            {color.name}
+                          </button>
+                        ))}
+                    </div>
+                  </div>
+                ) : (
+                  <div className="ItemMAR-modal-option">
+                    <label>Color:</label>
+                    <div className="ItemMAR-modal-colors">
+                      <span className="ItemMAR-modal-no-options">No colors available</span>
+                    </div>
+                  </div>
+                )}
+
+                {selectedProduct.sizes && selectedProduct.sizes.length > 0 ? (
+                  <div className="ItemMAR-modal-option">
+                    <label>Size:</label>
+                    <div className="ItemMAR-modal-sizes">
+                      {sizeOptions
+                        .filter(size => selectedProduct.sizes.includes(size.id))
+                        .map((size) => (
+                          <button
+                            key={size.id}
+                            className={`ItemMAR-modal-size-btn ${selectedSize === size.id ? 'selected' : ''}`}
+                            onClick={() => setSelectedSize(size.id)}
+                          >
+                            {size.name}
+                          </button>
+                        ))}
+                    </div>
+                  </div>
+                ) : (
+                  <div className="ItemMAR-modal-option">
+                    <label>Size:</label>
+                    <div className="ItemMAR-modal-sizes">
+                      <span className="ItemMAR-modal-no-options">No sizes available</span>
+                    </div>
+                  </div>
+                )}
+
+                <div className="ItemMAR-modal-option">
+                  <label>Quantity:</label>
+                  <div className="ItemMAR-modal-quantity">
+                    <button 
+                      onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                      className="ItemMAR-modal-qty-btn"
+                    >
+                      -
+                    </button>
+                    <span className="ItemMAR-modal-qty-value">{quantity}</span>
+                    <button 
+                      onClick={() => setQuantity(quantity + 1)}
+                      className="ItemMAR-modal-qty-btn"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+
+                {selectedProduct.inStock && (
+                  <div className="ItemMAR-modal-stock">
+                    {selectedProduct.stock} items available
+                  </div>
+                )}
+
+                <div className="ItemMAR-modal-actions">
+                  <button 
+                    className="ItemMAR-modal-add-to-cart"
+                    onClick={handleAddToCart}
+                  >
+                    Add to Cart
+                  </button>
+                  <button className="ItemMAR-modal-buy-now">
+                    Buy Now
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

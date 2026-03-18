@@ -13,7 +13,8 @@ const ItemsAddForm = ({ onAddItem, onClose }) => {
     stock: '',
     discount: '0',
     featured: false,
-    colors: []
+    colors: [],
+    sizes: []
   });
 
   const [imagePreview, setImagePreview] = useState(null);
@@ -35,6 +36,16 @@ const ItemsAddForm = ({ onAddItem, onClose }) => {
     { id: 'red', name: 'Red', color: '#c20000' },
     { id: 'green', name: 'Green', color: '#052401' },
     { id: 'cream', name: 'Cream', color: '#fceaba' },
+  ];
+
+  const sizeOptions = [
+    { id: '10mm', name: '10mm' },
+    { id: '15mm', name: '15mm' },
+    { id: '45mm', name: '45mm' },
+    { id: '50mm', name: '50mm' },
+    { id: '60mm', name: '60mm' },
+    { id: '80mm', name: '80mm' },
+    { id: '100mm', name: '100mm' },
   ];
 
   const mainCategories = [
@@ -91,7 +102,8 @@ const ItemsAddForm = ({ onAddItem, onClose }) => {
       stock: '',
       discount: '0',
       featured: false,
-      colors: []
+      colors: [],
+      sizes: []
     });
     setImagePreview(null);
     setImageFile(null);
@@ -122,6 +134,15 @@ const ItemsAddForm = ({ onAddItem, onClose }) => {
         ? prev.colors.filter(id => id !== colorId)
         : [...prev.colors, colorId];
       return { ...prev, colors: newColors };
+    });
+  };
+
+  const handleSizeToggle = (sizeId) => {
+    setFormData(prev => {
+      const newSizes = prev.sizes.includes(sizeId)
+        ? prev.sizes.filter(id => id !== sizeId)
+        : [...prev.sizes, sizeId];
+      return { ...prev, sizes: newSizes };
     });
   };
 
@@ -238,10 +259,25 @@ const ItemsAddForm = ({ onAddItem, onClose }) => {
       formDataToSend.append('discount', formData.discount || '0');
       formDataToSend.append('featured', formData.featured);
       
+      console.log('Selected colors:', formData.colors);
+      console.log('Selected sizes:', formData.sizes);
+      
       if (formData.colors && formData.colors.length > 0) {
         formData.colors.forEach(color => {
-          formDataToSend.append('colors[]', color);
+          formDataToSend.append('colors', color);
+          console.log('Appending color:', color);
         });
+      } else {
+        formDataToSend.append('colors', '');
+      }
+
+      if (formData.sizes && formData.sizes.length > 0) {
+        formData.sizes.forEach(size => {
+          formDataToSend.append('sizes', size);
+          console.log('Appending size:', size);
+        });
+      } else {
+        formDataToSend.append('sizes', '');
       }
       
       if (imageFile) {
@@ -249,6 +285,8 @@ const ItemsAddForm = ({ onAddItem, onClose }) => {
       }
       
       const token = localStorage.getItem('token');
+      
+      console.log('Sending FormData to server...');
       
       const response = await fetch('http://localhost:5003/api/items', {
         method: 'POST',
@@ -259,6 +297,7 @@ const ItemsAddForm = ({ onAddItem, onClose }) => {
       });
       
       const result = await response.json();
+      console.log('Server response:', result);
       
       if (result.success) {
         setSuccessMessage(`✅ "${formData.name}" has been added successfully!`);
@@ -516,6 +555,25 @@ const ItemsAddForm = ({ onAddItem, onClose }) => {
                         <span className="ITADD-colorName">{color.name}</span>
                         {formData.colors?.includes(color.id) && (
                           <span className="ITADD-colorCheck">✓</span>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="ITADD-fieldGroup">
+                  <label className="ITADD-label">Available Sizes</label>
+                  <p className="ITADD-colorHint">Select sizes available for this product</p>
+                  <div className="ITADD-sizeGrid">
+                    {sizeOptions.map(size => (
+                      <div
+                        key={size.id}
+                        className={`ITADD-sizeItem ${formData.sizes?.includes(size.id) ? 'selected' : ''}`}
+                        onClick={() => handleSizeToggle(size.id)}
+                      >
+                        <span className="ITADD-sizeName">{size.name}</span>
+                        {formData.sizes?.includes(size.id) && (
+                          <span className="ITADD-sizeCheck">✓</span>
                         )}
                       </div>
                     ))}

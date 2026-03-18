@@ -63,6 +63,10 @@ const itemSchema = new mongoose.Schema({
         type: String,
         enum: ['white', 'black', 'grey', 'wood', 'maroon', 'blue', 'red', 'green', 'cream']
     }],
+    sizes: [{
+        type: String,
+        enum: ['10mm', '15mm', '45mm', '50mm', '60mm', '80mm', '100mm']
+    }],
     inStock: {
         type: Boolean,
         default: true
