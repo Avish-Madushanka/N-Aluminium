@@ -112,7 +112,7 @@ const Navbar = ({ isLoggedIn, userInfo, handleLogout, cartItemCount = 0 }) => {
         <div className="Nav-auth-section">
           {isLoggedIn && userInfo ? (
             <div className="Nav-user-actions">
-              <Link to="/cart" className="Nav-cart-icon">
+              <Link to="/ItemsCartManage" className="Nav-cart-icon">
                 <ShoppingCart size={22} />
                 {cartItemCount > 0 && (
                   <span className="Nav-cart-badge">{cartItemCount}</span>

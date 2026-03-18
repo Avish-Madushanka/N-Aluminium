@@ -26,6 +26,8 @@ const ItemMarkert = () => {
   const [selectedSize, setSelectedSize] = useState('');
   const [quantity, setQuantity] = useState(1);
   const [showModal, setShowModal] = useState(false);
+  const [addingToCart, setAddingToCart] = useState(false);
+  const [cartMessage, setCartMessage] = useState('');
 
   const heroSlides = [
     {
@@ -110,6 +112,15 @@ const ItemMarkert = () => {
     fetchProducts();
   }, [selectedCategory, selectedMainCategory]);
 
+  useEffect(() => {
+    if (cartMessage) {
+      const timer = setTimeout(() => {
+        setCartMessage('');
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [cartMessage]);
+
   const fetchProducts = async () => {
     setLoading(true);
     setError('');
@@ -127,14 +138,12 @@ const ItemMarkert = () => {
       const result = await response.json();
       
       if (result.success) {
-        // Ensure each product has sizes and colors arrays
         const processedData = result.data.map(product => ({
           ...product,
           sizes: product.sizes || [],
           colors: product.colors || []
         }));
         setProducts(processedData);
-        console.log('Fetched products:', processedData); // Debug log
       } else {
         setError(result.message || 'Failed to fetch products');
       }
@@ -165,7 +174,6 @@ const ItemMarkert = () => {
   };
 
   const handleBuyNow = (product) => {
-    console.log('Selected product:', product); // Debug log
     setSelectedProduct(product);
     setSelectedColor(product.colors && product.colors.length > 0 ? product.colors[0] : '');
     setSelectedSize(product.sizes && product.sizes.length > 0 ? product.sizes[0] : '');
@@ -178,16 +186,45 @@ const ItemMarkert = () => {
     setSelectedProduct(null);
   };
 
-  const handleAddToCart = () => {
-    console.log('Added to cart:', {
-      product: selectedProduct,
-      color: selectedColor,
-      size: selectedSize,
-      quantity: quantity
-    });
-  
-    alert('Product added to cart!');
-    closeModal();
+  const handleAddToCart = async () => {
+    const token = localStorage.getItem('token');
+    
+    if (!token) {
+      alert('Please login to add items to cart');
+      return;
+    }
+
+    setAddingToCart(true);
+    
+    try {
+      const response = await fetch('http://localhost:5003/api/cart/add', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          productId: selectedProduct._id,
+          quantity: quantity,
+          selectedColor: selectedColor,
+          selectedSize: selectedSize
+        })
+      });
+      
+      const result = await response.json();
+      
+      if (result.success) {
+        setCartMessage('✅ Product added to cart successfully!');
+        closeModal();
+      } else {
+        alert(result.message || 'Failed to add to cart');
+      }
+    } catch (error) {
+      console.error('Add to cart error:', error);
+      alert('Failed to add to cart. Please try again.');
+    } finally {
+      setAddingToCart(false);
+    }
   };
 
   const getImageUrl = (imagePath) => {
@@ -213,6 +250,15 @@ const ItemMarkert = () => {
 
   return (
     <div className="ItemMAR-container">
+      {cartMessage && (
+        <div className="ItemMAR-cart-message">
+          <div className="ItemMAR-cart-message-content">
+            <span className="ItemMAR-cart-message-icon">✓</span>
+            <span>{cartMessage}</span>
+          </div>
+        </div>
+      )}
+
       <main className="ItemMAR-mainContent">
         <section className="ItemMAR-heroSection">
           <div className="ItemMAR-heroCarousel">
@@ -460,11 +506,9 @@ const ItemMarkert = () => {
                   <button 
                     className="ItemMAR-modal-add-to-cart"
                     onClick={handleAddToCart}
+                    disabled={addingToCart}
                   >
-                    Add to Cart
-                  </button>
-                  <button className="ItemMAR-modal-buy-now">
-                    Buy Now
+                    {addingToCart ? 'Adding...' : 'Add to Cart'}
                   </button>
                 </div>
               </div>

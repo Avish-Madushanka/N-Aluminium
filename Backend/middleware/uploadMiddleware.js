@@ -15,7 +15,7 @@ if (!fs.existsSync(uploadsDir)) {
     console.log(`[Multer Config] Uploads directory exists: ${uploadsDir}`);
 }
 
-const subdirectories = ['saleitems', 'projects', 'profiles', 'items'];
+const subdirectories = ['saleitems', 'projects', 'profiles', 'items', 'cart'];
 subdirectories.forEach(subDir => {
     const subDirPath = path.join(uploadsDir, subDir);
     if (!fs.existsSync(subDirPath)) {
@@ -103,6 +103,66 @@ const itemStorage = multer.diskStorage({
     }
 });
 
+const cartStorage = multer.diskStorage({
+    destination: function(req, file, cb) {
+        const cartUploadsDir = path.join(uploadsDir, 'cart');
+        if (!fs.existsSync(cartUploadsDir)) {
+            try {
+                fs.mkdirSync(cartUploadsDir, { recursive: true });
+            } catch (mkdirErr) {
+                return cb(mkdirErr);
+            }
+        }
+        cb(null, cartUploadsDir);
+    },
+    filename: (req, file, cb) => {
+        const safeName = file.originalname.replace(/[^a-zA-Z0-9.-]/g, '_');
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E3);
+        const finalFilename = `cart-${uniqueSuffix}${path.extname(safeName)}`;
+        cb(null, finalFilename);
+    }
+});
+
+const profilePhotoStorage = multer.diskStorage({
+    destination: function(req, file, cb) {
+        const profilesUploadsDir = path.join(uploadsDir, 'profiles');
+        if (!fs.existsSync(profilesUploadsDir)) {
+            try {
+                fs.mkdirSync(profilesUploadsDir, { recursive: true });
+            } catch (mkdirErr) {
+                return cb(mkdirErr);
+            }
+        }
+        cb(null, profilesUploadsDir);
+    },
+    filename: (req, file, cb) => {
+        const safeName = file.originalname.replace(/[^a-zA-Z0-9.-]/g, '_');
+        const userId = req.user ? req.user._id : 'anonymous';
+        const finalFilename = `profile-${userId}-${Date.now()}${path.extname(safeName)}`;
+        cb(null, finalFilename);
+    }
+});
+
+const coverPhotoStorage = multer.diskStorage({
+    destination: function(req, file, cb) {
+        const profilesUploadsDir = path.join(uploadsDir, 'profiles');
+        if (!fs.existsSync(profilesUploadsDir)) {
+            try {
+                fs.mkdirSync(profilesUploadsDir, { recursive: true });
+            } catch (mkdirErr) {
+                return cb(mkdirErr);
+            }
+        }
+        cb(null, profilesUploadsDir);
+    },
+    filename: (req, file, cb) => {
+        const safeName = file.originalname.replace(/[^a-zA-Z0-9.-]/g, '_');
+        const userId = req.user ? req.user._id : 'anonymous';
+        const finalFilename = `cover-${userId}-${Date.now()}${path.extname(safeName)}`;
+        cb(null, finalFilename);
+    }
+});
+
 const generalStorage = multer.diskStorage({ 
     destination: function(req, file, cb) {
         cb(null, uploadsDir);
@@ -131,20 +191,46 @@ const uploadItemImageMiddleware = multer({
     fileFilter: imageFileFilter
 }).single('image');
 
+const uploadCartImageMiddleware = multer({
+    storage: cartStorage,
+    limits: { fileSize: 5 * 1024 * 1024 },
+    fileFilter: imageFileFilter
+}).single('cartImage');
+
+const uploadProfilePhotoMiddleware = multer({
+    storage: profilePhotoStorage,
+    limits: { fileSize: 2 * 1024 * 1024 },
+    fileFilter: imageFileFilter
+}).single('profilePhoto');
+
+const uploadCoverPhotoMiddleware = multer({
+    storage: coverPhotoStorage,
+    limits: { fileSize: 5 * 1024 * 1024 },
+    fileFilter: imageFileFilter
+}).single('coverPhoto');
+
 const generalUpload = multer({ 
     storage: generalStorage, 
     limits: { fileSize: 5 * 1024 * 1024 },
     fileFilter: imageFileFilter
 });
 
+const uploadBusinessPhotosMiddleware = multer({
+    storage: profilePhotoStorage,
+    limits: { fileSize: 5 * 1024 * 1024 },
+    fileFilter: imageFileFilter
+}).fields([
+    { name: 'profilePhoto', maxCount: 1 },
+    { name: 'coverPhoto', maxCount: 1 }
+]);
+
 module.exports = {
-    uploadProfilePhoto: generalUpload.single('profilePhoto'),
-    uploadBusinessPhotos: generalUpload.fields([
-        { name: 'profilePhoto', maxCount: 1 }, 
-        { name: 'coverPhoto', maxCount: 1 }
-    ]),
+    uploadProfilePhoto: uploadProfilePhotoMiddleware,
+    uploadCoverPhoto: uploadCoverPhotoMiddleware,
+    uploadBusinessPhotos: uploadBusinessPhotosMiddleware,
     upload: generalUpload,
     uploadSaleItemImage: directSaleItemUploadMiddleware,
     uploadProjectImages: uploadProjectImagesMiddleware,
-    uploadItemImage: uploadItemImageMiddleware
+    uploadItemImage: uploadItemImageMiddleware,
+    uploadCartImage: uploadCartImageMiddleware
 };

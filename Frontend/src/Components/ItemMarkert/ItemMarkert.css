@@ -741,6 +741,73 @@
   padding: 8px 0;
 }
 
+.ItemMAR-cart-message {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: #4CAF50;
+  color: white;
+  padding: 15px 25px;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  z-index: 1000;
+  animation: slideInRight 0.3s ease-out;
+}
+
+.ItemMAR-cart-message-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ItemMAR-cart-message-icon {
+  width: 24px;
+  height: 24px;
+  background: white;
+  color: #4CAF50;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.ItemMAR-modal-add-to-cart {
+  width: 100%;
+  padding: 15px;
+  background: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  margin-top: 20px;
+}
+
+.ItemMAR-modal-add-to-cart:hover:not(:disabled) {
+  background: #45a049;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3);
+}
+
+.ItemMAR-modal-add-to-cart:disabled {
+  background: #A5D6A7;
+  cursor: not-allowed;
+}
+
 @keyframes ItemMAR-fadeIn {
   from {
     opacity: 0;

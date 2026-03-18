@@ -65,6 +65,7 @@ import AluRegVideoUp from './Components/AluTReg/AluRegVideoUp';
 import ItemAddForm from './Components/Admin/ItemsAddForm/ItemsAddForm';
 import AluTRegForm from './Components/AluTReg/AluTRegForm';
 import ItemsManage from './Components/Admin/ItemsAddForm/ItemsManage';
+import ItemsCartManage from './Components/ItemMarkert/ItemsCartManage';
 
 console.log('=== IMPORT DEBUG ===');
 console.log('ItemsManage imported:', ItemsManage);
@@ -345,6 +346,7 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
                         <Route path="/SaleForm" element={<SaleForm />} />
                         <Route path="/ProAddForm" element={<ProAddForm />} />
                         <Route path="/GlassOrder" element={<GlassOrder /> } />
+                        <Route path="/ItemsCartManage" element={<ItemsCartManage /> } />
                     </Route>
 
                     <Route element={<ProtectedRoute requiredRole="businessOwner" />}>

@@ -1,0 +1,909 @@
+.ICManage-container {
+  font-family: 'Roboto', sans-serif;
+  padding: 30px;
+  background-color: #f5f5f5;
+  min-height: 100vh;
+}
+
+.ICManage-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  background: white;
+  padding: 20px 30px;
+  border-radius: 15px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.ICManage-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #333;
+  margin: 0;
+  position: relative;
+  padding-left: 15px;
+}
+
+.ICManage-title:before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 5px;
+  height: 30px;
+  background: #4CAF50;
+  border-radius: 3px;
+}
+
+.ICManage-headerActions {
+  display: flex;
+  gap: 15px;
+}
+
+.ICManage-removeSelected {
+  padding: 10px 20px;
+  background: #f44336;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.ICManage-removeSelected:hover {
+  background: #d32f2f;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(244, 67, 54, 0.3);
+}
+
+.ICManage-success {
+  background: #4CAF50;
+  color: white;
+  padding: 15px 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  animation: slideDown 0.3s ease-out;
+}
+
+.ICManage-error {
+  background: #f44336;
+  color: white;
+  padding: 15px 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  animation: slideDown 0.3s ease-out;
+}
+
+.ICManage-successClose,
+.ICManage-errorClose {
+  background: rgba(255,255,255,0.2);
+  border: none;
+  color: white;
+  font-size: 20px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+}
+
+.ICManage-successClose:hover,
+.ICManage-errorClose:hover {
+  background: rgba(255,255,255,0.3);
+  transform: scale(1.1);
+}
+
+.ICManage-modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.ICManage-confirmModal {
+  background: white;
+  border-radius: 15px;
+  padding: 30px;
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+  animation: scaleIn 0.3s ease-out;
+}
+
+.ICManage-confirmModal h3 {
+  margin: 0 0 15px 0;
+  color: #333;
+  font-size: 22px;
+}
+
+.ICManage-confirmModal p {
+  color: #666;
+  margin-bottom: 25px;
+  line-height: 1.5;
+}
+
+.ICManage-confirmActions {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}
+
+.ICManage-confirmCancel {
+  padding: 10px 25px;
+  background: #f5f5f5;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.ICManage-confirmCancel:hover {
+  background: #e0e0e0;
+}
+
+.ICManage-confirmDelete {
+  padding: 10px 25px;
+  background: #f44336;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.ICManage-confirmDelete:hover {
+  background: #d32f2f;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(244, 67, 54, 0.3);
+}
+
+.ICManage-editModal {
+  background: white;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+  animation: scaleIn 0.3s ease-out;
+}
+
+.ICManage-editHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 30px;
+  border-bottom: 2px solid #f0f0f0;
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 10;
+}
+
+.ICManage-editHeader h2 {
+  margin: 0;
+  font-size: 24px;
+  color: #333;
+  font-weight: 600;
+}
+
+.ICManage-editClose {
+  background: none;
+  border: none;
+  font-size: 32px;
+  cursor: pointer;
+  color: #999;
+  transition: all 0.3s;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.ICManage-editClose:hover {
+  background: #f5f5f5;
+  color: #333;
+  transform: rotate(90deg);
+}
+
+.ICManage-editContent {
+  padding: 30px;
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 30px;
+}
+
+.ICManage-editImage {
+  width: 150px;
+  height: 150px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #e0e0e0;
+}
+
+.ICManage-editImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ICManage-editDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.ICManage-editDetails h3 {
+  margin: 0;
+  font-size: 20px;
+  color: #333;
+}
+
+.ICManage-editPrice {
+  font-size: 18px;
+  font-weight: 700;
+  color: #4CAF50;
+}
+
+.ICManage-editField {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ICManage-editField label {
+  font-weight: 600;
+  color: #555;
+  font-size: 14px;
+}
+
+.ICManage-editColors,
+.ICManage-editSizes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.ICManage-editColorBtn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 12px;
+  border: 2px solid #e0e0e0;
+  border-radius: 6px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 13px;
+}
+
+.ICManage-editColorBtn:hover {
+  border-color: #4CAF50;
+}
+
+.ICManage-editColorBtn.selected {
+  border-color: #4CAF50;
+  background: #e8f5e9;
+}
+
+.ICManage-editColorDot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1px solid #ddd;
+}
+
+.ICManage-editSizeBtn {
+  padding: 8px 12px;
+  border: 2px solid #e0e0e0;
+  border-radius: 6px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.ICManage-editSizeBtn:hover {
+  border-color: #4CAF50;
+}
+
+.ICManage-editSizeBtn.selected {
+  border-color: #4CAF50;
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.ICManage-editQuantity {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ICManage-editQtyBtn {
+  width: 36px;
+  height: 36px;
+  border: 2px solid #e0e0e0;
+  border-radius: 6px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 18px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ICManage-editQtyBtn:hover:not(:disabled) {
+  border-color: #4CAF50;
+  background: #f5f5f5;
+}
+
+.ICManage-editQtyBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.ICManage-editQtyValue {
+  font-size: 16px;
+  font-weight: 600;
+  min-width: 40px;
+  text-align: center;
+}
+
+.ICManage-editTotal {
+  font-size: 18px;
+  font-weight: 700;
+  color: #333;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 2px solid #f0f0f0;
+}
+
+.ICManage-editActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  padding: 20px 30px;
+  border-top: 2px solid #f0f0f0;
+}
+
+.ICManage-editCancel {
+  padding: 12px 30px;
+  background: #f5f5f5;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.ICManage-editCancel:hover {
+  background: #e0e0e0;
+}
+
+.ICManage-editSave {
+  padding: 12px 30px;
+  background: #4CAF50;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3);
+}
+
+.ICManage-editSave:hover {
+  background: #45a049;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(76, 175, 80, 0.4);
+}
+
+.ICManage-loading {
+  text-align: center;
+  padding: 50px;
+  font-size: 18px;
+  color: #666;
+}
+
+.ICManage-emptyCart {
+  text-align: center;
+  padding: 80px 20px;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.ICManage-emptyIcon {
+  font-size: 80px;
+  margin-bottom: 20px;
+  color: #ccc;
+}
+
+.ICManage-emptyCart h2 {
+  font-size: 28px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.ICManage-emptyCart p {
+  color: #666;
+  margin-bottom: 30px;
+}
+
+.ICManage-shopButton {
+  padding: 15px 40px;
+  background: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3);
+}
+
+.ICManage-shopButton:hover {
+  background: #45a049;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(76, 175, 80, 0.4);
+}
+
+.ICManage-cartHeader {
+  background: white;
+  padding: 15px 30px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.ICManage-selectAll {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ICManage-selectAll input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: #4CAF50;
+}
+
+.ICManage-selectAll label {
+  font-size: 15px;
+  font-weight: 500;
+  color: #555;
+  cursor: pointer;
+}
+
+.ICManage-cartContent {
+  display: grid;
+  grid-template-columns: 1fr 350px;
+  gap: 30px;
+}
+
+.ICManage-cartItems {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.ICManage-cartItem {
+  background: white;
+  border-radius: 15px;
+  padding: 20px;
+  display: grid;
+  grid-template-columns: 40px 100px 1fr 250px;
+  gap: 20px;
+  align-items: start;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  transition: all 0.3s;
+}
+
+.ICManage-cartItem:hover {
+  box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+  transform: translateY(-2px);
+}
+
+.ICManage-itemCheckbox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ICManage-itemCheckbox input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: #4CAF50;
+}
+
+.ICManage-itemImage {
+  width: 100px;
+  height: 100px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #e0e0e0;
+}
+
+.ICManage-itemImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ICManage-itemDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ICManage-itemName {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+.ICManage-itemDescription {
+  font-size: 13px;
+  color: #666;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.ICManage-itemOptions {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.ICManage-itemOption {
+  font-size: 12px;
+  color: #666;
+  background: #f5f5f5;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.ICManage-itemPrice {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.ICManage-discountedPrice {
+  font-size: 16px;
+  font-weight: 700;
+  color: #4CAF50;
+}
+
+.ICManage-originalPrice {
+  font-size: 14px;
+  color: #999;
+  text-decoration: line-through;
+}
+
+.ICManage-regularPrice {
+  font-size: 16px;
+  font-weight: 700;
+  color: #333;
+}
+
+.ICManage-discountBadge {
+  background: #f44336;
+  color: white;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.ICManage-unit {
+  font-size: 12px;
+  color: #666;
+  font-weight: 400;
+}
+
+.ICManage-itemActions {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: flex-end;
+}
+
+.ICManage-quantityControls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #f5f5f5;
+  padding: 5px;
+  border-radius: 8px;
+}
+
+.ICManage-quantityBtn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 6px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 16px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.ICManage-quantityBtn:hover:not(:disabled) {
+  background: #4CAF50;
+  color: white;
+}
+
+.ICManage-quantityBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.ICManage-quantityValue {
+  font-size: 15px;
+  font-weight: 600;
+  min-width: 30px;
+  text-align: center;
+}
+
+.ICManage-itemTotal {
+  font-size: 18px;
+  font-weight: 700;
+  color: #333;
+}
+
+.ICManage-actionButtons {
+  display: flex;
+  gap: 10px;
+}
+
+.ICManage-editBtn {
+  padding: 6px 12px;
+  background: #2196F3;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.ICManage-editBtn:hover {
+  background: #1976D2;
+  transform: translateY(-2px);
+}
+
+.ICManage-removeBtn {
+  padding: 6px 12px;
+  background: #f44336;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.ICManage-removeBtn:hover {
+  background: #d32f2f;
+  transform: translateY(-2px);
+}
+
+.ICManage-cartSummary {
+  background: white;
+  border-radius: 15px;
+  padding: 25px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  height: fit-content;
+  position: sticky;
+  top: 20px;
+}
+
+.ICManage-summaryTitle {
+  font-size: 20px;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 20px 0;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.ICManage-summaryRow {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  font-size: 15px;
+  color: #666;
+}
+
+.ICManage-selectedRow {
+  color: #4CAF50;
+  font-weight: 500;
+}
+
+.ICManage-totalRow {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 2px solid #f0f0f0;
+  font-size: 18px;
+  font-weight: 700;
+  color: #333;
+}
+
+.ICManage-checkoutBtn {
+  width: 100%;
+  padding: 15px;
+  background: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  margin: 20px 0 10px;
+  box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3);
+}
+
+.ICManage-checkoutBtn:hover {
+  background: #45a049;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(76, 175, 80, 0.4);
+}
+
+.ICManage-continueShopping {
+  width: 100%;
+  padding: 12px;
+  background: none;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.ICManage-continueShopping:hover {
+  border-color: #4CAF50;
+  color: #4CAF50;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (max-width: 1024px) {
+  .ICManage-cartContent {
+    grid-template-columns: 1fr;
+  }
+  
+  .ICManage-cartSummary {
+    position: static;
+  }
+}
+
+@media (max-width: 768px) {
+  .ICManage-container {
+    padding: 15px;
+  }
+
+  .ICManage-header {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+    padding: 15px;
+  }
+
+  .ICManage-title:before {
+    display: none;
+  }
+
+  .ICManage-cartItem {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .ICManage-itemCheckbox {
+    position: absolute;
+  }
+
+  .ICManage-itemImage {
+    width: 100%;
+    height: 200px;
+    margin-top: 30px;
+  }
+
+  .ICManage-itemActions {
+    align-items: stretch;
+  }
+
+  .ICManage-quantityControls {
+    justify-content: center;
+  }
+
+  .ICManage-actionButtons {
+    justify-content: center;
+  }
+
+  .ICManage-editContent {
+    grid-template-columns: 1fr;
+  }
+
+  .ICManage-editImage {
+    width: 100%;
+    height: 200px;
+  }
+}

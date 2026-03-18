@@ -2,8 +2,8 @@ require('dotenv').config();
 
 const express = require('express');
 const cors = require('cors');
-const actualPath = require('path');
-const actualHttp = require('http');
+const path = require('path');
+const http = require('http');
 const fs = require('fs');
 
 const connectDB = require('./config/db');
@@ -11,7 +11,7 @@ const connectDB = require('./config/db');
 console.log('[Server Startup] Initializing: Attempting to load route modules...');
 let clientRoutes, bOwnerRoutes, authRoutes, calendarSettingsRoutes,
     bookingRoutes, reviewRoutes, scrapTypeRoutes, shopLocationRoutes, adminRoutes,
-    saleItemRoutes, adminStatsRoutes, projectRoutes, itemRoutes;
+    saleItemRoutes, adminStatsRoutes, projectRoutes, itemRoutes, cartRoutes;
 
 const loadRoute = (routeName, path) => {
   try {
@@ -41,6 +41,7 @@ saleItemRoutes = loadRoute('saleItemRoutes', './routes/saleItemRoutes');
 adminStatsRoutes = loadRoute('adminStatsRoutes', './routes/adminStatsRoutes');
 projectRoutes = loadRoute('projectRoutes', './routes/projectRoutes');
 itemRoutes = loadRoute('itemRoutes', './routes/itemRoutes');
+cartRoutes = loadRoute('cartRoutes', './routes/cartRoutes');
 
 console.log('[Server Startup] Loading controllers and middleware...');
 const { createInitialAdmin } = require('./controllers/adminController');
@@ -57,14 +58,14 @@ app.use(cors({
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
-const uploadsDirectory = actualPath.join(__dirname, 'uploads');
+const uploadsDirectory = path.join(__dirname, 'uploads');
 app.use('/uploads', express.static(uploadsDirectory));
 
 if (fs.existsSync(uploadsDirectory)) {
     console.log(`[Server Config] Serving static files from ${uploadsDirectory} at /uploads`);
-    const subdirectories = ['saleitems', 'projects', 'profiles', 'items'];
+    const subdirectories = ['saleitems', 'projects', 'profiles', 'items', 'cart'];
     subdirectories.forEach(subDir => {
-        const fullSubDirPath = actualPath.join(uploadsDirectory, subDir);
+        const fullSubDirPath = path.join(uploadsDirectory, subDir);
         if (fs.existsSync(fullSubDirPath)) {
             console.log(`[Server Config] 'uploads/${subDir}' subdirectory exists.`);
         } else {
@@ -82,9 +83,9 @@ if (fs.existsSync(uploadsDirectory)) {
     try {
         fs.mkdirSync(uploadsDirectory, { recursive: true });
         console.log(`[Server Config] Successfully created 'uploads' directory at ${uploadsDirectory}`);
-        const subdirectoriesToCreate = ['saleitems', 'projects', 'profiles', 'items'];
+        const subdirectoriesToCreate = ['saleitems', 'projects', 'profiles', 'items', 'cart'];
         subdirectoriesToCreate.forEach(subDir => {
-            const fullSubDirPath = actualPath.join(uploadsDirectory, subDir);
+            const fullSubDirPath = path.join(uploadsDirectory, subDir);
             fs.mkdirSync(fullSubDirPath, { recursive: true });
             console.log(`[Server Config] Successfully created 'uploads/${subDir}' subdirectory.`);
         });
@@ -104,13 +105,11 @@ app.get('/api/test', (req, res) => {
 
 console.log('[Server Config] Mounting routes directly...');
 
-// --- Track mount paths manually alongside app.use() ---
 const routeMountMap = new WeakMap();
 
 function mountRoute(app, path, router) {
     if (!router) return;
     app.use(path, router);
-    // After mounting, find the last added router layer and tag it
     const stack = app._router.stack;
     for (let i = stack.length - 1; i >= 0; i--) {
         const layer = stack[i];
@@ -141,7 +140,13 @@ if (itemRoutes) {
     console.error('[Server Config]  ERROR: itemRoutes is null or undefined!');
 }
 
-// Route listing using the WeakMap for accurate mount paths
+if (cartRoutes) {
+    mountRoute(app, '/api/cart', cartRoutes);
+    console.log('[Server Config]  SUCCESS: Mounted cartRoutes at /api/cart');
+} else {
+    console.error('[Server Config]  ERROR: cartRoutes is null or undefined!');
+}
+
 console.log('\n=== REGISTERED ROUTES ===');
 
 function printRoutes(stack, basePath = '') {
@@ -153,13 +158,10 @@ function printRoutes(stack, basePath = '') {
             const fullPath = (basePath + layer.route.path).replace(/\/+/g, '/');
             routes.push(`${methods} ${fullPath}`);
         } else if (layer.handle && layer.handle.stack) {
-            // Use the WeakMap tag if available, otherwise fall back to regexp parsing
             let mountPath = routeMountMap.get(layer) || '';
 
             if (!mountPath && layer.regexp) {
-                // Fallback: decode regexp — handles Express 4's path-to-regexp encoding
                 const src = layer.regexp.source;
-                // Express encodes /api/items as: ^\/api\/items\/?(?=\/|$)
                 const match = src.match(/^\^((?:\\\/[^\\?*()|]+)+)/);
                 if (match) {
                     mountPath = match[1].replace(/\\\//g, '/');
@@ -182,7 +184,7 @@ console.log('\n=== END ROUTES ===\n');
 console.log('[Server Config] Applying global error handler.');
 app.use(errorHandler);
 
-const server = actualHttp.createServer(app);
+const server = http.createServer(app);
 
 const startServer = async () => {
     try {
