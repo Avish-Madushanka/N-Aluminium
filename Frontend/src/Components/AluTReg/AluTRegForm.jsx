@@ -89,11 +89,6 @@ function AluTRegForm() {
       return false;
     }
 
-    if (!cvFile) {
-      setError("Please upload your CV");
-      return false;
-    }
-
     return true;
   };
 
@@ -102,11 +97,10 @@ function AluTRegForm() {
     setError("");
     
     if (validateForm()) {
-      // Prepare data for popup
       setPopupData({
         ...formData,
         idPhotoName: idPhoto?.name,
-        cvFileName: cvFile?.name,
+        cvFileName: cvFile?.name || "Not uploaded",
         idPhoto: idPhoto,
         cvFile: cvFile
       });
@@ -118,7 +112,6 @@ function AluTRegForm() {
     setShowPopup(false);
     setLoading(true);
     
-    // Simulate API call
     setTimeout(() => {
       setLoading(false);
       setSuccess("Registration successful!");
@@ -135,7 +128,6 @@ function AluTRegForm() {
       clearFile("cv");
       setPopupData(null);
       
-      // Auto-hide success message after 3 seconds
       setTimeout(() => setSuccess(""), 3000);
     }, 2000);
   };
@@ -148,7 +140,9 @@ function AluTRegForm() {
   return (
     <div className="UR-main-container">
       <div className="UR-form-wrapper">
+        <span className="UR-subtitle">REGISTRATION</span>
         <h2 className="UR-title">Participant Registration Form</h2>
+        <p className="UR-description">Fill in your details to join our program</p>
 
         {error && (
           <div className="UR-error">
@@ -198,7 +192,6 @@ function AluTRegForm() {
               </div>
             </div>
 
-            {/* Right Column */}
             <div className="UR-right-col">
               <div className="UR-form-group">
                 <label><Home size={16}/> Address*</label>
@@ -214,18 +207,19 @@ function AluTRegForm() {
                 <label><Upload size={16}/> Upload ID Photo*</label>
                 <div className="UR-upload-area">
                   <input id="idUpload" type="file" accept={ALLOWED_IMAGE_TYPES.join(",")} onChange={(e) => handleFile(e, setIdPhoto, setIdPreview, ALLOWED_IMAGE_TYPES)} />
-                  {idPhoto && <button type="button" onClick={() => clearFile("id")}><X size={14}/></button>}
+                  {idPhoto && <button type="button" onClick={() => clearFile("id")} className="UR-clear-btn"><X size={14}/></button>}
                 </div>
                 {idPreview && <img src={idPreview} alt="ID Preview" className="UR-preview-img" />}
               </div>
 
               <div className="UR-form-group">
-                <label><Upload size={16}/> Upload CV (PDF/DOC)*</label>
+                <label><Upload size={16}/> Upload CV (Optional)</label>
                 <div className="UR-upload-area">
                   <input id="cvUpload" type="file" accept={ALLOWED_DOC_TYPES.join(",")} onChange={(e) => handleFile(e, setCvFile, () => {}, ALLOWED_DOC_TYPES)} />
-                  {cvFile && <button type="button" onClick={() => clearFile("cv")}><X size={14}/></button>}
+                  {cvFile && <button type="button" onClick={() => clearFile("cv")} className="UR-clear-btn"><X size={14}/></button>}
                 </div>
                 {cvFile && <p className="UR-file-name">{cvFile.name}</p>}
+                <span className="UR-optional-hint">Accepted formats: PDF, DOC, DOCX (Max 5MB)</span>
               </div>
             </div>
           </div>
@@ -235,7 +229,6 @@ function AluTRegForm() {
           </button>
         </form>
 
-        {/* Confirmation Popup */}
         {showPopup && popupData && (
           <div className="UR-popup-overlay">
             <div className="UR-popup-content">
@@ -284,7 +277,7 @@ function AluTRegForm() {
                   </div>
                   <div className="UR-popup-info-item">
                     <strong>CV File:</strong>
-                    <span>{popupData.cvFileName}</span>
+                    <span className={!cvFile ? "UR-not-uploaded" : ""}>{popupData.cvFileName}</span>
                   </div>
                 </div>
               </div>
