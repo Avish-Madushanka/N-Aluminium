@@ -15,11 +15,36 @@ const ItemsCartManage = () => {
   const [showQuotationModal, setShowQuotationModal] = useState(false);
   const [quotations, setQuotations] = useState([]);
   const [showQuotationsList, setShowQuotationsList] = useState(false);
+  const [apiAvailable, setApiAvailable] = useState(true);
 
   useEffect(() => {
     fetchCartItems();
-    fetchUserQuotations();
+    checkQuotationApi();
   }, []);
+
+  const checkQuotationApi = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) return;
+      
+      const response = await fetch('http://localhost:5003/api/test-quotations', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
+      if (response.ok) {
+        setApiAvailable(true);
+        fetchUserQuotations();
+      } else {
+        console.warn('Quotation API not available');
+        setApiAvailable(false);
+      }
+    } catch (error) {
+      console.warn('Quotation API check failed:', error);
+      setApiAvailable(false);
+    }
+  };
 
   const fetchCartItems = async () => {
     setLoading(true);
@@ -60,13 +85,24 @@ const ItemsCartManage = () => {
   };
 
   const fetchUserQuotations = async () => {
+    if (!apiAvailable) return;
+    
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5003/api/quotations/user', {
+      if (!token) return;
+      
+      const response = await fetch('http://localhost:5003/api/quotations/my-requests', {
         headers: {
           'Authorization': `Bearer ${token}`
         }
       });
+      
+      if (!response.ok) {
+        if (response.status === 404) {
+          setApiAvailable(false);
+        }
+        return;
+      }
       
       const result = await response.json();
       
@@ -241,6 +277,11 @@ const ItemsCartManage = () => {
   };
 
   const handleRequestQuotation = async () => {
+    if (!apiAvailable) {
+      setError('Quotation service is currently unavailable. Please try again later.');
+      return;
+    }
+
     if (cartItems.length === 0) {
       setError('Your cart is empty');
       return;
@@ -250,18 +291,40 @@ const ItemsCartManage = () => {
       setLoading(true);
       const token = localStorage.getItem('token');
       
-      const quotationItems = cartItems.map(item => ({
-        itemId: item.itemId || item._id,
-        name: item.name,
-        price: item.price,
-        discountedPrice: item.discountedPrice,
-        discount: item.discount,
-        quantity: item.quantity,
-        unit: item.unit,
-        image: item.image,
-        selectedColor: item.selectedColor,
-        selectedSize: item.selectedSize
-      }));
+      if (!token) {
+        setError('Please login to request a quotation');
+        setLoading(false);
+        return;
+      }
+
+      const quotationItems = cartItems.map(item => {
+        const itemId = item.productId || item._id;
+        if (!itemId) {
+          throw new Error('Item is missing ID');
+        }
+
+        return {
+          itemId: itemId,
+          name: item.name || 'Unknown Item',
+          price: parseFloat(item.price) || 0,
+          discountedPrice: parseFloat(item.discountedPrice) || parseFloat(item.price) || 0,
+          discount: parseFloat(item.discount) || 0,
+          quantity: parseInt(item.quantity) || 1,
+          unit: item.unit || 'piece',
+          image: item.image || '',
+          selectedColor: item.selectedColor || '',
+          selectedSize: item.selectedSize || ''
+        };
+      });
+
+      const subtotal = calculateSubtotal();
+      
+      const requestBody = {
+        items: quotationItems,
+        totalAmount: parseFloat(subtotal) || 0
+      };
+
+      console.log('Sending quotation request:', JSON.stringify(requestBody, null, 2));
 
       const response = await fetch('http://localhost:5003/api/quotations', {
         method: 'POST',
@@ -269,13 +332,24 @@ const ItemsCartManage = () => {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
-          items: quotationItems,
-          totalAmount: calculateSubtotal()
-        })
+        body: JSON.stringify(requestBody)
       });
 
-      const result = await response.json();
+      const responseText = await response.text();
+      console.log('Response status:', response.status);
+      console.log('Response text:', responseText);
+
+      let result;
+      try {
+        result = JSON.parse(responseText);
+      } catch (e) {
+        console.error('Failed to parse response as JSON:', e);
+        throw new Error(`Server returned invalid response. Status: ${response.status}`);
+      }
+
+      if (!response.ok) {
+        throw new Error(result.message || `Server error: ${response.status}`);
+      }
 
       if (result.success) {
         setShowQuotationModal(true);
@@ -285,7 +359,7 @@ const ItemsCartManage = () => {
       }
     } catch (error) {
       console.error('Quotation error:', error);
-      setError('Failed to connect to server: ' + error.message);
+      setError('Failed to request quotation: ' + error.message);
     } finally {
       setLoading(false);
     }
@@ -298,6 +372,7 @@ const ItemsCartManage = () => {
   const handleViewMyQuotations = () => {
     setShowQuotationsList(true);
     setShowQuotationModal(false);
+    fetchUserQuotations();
   };
 
   const handleCloseQuotationsList = () => {
@@ -405,7 +480,7 @@ const ItemsCartManage = () => {
       <div className="ICManage-header">
         <h1 className="ICManage-title">Shopping Cart</h1>
         <div className="ICManage-headerActions">
-          {quotations.length > 0 && (
+          {apiAvailable && quotations.length > 0 && (
             <button 
               className="ICManage-viewQuotationsBtn"
               onClick={() => setShowQuotationsList(true)}
@@ -438,7 +513,7 @@ const ItemsCartManage = () => {
         </div>
       )}
 
-      {getApprovedQuotationsCount() > 0 && (
+      {apiAvailable && getApprovedQuotationsCount() > 0 && (
         <div className="ICManage-quotationAlert">
           <div className="ICManage-quotationAlertIcon">✓</div>
           <div className="ICManage-quotationAlertContent">
@@ -669,7 +744,7 @@ const ItemsCartManage = () => {
           <p>Looks like you haven't added any items to your cart yet.</p>
           <button 
             className="ICManage-shopButton"
-            onClick={() => window.location.href = '/market'}
+            onClick={() => window.location.href = '/ItemMarket'}
           >
             Continue Shopping
           </button>
@@ -810,14 +885,15 @@ const ItemsCartManage = () => {
               <button 
                 className="ICManage-quotationBtn"
                 onClick={handleRequestQuotation}
-                disabled={cartItems.length === 0}
+                disabled={cartItems.length === 0 || !apiAvailable}
+                style={{ opacity: !apiAvailable ? 0.5 : 1 }}
               >
-                Request Quotation
+                {!apiAvailable ? 'Quotation Service Unavailable' : 'Request Quotation'}
               </button>
               
               <button 
                 className="ICManage-continueShopping"
-                onClick={() => window.location.href = '/ItemMarkert'}
+                onClick={() => window.location.href = '/ItemMarket'}
               >
                 Continue Shopping
               </button>

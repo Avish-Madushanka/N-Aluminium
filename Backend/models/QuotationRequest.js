@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const quotationItemSchema = new mongoose.Schema({
-  productId: {
+  itemId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Item',
     required: true
@@ -31,18 +31,23 @@ const quotationItemSchema = new mongoose.Schema({
     default: ''
   },
   image: {
-    type: String
+    type: String,
+    default: ''
   },
   unit: {
-    type: String
+    type: String,
+    default: 'piece'
+  },
+  discount: {
+    type: Number,
+    default: 0
   }
 });
 
 const quotationRequestSchema = new mongoose.Schema({
   quotationId: {
     type: String,
-    unique: true,
-    required: true
+    unique: true
   },
   userId: {
     type: mongoose.Schema.Types.ObjectId,
@@ -62,8 +67,7 @@ const quotationRequestSchema = new mongoose.Schema({
   items: [quotationItemSchema],
   totalAmount: {
     type: Number,
-    required: true,
-    default: 0
+    required: true
   },
   status: {
     type: String,
@@ -81,15 +85,15 @@ const quotationRequestSchema = new mongoose.Schema({
   respondedAt: {
     type: Date
   }
-}, { timestamps: true });
+});
 
-quotationRequestSchema.pre('save', async function(next) {
-  if (this.isNew && !this.quotationId) {
+quotationRequestSchema.pre('save', function(next) {
+  if (!this.quotationId) {
     const date = new Date();
     const year = date.getFullYear().toString().slice(-2);
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
     const day = date.getDate().toString().padStart(2, '0');
-    const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+    const random = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
     this.quotationId = `QT-${year}${month}${day}-${random}`;
   }
   next();

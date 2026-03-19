@@ -4,7 +4,7 @@ const BusinessOwner = require('../models/BusinessOwner');
 
 exports.createQuotationRequest = async (req, res) => {
   try {
-    const { items, totalAmount, userDetails } = req.body;
+    const { items, totalAmount } = req.body;
     
     if (!items || items.length === 0) {
       return res.status(400).json({
@@ -28,15 +28,33 @@ exports.createQuotationRequest = async (req, res) => {
       });
     }
 
+    let userName = '';
+    if (userModel === 'Client') {
+      userName = user.fullName || '';
+    } else {
+      userName = user.ownerName || user.businessName || '';
+    }
+
     const quotationRequest = new QuotationRequest({
       userId: req.user._id,
       userModel,
       userDetails: {
-        name: userDetails?.name || user.fullName || user.ownerName || user.businessName,
-        email: userDetails?.email || user.email,
-        phone: userDetails?.phone || user.contactNumber || user.phone
+        name: userName || 'User',
+        email: user.email || '',
+        phone: user.phone || user.contactNumber || ''
       },
-      items,
+      items: items.map(item => ({
+        itemId: item.itemId || item._id,
+        name: item.name,
+        quantity: item.quantity,
+        price: item.price,
+        discountedPrice: item.discountedPrice || item.price,
+        selectedColor: item.selectedColor || '',
+        selectedSize: item.selectedSize || '',
+        image: item.image || '',
+        unit: item.unit || 'piece',
+        discount: item.discount || 0
+      })),
       totalAmount,
       status: 'pending'
     });
@@ -66,13 +84,12 @@ exports.getAllQuotationRequests = async (req, res) => {
       filter.status = status;
     }
 
-    const queries = QuotationRequest.find(filter)
+    const quotations = await QuotationRequest.find(filter)
       .populate('userId', 'name email fullName ownerName businessName phone contactNumber')
       .sort({ requestedAt: -1 })
-      .limit(limit * 1)
-      .skip((page - 1) * limit);
+      .limit(parseInt(limit))
+      .skip((parseInt(page) - 1) * parseInt(limit));
 
-    const quotations = await queries;
     const total = await QuotationRequest.countDocuments(filter);
 
     res.json({
@@ -80,7 +97,7 @@ exports.getAllQuotationRequests = async (req, res) => {
       data: quotations,
       total,
       page: parseInt(page),
-      pages: Math.ceil(total / limit)
+      pages: Math.ceil(total / parseInt(limit))
     });
   } catch (error) {
     console.error('Get quotations error:', error);

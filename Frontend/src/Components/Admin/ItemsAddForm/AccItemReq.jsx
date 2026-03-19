@@ -39,6 +39,10 @@ const AccItemReq = () => {
           'Authorization': `Bearer ${token}`
         }
       });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
       
       const result = await response.json();
       
@@ -63,6 +67,10 @@ const AccItemReq = () => {
           'Authorization': `Bearer ${token}`
         }
       });
+
+      if (!response.ok) {
+        return;
+      }
       
       const result = await response.json();
       
@@ -100,6 +108,10 @@ const AccItemReq = () => {
           adminNotes: adminNotes
         })
       });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
       
       const result = await response.json();
       
@@ -259,8 +271,8 @@ const AccItemReq = () => {
                   <td>
                     <div className="ATreq-customer-info">
                       <div className="ATreq-customer-name">{quotation.userDetails?.name || 'N/A'}</div>
-                      <div className="ATreq-customer-email">{quotation.userDetails?.email}</div>
-                      <div className="ATreq-customer-phone">{quotation.userDetails?.phone}</div>
+                      <div className="ATreq-customer-email">{quotation.userDetails?.email || 'N/A'}</div>
+                      <div className="ATreq-customer-phone">{quotation.userDetails?.phone || 'N/A'}</div>
                     </div>
                   </td>
                   <td>
@@ -331,15 +343,15 @@ const AccItemReq = () => {
                 <h3>Customer Information</h3>
                 <div className="ATreq-info-row">
                   <span className="ATreq-info-label">Name:</span>
-                  <span className="ATreq-info-value">{selectedQuotation.userDetails?.name}</span>
+                  <span className="ATreq-info-value">{selectedQuotation.userDetails?.name || 'N/A'}</span>
                 </div>
                 <div className="ATreq-info-row">
                   <span className="ATreq-info-label">Email:</span>
-                  <span className="ATreq-info-value">{selectedQuotation.userDetails?.email}</span>
+                  <span className="ATreq-info-value">{selectedQuotation.userDetails?.email || 'N/A'}</span>
                 </div>
                 <div className="ATreq-info-row">
                   <span className="ATreq-info-label">Phone:</span>
-                  <span className="ATreq-info-value">{selectedQuotation.userDetails?.phone}</span>
+                  <span className="ATreq-info-value">{selectedQuotation.userDetails?.phone || 'N/A'}</span>
                 </div>
               </div>
 
@@ -364,7 +376,7 @@ const AccItemReq = () => {
                         <div className="ATreq-item-pricing">
                           <span className="ATreq-item-quantity">Qty: {item.quantity}</span>
                           <span className="ATreq-item-price">
-                            Rs. {formatPrice(item.discountedPrice || item.price)} / {item.unit}
+                            Rs. {formatPrice(item.discountedPrice || item.price)} / {item.unit || 'piece'}
                           </span>
                         </div>
                         <div className="ATreq-item-total">

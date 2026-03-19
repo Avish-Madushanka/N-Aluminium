@@ -47,7 +47,7 @@ const cartItemSchema = new mongoose.Schema({
   sizes: [{
     type: String
   }]
-}, { timestamps: true });
+}, { _id: true, timestamps: true });
 
 const cartSchema = new mongoose.Schema({
   userId: {

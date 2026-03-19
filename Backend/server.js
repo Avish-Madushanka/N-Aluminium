@@ -11,7 +11,7 @@ const connectDB = require('./config/db');
 console.log('[Server Startup] Initializing: Attempting to load route modules...');
 let clientRoutes, bOwnerRoutes, authRoutes, calendarSettingsRoutes,
     bookingRoutes, reviewRoutes, scrapTypeRoutes, shopLocationRoutes, adminRoutes,
-    saleItemRoutes, adminStatsRoutes, projectRoutes, itemRoutes, cartRoutes;
+    saleItemRoutes, adminStatsRoutes, projectRoutes, itemRoutes, cartRoutes, quotationRoutes;
 
 const loadRoute = (routeName, path) => {
   try {
@@ -43,6 +43,17 @@ projectRoutes = loadRoute('projectRoutes', './routes/projectRoutes');
 itemRoutes = loadRoute('itemRoutes', './routes/itemRoutes');
 cartRoutes = loadRoute('cartRoutes', './routes/cartRoutes');
 quotationRoutes = loadRoute('quotationRoutes', './routes/quotationRoutes');
+
+console.log('\n=== QUOTATION ROUTES DEBUG ===');
+if (quotationRoutes) {
+  console.log('✓ quotationRoutes loaded successfully');
+  console.log('  Type:', typeof quotationRoutes);
+  console.log('  Is Router:', !!quotationRoutes.stack);
+  console.log('  Stack length:', quotationRoutes.stack ? quotationRoutes.stack.length : 0);
+} else {
+  console.error('✗ quotationRoutes is NULL or UNDEFINED!');
+}
+console.log('=== END DEBUG ===\n');
 
 console.log('[Server Startup] Loading controllers and middleware...');
 const { createInitialAdmin } = require('./controllers/adminController');
@@ -95,6 +106,7 @@ if (fs.existsSync(uploadsDirectory)) {
     }
 }
 
+// Test endpoints
 app.get('/api/health', (req, res) => {
     console.log('[Health Check] /api/health endpoint was hit.');
     res.status(200).json({ status: 'ok', message: 'Backend API is running and healthy.' });
@@ -104,18 +116,35 @@ app.get('/api/test', (req, res) => {
     res.json({ message: 'Server is working', timestamp: new Date().toISOString() });
 });
 
+app.get('/api/test-quotations', (req, res) => {
+  res.json({ 
+    message: 'Quotations test endpoint working', 
+    timestamp: new Date().toISOString(),
+    routes: {
+      quotationsLoaded: !!quotationRoutes,
+      quotationsType: quotationRoutes ? typeof quotationRoutes : 'null',
+      isRouter: quotationRoutes ? !!quotationRoutes.stack : false
+    }
+  });
+});
+
 console.log('[Server Config] Mounting routes directly...');
 
 const routeMountMap = new WeakMap();
 
 function mountRoute(app, path, router) {
-    if (!router) return;
+    if (!router) {
+        console.warn(`[Server Config] WARNING: Router for ${path} is null, skipping mount.`);
+        return;
+    }
+    console.log(`[Server Config] Mounting ${path}...`);
     app.use(path, router);
     const stack = app._router.stack;
     for (let i = stack.length - 1; i >= 0; i--) {
         const layer = stack[i];
         if (layer.handle === router) {
             routeMountMap.set(layer, path);
+            console.log(`[Server Config] Successfully mounted ${path}`);
             break;
         }
     }
@@ -148,6 +177,15 @@ if (cartRoutes) {
 } else {
     console.error('[Server Config]  ERROR: cartRoutes is null or undefined!');
 }
+
+app.use('*', (req, res) => {
+    console.log(`[404] ${req.method} ${req.originalUrl} - Route not found`);
+    res.status(404).json({ 
+        success: false, 
+        message: `Route ${req.method} ${req.originalUrl} not found`,
+        availableRoutes: 'Check server console for registered routes'
+    });
+});
 
 console.log('\n=== REGISTERED ROUTES ===');
 
