@@ -42,6 +42,7 @@ adminStatsRoutes = loadRoute('adminStatsRoutes', './routes/adminStatsRoutes');
 projectRoutes = loadRoute('projectRoutes', './routes/projectRoutes');
 itemRoutes = loadRoute('itemRoutes', './routes/itemRoutes');
 cartRoutes = loadRoute('cartRoutes', './routes/cartRoutes');
+quotationRoutes = loadRoute('quotationRoutes', './routes/quotationRoutes');
 
 console.log('[Server Startup] Loading controllers and middleware...');
 const { createInitialAdmin } = require('./controllers/adminController');
@@ -132,6 +133,7 @@ mountRoute(app, '/api/saleitems', saleItemRoutes);
 mountRoute(app, '/api/projects', projectRoutes);
 mountRoute(app, '/api/admin', adminRoutes);
 mountRoute(app, '/api/admin/stats', adminStatsRoutes);
+mountRoute(app, '/api/quotations', quotationRoutes);
 
 if (itemRoutes) {
     mountRoute(app, '/api/items', itemRoutes);

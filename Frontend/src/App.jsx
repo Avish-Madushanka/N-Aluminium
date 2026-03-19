@@ -66,6 +66,7 @@ import ItemAddForm from './Components/Admin/ItemsAddForm/ItemsAddForm';
 import AluTRegForm from './Components/AluTReg/AluTRegForm';
 import ItemsManage from './Components/Admin/ItemsAddForm/ItemsManage';
 import ItemsCartManage from './Components/ItemMarkert/ItemsCartManage';
+import AccItemReq from './Components/Admin/ItemsAddForm/AccItemReq';
 
 console.log('=== IMPORT DEBUG ===');
 console.log('ItemsManage imported:', ItemsManage);
@@ -365,6 +366,7 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
                            <Route path="/Admin/Reviews" element={<DisReview />} />
                            <Route path="/Admin/AdminLocationManager" element={<AdminLocationManager />} />
                            <Route path="/Admin/ItemsManage" element={<ItemsManage /> } />
+                           <Route path="/Admin/AccItemReq" element={<AccItemReq /> } />
                         </Route>
                      </Route>
 

@@ -343,7 +343,8 @@ const ItemsManage = () => {
   const getImageUrl = (imagePath) => {
     if (!imagePath) return 'https://via.placeholder.com/100';
     if (imagePath.startsWith('http')) return imagePath;
-    return `http://localhost:5003${imagePath}`;
+    if (imagePath.startsWith('/uploads')) return `http://localhost:5003${imagePath}`;
+    return `http://localhost:5003/uploads/items/${imagePath}`;
   };
 
   const formatPrice = (price) => {
@@ -657,6 +658,8 @@ const ItemsManage = () => {
                 <th>Stock</th>
                 <th>Discount</th>
                 <th>Status</th>
+                <th>Colors</th>
+                <th>Sizes</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -707,6 +710,36 @@ const ItemsManage = () => {
                       )}
                     </td>
                     <td>
+                      {item.colors && item.colors.length > 0 ? (
+                        <div className="ItemMng-colorBadges">
+                          {item.colors.slice(0, 3).map(color => (
+                            <span key={color} className="ItemMng-colorBadge">
+                              {colorOptions.find(c => c.id === color)?.name || color}
+                            </span>
+                          ))}
+                          {item.colors.length > 3 && (
+                            <span className="ItemMng-moreBadge">+{item.colors.length - 3}</span>
+                          )}
+                        </div>
+                      ) : (
+                        <span className="ItemMng-noData">-</span>
+                      )}
+                    </td>
+                    <td>
+                      {item.sizes && item.sizes.length > 0 ? (
+                        <div className="ItemMng-sizeBadges">
+                          {item.sizes.slice(0, 3).map(size => (
+                            <span key={size} className="ItemMng-sizeBadge">{size}</span>
+                          ))}
+                          {item.sizes.length > 3 && (
+                            <span className="ItemMng-moreBadge">+{item.sizes.length - 3}</span>
+                          )}
+                        </div>
+                      ) : (
+                        <span className="ItemMng-noData">-</span>
+                      )}
+                    </td>
+                    <td>
                       <div className="ItemMng-actionButtons">
                         <button
                           className="ItemMng-editButton"
@@ -726,7 +759,7 @@ const ItemsManage = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="8" className="ItemMng-noData">
+                  <td colSpan="10" className="ItemMng-noData">
                     No products found. Click "Add New Product" to create one.
                   </td>
                 </tr>
