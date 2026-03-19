@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './AluRegVideoUp.css';
 
 const getYouTubeId = (url = '') => {
@@ -26,7 +26,7 @@ const getYouTubeThumbnail = (url = '') => {
 };
 
 export default function AluRegVideoUp() {
-  const [videos, setVideos] = useState([
+  const [videos] = useState([
     {
       id: 1,
       title: 'Acousticlive show at terraces',
@@ -91,7 +91,6 @@ export default function AluRegVideoUp() {
   const [filteredVideos, setFilteredVideos] = useState(videos);
   const [thumbnailError, setThumbnailError] = useState({});
   const videoPlayerRef = useRef(null);
-  const fileInputRef = useRef(null);
 
   useEffect(() => {
     const filtered = videos.filter((video) =>
@@ -104,133 +103,6 @@ export default function AluRegVideoUp() {
     if (thumbnailError[video.id]) return null;
     if (video.thumbnail) return video.thumbnail;
     return getYouTubeThumbnail(video.videoUrl) || null;
-  };
-
-  const handleVideoUpload = (event) => {
-    const files = Array.from(event.target.files);
-
-    files.forEach((file) => {
-      if (!file.type.startsWith('video/')) return;
-
-      const video = document.createElement('video');
-      video.preload = 'metadata';
-
-      video.onloadedmetadata = () => {
-        URL.revokeObjectURL(video.src);
-        const duration = formatDuration(video.duration);
-        const videoUrl = URL.createObjectURL(file);
-
-        createVideoThumbnail(file, (thumbnailUrl) => {
-          const newVideo = {
-            id: Date.now() + Math.random(),
-            title: file.name
-              .replace(/\.[^/.]+$/, '')
-              .replace(/[-_]/g, ' '),
-            duration,
-            thumbnail:
-              thumbnailUrl ||
-              'https://images.unsplash.com/photo-1492619375914-88005aa9e8fb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80',
-            videoUrl,
-            color: getRandomColor(),
-            isUploaded: true,
-          };
-          setVideos((prev) => [...prev, newVideo]);
-        });
-      };
-
-      video.src = URL.createObjectURL(file);
-    });
-
-    event.target.value = '';
-  };
-
-  const createVideoThumbnail = (file, callback) => {
-    const video = document.createElement('video');
-    video.preload = 'metadata';
-    video.currentTime = 1;
-
-    video.onloadeddata = () => {
-      const canvas = document.createElement('canvas');
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
-      const ctx = canvas.getContext('2d');
-      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-      canvas.toBlob(
-        (blob) => {
-          callback(URL.createObjectURL(blob));
-        },
-        'image/jpeg',
-        0.8
-      );
-      URL.revokeObjectURL(video.src);
-    };
-
-    video.onerror = () => callback(null);
-    video.src = URL.createObjectURL(file);
-  };
-
-  const handleVideoUrlSubmit = () => {
-    const url = prompt('Enter video URL (YouTube, MP4, WebM, etc.):');
-    if (!url) return;
-
-    try {
-      new URL(url);
-    } catch {
-      alert('Please enter a valid URL');
-      return;
-    }
-
-    const defaultTitle =
-      url.split('/').pop().split('?')[0] || 'New Video';
-    const title = prompt('Enter video title:', defaultTitle);
-    if (!title) return;
-
-    let thumbnailUrl = '';
-    if (!isYouTubeUrl(url)) {
-      thumbnailUrl = prompt('Enter thumbnail image URL (optional):', '') || '';
-    }
-
-    const newVideo = {
-      id: Date.now() + Math.random(),
-      title,
-      duration: '00:00',
-      thumbnail:
-        thumbnailUrl ||
-        (isYouTubeUrl(url) ? getYouTubeThumbnail(url) : null) ||
-        'https://images.unsplash.com/photo-1492619375914-88005aa9e8fb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80',
-      videoUrl: url,
-      color: getRandomColor(),
-      isUrl: true,
-    };
-
-    if (!isYouTubeUrl(url)) {
-      const tempVideo = document.createElement('video');
-      tempVideo.preload = 'metadata';
-      tempVideo.onloadedmetadata = () => {
-        newVideo.duration = formatDuration(tempVideo.duration);
-        setVideos((prev) => [...prev]);
-      };
-      tempVideo.src = url;
-    }
-
-    setVideos((prev) => [...prev, newVideo]);
-  };
-
-  const formatDuration = (seconds) => {
-    if (!seconds || isNaN(seconds)) return '00:00';
-    const mins = Math.floor(seconds / 60);
-    const secs = Math.floor(seconds % 60);
-    return `${mins.toString().padStart(2, '0')}:${secs
-      .toString()
-      .padStart(2, '0')}`;
-  };
-
-  const getRandomColor = () => {
-    const colors = [
-      '#3498db', '#e74c3c', '#2ecc71',
-      '#f39c12', '#9b59b6', '#1abc9c', '#e67e22',
-    ];
-    return colors[Math.floor(Math.random() * colors.length)];
   };
 
   const handleVideoClick = (video) => {
@@ -282,38 +154,9 @@ export default function AluRegVideoUp() {
         </div>
       </div>
 
-      <div className="AluRegVideoUp-upload-section">
-        <label className="AluRegVideoUp-upload-label">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
-          </svg>
-          Upload Video File
-          <input
-            type="file"
-            ref={fileInputRef}
-            onChange={handleVideoUpload}
-            accept="video/mp4,video/webm,video/ogg,video/quicktime"
-            multiple
-            hidden
-          />
-        </label>
-
-        <button className="AluRegVideoUp-url-btn" onClick={handleVideoUrlSubmit}>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1 0 1.71-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z" />
-          </svg>
-          Add from URL
-        </button>
-
-        <span className="AluRegVideoUp-upload-hint">
-          Upload files or add video links (YouTube supported)
-        </span>
-      </div>
-
       {showPlayer && selectedVideo && (
         <div className="AluRegVideoUp-player-overlay">
           <div className="AluRegVideoUp-player-container">
-
             {isYouTubeUrl(selectedVideo.videoUrl) ? (
               <iframe
                 key={selectedVideo.videoUrl}
@@ -337,7 +180,6 @@ export default function AluRegVideoUp() {
                 Your browser does not support the video tag.
               </video>
             )}
-
             <div className="AluRegVideoUp-player-info">
               <span className="AluRegVideoUp-player-title">
                 {selectedVideo.title}

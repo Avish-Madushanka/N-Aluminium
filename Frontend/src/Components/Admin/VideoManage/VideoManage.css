@@ -1,0 +1,417 @@
+.VideoManage-library {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 24px;
+  background: white;
+}
+
+.VideoManage-header {
+  margin-bottom: 32px;
+}
+
+.VideoManage-title-section {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.VideoManage-title {
+  font-size: 28px;
+  font-weight: 500;
+  margin: 0;
+  color: #000;
+}
+
+.VideoManage-count {
+  font-size: 16px;
+  color: #666;
+  font-weight: 400;
+}
+
+.VideoManage-header-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.VideoManage-search-section {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex: 1;
+}
+
+.VideoManage-search-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background: white;
+  flex: 1;
+}
+
+.VideoManage-search-icon {
+  position: absolute;
+  left: 12px;
+  color: #666;
+  pointer-events: none;
+}
+
+.VideoManage-search-input {
+  width: 100%;
+  padding: 10px 12px 10px 40px;
+  font-size: 14px;
+  border: none;
+  border-radius: 8px;
+  outline: none;
+  background: transparent;
+  color: #333;
+}
+
+.VideoManage-search-input::placeholder {
+  color: #999;
+}
+
+.VideoManage-filters-btn {
+  padding: 10px 20px;
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+
+.VideoManage-filters-btn:hover {
+  background: #f5f5f5;
+}
+
+.VideoManage-add-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 24px;
+  background: #1e293b;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+
+.VideoManage-add-btn:hover {
+  background: #0f172a;
+}
+
+.VideoManage-form-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.VideoManage-form-container {
+  background: white;
+  padding: 32px;
+  border-radius: 24px;
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.VideoManage-form-container h2 {
+  font-size: 24px;
+  font-weight: 500;
+  color: #1e293b;
+  margin-bottom: 24px;
+}
+
+.VideoManage-form-group {
+  margin-bottom: 20px;
+}
+
+.VideoManage-form-group label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: #4b5563;
+  margin-bottom: 8px;
+}
+
+.VideoManage-form-group input {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 14px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  outline: none;
+  background: white;
+  color: #333;
+}
+
+.VideoManage-form-group input:focus {
+  border-color: #1e293b;
+  box-shadow: 0 0 0 2px rgba(30, 41, 59, 0.1);
+}
+
+.VideoManage-form-upload {
+  margin-bottom: 24px;
+}
+
+.VideoManage-upload-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px;
+  background: #f9fafc;
+  border: 2px dashed #e0e0e0;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #4b5563;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.VideoManage-upload-label:hover {
+  background: #f1f5f9;
+  border-color: #1e293b;
+}
+
+.VideoManage-form-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.VideoManage-submit-btn {
+  flex: 1;
+  padding: 12px;
+  background: #1e293b;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.VideoManage-submit-btn:hover {
+  background: #0f172a;
+}
+
+.VideoManage-cancel-btn {
+  flex: 1;
+  padding: 12px;
+  background: white;
+  color: #4b5563;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.VideoManage-cancel-btn:hover {
+  background: #f5f5f5;
+}
+
+.VideoManage-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  margin-top: 24px;
+}
+
+.VideoManage-card {
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+  border-radius: 12px;
+}
+
+.VideoManage-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 12px 20px -10px rgba(0,0,0,0.2);
+}
+
+.VideoManage-thumbnail {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/9;
+  border-radius: 12px;
+  margin-bottom: 8px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.VideoManage-thumbnail::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.3));
+  pointer-events: none;
+  z-index: 1;
+}
+
+.VideoManage-duration {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  background: rgba(0, 0, 0, 0.75);
+  color: white;
+  padding: 3px 8px;
+  border-radius: 30px;
+  font-size: 12px;
+  font-weight: 500;
+  z-index: 2;
+  backdrop-filter: blur(2px);
+}
+
+.VideoManage-yt-badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: rgba(255, 0, 0, 0.9);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  z-index: 2;
+}
+
+.VideoManage-delete-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(220, 38, 38, 0.9);
+  border: none;
+  color: white;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 3;
+  transition: background 0.2s;
+}
+
+.VideoManage-delete-btn:hover {
+  background: #b91c1c;
+}
+
+.VideoManage-video-title {
+  font-size: 14px;
+  color: #1e293b;
+  margin: 0;
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 480;
+  padding: 0 2px;
+}
+
+.VideoManage-thumbnail-fallback {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: inherit;
+}
+
+.VideoManage-thumbnail-fallback svg {
+  opacity: 0.7;
+  width: 40px;
+  height: 40px;
+  fill: white;
+}
+
+.VideoManage-no-results {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 40px;
+  color: #999;
+  font-size: 16px;
+}
+
+@media (max-width: 1024px) {
+  .VideoManage-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .VideoManage-header-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .VideoManage-search-section {
+    width: 100%;
+  }
+  
+  .VideoManage-add-btn {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .VideoManage-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .VideoManage-title {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .VideoManage-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .VideoManage-search-section {
+    flex-direction: column;
+  }
+  
+  .VideoManage-filters-btn {
+    width: 100%;
+  }
+  
+  .VideoManage-form-container {
+    padding: 24px;
+  }
+}
