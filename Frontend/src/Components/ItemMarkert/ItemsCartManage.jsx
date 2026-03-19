@@ -12,9 +12,13 @@ const ItemsCartManage = () => {
   const [editColor, setEditColor] = useState('');
   const [editSize, setEditSize] = useState('');
   const [deleteConfirm, setDeleteConfirm] = useState(null);
+  const [showQuotationModal, setShowQuotationModal] = useState(false);
+  const [quotations, setQuotations] = useState([]);
+  const [showQuotationsList, setShowQuotationsList] = useState(false);
 
   useEffect(() => {
     fetchCartItems();
+    fetchUserQuotations();
   }, []);
 
   const fetchCartItems = async () => {
@@ -52,6 +56,25 @@ const ItemsCartManage = () => {
       setError('Failed to connect to server: ' + error.message);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchUserQuotations = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch('http://localhost:5003/api/quotations/user', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
+      const result = await response.json();
+      
+      if (result.success) {
+        setQuotations(result.data);
+      }
+    } catch (error) {
+      console.error('Fetch quotations error:', error);
     }
   };
 
@@ -217,6 +240,70 @@ const ItemsCartManage = () => {
     }
   };
 
+  const handleRequestQuotation = async () => {
+    if (cartItems.length === 0) {
+      setError('Your cart is empty');
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const token = localStorage.getItem('token');
+      
+      const quotationItems = cartItems.map(item => ({
+        itemId: item.itemId || item._id,
+        name: item.name,
+        price: item.price,
+        discountedPrice: item.discountedPrice,
+        discount: item.discount,
+        quantity: item.quantity,
+        unit: item.unit,
+        image: item.image,
+        selectedColor: item.selectedColor,
+        selectedSize: item.selectedSize
+      }));
+
+      const response = await fetch('http://localhost:5003/api/quotations', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          items: quotationItems,
+          totalAmount: calculateSubtotal()
+        })
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        setShowQuotationModal(true);
+        await fetchUserQuotations();
+      } else {
+        setError(result.message || 'Failed to request quotation');
+      }
+    } catch (error) {
+      console.error('Quotation error:', error);
+      setError('Failed to connect to server: ' + error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCloseQuotationModal = () => {
+    setShowQuotationModal(false);
+  };
+
+  const handleViewMyQuotations = () => {
+    setShowQuotationsList(true);
+    setShowQuotationModal(false);
+  };
+
+  const handleCloseQuotationsList = () => {
+    setShowQuotationsList(false);
+  };
+
   const calculateSubtotal = () => {
     return cartItems.reduce((total, item) => {
       const price = item.discountedPrice || item.price;
@@ -247,6 +334,37 @@ const ItemsCartManage = () => {
     }).format(price);
   };
 
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  };
+
+  const getStatusBadgeClass = (status) => {
+    switch(status) {
+      case 'pending': return 'ICManage-status-pending';
+      case 'approved': return 'ICManage-status-approved';
+      case 'rejected': return 'ICManage-status-rejected';
+      case 'completed': return 'ICManage-status-completed';
+      default: return '';
+    }
+  };
+
+  const getStatusText = (status) => {
+    switch(status) {
+      case 'pending': return 'Your quotation is being reviewed by admin';
+      case 'approved': return 'Your quotation has been approved! Prepare for checkout';
+      case 'rejected': return 'Your quotation has been rejected. Please contact admin';
+      case 'completed': return 'Quotation completed successfully';
+      default: return '';
+    }
+  };
+
   const colorOptions = [
     { id: 'white', name: 'White', color: '#ffffff' },
     { id: 'black', name: 'Black', color: '#000000' },
@@ -274,11 +392,27 @@ const ItemsCartManage = () => {
     return color ? color.name : colorId;
   };
 
+  const getPendingQuotationsCount = () => {
+    return quotations.filter(q => q.status === 'pending').length;
+  };
+
+  const getApprovedQuotationsCount = () => {
+    return quotations.filter(q => q.status === 'approved').length;
+  };
+
   return (
     <div className="ICManage-container">
       <div className="ICManage-header">
         <h1 className="ICManage-title">Shopping Cart</h1>
         <div className="ICManage-headerActions">
+          {quotations.length > 0 && (
+            <button 
+              className="ICManage-viewQuotationsBtn"
+              onClick={() => setShowQuotationsList(true)}
+            >
+              My Quotations ({getPendingQuotationsCount()} pending)
+            </button>
+          )}
           {selectedItems.length > 0 && (
             <button 
               className="ICManage-removeSelected"
@@ -301,6 +435,16 @@ const ItemsCartManage = () => {
         <div className="ICManage-error">
           <span>{error}</span>
           <button className="ICManage-errorClose" onClick={() => setError('')}>×</button>
+        </div>
+      )}
+
+      {getApprovedQuotationsCount() > 0 && (
+        <div className="ICManage-quotationAlert">
+          <div className="ICManage-quotationAlertIcon">✓</div>
+          <div className="ICManage-quotationAlertContent">
+            <h3>Quotation Approved!</h3>
+            <p>You have {getApprovedQuotationsCount()} approved quotation(s). Click "My Quotations" to view and proceed.</p>
+          </div>
         </div>
       )}
 
@@ -431,6 +575,86 @@ const ItemsCartManage = () => {
               >
                 Save Changes
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showQuotationModal && (
+        <div className="ICManage-modalOverlay" onClick={handleCloseQuotationModal}>
+          <div className="ICManage-quotationModal" onClick={(e) => e.stopPropagation()}>
+            <div className="ICManage-quotationModalHeader">
+              <div className="ICManage-quotationModalIcon">✓</div>
+              <h2>Quotation Request Sent!</h2>
+              <button className="ICManage-quotationModalClose" onClick={handleCloseQuotationModal}>×</button>
+            </div>
+            <div className="ICManage-quotationModalBody">
+              <p>Your quotation request has been successfully submitted to the admin.</p>
+              <p className="ICManage-quotationModalNote">You will be notified once the admin reviews your request.</p>
+              <div className="ICManage-quotationModalActions">
+                <button 
+                  className="ICManage-quotationModalViewBtn"
+                  onClick={handleViewMyQuotations}
+                >
+                  View My Quotations
+                </button>
+                <button 
+                  className="ICManage-quotationModalCloseBtn"
+                  onClick={handleCloseQuotationModal}
+                >
+                  Continue Shopping
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showQuotationsList && (
+        <div className="ICManage-modalOverlay" onClick={handleCloseQuotationsList}>
+          <div className="ICManage-quotationsListModal" onClick={(e) => e.stopPropagation()}>
+            <div className="ICManage-quotationsListHeader">
+              <h2>My Quotations</h2>
+              <button className="ICManage-quotationsListClose" onClick={handleCloseQuotationsList}>×</button>
+            </div>
+            <div className="ICManage-quotationsListBody">
+              {quotations.length === 0 ? (
+                <div className="ICManage-noQuotations">
+                  <p>No quotations found</p>
+                </div>
+              ) : (
+                quotations.map(quotation => (
+                  <div key={quotation._id} className="ICManage-quotationCard">
+                    <div className="ICManage-quotationCardHeader">
+                      <span className="ICManage-quotationId">{quotation.quotationId}</span>
+                      <span className={`ICManage-quotationStatus ${getStatusBadgeClass(quotation.status)}`}>
+                        {quotation.status}
+                      </span>
+                    </div>
+                    <div className="ICManage-quotationCardBody">
+                      <div className="ICManage-quotationInfo">
+                        <span>Items: {quotation.items.length}</span>
+                        <span>Total: Rs. {formatPrice(quotation.totalAmount)}</span>
+                        <span>Date: {formatDate(quotation.requestedAt)}</span>
+                      </div>
+                      <p className="ICManage-quotationMessage">
+                        {getStatusText(quotation.status)}
+                      </p>
+                      {quotation.adminNotes && (
+                        <div className="ICManage-quotationAdminNotes">
+                          <strong>Admin Notes:</strong>
+                          <p>{quotation.adminNotes}</p>
+                        </div>
+                      )}
+                      {quotation.status === 'approved' && (
+                        <button className="ICManage-quotationProceedBtn">
+                          Proceed to Checkout
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                ))
+              )}
             </div>
           </div>
         </div>
@@ -583,8 +807,12 @@ const ItemsCartManage = () => {
                 <span>Rs. {formatPrice(calculateSubtotal())}</span>
               </div>
               
-              <button className="ICManage-checkoutBtn">
-                Confirm Quotation
+              <button 
+                className="ICManage-quotationBtn"
+                onClick={handleRequestQuotation}
+                disabled={cartItems.length === 0}
+              >
+                Request Quotation
               </button>
               
               <button 
