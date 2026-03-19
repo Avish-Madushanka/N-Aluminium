@@ -584,12 +584,12 @@ const ItemsCartManage = () => {
               </div>
               
               <button className="ICManage-checkoutBtn">
-                Proceed to Checkout
+                Confirm Quotation
               </button>
               
               <button 
                 className="ICManage-continueShopping"
-                onClick={() => window.location.href = '/market'}
+                onClick={() => window.location.href = '/ItemMarkert'}
               >
                 Continue Shopping
               </button>
