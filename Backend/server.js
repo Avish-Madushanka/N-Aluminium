@@ -11,7 +11,8 @@ const connectDB = require('./config/db');
 console.log('[Server Startup] Initializing: Attempting to load route modules...');
 let clientRoutes, bOwnerRoutes, authRoutes, calendarSettingsRoutes,
     bookingRoutes, reviewRoutes, scrapTypeRoutes, shopLocationRoutes, adminRoutes,
-    saleItemRoutes, adminStatsRoutes, projectRoutes, itemRoutes, cartRoutes, quotationRoutes;
+    saleItemRoutes, adminStatsRoutes, projectRoutes, itemRoutes, cartRoutes, 
+    quotationRoutes, alumniRoutes;  // Added alumniRoutes
 
 const loadRoute = (routeName, path) => {
   try {
@@ -43,6 +44,7 @@ projectRoutes = loadRoute('projectRoutes', './routes/projectRoutes');
 itemRoutes = loadRoute('itemRoutes', './routes/itemRoutes');
 cartRoutes = loadRoute('cartRoutes', './routes/cartRoutes');
 quotationRoutes = loadRoute('quotationRoutes', './routes/quotationRoutes');
+alumniRoutes = loadRoute('alumniRoutes', './routes/alumniRoutes');  // Added alumniRoutes load
 
 console.log('\n=== QUOTATION ROUTES DEBUG ===');
 if (quotationRoutes) {
@@ -52,6 +54,17 @@ if (quotationRoutes) {
   console.log('  Stack length:', quotationRoutes.stack ? quotationRoutes.stack.length : 0);
 } else {
   console.error('✗ quotationRoutes is NULL or UNDEFINED!');
+}
+console.log('=== END DEBUG ===\n');
+
+console.log('\n=== ALUMNI ROUTES DEBUG ===');
+if (alumniRoutes) {
+  console.log('✓ alumniRoutes loaded successfully');
+  console.log('  Type:', typeof alumniRoutes);
+  console.log('  Is Router:', !!alumniRoutes.stack);
+  console.log('  Stack length:', alumniRoutes.stack ? alumniRoutes.stack.length : 0);
+} else {
+  console.error('✗ alumniRoutes is NULL or UNDEFINED!');
 }
 console.log('=== END DEBUG ===\n');
 
@@ -65,7 +78,9 @@ const PORT = process.env.PORT || 5003;
 console.log('[Server Config] Applying core middleware...');
 app.use(cors({
     origin: process.env.FRONTEND_URL || 'http://localhost:5173',
-    credentials: true
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
 }));
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
@@ -73,9 +88,10 @@ app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 const uploadsDirectory = path.join(__dirname, 'uploads');
 app.use('/uploads', express.static(uploadsDirectory));
 
+// Added 'alumni' to subdirectories
 if (fs.existsSync(uploadsDirectory)) {
     console.log(`[Server Config] Serving static files from ${uploadsDirectory} at /uploads`);
-    const subdirectories = ['saleitems', 'projects', 'profiles', 'items', 'cart'];
+    const subdirectories = ['saleitems', 'projects', 'profiles', 'items', 'cart', 'alumni'];
     subdirectories.forEach(subDir => {
         const fullSubDirPath = path.join(uploadsDirectory, subDir);
         if (fs.existsSync(fullSubDirPath)) {
@@ -95,7 +111,7 @@ if (fs.existsSync(uploadsDirectory)) {
     try {
         fs.mkdirSync(uploadsDirectory, { recursive: true });
         console.log(`[Server Config] Successfully created 'uploads' directory at ${uploadsDirectory}`);
-        const subdirectoriesToCreate = ['saleitems', 'projects', 'profiles', 'items', 'cart'];
+        const subdirectoriesToCreate = ['saleitems', 'projects', 'profiles', 'items', 'cart', 'alumni'];
         subdirectoriesToCreate.forEach(subDir => {
             const fullSubDirPath = path.join(uploadsDirectory, subDir);
             fs.mkdirSync(fullSubDirPath, { recursive: true });
@@ -109,11 +125,18 @@ if (fs.existsSync(uploadsDirectory)) {
 // Test endpoints
 app.get('/api/health', (req, res) => {
     console.log('[Health Check] /api/health endpoint was hit.');
-    res.status(200).json({ status: 'ok', message: 'Backend API is running and healthy.' });
+    res.status(200).json({ 
+        status: 'ok', 
+        message: 'Backend API is running and healthy.',
+        timestamp: new Date().toISOString()
+    });
 });
 
 app.get('/api/test', (req, res) => {
-    res.json({ message: 'Server is working', timestamp: new Date().toISOString() });
+    res.json({ 
+        message: 'Server is working', 
+        timestamp: new Date().toISOString() 
+    });
 });
 
 app.get('/api/test-quotations', (req, res) => {
@@ -124,6 +147,18 @@ app.get('/api/test-quotations', (req, res) => {
       quotationsLoaded: !!quotationRoutes,
       quotationsType: quotationRoutes ? typeof quotationRoutes : 'null',
       isRouter: quotationRoutes ? !!quotationRoutes.stack : false
+    }
+  });
+});
+
+app.get('/api/test-alumni', (req, res) => {
+  res.json({ 
+    message: 'Alumni test endpoint working', 
+    timestamp: new Date().toISOString(),
+    routes: {
+      alumniLoaded: !!alumniRoutes,
+      alumniType: alumniRoutes ? typeof alumniRoutes : 'null',
+      isRouter: alumniRoutes ? !!alumniRoutes.stack : false
     }
   });
 });
@@ -163,6 +198,7 @@ mountRoute(app, '/api/projects', projectRoutes);
 mountRoute(app, '/api/admin', adminRoutes);
 mountRoute(app, '/api/admin/stats', adminStatsRoutes);
 mountRoute(app, '/api/quotations', quotationRoutes);
+mountRoute(app, '/api/alumni', alumniRoutes);  // Added alumni route mounting
 
 if (itemRoutes) {
     mountRoute(app, '/api/items', itemRoutes);
