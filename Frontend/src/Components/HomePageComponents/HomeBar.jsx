@@ -1,123 +1,87 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './HomeBar.css';
 
 const HomeBar = () => {
   return (
-    <div className="argus-scrap-markets">
-
-      <section className="overview-section">
-        <div className="overview-text">
-          <h2>Overview</h2>
-          <div className="p1">
-            <p>
-              Our MetaTrade platform is designed to transform the way aluminum is collected,
-              reused, and shared. We provide an innovative system where individuals, households, and
-              businesses can easily schedule aluminum scrap collections, ensuring that valuable materials
-              never go to waste. Through our marketplace, users can buy and sell reusable aluminum items,
-              creating new opportunities for sustainable trade and circular economy practices.
-            </p>
-            <p>
-              For businesses and manufacturers, our smart inventory system makes it simple to track,
-              manage, and utilize aluminum resources more efficiently. Designers and engineers can take
-              advantage of integrated 3D modeling tools to visualize, plan, and innovate with aluminum-based
-              projects, while business owners and creators can upload and showcase their aluminum projects
-              directly to our community. By combining convenience, technology, and sustainability, our platform builds a connected
-              ecosystem where aluminum is not just recycled but given a new purpose — helping reduce
-              environmental impact while empowering communities and industries to benefit from a stronger,
-              greener aluminum economy.
-            </p>
+    <section className="hb-section-wrapper">
+      <div className="hb-inner-container">
+        
+        <div className="hb-header-badge-row">
+          <div className="hb-badge-tag">
+            <span className="hb-badge-number">01</span>
+            <span className="hb-badge-text">ABOUT COMPANY</span>
           </div>
         </div>
 
-        <div className="image-container">
-          <div className="image-wrapper top-left">
+        <h2 className="hb-hero-heading">
+          We are a <span className="hb-highlight-text">passionate</span> team dedicated to aluminum recycling and sustainable resource management.
+        </h2>
+
+        <div className="hb-main-layout-grid">
+          <div className="hb-content-column">
+            
+            <div className="hb-top-info-row">
+              <div className="hb-experience-box">
+                <div className="hb-stats-display">
+                  <span className="hb-stats-num">15</span>
+                  <span className="hb-stats-plus">+</span>
+                </div>
+                <p className="hb-stats-label">Work Experience</p>
+              </div>
+
+              <div className="hb-description-box">
+                <p className="hb-main-paragraph">
+                  We believe aluminum resources should be managed efficiently and sustainably. That’s why we focus on smart planning and innovative recycling solutions.
+                </p>
+                
+                <Link to="/AboutUs" className="hb-link-wrapper">
+                  <div className="hb-action-button-group">
+                    <button className="hb-cta-btn-main">ABOUT US</button>
+                    <div className="hb-cta-icon-wrapper">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                    </div>
+                  </div>
+                </Link>
+
+              </div>
+            </div>
+
+            <div className="hb-features-sub-grid">
+              <div className="hb-feature-card">
+                <div className="hb-icon-container hb-icon-lime">
+                  <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" strokeWidth="1.5">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M12 8v8M8 12h8"/>
+                  </svg>
+                </div>
+                <h3 className="hb-feature-title">Landscape design</h3>
+                <p className="hb-feature-desc">Custom designs to bring your outdoor vision to life.</p>
+              </div>
+
+              <div className="hb-feature-card">
+                <div className="hb-icon-container hb-icon-dark">
+                  <svg viewBox="0 0 24 24" width="32" height="32" fill="white" stroke="white" strokeWidth="1.5">
+                    <path d="M12 3v18M3 12h18M5 5l14 14M5 19L19 5"/>
+                  </svg>
+                </div>
+                <h3 className="hb-feature-title">Garden installation</h3>
+                <p className="hb-feature-desc">Turn your dream garden into reality today, effortlessly.</p>
+              </div>
+            </div>
+
+          </div>
+
+          <div className="hb-image-column">
             <img 
-              src="https://www.spitfiredoors.co.uk/wp-content/uploads/2024/05/Bauhaus-internal-double-doors-SH-scaled-1.jpg" 
-              alt="Aluminum Door" 
+              src="https://www.chaluminium.com/wp-content/uploads/2023/11/Aluminum-in-Construction.jpg" 
+              className="hb-featured-img" 
+              alt="Aluminum Industry"
             />
           </div>
-          <div className="image-wrapper bottom-right">
-            <img 
-              src="https://premier-metals.com.au/wp-content/uploads/2015/06/scrap-metal-recycling-perth.png" 
-              alt="Scrap Recycling" 
-            />
-          </div>
         </div>
-      </section>
 
-      <section className="features-section">
-        <h2 className="features-title">Key Features</h2>
-        <div className="features-grid">
-
-          <div className="feature-item">
-            <div className="icon-wrapper">
-              <img src="https://cdn-icons-png.flaticon.com/128/4212/4212257.png" alt="Scrap Pickup" className="icon" />
-            </div>
-            <h3>Aluminum Scrap Pickup</h3>
-            <p>
-              Users can schedule a convenient pickup for their aluminum scraps directly through the platform. 
-              Our reliable collection team ensures timely service, helping households and businesses recycle with ease.
-            </p>
-          </div>
-
-          <div className="feature-item">
-            <div className="icon-wrapper">
-              <img src="https://cdn-icons-png.flaticon.com/128/9748/9748078.png" alt="Marketplace" className="icon" />
-            </div>
-            <h3>Buy & Sell Marketplace</h3>
-            <p>
-              A digital marketplace that allows users to buy and sell reusable items. This promotes a circular economy 
-              by giving pre-owned products a second life, reducing waste, and saving costs.
-            </p>
-          </div>
-
-          <div className="feature-item">
-            <div className="icon-wrapper">
-              <img src="https://cdn-icons-png.flaticon.com/128/4091/4091120.png" alt="Scrap Value" className="icon" />
-            </div>
-            <h3>Real-Time Scrap Value</h3>
-            <p>
-              The system displays updated aluminum scrap prices based on current market trends. 
-              Users can instantly estimate how much money they’ll earn from their collected scraps.
-            </p>
-          </div>
-
-          <div className="feature-item">
-            <div className="icon-wrapper">
-              <img src="https://cdn-icons-png.flaticon.com/128/1483/1483285.png" alt="Map Integration" className="icon" />
-            </div>
-            <h3>Interactive Map Integration</h3>
-            <p>
-              A live map feature shows available pickup zones, service areas, and routes. 
-              Users can track collection status and view location-based services visually.
-            </p>
-          </div>
-
-          <div className="feature-item">
-            <div className="icon-wrapper">
-              <img src="https://cdn-icons-png.flaticon.com/128/2950/2950678.png" alt="Notifications" className="icon" />
-            </div>
-            <h3>Notifications & Alerts</h3>
-            <p>
-              Automated alerts via email or platform notifications keep users informed about pickups, 
-              payments, offers, and important updates, ensuring smooth communication.
-            </p>
-          </div>
-
-          <div className="feature-item">
-            <div className="icon-wrapper">
-              <img src="https://cdn-icons-png.flaticon.com/128/7994/7994537.png" alt="Eco-Friendly" className="icon" />
-            </div>
-            <h3>Eco-Friendly Impact</h3>
-            <p>
-              Every feature supports sustainability by reducing landfill waste, encouraging reuse, and lowering carbon emissions. 
-              The platform helps communities actively contribute to a greener future.
-            </p>
-          </div>
-
-        </div>
-      </section>
-    </div>
+      </div>
+    </section>
   );
 };
 
