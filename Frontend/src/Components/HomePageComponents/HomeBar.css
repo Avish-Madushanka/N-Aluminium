@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 .hb-section-wrapper {
-  padding: 80px 20px;
+  padding: 100px 20px;
   background-color: #ffffff;
   font-family: 'Inter', sans-serif;
   display: flex;
@@ -39,7 +39,7 @@
   padding: 6px 15px;
   font-size: 12px;
   font-weight: 600;
-  color: #1a2b1a;
+  color: #292929;
   letter-spacing: 0.5px;
 }
 
@@ -47,16 +47,15 @@
   text-align: center;
   font-size: 52px;
   color: #1a2b1a;
-  font-weight: 600;
-  margin-bottom: 60px;
+  font-weight: bold;
+  margin-bottom: 80px;
   line-height: 1.1;
-  max-width: 900px;
   margin-left: auto;
   margin-right: auto;
 }
 
 .hb-highlight-text {
-  background-color: #1a2b1a;
+  background-color: #b10000;
   color: #ffffff;
   padding: 2px 18px;
   border-radius: 12px;
@@ -74,7 +73,7 @@
   display: grid;
   grid-template-columns: 180px 1fr;
   gap: 30px;
-  padding-bottom: 40px;
+  padding-bottom: 50px;
   border-bottom: 1px solid #f0f0f0;
   margin-bottom: 40px;
 }
@@ -92,31 +91,32 @@
 .hb-stats-num {
   font-size: 100px;
   font-weight: 700;
-  color: #1a2b1a;
+  color: #c00000;
 }
 
 .hb-stats-plus {
   font-size: 60px;
   font-weight: 700;
-  color: #d9ea59;
+  color: #cc0000;
   margin-left: 2px;
 }
 
 .hb-stats-label {
-  font-size: 16px;
-  color: #1a2b1a;
-  font-weight: 500;
+  font-size: 20px;
+  color: #161616;
+  font-weight: 700;
   margin-top: 5px;
 }
 
 .hb-main-paragraph {
   color: #6b7280;
-  font-size: 17px;
+  font-size: 18px;
   line-height: 1.6;
   margin-bottom: 30px;
+  text-align: justify;
 }
 
-.hb-link-wrapper {
+.hb-cta-link-wrapper {
   text-decoration: none;
   display: inline-block;
 }
@@ -127,28 +127,39 @@
 }
 
 .hb-cta-btn-main {
-  background-color: #d9ea59;
-  border: none;
-  color: #1a2b1a;
+  background-color: #ffffff;
+  border: 2px solid #2c2c2c; 
+  height: 60px;
+  color: #000000;
   padding: 18px 35px;
   font-weight: 700;
   font-size: 15px;
   border-top-left-radius: 8px;
   border-bottom-left-radius: 8px;
   cursor: pointer;
-  transition: opacity 0.2s ease;
+  transition: background-color 0.3s ease;
+}
+
+.hb-cta-btn-main:hover {
+  background-color: #e2e2e2;
 }
 
 .hb-cta-icon-wrapper {
   width: 56px;
-  height: 56px;
-  background-color: #1a2b1a;
+  height: 60px;
+  background-color: #2c2c2c;
   display: flex;
   align-items: center;
   justify-content: center;
   border-top-right-radius: 8px;
   border-bottom-right-radius: 8px;
   color: #ffffff;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.hb-cta-icon-wrapper:hover {
+  background-color: #1a1a1a;
 }
 
 .hb-features-sub-grid {
@@ -157,74 +168,241 @@
   gap: 30px;
 }
 
+.hb-icon-link {
+  display: inline-block;
+  text-decoration: none;
+  transition: transform 0.3s ease;
+}
+
+.hb-icon-link:hover {
+  transform: scale(1.05);
+}
+
 .hb-icon-container {
-  width: 60px;
-  height: 60px;
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 20px;
+  overflow: hidden;
+}
+
+.hb-feature-link-img {
+  width: 35px;
+  height: 35px;
+  object-fit: contain;
+}
+
+.hb-img-invert {
+  filter: invert(1);
 }
 
 .hb-icon-lime {
-  background-color: #d9ea59;
-  color: #1a2b1a;
+  background-color: #e9e9e9;
 }
 
 .hb-icon-dark {
-  background-color: #1a2b1a;
-  color: #ffffff;
+  background-color: #131313;
 }
 
 .hb-feature-title {
   font-size: 24px;
-  color: #1a2b1a;
-  font-weight: 600;
+  color: #181818;
+  font-weight: bold;
   margin-bottom: 10px;
 }
 
 .hb-feature-desc {
-  color: #6b7280;
+  color: #4e4e4e;
   font-size: 15px;
   line-height: 1.5;
+  font-weight: 400;
 }
 
 .hb-image-column {
   height: 100%;
+  display: flex;
+  align-items: center;
 }
 
 .hb-featured-img {
-  width: 100%;
-  height: 100%;
-  min-height: 500px;
+  width: 600px;
+  height: 450px;
   object-fit: cover;
   border-radius: 16px;
 }
 
 @media (max-width: 1024px) {
+  .hb-section-wrapper {
+    padding: 60px 20px;
+  }
+
   .hb-main-layout-grid {
     grid-template-columns: 1fr;
+    gap: 40px;
   }
+
   .hb-hero-heading {
     font-size: 38px;
+    margin-bottom: 40px;
   }
+
   .hb-featured-img {
-    height: 400px;
-    min-height: auto;
+    max-height: 400px;
+    width: 100%;
+  }
+
+  .hb-stats-num {
+    font-size: 80px;
+  }
+
+  .hb-stats-plus {
+    font-size: 50px;
+  }
+
+  .hb-stats-label {
+    font-size: 18px;
+  }
+
+  .hb-feature-title {
+    font-size: 22px;
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
+  .hb-section-wrapper {
+    padding: 40px 16px;
+  }
+
+  .hb-hero-heading {
+    font-size: 32px;
+  }
+
+  .hb-highlight-text {
+    padding: 2px 12px;
+  }
+
   .hb-top-info-row {
     grid-template-columns: 1fr;
+    gap: 20px;
+    padding-bottom: 30px;
+    margin-bottom: 30px;
   }
+
   .hb-experience-box {
     border-right: none;
     border-bottom: 1px solid #e5e7eb;
     padding-bottom: 20px;
   }
+
+  .hb-stats-display {
+    justify-content: flex-start;
+  }
+
+  .hb-main-paragraph {
+    font-size: 16px;
+    margin-bottom: 25px;
+  }
+
+  .hb-cta-btn-main {
+    height: 50px;
+    padding: 12px 25px;
+    font-size: 14px;
+  }
+
+  .hb-cta-icon-wrapper {
+    width: 50px;
+    height: 50px;
+  }
+
   .hb-features-sub-grid {
     grid-template-columns: 1fr;
+    gap: 30px;
+  }
+
+  .hb-feature-title {
+    font-size: 20px;
+  }
+
+  .hb-feature-desc {
+    font-size: 14px;
+  }
+
+  .hb-icon-container {
+    width: 50px;
+    height: 50px;
+  }
+
+  .hb-feature-link-img {
+    width: 28px;
+    height: 28px;
+  }
+
+  .hb-featured-img {
+    max-height: 320px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hb-section-wrapper {
+    padding: 30px 12px;
+  }
+
+  .hb-hero-heading {
+    font-size: 26px;
+    margin-bottom: 30px;
+  }
+
+  .hb-badge-number {
+    padding: 4px 10px;
+    font-size: 12px;
+  }
+
+  .hb-badge-text {
+    padding: 4px 12px;
+    font-size: 10px;
+  }
+
+  .hb-stats-num {
+    font-size: 60px;
+  }
+
+  .hb-stats-plus {
+    font-size: 40px;
+  }
+
+  .hb-stats-label {
+    font-size: 16px;
+  }
+
+  .hb-main-paragraph {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .hb-cta-btn-main {
+    height: 44px;
+    padding: 10px 20px;
+    font-size: 13px;
+  }
+
+  .hb-cta-icon-wrapper {
+    width: 44px;
+    height: 44px;
+  }
+
+  .hb-feature-title {
+    font-size: 18px;
+  }
+
+  .hb-feature-desc {
+    font-size: 13px;
+  }
+
+  .hb-featured-img {
+    max-height: 250px;
+    border-radius: 12px;
   }
 }

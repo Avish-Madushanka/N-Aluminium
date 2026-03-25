@@ -1,0 +1,204 @@
+.HomeDES2-wrapper {
+  width: 100%;
+  overflow: hidden;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.HomeDES2-container {
+  display: flex;
+  min-height: 500px;
+}
+
+.HomeDES2-content-pane {
+  flex: 1;
+  background-color: #070708;
+  padding: 50px 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.HomeDES2-visual-pane {
+  flex: 1;
+  background-image: url('https://img.freepik.com/premium-photo/young-indian-male-engineer-wearing-safety-workwear-standing-factory_255667-82374.jpg?semt=ais_hybrid&w=740&q=80');
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+.HomeDES2-brand-label {
+  color: #acacac;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+}
+
+.HomeDES2-main-heading {
+  color: #ffffff;
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 30px;
+  max-width: 800px;
+}
+
+.HomeDES2-text-accent {
+  color: #8b8b8b;
+  font-size: 19px;
+  line-height: 1.6;
+  margin-bottom: 25px;
+  max-width: 800px;
+}
+
+.HomeDES2-text-standard {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 17px;
+  line-height: 1.8;
+  max-width: 800px;
+}
+
+.HomeDES2-stats-overlay {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  width: 350px;
+  z-index: 5;
+}
+
+.HomeDES2-stat-box {
+  display: flex;
+  align-items: center;
+  padding: 40px;
+  gap: 20px;
+}
+
+.HomeDES2-bg-dark {
+  background-color: #1a1a1a;
+  color: #ffffff;
+}
+
+.HomeDES2-bg-white {
+  background-color: #ffffff;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.HomeDES2-icon-wrap {
+  width: 50px;
+  height: 50px;
+  flex-shrink: 0;
+}
+
+.HomeDES2-icon-wrap svg {
+  width: 100%;
+  height: 100%;
+}
+
+.HomeDES2-text-red {
+  color: #dd1717;
+}
+
+.HomeDES2-info-wrap {
+  display: flex;
+  flex-direction: column;
+}
+
+.HomeDES2-stat-number {
+  font-size: 32px;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1;
+  min-width: 110px;
+}
+
+.HomeDES2-stat-label {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-top: 10px;
+}
+
+.HomeDES2-dark-text {
+  color: #000c1d;
+}
+
+.HomeDES2-gray-text {
+  color: #777777;
+}
+
+.HomeDES2-slider-section {
+  width: 100%;
+  background-color: #ececec;
+  border-top: 1px solid #eeeeee;
+  border-bottom: 1px solid #eeeeee;
+  overflow: hidden;
+}
+
+.HomeDES2-slider-track {
+  display: flex;
+  width: calc(250px * 20);
+  animation: scrollLeftLoop 30s linear infinite;
+}
+
+.HomeDES2-brand-item {
+  width: 250px;
+  height: 110px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-right: 1px solid #f0f0f0;
+  padding: 0 40px;
+}
+
+.HomeDES2-brand-logo-img {
+  max-width: 110px;
+  max-height: 110px;
+  object-fit: contain;
+  transition: all 0.3s ease;
+  opacity: 0.8;
+}
+
+
+@keyframes scrollLeftLoop {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(calc(-250px * 5)); }
+}
+
+@media (max-width: 1024px) {
+  .HomeDES2-container {
+    flex-direction: column;
+  }
+  .HomeDES2-content-pane {
+    padding: 60px 40px;
+  }
+  .HomeDES2-main-heading {
+    font-size: 36px;
+  }
+  .HomeDES2-visual-pane {
+    height: 500px;
+  }
+  .HomeDES2-stats-overlay {
+    position: static;
+    transform: none;
+    width: 100%;
+    display: flex;
+  }
+  .HomeDES2-stat-box {
+    flex: 1;
+  }
+}
+
+@media (max-width: 600px) {
+  .HomeDES2-stats-overlay {
+    flex-direction: column;
+  }
+  .HomeDES2-brand-item {
+    width: 180px;
+  }
+  @keyframes scrollLeftLoop {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(calc(-180px * 5)); }
+  }
+}
