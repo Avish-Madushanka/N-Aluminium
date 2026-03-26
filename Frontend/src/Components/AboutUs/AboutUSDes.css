@@ -250,7 +250,7 @@
 .AB-info-card-container {
   background-color: #fff;
   border-radius: 18px;
-  padding: 40px 40px 42px;
+  padding: 40px 40px 4px;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
   position: relative;
   overflow: hidden;

@@ -31,14 +31,9 @@ const AboutUsDes = () => {
       <div className="AB-ocean-container">
         <div className="AB-main-content">
           <div className="AB-left-section">
-            <h1 className="AB-title">Work Together to Collect Aluminum Scrap</h1>
+            <h1 className="AB-title">Work Together to Transform Aluminum Management</h1>
             <p className="AB-description">
-              Aluminum waste is a growing environmental and economic concern. Every year, 
-              <strong>thousands of tons of aluminum scraps</strong> are discarded, 
-              ending up in landfills instead of being recycled. Improper disposal wastes 
-              valuable resources, increases energy consumption, and contributes to pollution. 
-              By collecting and recycling aluminum, we conserve natural resources, reduce 
-              greenhouse gas emissions, and support a circular economy.
+              Aluminum waste is a growing environmental and economic challenge. Our <strong> MetaTrade platform </strong> solves this by combining smart collection, recycling, fabrication, and a digital marketplace—helping reduce waste, improve resource efficiency, and support a circular economy.
             </p>
             <div className="AB-image-card">
               <img
@@ -61,9 +56,7 @@ const AboutUsDes = () => {
                 <div className="AB-info-content">
                   <h3>Our Vision</h3>
                   <p>
-                    Our vision is to promote efficient aluminum scrap collection and recycling, 
-                    reduce environmental impact, and foster a circular economy where materials 
-                    are reused instead of wasted.
+                    Our vision is to build a smart and sustainable aluminum ecosystem where materials are efficiently collected, traded, fabricated, and reused, minimizing environmental impact while maximizing economic value.
                   </p>
                 </div>
               </div>
@@ -78,10 +71,7 @@ const AboutUsDes = () => {
                 <div className="AB-info-content">
                   <h3>Our Mission</h3>
                   <p>
-                    Our mission is to provide efficient, reliable, and easily accessible aluminum scrap 
-                    collection services, while actively educating and engaging communities on the 
-                    importance and benefits of recycling, responsible waste management, and 
-                    sustainable living.
+                    Our mission is to provide a comprehensive digital platform for aluminum management, offering seamless scrap collection, real-time pricing, fabrication support, and a marketplace for reusable materials. We aim to empower communities and businesses with innovative tools that promote sustainability and efficiency.
                   </p>
                 </div>
               </div>
@@ -96,10 +86,7 @@ const AboutUsDes = () => {
                 <div className="AB-info-content">
                   <h3>Our Goals</h3>
                   <p>
-                    Our goals are to significantly increase aluminum recycling rates, minimize 
-                    environmental waste, support and empower local communities, raise awareness 
-                    about sustainable practices, and promote a circular economy where materials 
-                    are reused efficiently for future generations.
+                    Our goals are to improve aluminum resource management, increase recycling and reuse rates, support fabrication and product development, enable transparent and real-time trading, and promote sustainable practices that benefit both the environment and future generations.
                   </p>
                 </div>
               </div>
