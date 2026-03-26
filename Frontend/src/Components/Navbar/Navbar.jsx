@@ -1,16 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, NavLink, useLocation } from 'react-router-dom';
-import { User, Menu, X, LogOut, ChevronDown, ShoppingCart } from 'lucide-react';
+import { Menu, X, LogOut, ShoppingCart } from 'lucide-react';
 import "./Navbar.css";
 import logo from "../../assets/logo.png";
 
 const Navbar = ({ isLoggedIn, userInfo, handleLogout, cartItemCount = 0 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
   const headerRef = useRef(null);
-  const profileRef = useRef(null);
+  const mobileMenuRef = useRef(null);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -20,14 +19,13 @@ const Navbar = ({ isLoggedIn, userInfo, handleLogout, cartItemCount = 0 }) => {
 
   useEffect(() => {
     setIsOpen(false);
-    setIsProfileOpen(false);
   }, [location]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (headerRef.current && !headerRef.current.contains(event.target)) {
+      if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target) && 
+          !event.target.closest('.Nav-menu-toggle')) {
         setIsOpen(false);
-        setIsProfileOpen(false);
       }
     };
     
@@ -39,45 +37,31 @@ const Navbar = ({ isLoggedIn, userInfo, handleLogout, cartItemCount = 0 }) => {
     setIsOpen(!isOpen);
   };
 
-  const toggleProfile = (e) => {
-    e.stopPropagation();
-    setIsProfileOpen(!isProfileOpen);
-  };
-
   const triggerLogout = () => {
     if (window.confirm("Are you sure you want to log out?")) {
       handleLogout();
     }
   };
 
-  const getInitials = (name) => {
-    if (!name || typeof name !== 'string') return '?';
-    const words = name.trim().split(' ').filter(Boolean);
-    if (words.length === 0) return '?';
-    if (words.length > 1) return (words[0][0] + words[words.length - 1][0]).toUpperCase();
-    return words[0][0].toUpperCase();
+  const userRole = userInfo?.role;
+  const displayName = userInfo?.name || userInfo?.ownerName || 'User';
+
+  const getProfilePath = () => {
+    if (!isLoggedIn) return '/';
+    if (userRole === 'admin') return '/Admin';
+    if (userRole === 'client') return '/ClientProfile';
+    return '/Profile';
   };
 
-  let profilePath = '/';
-  let profileName = 'User';
-  const userRole = userInfo?.role;
-  const displayName = userInfo?.name || userInfo?.ownerName;
 
-  if (isLoggedIn && userInfo) {
-    profileName = displayName?.split(' ')[0] || 'Profile';
-
-    if (userRole === 'admin') {
-      profilePath = '/Admin';
-    } else if (userRole === 'client') {
-      profilePath = '/ClientProfile';
-    }
-  }
+  const phoneIconUrl = "https://cdn-icons-png.flaticon.com/128/9840/9840072.png";
+  const locationIconUrl = "https://cdn-icons-png.flaticon.com/128/9131/9131546.png";
 
   return (
     <header className={`Nav-header-main ${scrolled ? 'Nav-header-scrolled' : ''}`} ref={headerRef}>
       <div className="Nav-header-container">
         <Link className="Nav-brand-logo" to="/">
-          <img src={logo} alt="Company Logo" className="Nav-brand-image" />
+          <img src={logo} alt="MetaTrade" className="Nav-brand-image" />
           <span className="Nav-brand-text">MetaTrade</span>
         </Link>
 
@@ -86,27 +70,34 @@ const Navbar = ({ isLoggedIn, userInfo, handleLogout, cartItemCount = 0 }) => {
             Home
           </NavLink>
           
-          <div className="Nav-has-dropdown">
-            <NavLink to="/AboutUs" className={({ isActive }) => `Nav-menu-item ${isActive ? 'Nav-active-menu-item' : ''}`}>
-              About Us
-            </NavLink>
-          </div>
+          <NavLink to="/AboutUs" className={({ isActive }) => `Nav-menu-item ${isActive ? 'Nav-active-menu-item' : ''}`}>
+            About Us
+          </NavLink>
           
           <NavLink to="/Service" className={({ isActive }) => `Nav-menu-item ${isActive ? 'Nav-active-menu-item' : ''}`}>
             Services
           </NavLink>
           
-          <div className="Nav-has-dropdown">
-            <NavLink to="/ContactUs" className={({ isActive }) => `Nav-menu-item ${isActive ? 'Nav-active-menu-item' : ''}`}>
-              Contact Us
-            </NavLink>
-          </div>
+          <NavLink to="/ContactUs" className={({ isActive }) => `Nav-menu-item ${isActive ? 'Nav-active-menu-item' : ''}`}>
+            Contact Us
+          </NavLink>
           
           {isLoggedIn && userRole === 'admin' && (
             <NavLink to="/Admin" className={({ isActive }) => `Nav-menu-item ${isActive ? 'Nav-active-menu-item' : ''}`}>
               Admin Panel
             </NavLink>
           )}
+        </div>
+
+        <div className="Nav-contact-info">
+          <div className="Nav-contact-item">
+            <img src={phoneIconUrl} alt="Phone" className="Nav-contact-icon-img" />
+            <span>+94 72 104 6048</span>
+          </div>
+          <div className="Nav-contact-item">
+            <img src={locationIconUrl} alt="Location" className="Nav-contact-icon-img" />
+            <span>PANADURA</span>
+          </div>
         </div>
 
         <div className="Nav-auth-section">
@@ -118,12 +109,14 @@ const Navbar = ({ isLoggedIn, userInfo, handleLogout, cartItemCount = 0 }) => {
                   <span className="Nav-cart-badge">{cartItemCount}</span>
                 )}
               </Link>
-              <button onClick={triggerLogout} className="Nav-logout-btn-navbar">
-                <LogOut size={18} /> Logout
+              
+              <button onClick={triggerLogout} className="Nav-logout-btn">
+                <LogOut size={18} />
+                <span>Logout</span>
               </button>
             </div>
           ) : (
-            <div className="Nav-auth-buttons-container">
+            <div className="Nav-auth-buttons">
               <Link to="/Login" className="Nav-login-btn">Login</Link>
               <Link to="/ClientForm" className="Nav-signup-btn">Sign Up</Link>
             </div>
@@ -133,61 +126,108 @@ const Navbar = ({ isLoggedIn, userInfo, handleLogout, cartItemCount = 0 }) => {
             className="Nav-menu-toggle" 
             onClick={toggleMenu} 
             aria-label={isOpen ? "Close menu" : "Open menu"}
-            aria-expanded={isOpen}
           >
             {isOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
       </div>
 
-      <div className={`Nav-mobile-menu ${isOpen ? 'active' : ''}`}>
+      <div className={`Nav-mobile-menu ${isOpen ? 'active' : ''}`} ref={mobileMenuRef}>
         <div className="Nav-mobile-menu-items">
+          {isLoggedIn && userInfo && (
+            <div className="Nav-mobile-user-info">
+              <div className="Nav-mobile-user-details">
+                <div className="Nav-mobile-user-name">{displayName}</div>
+                <div className="Nav-mobile-user-role">{userRole === 'admin' ? 'Administrator' : 'Client'}</div>
+              </div>
+            </div>
+          )}
+          
+          <div className="Nav-mobile-contact">
+            <div className="Nav-mobile-contact-item">
+              <img src={phoneIconUrl} alt="Phone" className="Nav-mobile-contact-icon-img" />
+              <span>+94 72 104 6048</span>
+            </div>
+            <div className="Nav-mobile-contact-item">
+              <img src={locationIconUrl} alt="Location" className="Nav-mobile-contact-icon-img" />
+              <span>Panadura</span>
+            </div>
+          </div>
+          
           <NavLink 
             to="/" 
-            className={({ isActive }) => `Nav-mobile-menu-item ${isActive ? 'Nav-active-mobile-menu-item' : ''}`}
+            className={({ isActive }) => `Nav-mobile-menu-item ${isActive ? 'active' : ''}`}
             onClick={() => setIsOpen(false)}
           >
             Home
           </NavLink>
           
-          <div className="Nav-mobile-menu-item" onClick={() => setIsOpen(false)}>
+          <NavLink 
+            to="/AboutUs" 
+            className={({ isActive }) => `Nav-mobile-menu-item ${isActive ? 'active' : ''}`}
+            onClick={() => setIsOpen(false)}
+          >
             About Us
-          </div>
+          </NavLink>
           
           <NavLink 
             to="/Service" 
-            className={({ isActive }) => `Nav-mobile-menu-item ${isActive ? 'Nav-active-mobile-menu-item' : ''}`}
+            className={({ isActive }) => `Nav-mobile-menu-item ${isActive ? 'active' : ''}`}
             onClick={() => setIsOpen(false)}
           >
             Services
           </NavLink>
           
-          <div className="Nav-mobile-menu-item" onClick={() => setIsOpen(false)}>
+          <NavLink 
+            to="/ContactUs" 
+            className={({ isActive }) => `Nav-mobile-menu-item ${isActive ? 'active' : ''}`}
+            onClick={() => setIsOpen(false)}
+          >
             Contact Us
-          </div>
+          </NavLink>
 
           {isLoggedIn && userRole === 'admin' && (
             <NavLink 
               to="/Admin" 
-              className={({ isActive }) => `Nav-mobile-menu-item ${isActive ? 'Nav-active-mobile-menu-item' : ''}`}
+              className={({ isActive }) => `Nav-mobile-menu-item ${isActive ? 'active' : ''}`}
               onClick={() => setIsOpen(false)}
             >
               Admin Panel
             </NavLink>
           )}
           
+          {isLoggedIn && (
+            <NavLink 
+              to={getProfilePath()} 
+              className="Nav-mobile-menu-item"
+              onClick={() => setIsOpen(false)}
+            >
+              My Profile
+            </NavLink>
+          )}
+          
+          {isLoggedIn && (
+            <button onClick={() => {
+              setIsOpen(false);
+              triggerLogout();
+            }} className="Nav-mobile-logout-btn">
+              <LogOut size={18} />
+              Logout
+            </button>
+          )}
+          
           {!isLoggedIn && (
-            <div className="Nav-auth-buttons-mobile">
+            <div className="Nav-mobile-auth-buttons">
               <Link 
                 to="/Login" 
-                className="Nav-login-btn Nav-mobile-btn"
+                className="Nav-mobile-login-btn"
                 onClick={() => setIsOpen(false)}
               >
                 Login
               </Link>
               <Link 
-                to="/SignUp" 
-                className="Nav-signup-btn Nav-mobile-btn"
+                to="/ClientForm" 
+                className="Nav-mobile-signup-btn"
                 onClick={() => setIsOpen(false)}
               >
                 Sign Up

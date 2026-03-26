@@ -6,29 +6,29 @@ const HomeDes = () => {
   const adventureData = [
     {
       id: 1,
-      title: "EXTREME RIDING",
-      desc: "Ride the wild slopes — snowboard, ski, or mountain bike among breathtaking peaks. For those who live for adrenaline and untamed freedom.",
+      title: "test",
+      desc: "Direct trading platform for aluminum scraps and processed materials.",
       img: "https://www.inotherm.com/wp-content/uploads/2024/11/moderna_AGE_1326_MS-6071_-RAL_MATT_serija-70_BT-610-1-896x753.jpg?x10087",
       bgColor: "hmd-bg-grey",
-      path: "/extreme-riding"
+      path: "/BuyandSell"
     },
     {
       id: 2,
-      title: "ROCK CLIMBING",
-      desc: "Climb beyond your limits — challenge your strength, balance, and spirit. Reach the top, conquer yourself.",
+      title: "Buy & Sell Aluminum",
+      desc: "Direct trading platform for aluminum scraps and processed materials.",
       img: "https://ey2msiqxj7z.exactdn.com/wp-content/uploads/2019/12/13223504/ao200309_weather01-scaled.jpg?strip=all&lossy=1&ssl=1",
       bgColor: "hmd-bg-navy",
       textColor: "hmd-text-light",
-      path: "/rock-climbing"
+      path: "/BuyandSell"
     },
     {
       id: 3,
-      title: "ADVENTURE TOURS",
-      desc: "Join guided adventure trips — from mountain biking and jeep safaris to kayaking through wild mountain rivers. Go beyond the ordinary.",
+      title: "Industrial Projects",
+      desc: "Support for industrial recycling and large-scale sustainability projects",
       img: "https://aluminco.com/wp-content/uploads/2025/06/1.SAWAKI-VILLA-810x570.jpg",
       bgColor: "hmd-bg-orange",
       textColor: "hmd-text-light",
-      path: "/adventure-tours"
+      path: "/Project"
     }
   ];
 

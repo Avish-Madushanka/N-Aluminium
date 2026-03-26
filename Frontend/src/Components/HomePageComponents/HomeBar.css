@@ -224,7 +224,6 @@
 .hb-image-column {
   height: 100%;
   display: flex;
-  align-items: center;
 }
 
 .hb-featured-img {
