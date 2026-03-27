@@ -41,8 +41,9 @@
 }
 
 .ABH-hero-title {
-  font-size: 4rem;
-  font-weight: 800;
+  font-family: 'Bebas Neue', cursive;
+  font-size: 82px;
+  letter-spacing: 2px;
   margin: 0;
 }
 

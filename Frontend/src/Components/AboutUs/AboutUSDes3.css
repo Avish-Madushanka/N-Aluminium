@@ -3,7 +3,7 @@
 .FAQ-main-container {
   font-family: 'Montserrat', sans-serif;
   background-color: #ffffff;
-  padding: 100px 5%;
+  padding: 80px 5%;
   width: 100%;
   box-sizing: border-box;
 }
@@ -64,7 +64,7 @@
   color: #fafafa;
   cursor: pointer;
   transition: all 0.3s ease;
-  margin-bottom: 50px;
+  margin-bottom: 20px;
 }
 
 .FAQ-ask-btn:hover {

@@ -61,13 +61,9 @@ const AboutUSDes3 = () => {
 
           <div className="FAQ-user-social">
             <div className="FAQ-avatar-group">
-              <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="user" />
-              <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="user" />
+              <img src="https://cdn-icons-png.flaticon.com/128/2202/2202112.png"/>
+              <img src="https://cdn-icons-png.flaticon.com/128/13482/13482193.png"/>
               <div className="FAQ-avatar-plus">+</div>
-            </div>
-            <div className="FAQ-user-text">
-              <strong>2603</strong>
-              <span>Peoples Registered</span>
             </div>
           </div>
         </div>
