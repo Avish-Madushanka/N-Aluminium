@@ -40,7 +40,7 @@ const AboutUsDes = () => {
                 src="https://media.istockphoto.com/id/688587628/photo/aluminium-and-pvc-industry-worker.jpg?s=612x612&w=0&k=20&c=j3W5LQbi0yV0RH0-DLqGs6VeFGlV60Vm_OaiIAMPoTo="
                 alt="People cleaning up trash"
               />
-              <div className="AB-years-of-experience">15+ Years of Experience</div>
+              <div className="AB-years-of-experience">20+ Years of Experience</div>
             </div>
           </div>
 

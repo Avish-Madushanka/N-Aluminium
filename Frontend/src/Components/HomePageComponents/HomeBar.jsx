@@ -17,7 +17,7 @@ const HomeBar = () => {
             <div className="hb-top-info-row">
               <div className="hb-experience-box">
                 <div className="hb-stats-display">
-                  <span className="hb-stats-num">15</span>
+                  <span className="hb-stats-num">20</span>
                   <span className="hb-stats-plus">+</span>
                 </div>
                 <p className="hb-stats-label">Work Experience</p>

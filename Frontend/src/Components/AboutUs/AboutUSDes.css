@@ -339,85 +339,391 @@
   transform: translateY(-2px);
 }
 
-@media (max-width: 992px) {
+@media (max-width: 1200px) {
   .AB-main-content {
-    flex-direction: column;
+    gap: 40px;
   }
-
-  .AB-right-section {
-    order: 2;
-  }
-
+  
   .AB-left-section {
-    order: 1;
+    min-width: 300px;
   }
-
-  .AB-decorative-truck {
-    display: none;
+  
+  .AB-right-section {
+    min-width: 300px;
   }
-
+  
   .AB-title {
-    font-size: 2rem;
+    font-size: 2.3rem;
   }
+}
 
-  .AB-experience-badge {
-    font-size: 1.8rem;
+@media (max-width: 992px) {
+  .AB-main-container {
+    padding: 15px;
   }
-
-  .AB-info-card-container {
-    padding: 30px;
-  }
-
+  
   .AB-recycling-container {
     flex-direction: column;
     text-align: center;
-    gap: 30px;
+    gap: 40px;
     padding: 40px 20px;
   }
-
+  
   .AB-text-section {
     text-align: center;
     max-width: 100%;
   }
-
+  
+  .AB-description {
+    text-align: center;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .AB-main-content {
+    flex-direction: column;
+    gap: 50px;
+  }
+  
+  .AB-right-section {
+    order: 2;
+    width: 100%;
+  }
+  
+  .AB-left-section {
+    order: 1;
+    width: 100%;
+    min-width: auto;
+  }
+  
+  .AB-decorative-truck {
+    display: none;
+  }
+  
   .AB-title {
     font-size: 2rem;
+    text-align: center;
   }
-
+  
   .AB-description {
-    font-size: 1rem;
+    text-align: center;
+    max-width: 100%;
   }
-
+  
+  .AB-info-card-container {
+    padding: 30px;
+  }
+  
   .AB2-steps {
     flex-direction: column;
     align-items: center;
+    gap: 40px;
   }
-
+  
   .AB2-steps::before {
     display: none;
   }
-
+  
   .AB2-step {
-    width: 90%;
-    max-width: 400px;
-    margin-bottom: 30px;
+    width: 100%;
+    max-width: 500px;
   }
-}
-
-@media (max-width: 600px) {
-  .AB-title {
-    font-size: 1.75rem;
+  
+  .AB2-circle {
+    width: 70px;
+    height: 70px;
   }
+  
+  .AB2-number {
+    font-size: 1.3rem;
+  }
+  
   .AB2-title {
     font-size: 2rem;
   }
-
-  .AB-description {
-    font-size: 0.95rem;
+  
+  .AB2-subtitle {
+    font-size: 1rem;
+    padding: 0 15px;
   }
-
+  
+  .AB-ocean-container {
+    margin: 30px auto;
+    padding: 15px;
+  }
+  
+  .AB-info-item::before {
+    left: 22px;
+    top: 42px;
+    height: 120px;
+  }
+  
+  .AB-info-icon {
+    width: 45px;
+    height: 45px;
+  }
+  
+  .AB-info-icon img {
+    width: 25px;
+    height: 25px;
+  }
+  
+  .AB-info-content h3 {
+    font-size: 1rem;
+  }
+  
+  .AB-info-content p {
+    font-size: 0.9rem;
+  }
+  
   .AB-learn-more-button {
     width: 100%;
     text-align: center;
+    padding: 12px 24px;
+  }
+  
+  .AB-years-of-experience {
+    bottom: 20px;
+    left: 15px;
+    padding: 6px 20px;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .AB-main-container {
+    padding: 10px;
+  }
+  
+  .AB-recycling-container {
+    padding: 30px 15px;
+    gap: 30px;
+  }
+  
+  .AB-title {
+    font-size: 1.75rem;
+    margin-bottom: 15px;
+  }
+  
+  .AB-description {
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+  
+  .AB-recycling-image {
+    max-width: 320px;
+  }
+  
+  .AB2-container {
+    padding: 40px 15px;
+  }
+  
+  .AB2-title {
+    font-size: 1.75rem;
+  }
+  
+  .AB2-subtitle {
+    font-size: 0.95rem;
+    margin-bottom: 35px;
+  }
+  
+  .AB2-step {
+    max-width: 100%;
+  }
+  
+  .AB2-circle {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 15px;
+  }
+  
+  .AB2-number {
+    font-size: 1.1rem;
+  }
+  
+  .AB2-icon {
+    font-size: 1rem;
+  }
+  
+  .AB2-content {
+    padding: 15px;
+  }
+  
+  .AB2-step-title {
+    font-size: 1.1rem;
+  }
+  
+  .AB2-description {
+    font-size: 0.9rem;
+  }
+  
+  .AB-ocean-container {
+    margin: 20px auto;
+    padding: 10px;
+  }
+  
+  .AB-main-content {
+    gap: 35px;
+  }
+  
+  .AB-info-card-container {
+    padding: 25px 20px;
+  }
+  
+  .AB-info-item {
+    gap: 12px;
+    margin-bottom: 25px;
+  }
+  
+  .AB-info-item::before {
+    left: 20px;
+    top: 38px;
+    height: 100px;
+  }
+  
+  .AB-info-icon {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .AB-info-icon img {
+    width: 22px;
+    height: 22px;
+  }
+  
+  .AB-info-content h3 {
+    font-size: 0.95rem;
+    margin-bottom: 4px;
+  }
+  
+  .AB-info-content p {
+    font-size: 0.85rem;
+    line-height: 1.5;
+  }
+  
+  .AB-learn-more-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 0.9rem;
+  }
+  
+  .AB-years-of-experience {
+    bottom: 15px;
+    left: 12px;
+    padding: 5px 15px;
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .AB-main-container {
+    padding: 5px;
+  }
+  
+  .AB-recycling-container {
+    padding: 25px 12px;
+    gap: 25px;
+  }
+  
+  .AB-title {
+    font-size: 1.5rem;
+  }
+  
+  .AB-description {
+    font-size: 0.85rem;
+    line-height: 1.5;
+  }
+  
+  .AB-recycling-image {
+    max-width: 260px;
+  }
+  
+  .AB2-container {
+    padding: 30px 12px;
+  }
+  
+  .AB2-title {
+    font-size: 1.5rem;
+  }
+  
+  .AB2-subtitle {
+    font-size: 0.85rem;
+    margin-bottom: 30px;
+  }
+  
+  .AB2-circle {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .AB2-number {
+    font-size: 1rem;
+  }
+  
+  .AB2-icon {
+    font-size: 0.9rem;
+  }
+  
+  .AB2-content {
+    padding: 12px;
+  }
+  
+  .AB2-step-title {
+    font-size: 1rem;
+  }
+  
+  .AB2-description {
+    font-size: 0.85rem;
+  }
+  
+  .AB-ocean-container {
+    margin: 15px auto;
+    padding: 8px;
+  }
+  
+  .AB-info-card-container {
+    padding: 20px 15px;
+  }
+  
+  .AB-info-item {
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .AB-info-item::before {
+    left: 18px;
+    top: 35px;
+    height: 85px;
+  }
+  
+  .AB-info-icon {
+    width: 35px;
+    height: 35px;
+  }
+  
+  .AB-info-icon img {
+    width: 18px;
+    height: 18px;
+  }
+  
+  .AB-info-content h3 {
+    font-size: 0.9rem;
+  }
+  
+  .AB-info-content p {
+    font-size: 0.8rem;
+  }
+  
+  .AB-learn-more-button {
+    padding: 8px 16px;
+    font-size: 0.85rem;
+  }
+  
+  .AB-years-of-experience {
+    bottom: 10px;
+    left: 10px;
+    padding: 4px 12px;
+    font-size: 0.7rem;
   }
 }
