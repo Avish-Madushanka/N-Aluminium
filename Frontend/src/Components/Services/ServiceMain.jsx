@@ -1,50 +1,52 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { ArrowRight } from "lucide-react";
 import "./ServiceMain.css";
+
+import Img1 from '../../assets/s1.jpg';
+import Img2 from '../../assets/s2.jpg';
+import Img3 from '../../assets/s3.jpg';
+import Img4 from '../../assets/s4.jpg';
+import Img5 from '../../assets/s5.jpg';
+import Img6 from '../../assets/s6.jpg';
 
 function ServiceMain() {
   const services = [
     {
-      title: "Waste Collection",
-      desc: "Door-to-door aluminum and recyclable waste collection with scheduled pickups.",
-      img: "https://www.rcmscrapmetal.com/images/blog/1718919338blog-24-06-20.jpg",
-      link: "/Collection",
-      theme: "ser-theme-green"
+      title: "Aluminum Fabrication",
+      desc: "Custom aluminum doors, windows, frames, and structures designed with precision.",
+      img: Img1,
+      link: "/Fabrication",
     },
     {
-      title: "Community Cleanup",
-      desc: "Organized community programs to promote environmental responsibility.",
-      img: "https://img.freepik.com/free-photo/high-angle-living-room-interior-design_23-2149647173.jpg",
-      link: "/community-cleanup",
-      theme: "ser-theme-grey"
+      title: "Scrap Collection",
+      desc: "Easy scheduling for aluminum scrap pickup from homes and businesses.",
+      img: Img2,
+      link: "/Collection",
     },
     {
       title: "Material Marketplace",
-      desc: "Buy and sell recyclable materials with transparent pricing.",
-      img: "https://www.ohra.net/fileadmin/_processed_/7/f/csm_kragarmregal_alu12_b0ab15b121.jpg",
+      desc: "Buy and sell reusable aluminum products with transparent pricing.",
+      img: Img3,
       link: "/ItemMarkert",
-      theme: "ser-theme-navy"
     },
     {
-      title: "Training & Registration",
-      desc: "Skill development and registration programs for recycling professionals.",
-      img: "https://www.alideck.co.uk/wp-content/uploads/2020/08/AliDeck-Non-Combustible-Aluminium-Metal-Balcony-Decking-Rochester-Training-Academy-013.jpg",
-      link: "/AluTReg",
-      theme: "ser-theme-red"
-    },
-    {
-      title: "Industrial Projects",
-      desc: "Support for industrial recycling and large-scale sustainability projects.",
-      img: "https://pbs.twimg.com/media/FfCEKerXEAA6dOV?format=jpg&name=large",
+      title: "Custom Projects",
+      desc: "Support for industrial and personal aluminum fabrication projects.",
+      img: Img4,
       link: "/Project",
-      theme: "ser-theme-navy"
+    },
+    {
+      title: "Real-Time Pricing",
+      desc: "Track current aluminum scrap value and make better selling decisions.",
+      img: Img5,
+      link: "/Pricing",
     },
     {
       title: "Buy & Sell Aluminum",
-      desc: "Direct trading platform for aluminum scraps and processed materials.",
-      img: "https://www.musgroves.co.nz/wp-content/uploads/2020/04/how-to-repair-aluminium-window-frames-retina-1.jpg",
+      desc: "Direct platform for trading aluminum materials and finished products.",
+      img: Img6,
       link: "/BuyandSell",
-      theme: "ser-theme-green"
     },
   ];
 
@@ -57,39 +59,136 @@ function ServiceMain() {
         </div>
       </section>
 
+      <div className="Ser-intro-section">
+        <div className="Ser-intro-header">
+          <span className="Ser-intro-tag">OUR SERVICES</span>
+          <h2 className="Ser-intro-title">
+            Smart Aluminum Services <br /> For Fabrication & Trade
+          </h2>
+          <p className="Ser-intro-sub">
+            We provide complete aluminum solutions including fabrication, scrap collection, and a digital marketplace to support efficient and sustainable resource management.
+          </p>
+        </div>
+      </div>
+
       <section className="Ser-services-section">
         <div className="Ser-uniform-grid">
           {services.map((service, index) => (
-            <div className={`Ser-adv-card ${service.theme}`} key={index}>
-              <div className="Ser-adv-content">
-                <h3 className="Ser-adv-card-title">{service.title}</h3>
-                <p className="Ser-adv-card-text">{service.desc}</p>
-              </div>
-              <div className="Ser-adv-img-box">
+            <div className="Ser-img-card" key={index}>
+              <div className="Ser-card-image-box">
                 <img src={service.img} alt={service.title} />
-                <div className="Ser-adv-hover-overlay">
-                  <Link to={service.link} className="Ser-adv-inner-btn">
-                    EXPLORE SERVICE
-                  </Link>
-                </div>
+              </div>
+
+              <div className="Ser-card-info-overlay">
+                <h3 className="Ser-card-title">{service.title}</h3>
+                <p className="Ser-card-text">{service.desc}</p>
+                <Link to={service.link} className="Ser-read-more-btn">
+                  Read More
+                  <span className="Ser-btn-icon">
+                    <ArrowRight size={16} />
+                  </span>
+                </Link>
               </div>
             </div>
           ))}
         </div>
       </section>
 
-      <section className="Ser-App-hero">
-        <div className="Ser-App-hero-overlay"></div>
-        <div className="Ser-App-hero-content">
-          <span className="Ser-App-hero-tag">DOWNLOAD APP</span>
-          <h1>Download Meta Trade app</h1>
-          <div className="Ser-App-hero-buttons">
-            <button className="Ser-App-btn apple">Get in App Store</button>
-            <button className="Ser-App-btn google">Google Play</button>
+      <section className="Ser-why-us-minimal">
+        <div className="Ser-why-content">
+          <h2 className="Ser-why-main-title">WHY CHOOSE US?</h2>
+          <p className="Ser-why-main-sub">
+            We combine modern fabrication technology, smart systems, and sustainable practices to deliver high-quality aluminum solutions.
+          </p>
+
+          <div className="Ser-why-feature-grid">
+            <div className="Ser-feature-box">
+              <img src="https://cdn-icons-png.flaticon.com/128/8273/8273233.png" alt="" className="Ser-feature-icon" />
+              <h3>High Durability</h3>
+              <p>Strong and reliable aluminum products designed for long-term performance, offering resistance to corrosion and harsh weather.</p>
+            </div>
+
+            <div className="Ser-feature-box">
+              <img src="https://cdn-icons-png.flaticon.com/128/17237/17237410.png" alt="" className="Ser-feature-icon" />
+              <h3>Precision Fabrication</h3>
+              <p>We use advanced fabrication techniques and modern tools to deliver accurate, high-quality aluminum designs and perfect finishing.</p>
+            </div>
+
+            <div className="Ser-feature-box">
+              <img src="https://cdn-icons-png.flaticon.com/128/12491/12491375.png" alt="" className="Ser-feature-icon" />
+              <h3>Smart & Sustainable</h3>
+              <p>Our platform combines smart technology with eco-friendly practices to optimize aluminum usage and support recycling.</p>
+            </div>
           </div>
         </div>
-        <div className="Ser-App-hero-image"
-          style={{ backgroundImage: `url('https://www.alimax.ltd/files/thumbs/Aluminium_window_faqs_w1920_h525.jpg')` }}>
+      </section>
+
+      <section className="Ser-benefits-dark">
+        <div className="Ser-ben-header">
+          <span className="Ser-ben-tag">USER ADVANTAGES</span>
+          <h2 className="Ser-ben-title">BENEFITS OF ALUMINUM REFERENCE</h2>
+        </div>
+
+        <div className="Ser-ben-container">
+          <div className="Ser-ben-side-left">
+            <div className="Ser-ben-item">
+              <div className="Ser-ben-text">
+                <h3>Save Time</h3>
+                <p>Streamlined fabrication orders and instant scrap pickup scheduling for maximum efficiency.</p>
+              </div>
+              <div className="Ser-ben-num">01</div>
+              <div className="Ser-ben-line-left">
+                <span className="dot-outer"></span>
+                <span className="dot-inner"></span>
+              </div>
+            </div>
+
+            <div className="Ser-ben-item">
+              <div className="Ser-ben-text">
+                <h3>Earn Money</h3>
+                <p>Get the best market value for your aluminum scrap with real-time pricing and direct trade.</p>
+              </div>
+              <div className="Ser-ben-num">02</div>
+              <div className="Ser-ben-line-left">
+                <span className="dot-outer"></span>
+                <span className="dot-inner"></span>
+              </div>
+            </div>
+          </div>
+
+          <div className="Ser-ben-center">
+            <div className="Ser-ben-circle">
+              <div className="Ser-ben-circle-inner">
+                 <img src="https://media.licdn.com/dms/image/sync/v2/D4E27AQF2NRPuiM1WkQ/articleshare-shrink_800/B4EZmf5tZBHMAM-/0/1759324330078?e=2147483647&v=beta&t=2glp8IupJWX6x9b5S2sWzL81XTbeAM2IiCw8xnS5mTs" />
+              </div>
+            </div>
+          </div>
+
+          <div className="Ser-ben-side-right">
+            <div className="Ser-ben-item">
+              <div className="Ser-ben-line-right">
+                <span className="dot-outer"></span>
+                <span className="dot-inner"></span>
+              </div>
+              <div className="Ser-ben-num">03</div>
+              <div className="Ser-ben-text">
+                <h3>Reduce Waste</h3>
+                <p>Transforming old aluminum into high-quality reusable materials through circular logistics.</p>
+              </div>
+            </div>
+
+            <div className="Ser-ben-item">
+              <div className="Ser-ben-line-right">
+                <span className="dot-outer"></span>
+                <span className="dot-inner"></span>
+              </div>
+              <div className="Ser-ben-num">04</div>
+              <div className="Ser-ben-text">
+                <h3>Support Sustainability</h3>
+                <p>Join our mission to protect the environment by recycling aluminum and reducing carbon footprint.</p>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
     </div>
