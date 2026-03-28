@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, CheckCircle } from "lucide-react";
 import "./ServiceMain.css";
 
 import Img1 from '../../assets/s1.jpg';
@@ -159,7 +159,7 @@ function ServiceMain() {
           <div className="Ser-ben-center">
             <div className="Ser-ben-circle">
               <div className="Ser-ben-circle-inner">
-                 <img src="https://media.licdn.com/dms/image/sync/v2/D4E27AQF2NRPuiM1WkQ/articleshare-shrink_800/B4EZmf5tZBHMAM-/0/1759324330078?e=2147483647&v=beta&t=2glp8IupJWX6x9b5S2sWzL81XTbeAM2IiCw8xnS5mTs" />
+                 <img src="https://media.licdn.com/dms/image/sync/v2/D4E27AQF2NRPuiM1WkQ/articleshare-shrink_800/B4EZmf5tZBHMAM-/0/1759324330078?e=2147483647&v=beta&t=2glp8IupJWX6x9b5S2sWzL81XTbeAM2IiCw8xnS5mTs" alt="Aluminum Reference" />
               </div>
             </div>
           </div>
@@ -188,6 +188,26 @@ function ServiceMain() {
                 <p>Join our mission to protect the environment by recycling aluminum and reducing carbon footprint.</p>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="Ser-cta-section">
+        <div className="Ser-cta-overlay"></div>
+        <div className="Ser-cta-content">
+          <h2 className="Ser-cta-title">Premium Aluminum Fabrication Services</h2>
+          <p className="Ser-cta-text">
+            Experience top-quality <strong>aluminum fabrication</strong> with precision craftsmanship, 
+            durable materials, and expert solutions tailored to your residential and commercial needs.
+          </p>
+          <div className="Ser-cta-btns">
+            <Link to="/Project" className="Ser-cta-btn-primary">Get Started Now</Link>
+            <Link to="/Proreq" className="Ser-cta-btn-secondary">Request Service</Link>
+          </div>
+          <div className="Ser-cta-trust">
+            <span><img src="https://cdn-icons-png.flaticon.com/128/16484/16484401.png" alt="check" width="16" height="16" className="Ser-cta-icon" /> Expert Craftsmanship</span>
+            <span><img src="https://cdn-icons-png.flaticon.com/128/18445/18445183.png" alt="check" width="16" height="16" className="Ser-cta-icon" /> Premium Quality</span>
+            <span><img src="https://cdn-icons-png.flaticon.com/128/16500/16500445.png" alt="check" width="16" height="16" className="Ser-cta-icon" /> Custom Solutions</span>
           </div>
         </div>
       </section>

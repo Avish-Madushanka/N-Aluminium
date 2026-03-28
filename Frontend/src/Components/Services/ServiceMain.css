@@ -239,8 +239,6 @@
   line-height: 1.6;
 }
 
-/*  BENEFITS */
-
 .Ser-benefits-dark {
   background-color: #0f0f0f;
   color: #fff;
@@ -289,8 +287,15 @@
   position: relative;
 }
 
-.Ser-ben-side-left .Ser-ben-item { justify-content: flex-end; text-align: right; }
-.Ser-ben-side-right .Ser-ben-item { justify-content: flex-start; text-align: left; }
+.Ser-ben-side-left .Ser-ben-item {
+  justify-content: flex-end;
+  text-align: right;
+}
+
+.Ser-ben-side-right .Ser-ben-item {
+  justify-content: flex-start;
+  text-align: left;
+}
 
 .Ser-ben-num {
   font-family: 'Bebas Neue', cursive;
@@ -311,7 +316,6 @@
   font-size: 14px;
   max-width: 270px;
   line-height: 1.6;
-  text-align: justify;
 }
 
 .Ser-ben-line-left, .Ser-ben-line-right {
@@ -322,8 +326,13 @@
   top: 50%;
 }
 
-.Ser-ben-line-left { right: -90px; }
-.Ser-ben-line-right { left: -90px; }
+.Ser-ben-line-left {
+  right: -90px;
+}
+
+.Ser-ben-line-right {
+  left: -90px;
+}
 
 .dot-outer {
   position: absolute;
@@ -334,8 +343,13 @@
   top: -3px;
 }
 
-.Ser-ben-line-left .dot-outer { left: 0; }
-.Ser-ben-line-right .dot-outer { right: 0; }
+.Ser-ben-line-left .dot-outer {
+  left: 0;
+}
+
+.Ser-ben-line-right .dot-outer {
+  right: 0;
+}
 
 .Ser-ben-center {
   flex: 0 0 450px;
@@ -350,7 +364,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 0 50px rgba(0,0,0,0.5);
 }
 
 .Ser-ben-circle-inner {
@@ -367,49 +380,469 @@
   object-fit: cover;
 }
 
-.Ser-play-btn {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 70px;
-  height: 70px;
-  background: rgba(0,0,0,0.4);
-  backdrop-filter: blur(5px);
-  border-radius: 50%;
+.Ser-cta-section {
+  position: relative;
+  padding: 120px 5%;
+  background-position: center;
+  background-attachment: fixed;
+  text-align: center;
   display: flex;
-  align-items: center;
   justify-content: center;
-  cursor: pointer;
+  align-items: center;
 }
 
-.play-icon {
-  width: 0;
-  height: 0;
-  border-top: 12px solid transparent;
-  border-bottom: 12px solid transparent;
-  border-left: 20px solid #fff;
-  margin-left: 5px;
+.Ser-cta-overlay {
+  position: absolute;
+  inset: 0;
+}
+
+.Ser-cta-content {
+  position: relative;
+  max-width: 900px;
+  z-index: 5;
+  color: #1a1a1a;
+}
+
+.Ser-cta-title {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 4.5rem;
+  margin-bottom: 25px;
+  letter-spacing: 1.5px;
+  line-height: 1;
+}
+
+.Ser-cta-text {
+  font-size: 1.2rem;
+  line-height: 1.8;
+  color: #3b3b3b;
+  margin-bottom: 45px;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.Ser-cta-text strong {
+  color: #000000;
+  border-bottom: 2px solid #505050;
+}
+
+.Ser-cta-btns {
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  margin-bottom: 40px;
+}
+
+.Ser-cta-btn-primary, .Ser-cta-btn-secondary {
+  padding: 16px 40px;
+  border-radius: 50px;
+  font-weight: 800;
+  text-decoration: none;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.Ser-cta-btn-primary {
+  background-color: #1f1f1f;
+  color: #ffffff;
+}
+
+.Ser-cta-btn-primary:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(170, 170, 170, 0.3);
+}
+
+.Ser-cta-btn-secondary {
+  background-color: transparent;
+  border: 2px solid #000000;
+  color: #000000;
+}
+
+.Ser-cta-btn-secondary:hover {
+  transform: translateY(-5px);
+  background-color: #fff;
+  color: #000;
+}
+
+.Ser-cta-trust {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #494949;
+}
+
+.Ser-cta-trust span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 @media (max-width: 1200px) {
-  .Ser-ben-container { flex-direction: column; gap: 40px; }
-  .Ser-ben-line-left, .Ser-ben-line-right { display: none; }
-  .Ser-ben-side-left, .Ser-ben-side-right { gap: 40px; text-align: center; }
-  .Ser-ben-item { flex-direction: column; justify-content: center !important; }
-  .Ser-ben-text p { max-width: 400px; }
-  .Ser-ben-title { font-size: 2.5rem; }
-  .Ser-ben-circle { width: 300px; height: 300px; }
+  .Ser-uniform-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
+  }
+  
+  .Ser-why-feature-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+  }
+  
+  .Ser-ben-container {
+    flex-direction: column;
+    gap: 40px;
+  }
+  
+  .Ser-ben-line-left, .Ser-ben-line-right {
+    display: none;
+  }
+  
+  .Ser-ben-side-left, .Ser-ben-side-right {
+    gap: 40px;
+  }
+  
+  .Ser-ben-item {
+    justify-content: center;
+    text-align: center;
+    flex-direction: column;
+  }
+  
+  .Ser-ben-side-left .Ser-ben-item, 
+  .Ser-ben-side-right .Ser-ben-item {
+    justify-content: center;
+    text-align: center;
+  }
+  
+  .Ser-ben-num {
+    margin: 0 0 15px 0;
+  }
+  
+  .Ser-ben-text p {
+    max-width: 100%;
+  }
+  
+  .Ser-ben-center {
+    flex: 0 0 auto;
+    margin: 20px 0;
+  }
+  
+  .Ser-ben-circle {
+    width: 300px;
+    height: 300px;
+  }
+  
+  .Ser-cta-title {
+    font-size: 3.5rem;
+  }
+  
+  .Ser-hero-content h1 {
+    font-size: 60px;
+  }
+  
+  .Ser-intro-title {
+    font-size: 2.2rem;
+  }
+  
+  .Ser-why-main-title {
+    font-size: 2.3rem;
+  }
 }
 
-@media (max-width: 1100px) {
-  .Ser-uniform-grid, .Ser-why-feature-grid { grid-template-columns: repeat(2, 1fr); }
-  .Ser-hero-content h1 { font-size: 60px; }
+@media (max-width: 992px) {
+  .Ser-cta-section {
+    padding: 80px 5%;
+  }
+  
+  .Ser-cta-title {
+    font-size: 3rem;
+  }
+  
+  .Ser-cta-text {
+    font-size: 1rem;
+    padding: 0 20px;
+  }
+  
+  .Ser-cta-btns {
+    flex-wrap: wrap;
+  }
+  
+  .Ser-cta-btn-primary, .Ser-cta-btn-secondary {
+    padding: 14px 35px;
+    font-size: 14px;
+  }
+  
+  .Ser-cta-trust {
+    flex-wrap: wrap;
+    gap: 20px;
+  }
 }
 
 @media (max-width: 768px) {
-  .Ser-uniform-grid, .Ser-why-feature-grid { grid-template-columns: 1fr; }
-  .Ser-hero { margin: 10px; height: 30vh; }
-  .Ser-hero-content h1 { font-size: 40px; }
-  .Ser-ben-num { font-size: 50px; }
+  .Ser-hero {
+    margin: 10px;
+    border-radius: 20px;
+    height: 30vh;
+  }
+  
+  .Ser-hero-content h1 {
+    font-size: 40px;
+  }
+  
+  .Ser-intro-section {
+    padding: 50px 4% 20px;
+  }
+  
+  .Ser-intro-title {
+    font-size: 1.8rem;
+  }
+  
+  .Ser-intro-tag {
+    font-size: 0.8rem;
+  }
+  
+  .Ser-services-section {
+    padding: 40px 4% 60px;
+  }
+  
+  .Ser-uniform-grid {
+    grid-template-columns: 1fr;
+    gap: 25px;
+  }
+  
+  .Ser-img-card {
+    height: 420px;
+  }
+  
+  .Ser-card-info-overlay {
+    padding: 25px;
+  }
+  
+  .Ser-card-title {
+    font-size: 22px;
+  }
+  
+  .Ser-card-text {
+    font-size: 14px;
+  }
+  
+  .Ser-why-us-minimal {
+    padding: 40px 5% 60px;
+  }
+  
+  .Ser-why-main-title {
+    font-size: 1.8rem;
+  }
+  
+  .Ser-why-main-sub {
+    font-size: 0.95rem;
+    margin-bottom: 40px;
+    padding: 0 15px;
+  }
+  
+  .Ser-why-feature-grid {
+    grid-template-columns: 1fr;
+    gap: 25px;
+  }
+  
+  .Ser-feature-box {
+    padding: 30px 20px;
+  }
+  
+  .Ser-feature-box h3 {
+    font-size: 1.2rem;
+  }
+  
+  .Ser-feature-box p {
+    font-size: 0.9rem;
+  }
+  
+  .Ser-benefits-dark {
+    padding: 50px 4%;
+  }
+  
+  .Ser-ben-title {
+    font-size: 2.5rem;
+  }
+  
+  .Ser-ben-tag {
+    font-size: 12px;
+  }
+  
+  .Ser-ben-side-left, .Ser-ben-side-right {
+    gap: 30px;
+  }
+  
+  .Ser-ben-num {
+    font-size: 50px;
+  }
+  
+  .Ser-ben-text h3 {
+    font-size: 18px;
+  }
+  
+  .Ser-ben-text p {
+    font-size: 13px;
+  }
+  
+  .Ser-ben-circle {
+    width: 250px;
+    height: 250px;
+  }
+  
+  .Ser-cta-section {
+    padding: 60px 4%;
+  }
+  
+  .Ser-cta-title {
+    font-size: 2.5rem;
+  }
+  
+  .Ser-cta-text {
+    font-size: 0.95rem;
+    margin-bottom: 30px;
+  }
+  
+  .Ser-cta-btns {
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+  }
+  
+  .Ser-cta-btn-primary, .Ser-cta-btn-secondary {
+    padding: 12px 30px;
+    font-size: 13px;
+    width: 100%;
+    max-width: 250px;
+  }
+  
+  .Ser-cta-trust {
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+  }
+  
+  .Ser-cta-trust span {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .Ser-hero {
+    height: 25vh;
+    margin: 8px;
+    border-radius: 15px;
+  }
+  
+  .Ser-hero-content h1 {
+    font-size: 32px;
+  }
+  
+  .Ser-intro-section {
+    padding: 40px 3% 15px;
+  }
+  
+  .Ser-intro-title {
+    font-size: 1.5rem;
+  }
+  
+  .Ser-services-section {
+    padding: 30px 3% 50px;
+  }
+  
+  .Ser-img-card {
+    height: 380px;
+  }
+  
+  .Ser-card-info-overlay {
+    padding: 20px;
+  }
+  
+  .Ser-card-title {
+    font-size: 20px;
+  }
+  
+  .Ser-card-text {
+    font-size: 13px;
+  }
+  
+  .Ser-why-us-minimal {
+    padding: 30px 4% 50px;
+  }
+  
+  .Ser-why-main-title {
+    font-size: 1.5rem;
+  }
+  
+  .Ser-why-main-sub {
+    font-size: 0.9rem;
+    margin-bottom: 30px;
+  }
+  
+  .Ser-feature-box {
+    padding: 25px 15px;
+  }
+  
+  .Ser-feature-icon {
+    width: 45px;
+    height: 45px;
+  }
+  
+  .Ser-feature-box h3 {
+    font-size: 1.1rem;
+  }
+  
+  .Ser-benefits-dark {
+    padding: 40px 3%;
+  }
+  
+  .Ser-ben-title {
+    font-size: 2rem;
+  }
+  
+  .Ser-ben-header {
+    margin-bottom: 35px;
+  }
+  
+  .Ser-ben-num {
+    font-size: 40px;
+  }
+  
+  .Ser-ben-text h3 {
+    font-size: 16px;
+  }
+  
+  .Ser-ben-text p {
+    font-size: 12px;
+  }
+  
+  .Ser-ben-circle {
+    width: 200px;
+    height: 200px;
+  }
+  
+  .Ser-cta-section {
+    padding: 50px 3%;
+  }
+  
+  .Ser-cta-title {
+    font-size: 2rem;
+  }
+  
+  .Ser-cta-text {
+    font-size: 0.9rem;
+    padding: 0 10px;
+  }
+  
+  .Ser-cta-btn-primary, .Ser-cta-btn-secondary {
+    padding: 10px 25px;
+    font-size: 12px;
+  }
+  
+  .Ser-cta-trust span {
+    font-size: 12px;
+  }
 }
