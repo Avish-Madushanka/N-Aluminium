@@ -13,38 +13,38 @@ import Img6 from '../../assets/s6.jpg';
 function ServiceMain() {
   const services = [
     {
-      title: "Aluminum Fabrication",
-      desc: "Custom aluminum doors, windows, frames, and structures designed with precision.",
-      img: Img1,
-      link: "/Fabrication",
-    },
-    {
       title: "Scrap Collection",
       desc: "Easy scheduling for aluminum scrap pickup from homes and businesses.",
-      img: Img2,
+      img: Img1,
       link: "/Collection",
     },
     {
+      title: "Training Programme",
+      desc: "Training programs for aluminum fabrication and recycling skills.",
+      img: Img2,
+      link: "/AluTReg",
+    },
+    {
       title: "Material Marketplace",
-      desc: "Buy and sell reusable aluminum products with transparent pricing.",
+      desc: "Smart marketplace for trading aluminum materials quickly and efficiently.",
       img: Img3,
       link: "/ItemMarkert",
     },
     {
-      title: "Custom Projects",
+      title: "test",
       desc: "Support for industrial and personal aluminum fabrication projects.",
       img: Img4,
+      link: "/Pro",
+    },
+    {
+      title: "Aluminum Fabricationg",
+      desc: "Custom aluminum fabrication with strength, quality, and precision.",
+      img: Img5,
       link: "/Project",
     },
     {
-      title: "Real-Time Pricing",
-      desc: "Track current aluminum scrap value and make better selling decisions.",
-      img: Img5,
-      link: "/Pricing",
-    },
-    {
       title: "Buy & Sell Aluminum",
-      desc: "Direct platform for trading aluminum materials and finished products.",
+      desc: "Buy and sell aluminum materials easily with secure transactions.",
       img: Img6,
       link: "/BuyandSell",
     },
