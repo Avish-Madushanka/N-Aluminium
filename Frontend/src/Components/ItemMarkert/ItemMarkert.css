@@ -7,42 +7,25 @@
 }
 
 .ItemMAR-heroSection {
-  height: 350px;
-  margin: 50px;
-  border-radius: 40px;
+  height: 450px;
   overflow: hidden;
   position: relative;
 }
 
-.ItemMAR-heroCarousel {
+.ItemMAR-heroImage {
   width: 100%;
   height: 100%;
   position: relative;
 }
 
-.ItemMAR-heroSlide {
-  position: absolute;
-  top: 0;
-  left: 0;
+.ItemMAR-heroBanner {
   width: 100%;
   height: 100%;
-  background-size: cover;
-  background-position: center;
-  opacity: 0;
-  transition: opacity 0.5s ease-in-out;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  padding-left: 10%;
-  color: #fff;
+  object-fit: cover;
+  object-position: center;
 }
 
-.ItemMAR-heroSlide.active {
-  opacity: 1;
-}
-
-.ItemMAR-heroSlide::before {
+.ItemMAR-heroImage::before {
   content: '';
   position: absolute;
   top: 0;
@@ -54,8 +37,12 @@
 }
 
 .ItemMAR-heroContent {
-  position: relative;
+  position: absolute;
+  top: 50%;
+  left: 10%;
+  transform: translateY(-50%);
   z-index: 2;
+  color: #fff;
 }
 
 .ItemMAR-heroContent h1 {
@@ -67,63 +54,6 @@
 .ItemMAR-heroContent p {
   font-size: 20px;
   text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
-}
-
-.ItemMAR-heroNav {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 45px;
-  height: 45px;
-  background: rgba(255,255,255,0.3);
-  border: 2px solid white;
-  border-radius: 50%;
-  color: white;
-  font-size: 24px;
-  font-weight: bold;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10;
-  transition: all 0.3s ease;
-}
-
-.ItemMAR-heroNav:hover {
-  background: white;
-  color: #333;
-}
-
-.ItemMAR-heroPrev {
-  left: 20px;
-}
-
-.ItemMAR-heroNext {
-  right: 20px;
-}
-
-.ItemMAR-heroDots {
-  position: absolute;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 10px;
-  z-index: 10;
-}
-
-.ItemMAR-heroDot {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.5);
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.ItemMAR-heroDot.active {
-  background: white;
-  transform: scale(1.2);
 }
 
 .ItemMAR-categorySection {
@@ -716,24 +646,6 @@
   transform: translateY(-2px);
 }
 
-.ItemMAR-modal-buy-now {
-  flex: 1;
-  padding: 15px 20px;
-  border: none;
-  border-radius: 30px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  background: #000;
-  color: white;
-}
-
-.ItemMAR-modal-buy-now:hover {
-  background: #333;
-  transform: translateY(-2px);
-}
-
 .ItemMAR-modal-no-options {
   color: #999;
   font-size: 14px;
@@ -914,14 +826,7 @@
   }
   
   .ItemMAR-heroSection {
-    margin: 20px;
     height: 250px;
-  }
-  
-  .ItemMAR-heroNav {
-    width: 35px;
-    height: 35px;
-    font-size: 18px;
   }
   
   .ItemMAR-heroContent h1 {

@@ -12,11 +12,11 @@ import knife from "../../assets/knife.png";
 import Rmac from "../../assets/Rmac.png";
 import sivilim from "../../assets/sivilim.png";
 import glass from "../../assets/glass.png";
+import ItemWall1 from "../../assets/ItemWall1.jpg";
 
 const ItemMarkert = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedMainCategory, setSelectedMainCategory] = useState('all');
-  const [currentHeroSlide, setCurrentHeroSlide] = useState(0);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -28,24 +28,6 @@ const ItemMarkert = () => {
   const [showModal, setShowModal] = useState(false);
   const [addingToCart, setAddingToCart] = useState(false);
   const [cartMessage, setCartMessage] = useState('');
-
-  const heroSlides = [
-    {
-      image: 'https://www.alineautomation.com/wp-content/uploads/2024/08/ALineAutomation-301227-Aluminum-Square-Bars-Blogbanner1-1024x536.jpg',
-      title: 'Premium Aluminum Bars',
-      subtitle: 'High Quality for Professional Use'
-    },
-    {
-      image: 'https://www.flemingconstructiongroup.com/wp-content/uploads/2022/09/AdobeStock_216792368-scaled.jpeg',
-      title: 'Glass Solutions',
-      subtitle: 'Tempered & Frosted Glass'
-    },
-    {
-      image: 'https://www.alucom.ae/images/aluminium-composite-panels-1.jpg',
-      title: 'Cradding Boards',
-      subtitle: 'Modern Finishing Solutions'
-    }
-  ];
 
   const categories = [
     { id: 1, name: 'Box Bars', image: box, category: 'box-bars' },
@@ -165,14 +147,6 @@ const ItemMarkert = () => {
     setSelectedCategory('all');
   };
 
-  const nextHeroSlide = () => {
-    setCurrentHeroSlide((prev) => (prev + 1) % heroSlides.length);
-  };
-
-  const prevHeroSlide = () => {
-    setCurrentHeroSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length);
-  };
-
   const handleBuyNow = (product) => {
     setSelectedProduct(product);
     setSelectedColor(product.colors && product.colors.length > 0 ? product.colors[0] : '');
@@ -261,29 +235,11 @@ const ItemMarkert = () => {
 
       <main className="ItemMAR-mainContent">
         <section className="ItemMAR-heroSection">
-          <div className="ItemMAR-heroCarousel">
-            {heroSlides.map((slide, index) => (
-              <div
-                key={index}
-                className={`ItemMAR-heroSlide ${index === currentHeroSlide ? 'active' : ''}`}
-                style={{ backgroundImage: `url(${slide.image})` }}
-              >
-                <div className="ItemMAR-heroContent">
-                  <h1>{slide.title}</h1>
-                  <p>{slide.subtitle}</p>
-                </div>
-              </div>
-            ))}
-            <button className="ItemMAR-heroNav ItemMAR-heroPrev" onClick={prevHeroSlide}>❮</button>
-            <button className="ItemMAR-heroNav ItemMAR-heroNext" onClick={nextHeroSlide}>❯</button>
-            <div className="ItemMAR-heroDots">
-              {heroSlides.map((_, index) => (
-                <span
-                  key={index}
-                  className={`ItemMAR-heroDot ${index === currentHeroSlide ? 'active' : ''}`}
-                  onClick={() => setCurrentHeroSlide(index)}
-                />
-              ))}
+          <div className="ItemMAR-heroImage">
+            <img src={ItemWall1} alt="Hero Banner" className="ItemMAR-heroBanner" />
+            <div className="ItemMAR-heroContent">
+              <h1>Premium Aluminum Products</h1>
+              <p>High Quality Materials for Professional Use</p>
             </div>
           </div>
         </section>

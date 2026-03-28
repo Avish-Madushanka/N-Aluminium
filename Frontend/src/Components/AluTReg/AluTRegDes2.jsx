@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './AluTRegDes2.css';
 
 function AluTRegDes2() {
@@ -10,12 +10,12 @@ function AluTRegDes2() {
     },
     {
       title: 'Mode',
-      description: 'Online and On-Site (select based on preference).',
+      description: 'On-Site sessions.',
       icon: 'https://cdn-icons-png.flaticon.com/128/11133/11133669.png',
     },
     {
       title: 'Duration',
-      description: 'Each training session lasts 2–3 hours.',
+      description: 'Each training sessions lasts 5–7 hours.',
       icon: 'https://cdn-icons-png.flaticon.com/128/1584/1584808.png',
     },
     {
@@ -25,12 +25,70 @@ function AluTRegDes2() {
     },
   ];
 
+  const statsData = [
+    { value: 45, suffix: '+', label: 'Practical Sessions', icon: 'https://cdn-icons-png.flaticon.com/128/18718/18718281.png' },
+    { value: 150, suffix: '+', label: 'Trained Students', icon: 'https://cdn-icons-png.flaticon.com/128/1018/1018662.png' },
+    { value: 85, suffix: '+', label: 'Successful Projects', icon: 'https://cdn-icons-png.flaticon.com/128/8644/8644515.png' },
+    { value: 79, suffix: '%', label: 'Job Placement Rate', icon: 'https://cdn-icons-png.flaticon.com/128/4559/4559359.png' },
+  ];
+
+  const [counts, setCounts] = useState(statsData.map(() => 0));
+  const [hasAnimated, setHasAnimated] = useState(false);
+  const statsRef = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !hasAnimated) {
+          setHasAnimated(true);
+          statsData.forEach((stat, index) => {
+            let start = 0;
+            const end = stat.value;
+            const duration = 2000;
+            const increment = end / (duration / 16);
+            
+            const timer = setInterval(() => {
+              start += increment;
+              if (start >= end) {
+                setCounts(prev => {
+                  const newCounts = [...prev];
+                  newCounts[index] = end;
+                  return newCounts;
+                });
+                clearInterval(timer);
+              } else {
+                setCounts(prev => {
+                  const newCounts = [...prev];
+                  newCounts[index] = Math.floor(start);
+                  return newCounts;
+                });
+              }
+            }, 16);
+            
+            return () => clearInterval(timer);
+          });
+        }
+      },
+      { threshold: 0.3 }
+    );
+
+    if (statsRef.current) {
+      observer.observe(statsRef.current);
+    }
+
+    return () => {
+      if (statsRef.current) {
+        observer.unobserve(statsRef.current);
+      }
+    };
+  }, [hasAnimated]);
+
   return (
     <div className="AluTRegMain">
       <div className="Alu-Container">
         <section className="ATW1-section">
           <p className="ATW1-subtitle">TRAINING SCHEDULE & DURATION</p>
-          <h2 className="ATW1-main-title">LEARN WITH FLEXIBILITY AND EXPERT GUIDANCE</h2>
+          <h2 className="ATW1-main-title">LEARN WITH FLEXIBILITY <br /> AND EXPERT GUIDANCE</h2>
           <p className="ATW1-description">
             Our aluminum recycling workshops are designed to suit all learners — 
             from beginners to industry professionals. Choose your preferred schedule and training mode to grow your skills sustainably.
@@ -109,37 +167,24 @@ function AluTRegDes2() {
           </div>
         </div>
       </div>
-      <div className="AT3-stats-section">
+      
+      <div className="AT3-stats-section" ref={statsRef}>
         <div className="AT3-stats-container">
-          <div className="AT3-stat-item">
-            <img src="https://cdn-icons-png.flaticon.com/128/18718/18718281.png" className="AT3-stat-icon" />
-            <div className="AT3-stat-number">45<sup>+</sup></div>
-            <div className="AT3-stat-label">Practical Sessions</div>
-          </div>
-
-          <div className="AT3-stat-item">
-            <img src="https://cdn-icons-png.flaticon.com/128/1018/1018662.png" className="AT3-stat-icon" />
-            <div className="AT3-stat-number">150<sup>+</sup></div>
-            <div className="AT3-stat-label">Trained Students</div>
-          </div>
-
-          <div className="AT3-stat-item">
-            <img src="https://cdn-icons-png.flaticon.com/128/8644/8644515.png" className="AT3-stat-icon" />
-            <div className="AT3-stat-number">85<sup>+</sup></div>
-            <div className="AT3-stat-label">Successful Projects</div>
-          </div>
-
-          <div className="AT3-stat-item">
-            <img src="https://cdn-icons-png.flaticon.com/128/4559/4559359.png" className="AT3-stat-icon" />
-            <div className="AT3-stat-number">79<sup>%</sup></div>
-            <div className="AT3-stat-label">Job Placement Rate</div>
-          </div>
+          {statsData.map((stat, index) => (
+            <div key={index} className="AT3-stat-item">
+              <img src={stat.icon} className="AT3-stat-icon" alt={stat.label} />
+              <div className="AT3-stat-number">
+                {counts[index]}<sup>{stat.suffix}</sup>
+              </div>
+              <div className="AT3-stat-label">{stat.label}</div>
+            </div>
+          ))}
         </div>
       </div>
 
       <div className="AT5-offer-section">
       <div className="AT5-header-container">
-        <h2 className="AT5-main-heading">Why Join Our Aluminum Training Program?</h2>
+        <h2 className="AT5-main-heading">Skills & Opportunities You Will Achieve</h2>
       </div>
       
       <div className="AT5-content-layout"> 

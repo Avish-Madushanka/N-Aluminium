@@ -37,7 +37,7 @@ function ServiceMain() {
       link: "/Pro",
     },
     {
-      title: "Aluminum Fabricationg",
+      title: "Aluminum Fabrication",
       desc: "Custom aluminum fabrication with strength, quality, and precision.",
       img: Img5,
       link: "/Project",

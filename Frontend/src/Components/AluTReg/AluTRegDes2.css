@@ -20,7 +20,8 @@
 }
 
 .ATW1-main-title {
-  font-size: 46px;
+  font-family: 'Georgia', serif;
+  font-size: 2.8rem;
   color: #2c3e50;
   margin-bottom: 20px;
   font-weight: 900;
@@ -85,6 +86,9 @@
   line-height: 1.5;
   margin: 0;
 }
+
+
+/*--------- AReg1 ---------*/
 
 .AReg1--main-container {
   background-color: #ffffff;
@@ -270,6 +274,10 @@
   transform: translateY(-2px);
 }
 
+
+
+/*--------- AT3 ---------*/
+
 .AT3-stats-section {
   margin-top: 70px;
   background-color: #161616;
@@ -337,6 +345,75 @@
   letter-spacing: 0.5px;
   margin-top: 8px;
 }
+
+.AT3-stats-section {
+  margin-top: 70px;
+  background-color: #161616;
+  padding: 60px 40px;
+  color: #fff;
+  padding-top: 60px;
+}
+
+.AT3-stats-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  max-width: 1300px;
+  margin: 0 auto;
+  flex-wrap: wrap;
+  gap: 60px;
+}
+
+.AT3-stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  flex: 1;
+  min-width: 220px;
+}
+
+.AT3-stat-icon {
+  width: 70px;
+  height: 70px;
+  margin-bottom: 20px;
+  filter: brightness(1) saturate(1.2);
+  transition: transform 0.3s ease;
+}
+
+.AT3-stat-item:hover .AT3-stat-icon {
+  transform: scale(1.1);
+}
+
+.AT3-stat-number {
+  font-size: 3.2rem;
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: 10px;
+  color: #FFC107;
+}
+
+.AT3-stat-number sup {
+  font-size: 0.5em;
+  vertical-align: super;
+  position: relative;
+  top: -0.5em;
+  margin-left: 2px;
+}
+
+.AT3-stat-label {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #E0E0E0;
+  letter-spacing: 0.5px;
+  margin-top: 8px;
+}
+
+
+
+
+/*--------- AT5 ---------*/
+
 
 .AT5-offer-section {
   background-color: #ffffff;
@@ -445,68 +522,6 @@
 .AT5-main-image:hover {
   transform: scale(1.15);
 }
-.AT3-stats-section {
-  margin-top: 70px;
-  background-color: #161616;
-  padding: 60px 40px;
-  color: #fff;
-  padding-top: 60px;
-}
-
-.AT3-stats-container {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  max-width: 1300px;
-  margin: 0 auto;
-  flex-wrap: wrap;
-  gap: 60px;
-}
-
-.AT3-stat-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  flex: 1;
-  min-width: 220px;
-}
-
-.AT3-stat-icon {
-  width: 70px;
-  height: 70px;
-  margin-bottom: 20px;
-  filter: brightness(1) saturate(1.2);
-  transition: transform 0.3s ease;
-}
-
-.AT3-stat-item:hover .AT3-stat-icon {
-  transform: scale(1.1);
-}
-
-.AT3-stat-number {
-  font-size: 3.2rem;
-  font-weight: 700;
-  line-height: 1;
-  margin-bottom: 10px;
-  color: #FFC107;
-}
-
-.AT3-stat-number sup {
-  font-size: 0.5em;
-  vertical-align: super;
-  position: relative;
-  top: -0.5em;
-  margin-left: 2px;
-}
-
-.AT3-stat-label {
-  font-size: 1.1rem;
-  font-weight: 500;
-  color: #E0E0E0;
-  letter-spacing: 0.5px;
-  margin-top: 8px;
-}
 
 .AT5-offer-section {
   background-color: #F8F8F8;
@@ -522,7 +537,6 @@
 }
 
 .AT5-main-heading {
-  font-family: Georgia, serif;
   font-size: 3.5rem;
   font-weight: 700;
   color: #2c3e50;
@@ -608,11 +622,16 @@
   height: auto;
 }
 
+
+/*--------responsive----------*/
+
+
 @media (max-width: 1200px) {
   .AT5-content-layout {
     flex-direction: column;
     gap: 40px;
   }
+  
   .AT5-programs-column {
     flex-direction: row;
     flex-wrap: wrap;
@@ -621,16 +640,19 @@
     max-width: 700px;
     gap: 40px;
   }
+  
   .AT5-program-item {
     flex-basis: calc(50% - 20px);
     align-items: center;
     text-align: center;
   }
+  
   .AT5-main-image-wrapper {
     order: -1;
     flex-basis: auto;
     margin-bottom: 40px;
   }
+  
   .AT5-main-image {
     max-width: 400px;
   }
@@ -641,6 +663,7 @@
     justify-content: center;
     gap: 30px;
   }
+  
   .AT3-stat-item {
     min-width: 200px;
   }
@@ -650,77 +673,91 @@
   .AT3-stats-section {
     padding: 60px 20px;
   }
+  
   .AT3-stat-number {
     font-size: 2.8rem;
   }
+  
   .AT3-stat-icon {
     width: 60px;
     height: 60px;
   }
+  
   .AT3-stat-label {
     font-size: 1rem;
   }
+  
   .AT5-offer-section {
     padding: 60px 20px;
   }
+  
   .AT5-main-heading {
     font-size: 2.8rem;
   }
-  .AT5-sub-description {
-    font-size: 1rem;
-  }
+  
   .AT5-programs-column {
     gap: 30px;
   }
+  
   .AT5-program-item {
     flex-basis: 100%;
   }
+  
   .AT5-program-title {
     font-size: 1.2rem;
   }
+  
   .AT5-program-text {
     font-size: 0.9rem;
     max-width: 90%;
   }
+  
   .AReg1--main-content {
     flex-direction: column;
     align-items: center;
     text-align: center;
     gap: 30px;
   }
+  
   .AReg1--left-section,
   .AReg1--right-section {
     min-width: 100%;
     padding: 0 15px;
   }
+  
   .AReg1--title {
     font-size: 1.8rem;
   }
+  
   .AReg1--description {
     font-size: 0.95rem;
     text-align: center;
   }
+  
   .AReg1--info-card-container {
     height: auto;
     padding: 25px 20px;
   }
+  
   .AReg1--info-item {
-    flex-direction: column;
-    align-items: center;
     gap: 10px;
     margin-bottom: 25px;
   }
+  
   .AReg1--info-icon {
     width: 50px;
     height: 50px;
   }
+  
   .AReg1--info-content h3 {
     font-size: 1rem;
   }
+  
   .AReg1--info-content p {
     font-size: 0.9rem;
     text-align: center;
   }
+  
   .AReg1--learn-more-button {
     width: 100%;
     padding: 12px 0;
@@ -733,22 +770,23 @@
     flex-direction: column;
     gap: 35px;
   }
+  
   .AT3-stat-item {
     width: 100%;
     max-width: 320px;
   }
+  
   .AT5-main-heading {
     font-size: 2.2rem;
   }
+  
   .AT5-main-image {
     max-width: 300px;
   }
+  
   .AT5-program-icon-wrapper {
     width: 50px;
     height: 50px;
     margin-bottom: 15px;
-  }
-  .AT5-program-icon {
-    font-size: 1.5rem;
   }
 }
