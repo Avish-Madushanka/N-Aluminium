@@ -43,7 +43,7 @@ const ContactReviewPage = () => {
         <div className="Con-intro-header">
           <span className="Con-intro-tag">GET IN TOUCH</span>
           <h2 className="Con-intro-title">
-            Let’s Discuss Your <br /> Aluminum Solutions
+            Let's Discuss Your <br /> Aluminum Solutions
           </h2>
           <p className="Con-intro-sub">
             Whether you need custom fabrication, scrap collection, or market insights, 
@@ -71,7 +71,7 @@ const ContactReviewPage = () => {
                 <FaEnvelope className="Con-large-icon" /> <span>donotreply.ALUX@gmail.com</span>
               </div>
               <div className="Con-link-item">
-                <FaMapMarkerAlt className="Con-large-icon" /> <span>426F Shanthi Garden, Medha MW,<br />Alubomulla, Panadura</span>
+                <FaMapMarkerAlt className="Con-large-icon" /> <span>426F Shanthi Garden,<br />Alubomulla, Panadura</span>
               </div>
             </div>
 
@@ -83,7 +83,7 @@ const ContactReviewPage = () => {
                 </a>
               </div>
               <div className="Con-talent-image">
-                <img src="https://aluminiumacademy.com/wp-content/uploads/2024/03/Technical-Training.jpg" />
+                <img src="https://aluminiumacademy.com/wp-content/uploads/2024/03/Technical-Training.jpg" alt="Technical Training" />
               </div>
             </div>
           </div>
@@ -124,7 +124,15 @@ const ContactReviewPage = () => {
 
               <div className="Con-input-box full-width">
                 <label>Tell Us About Your Project <span>*</span></label>
-                <textarea name="message" value={formData.message6} onChange={handleChange} placeholder="Leave your message here" required rows="4"></textarea>
+                <textarea 
+                  name="message" 
+                  value={formData.message} 
+                  onChange={handleChange} 
+                  placeholder="Leave your message here" 
+                  required 
+                  rows="4"
+                  className="Con-message-textarea"
+                ></textarea>
               </div>
 
               <button type="submit" className="Con-submit-btn-real" disabled={isSubmitting}>

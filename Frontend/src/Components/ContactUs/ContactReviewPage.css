@@ -2,7 +2,7 @@
 
 .Con-root {
   font-family: 'Montserrat', sans-serif;
-  background-color: #f4faff;
+  background-color: #ffffff;
 }
 
 .Con-hero {
@@ -59,9 +59,9 @@
 }
 
 .Con-intro-sub {
-  color: #666;
+  color: #474747;
   font-size: 1rem;
-  line-height: 1.6;
+  line-height: 1.8;
   max-width: 800px;
   margin: 0 auto;
 }
@@ -91,7 +91,7 @@
 }
 
 .Con-main-heading span {
-  color: #616161;
+  color: #e03434;
 }
 
 .Con-sub-heading {
@@ -106,19 +106,20 @@
   flex-direction: column;
   gap: 20px;
   margin-bottom: 50px;
+  margin-left: 80px;
 }
 
 .Con-link-item {
   display: flex;
   align-items: center;
-  gap: 15px;
-  font-weight: 700;
-  color: #0d1b3e;
+  gap: 25px;
+  font-weight: 600;
+  color: #222222;
   font-size: 1.1rem;
 }
 
 .Con-large-icon {
-  color: #001696;
+  color: #d30000;
   font-size: 1.6rem;
 }
 
@@ -132,6 +133,7 @@
 }
 
 .Con-talent-content {
+  background-color: #e7e7e7;
   padding: 35px;
   flex: 1.2;
 }
@@ -212,21 +214,25 @@
 
 .Con-input-box input, 
 .Con-input-box select, 
-.Con-input-box textarea {
+.Con-message-textarea {
   padding: 12px 18px;
   border-radius: 8px;
   border: none;
   font-family: inherit;
   font-size: 0.95rem;
   color: #333;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-.Con-input-box textarea {
+.Con-message-textarea {
+  background-color: #e0e0e0;
+  color: #333;
   resize: none;
 }
 
 .Con-submit-btn-real {
-  background: #34ace0;
+  background: #e03434;
   color: white;
   border: none;
   padding: 14px 35px;
@@ -242,7 +248,7 @@
 }
 
 .Con-submit-btn-real:hover {
-  background: #258cb8;
+  background: #b82525;
   transform: translateX(5px);
 }
 
