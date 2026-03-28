@@ -1,194 +1,267 @@
-/* Container */
-.contact-form-container {
-  display: flex;
-  max-width: 1100px;
-  margin: 3rem auto;
-  border-radius: 15px;
-  overflow: hidden;
-  box-shadow: 0 15px 40px rgba(0,0,0,0.1);
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;500;600;700;800&display=swap');
+
+.Con-root {
+  font-family: 'Montserrat', sans-serif;
+  background-color: #f4faff;
 }
 
-.contact-left-panel {
-  flex: 1;
-  padding: 3rem;
-  background: #f9f9f9;
-}
-
-.contact-right-panel {
-  flex: 1;
-  padding: 3rem;
-  background: linear-gradient(145deg, #292929, #000000);
-  color: #fff;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: start;
-}
-
-.contact-header h2 {
-  font-size: 2rem;
-  color: #000000;
-  margin-bottom: 1rem;
-  text-transform: uppercase;
-}
-
-.intro-text {
-  font-size: 1rem;
-  color: #555;
-  line-height: 1.6;
-}
-
-/* Form */
-.contact-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.8rem;
-}
-
-.floating-label {
+.Con-hero {
   position: relative;
-}
-
-.floating-label input,
-.floating-label textarea {
-  width: 100%;
-  padding: 1.2rem 1rem 1.2rem 3rem;
-  border-radius: 10px;
-  border: 1px solid #ddd;
-  background: #fff;
-  font-size: 1rem;
-  transition: 0.3s;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-}
-
-.floating-label textarea {
-  min-height: 120px;
-}
-
-.floating-label label {
-  position: absolute;
-  top: 1.2rem;
-  left: 3rem;
-  font-size: 1rem;
-  color: #999;
-  transition: 0.3s;
-  pointer-events: none;
-}
-
-.floating-label input:focus + label,
-.floating-label textarea:focus + label,
-.floating-label input:not(:placeholder-shown) + label,
-.floating-label textarea:not(:placeholder-shown) + label {
-  top: -0.6rem;
-  left: 2.8rem;
-  font-size: 0.8rem;
-  color: #4361ee;
-  background: #f9f9f9;
-  padding: 0 0.3rem;
-}
-
-.input-icon {
-  position: absolute;
-  top: 1.2rem;
-  left: 1rem;
-  color: #999;
-}
-
-.submit-btn {
-  background: #444444;
-  color: #fff;
-  padding: 1rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  border-radius: 10px;
-  border: none;
+  height: 40vh;
+  background-image: url("https://t4.ftcdn.net/jpg/02/85/11/01/360_F_285110178_yUj7sFp89xPArBzrUnZ1qGP0TPLnDwr2.jpg");
+  background-size: cover;
+  background-position: center;
   display: flex;
-  justify-content: center;
   align-items: center;
-  gap: 0.5rem;
-  cursor: pointer;
-  transition: 0.3s;
+  justify-content: center;
+  margin: 20px 50px;
+  border-radius: 40px;
+  overflow: hidden;
 }
 
-.submit-btn:hover {
-  background: #272727;
-  transform: translateY(-2px);
+.Con-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
 }
 
-.submit-btn.submitting {
-  background: #4895ef;
+.Con-hero-content {
+  position: relative;
+  color: #ffffff;
 }
 
-.spinner {
+.Con-hero-content h1 {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 82px;
+  letter-spacing: 2px;
+  margin: 0;
+}
+
+.Con-intro-section {
+  padding: 60px 6% 30px;
+  text-align: center;
+}
+
+.Con-intro-tag {
+  color: #414141;
+  font-weight: 800;
+  font-size: 0.9rem;
+  letter-spacing: 1.5px;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.Con-intro-title {
+  font-size: 2.8rem;
+  font-weight: 800;
+  color: #0f0f0f;
+  margin-bottom: 15px;
+}
+
+.Con-intro-sub {
+  color: #666;
+  font-size: 1rem;
+  line-height: 1.6;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.Con-main-wrapper {
+  padding: 60px 6% 80px;
+}
+
+.Con-container {
+  display: flex;
+  max-width: 1300px;
+  margin: 0 auto;
+  gap: 50px;
+  align-items: flex-start;
+}
+
+.Con-info-side {
+  flex: 1;
+}
+
+.Con-main-heading {
+  font-size: 3.2rem;
+  color: #0e0e0e;
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 25px;
+}
+
+.Con-main-heading span {
+  color: #616161;
+}
+
+.Con-sub-heading {
+  font-size: 1.15rem;
+  color: #333;
+  margin-bottom: 40px;
+  line-height: 1.5;
+}
+
+.Con-contact-quick-links {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-bottom: 50px;
+}
+
+.Con-link-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  font-weight: 700;
+  color: #0d1b3e;
+  font-size: 1.1rem;
+}
+
+.Con-large-icon {
+  color: #001696;
+  font-size: 1.6rem;
+}
+
+.Con-talent-card {
+  background: white;
+  border-radius: 15px;
+  display: flex;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  max-width: 500px;
+}
+
+.Con-talent-content {
+  padding: 35px;
+  flex: 1.2;
+}
+
+.Con-talent-content h3 {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #131313;
+  margin-bottom: 20px;
+}
+
+.Con-job-link {
+  color: #001f41;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.Con-circle-arrow {
+  background: #1d1d1d;
+  color: white;
   width: 20px;
   height: 20px;
-  border: 3px solid rgba(255,255,255,0.3);
-  border-top-color: #fff;
   border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin { 100% { transform: rotate(360deg); } }
-
-.success-message {
-  margin-top: 1rem;
-  background: #4bb543;
-  color: #fff;
-  padding: 1rem;
-  border-radius: 8px;
-  text-align: center;
-  animation: fadeIn 0.5s ease-out;
-}
-
-@keyframes fadeIn { from { opacity:0; transform: translateY(10px);} to {opacity:1; transform:translateY(0);} }
-
-/* Right panel info */
-.info-card {
-  background: rgba(255,255,255,0.1);
-  backdrop-filter: blur(10px);
-  padding: 2rem;
-  border-radius: 12px;
-  width: 100%;
-}
-
-.info-item {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-}
-
-.info-item:last-child { margin-bottom:0; }
-
-.info-icon-wrapper {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.2);
   display: flex;
   align-items: center;
   justify-content: center;
+  font-size: 14px;
+  padding-bottom: 2px;
 }
 
-.info-content h4 {
-  font-size: 1rem;
+.Con-talent-image {
+  flex: 0.8;
+}
+
+.Con-talent-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.Con-form-side {
+  flex: 1;
+  background: #1a1a1a;
+  padding: 50px;
+  border-radius: 15px;
+}
+
+.Con-form-row {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.Con-input-box {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.Con-input-box.full-width {
+  margin-bottom: 20px;
+}
+
+.Con-input-box label {
+  color: white;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.Con-input-box label span {
+  color: #ff4d4d;
+}
+
+.Con-input-box input, 
+.Con-input-box select, 
+.Con-input-box textarea {
+  padding: 12px 18px;
+  border-radius: 8px;
+  border: none;
+  font-family: inherit;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.Con-input-box textarea {
+  resize: none;
+}
+
+.Con-submit-btn-real {
+  background: #34ace0;
+  color: white;
+  border: none;
+  padding: 14px 35px;
+  border-radius: 8px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: 0.3s;
   text-transform: uppercase;
-  opacity: 0.8;
+  font-size: 0.9rem;
 }
 
-.info-content p { font-size: 1.05rem; }
-
-/* Responsive */
-@media(max-width: 992px){
-  .contact-form-container { flex-direction: column; }
-  .contact-left-panel, .contact-right-panel { padding: 2rem; }
+.Con-submit-btn-real:hover {
+  background: #258cb8;
+  transform: translateX(5px);
 }
 
-@media(max-width:576px){
-  .floating-label input, .floating-label textarea { padding-left: 2.5rem; }
-  .floating-label label { left: 2.5rem; }
-  .input-icon { left: 0.8rem; }
-  .info-item { flex-direction: column; gap:0.8rem; }
-  .info-icon-wrapper { width:40px; height:40px; }
+.Con-success-box {
+  margin-top: 15px;
+  color: #c1ff00;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 1100px) {
+  .Con-container { flex-direction: column; gap: 40px; }
+  .Con-main-heading { font-size: 2.8rem; }
+  .Con-form-side { padding: 30px; }
+  .Con-hero { margin: 10px; height: 30vh; }
+}
+
+@media (max-width: 600px) {
+  .Con-form-row { flex-direction: column; }
+  .Con-talent-card { flex-direction: column; }
+  .Con-talent-image { height: 200px; }
 }

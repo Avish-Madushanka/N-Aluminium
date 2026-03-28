@@ -1,9 +1,16 @@
 import React, { useState } from 'react';
-import { FaPaperPlane, FaPhone, FaMapMarkerAlt, FaEnvelope, FaUser, FaComment } from 'react-icons/fa';
+import { FaPhoneAlt, FaEnvelope, FaMapMarkerAlt, FaLongArrowAltRight } from 'react-icons/fa';
 import './ContactReviewPage.css';
 
 const ContactReviewPage = () => {
-  const [formData, setFormData] = useState({ name: '', contact: '', message: '' });
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    location: '',
+    expertise: '',
+    message: ''
+  });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
 
@@ -15,68 +22,119 @@ const ContactReviewPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-
     setTimeout(() => {
-      console.log('Form submitted:', formData);
       setIsSubmitting(false);
       setSubmitSuccess(true);
-      setFormData({ name: '', contact: '', message: '' });
+      setFormData({ name: '', email: '', phone: '', location: '', expertise: '', message: '' });
       setTimeout(() => setSubmitSuccess(false), 4000);
     }, 1500);
   };
 
   return (
-    <div className="contact-form-container">
-      <div className="contact-left-panel">
-        <div className="contact-header">
-          <h2>Share Your Feedback</h2>
-          <p className="intro-text">
-            We value your input! Reach out with any questions or thoughts you have.
+    <div className="Con-root">
+      <section className="Con-hero">
+        <div className="Con-hero-overlay"></div>
+        <div className="Con-hero-content">
+          <h1>CONTACT US</h1>
+        </div>
+      </section>
+
+      <div className="Con-intro-section">
+        <div className="Con-intro-header">
+          <span className="Con-intro-tag">GET IN TOUCH</span>
+          <h2 className="Con-intro-title">
+            Let’s Discuss Your <br /> Aluminum Solutions
+          </h2>
+          <p className="Con-intro-sub">
+            Whether you need custom fabrication, scrap collection, or market insights, 
+            our team is here to help you optimize your resources.
           </p>
         </div>
-
-        <form onSubmit={handleSubmit} className="contact-form">
-          <div className="form-group floating-label">
-            <FaUser className="input-icon" />
-            <input type="text" name="name" value={formData.name} onChange={handleChange} required placeholder=" " />
-            <label>Your Name</label>
-          </div>
-
-          <div className="form-group floating-label">
-            <FaEnvelope className="input-icon" />
-            <input type="text" name="contact" value={formData.contact} onChange={handleChange} required placeholder=" " />
-            <label>Contact</label>
-          </div>
-
-          <div className="form-group floating-label">
-            <FaComment className="input-icon" />
-            <textarea name="message" value={formData.message} onChange={handleChange} required placeholder=" " rows="5" />
-            <label>Share your thoughts</label>
-          </div>
-
-          <button type="submit" className={`submit-btn ${isSubmitting ? 'submitting' : ''}`} disabled={isSubmitting}>
-            {isSubmitting ? <span className="spinner"></span> : <><FaPaperPlane /> Send Message</>}
-          </button>
-
-          {submitSuccess && <div className="success-message">Thank you! Your message has been received.</div>}
-        </form>
       </div>
 
-      <div className="contact-right-panel">
-        <h3>Contact Us</h3>
-        <div className="info-card">
-          <div className="info-item">
-            <div className="info-icon-wrapper"><FaPhone /></div>
-            <div className="info-content"><h4>Call Us</h4><p>+1 456-900-8908</p></div>
+      <div className="Con-main-wrapper">
+        <div className="Con-container">
+          
+          <div className="Con-info-side">
+            <h2 className="Con-main-heading">
+              <span>Connect</span> with Our Team of Experts
+            </h2>
+            <p className="Con-sub-heading">
+              Contact our team of excellence-driven experts today to bring your project to life.
+            </p>
+
+            <div className="Con-contact-quick-links">
+              <div className="Con-link-item">
+                <FaPhoneAlt className="Con-large-icon" /> <span>+94 72 104 6048</span>
+              </div>
+              <div className="Con-link-item">
+                <FaEnvelope className="Con-large-icon" /> <span>donotreply.ALUX@gmail.com</span>
+              </div>
+              <div className="Con-link-item">
+                <FaMapMarkerAlt className="Con-large-icon" /> <span>426F Shanthi Garden, Medha MW,<br />Alubomulla, Panadura</span>
+              </div>
+            </div>
+
+            <div className="Con-talent-card">
+              <div className="Con-talent-content">
+                <h3>Want to Join Our Training Programme?</h3>
+                <a href="/AluTReg" className="Con-job-link">
+                  JOIN HERE <div className="Con-circle-arrow">›</div>
+                </a>
+              </div>
+              <div className="Con-talent-image">
+                <img src="https://aluminiumacademy.com/wp-content/uploads/2024/03/Technical-Training.jpg" />
+              </div>
+            </div>
           </div>
-          <div className="info-item">
-            <div className="info-icon-wrapper"><FaMapMarkerAlt /></div>
-            <div className="info-content"><h4>Visit Us</h4><p>25/A Jameson Sparke St., Los Angeles, US</p></div>
+
+          <div className="Con-form-side">
+            <form onSubmit={handleSubmit} className="Con-real-form">
+              <div className="Con-form-row">
+                <div className="Con-input-box">
+                  <label>Full Name <span>*</span></label>
+                  <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Full Name" required />
+                </div>
+                <div className="Con-input-box">
+                  <label>Email Address <span>*</span></label>
+                  <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Email Address" required />
+                </div>
+              </div>
+
+              <div className="Con-form-row">
+                <div className="Con-input-box">
+                  <label>Phone Number</label>
+                  <input type="text" name="phone" value={formData.phone} onChange={handleChange} placeholder="Phone Number" />
+                </div>
+                <div className="Con-input-box">
+                  <label>Location</label>
+                  <input type="text" name="location" value={formData.location} onChange={handleChange} placeholder="Location" />
+                </div>
+              </div>
+
+              <div className="Con-input-box full-width">
+                <label>What Expertise You're Interested In <span>*</span></label>
+                <select name="expertise" value={formData.expertise} onChange={handleChange} required>
+                  <option value="">Select</option>
+                  <option value="fabrication">Aluminum Fabrication</option>
+                  <option value="scrap">Scrap Collection</option>
+                  <option value="marketplace">Material Marketplace</option>
+                </select>
+              </div>
+
+              <div className="Con-input-box full-width">
+                <label>Tell Us About Your Project <span>*</span></label>
+                <textarea name="message" value={formData.message6} onChange={handleChange} placeholder="Leave your message here" required rows="4"></textarea>
+              </div>
+
+              <button type="submit" className="Con-submit-btn-real" disabled={isSubmitting}>
+                {isSubmitting ? "SENDING..." : <>SUBMIT <FaLongArrowAltRight /></>}
+              </button>
+
+              {submitSuccess && <div className="Con-success-box">Message sent successfully!</div>}
+            </form>
           </div>
-          <div className="info-item">
-            <div className="info-icon-wrapper"><FaEnvelope /></div>
-            <div className="info-content"><h4>Email Us</h4><p>webbeyou@mail.com</p></div>
-          </div>
+
         </div>
       </div>
     </div>
