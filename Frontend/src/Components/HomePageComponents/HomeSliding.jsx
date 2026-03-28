@@ -16,9 +16,9 @@ const HomeSliding = () => {
       title: "Aluminum Scrap Collection",
       subtitle: "Schedule pickups easily and contribute to a sustainable future. We ensure fast, reliable, and responsible collection of all aluminum waste, helping you recycle efficiently.",
       button1Text: "Check Pickups",
-      button1Link: "/Collection",
-      button2Text: "Learn More",
-      button2Link: "/learn-more"
+      button1Link: "/CalendarDisplay",
+      button2Text: "More Details",
+      button2Link: "/Collection"
     },
     {
       id: 2,
@@ -38,7 +38,7 @@ const HomeSliding = () => {
       title: "High-Quality Aluminum for Build",
       subtitle: "Explore our wide range of aluminum construction items, from panels and profiles to sheets and fittings. Durable, reliable, and designed for modern construction projects.",
       button1Text: "Order Now",
-      button1Link: "/discover"
+      button1Link: "/ItemMarkert"
     },
   ]);
 

@@ -1,5 +1,6 @@
 import React from 'react';
 import './AluTRegMain.css';
+import { Link } from "react-router-dom";
 import {
   FaRecycle,
   FaLightbulb,
@@ -68,7 +69,9 @@ function AluTRegMain() {
           Reach out today to get personalized guidance and the best solutions for your aluminum recycling or training needs.
         </p>
       </div>
-      <button className="AT4-button">CONTACT US</button>
+        <Link to="/ContactUs">
+          <button className="AT4-button">CONTACT US</button>
+        </Link>
     </div>
     </div>
   );
