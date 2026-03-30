@@ -1,26 +1,79 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import './ProAddForm.css';
-import axiosInstance from '../../api/axiosInstance'; 
-import API_ENDPOINTS from '../../apiConfig'; 
+import axiosInstance from '../../api/axiosInstance';
+import API_ENDPOINTS from '../../apiConfig';
 
-const ProAddForm = () => {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [projectType, setProjectType] = useState('');
+const ProAddForm = ({ onAddProject, onClose }) => {
+  const [formData, setFormData] = useState({
+    title: '',
+    description: '',
+    projectType: '',
+    location: '',
+    projectDate: '',
+    featured: false
+  });
+
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [message, setMessage] = useState({ type: '', text: '' });
+  const [coverImageIndex, setCoverImageIndex] = useState(0);
+  const [errors, setErrors] = useState({});
+  const [touched, setTouched] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
+  const [apiError, setApiError] = useState('');
   const fileInputRef = useRef(null);
 
-  useEffect(() => {
-    if (message.text) {
-      const timer = setTimeout(() => {
-        setMessage({ type: '', text: '' });
-      }, 5000);
-      return () => clearTimeout(timer);
+  const projectTypes = [
+    { id: 'aluminum-doors', name: 'Aluminum Doors' },
+    { id: 'aluminum-windows', name: 'Aluminum Windows' },
+    { id: 'full-house-aluminum', name: 'Full House Aluminum' },
+    { id: 'curtain-walls', name: 'Curtain Walls' },
+    { id: 'facade-systems', name: 'Facade Systems' },
+    { id: 'skylights', name: 'Skylights' },
+    { id: 'structural-glazing', name: 'Structural Glazing' },
+    { id: 'other', name: 'Other' }
+  ];
+
+  const resetForm = () => {
+    setFormData({
+      title: '',
+      description: '',
+      projectType: '',
+      location: '',
+      projectDate: '',
+      featured: false
+    });
+    setSelectedFiles([]);
+    setImagePreviews([]);
+    setCoverImageIndex(0);
+    setErrors({});
+    setTouched({});
+    setApiError('');
+  };
+
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value
+    }));
+    
+    if (errors[name]) {
+      setErrors(prev => ({
+        ...prev,
+        [name]: null
+      }));
     }
-  }, [message]);
+  };
+
+  const handleBlur = (e) => {
+    const { name } = e.target;
+    setTouched(prev => ({
+      ...prev,
+      [name]: true
+    }));
+  };
 
   const handleFileInputAreaClick = () => {
     fileInputRef.current.click();
@@ -32,28 +85,53 @@ const ProAddForm = () => {
 
     const newTotalFiles = selectedFiles.length + files.length;
     if (newTotalFiles > 10) {
-      setMessage({ type: 'error', text: 'You can upload a maximum of 10 images.' });
+      setApiError('You can upload a maximum of 10 images.');
       return;
     }
 
-    setSelectedFiles(prevFiles => [...prevFiles, ...files]);
+    const validFiles = files.filter(file => {
+      const isValidType = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'].includes(file.type);
+      const isValidSize = file.size <= 10 * 1024 * 1024;
+      if (!isValidType) {
+        setApiError(`${file.name}: Only JPG, PNG, WEBP images are allowed.`);
+        return false;
+      }
+      if (!isValidSize) {
+        setApiError(`${file.name}: File size must be less than 10MB.`);
+        return false;
+      }
+      return true;
+    });
 
-    const newPreviewsPromises = files.map(file => {
-      return new Promise((resolve, reject) => {
+    if (validFiles.length === 0) return;
+
+    setSelectedFiles(prevFiles => [...prevFiles, ...validFiles]);
+
+    const newPreviewsPromises = validFiles.map(file => {
+      return new Promise((resolve) => {
         const reader = new FileReader();
         reader.onloadend = () => resolve({ file, previewUrl: reader.result });
-        reader.onerror = reject;
         reader.readAsDataURL(file);
       });
     });
 
     Promise.all(newPreviewsPromises)
       .then(newGeneratedPreviewsData => {
-        setImagePreviews(prevPreviews => [...prevPreviews, ...newGeneratedPreviewsData.map(d => d.previewUrl)]);
+        const newPreviews = newGeneratedPreviewsData.map(d => d.previewUrl);
+        setImagePreviews(prevPreviews => [...prevPreviews, ...newPreviews]);
+        
+        if (selectedFiles.length === 0 && coverImageIndex === 0) {
+          setCoverImageIndex(0);
+        }
+        
+        if (errors.images) {
+          setErrors(prev => ({ ...prev, images: null }));
+        }
+        setApiError('');
       })
       .catch(error => {
         console.error("Error generating image previews:", error);
-        setMessage({ type: 'error', text: 'Error generating image previews.' });
+        setApiError('Error generating image previews.');
       });
 
     event.target.value = null;
@@ -62,168 +140,346 @@ const ProAddForm = () => {
   const handleRemoveFile = (indexToRemove) => {
     setSelectedFiles(prevFiles => prevFiles.filter((_, index) => index !== indexToRemove));
     setImagePreviews(prevPreviews => prevPreviews.filter((_, index) => index !== indexToRemove));
-  };
-
-  const resetForm = () => {
-    setTitle('');
-    setDescription('');
-    setProjectType('');
-    setSelectedFiles([]);
-    setImagePreviews([]);
-  };
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    setIsLoading(true);
-    setMessage({ type: '', text: '' });
-
-    if (!title.trim() || !description.trim() || !projectType) {
-      setMessage({ type: 'error', text: 'Please fill in all text fields.' });
-      setIsLoading(false);
-      return;
+    
+    if (coverImageIndex === indexToRemove) {
+      setCoverImageIndex(0);
+    } else if (coverImageIndex > indexToRemove) {
+      setCoverImageIndex(coverImageIndex - 1);
     }
+  };
 
+  const setAsCoverImage = (index) => {
+    setCoverImageIndex(index);
+    setSuccessMessage('Cover image updated successfully!');
+    setTimeout(() => {
+      setSuccessMessage('');
+    }, 2000);
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+    
+    if (!formData.title?.trim()) {
+      newErrors.title = 'Project title is required';
+    } else if (formData.title.trim().length < 3) {
+      newErrors.title = 'Project title must be at least 3 characters';
+    }
+    
+    if (!formData.description?.trim()) {
+      newErrors.description = 'Project description is required';
+    } else if (formData.description.trim().length < 10) {
+      newErrors.description = 'Description must be at least 10 characters';
+    }
+    
+    if (!formData.projectType) {
+      newErrors.projectType = 'Project type is required';
+    }
+    
     if (selectedFiles.length === 0) {
-      setMessage({ type: 'error', text: 'Please upload at least one image.' });
-      setIsLoading(false);
+      newErrors.images = 'At least one project image is required';
+    }
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    if (isSubmitting) return;
+    setApiError('');
+    
+    if (!validateForm()) {
+      const allTouched = {};
+      Object.keys(formData).forEach(key => {
+        allTouched[key] = true;
+      });
+      setTouched(allTouched);
       return;
     }
-
-    const formData = new FormData();
-    formData.append('title', title);
-    formData.append('description', description);
-    formData.append('projectType', projectType);
-    selectedFiles.forEach(file => {
-      formData.append('projectImages', file); 
-    });
-
+    
+    setIsSubmitting(true);
+    
     try {
-      const response = await axiosInstance.post(API_ENDPOINTS.PROJECTS.CREATE, formData, {
+      const uploadFormData = new FormData();
+      uploadFormData.append('title', formData.title.trim());
+      uploadFormData.append('description', formData.description.trim());
+      uploadFormData.append('projectType', formData.projectType);
+      uploadFormData.append('location', formData.location);
+      uploadFormData.append('projectDate', formData.projectDate);
+      uploadFormData.append('featured', formData.featured);
+      uploadFormData.append('coverImageIndex', coverImageIndex);
+      
+      selectedFiles.forEach((file) => {
+        uploadFormData.append('projectImages', file);
       });
-
-      const result = response.data; 
-
-      if (result.success) { 
-        setMessage({ type: 'success', text: result.message || 'Project added successfully!' });
+      
+      const response = await axiosInstance.post(API_ENDPOINTS.PROJECTS.CREATE, uploadFormData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      
+      const result = response.data;
+      
+      if (result.success) {
+        setSuccessMessage(`✅ "${formData.title}" has been added successfully!`);
+        setShowSuccess(true);
+        
+        if (onAddProject) {
+          onAddProject(result.data);
+        }
+        
         resetForm();
+        
+        setTimeout(() => {
+          setShowSuccess(false);
+          setSuccessMessage('');
+        }, 3000);
       } else {
-        setMessage({ type: 'error', text: result.message || 'Failed to add project. Please try again.' });
+        setApiError(result.message || 'Failed to add project');
       }
+      
     } catch (error) {
       console.error('Submission error:', error);
       if (error.response && error.response.data) {
-        setMessage({ type: 'error', text: error.response.data.message || 'An error occurred while submitting the project.' });
+        setApiError(error.response.data.message || 'An error occurred while submitting the project.');
       } else if (error.request) {
-        setMessage({ type: 'error', text: 'Network error. Please check your connection and try again.' });
+        setApiError('Network error. Please check your connection and try again.');
       } else {
-        setMessage({ type: 'error', text: `An error occurred: ${error.message || 'Unknown error'}` });
+        setApiError(`An error occurred: ${error.message || 'Unknown error'}`);
       }
     } finally {
-      setIsLoading(false);
+      setIsSubmitting(false);
     }
   };
 
-  return (
-    <div className="add-projects-container">
-      <h1 className="add-projects-title">Add New Project</h1>
+  const handleAddAnother = () => {
+    resetForm();
+    setShowSuccess(false);
+  };
 
-      {message.text && (
-        <div className={`message message-${message.type}`}>
-          {message.text}
+  return (
+    <div className="PROADD-page">
+      <div className="PROADD-header">
+        <h2 className="PROADD-title">Add New Aluminum Project</h2>
+        <button type="button" className="PROADD-close" onClick={onClose}>×</button>
+      </div>
+
+      {showSuccess && (
+        <div className="PROADD-success-message">
+          <div className="PROADD-success-content">
+            <span className="PROADD-success-icon">✓</span>
+            <span className="PROADD-success-text">{successMessage}</span>
+          </div>
+          <button type="button" className="PROADD-success-close" onClick={() => setShowSuccess(false)}>×</button>
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="project-form">
-        <div className="form-group">
-          <label htmlFor="title">Project Title</label>
-          <input
-            type="text"
-            id="title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder="e.g., E-commerce Platform Redesign"
-            required
-          />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="description">Project Description</label>
-          <textarea
-            id="description"
-            rows="5"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            placeholder="Briefly describe your project..."
-            required
-          ></textarea>
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="projectType">Project Type</label>
-          <select
-            id="projectType"
-            value={projectType}
-            onChange={(e) => setProjectType(e.target.value)}
-            required
-          >
-            <option value="">Select Type</option>
-            <option value="web">Aluminum Doors</option>
-            <option value="mobile">Aluminum Windows</option>
-            <option value="design">Full House</option>
-            <option value="other">Other</option>
-          </select>
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="upload-photos-trigger">Project Images (Max 10)</label>
-          <div
-            id="upload-photos-trigger"
-            className="file-input-area"
-            onClick={handleFileInputAreaClick}
-            onKeyPress={(e) => { if (e.key === 'Enter' || e.key === ' ') handleFileInputAreaClick(); }}
-            tabIndex={0}
-            role="button"
-            aria-label="Upload project images"
-          >
-            <p>Drag & drop files here, or <strong>click to browse</strong>.</p>
-            <p style={{ fontSize: '0.8em', marginTop: '5px' }}>Supports JPG, PNG, GIF. Max 10MB per file.</p>
+      {apiError && (
+        <div className="PROADD-error-message">
+          <div className="PROADD-error-content">
+            <span className="PROADD-error-icon">!</span>
+            <span>{apiError}</span>
           </div>
-          <input
-            type="file"
-            id="upload-photos"
-            ref={fileInputRef}
-            multiple
-            accept="image/*"
-            onChange={handleFileChange}
-            style={{ display: 'none' }}
-          />
+          <button type="button" className="PROADD-error-close" onClick={() => setApiError('')}>×</button>
         </div>
+      )}
 
-        {imagePreviews.length > 0 && (
-          <div className="image-previews-container">
-            <h3 className="previews-title">Image Previews ({imagePreviews.length}/10)</h3>
-            <div className="previews-grid">
-              {imagePreviews.map((previewUrl, index) => (
-                <div key={index} className="preview-item">
-                  <img src={previewUrl} alt={`Preview ${index + 1}`} className="preview-image" />
-                  <button
-                    type="button"
-                    onClick={() => handleRemoveFile(index)}
-                    className="remove-file-button"
-                    title="Remove image"
-                    aria-label={`Remove image ${index + 1}`}
-                  >
-                    ×
-                  </button>
+      <form onSubmit={handleSubmit} className="PROADD-form">
+        <div className="PROADD-twoColumn">
+          <div className="PROADD-leftColumn">
+            <div className="PROADD-card">
+              <h3 className="PROADD-sectionTitle">Project Images</h3>
+              <div className="PROADD-imageUpload">
+                <div
+                  className="PROADD-uploadArea"
+                  onClick={handleFileInputAreaClick}
+                  onKeyPress={(e) => { if (e.key === 'Enter' || e.key === ' ') handleFileInputAreaClick(); }}
+                  tabIndex={0}
+                  role="button"
+                >
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    multiple
+                    accept="image/jpeg,image/png,image/jpg,image/webp"
+                    onChange={handleFileChange}
+                    style={{ display: 'none' }}
+                  />
+                  <div className="PROADD-uploadPlaceholder">
+                    <span className="PROADD-uploadIcon">+</span>
+                    <span>Click to upload images</span>
+                    <span className="PROADD-uploadHint">JPG, PNG, WEBP up to 10MB each (Max 10 images)</span>
+                  </div>
                 </div>
-              ))}
+              </div>
+              {errors.images && <div className="PROADD-error">{errors.images}</div>}
+              
+              {imagePreviews.length > 0 && (
+                <div className="PROADD-imageGallery">
+                  <div className="PROADD-coverSelection">
+                    <p className="PROADD-coverLabel">Main Display Image:</p>
+                    <div className="PROADD-coverPreview">
+                      {imagePreviews[coverImageIndex] && (
+                        <img src={imagePreviews[coverImageIndex]} alt="Cover" />
+                      )}
+                      <span className="PROADD-coverBadge">Main Image</span>
+                    </div>
+                    <p className="PROADD-coverHint">This image will be displayed as the project cover</p>
+                  </div>
+                  
+                  <div className="PROADD-previewsGrid">
+                    {imagePreviews.map((previewUrl, index) => (
+                      <div key={index} className={`PROADD-previewItem ${coverImageIndex === index ? 'selected' : ''}`}>
+                        <img src={previewUrl} alt={`Preview ${index + 1}`} />
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveFile(index)}
+                          className="PROADD-removeImage"
+                          title="Remove image"
+                        >
+                          ×
+                        </button>
+                        {coverImageIndex !== index && (
+                          <button
+                            type="button"
+                            onClick={() => setAsCoverImage(index)}
+                            className="PROADD-setCover"
+                            title="Set as main image"
+                          >
+                            Set as Main
+                          </button>
+                        )}
+                        {coverImageIndex === index && (
+                          <div className="PROADD-coverIndicator">Main</div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
-        )}
 
-        <button type="submit" className="submit-button" disabled={isLoading}>
-          {isLoading ? 'Submitting...' : 'Add Project'}
-        </button>
+          <div className="PROADD-rightColumn">
+            <div className="PROADD-card">
+              <h3 className="PROADD-sectionTitle">Project Information</h3>
+              
+              <div className="PROADD-fields">
+                <div className="PROADD-fieldGroup">
+                  <label className="PROADD-label">
+                    Project Title <span className="PROADD-required">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    name="title"
+                    value={formData.title}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    className={`PROADD-input ${errors.title && touched.title ? 'error' : ''}`}
+                    placeholder="e.g., Modern Aluminum Curtain Wall System"
+                  />
+                  {errors.title && touched.title && <div className="PROADD-error">{errors.title}</div>}
+                </div>
+
+                <div className="PROADD-fieldGroup">
+                  <label className="PROADD-label">
+                    Project Type <span className="PROADD-required">*</span>
+                  </label>
+                  <select
+                    name="projectType"
+                    value={formData.projectType}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    className={`PROADD-select ${errors.projectType && touched.projectType ? 'error' : ''}`}
+                  >
+                    <option value="">Select Project Type</option>
+                    {projectTypes.map(type => (
+                      <option key={type.id} value={type.name}>{type.name}</option>
+                    ))}
+                  </select>
+                  {errors.projectType && touched.projectType && <div className="PROADD-error">{errors.projectType}</div>}
+                </div>
+
+                <div className="PROADD-row">
+                  <div className="PROADD-fieldGroup">
+                    <label className="PROADD-label">Project Location</label>
+                    <input
+                      type="text"
+                      name="location"
+                      value={formData.location}
+                      onChange={handleChange}
+                      className="PROADD-input"
+                      placeholder="e.g., Dhaka, Bangladesh"
+                    />
+                  </div>
+
+                  <div className="PROADD-fieldGroup">
+                    <label className="PROADD-label">Completion Date</label>
+                    <input
+                      type="month"
+                      name="projectDate"
+                      value={formData.projectDate}
+                      onChange={handleChange}
+                      className="PROADD-input"
+                    />
+                  </div>
+                </div>
+
+                <div className="PROADD-fieldGroup">
+                  <label className="PROADD-label">
+                    Project Description <span className="PROADD-required">*</span>
+                  </label>
+                  <textarea
+                    name="description"
+                    value={formData.description}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    className={`PROADD-textarea ${errors.description && touched.description ? 'error' : ''}`}
+                    placeholder="Describe your aluminum project, including techniques used, unique features, and project highlights..."
+                    rows="5"
+                  />
+                  {errors.description && touched.description && <div className="PROADD-error">{errors.description}</div>}
+                </div>
+
+                <div className="PROADD-fieldGroup">
+                  <label className="PROADD-checkbox">
+                    <input
+                      type="checkbox"
+                      name="featured"
+                      checked={formData.featured}
+                      onChange={handleChange}
+                    />
+                    <span>Mark as Featured Project</span>
+                  </label>
+                  <p className="PROADD-checkboxHint">Featured projects will be highlighted on the homepage</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="PROADD-actions">
+          <button type="button" className="PROADD-cancel" onClick={onClose}>
+            Cancel
+          </button>
+          <button 
+            type="button" 
+            className="PROADD-addAnother" 
+            onClick={handleAddAnother}
+            disabled={isSubmitting}
+          >
+            Add Another
+          </button>
+          <button 
+            type="submit" 
+            className="PROADD-submit" 
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? 'Publishing...' : 'Publish Project'}
+          </button>
+        </div>
       </form>
     </div>
   );

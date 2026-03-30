@@ -245,7 +245,6 @@ const ItemMarkert = () => {
         </section>
 
         <section className="ItemMAR-categorySection">
-          <h2 className="ItemMAR-categoryTitle">Category</h2>
           <div className="ItemMAR-categoriesGrid">
             {categories.map((category) => (
               <div 

@@ -5,32 +5,63 @@ const projectSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Project title is required.'],
         trim: true,
+        minlength: [3, 'Title must be at least 3 characters.']
     },
     description: {
         type: String,
         required: [true, 'Project description is required.'],
         trim: true,
+        minlength: [10, 'Description must be at least 10 characters.']
     },
-    projectType: { 
+    projectType: {
         type: String,
         required: [true, 'Project type is required.'],
-        enum: ['web', 'mobile', 'design', 'other'], 
+        enum: [
+            'Aluminum Doors',
+            'Aluminum Windows',
+            'Full House Aluminum',
+            'Curtain Walls',
+            'Facade Systems',
+            'Skylights',
+            'Structural Glazing',
+            'Other'
+        ],
+        trim: true
+    },
+    location: {
+        type: String,
         trim: true,
+        default: ''
     },
-    images: [{ 
+    projectDate: {
         type: String,
-        required: [true, 'At least one project image is required.'],
+        trim: true,
+        default: ''
+    },
+    featured: {
+        type: Boolean,
+        default: false
+    },
+    coverImage: {
+        type: String,
+        required: [true, 'Cover image is required.']
+    },
+    galleryImages: [{
+        type: String,
+        required: true
     }],
-    userId: { 
+    userId: {
         type: mongoose.Schema.Types.ObjectId,
-        refPath: 'userModel', 
-        required: true,
+        refPath: 'userModel',
+        required: true
     },
-    userModel: { 
+    userModel: {
         type: String,
         required: true,
-        enum: ['Client', 'BusinessOwner', 'Admin'],
-    },
-}, { timestamps: true });
+        enum: ['Client', 'BusinessOwner', 'Admin']
+    }
+}, {
+    timestamps: true
+});
 
 module.exports = mongoose.model('Project', projectSchema);

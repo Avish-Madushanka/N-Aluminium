@@ -5,27 +5,27 @@ const ProMain = () => {
   return (
     <div className="Proj1-hero-container">
       <img
-        src="https://images.adsttc.com/media/images/5a0e/c7f6/b22e/382f/e000/00b1/large_jpg/EXT_Bedroom.jpg?1510918117"
-        alt="Hero Background"
+        src="https://signaturehomeimprovements.uk/wp-content/uploads/2025/01/Alluminium-windows.webp"
+        alt="Aluminum Architecture Background"
         className="Proj1-hero-background"
       />
 
       <div className="Proj1-hero-overlay"></div>
 
       <div className="Proj1-hero-content">
-        <h1 className="Proj1-hero-title">WELCOME HOME</h1>
+        <h1 className="Proj1-hero-title">OUR ALUMINUM PROJECTS</h1>
         <p className="Proj1-hero-subtitle">
-          Rent unique places to stay from local hosts in 190 countries.
+          Take a look at our latest aluminum fabrication work, from custom designs to large-scale projects, showcasing quality craftsmanship and reliable performance.
         </p>
       </div>
 
       <div className="Proj1-search-bar-container">
         <input
           type="text"
-          placeholder="Search Projects"
+          placeholder="Search Aluminum Projects..."
           className="Proj1-search-input"
         />
-        <button className="Proj1-search-button">Search</button>
+        <button className="Proj1-search-button">Search Projects</button>
       </div>
     </div>
   );

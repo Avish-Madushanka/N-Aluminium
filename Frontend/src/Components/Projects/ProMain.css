@@ -1,7 +1,7 @@
 .Proj1-hero-container {
   position: relative;
   width: 100%;
-  height: 70vh;
+  height: 60vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -20,7 +20,7 @@
 .Proj1-hero-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.45);
+  background: rgba(26, 47, 58, 0.65);
   z-index: 1;
 }
 
@@ -38,43 +38,54 @@
   font-weight: 700;
   letter-spacing: 2px;
   margin-bottom: 16px;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .Proj1-hero-subtitle {
   font-size: 1.25rem;
   line-height: 1.6;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
 }
 
 .Proj1-search-bar-container {
   position: absolute;
+  height: 90px;
   bottom: 0px;
   left: 50%;
   transform: translateX(-50%);
   width: 90%;
   max-width: 900px;
-  background: rgba(0, 0, 0, 0.75);
+  background: rgba(26, 47, 58, 0.85);
   padding: 16px;
   border-radius: 12px;
   display: flex;
   gap: 12px;
   z-index: 3;
-  backdrop-filter: blur(6px);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(176, 196, 206, 0.3);
 }
 
 .Proj1-search-input {
   flex: 1;
+  height: 55px;
   padding: 14px 16px;
   border-radius: 8px;
   border: none;
   font-size: 1rem;
   outline: none;
+  transition: all 0.3s ease;
+}
+
+.Proj1-search-input:focus {
+  box-shadow: 0 0 0 2px rgba(201, 168, 123, 0.5);
 }
 
 .Proj1-search-button {
+  height: 55px;
   padding: 14px 28px;
   border-radius: 8px;
   border: none;
-  background: #ff5a5f;
+  background: #b51919;
   color: #fff;
   font-size: 1rem;
   font-weight: 600;
@@ -83,7 +94,7 @@
 }
 
 .Proj1-search-button:hover {
-  background: #e04a4f;
+  background: #8b1414;
 }
 
 @media (max-width: 992px) {

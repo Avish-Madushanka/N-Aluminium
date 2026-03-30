@@ -69,6 +69,7 @@ import ItemsCartManage from './Components/ItemMarkert/ItemsCartManage';
 import AccItemReq from './Components/Admin/ItemsAddForm/AccItemReq';
 import AdminAlumni from './Components/Admin/AluTRegManage/AdminAlumni';
 import VideoManage from './Components/Admin/VideoManage/VideoManage';
+import ProManage from './Components/Admin/ProjectManage/ProManage';
 
 console.log('=== IMPORT DEBUG ===');
 console.log('ItemsManage imported:', ItemsManage);
@@ -347,7 +348,6 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
                         <Route path="/BuyCard" element={<BuyCard />} />
                         <Route path="/WastePickForm" element={<WastePickForm />} />
                         <Route path="/SaleForm" element={<SaleForm />} />
-                        <Route path="/ProAddForm" element={<ProAddForm />} />
                         <Route path="/GlassOrder" element={<GlassOrder /> } />
                         <Route path="/ItemsCartManage" element={<ItemsCartManage /> } />
                     </Route>
@@ -365,12 +365,14 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
                            <Route path="/Admin/Scrap" element={<AdScrap />} />
                            <Route path="/Admin/Emails" element={<EmailDisplay />} />
                            <Route path="/Admin/ManageOwners" element={<HandleBOwners />} />
+                           <Route path="/ProAddForm" element={<ProAddForm />} />
                            <Route path="/Admin/Reviews" element={<DisReview />} />
                            <Route path="/Admin/AdminLocationManager" element={<AdminLocationManager />} />
                            <Route path="/Admin/ItemsManage" element={<ItemsManage /> } />
                            <Route path="/Admin/AccItemReq" element={<AccItemReq /> } />
                            <Route path="/Admin/AdminAlumni" element={<AdminAlumni /> } />
                            <Route path="/Admin/VideoManage" element={<VideoManage /> } />
+                           <Route path="/Admin/ProManage" element={<ProManage /> } />
                         </Route>
                      </Route>
 

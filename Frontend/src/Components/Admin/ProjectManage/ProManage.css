@@ -1,0 +1,831 @@
+.ProManage-container {
+  font-family: 'Roboto', sans-serif;
+  padding: 30px;
+  background-color: #f5f5f5;
+  min-height: 100vh;
+}
+
+.ProManage-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  background: white;
+  padding: 20px 30px;
+  border-radius: 15px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.ProManage-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #333;
+  margin: 0;
+  position: relative;
+  padding-left: 15px;
+}
+
+.ProManage-title:before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 5px;
+  height: 30px;
+  background: #c9a87b;
+  border-radius: 3px;
+}
+
+.ProManage-addButton {
+  padding: 12px 25px;
+  background: #c9a87b;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 4px 10px rgba(201, 168, 123, 0.3);
+}
+
+.ProManage-addButton:hover {
+  background: #b89265;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(201, 168, 123, 0.4);
+}
+
+.ProManage-success {
+  background: #4CAF50;
+  color: white;
+  padding: 15px 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  animation: slideDown 0.3s ease-out;
+}
+
+.ProManage-error {
+  background: #f44336;
+  color: white;
+  padding: 15px 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  animation: slideDown 0.3s ease-out;
+}
+
+.ProManage-successClose,
+.ProManage-errorClose {
+  background: rgba(255,255,255,0.2);
+  border: none;
+  color: white;
+  font-size: 20px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+}
+
+.ProManage-successClose:hover,
+.ProManage-errorClose:hover {
+  background: rgba(255,255,255,0.3);
+  transform: scale(1.1);
+}
+
+.ProManage-modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.ProManage-modal {
+  background: white;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 1200px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+  animation: scaleIn 0.3s ease-out;
+}
+
+.ProManage-modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 30px;
+  border-bottom: 2px solid #f0f0f0;
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 10;
+}
+
+.ProManage-modalHeader h2 {
+  margin: 0;
+  font-size: 24px;
+  color: #333;
+  font-weight: 600;
+}
+
+.ProManage-modalClose {
+  background: none;
+  border: none;
+  font-size: 32px;
+  cursor: pointer;
+  color: #999;
+  transition: all 0.3s;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.ProManage-modalClose:hover {
+  background: #f5f5f5;
+  color: #333;
+  transform: rotate(90deg);
+}
+
+.ProManage-form {
+  padding: 30px;
+}
+
+.ProManage-twoColumn {
+  display: grid;
+  grid-template-columns: 400px 1fr;
+  gap: 30px;
+  margin-bottom: 30px;
+}
+
+.ProManage-leftColumn {
+  min-width: 0;
+}
+
+.ProManage-rightColumn {
+  min-width: 0;
+}
+
+.ProManage-card {
+  background: #f9f9f9;
+  border-radius: 15px;
+  padding: 20px;
+  border: 1px solid #e0e0e0;
+}
+
+.ProManage-sectionTitle {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 20px 0;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #e0e0e0;
+  position: relative;
+}
+
+.ProManage-sectionTitle:after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 50px;
+  height: 2px;
+  background: #c9a87b;
+}
+
+.ProManage-imageUpload {
+  width: 100%;
+  min-height: 200px;
+  border: 3px dashed #ddd;
+  border-radius: 15px;
+  overflow: hidden;
+  transition: all 0.3s;
+  background: white;
+  margin-bottom: 20px;
+}
+
+.ProManage-imageUpload:hover {
+  border-color: #c9a87b;
+}
+
+.ProManage-uploadArea {
+  width: 100%;
+  height: 100%;
+  display: block;
+  cursor: pointer;
+}
+
+.ProManage-uploadPlaceholder {
+  width: 100%;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #999;
+  padding: 40px 20px;
+}
+
+.ProManage-uploadIcon {
+  font-size: 48px;
+  font-weight: 300;
+  color: #c9a87b;
+}
+
+.ProManage-uploadHint {
+  font-size: 12px;
+  color: #ccc;
+}
+
+.ProManage-imageGallery {
+  margin-top: 20px;
+}
+
+.ProManage-coverSelection {
+  margin-bottom: 20px;
+  padding: 15px;
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #e0e0e0;
+}
+
+.ProManage-coverLabel {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 12px;
+}
+
+.ProManage-coverPreview {
+  position: relative;
+  width: 100%;
+  max-width: 250px;
+  height: 180px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  margin-bottom: 10px;
+  background: #f5f5f5;
+}
+
+.ProManage-coverPreview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ProManage-coverPlaceholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+  font-size: 14px;
+  background: #f5f5f5;
+}
+
+.ProManage-coverBadge {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background: #c9a87b;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.ProManage-coverHint {
+  font-size: 12px;
+  color: #7e8c8d;
+  margin: 0;
+}
+
+.ProManage-previewsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 12px;
+  margin-top: 15px;
+}
+
+.ProManage-previewItem {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  background: #f1f5f9;
+  transition: all 0.2s;
+}
+
+.ProManage-previewItem.selected {
+  border: 3px solid #c9a87b;
+  box-shadow: 0 0 0 2px rgba(201, 168, 123, 0.3);
+}
+
+.ProManage-previewItem img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ProManage-removeImage {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.7);
+  color: white;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.ProManage-removeImage:hover {
+  background: #dc2626;
+  transform: scale(1.1);
+}
+
+.ProManage-setCover {
+  position: absolute;
+  bottom: 5px;
+  left: 5px;
+  right: 5px;
+  background: rgba(0,0,0,0.7);
+  color: white;
+  border: none;
+  padding: 4px;
+  border-radius: 6px;
+  font-size: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.ProManage-setCover:hover {
+  background: #c9a87b;
+}
+
+.ProManage-coverIndicator {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  background: #c9a87b;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.ProManage-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.ProManage-fieldGroup {
+  width: 100%;
+}
+
+.ProManage-label {
+  display: block;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.ProManage-required {
+  color: #f44336;
+  margin-left: 4px;
+}
+
+.ProManage-input,
+.ProManage-select,
+.ProManage-textarea {
+  width: 100%;
+  padding: 12px 15px;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  font-size: 14px;
+  transition: all 0.3s;
+  font-family: 'Roboto', sans-serif;
+}
+
+.ProManage-input:focus,
+.ProManage-select:focus,
+.ProManage-textarea:focus {
+  outline: none;
+  border-color: #c9a87b;
+  box-shadow: 0 0 0 3px rgba(201, 168, 123, 0.1);
+}
+
+.ProManage-input.error,
+.ProManage-select.error,
+.ProManage-textarea.error {
+  border-color: #f44336;
+}
+
+.ProManage-textarea {
+  resize: vertical;
+}
+
+.ProManage-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.ProManage-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-weight: 500;
+  color: #555;
+  padding: 5px 0;
+}
+
+.ProManage-checkbox input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: #c9a87b;
+}
+
+.ProManage-checkboxHint {
+  font-size: 12px;
+  color: #999;
+  margin: 5px 0 0 28px;
+}
+
+.ProManage-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  padding-top: 20px;
+  border-top: 2px solid #f0f0f0;
+}
+
+.ProManage-cancelButton {
+  padding: 12px 30px;
+  background: #f5f5f5;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.ProManage-cancelButton:hover {
+  background: #e0e0e0;
+  transform: translateY(-2px);
+}
+
+.ProManage-submitButton {
+  padding: 12px 30px;
+  background: #c9a87b;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 4px 10px rgba(201, 168, 123, 0.3);
+}
+
+.ProManage-submitButton:hover:not(:disabled) {
+  background: #b89265;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(201, 168, 123, 0.4);
+}
+
+.ProManage-submitButton:disabled {
+  background: #e0c8a8;
+  cursor: not-allowed;
+}
+
+.ProManage-confirmModal {
+  background: white;
+  border-radius: 15px;
+  padding: 30px;
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+  animation: scaleIn 0.3s ease-out;
+}
+
+.ProManage-confirmModal h3 {
+  margin: 0 0 15px 0;
+  color: #333;
+  font-size: 22px;
+}
+
+.ProManage-confirmModal p {
+  color: #666;
+  margin-bottom: 25px;
+  line-height: 1.5;
+}
+
+.ProManage-confirmActions {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}
+
+.ProManage-confirmCancel {
+  padding: 10px 25px;
+  background: #f5f5f5;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.ProManage-confirmCancel:hover {
+  background: #e0e0e0;
+}
+
+.ProManage-confirmDelete {
+  padding: 10px 25px;
+  background: #f44336;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.ProManage-confirmDelete:hover {
+  background: #d32f2f;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(244, 67, 54, 0.3);
+}
+
+.ProManage-tableContainer {
+  background: white;
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  overflow-x: auto;
+}
+
+.ProManage-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 900px;
+}
+
+.ProManage-table th {
+  text-align: left;
+  padding: 15px;
+  background: #f8f9fa;
+  color: #495057;
+  font-weight: 600;
+  font-size: 14px;
+  border-bottom: 2px solid #dee2e6;
+}
+
+.ProManage-table td {
+  padding: 15px;
+  border-bottom: 1px solid #e9ecef;
+  vertical-align: middle;
+}
+
+.ProManage-table tr:hover {
+  background: #f8f9fa;
+}
+
+.ProManage-tableImage {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+}
+
+.ProManage-tableCell {
+  max-width: 250px;
+}
+
+.ProManage-projectTitle {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.ProManage-projectDescription {
+  font-size: 12px;
+  color: #666;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ProManage-typeBadge {
+  background: #e3f2fd;
+  color: #1976d2;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  display: inline-block;
+}
+
+.ProManage-featuredBadge {
+  display: inline-block;
+  background: #ffd54f;
+  color: #333;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.ProManage-imageCount {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.ProManage-imageCountNumber {
+  font-size: 18px;
+  font-weight: 700;
+  color: #c9a87b;
+}
+
+.ProManage-imageCountLabel {
+  font-size: 10px;
+  color: #999;
+}
+
+.ProManage-actionButtons {
+  display: flex;
+  gap: 8px;
+}
+
+.ProManage-editButton {
+  padding: 6px 12px;
+  background: #2196F3;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.ProManage-editButton:hover {
+  background: #1976D2;
+  transform: translateY(-2px);
+}
+
+.ProManage-deleteButton {
+  padding: 6px 12px;
+  background: #f44336;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.ProManage-deleteButton:hover {
+  background: #d32f2f;
+  transform: translateY(-2px);
+}
+
+.ProManage-loading {
+  text-align: center;
+  padding: 50px;
+  font-size: 18px;
+  color: #666;
+}
+
+.ProManage-noData {
+  text-align: center;
+  padding: 50px;
+  color: #999;
+  font-size: 16px;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (max-width: 768px) {
+  .ProManage-container {
+    padding: 15px;
+  }
+
+  .ProManage-header {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+    padding: 15px;
+  }
+
+  .ProManage-title:before {
+    display: none;
+  }
+
+  .ProManage-twoColumn {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .ProManage-row {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .ProManage-modal {
+    width: 95%;
+    margin: 10px;
+  }
+
+  .ProManage-actions {
+    flex-direction: column;
+  }
+
+  .ProManage-cancelButton,
+  .ProManage-submitButton {
+    width: 100%;
+  }
+
+  .ProManage-actionButtons {
+    flex-direction: column;
+  }
+
+  .ProManage-previewsGrid {
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  }
+}

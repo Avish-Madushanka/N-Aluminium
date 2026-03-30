@@ -3,16 +3,13 @@ const path = require('path');
 const fs = require('fs');
 
 const uploadsDir = path.join(__dirname, '../uploads');
-console.log(`[Multer Config] Uploads directory target: ${uploadsDir}`);
+
 if (!fs.existsSync(uploadsDir)) {
     try {
         fs.mkdirSync(uploadsDir, { recursive: true });
-        console.log(`[Multer Config] Created uploads directory: ${uploadsDir}`);
     } catch (err) {
         console.error(`[Multer Config] Error creating uploads dir '${uploadsDir}': ${err.message}`);
     }
-} else {
-    console.log(`[Multer Config] Uploads directory exists: ${uploadsDir}`);
 }
 
 const subdirectories = ['saleitems', 'projects', 'profiles', 'items', 'cart'];
@@ -21,23 +18,18 @@ subdirectories.forEach(subDir => {
     if (!fs.existsSync(subDirPath)) {
         try {
             fs.mkdirSync(subDirPath, { recursive: true });
-            console.log(`[Multer Config] Created '${subDir}' uploads subdirectory at ${subDirPath}`);
         } catch (err) {
             console.error(`[Multer Config] Error creating '${subDir}' uploads subdirectory: ${err.message}`);
         }
-    } else {
-        console.log(`[Multer Config] '${subDir}' subdirectory exists at ${subDirPath}`);
     }
 });
 
 const imageFileFilter = (req, file, cb) => {
-    console.log(`[Multer FileFilter] Checking file - Fieldname: '${file.fieldname}', Original Filename: '${file.originalname}', Mimetype: '${file.mimetype}'`);
-    if (file.mimetype && file.mimetype.startsWith('image/')) {
-        console.log(`[Multer FileFilter] Accepting file: '${file.originalname}'`);
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif'];
+    if (file.mimetype && allowedTypes.includes(file.mimetype)) {
         cb(null, true);
     } else {
-        console.warn(`[Multer FileFilter] Rejecting file: '${file.originalname}' due to mimetype '${file.mimetype}'.`);
-        const err = new Error('Invalid file type. Only image files are allowed (e.g., PNG, JPG). Rejected by filter.');
+        const err = new Error('Invalid file type. Only JPG, PNG, WEBP, and GIF images are allowed.');
         err.code = 'INVALID_FILE_TYPE_FILTER';
         cb(err, false);
     }
