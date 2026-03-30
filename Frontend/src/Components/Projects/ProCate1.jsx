@@ -14,6 +14,7 @@ const ProCate1 = () => {
   ];
 
   const [projects, setProjects] = useState([]);
+  const [filteredProjects, setFilteredProjects] = useState([]);
   const [selectedProject, setSelectedProject] = useState(null);
   const [activeCategory, setActiveCategory] = useState("All");
   const [loading, setLoading] = useState(true);
@@ -21,21 +22,18 @@ const ProCate1 = () => {
 
   useEffect(() => {
     fetchProjects();
-  }, [activeCategory]);
+  }, []);
+
+  useEffect(() => {
+    filterProjectsByCategory();
+  }, [activeCategory, projects]);
 
   const fetchProjects = async () => {
     setLoading(true);
     setError("");
     
     try {
-      let url;
-      if (activeCategory === "All") {
-        url = `${API_ENDPOINTS.API_ROOT}${API_ENDPOINTS.PROJECTS.GET_ALL}`;
-      } else {
-        url = `${API_ENDPOINTS.API_ROOT}${API_ENDPOINTS.PROJECTS.GET_BY_CATEGORY}/${activeCategory}`;
-      }
-      
-      const response = await axiosInstance.get(url);
+      const response = await axiosInstance.get(API_ENDPOINTS.PROJECTS.GET_ALL);
       
       if (response.data.success) {
         setProjects(response.data.data || []);
@@ -57,6 +55,8 @@ const ProCate1 = () => {
       'Aluminum Doors': 'Doors',
       'Aluminum Windows': 'Windows',
       'Full House Aluminum': 'Windows',
+      'Aluminum Pantry Cupboards': 'Pantry Cupboards',
+      'Sivilims': 'Sivilims',
       'Curtain Walls': 'Others',
       'Facade Systems': 'Others',
       'Skylights': 'Others',
@@ -64,6 +64,18 @@ const ProCate1 = () => {
       'Other': 'Others'
     };
     return categoryMap[projectType] || 'Others';
+  };
+
+  const filterProjectsByCategory = () => {
+    if (activeCategory === "All") {
+      setFilteredProjects(projects);
+    } else {
+      const filtered = projects.filter(project => {
+        const projectCategory = getCategoryFromProjectType(project.projectType);
+        return projectCategory === activeCategory;
+      });
+      setFilteredProjects(filtered);
+    }
   };
 
   const formatDate = (dateString) => {
@@ -80,7 +92,7 @@ const ProCate1 = () => {
   const getImageUrl = (imagePath) => {
     if (!imagePath) return null;
     if (imagePath.startsWith('http')) return imagePath;
-    const baseUrl = API_ENDPOINTS.BACKEND_ROOT_URL;
+    const baseUrl = API_ENDPOINTS.BACKEND_ROOT_URL || 'http://localhost:5003';
     return `${baseUrl}${imagePath}`;
   };
 
@@ -126,18 +138,19 @@ const ProCate1 = () => {
         </div>
       </div>
 
-      {projects.length === 0 ? (
+      {filteredProjects.length === 0 ? (
         <div className="Proj2-no-projects">
-          <p>No projects found in this category.</p>
+          <p>No projects found in {activeCategory === "All" ? "any category" : `"${activeCategory}"`}.</p>
         </div>
       ) : (
         <div className="Proj2-projects-grid">
-          {projects.map((project) => {
+          {filteredProjects.map((project) => {
             const coverImageUrl = getImageUrl(project.coverImage);
             const galleryImages = project.galleryImages || [];
+            const projectCategory = getCategoryFromProjectType(project.projectType);
             
             return (
-              <div key={project._id || project.id} className="Proj2-project-card">
+              <div key={project._id} className="Proj2-project-card">
                 <div className="Proj2-image-wrapper">
                   {coverImageUrl ? (
                     <img
@@ -152,9 +165,7 @@ const ProCate1 = () => {
                   ) : (
                     <div className="Proj2-placeholder-image">No Image</div>
                   )}
-                  <span className="Proj2-category-badge">
-                    {getCategoryFromProjectType(project.projectType)}
-                  </span>
+                  <span className="Proj2-category-badge">{projectCategory}</span>
                   {project.featured && (
                     <span className="Proj2-featured-badge">Featured</span>
                   )}

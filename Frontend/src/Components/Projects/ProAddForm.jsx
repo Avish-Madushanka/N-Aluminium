@@ -27,11 +27,8 @@ const ProAddForm = ({ onAddProject, onClose }) => {
   const projectTypes = [
     { id: 'aluminum-doors', name: 'Aluminum Doors' },
     { id: 'aluminum-windows', name: 'Aluminum Windows' },
-    { id: 'full-house-aluminum', name: 'Full House Aluminum' },
-    { id: 'curtain-walls', name: 'Curtain Walls' },
-    { id: 'facade-systems', name: 'Facade Systems' },
-    { id: 'skylights', name: 'Skylights' },
-    { id: 'structural-glazing', name: 'Structural Glazing' },
+    { id: 'aluminum-pantry-cupboards', name: 'Aluminum Pantry Cupboards' },
+    { id: 'sivilims', name: 'Sivilims' },
     { id: 'other', name: 'Other' }
   ];
 
@@ -163,21 +160,42 @@ const ProAddForm = ({ onAddProject, onClose }) => {
       newErrors.title = 'Project title is required';
     } else if (formData.title.trim().length < 3) {
       newErrors.title = 'Project title must be at least 3 characters';
+    } else if (formData.title.trim().length > 100) {
+      newErrors.title = 'Project title must be less than 100 characters';
     }
     
     if (!formData.description?.trim()) {
       newErrors.description = 'Project description is required';
     } else if (formData.description.trim().length < 10) {
       newErrors.description = 'Description must be at least 10 characters';
+    } else if (formData.description.trim().length > 2000) {
+      newErrors.description = 'Description must be less than 2000 characters';
     }
     
     if (!formData.projectType) {
       newErrors.projectType = 'Project type is required';
+    } else {
+      const validTypes = ['Aluminum Doors', 'Aluminum Windows', 'Aluminum Pantry Cupboards', 'Sivilims', 'Other'];
+      if (!validTypes.includes(formData.projectType)) {
+        newErrors.projectType = 'Please select a valid project type';
+      }
+    }
+    
+    if (formData.location && formData.location.trim().length > 200) {
+      newErrors.location = 'Location must be less than 200 characters';
     }
     
     if (selectedFiles.length === 0) {
       newErrors.images = 'At least one project image is required';
+    } else if (selectedFiles.length > 10) {
+      newErrors.images = 'Maximum 10 images allowed';
     }
+    
+    selectedFiles.forEach((file, index) => {
+      if (file.size > 10 * 1024 * 1024) {
+        newErrors[`image_${index}`] = `Image ${index + 1} exceeds 10MB limit`;
+      }
+    });
     
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -195,6 +213,8 @@ const ProAddForm = ({ onAddProject, onClose }) => {
         allTouched[key] = true;
       });
       setTouched(allTouched);
+      
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
     
@@ -205,7 +225,7 @@ const ProAddForm = ({ onAddProject, onClose }) => {
       uploadFormData.append('title', formData.title.trim());
       uploadFormData.append('description', formData.description.trim());
       uploadFormData.append('projectType', formData.projectType);
-      uploadFormData.append('location', formData.location);
+      uploadFormData.append('location', formData.location.trim());
       uploadFormData.append('projectDate', formData.projectDate);
       uploadFormData.append('featured', formData.featured);
       uploadFormData.append('coverImageIndex', coverImageIndex);
@@ -413,6 +433,7 @@ const ProAddForm = ({ onAddProject, onClose }) => {
                       className="PROADD-input"
                       placeholder="e.g., Dhaka, Bangladesh"
                     />
+                    {errors.location && touched.location && <div className="PROADD-error">{errors.location}</div>}
                   </div>
 
                   <div className="PROADD-fieldGroup">

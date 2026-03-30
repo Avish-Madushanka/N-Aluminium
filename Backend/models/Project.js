@@ -5,13 +5,15 @@ const projectSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Project title is required.'],
         trim: true,
-        minlength: [3, 'Title must be at least 3 characters.']
+        minlength: [3, 'Title must be at least 3 characters.'],
+        maxlength: [100, 'Title must be less than 100 characters.']
     },
     description: {
         type: String,
         required: [true, 'Project description is required.'],
         trim: true,
-        minlength: [10, 'Description must be at least 10 characters.']
+        minlength: [10, 'Description must be at least 10 characters.'],
+        maxlength: [2000, 'Description must be less than 2000 characters.']
     },
     projectType: {
         type: String,
@@ -19,11 +21,8 @@ const projectSchema = new mongoose.Schema({
         enum: [
             'Aluminum Doors',
             'Aluminum Windows',
-            'Full House Aluminum',
-            'Curtain Walls',
-            'Facade Systems',
-            'Skylights',
-            'Structural Glazing',
+            'Aluminum Pantry Cupboards',
+            'Sivilims',
             'Other'
         ],
         trim: true
@@ -31,6 +30,7 @@ const projectSchema = new mongoose.Schema({
     location: {
         type: String,
         trim: true,
+        maxlength: [200, 'Location must be less than 200 characters.'],
         default: ''
     },
     projectDate: {
