@@ -20,17 +20,6 @@
   color: #ffcc00;
 }
 
-input, select, textarea, .BS1-file-upload {
-  width: 100%;
-  padding: 12px 15px;
-  background-color: #d9d9d9;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 15px;
-  color: #333;
-  margin-bottom: 15px;
-  transition: all 0.2s ease-in-out;
-}
 
 input:focus, select:focus, textarea:focus {
   outline: none;
