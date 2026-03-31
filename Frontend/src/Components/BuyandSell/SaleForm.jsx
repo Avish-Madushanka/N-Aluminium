@@ -119,7 +119,7 @@ const SaleForm = () => {
         setSuccessMessage("Item added successfully!");
         setTimeout(() => {
           setSuccessMessage("");
-          navigate("/");
+          navigate("/BSHeader");
         }, 1500);
       }
     } catch (err) {
@@ -135,7 +135,7 @@ const SaleForm = () => {
     <div className="SF-saleform-page">
       <div className="SF-saleform-header">
         <h1 className="SF-saleform-title">Sell Your Item</h1>
-        <button className="SF-saleform-close" onClick={() => navigate("/")}>✕</button>
+        <button className="SF-saleform-close" onClick={() => navigate("/BSHeader")}>✕</button>
       </div>
 
       {successMessage && (
@@ -276,7 +276,7 @@ const SaleForm = () => {
         </div>
 
         <div className="SF-saleform-actions">
-          <button type="button" className="SF-saleform-cancel" onClick={() => navigate("/")}>Cancel</button>
+          <button type="button" className="SF-saleform-cancel" onClick={() => navigate("/BSHeader")}>Cancel</button>
           <button type="submit" className="SF-saleform-submit" disabled={loading}>
             {loading ? <span className="SF-saleform-loading"></span> : null}
             {loading ? "Adding..." : "Add Item"}

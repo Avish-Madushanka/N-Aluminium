@@ -69,6 +69,7 @@ import AdminAlumni from './Components/Admin/AluTRegManage/AdminAlumni';
 import VideoManage from './Components/Admin/VideoManage/VideoManage';
 import ProManage from './Components/Admin/ProjectManage/ProManage';
 import SaleForm from './Components/BuyandSell/SaleForm';
+import BuyandSellManage from './Components/Admin/BuyandSellManage/BuyandSellManage';
 
 console.log('=== IMPORT DEBUG ===');
 console.log('ItemsManage imported:', ItemsManage);
@@ -367,6 +368,7 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
                            <Route path="/Admin/AdminAlumni" element={<AdminAlumni /> } />
                            <Route path="/Admin/VideoManage" element={<VideoManage /> } />
                            <Route path="/Admin/ProManage" element={<ProManage /> } />
+                           <Route path="/Admin/BuyandSellManage" element={<BuyandSellManage /> } />
                         </Route>
                      </Route>
 

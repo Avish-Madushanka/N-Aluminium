@@ -1,0 +1,748 @@
+.BSM-container {
+  font-family: 'Roboto', sans-serif;
+  padding: 30px;
+  background-color: #f5f5f5;
+  min-height: 100vh;
+}
+
+.BSM-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  background: white;
+  padding: 20px 30px;
+  border-radius: 15px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.BSM-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #333;
+  margin: 0;
+  position: relative;
+  padding-left: 15px;
+}
+
+.BSM-title:before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 5px;
+  height: 30px;
+  background: #ff9800;
+  border-radius: 3px;
+}
+
+.BSM-addButton {
+  padding: 12px 25px;
+  background: #ff9800;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 4px 10px rgba(255, 152, 0, 0.3);
+}
+
+.BSM-addButton:hover {
+  background: #f57c00;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(255, 152, 0, 0.4);
+}
+
+.BSM-success {
+  background: #4caf50;
+  color: white;
+  padding: 15px 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  animation: BSM-slideDown 0.3s ease-out;
+}
+
+.BSM-error {
+  background: #f44336;
+  color: white;
+  padding: 15px 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  animation: BSM-slideDown 0.3s ease-out;
+}
+
+.BSM-successClose,
+.BSM-errorClose {
+  background: rgba(255,255,255,0.2);
+  border: none;
+  color: white;
+  font-size: 20px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+}
+
+.BSM-successClose:hover,
+.BSM-errorClose:hover {
+  background: rgba(255,255,255,0.3);
+  transform: scale(1.1);
+}
+
+.BSM-modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: BSM-fadeIn 0.3s ease-out;
+}
+
+.BSM-modal {
+  background: white;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 1100px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+  animation: BSM-scaleIn 0.3s ease-out;
+}
+
+.BSM-modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 30px;
+  border-bottom: 2px solid #f0f0f0;
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 10;
+}
+
+.BSM-modalHeader h2 {
+  margin: 0;
+  font-size: 24px;
+  color: #333;
+  font-weight: 600;
+}
+
+.BSM-modalClose {
+  background: none;
+  border: none;
+  font-size: 32px;
+  cursor: pointer;
+  color: #999;
+  transition: all 0.3s;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.BSM-modalClose:hover {
+  background: #f5f5f5;
+  color: #333;
+  transform: rotate(90deg);
+}
+
+.BSM-form {
+  padding: 30px;
+}
+
+.BSM-formGrid {
+  display: grid;
+  grid-template-columns: 350px 1fr;
+  gap: 30px;
+  margin-bottom: 30px;
+}
+
+.BSM-formLeft {
+  background: #f9f9f9;
+  border-radius: 15px;
+  padding: 20px;
+}
+
+.BSM-imageUpload {
+  width: 100%;
+  height: 280px;
+  border: 3px dashed #ddd;
+  border-radius: 15px;
+  overflow: hidden;
+  transition: all 0.3s;
+  background: white;
+  margin-bottom: 20px;
+}
+
+.BSM-imageUpload:hover {
+  border-color: #ff9800;
+}
+
+.BSM-uploadLabel {
+  width: 100%;
+  height: 100%;
+  display: block;
+  cursor: pointer;
+}
+
+.BSM-uploadPlaceholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #999;
+}
+
+.BSM-uploadIcon {
+  font-size: 48px;
+  color: #ff9800;
+}
+
+.BSM-uploadHint {
+  font-size: 12px;
+  color: #bbb;
+}
+
+.BSM-imagePreview {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.BSM-imagePreview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.BSM-removeImage {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.9);
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #f44336;
+  transition: all 0.3s;
+}
+
+.BSM-removeImage:hover {
+  background: white;
+  transform: scale(1.1);
+}
+
+.BSM-additionalImages {
+  margin-top: 20px;
+}
+
+.BSM-fileInput {
+  width: 100%;
+  padding: 10px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  margin-top: 10px;
+}
+
+.BSM-additionalGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.BSM-additionalPreview {
+  position: relative;
+  height: 80px;
+}
+
+.BSM-additionalPreview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.BSM-removeAdditional {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(244,67,54,0.9);
+  border: none;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+}
+
+.BSM-removeAdditional:hover {
+  background: #d32f2f;
+  transform: scale(1.1);
+}
+
+.BSM-formRight {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.BSM-fieldGroup {
+  width: 100%;
+}
+
+.BSM-label {
+  display: block;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.BSM-input,
+.BSM-select,
+.BSM-textarea {
+  width: 100%;
+  padding: 12px 15px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: all 0.3s;
+  font-family: 'Roboto', sans-serif;
+}
+
+.BSM-input:focus,
+.BSM-select:focus,
+.BSM-textarea:focus {
+  outline: none;
+  border-color: #ff9800;
+  box-shadow: 0 0 0 3px rgba(255, 152, 0, 0.1);
+}
+
+.BSM-inputError {
+  border-color: #f44336 !important;
+}
+
+.BSM-fieldError {
+  color: #f44336;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.BSM-textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.BSM-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.BSM-formActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  padding-top: 20px;
+  border-top: 2px solid #f0f0f0;
+}
+
+.BSM-cancelButton {
+  padding: 12px 30px;
+  background: #f5f5f5;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.BSM-cancelButton:hover {
+  background: #e0e0e0;
+  transform: translateY(-2px);
+}
+
+.BSM-submitButton {
+  padding: 12px 30px;
+  background: #ff9800;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 4px 10px rgba(255, 152, 0, 0.3);
+}
+
+.BSM-submitButton:hover:not(:disabled) {
+  background: #f57c00;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(255, 152, 0, 0.4);
+}
+
+.BSM-submitButton:disabled {
+  background: #ffcc80;
+  cursor: not-allowed;
+}
+
+.BSM-confirmModal {
+  background: white;
+  border-radius: 15px;
+  padding: 30px;
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+  animation: BSM-scaleIn 0.3s ease-out;
+}
+
+.BSM-confirmModal h3 {
+  margin: 0 0 15px 0;
+  color: #333;
+  font-size: 22px;
+}
+
+.BSM-confirmModal p {
+  color: #666;
+  margin-bottom: 25px;
+  line-height: 1.5;
+}
+
+.BSM-confirmActions {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}
+
+.BSM-confirmCancel {
+  padding: 10px 25px;
+  background: #f5f5f5;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.BSM-confirmCancel:hover {
+  background: #e0e0e0;
+}
+
+.BSM-confirmDelete {
+  padding: 10px 25px;
+  background: #f44336;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.BSM-confirmDelete:hover {
+  background: #d32f2f;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(244, 67, 54, 0.3);
+}
+
+.BSM-tableContainer {
+  background: white;
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  overflow-x: auto;
+}
+
+.BSM-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 1000px;
+}
+
+.BSM-table th {
+  text-align: left;
+  padding: 15px;
+  background: #f8f9fa;
+  color: #495057;
+  font-weight: 600;
+  font-size: 14px;
+  border-bottom: 2px solid #dee2e6;
+}
+
+.BSM-table td {
+  padding: 15px;
+  border-bottom: 1px solid #e9ecef;
+  vertical-align: middle;
+}
+
+.BSM-table tr:hover {
+  background: #f8f9fa;
+}
+
+.BSM-tableImage {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+}
+
+.BSM-tableCell {
+  max-width: 200px;
+}
+
+.BSM-productName {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.BSM-productDescription {
+  font-size: 12px;
+  color: #666;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.BSM-categoryBadge {
+  background: #fff3e0;
+  color: #ff9800;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.BSM-conditionBadge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.BSM-new {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.BSM-like-new {
+  background: #e3f2fd;
+  color: #1976d2;
+}
+
+.BSM-good {
+  background: #fff3e0;
+  color: #f57c00;
+}
+
+.BSM-fair {
+  background: #ffebee;
+  color: #c62828;
+}
+
+.BSM-poor {
+  background: #efebe9;
+  color: #5d4037;
+}
+
+.BSM-priceCell {
+  font-weight: 600;
+}
+
+.BSM-currentPrice {
+  color: #ff9800;
+  font-size: 16px;
+}
+
+.BSM-oldPrice {
+  color: #999;
+  font-size: 12px;
+  text-decoration: line-through;
+  margin-top: 2px;
+}
+
+.BSM-contactInfo {
+  font-size: 12px;
+}
+
+.BSM-phone {
+  color: #333;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.BSM-address {
+  color: #666;
+  font-size: 11px;
+}
+
+.BSM-actionButtons {
+  display: flex;
+  gap: 8px;
+}
+
+.BSM-editButton {
+  padding: 6px 12px;
+  background: #2196f3;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.BSM-editButton:hover {
+  background: #1976d2;
+  transform: translateY(-2px);
+}
+
+.BSM-deleteButton {
+  padding: 6px 12px;
+  background: #f44336;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.BSM-deleteButton:hover {
+  background: #d32f2f;
+  transform: translateY(-2px);
+}
+
+.BSM-loading {
+  text-align: center;
+  padding: 50px;
+  font-size: 18px;
+  color: #666;
+}
+
+.BSM-noData {
+  text-align: center;
+  padding: 50px;
+  color: #999;
+  font-size: 16px;
+}
+
+@keyframes BSM-slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes BSM-fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes BSM-scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (max-width: 768px) {
+  .BSM-container {
+    padding: 15px;
+  }
+
+  .BSM-header {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+    padding: 15px;
+  }
+
+  .BSM-title:before {
+    display: none;
+  }
+
+  .BSM-formGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .BSM-row {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .BSM-modal {
+    width: 95%;
+    margin: 10px;
+  }
+
+  .BSM-formActions {
+    flex-direction: column;
+  }
+
+  .BSM-cancelButton,
+  .BSM-submitButton {
+    width: 100%;
+  }
+
+  .BSM-actionButtons {
+    flex-direction: column;
+  }
+}
