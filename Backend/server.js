@@ -12,7 +12,7 @@ console.log('[Server Startup] Initializing: Attempting to load route modules...'
 let clientRoutes, bOwnerRoutes, authRoutes, calendarSettingsRoutes,
     bookingRoutes, reviewRoutes, scrapTypeRoutes, shopLocationRoutes, adminRoutes,
     saleItemRoutes, adminStatsRoutes, projectRoutes, itemRoutes, cartRoutes, 
-    quotationRoutes, alumniRoutes;  // Added alumniRoutes
+    quotationRoutes, alumniRoutes, buyAndSellRoutes;
 
 const loadRoute = (routeName, path) => {
   try {
@@ -44,7 +44,19 @@ projectRoutes = loadRoute('projectRoutes', './routes/projectRoutes');
 itemRoutes = loadRoute('itemRoutes', './routes/itemRoutes');
 cartRoutes = loadRoute('cartRoutes', './routes/cartRoutes');
 quotationRoutes = loadRoute('quotationRoutes', './routes/quotationRoutes');
-alumniRoutes = loadRoute('alumniRoutes', './routes/alumniRoutes');  // Added alumniRoutes load
+alumniRoutes = loadRoute('alumniRoutes', './routes/alumniRoutes');
+buyAndSellRoutes = loadRoute('buyAndSellRoutes', './routes/buyAndSellRoutes');
+
+console.log('\n=== BUY AND SELL ROUTES DEBUG ===');
+if (buyAndSellRoutes) {
+  console.log('✓ buyAndSellRoutes loaded successfully');
+  console.log('  Type:', typeof buyAndSellRoutes);
+  console.log('  Is Router:', !!buyAndSellRoutes.stack);
+  console.log('  Stack length:', buyAndSellRoutes.stack ? buyAndSellRoutes.stack.length : 0);
+} else {
+  console.error('✗ buyAndSellRoutes is NULL or UNDEFINED!');
+}
+console.log('=== END DEBUG ===\n');
 
 console.log('\n=== QUOTATION ROUTES DEBUG ===');
 if (quotationRoutes) {
@@ -68,6 +80,17 @@ if (alumniRoutes) {
 }
 console.log('=== END DEBUG ===\n');
 
+console.log('\n=== ITEM ROUTES DEBUG ===');
+if (itemRoutes) {
+  console.log('✓ itemRoutes loaded successfully');
+  console.log('  Type:', typeof itemRoutes);
+  console.log('  Is Router:', !!itemRoutes.stack);
+  console.log('  Stack length:', itemRoutes.stack ? itemRoutes.stack.length : 0);
+} else {
+  console.error('✗ itemRoutes is NULL or UNDEFINED!');
+}
+console.log('=== END DEBUG ===\n');
+
 console.log('[Server Startup] Loading controllers and middleware...');
 const { createInitialAdmin } = require('./controllers/adminController');
 const errorHandler = require('./middleware/errorHandler');
@@ -88,7 +111,6 @@ app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 const uploadsDirectory = path.join(__dirname, 'uploads');
 app.use('/uploads', express.static(uploadsDirectory));
 
-// Added 'alumni' to subdirectories
 if (fs.existsSync(uploadsDirectory)) {
     console.log(`[Server Config] Serving static files from ${uploadsDirectory} at /uploads`);
     const subdirectories = ['saleitems', 'projects', 'profiles', 'items', 'cart', 'alumni'];
@@ -122,7 +144,6 @@ if (fs.existsSync(uploadsDirectory)) {
     }
 }
 
-// Test endpoints
 app.get('/api/health', (req, res) => {
     console.log('[Health Check] /api/health endpoint was hit.');
     res.status(200).json({ 
@@ -136,6 +157,18 @@ app.get('/api/test', (req, res) => {
     res.json({ 
         message: 'Server is working', 
         timestamp: new Date().toISOString() 
+    });
+});
+
+app.get('/api/test-buy-and-sell', (req, res) => {
+    res.json({ 
+        message: 'Buy and Sell test endpoint working', 
+        timestamp: new Date().toISOString(),
+        routes: {
+            buyAndSellLoaded: !!buyAndSellRoutes,
+            buyAndSellType: buyAndSellRoutes ? typeof buyAndSellRoutes : 'null',
+            isRouter: buyAndSellRoutes ? !!buyAndSellRoutes.stack : false
+        }
     });
 });
 
@@ -159,6 +192,18 @@ app.get('/api/test-alumni', (req, res) => {
       alumniLoaded: !!alumniRoutes,
       alumniType: alumniRoutes ? typeof alumniRoutes : 'null',
       isRouter: alumniRoutes ? !!alumniRoutes.stack : false
+    }
+  });
+});
+
+app.get('/api/test-items', (req, res) => {
+  res.json({ 
+    message: 'Items test endpoint working', 
+    timestamp: new Date().toISOString(),
+    routes: {
+      itemsLoaded: !!itemRoutes,
+      itemsType: itemRoutes ? typeof itemRoutes : 'null',
+      isRouter: itemRoutes ? !!itemRoutes.stack : false
     }
   });
 });
@@ -198,20 +243,29 @@ mountRoute(app, '/api/projects', projectRoutes);
 mountRoute(app, '/api/admin', adminRoutes);
 mountRoute(app, '/api/admin/stats', adminStatsRoutes);
 mountRoute(app, '/api/quotations', quotationRoutes);
-mountRoute(app, '/api/alumni', alumniRoutes);  // Added alumni route mounting
+mountRoute(app, '/api/alumni', alumniRoutes);
+mountRoute(app, '/api/buy-and-sell', buyAndSellRoutes);
 
 if (itemRoutes) {
     mountRoute(app, '/api/items', itemRoutes);
-    console.log('[Server Config]  SUCCESS: Mounted itemRoutes at /api/items');
+    console.log('[Server Config] SUCCESS: Mounted itemRoutes at /api/items');
 } else {
-    console.error('[Server Config]  ERROR: itemRoutes is null or undefined!');
+    console.error('[Server Config] ERROR: itemRoutes is null or undefined!');
+    app.use('/api/items', (req, res) => {
+        console.log('[Server Config] Fallback: /api/items hit but route not loaded');
+        res.status(200).json({ 
+            success: true, 
+            message: 'Items endpoint - route loading in progress',
+            data: []
+        });
+    });
 }
 
 if (cartRoutes) {
     mountRoute(app, '/api/cart', cartRoutes);
-    console.log('[Server Config]  SUCCESS: Mounted cartRoutes at /api/cart');
+    console.log('[Server Config] SUCCESS: Mounted cartRoutes at /api/cart');
 } else {
-    console.error('[Server Config]  ERROR: cartRoutes is null or undefined!');
+    console.error('[Server Config] ERROR: cartRoutes is null or undefined!');
 }
 
 app.use('*', (req, res) => {

@@ -32,8 +32,6 @@ import ItemMarkert from './Components/ItemMarkert/ItemMarkert';
 
 import ClientForm from './Components/RegistrationForm/ClientForm';
 import Calculate from './Components/Calculate/Calculate';
-import SaleForm from './Components/SaleForm/SaleForm';
-import BuyCard from './Components/BuyCard/BuyCard';
 import ProAddForm from './Components/Projects/ProAddForm';
 import WastePickForm from './Components/WasteCollect/WastePickForm';
 import UserCalendar from './Components/WasteCollect/UserCalendar';
@@ -70,6 +68,7 @@ import AccItemReq from './Components/Admin/ItemsAddForm/AccItemReq';
 import AdminAlumni from './Components/Admin/AluTRegManage/AdminAlumni';
 import VideoManage from './Components/Admin/VideoManage/VideoManage';
 import ProManage from './Components/Admin/ProjectManage/ProManage';
+import SaleForm from './Components/BuyandSell/SaleForm';
 
 console.log('=== IMPORT DEBUG ===');
 console.log('ItemsManage imported:', ItemsManage);
@@ -335,6 +334,7 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
                     <Route path="/AluRegVideoUp" element={<AluRegVideoUp /> } />
                     <Route path="/ItemsAddForm" element={<ItemAddForm /> } />
                     <Route path="/AluTRegForm" element={<AluTRegForm /> } />
+                    <Route path="/SaleForm" element={<SaleForm /> } />
                     
                     <Route path="/test-items" element={<ItemsManage />} />
 
@@ -345,15 +345,9 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
                         <Route path="/PickupReq" element={<PickupReq />} />
                         <Route path="/CheckBuySell" element={<CheckBuySell />} />
                         <Route path="/ClientEmail" element={<ClientEmail />} />
-                        <Route path="/BuyCard" element={<BuyCard />} />
                         <Route path="/WastePickForm" element={<WastePickForm />} />
-                        <Route path="/SaleForm" element={<SaleForm />} />
                         <Route path="/GlassOrder" element={<GlassOrder /> } />
                         <Route path="/ItemsCartManage" element={<ItemsCartManage /> } />
-                    </Route>
-
-                    <Route element={<ProtectedRoute requiredRole="businessOwner" />}>
-                         <Route path="/ProAddForm" element={<ProAddForm />} />
                     </Route>
 
                     <Route element={<ProtectedRoute requiredRole="admin" />}>

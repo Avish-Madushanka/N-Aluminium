@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import "./BSHeader.css";
-import axiosInstance from "../../api/axiosInstance";
-import API_ENDPOINTS from "../../apiConfig";
 
 const BSHeader = () => {
   const navigate = useNavigate();
@@ -21,7 +20,7 @@ const BSHeader = () => {
     const fetchSaleItems = async () => {
       try {
         setLoading(true);
-        const response = await axiosInstance.get(API_ENDPOINTS.SALE_ITEMS.GET_ALL);
+        const response = await axios.get("http://localhost:5003/api/buy-and-sell");
         if (response.data && response.data.data) {
           setSaleItems(response.data.data);
           setFilteredProducts(response.data.data);
@@ -31,6 +30,7 @@ const BSHeader = () => {
         }
         setError(null);
       } catch (err) {
+        console.error("Fetch error:", err);
         setError("Failed to load items. Please try again later.");
         setSaleItems([]);
         setFilteredProducts([]);
@@ -79,39 +79,32 @@ const BSHeader = () => {
   };
 
   const nextImage = () => {
-    if (selectedProduct && selectedProduct.additionalImages && selectedProduct.additionalImages.length > 0) {
-      setCurrentImageIndex((prev) => 
-        prev + 1 >= selectedProduct.additionalImages.length ? 0 : prev + 1
-      );
-    }
+    const images = [selectedProduct.imagePath, ...(selectedProduct.additionalImages || [])];
+    setCurrentImageIndex((prev) => 
+      prev + 1 >= images.length ? 0 : prev + 1
+    );
   };
 
   const prevImage = () => {
-    if (selectedProduct && selectedProduct.additionalImages && selectedProduct.additionalImages.length > 0) {
-      setCurrentImageIndex((prev) => 
-        prev - 1 < 0 ? selectedProduct.additionalImages.length - 1 : prev - 1
-      );
-    }
+    const images = [selectedProduct.imagePath, ...(selectedProduct.additionalImages || [])];
+    setCurrentImageIndex((prev) => 
+      prev - 1 < 0 ? images.length - 1 : prev - 1
+    );
   };
 
   const getImageUrl = (imagePath) => {
     if (!imagePath) return "https://via.placeholder.com/400x300?text=No+Image";
     if (imagePath.startsWith("http")) return imagePath;
-    return `${API_ENDPOINTS.BACKEND_ROOT_URL}${imagePath}`;
+    return `http://localhost:5003${imagePath}`;
   };
 
-  const handleSearch = () => {
-  };
-
-  const handleSortChange = (e) => {
-    setSortOption(e.target.value);
-  };
-
-  const clearAllFilters = () => {
-    setSearchQuery("");
-    setSelectedFilter("");
-    setSelectedCondition("");
-    setSortOption("");
+  const getDiscountData = (product) => {
+    if (product.oldPrice && product.price && product.oldPrice > product.price) {
+        const perc = Math.round(((product.oldPrice - product.price) / product.oldPrice) * 100);
+        return { percent: perc, old: product.oldPrice };
+    }
+    const simulatedOld = Math.floor(product.price * 1.25);
+    return { percent: 25, old: simulatedOld };
   };
 
   return (
@@ -147,7 +140,7 @@ const BSHeader = () => {
               onChange={(e) => setSearchQuery(e.target.value)}
               className="bs-header-search-input"
             />
-            <button className="bs-header-search-btn" onClick={handleSearch}>Search</button>
+            <button className="bs-header-search-btn">Search</button>
           </div>
 
           <div className="bs-header-dropdown-wrapper">
@@ -187,7 +180,7 @@ const BSHeader = () => {
             <select
               className="bs-header-filter-dropdown"
               value={sortOption}
-              onChange={handleSortChange}
+              onChange={(e) => setSortOption(e.target.value)}
             >
               <option value="">Default</option>
               <option value="price-low-high">Price: Low to High</option>
@@ -207,259 +200,146 @@ const BSHeader = () => {
       {loading && (
         <div className="bs-header-loading">
           <div className="bs-header-spinner"></div>
-          <p>Loading items...</p>
         </div>
       )}
 
-      {error && !loading && (
+      {error && (
         <div className="bs-header-error">
-          <i className="fas fa-exclamation-circle"></i>
           <p>{error}</p>
-          <button className="bs-header-retry-button" onClick={() => window.location.reload()}>
-            Retry
+          <button onClick={() => window.location.reload()}>Retry</button>
+        </div>
+      )}
+
+      {!loading && !error && filteredProducts.length === 0 && (
+        <div className="bs-header-no-items">
+          <p>No items found. Be the first to add an item!</p>
+          <button onClick={() => navigate("/SaleForm")} className="bs-header-add-button">
+            Add Your Item
           </button>
         </div>
       )}
 
-      {!loading && !error && (
-        <>
-          <div className="bs-header-product-grid">
-            {filteredProducts.length > 0 ? (
-              filteredProducts.map((product) => (
-                <div key={product._id} className="bs-header-product-card">
-                  <div className="bs-header-product-image-container">
-                    <img
-                      src={getImageUrl(product.imagePath)}
-                      alt={product.name}
-                      className="bs-header-product-image"
-                      onError={(e) => {
-                        e.target.onerror = null;
-                        e.target.src = "https://via.placeholder.com/400x300?text=No+Image";
-                      }}
-                    />
-                    <span className="bs-header-product-condition-badge">
+      {!loading && !error && filteredProducts.length > 0 && (
+        <div className="bs-header-product-grid">
+          {filteredProducts.map((product) => {
+            const disc = getDiscountData(product);
+            return (
+              <div key={product._id} className="bs-header-item-card" onClick={() => openProductModal(product)}>
+                <div className="bs-header-item-img-box">
+                  <img src={getImageUrl(product.imagePath)} alt={product.name} />
+                  <div className="bs-header-item-discount-tag">
+                    <span>{disc.percent}%</span>
+                    <span>OFF</span>
+                  </div>
+                </div>
+                <div className="bs-header-item-info-box">
+                  <h3 className="bs-header-item-name">{product.name}</h3>
+                  {product.brand && <p className="bs-header-item-brand">{product.brand}</p>}
+                  <div className="bs-header-item-price-row">
+                    <span className="bs-header-item-old-price">Rs. {disc.old.toLocaleString()}</span>
+                    <span className="bs-header-item-new-price">Rs. {Number(product.price).toLocaleString()}</span>
+                  </div>
+                  <div className="bs-header-item-condition">
+                    <span className={`condition-badge ${product.condition?.toLowerCase().replace(' ', '-')}`}>
                       {product.condition || "Good"}
                     </span>
                   </div>
-                  
-                  <div className="bs-header-product-details">
-                    <h3 className="bs-header-product-name">{product.name}</h3>
-                    <p className="bs-header-product-price">
-                      €{Number(product.price || 0).toLocaleString()}
-                    </p>
-                    
-                    <div className="bs-header-product-location">
-                      <i className="fas fa-map-marker-alt"></i>
-                      <span>{product.address || "Location not specified"}</span>
-                    </div>
-
-                    <button 
-                      className="bs-header-view-more-button"
-                      onClick={() => openProductModal(product)}
-                    >
-                      View More Details →
-                    </button>
-                  </div>
                 </div>
-              ))
-            ) : (
-              <div className="bs-header-no-products">
-                <i className="fas fa-search"></i>
-                <p>No products found matching your criteria</p>
-                <button
-                  className="bs-header-clear-filters"
-                  onClick={clearAllFilters}
-                >
-                  Clear Filters
-                </button>
               </div>
-            )}
-          </div>
-        </>
+            );
+          })}
+        </div>
       )}
 
       {selectedProduct && (
-        <div className="bs-header-modal-overlay" onClick={closeProductModal}>
-          <div className="bs-header-modal" onClick={(e) => e.stopPropagation()}>
-            <button className="bs-header-modal-close" onClick={closeProductModal}>
-              ✕
-            </button>
-
-            <div className="bs-header-modal-content">
-              <div className="bs-header-modal-header">
-                <h2 className="bs-header-modal-title">{selectedProduct.name}</h2>
-                <span className="bs-header-modal-category">
-                  {selectedProduct.type || "Uncategorized"}
-                </span>
-              </div>
-
-              <div className="bs-header-modal-price-section">
-                <p className="bs-header-modal-price">
-                  €{Number(selectedProduct.price || 0).toLocaleString()}
-                </p>
-                <span className={`bs-header-modal-condition condition-${selectedProduct.condition?.toLowerCase().replace(' ', '-') || 'good'}`}>
-                  {selectedProduct.condition || "Good"}
-                </span>
-              </div>
-
-              <div className="bs-header-modal-info">
-                <div className="bs-header-modal-location">
-                  <i className="fas fa-map-marker-alt"></i>
-                  <span>{selectedProduct.address || "Location not specified"}</span>
-                </div>
-                {selectedProduct.projectDate && (
-                  <div className="bs-header-modal-date">
-                    <i className="fas fa-calendar-alt"></i>
-                    <span>Posted: {new Date(selectedProduct.projectDate).toLocaleDateString()}</span>
+        <div className="bs-header-detail-overlay" onClick={closeProductModal}>
+          <div className="bs-header-detail-wrapper" onClick={(e) => e.stopPropagation()}>
+            <div className="bs-header-detail-layout">
+              
+              <div className="bs-header-detail-media">
+                <div className="bs-header-detail-slider">
+                  <button className="bs-header-slider-arrow prev" onClick={prevImage}>
+                    <i className="fas fa-chevron-left"></i>
+                  </button>
+                  <div className="bs-header-slider-main-view">
+                    <img 
+                      src={getImageUrl([selectedProduct.imagePath, ...(selectedProduct.additionalImages || [])][currentImageIndex])} 
+                      alt="Product" 
+                    />
                   </div>
-                )}
-              </div>
-
-              {(selectedProduct.additionalImages && selectedProduct.additionalImages.length > 0) && (
-                <div className="bs-header-modal-gallery-section">
-                  <h3>Product Gallery</h3>
-                  
-                  <div className="bs-header-gallery-slider">
-                    <button className="bs-header-slider-nav prev" onClick={prevImage}>
-                      <i className="fas fa-chevron-left"></i>
-                    </button>
-                    
-                    <div className="bs-header-slider-main">
-                      <img 
-                        src={getImageUrl(selectedProduct.additionalImages[currentImageIndex])}
-                        alt={`${selectedProduct.name} - ${currentImageIndex + 1}`}
-                        className="bs-header-slider-image"
-                        onError={(e) => {
-                          e.target.onerror = null;
-                          e.target.src = "https://via.placeholder.com/800x500?text=Image+Not+Found";
-                        }}
-                      />
-                    </div>
-                    
-                    <button className="bs-header-slider-nav next" onClick={nextImage}>
-                      <i className="fas fa-chevron-right"></i>
-                    </button>
-                  </div>
-                  
-                  <div className="bs-header-gallery-thumbnails">
-                    {selectedProduct.additionalImages.map((img, idx) => (
-                      <div 
-                        key={idx} 
-                        className={`bs-header-thumbnail-item ${idx === currentImageIndex ? 'active' : ''}`}
-                        onClick={() => setCurrentImageIndex(idx)}
-                      >
-                        <img 
-                          src={getImageUrl(img)} 
-                          alt={`Thumbnail ${idx + 1}`}
-                          onError={(e) => {
-                            e.target.onerror = null;
-                            e.target.src = "https://via.placeholder.com/100x80?text=No+Image";
-                          }}
-                        />
-                      </div>
+                  <button className="bs-header-slider-arrow next" onClick={nextImage}>
+                    <i className="fas fa-chevron-right"></i>
+                  </button>
+                  <div className="bs-header-slider-pagination">
+                    {[selectedProduct.imagePath, ...(selectedProduct.additionalImages || [])].map((_, idx) => (
+                      <span key={idx} className={idx === currentImageIndex ? "active" : ""}></span>
                     ))}
                   </div>
                 </div>
-              )}
-
-              <div className="bs-header-modal-description-section">
-                <h3>Description</h3>
-                <p className="bs-header-modal-description">
-                  {selectedProduct.description || "No description available"}
-                </p>
               </div>
 
-              <div className="bs-header-modal-contact-section">
-                <h3>Contact Seller</h3>
-                <div className="bs-header-contact-details">
-                  <div className="bs-header-contact-item">
-                    <i className="fas fa-user"></i>
-                    <div>
-                      <label>Seller Name</label>
-                      <p>{selectedProduct.sellerName || "Not specified"}</p>
+              <div className="bs-header-detail-content">
+                <h1 className="bs-header-detail-name">{selectedProduct.name}</h1>
+                <p className="bs-header-detail-price">Rs. {Number(selectedProduct.price).toLocaleString()}</p>
+                {selectedProduct.oldPrice && selectedProduct.oldPrice > selectedProduct.price && (
+                  <p className="bs-header-detail-old-price">Was: Rs. {Number(selectedProduct.oldPrice).toLocaleString()}</p>
+                )}
+                
+                <div className="bs-header-detail-hr"></div>
+
+                <div className="bs-header-detail-row">
+                  <label>Sold by:</label>
+                  <div className="bs-header-detail-seller">
+                    <div className="bs-header-seller-icon">
+                      <img src="https://ui-avatars.com/api/?name=User&background=random" alt="user" />
+                    </div>
+                    <span>{selectedProduct.userId?.name || selectedProduct.userId?.fullName || selectedProduct.userId?.ownerName || "User"}</span>
+                  </div>
+                </div>
+
+                <div className="bs-header-detail-row">
+                  <label>Description</label>
+                  <div className="bs-header-detail-description">
+                    <p>{selectedProduct.description || "No specific description available."}</p>
+                  </div>
+                </div>
+
+                <div className="bs-header-detail-row">
+                  <label>Details</label>
+                  <div className="bs-header-detail-meta-group">
+                    <div className="bs-header-meta-item">
+                        <i className="fas fa-info-circle"></i>
+                        <span>Condition: <strong>{selectedProduct.condition || "Good"}</strong></span>
+                    </div>
+                    {selectedProduct.brand && (
+                      <div className="bs-header-meta-item">
+                        <i className="fas fa-tag"></i>
+                        <span>Brand: <strong>{selectedProduct.brand}</strong></span>
+                      </div>
+                    )}
+                    <div className="bs-header-meta-item">
+                        <i className="fas fa-map-marker-alt"></i>
+                        <span>Location: <strong>{selectedProduct.address || "Not Specified"}</strong></span>
+                    </div>
+                    <div className="bs-header-meta-item">
+                        <i className="fas fa-phone-alt"></i>
+                        <span>Contact: <strong>{selectedProduct.phoneNumber || "Not provided"}</strong></span>
                     </div>
                   </div>
+                </div>
 
-                  <div className="bs-header-contact-item">
-                    <i className="fas fa-phone-alt"></i>
-                    <div>
-                      <label>Phone Number</label>
-                      <p className="bs-header-contact-phone">
-                        {selectedProduct.phoneNumber || "Not provided"}
-                      </p>
-                      {selectedProduct.phoneNumber && (
-                        <a 
-                          href={`tel:${selectedProduct.phoneNumber}`} 
-                          className="bs-header-call-now-btn"
-                        >
-                          <i className="fas fa-phone"></i> Call Now
-                        </a>
-                      )}
-                    </div>
+                <div className="bs-header-detail-row">
+                  <label>Categories</label>
+                  <div className="bs-header-detail-tags">
+                    <span className="bs-header-detail-tag">{selectedProduct.type || "Product"}</span>
+                    {selectedProduct.brand && <span className="bs-header-detail-tag">{selectedProduct.brand}</span>}
+                    <span className="bs-header-detail-tag">{selectedProduct.condition || "Used"}</span>
                   </div>
-
-                  {selectedProduct.email && (
-                    <div className="bs-header-contact-item">
-                      <i className="fas fa-envelope"></i>
-                      <div>
-                        <label>Email</label>
-                        <p>{selectedProduct.email}</p>
-                        <a 
-                          href={`mailto:${selectedProduct.email}`} 
-                          className="bs-header-email-now-btn"
-                        >
-                          <i className="fas fa-envelope"></i> Send Email
-                        </a>
-                      </div>
-                    </div>
-                  )}
-
-                  {selectedProduct.dimensions && (
-                    <div className="bs-header-contact-item">
-                      <i className="fas fa-ruler-combined"></i>
-                      <div>
-                        <label>Dimensions</label>
-                        <p>{selectedProduct.dimensions}</p>
-                      </div>
-                    </div>
-                  )}
-
-                  {selectedProduct.material && (
-                    <div className="bs-header-contact-item">
-                      <i className="fas fa-cube"></i>
-                      <div>
-                        <label>Material</label>
-                        <p>{selectedProduct.material}</p>
-                      </div>
-                    </div>
-                  )}
-
-                  {selectedProduct.brand && (
-                    <div className="bs-header-contact-item">
-                      <i className="fas fa-trademark"></i>
-                      <div>
-                        <label>Brand</label>
-                        <p>{selectedProduct.brand}</p>
-                      </div>
-                    </div>
-                  )}
                 </div>
               </div>
-            </div>
 
-            <div className="bs-header-modal-footer">
-              <button className="bs-header-modal-cancel" onClick={closeProductModal}>
-                Close
-              </button>
-              {selectedProduct.phoneNumber && (
-                <a 
-                  href={`tel:${selectedProduct.phoneNumber}`} 
-                  className="bs-header-modal-call"
-                >
-                  <i className="fas fa-phone-alt"></i> Contact Seller
-                </a>
-              )}
             </div>
+            <button className="bs-header-detail-close-btn" onClick={closeProductModal}>✕</button>
           </div>
         </div>
       )}

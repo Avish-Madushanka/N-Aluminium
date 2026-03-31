@@ -1,0 +1,536 @@
+.SF-saleform-page {
+  font-family: 'Roboto', sans-serif;
+  background-color: #f5f5f5;
+  min-height: 100vh;
+  padding: 30px;
+}
+
+.SF-saleform-header {
+  background: #1a1a1a;
+  color: white;
+  padding: 20px 30px;
+  border-radius: 20px;
+  margin-bottom: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.SF-saleform-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0;
+  position: relative;
+  padding-left: 15px;
+}
+
+.SF-saleform-title:before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 5px;
+  height: 35px;
+  background: #4CAF50;
+  border-radius: 3px;
+}
+
+.SF-saleform-close {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  font-size: 32px;
+  cursor: pointer;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+}
+
+.SF-saleform-close:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: rotate(90deg);
+}
+
+.SF-saleform-form {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.SF-saleform-twoColumn {
+  display: grid;
+  grid-template-columns: 350px 1fr;
+  gap: 30px;
+  margin-bottom: 30px;
+}
+
+.SF-saleform-card {
+  background: white;
+  border-radius: 20px;
+  padding: 25px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  border: 1px solid #f0f0f0;
+}
+
+.SF-saleform-sectionTitle {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 20px 0;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #f0f0f0;
+  position: relative;
+}
+
+.SF-saleform-sectionTitle:after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 50px;
+  height: 2px;
+  background: #4CAF50;
+}
+
+.SF-saleform-imageUpload {
+  width: 100%;
+  height: 280px;
+  border: 3px dashed #ddd;
+  border-radius: 15px;
+  overflow: hidden;
+  transition: all 0.3s;
+  background: #f9f9f9;
+}
+
+.SF-saleform-imageUpload:hover {
+  border-color: #4CAF50;
+}
+
+.SF-saleform-uploadLabel {
+  width: 100%;
+  height: 100%;
+  display: block;
+  cursor: pointer;
+}
+
+.SF-saleform-uploadPlaceholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #999;
+}
+
+.SF-saleform-uploadIcon {
+  font-size: 48px;
+  font-weight: 300;
+  color: #4CAF50;
+}
+
+.SF-saleform-uploadHint {
+  font-size: 12px;
+  color: #ccc;
+}
+
+.SF-saleform-imagePreview {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.SF-saleform-imagePreview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.SF-saleform-removeImage {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #f44336;
+  transition: all 0.3s;
+}
+
+.SF-saleform-removeImage:hover {
+  background: white;
+  transform: scale(1.1);
+}
+
+.SF-saleform-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.SF-saleform-fieldGroup {
+  width: 100%;
+}
+
+.SF-saleform-label {
+  display: block;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.SF-saleform-required {
+  color: #f44336;
+  margin-left: 4px;
+}
+
+.SF-saleform-input,
+.SF-saleform-select,
+.SF-saleform-textarea {
+  width: 100%;
+  padding: 12px 15px;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  font-size: 14px;
+  transition: all 0.3s;
+  font-family: 'Roboto', sans-serif;
+}
+
+.SF-saleform-input:focus,
+.SF-saleform-select:focus,
+.SF-saleform-textarea:focus {
+  outline: none;
+  border-color: #4CAF50;
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+}
+
+.SF-saleform-input.error,
+.SF-saleform-select.error,
+.SF-saleform-textarea.error {
+  border-color: #f44336;
+}
+
+.SF-saleform-textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.SF-saleform-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.SF-saleform-error {
+  color: #f44336;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.SF-saleform-success-message {
+  background: #4CAF50;
+  color: white;
+  padding: 15px 20px;
+  border-radius: 10px;
+  margin: 0 30px 20px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  animation: SF-saleform-slideDown 0.3s ease-out;
+  box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+}
+
+.SF-saleform-success-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.SF-saleform-success-icon {
+  font-size: 24px;
+  font-weight: bold;
+  background: white;
+  color: #4CAF50;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.SF-saleform-success-text {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.SF-saleform-success-close {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+}
+
+.SF-saleform-success-close:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+}
+
+.SF-saleform-error-message {
+  background: #f44336;
+  color: white;
+  padding: 15px 20px;
+  border-radius: 10px;
+  margin: 0 30px 20px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  animation: SF-saleform-slideDown 0.3s ease-out;
+  box-shadow: 0 4px 15px rgba(244, 67, 54, 0.3);
+}
+
+.SF-saleform-error-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.SF-saleform-error-icon {
+  font-size: 24px;
+  font-weight: bold;
+  background: white;
+  color: #f44336;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.SF-saleform-error-close {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+}
+
+.SF-saleform-error-close:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+}
+
+.SF-saleform-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-radius: 15px;
+  padding: 20px 30px;
+}
+
+.SF-saleform-cancel {
+  padding: 12px 35px;
+  background: #f5f5f5;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-family: 'Roboto', sans-serif;
+}
+
+.SF-saleform-cancel:hover {
+  background: #e0e0e0;
+  border-color: #ccc;
+  transform: translateY(-2px);
+}
+
+.SF-saleform-submit {
+  padding: 12px 35px;
+  background: #4CAF50;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3);
+  font-family: 'Roboto', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.SF-saleform-submit:hover:not(:disabled) {
+  background: #45a049;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(76, 175, 80, 0.4);
+}
+
+.SF-saleform-submit:disabled {
+  background: #A5D6A7;
+  cursor: not-allowed;
+  opacity: 0.7;
+  transform: none;
+  box-shadow: none;
+}
+
+@keyframes SF-saleform-slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.SF-saleform-loading {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255,255,255,.3);
+  border-radius: 50%;
+  border-top-color: #fff;
+  animation: SF-saleform-spin 1s ease-in-out infinite;
+  margin-right: 8px;
+}
+
+@keyframes SF-saleform-spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (max-width: 1024px) {
+  .SF-saleform-twoColumn {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .SF-saleform-page {
+    padding: 20px;
+  }
+  
+  .SF-saleform-colorGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .SF-saleform-sizeGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .SF-saleform-header {
+    padding: 15px 20px;
+  }
+  
+  .SF-saleform-title {
+    font-size: 22px;
+  }
+  
+  .SF-saleform-row {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  .SF-saleform-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .SF-saleform-cancel,
+  .SF-saleform-submit {
+    width: 100%;
+    padding: 12px 20px;
+  }
+  
+  .SF-saleform-colorGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .SF-saleform-sizeGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .SF-saleform-page {
+    padding: 15px;
+  }
+  
+  .SF-saleform-header {
+    padding: 12px 15px;
+  }
+  
+  .SF-saleform-title {
+    font-size: 20px;
+  }
+  
+  .SF-saleform-card {
+    padding: 15px;
+  }
+  
+  .SF-saleform-colorGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .SF-saleform-sizeGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .SF-saleform-imageUpload {
+    height: 200px;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
