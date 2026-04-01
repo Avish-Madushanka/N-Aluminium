@@ -1,460 +1,687 @@
 .WS2-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 3rem 2rem;
-    font-family: 'Roboto', sans-serif;
-    background-color: #fff;
-    max-width: 1200px;
-    margin: auto;
-    gap: 2rem;
-    flex-wrap: wrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  font-family: 'Poppins', sans-serif;
+  background-color: #ffffff;
+  max-width: 1400px;
+  margin: auto;
+  gap: 5rem;
+  flex-wrap: wrap;
 }
 
 .WS2-left-section {
-    flex: 1;
-    padding-right: 2rem;
-    min-width: 300px;
+  flex: 1;
+  min-width: 300px;
 }
 
 .WS2-image-container {
-    position: relative;
+  position: relative;
+  border-radius: 30px;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
 }
 
 .WS2-wall-image {
-    width: 100%;
-    height: auto;
-    border-radius: 200px 5px 5px 5px;
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.WS2-image-container:hover .WS2-wall-image {
+  transform: scale(1.05);
+}
+
+.WS2-image-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, rgba(80, 41, 41, 0.3), rgba(0, 0, 0, 0.3));
+  pointer-events: none;
 }
 
 .WS2-right-section {
-    flex: 1.2;
-    padding-left: 2rem;
-    min-width: 320px;
+  flex: 1.2;
+  min-width: 320px;
+}
+
+.WS2-badge {
+  display: inline-block;
+  background-color: #142e15;
+  color: white;
+  padding: 6px 16px;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  letter-spacing: 0.5px;
 }
 
 .WS2-main-heading {
-    font-family: 'Merriweather', serif;
-    font-size: 2.4rem;
-    color: #2c3e50;
-    margin-bottom: 1.5rem;
-    line-height: 1.2;
+  font-family: 'Merriweather', serif;
+  font-size: 2.8rem;
+  color: #0f1c2b;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  line-height: 1.3;
 }
 
 .WS2-description {
-    color: #555;
-    line-height: 1.6;
-    margin-bottom: 2.5rem;
-    text-align: justify;
+  color: #666;
+  line-height: 1.8;
+  margin-bottom: 2.5rem;
+  text-align: justify;
 }
 
-.WS2-features-container {
-    display: flex;
-    gap: 2rem;
-    flex-wrap: wrap;
-}
 
-.WS2-feature-card {
-    background-color: #f8f9fa;
-    padding: 1.5rem;
-    border-radius: 10px;
-    flex: 1;
-    min-width: 260px;
-}
 
-.WS2-icon-wrapper {
-    background-color: #f1f1f1;
-    border-radius: 50%;
-    padding: 0.75rem;
-    width: 60px;
-    height: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 1rem;
-}
+/*------------wht we collect----------- */
 
-.WS2-feature-icon {
-    width: 100%;
-}
 
-.WS2-feature-title {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #1f1616;
-    margin-bottom: 0.5rem;
-}
-
-.WS2-feature-description {
-    color: #666;
-    font-size: 0.9rem;
-    line-height: 1.6;
-    text-align: justify;
-}
 
 .WS3-category-section {
-    padding: 40px 50px;
-    background-color: #ffffff;
-    max-width: 1500px;
-    margin-bottom: 30px;
+  padding: 60px 50px;
+  background-color: #ffffff;
+  max-width: 1500px;
+  margin: 0 auto 30px;
+}
+
+.WS3-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.WS3-subtitle {
+  display: inline-block;
+  color: #414141;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 5px;
 }
 
 .WS3-title {
-    font-family: 'Roboto', sans-serif;
-    font-size: 2.4rem;
-    font-weight: 700;
-    color: #2c3e50;
-    margin-bottom: 50px;
-    text-align: left;
+  font-family: 'Merriweather', serif;
+  font-size: 2.6rem;
+  font-weight: 800;
+  color: #0b1610;
+  margin-bottom: 15px;
+}
+
+.WS3-description {
+  color: #888;
+  font-size: 1rem;
+  max-width: 700px;
+  margin: 0 auto;
 }
 
 .WS3-category-container {
-    display: flex;
-    justify-content: space-around;
-    align-items: flex-start;
-    gap: 20px;
-    flex-wrap: wrap;
-    justify-items: center;
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  flex-wrap: wrap;
 }
 
 .WS3-category-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+
+.WS3-category-item:hover {
+  transform: translateY(-8px);
+}
+
+.WS3-category-image-wrapper {
+  position: relative;
+  width: 170px;
+  height: 170px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-bottom: 15px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+}
+
+.WS3-category-item:hover .WS3-category-image-wrapper {
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
 }
 
 .WS3-category-image {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-bottom: 15px;
-    background-color: #f0f0f0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.WS3-category-item:hover .WS3-category-image {
+  transform: scale(1.1);
+}
+
+.WS3-category-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(10, 41, 24, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.WS3-category-item:hover .WS3-category-overlay {
+  opacity: 1;
+}
+
+.WS3-recycle-icon {
+  font-size: 2rem;
 }
 
 .WS3-category-name {
-    font-size: 1rem;
-    color: #555;
+  font-family: 'Merriweather', serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #333;
+  margin-top: 10px;
 }
+
+
+
+/*------------Slider Section----------- */
+
+.WS5-marquee-section {
+  width: 100%;
+  background-color: #020e06;
+  overflow: hidden;
+  height: 90px;
+  display: flex;
+  align-items: center;
+  position: relative;
+  margin: 0px 0 40px;
+}
+
+.WS5-marquee-container {
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.WS5-marquee-content {
+  display: flex;
+  width: max-content;
+  animation: scrollMarquee 20s linear infinite;
+}
+
+.WS5-marquee-text {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: 1px;
+  padding: 0 50px;
+  text-transform: uppercase;
+  font-family: 'Poppins', sans-serif;
+  white-space: nowrap;
+}
+
+.WS5-marquee-text img {
+  width: 35px;
+  height: 35px;
+  object-fit: contain;
+}
+
+@keyframes scrollMarquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/*------------Dates & Centers----------- */
+
+
 
 .Co-recycling-section {
   font-family: "Poppins", Arial, sans-serif;
-  padding: 60px 0;
-  background-color: #ffffff;
+  background: #ffffff;
   margin-bottom: 10px;
 }
 
-.Co-content-and-accordion-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  align-items: center;
-  justify-items: center;
-  padding-bottom: 40px;
-  gap: 30px;
-}
-
-.Co-image-container img {
-  width: 80%;
-  border-radius: 10px;
-  transition: transform 0.4s ease;
-}
-
-.Co-image-container img:hover {
-  transform: scale(1.05);
+.Co-accordion-section {
+  margin-top: 30px;
 }
 
 .Co-accordion-item {
   margin-bottom: 15px;
-  background: #fbfbfb;
-  border-radius: 10px;
-  border: 1px solid #2b2b2b;
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid #ffffff;
   overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.Co-accordion-item.active {
+  border-color: #ffc681;
+  box-shadow: 0 4px 12px rgba(247, 160, 51, 0.1);
 }
 
 .Co-accordion-header {
   width: 100%;
   padding: 18px 25px;
-  background: #fbfbfb;
+  background: #e6ffe9;
   border: none;
-  font-size: 1.1em;
+  font-size: 1.05rem;
   font-weight: 600;
+  color: #414141;
   cursor: pointer;
   display: flex;
   justify-content: space-between;
-  transition: 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .Co-accordion-header:hover {
-  background: #e2e2e2;
+  background: #b8ffc1;
+  color: #272727;
 }
 
 .Co-accordion-toggle-icon {
-  font-size: 1.5em;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #2b2b2b;
 }
 
 .Co-accordion-content {
   padding: 0 25px 20px;
-  background: #f0f0f0;
-  font-size: 0.95em;
-  line-height: 1.6;
-}
-
-.scrap-info-section {
-  display: flex;
-  flex-wrap: wrap;
-  width: 100%;
-  height: 50vh;
-}
-
-.scrap-card {
-  flex: 1 1 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  transition: 0.4s ease;
-  overflow: hidden;
-  height: 400px;
-}
-
-.scrap-card:hover {
-  transform: scale(1.02);
-  filter: brightness(1.15);
-}
-
-.scrap-overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.55);
-  z-index: 1;
-}
-
-.scrap-content {
-  position: relative;
-  z-index: 2;
-  max-width: 600px;
-  padding: 30px;
-  color: #fff;
-}
-
-.scrap-title {
-  font-size: 2.2rem;
-  margin-bottom: 12px;
-  font-weight: 600;
-}
-
-.scrap-text {
-  font-size: 1.05rem;
-  margin-bottom: 25px;
-  line-height: 1.6;
-  text-align: justify;
-}
-
-.scrap-btn {
-  width: 65px;
-  height: 65px;
-  border: 2px solid #fff;
-  border-radius: 50%;
-  background: transparent;
-  font-size: 1.4rem;
-  cursor: pointer;
-  transition: 0.3s ease;
-}
-
-.scrap-btn:hover {
-  background: #fff;
-  color: #1e3a34;
+  background: #fafafa;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: #666;
+  border-top: 1px solid #e8e8e8;
 }
 
 .WS4-container {
-    display: flex;
-    width: 100%;
-    height: 60vh;
-    font-family: 'Montserrat', sans-serif;
-    color: #ffffff;
+  display: flex;
+  width: 100%;
+  min-height: 500px;
+  font-family: 'Montserrat', sans-serif;
+  color: #ffffff;
 }
 
+
+
+/*----------Service cards----------- */
+
 .WS4-section {
-    flex: 1;
-    background-size: cover;
-    background-position: center;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 2rem;
+  flex: 1;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 3rem;
+  transition: all 0.3s ease;
 }
 
 .WS4-section::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(45, 52, 63, 0.6);
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.5));
+  transition: background 0.3s ease;
+}
+
+.WS4-section:hover::before {
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.6));
 }
 
 .WS4-m {
-    background-image: url('https://westchicago.org/wp-content/uploads/2022/12/Garbage-Pickup-02.png');
+  background-image: url('https://www.actionmetalsrecyclers.com/wp-content/uploads/2023/03/shutterstock_1976224004-768x513.jpg');
 }
 
 .WS4-w {
-    background-image: url('https://img.freepik.com/premium-photo/map-with-marked-location-illustrating-geographic-positioning-site-identification_1211661-5650.jpg');
+  background-image: url('https://img.freepik.com/premium-photo/map-with-marked-location-illustrating-geographic-positioning-site-identification_1211661-5650.jpg');
 }
 
 .WS4-content {
-    position: relative;
-    z-index: 1;
-    justify-items: center;
-    width: 500px;
+  position: relative;
+  z-index: 1;
+  max-width: 500px;
+  width: 100%;
+}
+
+.WS4-icon-wrapper {
+  margin-bottom: 20px;
+}
+
+.WS4-icon-wrapper svg {
+  stroke: #ffffff;
 }
 
 .WS4-title {
-    font-size: 2.8rem;
-    font-weight: 900;
-    margin: 0;
-    text-transform: uppercase;
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin: 0 0 15px 0;
+  line-height: 1.3;
 }
 
-.WS4-highlight-blue {
-    color: #48ff00;
-}
-
+.WS4-highlight-blue,
 .WS4-highlight-pink {
-    color: #48ff00;
+  color: #4af733;
+  position: relative;
+  display: inline-block;
 }
 
 .WS4-subtitle {
-    font-size: 1rem;
-    margin: 1rem 0 2rem 0;
-    max-width: 350px;
+  font-size: 0.95rem;
+  margin: 1rem 0 2rem 0;
+  line-height: 1.6;
+  opacity: 0.9;
 }
 
 .WS4-button {
-    border: 2px solid #ffffff;
-    background: transparent;
-    color: #ffffff;
-    padding: 1rem 2.5rem;
-    font-size: 0.9rem;
-    font-weight: 700;
-    cursor: pointer;
-    letter-spacing: 1px;
-    border-radius: 20px;
-    text-decoration: none;
-    transition: 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  border: 2px solid #ffffff;
+  background: transparent;
+  color: #ffffff;
+  padding: 12px 28px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  letter-spacing: 1px;
+  border-radius: 50px;
+  text-decoration: none;
+  transition: all 0.3s ease;
 }
 
 .WS4-button:hover {
-    background-color: #ffffff;
-    color: #000000;
+  background-color: #1a1a1a;
+  border-color: #4af733;
+  color: #ffffff;
+  transform: translateY(-2px);
 }
 
-.WS4-button-2 {
-    background: transparent;
-    border: 2px solid #ffffff;
+.WS4-button-arrow {
+  transition: transform 0.3s ease;
+  font-size: 1.1rem;
 }
 
+.WS4-button:hover .WS4-button-arrow {
+  transform: translateX(5px);
+}
+
+
+
+/*----------Collect process------------ */
+
+
+
+.WS6-process-section {
+  padding: 100px 8%;
+  background-color: #edf2f1;
+}
+
+.WS6-header {
+  display: flex;
+  gap: 60px;
+  align-items: flex-end;
+  margin-bottom: 80px;
+}
+
+.WS6-left { flex: 1.4; }
+.WS6-right { flex: 1; }
+
+.WS6-badge {
+  border: 1px solid #457b78;
+  color: #457b78;
+  padding: 8px 22px;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  display: inline-block;
+  margin-bottom: 20px;
+}
+
+.WS6-title {
+  font-size: 3.5rem;
+  color: #000;
+  font-weight: 900;
+  line-height: 1.1;
+}
+
+.WS6-steps-grid {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  z-index: 1;
+}
+
+.WS6-line {
+  position: absolute;
+  top: 50px;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background-color: #cbd5e1;
+  z-index: -1;
+}
+
+.WS6-step-card {
+  flex: 1;
+  text-align: center;
+  padding: 0 20px;
+}
+
+.WS6-icon-circle {
+  width: 100px;
+  height: 100px;
+  background-color: #457b78;
+  border-radius: 50%;
+  margin: 0 auto 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  border: 12px solid #edf2f1;
+  transition: transform 0.3s ease;
+}
+
+.WS6-step-card:hover .WS6-icon-circle {
+  transform: translateY(-5px) scale(1.05);
+}
+
+.WS6-svg-container {
+  width: 38px;
+  height: 38px;
+}
+
+.WS6-step-title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  margin-bottom: 12px;
+  color: #000;
+}
+
+.WS6-step-text {
+  font-size: 0.95rem;
+  color: #666;
+  line-height: 1.6;
+}
 
 
 @media (max-width: 992px) {
-  .Co-content-and-accordion-grid {
-    grid-template-columns: 1fr;
-  }
-
   .WS2-main-heading {
-     font-size: 2.1rem;
+    font-size: 2.2rem;
   }
-
+  
+  .WS3-title {
+    font-size: 2.2rem;
+  }
+  
   .WS4-container {
-     height: auto;
-     flex-direction: column;
+    flex-direction: column;
+    height: auto;
   }
-
-  .WS4-content {
-     width: 90%;
+  
+  .WS4-section {
+    min-height: 450px;
+  }
+  
+  .WS4-title {
+    font-size: 2rem;
   }
 }
 
 @media (max-width: 768px) {
-
   .WS2-container {
-     flex-direction: column;
-     padding: 1.5rem;
-     gap: 1.5rem;
+    flex-direction: column;
+    padding: 2rem 1.5rem;
+    gap: 2rem;
   }
-
+  
   .WS2-left-section,
   .WS2-right-section {
-     padding: 0;
-     text-align: center;
+    padding: 0;
+    text-align: center;
   }
-
-  .WS2-feature-card {
-     min-width: 100%;
-  }
-
+  
   .WS2-main-heading {
-     font-size: 1.8rem;
+    font-size: 1.8rem;
   }
-
-  .WS3-category-image {
-     width: 110px;
-     height: 110px;
+  
+  .WS2-description {
+    text-align: left;
   }
-
+  
   .WS3-category-section {
-     padding: 30px 20px;
+    padding: 40px 20px;
   }
-
+  
   .WS3-title {
-     font-size: 2rem;
-     text-align: center;
+    font-size: 1.8rem;
   }
-
-  .scrap-info-section {
-     flex-direction: column;
-     height: auto;
+  
+  .WS3-subtitle {
+    font-size: 0.8rem;
   }
-
-  .scrap-card {
-     height: 55vh;
+  
+  .WS3-description {
+    font-size: 0.9rem;
+    padding: 0 20px;
   }
-
-  .scrap-content {
-     text-align: center;
-     padding: 20px;
+  
+  .WS3-category-image-wrapper {
+    width: 120px;
+    height: 120px;
   }
-
-  .scrap-btn {
-     margin: auto;
+  
+  .WS3-category-name {
+    font-size: 0.85rem;
   }
-
-  .WS4-container {
-     flex-direction: column;
-     height: auto;
+  
+  .Co-accordion-header {
+    padding: 14px 18px;
+    font-size: 0.9rem;
   }
-
+  
+  .Co-accordion-content {
+    padding: 0 18px 16px;
+    font-size: 0.85rem;
+  }
+  
   .WS4-section {
-     width: 100%;
-     height: 60vh;
-     padding: 2rem;
+    padding: 2rem;
+    min-height: 400px;
   }
-
+  
   .WS4-title {
-     font-size: 2rem;
-     margin-bottom: 1rem;
+    font-size: 1.6rem;
   }
-
+  
   .WS4-subtitle {
-     font-size: 0.9rem;
-     max-width: 100%;
+    font-size: 0.85rem;
+  }
+  
+  .WS4-button {
+    padding: 10px 24px;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .WS2-main-heading {
+    font-size: 1.5rem;
+  }
+  
+  .WS2-description {
+    font-size: 0.9rem;
+  }
+  
+  .WS3-title {
+    font-size: 1.5rem;
+  }
+  
+  .WS3-category-image-wrapper {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .WS4-title {
+    font-size: 1.4rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .WS5-marquee-section {
+    height: 80px;
   }
 
-  .WS4-content {
-     width: 90%;
+  .WS5-marquee-text {
+    font-size: 1.1rem;
+    padding: 0 25px;
+  }
+
+  .WS5-marquee-text img {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .WS5-marquee-section {
+    height: 70px;
+  }
+
+  .WS5-marquee-text {
+    font-size: 0.85rem;
+    padding: 0 18px;
+  }
+
+  .WS5-marquee-text img {
+    width: 16px;
+    height: 16px;
   }
 }
