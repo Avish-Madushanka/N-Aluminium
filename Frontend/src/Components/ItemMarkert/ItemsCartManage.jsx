@@ -744,7 +744,7 @@ const ItemsCartManage = () => {
           <p>Looks like you haven't added any items to your cart yet.</p>
           <button 
             className="ICManage-shopButton"
-            onClick={() => window.location.href = '/ItemMarket'}
+            onClick={() => window.location.href = '/ItemMarkert'}
           >
             Continue Shopping
           </button>
