@@ -70,6 +70,9 @@ import VideoManage from './Components/Admin/VideoManage/VideoManage';
 import ProManage from './Components/Admin/ProjectManage/ProManage';
 import SaleForm from './Components/BuyandSell/SaleForm';
 import BuyandSellManage from './Components/Admin/BuyandSellManage/BuyandSellManage';
+import Cookie from './Components/LegalPolicy/Cookie';
+import Terms from './Components/LegalPolicy/Terms';
+import Privacy from './Components/LegalPolicy/Privacy';
 
 console.log('=== IMPORT DEBUG ===');
 console.log('ItemsManage imported:', ItemsManage);
@@ -336,6 +339,12 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
                     <Route path="/ItemsAddForm" element={<ItemAddForm /> } />
                     <Route path="/AluTRegForm" element={<AluTRegForm /> } />
                     <Route path="/SaleForm" element={<SaleForm /> } />
+
+                    
+                    <Route path="/Cookie" element={<Cookie />} />
+                    <Route path="/Terms" element={<Terms />} />
+                    <Route path="/Privacy" element={<Privacy />} />
+
                     
                     <Route path="/test-items" element={<ItemsManage />} />
 

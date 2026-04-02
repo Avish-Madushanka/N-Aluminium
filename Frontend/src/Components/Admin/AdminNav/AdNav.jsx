@@ -28,11 +28,6 @@ function AdNavComponent({ handleLogout }) {
                     <div className="menu-section-title">GENERAL</div>
                     <ul>
                         <li>
-                            <NavLink to="/Admin/Dashboard" className={({ isActive }) => isActive ? 'active' : ''}>
-                                <FontAwesomeIcon icon={faTachometerAlt} className="menu-icon" /> Dashboard
-                            </NavLink>
-                        </li>
-                        <li>
                             <NavLink to="/Admin/Calendar" className={({ isActive }) => isActive ? 'active' : ''}>
                                 <FontAwesomeIcon icon={faCalendarAlt} className="menu-icon" /> Schedule Mgmt
                             </NavLink>
@@ -47,11 +42,6 @@ function AdNavComponent({ handleLogout }) {
                                 <FontAwesomeIcon icon={faBox} className="menu-icon" /> Scrap Calculator
                             </NavLink>
                         </li>
-                         <li>
-                            <NavLink to="/Admin/ManageOwners" className={({ isActive }) => isActive ? 'active' : ''}>
-                                <FontAwesomeIcon icon={faBuilding} className="menu-icon" /> Business Owners
-                            </NavLink>
-                        </li>
                         <li>
                             <NavLink to="/Admin/AdminLocationManager" className={({ isActive }) => isActive ? 'active' : ''}>
                                 <FontAwesomeIcon icon={faCreditCard} className="menu-icon" /> Add Shop Location
@@ -64,16 +54,7 @@ function AdNavComponent({ handleLogout }) {
                         </li> 
                     </ul>
                 </div>
-
-                
-            </nav>
-
-            <div className="logout">
-                <button onClick={performLogout} className="logout-button"> 
-                    <FontAwesomeIcon icon={faSignOutAlt} className="menu-icon" />
-                    Logout
-                </button>
-            </div>
+             </nav>
         </aside>
     );
 }

@@ -22,51 +22,27 @@ const WasteMain = () => {
   const processSteps = [
     {
       id: 1,
-      title: "Garbage Pickup",
-      text: "Lorem ipsum dolor sit amet consectetur adipiscing elit.",
-      icon: (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-          <path d="M5 18H3c-.6 0-1-.4-1-1V7c0-.6.4-1 1-1h10c.6 0 1 .4 1 1v11" />
-          <path d="M14 9h4l4 4v5h-3" />
-          <circle cx="7.5" cy="18.5" r="2.5" />
-          <circle cx="17.5" cy="18.5" r="2.5" />
-          <path d="M7 9h3M7 12h3" />
-        </svg>
-      )
+      title: "Login / Register",
+      text: "Create a secure account or log in to access our aluminum scrap collection services. This allows you to manage requests, track pickups, receive updates, and use all platform features efficiently for a smooth and personalized experience.",
+      iconUrl: "https://cdn-icons-png.flaticon.com/128/15688/15688116.png"
     },
     {
       id: 2,
-      title: "Sorting Waste",
-      text: "Lorem ipsum dolor sit amet consectetur adipiscing elit.",
-      icon: (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-          <polyline points="9 22 9 12 15 12 15 22" />
-          <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
-        </svg>
-      )
+      title: "Check Available Dates",
+      text: "Browse available pickup dates and time slots based on your location. Our smart system helps you select the most convenient schedule, ensuring flexibility and better planning for both households and businesses needing aluminum scrap collection services.",
+      iconUrl: "https://cdn-icons-png.flaticon.com/128/10212/10212848.png"
     },
     {
       id: 3,
-      title: "Washing Waste",
-      text: "Lorem ipsum dolor sit amet consectetur adipiscing elit.",
-      icon: (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-          <path d="M7 16.3c2.2 0 4-1.8 4-4 0-3.3-4-8-4-8s-4 4.7-4 8c0 2.2 1.8 4 4 4z" />
-          <path d="M12 7h6M12 11h4M12 15h2" />
-        </svg>
-      )
+      title: "Request Pickup",
+      text: "Submit your aluminum scrap collection request by selecting your preferred date, time, and material type. Provide necessary details to help our team prepare, ensuring a fast, efficient, and well-organized pickup process tailored to your needs.",
+      iconUrl: "https://cdn-icons-png.flaticon.com/128/15330/15330605.png"
     },
     {
       id: 4,
-      title: "Recycle Process",
-      text: "Lorem ipsum dolor sit amet consectetur adipiscing elit.",
-      icon: (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-          <path d="M7 2h10l3 3v14l-3 3H7l-3-3V5z" />
-          <path d="M12 8v8M8 12l4 4 4-4" />
-        </svg>
-      )
+      title: "Collection & Processing",
+      text: "Our professional team arrives at your location to collect aluminum scrap safely and on time. The materials are then sorted, evaluated, and processed for recycling or fabrication, transforming waste into valuable resources while supporting sustainable environmental practices.",
+      iconUrl: "https://cdn-icons-png.flaticon.com/128/9982/9982382.png"
     }
   ];
 
@@ -226,26 +202,25 @@ const WasteMain = () => {
       </section>
 
       <section className="WS6-process-section">
-        <div className="WS6-container">
-          <div className="WS6-header">
-            <div className="WS6-left">
-              <span className="WS6-badge">Recycle Process</span>
-              <h2 className="WS6-title">How We Turn Waste Into <br /> Sustainability Solution</h2>
-            </div>
+        <div className="WS6-header">
+          <div className="WS6-left">
+            <span className="WS6-badge">Recycle Process</span>
+            <h2 className="WS6-title">How Our Aluminum Collection System Works</h2>
           </div>
+        </div>
 
-          <div className="WS6-steps-grid">
-            <div className="WS6-line"></div>
-            {processSteps.map((step) => (
-              <div key={step.id} className="WS6-step-card">
-                <div className="WS6-icon-circle">
-                  <div className="WS6-svg-container">{step.icon}</div>
+        <div className="WS6-steps-grid">
+          {processSteps.map((step, idx) => (
+            <div key={step.id} className="WS6-step-card" data-step={String(idx + 1).padStart(2, '0')}>
+              <div className="WS6-icon-circle">
+                <div className="WS6-svg-container">
+                  <img src={step.iconUrl} alt={step.title} className="WS6-icon-image" />
                 </div>
-                <h4 className="WS6-step-title">{step.title}</h4>
-                <p className="WS6-step-text">{step.text}</p>
               </div>
-            ))}
-          </div>
+              <h4 className="WS6-step-title">{step.title}</h4>
+              <p className="WS6-step-text">{step.text}</p>
+            </div>
+          ))}
         </div>
       </section>
     </div>

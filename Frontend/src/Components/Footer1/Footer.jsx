@@ -40,9 +40,9 @@ const Footer = () => {
           <div className="mt-footer-nav-col">
             <h4 className="mt-footer-heading">Legal Policy</h4>
             <ul className="mt-footer-links">
-              <li><Link to="/terms">Terms & Conditions</Link></li>
-              <li><Link to="/privacy">Privacy Policy</Link></li>
-              <li><Link to="/cookies">Cookie Policy</Link></li>
+              <li><Link to="/Terms">Terms & Conditions</Link></li>
+              <li><Link to="/Privacy">Privacy Policy</Link></li>
+              <li><Link to="/Cookie">Cookie Policy</Link></li>
             </ul>
           </div>
 

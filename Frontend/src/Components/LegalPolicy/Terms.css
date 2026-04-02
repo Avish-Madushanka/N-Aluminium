@@ -1,0 +1,83 @@
+.Terms-container {
+  font-family: 'Montserrat', sans-serif;
+  background: #f8f9fb;
+  color: #1a1a1a;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.Terms-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 220px;
+  background: linear-gradient(135deg, #0f2e1b, #1a4a2a);
+  color: white;
+  text-align: center;
+}
+
+.Terms-logo {
+  width: 70px;
+  margin-bottom: 15px;
+}
+
+.Terms-header h1 {
+  font-size: 2.8rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.Terms-content {
+  max-width: 900px;
+  margin: 60px auto;
+  padding: 0 20px;
+  line-height: 1.8;
+}
+
+.Terms-content h2 {
+  margin-top: 35px;
+  margin-bottom: 10px;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #0f2e1b;
+}
+
+.Terms-content p {
+  margin-bottom: 15px;
+  color: #555;
+}
+
+.Terms-content ul {
+  padding-left: 20px;
+  margin-bottom: 20px;
+}
+
+.Terms-content li {
+  margin-bottom: 8px;
+  color: #444;
+}
+
+.Terms-footer {
+  margin-top: auto;
+  background: #0f2e1b;
+  color: white;
+  text-align: center;
+  padding: 20px;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+  .Terms-header {
+    height: 180px;
+  }
+
+  .Terms-header h1 {
+    font-size: 2rem;
+  }
+
+  .Terms-content {
+    margin: 40px auto;
+  }
+}
