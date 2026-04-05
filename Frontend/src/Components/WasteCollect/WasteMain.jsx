@@ -134,7 +134,7 @@ const WasteMain = () => {
           <div className="WS3-header">
             <span className="WS3-subtitle">Materials We Accept</span>
             <h2 className="WS3-title">What We Collect</h2>
-            <p className="WS3-description">We recycle a wide range of aluminum and metal materials to support a circular economy.</p>
+            <p className="WS3-description">We recycle a wide range of aluminum and metal materials, including cans, sheets, frames, and industrial scraps, ensuring they are properly sorted, processed, and reused. Our system reduces waste, saves energy, and transforms discarded materials into valuable resources, supporting a sustainable circular economy.</p>
           </div>
           <div className="WS3-category-container">
             {categories.map((category, index) => (
@@ -198,6 +198,7 @@ const WasteMain = () => {
               </Link>
             </div>
           </div>
+          
         </div>
       </section>
 
