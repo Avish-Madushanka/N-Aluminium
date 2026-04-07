@@ -155,7 +155,7 @@ const CalendarDisplay = () => {
           let responseText = "[Could not read response text]";
           try {
              responseText = await response.text();
-          } catch (e) { /* ignore, already set default for snippet */ }
+          } catch (e) { }
           const bodySnippet = responseText.substring(0, 200);
           console.warn("Expected JSON, but received Content-Type:", contentType, "Body preview:", bodySnippet);
           throw new Error(`Expected JSON response from server, but received '${contentType || 'unknown content type'}'. Body preview: ${bodySnippet}...`);
@@ -222,7 +222,7 @@ const CalendarDisplay = () => {
     navigate('/UserCalendar');
   };
   
-  const handleScheduleAvailableDay = (/* date */) => { 
+  const handleScheduleAvailableDay = ( ) => { 
     navigate('/UserCalendar');
   };
 

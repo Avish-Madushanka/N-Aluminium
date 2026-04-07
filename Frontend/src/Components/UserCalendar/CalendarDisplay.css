@@ -1,62 +1,45 @@
-:root {
-  --primary-color: #388e3c;
-  --primary-hover: #2e7d32;
-  --secondary-color: #f5f5f5;
-  --error-color: #d32f2f;
-  --warning-color: #ffa000;
-  --success-color: #388e3c;
-  --text-dark: #212121;
-  --text-medium: #616161;
-  --text-light: #9e9e9e;
-  --border-color: #e0e0e0;
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0,0,0,0.06);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0,0,0,0.08);
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
-  --transition: all 0.2s ease;
-}
-
 .CDis-user-dashboard {
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 2rem auto;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   position: relative;
-  color: var(--text-dark);
+  color: #212121;
 }
 
 .CDis-dashboard-grid {
   display: grid;
   grid-template-columns: minmax(400px, 1fr) minmax(350px, 1fr);
-  gap: 1.5rem;
+  gap: 2.5rem;
   padding: 0 1.25rem 1.25rem;
 }
 
 .CDis-calendar-column,
 .CDis-pickups-column {
   background-color: white;
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-sm);
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0,0,0,0.06);
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
-  transition: var(--transition);
+  transition: all 0.2s ease;
 }
 
 .CDis-column-header {
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid #e0e0e0;
   padding-bottom: 0.75rem;
   margin-bottom: 1.25rem;
 }
 
 .CDis-column-header h2 {
   margin: 0;
-  font-size: 1.375rem;
-  font-weight: 600;
-  color: var(--text-dark);
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #131313;
+  font-family: 'Merriweather', serif;
+  text-align: center;
 }
 
 .CDis-calendar-container {
@@ -72,14 +55,15 @@
 
 .CDis-current-month {
   margin: 0;
-  font-size: 1.25rem;
+  font-family: 'Merriweather', serif;
+  font-size: 1.6rem;
   font-weight: 600;
-  color: var(--text-dark);
+  color: #252525;
 }
 
 .CDis-nav-button {
   background: white;
-  border: 1px solid var(--border-color);
+  border: 1px solid #e0e0e0;
   border-radius: 50%;
   width: 2.5rem;
   height: 2.5rem;
@@ -87,18 +71,18 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: var(--text-medium);
-  transition: var(--transition);
+  color: #616161;
+  transition: all 0.2s ease;
 }
 
 .CDis-nav-button:hover:not(:disabled) {
-  background-color: var(--secondary-color);
+  background-color: #f5f5f5;
   border-color: #bbb;
-  color: var(--text-dark);
+  color: #212121;
 }
 
 .CDis-nav-button:focus-visible {
-  outline: 2px solid var(--primary-color);
+  outline: 2px solid #388e3c;
   outline-offset: 2px;
 }
 
@@ -116,7 +100,7 @@
 
 .CDis-weekday {
   font-weight: 600;
-  color: var(--text-medium);
+  color: #616161;
   font-size: 0.875rem;
   padding: 0.5rem 0;
 }
@@ -139,7 +123,7 @@
   position: relative;
   cursor: pointer;
   background-color: white;
-  transition: var(--transition);
+  transition: all 0.2s ease;
   font-size: 0.9375rem;
 }
 
@@ -148,7 +132,7 @@
 }
 
 .CDis-calendar-day:focus-visible {
-  outline: 2px solid var(--primary-color);
+  outline: 2px solid #388e3c;
   outline-offset: 2px;
 }
 
@@ -160,36 +144,36 @@
 .CDis-calendar-day.CDis-available {
   background-color: #5eee6a;
   border-color: #005603;
-  color: var(--primary-color);
+  color: #388e3c;
 }
 
 .CDis-calendar-day.CDis-available:hover:not(:disabled) {
   background-color: #71ff71;
-  border-color: var(--primary-color);
+  border-color: #388e3c;
 }
 
 .CDis-calendar-day.CDis-selected,
 .CDis-calendar-day.CDis-selected:hover {
-  background-color: var(--primary-color);
-  border-color: var(--primary-hover);
+  background-color: #388e3c;
+  border-color: #2e7d32;
   color: white;
 }
 
 .CDis-calendar-day.CDis-unavailable,
 .CDis-calendar-day.CDis-past {
   background-color: #f5f5f5;
-  color: var(--text-light);
+  color: #9e9e9e;
   cursor: not-allowed;
   border-color: #eee;
 }
 
 .CDis-calendar-day.CDis-today {
   font-weight: 700;
-  border: 2px solid var(--text-medium);
+  border: 2px solid #616161;
 }
 
 .CDis-calendar-day.CDis-today.CDis-selected {
-  border-color: var(--primary-hover);
+  border-color: #2e7d32;
 }
 
 .CDis-special-indicator {
@@ -199,7 +183,7 @@
   transform: translateX(-50%);
   width: 0.375rem;
   height: 0.375rem;
-  background-color: var(--warning-color);
+  background-color: #ffa000;
   border-radius: 50%;
 }
 
@@ -209,7 +193,7 @@
   gap: 1rem;
   margin-top: 1.5rem;
   font-size: 0.8125rem;
-  color: var(--text-medium);
+  color: #616161;
 }
 
 .CDis-legend-item {
@@ -229,15 +213,15 @@
 
 .CDis-legend-item.CDis-today::before { 
   background-color: white; 
-  border-color: var(--text-medium);
+  border-color: #616161;
 }
 .CDis-legend-item.CDis-available::before { 
   background-color: #e8f5e9; 
   border-color: #c8e6c9; 
 }
 .CDis-legend-item.CDis-selected::before { 
-  background-color: var(--primary-color); 
-  border-color: var(--primary-hover); 
+  background-color: #388e3c; 
+  border-color: #2e7d32; 
 }
 .CDis-legend-item.CDis-unavailable::before, 
 .CDis-legend-item.CDis-past::before { 
@@ -251,7 +235,7 @@
   gap: 0.5rem;
   margin-top: 1rem;
   font-size: 0.875rem;
-  color: var(--text-medium);
+  color: #616161;
 }
 
 .CDis-available-slots-section {
@@ -260,8 +244,11 @@
 
 .CDis-available-slots-section h4 {
   margin: 0 0 1rem 0;
-  font-size: 1.0625rem;
-  color: var(--text-dark);
+  text-align: center;
+  font-size: 1.5rem;
+  color: #181818;
+  margin-bottom: 40px;
+  font-family: 'Merriweather', serif;
 }
 
 .CDis-available-day-item {
@@ -271,14 +258,14 @@
   padding: 0.875rem;
   margin-bottom: 0.75rem;
   background-color: white;
-  border-radius: var(--radius-sm);
-  border-left: 3px solid var(--primary-color);
-  box-shadow: var(--shadow-sm);
-  transition: var(--transition);
+  border-radius: 4px;
+  border-left: 3px solid #388e3c;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0,0,0,0.06);
+  transition: all 0.2s ease;
 }
 
 .CDis-available-day-item:hover {
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0,0,0,0.08);
 }
 
 .CDis-available-day-info {
@@ -286,23 +273,23 @@
   align-items: center;
   gap: 0.5rem;
   font-size: 0.9375rem;
-  color: var(--text-dark);
+  color: #212121;
 }
 
 .CDis-btn-schedule-quick {
-  background-color: var(--primary-color);
+  background-color: #388e3c;
   color: white;
   border: none;
   padding: 0.5rem 1rem;
-  border-radius: var(--radius-sm);
+  border-radius: 4px;
   cursor: pointer;
   font-size: 0.875rem;
   font-weight: 500;
-  transition: var(--transition);
+  transition: all 0.2s ease;
 }
 
 .CDis-btn-schedule-quick:hover {
-  background-color: var(--primary-hover);
+  background-color: #2e7d32;
 }
 
 .CDis-loading-overlay {
@@ -318,7 +305,7 @@
   align-items: center;
   z-index: 1000;
   gap: 1rem;
-  color: var(--text-medium);
+  color: #616161;
 }
 
 .CDis-animate-spin {
@@ -337,8 +324,8 @@
   padding: 0.75rem 1rem;
   background-color: #ffebee;
   border: 1px solid #ffcdd2;
-  border-radius: var(--radius-sm);
-  color: var(--error-color);
+  border-radius: 4px;
+  color: #d32f2f;
   margin: 0 1.25rem 1rem;
   font-size: 0.9375rem;
 }
@@ -351,7 +338,7 @@
   justify-content: center;
   padding: 2rem 1.25rem;
   text-align: center;
-  color: var(--text-light);
+  color: #9e9e9e;
   gap: 1rem;
   min-height: 9.375rem;
 }
