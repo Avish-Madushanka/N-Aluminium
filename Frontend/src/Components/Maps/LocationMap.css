@@ -3,7 +3,7 @@
   padding: 60px 40px;
   box-sizing: border-box;
   font-family: "Inter", "Roboto", sans-serif;
-  background: linear-gradient(135deg, #f5f7fa 0%, #f9fafc 100%);
+  background-color: #f9fafc ;
   min-height: 100vh;
 }
 

@@ -5,14 +5,11 @@ import axiosInstance from '../../api/axiosInstance';
 const Calculate = () => {
   const [weight, setWeight] = useState('');
   const [scrapTypes, setScrapTypes] = useState([]);
-  const [selectedScrapId, setSelectedScrapId] = useState('');
-  const [resultUSD, setResultUSD] = useState(null);
-  const [showAnimation, setShowAnimation] = useState(false);
+  const [calculations, setCalculations] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [selectedUnit, setSelectedUnit] = useState('kg'); 
-
-  const exchangeRate = 300; 
+  const [selectedUnit, setSelectedUnit] = useState('kg');
+  const [exchangeRate, setExchangeRate] = useState(300);
 
   const fetchActiveScrapTypes = useCallback(async () => {
     setIsLoading(true);
@@ -20,146 +17,163 @@ const Calculate = () => {
     try {
       const response = await axiosInstance.get('/scrap-types');
       const activeTypes = response.data.data.filter(type => type.isActive);
-      if (activeTypes.length > 0) {
-        setScrapTypes(activeTypes);
-        setSelectedScrapId(activeTypes[0]._id);
-      } else {
-        setScrapTypes([]);
-        setError('No active scrap types available at the moment.');
-      }
+      setScrapTypes(activeTypes || []);
     } catch (err) {
-      setError(err.response?.data?.message || err.message || 'Failed to load scrap prices.');
-      setScrapTypes([]);
+      setError(err.response?.data?.message || 'Failed to load scrap prices.');
     } finally {
       setIsLoading(false);
     }
   }, []);
 
+  const fetchExchangeRate = useCallback(async () => {
+    try {
+      const response = await axiosInstance.get('/exchange-rate');
+      if (response.data && response.data.rate) {
+        setExchangeRate(response.data.rate);
+      }
+    } catch (err) {
+      console.error('Failed to fetch exchange rate:', err);
+    }
+  }, []);
+
   useEffect(() => {
     fetchActiveScrapTypes();
-  }, [fetchActiveScrapTypes]);
+    fetchExchangeRate();
+  }, [fetchActiveScrapTypes, fetchExchangeRate]);
 
-  const handleCalculate = (e) => {
-    e.preventDefault();
-    let weightValue = parseFloat(weight);
-    const selectedScrapType = scrapTypes.find(type => type._id === selectedScrapId);
-
-    if (!selectedScrapType) {
-      setError('Please select a valid scrap type.');
-      setResultUSD(null);
-      return;
-    }
-
-    if (selectedUnit === 'lbs') {
-      weightValue = weightValue * 0.453592; 
-    } else if (selectedUnit === 'tons') {
-      weightValue = weightValue * 907.185; 
-    }
-
-    const priceValue = selectedScrapType.price; 
-
-    if (!isNaN(weightValue) && weightValue > 0) {
-      const totalUSD = weightValue * priceValue;
-      setResultUSD(totalUSD);
-      setShowAnimation(true);
-      setError(null);
-    } else {
-      setResultUSD(null);
-      setError('Please enter a valid weight.');
-    }
+  const getWeightInKg = (val) => {
+    const numVal = parseFloat(val);
+    if (isNaN(numVal)) return 0;
+    if (selectedUnit === 'lbs') return numVal * 0.453592;
+    if (selectedUnit === 'tons') return numVal * 907.185;
+    return numVal;
   };
 
-  useEffect(() => {
-    if (showAnimation) {
-      const timer = setTimeout(() => setShowAnimation(false), 1500);
-      return () => clearTimeout(timer);
-    }
-  }, [showAnimation]);
+  const handleCalculate = (e) => {
+    if (e) e.preventDefault();
+    const weightVal = parseFloat(weight);
+    if (isNaN(weightVal) || weightVal <= 0) return;
 
-  const selectedScrapType = scrapTypes.find(type => type._id === selectedScrapId);
-  const currentPriceDisplay = selectedScrapType ? selectedScrapType.price.toFixed(2) : 'N/A';
-  const currentUnit = selectedScrapType ? (selectedScrapType.unit || 'kg') : 'kg';
+    const kgWeight = getWeightInKg(weightVal);
+    const results = scrapTypes.map(scrap => ({
+      id: scrap._id,
+      name: scrap.name,
+      price: scrap.price,
+      unit: scrap.unit || 'kg',
+      totalUSD: kgWeight * scrap.price,
+      totalLKR: kgWeight * scrap.price * exchangeRate
+    }));
+    setCalculations(results);
+  };
+
+  const handleSingleCalc = (scrap) => {
+    const weightVal = parseFloat(weight);
+    if (isNaN(weightVal) || weightVal <= 0) return;
+
+    const kgWeight = getWeightInKg(weightVal);
+    setCalculations([{
+      id: scrap._id,
+      name: scrap.name,
+      price: scrap.price,
+      unit: scrap.unit || 'kg',
+      totalLKR: kgWeight * scrap.price * exchangeRate,
+      totalUSD: kgWeight * scrap.price
+    }]);
+  };
+
+  const handleClear = () => {
+    setWeight('');
+    setCalculations([]);
+  };
+
+  const totalSumLKR = calculations.reduce((acc, curr) => acc + curr.totalLKR, 0);
+  const totalSumUSD = calculations.reduce((acc, curr) => acc + curr.totalUSD, 0);
 
   return (
-    <div className="Cal-2-calculate-container">
-      <div className="Cal-2-calculate-wrapper">
-        <div className="Cal-2-calculate-quote-section">
-          <h1>Know Your <br></br> Scrap’s Worth</h1>
-          <div className="Cal-2-calculate-image-placeholder"></div>
+    <div className="layout-container">
+      <div className="section-1">
+        <div className="price-display-header">
+          <h2>Market Rates</h2>
+          <p>Real-time scrap metal market rates updated daily. Know your scrap's worth before you sell for maximum profit.</p>
+        </div>
+        {isLoading && <div className="status-msg">Loading scrap types...</div>}
+        {error && <div className="status-msg error">{error}</div>}
+        <div className="price-grid">
+          {scrapTypes.map((scrap) => (
+            <div key={scrap._id} className="price-item-card">
+              <span className="scrap-name">{scrap.name}</span>
+              <span className="scrap-price-lkr">
+                Rs. {(scrap.price * exchangeRate).toLocaleString()} /{scrap.unit || 'kg'}
+              </span>
+              <span className="scrap-price">
+                ${scrap.price.toFixed(2)} 
+                <sub>/{scrap.unit || 'kg'}</sub>
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="right-panel">
+        <div className="section-3">
+          <div className="total-display-box">
+            <div className="total-main">
+              <label>Total Estimated Value</label>
+              <h1>Rs. {totalSumLKR.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</h1>
+              <p className="usd-total">${totalSumUSD.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+            </div>
+            <div className="calculation-breakdown">
+              {calculations.length === 0 && "No calculation yet"}
+              {calculations.length === 1 && `${calculations[0]?.name}`}
+              {calculations.length > 1 && `${calculations.length} items selected`}
+            </div>
+          </div>
         </div>
 
-        <div className="Cal-2-calculate-form-section">
-          <div className="Cal-2-calculate-form-container">
-            <div className="Cal-2-scrap-calculator-header">
-              <i className="fas fa-calculator-alt"></i>
-              <h2>Scrap Metal Calculator</h2>
-            </div>
-            <p className="Cal-2-calculator-subtitle">Calculate scrap metal value and estimated payout</p>
-
-            {isLoading && <p className="Cal-2-loading-message">Loading scrap prices...</p>}
-            {error && <p className="Cal-2-error-message">{error}</p>}
-
-            {!isLoading && scrapTypes.length > 0 && (
-              <form onSubmit={handleCalculate} className="Cal-2-calculator-form">
-                <div className="Cal-2-input-group">
-                  <label htmlFor="scrap-type">Scrap Type</label>
-                  <select
-                    id="scrap-type"
-                    value={selectedScrapId}
-                    onChange={(e) => setSelectedScrapId(e.target.value)}
-                  >
-                    {scrapTypes.map((type) => (
-                      <option key={type._id} value={type._id}>
-                        {type.name} ${type.price.toFixed(2)}/{type.unit || 'kg'}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div className="Cal-2-input-group">
-                  <label htmlFor="weight">Weight</label>
-                  <div className="Cal-2-weight-input-group">
-                    <input
-                      id="weight"
-                      type="number"
-                      step="0.01"
-                      min="0"
-                      value={weight}
-                      onChange={(e) => setWeight(e.target.value)}
-                      placeholder="Enter Weight"
-                    />
-                    <select
-                      value={selectedUnit}
-                      onChange={(e) => setSelectedUnit(e.target.value)}
-                      className="Cal-2-unit-select"
-                    >
-                      <option value="kg">Kilograms (kg)</option>
-                      <option value="lbs">Pounds (lbs)</option>
-                      <option value="tons">Tons</option>
-                    </select>
-                  </div>
-                </div>
-
-                <button type="submit" disabled={!weight || !selectedScrapId || isLoading}>
-                  <i className="fas fa-calculator-alt Cal-2-button-icon"></i> Calculate Scrap Value
-                </button>
-              </form>
-            )}
-
-            {resultUSD !== null && (
-              <div className={`Cal-2-result-section ${showAnimation ? 'show' : ''}`}>
-                <h3>Scrap Value Results</h3>
-                <div className="Cal-2-total-value-row">
-                  <p>Total Scrap Value</p>
-                </div>
-                <div className="Cal-2-value">
-                  <p>${resultUSD.toFixed(2)}</p>
-                </div>
-                <div className="Cal-2-lkr-value">
-                  <p>LKR: Rs. {(resultUSD * exchangeRate).toFixed(2)}</p>
-                </div>
+        <div className="section-2">
+          <div className="calc-process-card">
+            <h3>Value Calculator</h3>
+            <form onSubmit={handleCalculate} className="input-row">
+              <div className="field-group">
+                <input
+                  type="number"
+                  value={weight}
+                  onChange={(e) => setWeight(e.target.value)}
+                  placeholder="Enter weight"
+                  step="0.01"
+                  min="0"
+                />
+                <select value={selectedUnit} onChange={(e) => setSelectedUnit(e.target.value)}>
+                  <option value="kg">Kilograms (kg)</option>
+                  <option value="lbs">Pounds (lbs)</option>
+                  <option value="tons">Tons</option>
+                </select>
               </div>
-            )}
+              <button type="submit" disabled={!weight || scrapTypes.length === 0}>
+                Calculate All
+              </button>
+              {calculations.length > 0 && (
+                <button type="button" onClick={handleClear} className="clear-btn">
+                  Clear
+                </button>
+              )}
+            </form>
+
+            <div className="quick-actions">
+              <label>Quick Estimate Per Type:</label>
+              <div className="action-btns">
+                {scrapTypes.map(scrap => (
+                  <button 
+                    key={scrap._id} 
+                    onClick={() => handleSingleCalc(scrap)}
+                    disabled={!weight}
+                    className="quick-btn"
+                  >
+                    {scrap.name}
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </div>
