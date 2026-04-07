@@ -5,7 +5,7 @@ import "./LocationMap.css";
 
 const mapContainerStyle = {
   width: "100%",
-  height: "500px",
+  height: "600px",
 };
 
 const KALUTARA_DISTRICT_CENTER = { lat: 6.5853, lng: 79.9607 };
