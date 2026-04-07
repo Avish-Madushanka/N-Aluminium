@@ -51,14 +51,12 @@
 
 .WS2-badge {
   display: inline-block;
-  background-color: #142e15;
-  color: white;
-  padding: 6px 16px;
-  border-radius: 50px;
-  font-size: 0.85rem;
+  color: #414141;
+  font-size: 0.9rem;
   font-weight: 600;
-  margin-bottom: 1rem;
-  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 5px;
 }
 
 .WS2-main-heading {
@@ -79,6 +77,234 @@
 
 
 
+/*------------Service card---------------- */
+
+
+
+.WS8-wrapper {
+  background-color: #ffffff;
+  padding: 30px 20px;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.WS8-container {
+  max-width: 1340px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.WS8-header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.WS8-header h2 {
+  font-family: 'Merriweather', serif;
+  font-size: 3.5rem;
+  font-weight: 800;
+  color: #0f1c2b;
+  margin-bottom: 16px;
+  letter-spacing: -0.5px;
+}
+
+.WS8-header p {
+  font-size: 1.2rem;
+  color: #1d1d1d;
+  max-width: 900px;
+  margin: 0 auto;
+  line-height: 1.5;
+}
+
+.WS8-grid {
+  display: flex;
+  gap: 30px;
+  width: 100%;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.WS8-card {
+  flex: 1;
+  max-width: 450px;
+  background-color: #ffffff;
+  border-radius: 0px;
+  overflow: hidden;
+  height: 500px;
+  position: relative;
+  box-shadow: 0 20px 30px -12px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.02);
+  transition: transform 0.25s ease, box-shadow 0.3s ease;
+  cursor: default;
+}
+
+.WS8-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 28px 36px -16px rgba(0, 0, 0, 0.2);
+}
+
+.WS8-image-box {
+  width: 100%;
+  height: 380px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  transition: transform 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+  z-index: 1;
+  border-radius: 20px 20px 0 0;
+}
+
+.WS8-img {
+  width: 100%;
+  height: 460px;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s ease-out;
+}
+
+.WS8-card:hover .WS8-img {
+  transform: scale(1.04);
+}
+
+.WS8-content-box {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: #303030;
+  padding: 26px 24px 28px 24px;
+  height: 150px;
+  transition: all 0.5s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  z-index: 10;
+  border-radius: 20px 20px 20px 20px;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.WS8-category {
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.7px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  display: inline-block;
+  background: #525252;
+  padding: 4px 12px;
+  border-radius: 40px;
+  width: fit-content;
+  transition: background 0.2s;
+}
+
+.WS8-title {
+  color: #ffffff;
+  font-size: 25px;
+  font-weight: 800;
+  line-height: 1.25;
+  margin: 0 0 8px 0;
+  transition: color 0.25s ease;
+  letter-spacing: -0.2px;
+}
+
+.WS8-reveal-box {
+  opacity: 0;
+  visibility: hidden;
+  max-height: 0;
+  overflow: hidden;
+  transition: opacity 0.4s ease, visibility 0.4s ease, max-height 0.45s ease-out;
+  margin-top: 4px;
+}
+
+.WS8-description {
+  color: #e6e6e6;
+  font-size: 18px;
+  line-height: 1.55;
+  margin: 8px 0 22px 0;
+  font-weight: 450;
+}
+
+.WS8-unique-btn {
+  border: none;
+  padding: 8px 12px 8px 20px;
+  border-radius: 60px;
+  font-size: 14px;
+  text-decoration: none;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+  width: fit-content;
+  color: #ffffff;
+  transition: all 0.25s ease;
+  background: #4caf50;
+  font-family: inherit;
+  letter-spacing: 0.3px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+.WS8-btn-type-0 { background: #408544; }
+.WS8-btn-type-1 { background: #bb6666; }
+.WS8-btn-type-2 { background: #4368a0; }
+
+.WS8-btn-circle {
+  background: #ffffff;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.25s ease, background 0.2s;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.WS8-btn-type-0 .WS8-btn-circle { color: #66bb6a; }
+.WS8-btn-type-1 .WS8-btn-circle { color: #bb6666; }
+.WS8-btn-type-2 .WS8-btn-circle { color: #4368a0; }
+
+.WS8-unique-btn:hover {
+  filter: brightness(1.05);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.12);
+  transform: scale(0.98);
+}
+
+.WS8-unique-btn:hover .WS8-btn-circle {
+  transform: scale(1.12) rotate(8deg);
+  background: #ffffff;
+}
+
+.WS8-card:hover .WS8-content-box {
+  height: 370px;
+}
+
+.WS8-card:hover .WS8-reveal-box {
+  opacity: 1;
+  visibility: visible;
+  max-height: 220px;
+  transition-delay: 0.08s;
+}
+
+.WS8-card:hover .WS8-title {
+  color: #a7e0b5;
+}
+
+.WS8-card:hover .WS8-category {
+  background: #0d3b2c;
+  color: #ffffff;
+}
+
+.WS8-card, .WS8-image-box {
+  border-radius: 20px;
+}
+
+
+
 /*------------wht we collect----------- */
 
 
@@ -86,7 +312,7 @@
 .WS3-category-section {
   padding: 60px 50px;
   background-color: #ffffff;
-  max-width: 1500px;
+  max-width: 100%;
   margin: 0 auto 30px;
 }
 
@@ -107,7 +333,7 @@
 
 .WS3-title {
   font-family: 'Merriweather', serif;
-  font-size: 2.6rem;
+  font-size: 3.5rem;
   font-weight: 800;
   color: #0b1610;
   margin-bottom: 15px;
@@ -284,7 +510,7 @@
 .Co-accordion-header {
   width: 100%;
   padding: 18px 25px;
-  background: #e6ffe9;
+  background: #ebebeb;
   border: none;
   font-size: 1.05rem;
   font-weight: 600;
@@ -296,7 +522,7 @@
 }
 
 .Co-accordion-header:hover {
-  background: #b8ffc1;
+  background: #c7c7c7;
   color: #272727;
 }
 
@@ -315,138 +541,20 @@
   border-top: 1px solid #e8e8e8;
 }
 
-.WS4-container {
-  display: flex;
-  width: 100%;
-  min-height: 500px;
-  font-family: 'Montserrat', sans-serif;
-  color: #ffffff;
-}
-
-
-
-/*----------Service cards----------- */
-
-.WS4-section {
-  flex: 1;
-  background-size: cover;
-  background-position: center;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  padding: 3rem;
-  transition: all 0.3s ease;
-}
-
-.WS4-section::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(135deg, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.5));
-  transition: background 0.3s ease;
-}
-
-.WS4-section:hover::before {
-  background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.6));
-}
-
-.WS4-m {
-  background-image: url('https://www.actionmetalsrecyclers.com/wp-content/uploads/2023/03/shutterstock_1976224004-768x513.jpg');
-}
-
-.WS4-w {
-  background-image: url('https://img.freepik.com/premium-photo/map-with-marked-location-illustrating-geographic-positioning-site-identification_1211661-5650.jpg');
-}
-
-.WS4-content {
-  position: relative;
-  z-index: 1;
-  max-width: 500px;
-  width: 100%;
-}
-
-.WS4-icon-wrapper {
-  margin-bottom: 20px;
-}
-
-.WS4-icon-wrapper svg {
-  stroke: #ffffff;
-}
-
-.WS4-title {
-  font-size: 2.5rem;
-  font-weight: 800;
-  margin: 0 0 15px 0;
-  line-height: 1.3;
-}
-
-.WS4-highlight-blue,
-.WS4-highlight-pink {
-  color: #4af733;
-  position: relative;
-  display: inline-block;
-}
-
-.WS4-subtitle {
-  font-size: 0.95rem;
-  margin: 1rem 0 2rem 0;
-  line-height: 1.6;
-  opacity: 0.9;
-}
-
-.WS4-button {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  border: 2px solid #ffffff;
-  background: transparent;
-  color: #ffffff;
-  padding: 12px 28px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  cursor: pointer;
-  letter-spacing: 1px;
-  border-radius: 50px;
-  text-decoration: none;
-  transition: all 0.3s ease;
-}
-
-.WS4-button:hover {
-  background-color: #1a1a1a;
-  border-color: #4af733;
-  color: #ffffff;
-  transform: translateY(-2px);
-}
-
-.WS4-button-arrow {
-  transition: transform 0.3s ease;
-  font-size: 1.1rem;
-}
-
-.WS4-button:hover .WS4-button-arrow {
-  transform: translateX(5px);
-}
-
-
 
 /*----------Collect process------------ */
 
 
 .WS6-process-section {
   padding: 80px 8%;
-  background-color: #eeeeee;
+  background-color: #ffffff;
   position: relative;
   overflow: hidden;
 }
 
 .WS6-header {
   display: flex;
+  text-align: center;
   gap: 60px;
   align-items: flex-end;
   margin-bottom: 50px;
@@ -458,29 +566,22 @@
 }
 
 .WS6-badge {
-  border: 2px solid #142e15;
-  background: #142e15;
-  color: #ffffff;
-  padding: 8px 22px;
-  border-radius: 50px;
-  font-size: 0.85rem;
-  font-weight: 700;
   display: inline-block;
-  margin-bottom: 20px;
-  backdrop-filter: blur(2px);
-  transition: all 0.3s ease;
+  color: #414141;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 5px;
 }
-
 
 .WS6-title {
   font-family: 'Merriweather', serif;
   font-size: 3.5rem;
-  font-weight: 900;
-  line-height: 1.2;
-  background: #0f1c2b;
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
+  font-weight: 800;
+  color: #0b1610;
+  margin-bottom: 15px;
+  line-height: 60px;
 }
 
 .WS6-steps-grid {
@@ -497,7 +598,7 @@
   padding: 0 20px;
   transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
   position: relative;
-  background: rgba(255, 255, 255, 0.5);
+  background: rgba(211, 211, 211, 0.5);
   border-radius: 32px;
   padding: 1.8rem 1.2rem;
   backdrop-filter: blur(2px);
@@ -611,9 +712,44 @@
 }
 
 
-@media (max-width: 1100px) {
+@media (max-width: 1200px) {
+  .WS8-header h2 {
+    font-size: 3rem;
+  }
+  
+  .WS3-title {
+    font-size: 3rem;
+  }
+  
   .WS6-title {
-    font-size: 2.8rem;
+    font-size: 3rem;
+    line-height: 1.3;
+  }
+}
+
+@media (max-width: 992px) {
+  .WS2-main-heading {
+    font-size: 2.2rem;
+  }
+  
+  .WS8-header h2 {
+    font-size: 2.5rem;
+  }
+  
+  .WS8-header p {
+    font-size: 1rem;
+  }
+  
+  .WS3-title {
+    font-size: 2.5rem;
+  }
+  
+  .WS3-description {
+    font-size: 1rem;
+  }
+  
+  .WS6-title {
+    font-size: 2.5rem;
   }
   
   .WS6-steps-grid {
@@ -623,116 +759,7 @@
   
   .WS6-step-card {
     flex: 0 0 calc(50% - 1rem);
-    min-width: 220px;
-  }
-  
-  .WS6-line {
-    display: none;
-  }
-}
-
-@media (max-width: 768px) {
-  .WS6-process-section {
-    padding: 60px 5%;
-  }
-  
-  .WS6-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 30px;
-    margin-bottom: 50px;
-  }
-  
-  .WS6-left,
-  .WS6-right-description {
-    flex: auto;
-    width: 100%;
-  }
-  
-  .WS6-title {
-    font-size: 2.2rem;
-  }
-  
-  .WS6-step-card {
-    flex: 0 0 100%;
-    max-width: 320px;
-    margin: 0 auto;
-  }
-  
-  .WS6-icon-circle {
-    width: 80px;
-    height: 80px;
-  }
-  
-  .WS6-svg-container {
-    width: 34px;
-    height: 34px;
-  }
-  
-  .WS6-step-title {
-    font-size: 1.2rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .WS6-title {
-    font-size: 1.8rem;
-  }
-  
-  .WS6-badge {
-    font-size: 0.75rem;
-    padding: 6px 16px;
-  }
-  
-  .WS6-icon-circle {
-    width: 70px;
-    height: 70px;
-    border-width: 8px;
-  }
-  
-  .WS6-svg-container {
-    width: 30px;
-    height: 30px;
-  }
-  
-  .WS6-step-title {
-    font-size: 1.1rem;
-  }
-  
-  .WS6-step-text {
-    font-size: 0.85rem;
-  }
-  
-  .WS6-right-description {
-    padding: 1rem 1.2rem;
-  }
-  
-  .WS6-right-description p {
-    font-size: 0.85rem;
-  }
-}
-
-
-@media (max-width: 992px) {
-  .WS2-main-heading {
-    font-size: 2.2rem;
-  }
-  
-  .WS3-title {
-    font-size: 2.2rem;
-  }
-  
-  .WS4-container {
-    flex-direction: column;
-    height: auto;
-  }
-  
-  .WS4-section {
-    min-height: 450px;
-  }
-  
-  .WS4-title {
-    font-size: 2rem;
+    min-width: 250px;
   }
 }
 
@@ -757,12 +784,42 @@
     text-align: left;
   }
   
+  .WS8-wrapper {
+    padding: 30px 15px;
+  }
+  
+  .WS8-header {
+    margin-bottom: 35px;
+  }
+  
+  .WS8-header h2 {
+    font-size: 2rem;
+  }
+  
+  .WS8-header p {
+    font-size: 0.95rem;
+    padding: 0 15px;
+  }
+  
+  .WS8-card {
+    max-width: 100%;
+    min-width: 280px;
+  }
+  
+  .WS8-title {
+    font-size: 22px;
+  }
+  
+  .WS8-description {
+    font-size: 15px;
+  }
+  
   .WS3-category-section {
     padding: 40px 20px;
   }
   
   .WS3-title {
-    font-size: 1.8rem;
+    font-size: 2rem;
   }
   
   .WS3-subtitle {
@@ -775,12 +832,26 @@
   }
   
   .WS3-category-image-wrapper {
-    width: 120px;
-    height: 120px;
+    width: 130px;
+    height: 130px;
   }
   
   .WS3-category-name {
-    font-size: 0.85rem;
+    font-size: 0.9rem;
+  }
+  
+  .WS5-marquee-section {
+    height: 70px;
+  }
+  
+  .WS5-marquee-text {
+    font-size: 1.1rem;
+    padding: 0 25px;
+  }
+  
+  .WS5-marquee-text img {
+    width: 22px;
+    height: 22px;
   }
   
   .Co-accordion-header {
@@ -793,26 +864,58 @@
     font-size: 0.85rem;
   }
   
-  .WS4-section {
-    padding: 2rem;
-    min-height: 400px;
+  .WS6-process-section {
+    padding: 60px 5%;
   }
   
-  .WS4-title {
-    font-size: 1.6rem;
+  .WS6-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 30px;
+    margin-bottom: 40px;
   }
   
-  .WS4-subtitle {
-    font-size: 0.85rem;
+  .WS6-left,
+  .WS6-right-description {
+    flex: auto;
+    width: 100%;
   }
   
-  .WS4-button {
-    padding: 10px 24px;
-    font-size: 0.85rem;
+  .WS6-title {
+    font-size: 2rem;
+    line-height: 1.3;
+  }
+  
+  .WS6-step-card {
+    flex: 0 0 100%;
+    max-width: 350px;
+    margin: 0 auto;
+  }
+  
+  .WS6-icon-circle {
+    width: 85px;
+    height: 85px;
+  }
+  
+  .WS6-svg-container {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .WS6-step-title {
+    font-size: 1.3rem;
+  }
+  
+  .WS6-step-text {
+    font-size: 0.88rem;
+  }
+  
+  .WS6-step-card::before {
+    left: 85%;
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 576px) {
   .WS2-main-heading {
     font-size: 1.5rem;
   }
@@ -821,48 +924,146 @@
     font-size: 0.9rem;
   }
   
+  .WS8-header h2 {
+    font-size: 1.8rem;
+  }
+  
+  .WS8-card {
+    height: 480px;
+  }
+  
+  .WS8-content-box {
+    padding: 20px 18px 24px 18px;
+  }
+  
+  .WS8-title {
+    font-size: 20px;
+  }
+  
+  .WS8-description {
+    font-size: 14px;
+    margin: 6px 0 18px 0;
+  }
+  
+  .WS8-card:hover .WS8-content-box {
+    height: 380px;
+  }
+  
   .WS3-title {
-    font-size: 1.5rem;
+    font-size: 1.6rem;
   }
   
   .WS3-category-image-wrapper {
-    width: 100px;
-    height: 100px;
+    width: 110px;
+    height: 110px;
   }
   
-  .WS4-title {
-    font-size: 1.4rem;
+  .WS3-category-name {
+    font-size: 0.85rem;
   }
-}
-
-@media (max-width: 768px) {
+  
   .WS5-marquee-section {
-    height: 80px;
+    height: 60px;
   }
-
-  .WS5-marquee-text {
-    font-size: 1.1rem;
-    padding: 0 25px;
-  }
-
-  .WS5-marquee-text img {
-    width: 20px;
-    height: 20px;
-  }
-}
-
-@media (max-width: 480px) {
-  .WS5-marquee-section {
-    height: 70px;
-  }
-
+  
   .WS5-marquee-text {
     font-size: 0.85rem;
     padding: 0 18px;
   }
-
+  
   .WS5-marquee-text img {
-    width: 16px;
-    height: 16px;
+    width: 18px;
+    height: 18px;
+  }
+  
+  .WS6-title {
+    font-size: 1.6rem;
+  }
+  
+  .WS6-badge {
+    font-size: 0.75rem;
+  }
+  
+  .WS6-icon-circle {
+    width: 75px;
+    height: 75px;
+    border-width: 8px;
+  }
+  
+  .WS6-svg-container {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .WS6-step-title {
+    font-size: 1.1rem;
+  }
+  
+  .WS6-step-text {
+    font-size: 0.85rem;
+  }
+  
+  .WS6-step-card::before {
+    font-size: 0.6rem;
+    padding: 2px 8px;
+    left: 80%;
+  }
+}
+
+@media (max-width: 480px) {
+  .WS2-main-heading {
+    font-size: 1.3rem;
+  }
+  
+  .WS8-header h2 {
+    font-size: 1.5rem;
+  }
+  
+  .WS8-header p {
+    font-size: 0.85rem;
+  }
+  
+  .WS8-card {
+    height: 460px;
+  }
+  
+  .WS8-title {
+    font-size: 18px;
+  }
+  
+  .WS3-title {
+    font-size: 1.4rem;
+  }
+  
+  .WS3-category-image-wrapper {
+    width: 95px;
+    height: 95px;
+  }
+  
+  .WS3-category-name {
+    font-size: 0.75rem;
+  }
+  
+  .WS6-title {
+    font-size: 1.4rem;
+  }
+  
+  .WS6-icon-circle {
+    width: 65px;
+    height: 65px;
+    border-width: 6px;
+  }
+  
+  .WS6-svg-container {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .WS6-step-title {
+    font-size: 1rem;
+  }
+  
+  .WS6-step-text {
+    font-size: 0.8rem;
   }
 }

@@ -19,6 +19,33 @@ const WasteMain = () => {
     setOpenAccordion(openAccordion === index ? null : index);
   };
 
+    const services = [
+    {
+      category: "Scheduling",
+      title: "Check Scraps Pickup Dates",
+      desc: "Metal Source is a buyer of all scrap metal grades including aluminum, steel, copper, stainless, and all ferrous and nonferrous metals.",
+      image: "https://www.actionmetalsrecyclers.com/wp-content/uploads/2023/03/shutterstock_1976224004-768x513.jpg",
+      btnText: "Schedule Pickup",
+      btnIcon1: "M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"
+    },
+    {
+      category: "Location Services",
+      title: "Find Collection Centers Near You",
+      desc: "Quickly find nearby aluminum scrap collection centers and partner shops through our interactive map.",
+      image: "https://img.freepik.com/premium-photo/map-with-marked-location-illustrating-geographic-positioning-site-identification_1211661-5650.jpg",
+      btnText: "Find Location",
+      btnIcon2: "M9.5 2A1.5 1.5 0 0 0 8 3.5V6a2 2 0 0 1-2 2H3.5A1.5 1.5 0 0 0 2 9.5v5A1.5 1.5 0 0 0 3.5 16H6a2 2 0 0 1 2 2v2.5A1.5 1.5 0 0 0 9.5 22h5a1.5 1.5 0 0 0 1.5-1.5V18a2 2 0 0 1 2-2h2.5a1.5 1.5 0 0 0 1.5-1.5v-5A1.5 1.5 0 0 0 20.5 8H18a2 2 0 0 1-2-2V3.5A1.5 1.5 0 0 0 14.5 2h-5z"
+    },
+    {
+      category: "Real-Time Pricing",
+      title: "Check Scrap Prices",
+      desc: "View real-time aluminum scrap prices based on current market trends, material type, and quality. Easily estimate your earnings, compare rates, and make informed decisions before scheduling a pickup or selling your materials.",
+      image: "https://taylorsjunkyard.com/wp-content/uploads/2025/11/maximizing-financial-returns-from-scrap-metal-1024x576.jpg",
+      btnText: "Check Prices",
+      btnIcon3: "M13 2L3 14h9l-1 8 10-12h-9l1-8z"
+    }
+  ];
+
   const processSteps = [
     {
       id: 1,
@@ -130,6 +157,65 @@ const WasteMain = () => {
           </div>
         </div>
 
+      <section className="WS8-wrapper">
+          <div className="WS8-container">
+            <div className="WS8-header">
+              <h2>Recycling Services</h2>
+              <p>Quickly schedule your scrap pickup, find the nearest collection center, and check real-time aluminum prices. Everything you need to recycle smarter and earn more — all in one place. Join the green movement and turn waste into value with our easy-to-use recycling tools.</p>
+            </div>
+            <div className="WS8-grid">
+              {services.map((item, index) => (
+                <div className="WS8-card" key={index}>
+                  <div className="WS8-image-box">
+                    <img src={item.image} alt="service" className="WS8-img" />
+                  </div>
+                  <div className="WS8-content-box">
+                    <span className="WS8-category">{item.category}</span>
+                    <h3 className="WS8-title">{item.title}</h3>
+                    <div className="WS8-reveal-box">
+                      <p className="WS8-description">{item.desc}</p>
+                      <a 
+                        href={index === 0 ? "/UserCalendar" : index === 1 ? "/LocationMap" : "/Calculate"}
+                        className={`WS8-unique-btn WS8-btn-type-${index % 3}`}
+                      >
+                        <span className="WS8-btn-text">{item.btnText}</span>
+                        <span className="WS8-btn-circle">
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                          </svg>
+                        </span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="WS6-process-section">
+          <div className="WS6-header">
+            <div className="WS6-left">
+              <span className="WS6-badge">Recycle Process</span>
+              <h2 className="WS6-title">How Our Aluminum <br />Collection System Works</h2>
+            </div>
+          </div>
+
+          <div className="WS6-steps-grid">
+            {processSteps.map((step, idx) => (
+              <div key={step.id} className="WS6-step-card" data-step={String(idx + 1).padStart(2, '0')}>
+                <div className="WS6-icon-circle">
+                  <div className="WS6-svg-container">
+                    <img src={step.iconUrl} alt={step.title} className="WS6-icon-image" />
+                  </div>
+                </div>
+                <h4 className="WS6-step-title">{step.title}</h4>
+                <p className="WS6-step-text">{step.text}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
         <div className="WS3-category-section">
           <div className="WS3-header">
             <span className="WS3-subtitle">Materials We Accept</span>
@@ -152,78 +238,6 @@ const WasteMain = () => {
         </div>
       </section>
 
-      <section className="scrap-info-section">
-        <div className="WS4-container">
-          <div className="WS4-section WS4-m">
-            <div className="WS4-content">
-              <div className="WS4-icon-wrapper">
-                <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                  <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
-                  <path d="M3 3v5h5" />
-                  <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16" />
-                  <path d="M21 21v-5h-5" />
-                </svg>
-              </div>
-              <h2 className="WS4-title">
-                <span className="WS4-highlight-blue">Check Scraps</span> Pickup Dates
-              </h2>
-              <p className="WS4-subtitle">
-                Metal Source is a buyer of all scrap metal grades including aluminum, steel, copper, stainless, and all ferrous and nonferrous metals.
-              </p>
-              <Link to="/UserCalendar" className="WS4-button WS4-button-2">
-                Schedule Pickup
-                <span className="WS4-button-arrow">→</span>
-              </Link>
-            </div>
-          </div>
-
-          <div className="WS4-section WS4-w">
-            <div className="WS4-content">
-              <div className="WS4-icon-wrapper">
-                <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                  <circle cx="12" cy="10" r="3" />
-                </svg>
-              </div>
-              <h2 className="WS4-title">
-                Collection Centers <br />
-                <span className="WS4-highlight-pink">Near You</span>
-              </h2>
-              <p className="WS4-subtitle">
-                Quickly find nearby aluminum scrap collection centers and partner shops through our interactive map.
-              </p>
-              <Link to="/LocationMap" className="WS4-button WS4-button-2">
-                Find Location
-                <span className="WS4-button-arrow">→</span>
-              </Link>
-            </div>
-          </div>
-          
-        </div>
-      </section>
-
-      <section className="WS6-process-section">
-        <div className="WS6-header">
-          <div className="WS6-left">
-            <span className="WS6-badge">Recycle Process</span>
-            <h2 className="WS6-title">How Our Aluminum Collection System Works</h2>
-          </div>
-        </div>
-
-        <div className="WS6-steps-grid">
-          {processSteps.map((step, idx) => (
-            <div key={step.id} className="WS6-step-card" data-step={String(idx + 1).padStart(2, '0')}>
-              <div className="WS6-icon-circle">
-                <div className="WS6-svg-container">
-                  <img src={step.iconUrl} alt={step.title} className="WS6-icon-image" />
-                </div>
-              </div>
-              <h4 className="WS6-step-title">{step.title}</h4>
-              <p className="WS6-step-text">{step.text}</p>
-            </div>
-          ))}
-        </div>
-      </section>
     </div>
   );
 };
