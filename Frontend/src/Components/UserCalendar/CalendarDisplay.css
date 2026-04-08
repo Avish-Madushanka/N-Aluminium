@@ -24,7 +24,6 @@
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
-  transition: all 0.2s ease;
 }
 
 .CDis-column-header {
@@ -114,7 +113,6 @@
 .CDis-calendar-day {
   aspect-ratio: 1/1;
   border: 1px solid transparent;
-  border-radius: 50%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -142,27 +140,27 @@
 }
 
 .CDis-calendar-day.CDis-available {
-  background-color: #5eee6a;
-  border-color: #005603;
-  color: #388e3c;
+  background-color: #bbffc0;
+  border-color: #808080;
+  color: #555555;
 }
 
 .CDis-calendar-day.CDis-available:hover:not(:disabled) {
-  background-color: #71ff71;
-  border-color: #388e3c;
+  background-color: #a0f5a0;
+  border-color: #868686;
 }
 
 .CDis-calendar-day.CDis-selected,
 .CDis-calendar-day.CDis-selected:hover {
   background-color: #388e3c;
-  border-color: #2e7d32;
+  border-color: #0b8011;
   color: white;
 }
 
 .CDis-calendar-day.CDis-unavailable,
 .CDis-calendar-day.CDis-past {
-  background-color: #f5f5f5;
-  color: #9e9e9e;
+  background-color: #fff3f3;
+  color: #555555;
   cursor: not-allowed;
   border-color: #eee;
 }
@@ -253,15 +251,14 @@
 
 .CDis-available-day-item {
   display: flex;
+  height: 100px;
   justify-content: space-between;
   align-items: center;
   padding: 0.875rem;
   margin-bottom: 0.75rem;
-  background-color: white;
+  background-color: rgb(248, 248, 248);
   border-radius: 4px;
-  border-left: 3px solid #388e3c;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0,0,0,0.06);
-  transition: all 0.2s ease;
 }
 
 .CDis-available-day-item:hover {
@@ -270,14 +267,15 @@
 
 .CDis-available-day-info {
   display: flex;
+  font-family: 'Merriweather', serif;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 0.9375rem;
+  gap: 0.8rem;
+  font-size: 1.3rem;
   color: #212121;
 }
 
 .CDis-btn-schedule-quick {
-  background-color: #388e3c;
+  background-color: #161616;
   color: white;
   border: none;
   padding: 0.5rem 1rem;
@@ -289,7 +287,7 @@
 }
 
 .CDis-btn-schedule-quick:hover {
-  background-color: #2e7d32;
+  background-color: #464646;
 }
 
 .CDis-loading-overlay {
