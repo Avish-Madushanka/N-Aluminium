@@ -6,20 +6,20 @@ const glassProduct = {
   name: "Premium Glass",
   glassTypes: {
     "Clear Float Glass": {
-      Standard: { "4mm": 1500, "6mm": 2200, "8mm": 3000, "10mm": 4000 },
-      Premium: { "4mm": 1800, "6mm": 2600, "8mm": 3500, "10mm": 4800 },
+      Standard: { "4mm": 130, "6mm": 210, "8mm": 290, "10mm": 350, "12mm": 500 },
+      Premium: { "4mm": 170, "6mm": 300, "8mm": 400, "10mm": 500, "12mm": 750 },
     },
-    "Tempered  Glass": {
-      Standard: { "5mm": 2000, "6mm": 2800, "8mm": 3800, "12mm": 5500 },
-      Premium: { "5mm": 2400, "6mm": 3300, "8mm": 4500, "12mm": 6500 },
+    "Tempered Glass": {
+      Standard: { "5mm": 375, "6mm": 450, "8mm": 540, "12mm": 630 },
+      Premium: { "5mm": 400, "6mm": 550, "8mm": 700, "12mm": 800 },
     },
     "Laminated Glass": {
-      Standard: { "6.38mm": 3500, "8.38mm": 4500, "10.76mm": 6000 },
-      Premium: { "6.38mm": 4200, "8.38mm": 5400, "10.76mm": 7200 },
+      Standard: { "10mm": 500, "15mm": 900, "20mm": 1400 },
+      Premium: { "10mm": 700, "15mm": 1400, "20mm": 2000 },
     },
     "Tinted Glass": {
-      Standard: { "4mm": 1800, "6mm": 2500, "8mm": 3400 },
-      Premium: { "4mm": 2100, "6mm": 3000, "8mm": 4000 },
+      Standard: { "4mm": 370, "6mm": 450, "8mm": 600 },
+      Premium: { "4mm": 450, "6mm": 600, "8mm": 800 },
     },
   },
 };
@@ -34,7 +34,7 @@ const productGallery = [
   },
   {
     id: 2,
-    title: "Tempered  Glass",
+    title: "Tempered Glass",
     description: "Strong and durable safety glass designed to withstand impact and heat, perfect for doors, partitions, and exteriors.",
     imageUrl: "https://ueeshop.ly200-cdn.com/u_file/UPBG/UPBG338/2305/products/07/7fd2a4431f.png?x-oss-process=image/quality,q_100/resize,m_lfit,h_500,w_500",
     category: "Tempered",
@@ -49,7 +49,7 @@ const productGallery = [
   {
     id: 4,
     title: "Tinted Glass",
-    description: "Stylish glass that reduces heat and glare, perfect for modern",
+    description: "Stylish glass that reduces heat and glare, perfect for modern buildings and vehicles.",
     imageUrl: "https://www.onedayglass.com/wp-content/uploads/2018/07/Glass-Tint-Pic-update.jpg",
     category: "Tinted",
   },
@@ -75,8 +75,8 @@ const GlassOrder = () => {
   );
   const [selectedQuality, setSelectedQuality] = useState("Standard");
   const [selectedSize, setSelectedSize] = useState("4mm");
-  const [width, setWidth] = useState("");
-  const [height, setHeight] = useState("");
+  const [widthFt, setWidthFt] = useState("");
+  const [heightFt, setHeightFt] = useState("");
   const [quantity, setQuantity] = useState(1);
   const [selectedItems, setSelectedItems] = useState([]);
   const [deliveryMethod, setDeliveryMethod] = useState(null);
@@ -122,31 +122,42 @@ const GlassOrder = () => {
     setSelectedSize(firstSize);
   };
 
+  const ftToMeters = (feet) => {
+    return parseFloat(feet) * 0.3048;
+  };
+
+  const calculateAreaInSqMeters = () => {
+    if (!widthFt || !heightFt) return 0;
+    const widthM = ftToMeters(widthFt);
+    const heightM = ftToMeters(heightFt);
+    return widthM * heightM;
+  };
+
   const handleAddToOrder = () => {
-    if (!width || !height || !quantity || width <= 0 || height <= 0 || quantity <= 0)
+    if (!widthFt || !heightFt || !quantity || widthFt <= 0 || heightFt <= 0 || quantity <= 0)
       return;
 
-    const area = (parseFloat(width) * parseFloat(height)) / 1000000;
-    const calculatedPrice = currentUnitPrice * area * parseInt(quantity);
-    const weight = area * parseInt(quantity) * 2.5;
+    const areaSqM = calculateAreaInSqMeters();
+    const calculatedPrice = currentUnitPrice * areaSqM * parseInt(quantity);
+    const weight = areaSqM * parseInt(quantity) * 2.5;
 
     const newItem = {
       id: Date.now(),
       glassType: selectedGlassType,
       quality: selectedQuality,
       size: selectedSize,
-      width: parseFloat(width),
-      height: parseFloat(height),
+      widthFt: parseFloat(widthFt),
+      heightFt: parseFloat(heightFt),
       quantity: parseInt(quantity),
-      area: area,
+      areaSqM: areaSqM,
       weight: weight,
       unitPrice: currentUnitPrice,
       totalPrice: calculatedPrice,
     };
 
     setSelectedItems((prevItems) => [...prevItems, newItem]);
-    setWidth("");
-    setHeight("");
+    setWidthFt("");
+    setHeightFt("");
     setQuantity(1);
   };
 
@@ -222,6 +233,23 @@ const GlassOrder = () => {
     setDriverDetails(null);
   };
 
+  const getAllPriceRows = () => {
+    const rows = [];
+    Object.entries(glassProduct.glassTypes).forEach(([glassType, qualities]) => {
+      Object.entries(qualities).forEach(([quality, sizes]) => {
+        Object.entries(sizes).forEach(([size, price]) => {
+          rows.push({
+            glassType,
+            quality,
+            size,
+            price,
+          });
+        });
+      });
+    });
+    return rows;
+  };
+
   if (orderConfirmed) {
     return (
       <div className="GlassOr-container">
@@ -241,7 +269,7 @@ const GlassOrder = () => {
             <h3>Order Summary</h3>
             {selectedItems.map((item) => (
               <div key={item.id} className="GlassOr-confirmationItem">
-                <span>{item.glassType} - {item.size} ({item.width}x{item.height}mm)</span>
+                <span>{item.glassType} - {item.size} ({item.widthFt}'x{item.heightFt}')</span>
                 <span>Qty: {item.quantity}</span>
                 <span>Rs {item.totalPrice.toFixed(2)}</span>
               </div>
@@ -324,6 +352,8 @@ const GlassOrder = () => {
     );
   }
 
+  const priceRows = getAllPriceRows();
+
   return (
     <div className="GlassOr-container">
       <div className="GlassOr-hero">
@@ -339,7 +369,7 @@ const GlassOrder = () => {
       <div className="GlassOr-gallerySection">
         <h2 className="GlassOr-galleryTitle">Quality Glass for Every Need</h2>
         <p className="GlassOr-gallerySubtitle">
-          We offer a complete selection of premium glass products including clear and tinted float glass, reflective and patterned designs, as well as high-quality local and imported mirrors. Each product is carefully selected to meet both durability and aesthetic standards for residential, commercial, and industrial use.Customize your order with the exact size, thickness, and finish to suit your specific requirements. Our system ensures precise cutting, reliable quality, and safe handling for every order. With flexible pickup and delivery options, we make it easy and convenient to get the perfect glass solution delivered right to your doorstep.
+          We offer a complete selection of premium glass products including clear and tinted float glass, reflective and patterned designs, as well as high-quality local and imported mirrors. Each product is carefully selected to meet both durability and aesthetic standards for residential, commercial, and industrial use. Customize your order with the exact size, thickness, and finish to suit your specific requirements. Our system ensures precise cutting, reliable quality, and safe handling for every order. With flexible pickup and delivery options, we make it easy and convenient to get the perfect glass solution delivered right to your doorstep.
         </p>
         <div className="GlassOr-galleryGrid">
           {productGallery.map((product) => (
@@ -356,7 +386,6 @@ const GlassOrder = () => {
               </div>
               <div className="GlassOr-galleryInfo">
                 <h3 className="GlassOr-galleryCardTitle">{product.title}</h3>
-                <p className="GlassOr-galleryCardName">{product.name}</p>
                 <p className="GlassOr-galleryCardDesc">{product.description}</p>
               </div>
             </div>
@@ -366,110 +395,182 @@ const GlassOrder = () => {
 
       <h1 className="GlassOr-mainTitle">Order Your Custom Glass</h1>
 
-      <div className="GlassOr-orderContainer">
-        <div className="GlassOr-glassCard">
-          <div className="GlassOr-twoColumnLayout">
-            <div className="GlassOr-leftColumn">
-              <h3 className="GlassOr-productName">{glassProduct.name}</h3>
-              <div className="GlassOr-formGroup">
-                <label className="GlassOr-formLabel">Glass Type:</label>
-                <select
-                  className="GlassOr-formSelect"
-                  value={selectedGlassType}
-                  onChange={(e) => handleGlassTypeChange(e.target.value)}
-                >
-                  {Object.keys(glassProduct.glassTypes).map((type) => (
-                    <option key={type} value={type}>
-                      {type}
-                    </option>
-                  ))}
-                </select>
+      <div className="GlassOr-orderLayout">
+        <div className="GlassOr-priceTableWrapper">
+          <h3 className="GlassOr-priceTableTitle">Glass Price List (Rs/m²)</h3>
+          <div className="GlassOr-priceTableContainer">
+            <table className="GlassOr-priceTable">
+              <thead>
+                <tr className="GlassOr-tableMainHeader">
+                  <th rowSpan="2">Glass Type</th>
+                  <th colSpan="2">Quality</th>
+                  <th rowSpan="2">Price (Rs/m²)</th>
+                </tr>
+                <tr className="GlassOr-tableSubHeader">
+                  <th>Standard</th>
+                  <th>Premium</th>
+                </tr>
+              </thead>
+              <tbody>
+                {(() => {
+                  const rows = [];
+                  const glassTypes = Object.keys(glassProduct.glassTypes);
+                  
+                  glassTypes.forEach((glassType, glassIndex) => {
+                    const qualities = glassProduct.glassTypes[glassType];
+                    const standardSizes = qualities.Standard ? Object.keys(qualities.Standard) : [];
+                    const premiumSizes = qualities.Premium ? Object.keys(qualities.Premium) : [];
+                    const maxRows = Math.max(standardSizes.length, premiumSizes.length);
+                    
+                    for (let i = 0; i < maxRows; i++) {
+                      const standardSize = standardSizes[i];
+                      const premiumSize = premiumSizes[i];
+                      const standardPrice = standardSize ? qualities.Standard[standardSize] : null;
+                      const premiumPrice = premiumSize ? qualities.Premium[premiumSize] : null;
+                      
+                      rows.push(
+                        <tr key={`${glassType}-row-${i}`}>
+                          {i === 0 && (
+                            <td rowSpan={maxRows} className="GlassOr-glassTypeCell">
+                              {glassType}
+                            </td>
+                          )}
+                          <td className="GlassOr-sizeCell">
+                            {standardSize ? (
+                              <div className="GlassOr-sizePriceCell">
+                                <span className="GlassOr-sizeValue">{standardSize}</span>
+                                <span className="GlassOr-priceValue">Rs {standardPrice.toFixed(2)}</span>
+                              </div>
+                            ) : null}
+                          </td>
+                          <td className="GlassOr-sizeCell">
+                            {premiumSize ? (
+                              <div className="GlassOr-sizePriceCell">
+                                <span className="GlassOr-sizeValue">{premiumSize}</span>
+                                <span className="GlassOr-priceValue">Rs {premiumPrice.toFixed(2)}</span>
+                              </div>
+                            ) : null}
+                          </td>
+                          {i === 0 && (
+                            <td rowSpan={maxRows} className="GlassOr-priceNoteCell">
+                              Per m²
+                            </td>
+                          )}
+                        </tr>
+                      );
+                    }
+                  });
+                  
+                  return rows;
+                })()}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div className="GlassOr-orderContainer">
+          <div className="GlassOr-glassCard">
+            <h3 className="GlassOr-productName">{glassProduct.name}</h3>
+            <div className="GlassOr-twoColumnLayout">
+              <div className="GlassOr-leftColumn">
+                <div className="GlassOr-formGroup">
+                  <label className="GlassOr-formLabel">Glass Type:</label>
+                  <select
+                    className="GlassOr-formSelect"
+                    value={selectedGlassType}
+                    onChange={(e) => handleGlassTypeChange(e.target.value)}
+                  >
+                    {Object.keys(glassProduct.glassTypes).map((type) => (
+                      <option key={type} value={type}>
+                        {type}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="GlassOr-formGroup">
+                  <label className="GlassOr-formLabel">Quality:</label>
+                  <select
+                    className="GlassOr-formSelect"
+                    value={selectedQuality}
+                    onChange={(e) => handleQualityChange(e.target.value)}
+                  >
+                    {availableQualities.map((quality) => (
+                      <option key={quality} value={quality}>
+                        {quality}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="GlassOr-formGroup">
+                  <label className="GlassOr-formLabel">Thickness (mm):</label>
+                  <select
+                    className="GlassOr-formSelect"
+                    value={selectedSize}
+                    onChange={(e) => setSelectedSize(e.target.value)}
+                  >
+                    {availableSizes.map((size) => (
+                      <option key={size} value={size}>
+                        {size}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
-              <div className="GlassOr-formGroup">
-                <label className="GlassOr-formLabel">Quality:</label>
-                <select
-                  className="GlassOr-formSelect"
-                  value={selectedQuality}
-                  onChange={(e) => handleQualityChange(e.target.value)}
-                >
-                  {availableQualities.map((quality) => (
-                    <option key={quality} value={quality}>
-                      {quality}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="GlassOr-formGroup">
-                <label className="GlassOr-formLabel">Thickness (mm):</label>
-                <select
-                  className="GlassOr-formSelect"
-                  value={selectedSize}
-                  onChange={(e) => setSelectedSize(e.target.value)}
-                >
-                  {availableSizes.map((size) => (
-                    <option key={size} value={size}>
-                      {size}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-            <div className="GlassOr-rightColumn">
-              <div className="GlassOr-dimensionGroup">
-                <div className="GlassOr-dimensionInput">
-                  <label className="GlassOr-formLabel">Width (mm):</label>
+              <div className="GlassOr-rightColumn">
+                <div className="GlassOr-dimensionGroup">
+                  <div className="GlassOr-dimensionInput">
+                    <label className="GlassOr-formLabel">Width (feet):</label>
+                    <input
+                      type="number"
+                      step="0.1"
+                      className="GlassOr-formInput"
+                      value={widthFt}
+                      onChange={(e) => setWidthFt(e.target.value)}
+                      placeholder="e.g., 4.5"
+                      min="0.1"
+                    />
+                  </div>
+                  <div className="GlassOr-dimensionInput">
+                    <label className="GlassOr-formLabel">Height (feet):</label>
+                    <input
+                      type="number"
+                      step="0.1"
+                      className="GlassOr-formInput"
+                      value={heightFt}
+                      onChange={(e) => setHeightFt(e.target.value)}
+                      placeholder="e.g., 3.2"
+                      min="0.1"
+                    />
+                  </div>
+                </div>
+                <div className="GlassOr-formGroup">
+                  <label className="GlassOr-formLabel">Quantity:</label>
                   <input
                     type="number"
                     className="GlassOr-formInput"
-                    value={width}
-                    onChange={(e) => setWidth(e.target.value)}
-                    placeholder="e.g., 1000"
+                    value={quantity}
+                    onChange={(e) => setQuantity(e.target.value)}
                     min="1"
                   />
                 </div>
-                <div className="GlassOr-dimensionInput">
-                  <label className="GlassOr-formLabel">Height (mm):</label>
-                  <input
-                    type="number"
-                    className="GlassOr-formInput"
-                    value={height}
-                    onChange={(e) => setHeight(e.target.value)}
-                    placeholder="e.g., 800"
-                    min="1"
-                  />
+                <div className="GlassOr-priceDisplay">
+                  Unit Price:{" "}
+                  <span className="GlassOr-unitPrice">Rs {currentUnitPrice.toFixed(2)}/m²</span>
                 </div>
+                {widthFt && heightFt && quantity > 0 && (
+                  <div className="GlassOr-totalDisplay">
+                    Area: {(calculateAreaInSqMeters()).toFixed(2)} m² | Total: Rs{" "}
+                    {(currentUnitPrice * calculateAreaInSqMeters() * quantity).toFixed(2)}
+                  </div>
+                )}
+                <button
+                  className="GlassOr-addButton"
+                  onClick={handleAddToOrder}
+                  disabled={!widthFt || !heightFt || !quantity || widthFt <= 0 || heightFt <= 0 || quantity <= 0}
+                >
+                  Add to Order
+                </button>
               </div>
-              <div className="GlassOr-formGroup">
-                <label className="GlassOr-formLabel">Quantity:</label>
-                <input
-                  type="number"
-                  className="GlassOr-formInput"
-                  value={quantity}
-                  onChange={(e) => setQuantity(e.target.value)}
-                  min="1"
-                />
-              </div>
-              <div className="GlassOr-priceDisplay">
-                Unit Price:{" "}
-                <span className="GlassOr-unitPrice">Rs {currentUnitPrice.toFixed(2)}/m²</span>
-              </div>
-              {width && height && quantity > 0 && (
-                <div className="GlassOr-totalDisplay">
-                  Total: Rs{" "}
-                  {(
-                    currentUnitPrice *
-                    ((parseFloat(width) * parseFloat(height)) / 1000000) *
-                    quantity
-                  ).toFixed(2)}
-                </div>
-              )}
-              <button
-                className="GlassOr-addButton"
-                onClick={handleAddToOrder}
-                disabled={!width || !height || !quantity || width <= 0 || height <= 0 || quantity <= 0}
-              >
-                Add to Order
-              </button>
             </div>
           </div>
         </div>
@@ -484,8 +585,8 @@ const GlassOrder = () => {
                 <div className="GlassOr-itemInfo">
                   <span className="GlassOr-itemName">{item.glassType}</span>
                   <span className="GlassOr-itemDetails">
-                    {item.size} / {item.quality} | {item.width}x{item.height}mm | Qty: {item.quantity} | Area:{" "}
-                    {item.area.toFixed(2)}m²
+                    {item.size} / {item.quality} | {item.widthFt}'x{item.heightFt}' | Qty: {item.quantity} | Area:{" "}
+                    {item.areaSqM.toFixed(2)}m²
                   </span>
                   <span className="GlassOr-itemPrice">Rs {item.totalPrice.toFixed(2)}</span>
                 </div>
@@ -718,3 +819,5 @@ const GlassOrder = () => {
 };
 
 export default GlassOrder;
+
+

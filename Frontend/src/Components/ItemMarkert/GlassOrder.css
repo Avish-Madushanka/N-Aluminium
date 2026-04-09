@@ -53,12 +53,6 @@
   color: #dddddd;
 }
 
-
-
-/*-----------GlassTypes-----------*/
-
-
-
 .GlassOr-gallerySection {
   max-width: 1400px;
   margin: 0 auto 80px auto;
@@ -129,12 +123,6 @@
   margin: 0;
 }
 
-
-
-/*-----------Ordering System---------- */
-
-
-
 .GlassOr-mainTitle {
   font-family: 'Merriweather', serif;
   text-align: center;
@@ -145,10 +133,114 @@
   letter-spacing: -1px;
 }
 
-.GlassOr-orderContainer {
-  max-width: 900px;
+.GlassOr-orderLayout {
+  max-width: 1400px;
   margin: 0 auto 50px auto;
   padding: 0 20px;
+  display: flex;
+  gap: 40px;
+  align-items: flex-start;
+}
+
+.GlassOr-priceTableWrapper {
+  flex: 1;
+  background-color: white;
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  position: sticky;
+  top: 20px;
+}
+
+.GlassOr-priceTableTitle {
+  font-size: 1.4em;
+  color: #34495e;
+  margin-bottom: 15px;
+  text-align: center;
+  font-weight: 600;
+}
+
+.GlassOr-priceTableContainer {
+  max-height: 550px;
+  overflow-y: auto;
+  border-radius: 12px;
+  border: 1px solid #ecf0f1;
+}
+
+.GlassOr-priceTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85em;
+}
+
+.GlassOr-priceTable th,
+.GlassOr-priceTable td {
+  border: 1px solid #ecf0f1;
+  padding: 12px 10px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.GlassOr-tableMainHeader th {
+  background-color: #2c3e50;
+  color: white;
+  font-weight: 600;
+  text-align: center;
+  padding: 12px 10px;
+}
+
+.GlassOr-tableSubHeader th {
+  background-color: #ecf0f1;
+  color: #2c3e50;
+  font-weight: 600;
+  text-align: center;
+  padding: 10px 8px;
+}
+
+.GlassOr-glassTypeCell {
+  background-color: #f8f9fa;
+  font-weight: 600;
+  color: #2c3e50;
+  vertical-align: middle;
+}
+
+.GlassOr-sizeCell {
+  padding: 8px 10px;
+  vertical-align: middle;
+}
+
+.GlassOr-sizePriceCell {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+}
+
+.GlassOr-sizeValue {
+  font-weight: 500;
+  color: #555;
+  min-width: 45px;
+}
+
+.GlassOr-priceValue {
+  color: #e67e22;
+  font-weight: 600;
+}
+
+.GlassOr-priceNoteCell {
+  background-color: #f8f9fa;
+  text-align: center;
+  vertical-align: middle;
+  color: #7f8c8d;
+  font-style: italic;
+}
+
+.GlassOr-priceTable tbody tr:hover {
+  background-color: #fef9e7;
+}
+
+.GlassOr-orderContainer {
+  flex: 1;
 }
 
 .GlassOr-glassCard {
@@ -290,7 +382,7 @@
   background-color: white;
   border-radius: 15px;
   padding: 30px;
-  max-width: 900px;
+  max-width: 1000px;
   margin: 40px auto;
   border-left: 5px solid #3498db;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
@@ -703,6 +795,21 @@
   background-color: #45a049;
 }
 
+@media (max-width: 1024px) {
+  .GlassOr-orderLayout {
+    flex-direction: column;
+  }
+  
+  .GlassOr-priceTableWrapper {
+    position: static;
+    width: 100%;
+  }
+  
+  .GlassOr-priceTableContainer {
+    max-height: 400px;
+  }
+}
+
 @media (max-width: 768px) {
   .GlassOr-hero {
     height: 25vh;
@@ -783,6 +890,18 @@
   .GlassOr-stepIcon {
     margin: 0;
   }
+  
+  .GlassOr-priceTable th,
+  .GlassOr-priceTable td {
+    padding: 8px 6px;
+    font-size: 0.75em;
+  }
+  
+  .GlassOr-sizePriceCell {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -821,5 +940,13 @@
   .GlassOr-dimensionGroup {
     flex-direction: column;
     gap: 10px;
+  }
+  
+  .GlassOr-priceTableWrapper {
+    padding: 10px;
+  }
+  
+  .GlassOr-priceTableTitle {
+    font-size: 1.2em;
   }
 }
