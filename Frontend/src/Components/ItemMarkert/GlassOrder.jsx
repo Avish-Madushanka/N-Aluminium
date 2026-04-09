@@ -3,8 +3,8 @@ import "./GlassOrder.css";
 
 const glassProduct = {
   id: 1,
-  name: "Premium Glass",
-  glassTypes: {
+  name: "Start Your Glass Order",
+   glassTypes: {
     "Clear Float Glass": {
       Standard: { "4mm": 130, "6mm": 210, "8mm": 290, "10mm": 350, "12mm": 500 },
       Premium: { "4mm": 170, "6mm": 300, "8mm": 400, "10mm": 500, "12mm": 750 },
@@ -122,24 +122,18 @@ const GlassOrder = () => {
     setSelectedSize(firstSize);
   };
 
-  const ftToMeters = (feet) => {
-    return parseFloat(feet) * 0.3048;
-  };
-
-  const calculateAreaInSqMeters = () => {
+  const calculateAreaInSqFeet = () => {
     if (!widthFt || !heightFt) return 0;
-    const widthM = ftToMeters(widthFt);
-    const heightM = ftToMeters(heightFt);
-    return widthM * heightM;
+    return parseFloat(widthFt) * parseFloat(heightFt);
   };
 
   const handleAddToOrder = () => {
     if (!widthFt || !heightFt || !quantity || widthFt <= 0 || heightFt <= 0 || quantity <= 0)
       return;
 
-    const areaSqM = calculateAreaInSqMeters();
-    const calculatedPrice = currentUnitPrice * areaSqM * parseInt(quantity);
-    const weight = areaSqM * parseInt(quantity) * 2.5;
+    const areaSqFt = calculateAreaInSqFeet();
+    const calculatedPrice = currentUnitPrice * areaSqFt * parseInt(quantity);
+    const weight = (areaSqFt * parseInt(quantity) * 2.5) / 10.764;
 
     const newItem = {
       id: Date.now(),
@@ -149,7 +143,7 @@ const GlassOrder = () => {
       widthFt: parseFloat(widthFt),
       heightFt: parseFloat(heightFt),
       quantity: parseInt(quantity),
-      areaSqM: areaSqM,
+      areaSqFt: areaSqFt,
       weight: weight,
       unitPrice: currentUnitPrice,
       totalPrice: calculatedPrice,
@@ -231,23 +225,6 @@ const GlassOrder = () => {
     setOrderConfirmed(false);
     setOrderStatus("pending");
     setDriverDetails(null);
-  };
-
-  const getAllPriceRows = () => {
-    const rows = [];
-    Object.entries(glassProduct.glassTypes).forEach(([glassType, qualities]) => {
-      Object.entries(qualities).forEach(([quality, sizes]) => {
-        Object.entries(sizes).forEach(([size, price]) => {
-          rows.push({
-            glassType,
-            quality,
-            size,
-            price,
-          });
-        });
-      });
-    });
-    return rows;
   };
 
   if (orderConfirmed) {
@@ -352,8 +329,6 @@ const GlassOrder = () => {
     );
   }
 
-  const priceRows = getAllPriceRows();
-
   return (
     <div className="GlassOr-container">
       <div className="GlassOr-hero">
@@ -397,26 +372,26 @@ const GlassOrder = () => {
 
       <div className="GlassOr-orderLayout">
         <div className="GlassOr-priceTableWrapper">
-          <h3 className="GlassOr-priceTableTitle">Glass Price List (Rs/m²)</h3>
+          <h3 className="GlassOr-priceTableTitle">Glass Price List (Rs/ft²)</h3>
           <div className="GlassOr-priceTableContainer">
             <table className="GlassOr-priceTable">
               <thead>
                 <tr className="GlassOr-tableMainHeader">
                   <th rowSpan="2">Glass Type</th>
                   <th colSpan="2">Quality</th>
-                  <th rowSpan="2">Price (Rs/m²)</th>
-                </tr>
+                  <th rowSpan="2">Price (Rs/ft²)</th>
+                 </tr>
                 <tr className="GlassOr-tableSubHeader">
                   <th>Standard</th>
                   <th>Premium</th>
-                </tr>
+                 </tr>
               </thead>
               <tbody>
                 {(() => {
                   const rows = [];
                   const glassTypes = Object.keys(glassProduct.glassTypes);
                   
-                  glassTypes.forEach((glassType, glassIndex) => {
+                  glassTypes.forEach((glassType) => {
                     const qualities = glassProduct.glassTypes[glassType];
                     const standardSizes = qualities.Standard ? Object.keys(qualities.Standard) : [];
                     const premiumSizes = qualities.Premium ? Object.keys(qualities.Premium) : [];
@@ -433,7 +408,7 @@ const GlassOrder = () => {
                           {i === 0 && (
                             <td rowSpan={maxRows} className="GlassOr-glassTypeCell">
                               {glassType}
-                            </td>
+                             </td>
                           )}
                           <td className="GlassOr-sizeCell">
                             {standardSize ? (
@@ -442,7 +417,7 @@ const GlassOrder = () => {
                                 <span className="GlassOr-priceValue">Rs {standardPrice.toFixed(2)}</span>
                               </div>
                             ) : null}
-                          </td>
+                           </td>
                           <td className="GlassOr-sizeCell">
                             {premiumSize ? (
                               <div className="GlassOr-sizePriceCell">
@@ -450,13 +425,13 @@ const GlassOrder = () => {
                                 <span className="GlassOr-priceValue">Rs {premiumPrice.toFixed(2)}</span>
                               </div>
                             ) : null}
-                          </td>
+                           </td>
                           {i === 0 && (
                             <td rowSpan={maxRows} className="GlassOr-priceNoteCell">
-                              Per m²
-                            </td>
+                              Per ft²
+                             </td>
                           )}
-                        </tr>
+                         </tr>
                       );
                     }
                   });
@@ -538,7 +513,7 @@ const GlassOrder = () => {
                       className="GlassOr-formInput"
                       value={heightFt}
                       onChange={(e) => setHeightFt(e.target.value)}
-                      placeholder="e.g., 3.2"
+                      placeholder="e.g., 3"
                       min="0.1"
                     />
                   </div>
@@ -555,12 +530,12 @@ const GlassOrder = () => {
                 </div>
                 <div className="GlassOr-priceDisplay">
                   Unit Price:{" "}
-                  <span className="GlassOr-unitPrice">Rs {currentUnitPrice.toFixed(2)}/m²</span>
+                  <span className="GlassOr-unitPrice">Rs {currentUnitPrice.toFixed(2)}/ft²</span>
                 </div>
                 {widthFt && heightFt && quantity > 0 && (
                   <div className="GlassOr-totalDisplay">
-                    Area: {(calculateAreaInSqMeters()).toFixed(2)} m² | Total: Rs{" "}
-                    {(currentUnitPrice * calculateAreaInSqMeters() * quantity).toFixed(2)}
+                    Area: {(calculateAreaInSqFeet()).toFixed(2)} ft² | Total: Rs{" "}
+                    {(currentUnitPrice * calculateAreaInSqFeet() * quantity).toFixed(2)}
                   </div>
                 )}
                 <button
@@ -586,7 +561,7 @@ const GlassOrder = () => {
                   <span className="GlassOr-itemName">{item.glassType}</span>
                   <span className="GlassOr-itemDetails">
                     {item.size} / {item.quality} | {item.widthFt}'x{item.heightFt}' | Qty: {item.quantity} | Area:{" "}
-                    {item.areaSqM.toFixed(2)}m²
+                    {item.areaSqFt.toFixed(2)}ft²
                   </span>
                   <span className="GlassOr-itemPrice">Rs {item.totalPrice.toFixed(2)}</span>
                 </div>
@@ -819,5 +794,3 @@ const GlassOrder = () => {
 };
 
 export default GlassOrder;
-
-

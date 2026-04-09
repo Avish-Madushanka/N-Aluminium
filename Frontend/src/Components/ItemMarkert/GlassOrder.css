@@ -123,18 +123,24 @@
   margin: 0;
 }
 
+
+
+/*---------------Order process---------------*/
+
+
+
 .GlassOr-mainTitle {
   font-family: 'Merriweather', serif;
   text-align: center;
   font-size: 2.5em;
   color: #1b1b1b;
-  margin-bottom: 30px;
+  margin-bottom: 50px;
   font-weight: 700;
   letter-spacing: -1px;
 }
 
 .GlassOr-orderLayout {
-  max-width: 1400px;
+  max-width: 1500px;
   margin: 0 auto 50px auto;
   padding: 0 20px;
   display: flex;
@@ -154,6 +160,7 @@
 
 .GlassOr-priceTableTitle {
   font-size: 1.4em;
+  font-family: 'Merriweather', serif;
   color: #34495e;
   margin-bottom: 15px;
   text-align: center;
@@ -182,17 +189,20 @@
 }
 
 .GlassOr-tableMainHeader th {
-  background-color: #2c3e50;
+  font-size: 1rem;
+  width: 130px;
+  background-color: #3f3f3f;
   color: white;
-  font-weight: 600;
+  font-weight: 700;
   text-align: center;
   padding: 12px 10px;
 }
 
 .GlassOr-tableSubHeader th {
-  background-color: #ecf0f1;
-  color: #2c3e50;
-  font-weight: 600;
+  background-color: #525252;
+  font-size: 1rem;
+  color: #ffffff;
+  font-weight: 700;
   text-align: center;
   padding: 10px 8px;
 }
@@ -223,9 +233,11 @@
 }
 
 .GlassOr-priceValue {
-  color: #e67e22;
+  color: #da0000;
   font-weight: 600;
 }
+
+
 
 .GlassOr-priceNoteCell {
   background-color: #f8f9fa;
@@ -236,7 +248,7 @@
 }
 
 .GlassOr-priceTable tbody tr:hover {
-  background-color: #fef9e7;
+  background-color: #ffecec;
 }
 
 .GlassOr-orderContainer {
@@ -269,8 +281,9 @@
 }
 
 .GlassOr-productName {
+  font-family: 'Merriweather', serif;
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 60px;
   color: #34495e;
   font-size: 1.4em;
   font-weight: 600;
@@ -342,14 +355,14 @@
 }
 
 .GlassOr-unitPrice {
-  color: #e67e22;
+  color: #e00404;
 }
 
 .GlassOr-totalDisplay {
   text-align: center;
   margin-bottom: 15px;
   padding: 8px;
-  background-color: #e8f4fd;
+  background-color: #ebf4fc;
   border-radius: 8px;
   font-weight: 700;
   color: #2980b9;
@@ -358,7 +371,7 @@
 .GlassOr-addButton {
   width: 100%;
   padding: 12px;
-  background-color: #4CAF50;
+  background-color: #1d1d1d;
   color: white;
   border: none;
   border-radius: 10px;
@@ -369,12 +382,12 @@
 }
 
 .GlassOr-addButton:hover:not(:disabled) {
-  background-color: #45a049;
+  background-color: #525252;
   transform: translateY(-2px);
 }
 
 .GlassOr-addButton:disabled {
-  background-color: #cccccc;
+  background-color: #d6d6d6;
   cursor: not-allowed;
 }
 
@@ -603,11 +616,6 @@
   color: #2980b9;
   border-bottom: none;
   padding-top: 10px;
-}
-
-.GlassOr-priceValue {
-  color: #e67e22;
-  font-weight: 700;
 }
 
 .GlassOr-grandTotal {
