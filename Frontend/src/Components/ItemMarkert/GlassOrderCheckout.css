@@ -51,7 +51,7 @@
 }
 
 .GlassCheckout-transportTitle {
-  border-bottom-color: #f39c12;
+  border-bottom-color: #f37712;
 }
 
 .GlassCheckout-ordersTable {
@@ -68,6 +68,7 @@
 .GlassCheckout-ordersTableElement th,
 .GlassCheckout-ordersTableElement td {
   border: 1px solid #ecf0f1;
+  font-size: 1rem;
   padding: 8px 6px;
   text-align: center;
   vertical-align: middle;
@@ -228,18 +229,18 @@
 }
 
 .GlassCheckout-deliveryOption strong {
-  font-size: 0.9em;
+  font-size: 1.3em;
   color: #2c3e50;
 }
 
 .GlassCheckout-deliveryOption small {
-  font-size: 0.7em;
+  font-size: 0.9em;
   color: #7f8c8d;
 }
 
 .GlassCheckout-pickupSection, 
 .GlassCheckout-lorrySection {
-  background-color: #f9f9f9;
+  background-color: #f0f7ff;
   padding: 12px;
   border-radius: 10px;
   margin-top: 12px;
@@ -247,9 +248,10 @@
 
 .GlassCheckout-pickupSection h3, 
 .GlassCheckout-lorrySection h3 {
-  margin-bottom: 10px;
-  color: #2c3e50;
-  font-size: 1.1em;
+  color: #131313;
+  margin-bottom: 20px;
+  font-size: 1.2rem;
+  font-weight: 600;
 }
 
 .GlassCheckout-formRow {
@@ -271,18 +273,19 @@
 
 .GlassCheckout-formLabel {
   display: block;
-  margin-bottom: 3px;
-  font-size: 0.8em;
+  margin-bottom: 10px;
+  font-size: 1em;
   color: #6c7a89;
   font-weight: 500;
 }
 
 .GlassCheckout-formSelect {
-  width: 100%;
+  width: 300px;
+  height: 50px;
   padding: 6px 10px;
   border-radius: 6px;
   border: 1px solid #dcdcdc;
-  font-size: 0.85em;
+  font-size: 1rem;
   color: #555;
   background-color: #f8f8f8;
   cursor: pointer;
@@ -290,40 +293,40 @@
 
 .GlassCheckout-formSelect:focus {
   outline: none;
-  border-color: #4CAF50;
+  border-color: #4c53af;
   box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
 }
 
 .GlassCheckout-formInput {
   width: 100%;
+  height: 50px;
   padding: 6px 10px;
   border-radius: 6px;
   border: 1px solid #dcdcdc;
-  font-size: 0.85em;
+  font-size: 1rem;
   color: #555;
   background-color: #f8f8f8;
 }
 
 .GlassCheckout-formInput:focus {
   outline: none;
-  border-color: #4CAF50;
-  box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+  border-color: #af4c4c;
+  box-shadow: 0 0 0 2px rgba(175, 76, 76, 0.2);
 }
 
 .GlassCheckout-userInfoSection {
   background-color: #f0f7ff;
-  padding: 10px 12px;
+  padding: 20px 15px;
   border-radius: 10px;
   margin-bottom: 12px;
   border: 1px solid #d6e9ff;
 }
 
 .GlassCheckout-userInfoSection h4 {
-  color: #2c3e50;
-  margin-bottom: 10px;
-  font-size: 0.95em;
-  border-left: 3px solid #3498db;
-  padding-left: 8px;
+  color: #131313;
+  margin-bottom: 20px;
+  font-size: 1.2rem;
+  font-weight: 600;
 }
 
 .GlassCheckout-userInfoSection .GlassCheckout-formRow {
@@ -331,7 +334,7 @@
 }
 
 .GlassCheckout-locationInfo {
-  background-color: #e8f4fd;
+  background-color: #fde8e8;
   padding: 8px 12px;
   border-radius: 6px;
   margin-bottom: 12px;
@@ -339,26 +342,27 @@
 
 .GlassCheckout-locationInfo p {
   margin: 3px 0;
-  color: #2c3e50;
-  font-size: 0.85em;
+  color: #16416d;
+  font-size: 1.1em;
 }
 
 .GlassCheckout-getDistanceButton {
-  width: 100%;
+  width: 300px;
+  height: 50px;
   padding: 6px;
-  background-color: #3498db;
+  background-color: #414141;
   color: white;
   border: none;
   border-radius: 6px;
-  font-size: 0.85em;
+  font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  margin-top: 20px;
+  margin-top: 33px;
   transition: background-color 0.3s ease;
 }
 
 .GlassCheckout-getDistanceButton:hover:not(:disabled) {
-  background-color: #2980b9;
+  background-color: #202020;
 }
 
 .GlassCheckout-getDistanceButton:disabled {
@@ -367,10 +371,12 @@
 }
 
 .GlassCheckout-priceInfo {
-  background-color: #fff9e6;
+  background-color: #fde8e8;
+  height: 50px;
   padding: 8px 12px;
   border-radius: 6px;
-  margin-bottom: 12px;
+  margin-bottom: 20px;
+  margin-top: 20px;
 }
 
 .GlassCheckout-priceInfo p {
@@ -380,17 +386,19 @@
 }
 
 .GlassCheckout-priceInfo p:first-child {
-  font-weight: bold;
-  color: #e67e22;
+  font-weight: 500;
+  font-size: 1.1rem;
+  color: #2f2f2f;
 }
 
 .GlassCheckout-pickupInfo, 
 .GlassCheckout-lorryInfo {
   background-color: #fff3e0;
+  height: 50px;
   padding: 8px 12px;
   border-radius: 6px;
-  margin-top: 10px;
-  font-size: 0.85em;
+  margin-top: 20px;
+  font-size: 1rem;
 }
 
 .GlassCheckout-pickupInfo p, 
@@ -401,7 +409,7 @@
 .GlassCheckout-checkboxGroup {
   display: flex;
   gap: 15px;
-  margin: 10px 0;
+  margin: 15px 10px;
   flex-wrap: wrap;
 }
 
@@ -410,59 +418,62 @@
   align-items: center;
   gap: 6px;
   cursor: pointer;
-  font-size: 0.85em;
+  font-size: 1rem;
 }
 
 .GlassCheckout-transportCostSummary {
   background-color: #f0f3f6;
-  padding: 10px 12px;
+  padding: 15px 30px;
   border-radius: 8px;
-  margin-top: 12px;
+  margin-top: 20px;
 }
 
 .GlassCheckout-transportCostSummary h3 {
-  margin-bottom: 8px;
-  color: #2c3e50;
-  font-size: 0.95em;
+  color: #1f1f1f;
+  margin-bottom: 25px;
+  font-size: 1.5rem;
+  font-weight: 700;
 }
 
 .GlassCheckout-costRow {
   display: flex;
   justify-content: space-between;
-  padding: 5px 0;
+  padding: 7px 0;
   border-bottom: 1px solid #ddd;
-  font-size: 0.85em;
+  font-size: 1.2rem;
 }
 
 .GlassCheckout-grandTotalRow {
-  font-size: 1em;
+  font-size: 1.2rem;
   font-weight: 700;
-  color: #2980b9;
+  color: #b92929;
   border-bottom: none;
   padding-top: 6px;
 }
 
 .GlassCheckout-paymentButton {
-  width: 100%;
   padding: 10px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background-color: #b90c0c;
   color: white;
   border: none;
   border-radius: 8px;
-  font-size: 0.95em;
+  font-size: 1.1rem;
   font-weight: 700;
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  margin-top: 20px;
+  margin-top: 30px;
+  display: block;
+  margin-left: auto;
 }
 
 .GlassCheckout-paymentButton:hover:not(:disabled) {
+    background-color: #9b0202;
   transform: translateY(-2px);
-  box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 5px 20px rgba(234, 102, 102, 0.4);
 }
 
 .GlassCheckout-paymentButton:disabled {
-  background: linear-gradient(135deg, #cccccc 0%, #999999 100%);
+  background-color:#b90c0c;
   cursor: not-allowed;
   transform: none;
 }
@@ -883,108 +894,4 @@
 
 .GlassCheckout-newOrderButton:hover {
   background-color: #45a049;
-}
-
-@media (max-width: 968px) {
-  .GlassCheckout-ordersTable {
-    font-size: 0.7em;
-  }
-  
-  .GlassCheckout-ordersTableElement th,
-  .GlassCheckout-ordersTableElement td {
-    padding: 6px 4px;
-  }
-  
-  .GlassCheckout-editInput {
-    width: 45px;
-  }
-}
-
-@media (max-width: 768px) {
-  .GlassCheckout-sectionTitle {
-    font-size: 1.2em;
-  }
-
-  .GlassCheckout-deliveryMethodSelection {
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .GlassCheckout-statusSteps {
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .GlassCheckout-statusStep {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .GlassCheckout-stepIcon {
-    margin: 0;
-  }
-  
-  .GlassCheckout-hero {
-    height: 20vh;
-  }
-
-  .GlassCheckout-heroTitle {
-    font-size: 1.5em;
-  }
-
-  .GlassCheckout-heroSubtitle {
-    font-size: 0.8em;
-  }
-
-  .GlassCheckout-wrapper {
-    padding: 10px;
-  }
-  
-  .GlassCheckout-ordersTableElement {
-    font-size: 0.65em;
-  }
-  
-  .GlassCheckout-editBtn, 
-  .GlassCheckout-deleteBtn, 
-  .GlassCheckout-saveBtn, 
-  .GlassCheckout-cancelBtn {
-    padding: 2px 4px;
-    font-size: 0.65em;
-  }
-
-  .GlassCheckout-formRow {
-    flex-direction: column;
-    gap: 10px;
-  }
-  
-  .GlassCheckout-formGroup {
-    min-width: 100%;
-  }
-}
-
-@media (max-width: 480px) {
-  .GlassCheckout-heroTitle {
-    font-size: 1.2em;
-  }
-  
-  .GlassCheckout-heroSubtitle {
-    font-size: 0.7em;
-  }
-  
-  .GlassCheckout-confirmationCard {
-    padding: 15px;
-    margin: 15px;
-  }
-  
-  .GlassCheckout-confirmationHeader {
-    flex-direction: column;
-    gap: 8px;
-    text-align: center;
-  }
-  
-  .GlassCheckout-checkboxGroup {
-    flex-direction: column;
-    gap: 8px;
-  }
 }

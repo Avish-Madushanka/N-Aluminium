@@ -343,7 +343,7 @@ const GlassOrderCheckout = () => {
                 <p><strong>Pickup Location:</strong> Glass House Panadura - Alubomulla</p>
                 <p><strong>Pickup Date:</strong> {pickupDate}</p>
                 <p><strong>Pickup Time:</strong> {pickupTimeSlot}</p>
-                <p className="GlassCheckout-fragileWarning">⚠️ Fragile item - Handle with care. Please bring ID for verification.</p>
+                <p className="GlassCheckout-fragileWarning">⚠️ Fragile item - Handle with care. Please bring payment receipt for verification.</p>
               </div>
             ) : (
               <div>
@@ -606,7 +606,7 @@ const GlassOrderCheckout = () => {
               </div>
             </div>
             <div className="GlassCheckout-pickupInfo">
-              <p>📋 Bring ID for verification | ⚠️ Fragile - Handle with care</p>
+              <p>📋 Bring payment receipt for verification | ⚠️ Fragile - Handle with care</p>
             </div>
           </div>
         )}
@@ -615,9 +615,9 @@ const GlassOrderCheckout = () => {
           <div className="GlassCheckout-lorrySection">
             <h3>Delivery Details</h3>
             <div className="GlassCheckout-locationInfo">
-              <p>🏭 <strong>Shipping From:</strong> Glass House Panadura - Alubomulla, Sri Lanka</p>
+              <p>🏭 <strong>Shipping From:</strong> Panadura - Alubomulla, Sri Lanka</p>
             </div>
-            
+             
             <div className="GlassCheckout-formRow">
               <div className="GlassCheckout-formGroup GlassCheckout-fullWidth">
                 <label className="GlassCheckout-formLabel">Street Address</label>
