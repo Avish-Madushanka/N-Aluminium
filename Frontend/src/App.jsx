@@ -29,7 +29,6 @@ import ContactUs from './Pages/ContactUs';
 import UnauthorizedPage from './Pages/UnauthorizedPage';
 import Login from './Components/Login/Login';
 import ItemMarkert from './Components/ItemMarkert/ItemMarkert';
-
 import ClientForm from './Components/RegistrationForm/ClientForm';
 import Calculate from './Components/Calculate/Calculate';
 import ProAddForm from './Components/Projects/ProAddForm';
@@ -37,13 +36,11 @@ import WastePickForm from './Components/WasteCollect/WastePickForm';
 import UserCalendar from './Components/WasteCollect/UserCalendar';
 import LocationMap from './Components/Maps/LocationMap';
 import CalendarDisplay from './Components/UserCalendar/CalendarDisplay';
-
 import BSHeader from './Components/BuyandSell/BSHeader';
 import ClientEmail from './Components/Profile/ClientEmail';
 import PickupReq from './Components/Profile/PickupReq';
 import CheckBuySell from './Components/Profile/CheckBuySell';
 import AdCalendar from './Components/Admin/AdMinCalendar/AdCalendar';
-
 import AdCheckReq from './Components/Admin/AdCheckReq/AdCheckReq';
 import EmailDisplay from './Components/Admin/EmailDisplay/EmailDisplay';
 import Dashboard from './Components/Admin/Dashboard/Dashboard';
@@ -73,12 +70,7 @@ import BuyandSellManage from './Components/Admin/BuyandSellManage/BuyandSellMana
 import Cookie from './Components/LegalPolicy/Cookie';
 import Terms from './Components/LegalPolicy/Terms';
 import Privacy from './Components/LegalPolicy/Privacy';
-
-console.log('=== IMPORT DEBUG ===');
-console.log('ItemsManage imported:', ItemsManage);
-console.log('AdminLayout imported:', AdminLayout);
-console.log('ProtectedRoute imported:', ProtectedRoute);
-console.log('=== END IMPORT DEBUG ===');
+import GlassOrderCheckout from './Components/ItemMarkert/GlassOrderCheckout';
 
 const parseUserInfoFromToken = (token) => {
     if (!token) {
@@ -87,7 +79,6 @@ const parseUserInfoFromToken = (token) => {
     try {
         const decoded = jwtDecode(token);
         if (!decoded || typeof decoded !== 'object' || !decoded.exp || !decoded.id || !decoded.email || !decoded.role || typeof decoded.name === 'undefined') {
-            console.error("[parseUserInfo] Invalid token structure or essential fields missing. Decoded:", decoded);
             localStorage.removeItem('token');
             localStorage.removeItem('userInfo');
             return null;
@@ -95,7 +86,6 @@ const parseUserInfoFromToken = (token) => {
 
         const currentTime = Date.now() / 1000;
         if (decoded.exp < currentTime) {
-            console.warn(`[parseUserInfo] Token expired at ${new Date(decoded.exp * 1000).toLocaleString()}.`);
             localStorage.removeItem('token');
             localStorage.removeItem('userInfo');
             return null;
@@ -109,7 +99,6 @@ const parseUserInfoFromToken = (token) => {
             ...(decoded.role === 'businessOwner' && decoded.businessName && { businessName: decoded.businessName }),
         };
     } catch (error) {
-        console.error("[parseUserInfo] Error decoding token:", error.message, "Token snippet:", token.substring(0, 20) + "...");
         localStorage.removeItem('token');
         localStorage.removeItem('userInfo');
         return null;
@@ -126,7 +115,6 @@ function App() {
     const navigateRef = useRef(null);
 
     const handleLogout = useCallback((message = "You have been logged out.") => {
-        console.log(`[App] handleLogout called. Message: "${message}"`);
         localStorage.removeItem("token");
         localStorage.removeItem("userInfo");
         setAuthState({ isLoggedIn: false, userInfo: null, isLoading: false });
@@ -134,18 +122,15 @@ function App() {
     }, []);
 
     useEffect(() => {
-        console.log("[App useEffect] Performing initial authentication check...");
         const token = localStorage.getItem('token');
         const parsedUser = parseUserInfoFromToken(token);
 
         if (parsedUser) {
-            console.log("[App useEffect] Valid session restored from token. User:", parsedUser.email);
             if (JSON.stringify(parsedUser) !== localStorage.getItem('userInfo')) {
                 localStorage.setItem('userInfo', JSON.stringify(parsedUser));
             }
             setAuthState({ isLoggedIn: true, userInfo: parsedUser, isLoading: false });
         } else {
-            console.log("[App useEffect] No valid session found, or token expired.");
             if (localStorage.getItem('token') || localStorage.getItem('userInfo')) {
                 localStorage.removeItem('token');
                 localStorage.removeItem('userInfo');
@@ -155,7 +140,6 @@ function App() {
 
         const handleStorageChange = (event) => {
              if (event.key === 'token' || event.key === 'userInfo') {
-                 console.log(`[App Storage Listener] Storage changed ('${event.key}'). Re-evaluating auth state.`);
                  const currentToken = localStorage.getItem('token');
                  const currentUserInfo = parseUserInfoFromToken(currentToken);
                  setAuthState(prevState => {
@@ -177,27 +161,22 @@ function App() {
     }, []);
 
     const handleLoginSuccess = useCallback((token, backendUserData) => {
-        console.log('[App] handleLoginSuccess callback triggered.');
         const parsedUser = parseUserInfoFromToken(token);
         if (parsedUser) {
-            console.log('%c[App] Login successful. Updating AuthState with parsed user:', 'color: green; font-weight: bold;', parsedUser);
             localStorage.setItem('token', token);
             localStorage.setItem('userInfo', JSON.stringify(parsedUser));
             setAuthState({ isLoggedIn: true, userInfo: parsedUser, isLoading: false });
             setLogoutMessage('');
         } else {
-            console.error("[App] CRITICAL ERROR: Token from successful login was invalid. Logging out.");
             handleLogout("Login failed: Invalid session data received from server. Please try again.");
         }
     }, [handleLogout]);
 
     useEffect(() => {
         const handleAuthErrorEvent = (event) => {
-            console.warn('[App] Global 401 (auth-error-401) event listener received.');
             setAuthState(currentState => {
                 if (currentState.isLoggedIn) {
                     const message = event.detail?.message || 'Your session has expired or is invalid. Please log in again.';
-                    console.log(`[App 401 Handler] User was logged in. Initiating logout with message: "${message}"`);
                     handleLogout(message);
                 }
                 return currentState.isLoggedIn ? currentState : { ...currentState, isLoading: false };
@@ -233,12 +212,20 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
     const navigate = useNavigate();
     const location = useLocation();
     const auth = useAuth();
+    const [orderItems, setOrderItems] = useState([]);
 
-    console.log('AppContentWrapper - Auth state:', { 
-        isLoggedIn: auth.isLoggedIn, 
-        role: auth.userInfo?.role,
-        pathname: location.pathname 
-    });
+    useEffect(() => {
+        const storedItems = localStorage.getItem('glassOrderItems');
+        if (storedItems) {
+            setOrderItems(JSON.parse(storedItems));
+        }
+    }, []);
+
+    const handleResetOrder = () => {
+        localStorage.removeItem('glassOrderItems');
+        setOrderItems([]);
+        navigate('/ItemMarkert');
+    };
 
     useEffect(() => {
         if (navigateRef) navigateRef.current = navigate;
@@ -254,12 +241,10 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
                 case 'client': redirectPath = '/'; break;
                 case 'businessOwner': redirectPath = '/BOwnerHome'; break;
                 default:
-                    console.warn("[AppContentWrapper] Unknown user role for redirect:", auth.userInfo.role);
                     redirectPath = '/';
             }
             const fromPath = location.state?.from?.pathname;
             const destination = (fromPath && fromPath !== '/login' && fromPath !== '/') ? fromPath : redirectPath;
-            console.log(`%c[AppContentWrapper] User logged in (${auth.userInfo.email}, ${auth.userInfo.role}). Navigating from ${currentPath} to: ${destination}`, 'color: blue; font-weight: bold;');
             navigate(destination, { replace: true, state: {} });
         }
     }, [auth.isLoggedIn, auth.userInfo, navigate, location]);
@@ -280,7 +265,6 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
     useEffect(() => {
         const currentPath = location.pathname.toLowerCase();
         if (logoutMessage && currentPath !== '/login' && !auth.isLoggedIn) {
-            console.log(`[AppContentWrapper] Logout message ("${logoutMessage}") present, redirecting to /login.`);
             navigate(`/login`, { replace: true, state: { logoutMessage: logoutMessage } });
         }
     }, [logoutMessage, location.pathname, navigate, auth.isLoggedIn]);
@@ -339,13 +323,9 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
                     <Route path="/ItemsAddForm" element={<ItemAddForm /> } />
                     <Route path="/AluTRegForm" element={<AluTRegForm /> } />
                     <Route path="/SaleForm" element={<SaleForm /> } />
-
-                    
                     <Route path="/Cookie" element={<Cookie />} />
                     <Route path="/Terms" element={<Terms />} />
                     <Route path="/Privacy" element={<Privacy />} />
-
-                    
                     <Route path="/test-items" element={<ItemsManage />} />
 
                     <Route path="/Login" element={ auth.isLoggedIn && auth.userInfo ? (<Navigate to={ (auth.userInfo.role === 'admin' && '/Admin/Dashboard') || (auth.userInfo.role === 'client' && '/') || (auth.userInfo.role === 'businessOwner' && '/BOwnerHome') || '/' } replace /> ) : ( <Login /> )} />
@@ -357,6 +337,7 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
                         <Route path="/ClientEmail" element={<ClientEmail />} />
                         <Route path="/WastePickForm" element={<WastePickForm />} />
                         <Route path="/GlassOrder" element={<GlassOrder /> } />
+                        <Route path="/GlassOrderCheckout" element={<GlassOrderCheckout selectedItems={orderItems} onReset={handleResetOrder} /> } />
                         <Route path="/ItemsCartManage" element={<ItemsCartManage /> } />
                     </Route>
 
@@ -377,6 +358,7 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
                            <Route path="/Admin/AdminAlumni" element={<AdminAlumni /> } />
                            <Route path="/Admin/VideoManage" element={<VideoManage /> } />
                            <Route path="/Admin/ProManage" element={<ProManage /> } />
+                           <Route path="/Admin/ItemsAddForm" element={<ItemAddForm /> } />
                            <Route path="/Admin/BuyandSellManage" element={<BuyandSellManage /> } />
                         </Route>
                      </Route>
