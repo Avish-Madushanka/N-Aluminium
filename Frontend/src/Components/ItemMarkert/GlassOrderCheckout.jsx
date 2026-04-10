@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import "./GlassOrderCheckout.css";
+
+const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
 const GlassOrderCheckout = () => {
   const navigate = useNavigate();
@@ -38,8 +40,17 @@ const GlassOrderCheckout = () => {
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState("");
   const [isCalculatingDistance, setIsCalculatingDistance] = useState(false);
+  const [showLocationPicker, setShowLocationPicker] = useState(false);
+  const [mapSearchTerm, setMapSearchTerm] = useState("");
+  const [selectedLocation, setSelectedLocation] = useState(null);
+  const [mapLoaded, setMapLoaded] = useState(false);
+  const [manualDistance, setManualDistance] = useState("");
+  
+  const mapRef = useRef(null);
+  const markerRef = useRef(null);
+  const companyMarkerRef = useRef(null);
 
-  const COMPANY_ADDRESS = "Alubomulla, Panadura, Sri Lanka";
+  const COMPANY_COORDS = { lat: 6.6578, lng: 79.9027 };
 
   useEffect(() => {
     const storedItems = JSON.parse(localStorage.getItem('glassOrderItems') || '[]');
@@ -49,17 +60,48 @@ const GlassOrderCheckout = () => {
     setSelectedItems(storedItems);
   }, [navigate]);
 
+  useEffect(() => {
+    if (!GOOGLE_MAPS_API_KEY) {
+      console.error("Google Maps API key is missing");
+      return;
+    }
+
+    if (document.querySelector('script[src*="maps.googleapis.com/maps/api/js"]')) {
+      if (window.google && window.google.maps) {
+        setMapLoaded(true);
+      }
+      return;
+    }
+
+    const script = document.createElement('script');
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&libraries=places`;
+    script.async = true;
+    script.defer = true;
+    script.onload = () => {
+      setMapLoaded(true);
+    };
+    document.head.appendChild(script);
+
+    return () => {
+      const scriptElement = document.querySelector('script[src*="maps.googleapis.com/maps/api/js"]');
+      if (scriptElement) {
+        scriptElement.remove();
+      }
+    };
+  }, []);
+
   const totalGlassPrice = selectedItems.reduce((sum, item) => sum + item.totalPrice, 0);
   const totalWeight = selectedItems.reduce((sum, item) => sum + item.weight, 0);
   
   const calculateDeliveryPrice = () => {
-    if (!deliveryMethod || deliveryMethod !== "delivery" || !distance) return 0;
-    const kmDistance = parseFloat(distance) || 0;
+    const currentDistance = manualDistance ? parseFloat(manualDistance) : parseFloat(distance);
+    if (!deliveryMethod || deliveryMethod !== "delivery" || !currentDistance || isNaN(currentDistance)) return 0;
+    const kmDistance = currentDistance || 0;
     
-    let totalCost = 5000;
+    let totalCost = 6000;
     if (kmDistance > 15) {
       const extraKm = kmDistance - 15;
-      totalCost += extraKm * 50;
+      totalCost += extraKm * 150;
     }
     
     if (urgentDelivery) totalCost += totalCost * 0.25;
@@ -69,6 +111,7 @@ const GlassOrderCheckout = () => {
   const transportCost = deliveryMethod === "pickup" ? 0 : calculateDeliveryPrice();
   const insuranceCost = insurance && deliveryMethod === "delivery" ? totalGlassPrice * 0.02 : 0;
   const grandTotal = totalGlassPrice + transportCost + insuranceCost;
+  const currentDistanceValue = manualDistance || distance;
 
   const handleDeleteItem = (id) => {
     const updatedItems = selectedItems.filter(item => item.id !== id);
@@ -146,61 +189,223 @@ const GlassOrderCheckout = () => {
     return true;
   };
 
-  const calculateDistanceFromMap = () => {
-    if (!deliveryAddress.street || !deliveryAddress.city) {
-      alert("Please enter your full address first");
-      return;
-    }
-    
+  const calculateHaversineDistance = (lat1, lon1, lat2, lon2) => {
+    const R = 6371;
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a = 
+      Math.sin(dLat/2) * Math.sin(dLat/2) +
+      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
+      Math.sin(dLon/2) * Math.sin(dLon/2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    return R * c;
+  };
+
+  const searchLocation = () => {
+    if (!mapSearchTerm.trim()) return;
+
     setIsCalculatingDistance(true);
     
-    const destinationAddress = `${deliveryAddress.street}, ${deliveryAddress.city}, ${deliveryAddress.postalCode}, Sri Lanka`;
-    const originAddress = COMPANY_ADDRESS;
-    
-    const geocodeUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(originAddress)}&key=YOUR_GOOGLE_MAPS_API_KEY`;
+    const geocodeUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(mapSearchTerm + ", Sri Lanka")}&key=${GOOGLE_MAPS_API_KEY}`;
     
     fetch(geocodeUrl)
       .then(response => response.json())
-      .then(originData => {
-        if (originData.results && originData.results[0]) {
-          const originCoords = originData.results[0].geometry.location;
-          
-          const destGeocodeUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(destinationAddress)}&key=YOUR_GOOGLE_MAPS_API_KEY`;
-          
-          return fetch(destGeocodeUrl)
-            .then(response => response.json())
-            .then(destData => {
-              if (destData.results && destData.results[0]) {
-                const destCoords = destData.results[0].geometry.location;
-                
-                const distanceMatrixUrl = `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${originCoords.lat},${originCoords.lng}&destinations=${destCoords.lat},${destCoords.lng}&key=YOUR_GOOGLE_MAPS_API_KEY`;
-                
-                return fetch(distanceMatrixUrl);
-              } else {
-                throw new Error("Could not find destination address");
-              }
-            });
-        } else {
-          throw new Error("Could not find company location");
-        }
-      })
-      .then(response => response.json())
       .then(data => {
-        if (data.rows && data.rows[0] && data.rows[0].elements[0]) {
-          const distanceInKm = data.rows[0].elements[0].distance.value / 1000;
-          setDistance(distanceInKm.toFixed(1));
-          alert(`Distance calculated: ${distanceInKm.toFixed(1)} km`);
-        } else {
-          alert("Could not calculate distance. Please check your address.");
+        if (data.results && data.results.length > 0) {
+          const result = data.results[0];
+          const location = result.geometry.location;
+          
+          if (mapRef.current && window.google) {
+            mapRef.current.setCenter(location);
+            mapRef.current.setZoom(15);
+            
+            if (markerRef.current) {
+              markerRef.current.setPosition(location);
+            } else {
+              markerRef.current = new window.google.maps.Marker({
+                position: location,
+                map: mapRef.current,
+                animation: window.google.maps.Animation.DROP,
+                title: "Selected Location"
+              });
+            }
+            
+            calculateDistanceFromCoords(location, result.formatted_address);
+          }
         }
       })
       .catch(error => {
-        console.error("Error calculating distance:", error);
-        alert("Error calculating distance. Please try again or enter distance manually.");
+        console.error("Error searching location:", error);
       })
       .finally(() => {
         setIsCalculatingDistance(false);
       });
+  };
+
+  const calculateDistanceFromCoords = (destinationCoords, address) => {
+    setIsCalculatingDistance(true);
+    
+    const distanceMatrixUrl = `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${COMPANY_COORDS.lat},${COMPANY_COORDS.lng}&destinations=${destinationCoords.lat},${destinationCoords.lng}&key=${GOOGLE_MAPS_API_KEY}`;
+    
+    fetch(distanceMatrixUrl)
+      .then(response => response.json())
+      .then(data => {
+        if (data.rows && data.rows[0] && data.rows[0].elements[0]) {
+          const element = data.rows[0].elements[0];
+          if (element.status === "OK") {
+            const distanceInKm = element.distance.value / 1000;
+            const duration = element.duration.text;
+            setDistance(distanceInKm.toFixed(1));
+            setManualDistance("");
+            
+            setSelectedLocation({
+              address: address,
+              coords: destinationCoords,
+              distance: distanceInKm.toFixed(1),
+              duration: duration
+            });
+            
+            setDeliveryAddress({
+              street: address.split(',')[0] || "",
+              city: address.split(',')[1] || "",
+              postalCode: address.split(',')[2] || ""
+            });
+            return;
+          }
+        }
+        throw new Error("Distance Matrix API failed");
+      })
+      .catch(error => {
+        console.error("Distance Matrix API error:", error);
+        
+        const haversineDistance = calculateHaversineDistance(
+          COMPANY_COORDS.lat, COMPANY_COORDS.lng,
+          destinationCoords.lat, destinationCoords.lng
+        );
+        
+        const estimatedDistance = haversineDistance.toFixed(1);
+        setDistance(estimatedDistance);
+        setManualDistance("");
+        
+        setSelectedLocation({
+          address: address,
+          coords: destinationCoords,
+          distance: estimatedDistance,
+          duration: "Estimated"
+        });
+        
+        setDeliveryAddress({
+          street: address.split(',')[0] || "",
+          city: address.split(',')[1] || "",
+          postalCode: address.split(',')[2] || ""
+        });
+      })
+      .finally(() => {
+        setIsCalculatingDistance(false);
+      });
+  };
+
+  const handleMapClick = (event) => {
+    const clickedLocation = event.latLng;
+    const lat = clickedLocation.lat();
+    const lng = clickedLocation.lng();
+    
+    if (markerRef.current) {
+      markerRef.current.setPosition(clickedLocation);
+    } else if (window.google && mapRef.current) {
+      markerRef.current = new window.google.maps.Marker({
+        position: clickedLocation,
+        map: mapRef.current,
+        animation: window.google.maps.Animation.DROP,
+        title: "Selected Location"
+      });
+    }
+    
+    const geocodeUrl = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${GOOGLE_MAPS_API_KEY}`;
+    
+    fetch(geocodeUrl)
+      .then(response => response.json())
+      .then(data => {
+        if (data.results && data.results[0]) {
+          const address = data.results[0].formatted_address;
+          calculateDistanceFromCoords({ lat, lng }, address);
+        } else {
+          calculateDistanceFromCoords({ lat, lng }, `${lat}, ${lng}`);
+        }
+      })
+      .catch(() => {
+        calculateDistanceFromCoords({ lat, lng }, `${lat}, ${lng}`);
+      });
+  };
+
+  const initMap = () => {
+    if (!window.google || !window.google.maps || !showLocationPicker) return;
+    
+    const mapElement = document.getElementById("location-picker-map");
+    if (!mapElement) return;
+    
+    const map = new window.google.maps.Map(mapElement, {
+      center: COMPANY_COORDS,
+      zoom: 12,
+      styles: [
+        {
+          featureType: "poi",
+          elementType: "labels",
+          stylers: [{ visibility: "off" }]
+        }
+      ]
+    });
+    
+    map.addListener("click", handleMapClick);
+    mapRef.current = map;
+    
+    companyMarkerRef.current = new window.google.maps.Marker({
+      position: COMPANY_COORDS,
+      map: map,
+      icon: {
+        url: "https://maps.google.com/mapfiles/ms/icons/blue-dot.png",
+        scaledSize: new window.google.maps.Size(40, 40)
+      },
+      title: "Our Warehouse - Panadura"
+    });
+    
+    const infoWindow = new window.google.maps.InfoWindow({
+      content: '<div style="padding: 5px;"><strong>Glass House Panadura</strong><br/>Our Warehouse Location</div>'
+    });
+    
+    companyMarkerRef.current.addListener("click", () => {
+      infoWindow.open(map, companyMarkerRef.current);
+    });
+  };
+
+  useEffect(() => {
+    if (showLocationPicker && mapLoaded && window.google && !mapRef.current) {
+      setTimeout(() => {
+        initMap();
+      }, 500);
+    }
+    
+    return () => {
+      if (showLocationPicker && mapRef.current) {
+        mapRef.current = null;
+        markerRef.current = null;
+        companyMarkerRef.current = null;
+      }
+    };
+  }, [showLocationPicker, mapLoaded]);
+
+  const handleManualDistanceChange = (e) => {
+    const value = e.target.value;
+    setManualDistance(value);
+    if (value && !isNaN(parseFloat(value))) {
+      setDistance("");
+      setSelectedLocation({
+        address: "Manually entered location",
+        coords: null,
+        distance: value,
+        duration: "Manual entry"
+      });
+    }
   };
 
   const handleProceedToPayment = () => {
@@ -218,12 +423,12 @@ const GlassOrderCheckout = () => {
       }
       setShowPaymentModal(true);
     } else if (deliveryMethod === "delivery") {
-      if (!deliveryAddress.street || !deliveryAddress.city) {
-        alert("Please complete delivery address");
+      if (!selectedLocation && !manualDistance) {
+        alert("Please select a delivery location or enter distance manually");
         return;
       }
-      if (!distance || distance <= 0) {
-        alert("Please calculate distance first using 'Get Distance' button");
+      if (!currentDistanceValue || parseFloat(currentDistanceValue) <= 0) {
+        alert("Please enter a valid distance");
         return;
       }
       if (!deliveryDate) {
@@ -269,6 +474,7 @@ const GlassOrderCheckout = () => {
     setUserInfo({ fullName: "", email: "", phone: "" });
     setDeliveryAddress({ street: "", city: "", postalCode: "" });
     setDistance("");
+    setManualDistance("");
     setDeliveryDate("");
     setDeliveryTimeSlot("");
     setUrgentDelivery(false);
@@ -278,6 +484,7 @@ const GlassOrderCheckout = () => {
     setDriverDetails(null);
     setShowPaymentModal(false);
     setPaymentMethod("");
+    setSelectedLocation(null);
     navigate('/GlassOrder');
   };
 
@@ -347,8 +554,8 @@ const GlassOrderCheckout = () => {
               </div>
             ) : (
               <div>
-                <p><strong>Delivery Address:</strong> {deliveryAddress.street}, {deliveryAddress.city}</p>
-                <p><strong>Distance:</strong> {distance} km</p>
+                <p><strong>Delivery Address:</strong> {selectedLocation?.address || "Manually entered location"}</p>
+                <p><strong>Distance:</strong> {currentDistanceValue} km</p>
                 <p><strong>Delivery Date:</strong> {deliveryDate}</p>
                 <p><strong>Delivery Time:</strong> {deliveryTimeSlot}</p>
                 {urgentDelivery && <p><strong>Urgent Delivery:</strong> Yes (+25% fee)</p>}
@@ -615,63 +822,28 @@ const GlassOrderCheckout = () => {
           <div className="GlassCheckout-lorrySection">
             <h3>Delivery Details</h3>
             <div className="GlassCheckout-locationInfo">
-              <p>🏭 <strong>Shipping From:</strong> Panadura - Alubomulla, Sri Lanka</p>
-            </div>
-             
-            <div className="GlassCheckout-formRow">
-              <div className="GlassCheckout-formGroup GlassCheckout-fullWidth">
-                <label className="GlassCheckout-formLabel">Street Address</label>
-                <input
-                  type="text"
-                  className="GlassCheckout-formInput"
-                  value={deliveryAddress.street}
-                  onChange={(e) => setDeliveryAddress({ ...deliveryAddress, street: e.target.value })}
-                  placeholder="House No, Street Name"
-                />
-              </div>
+              <p>🏭 <strong>Shipping From:</strong> Glass House Panadura - Alubomulla, Sri Lanka</p>
             </div>
             
             <div className="GlassCheckout-formRow">
               <div className="GlassCheckout-formGroup">
-                <label className="GlassCheckout-formLabel">City</label>
-                <input
-                  type="text"
-                  className="GlassCheckout-formInput"
-                  value={deliveryAddress.city}
-                  onChange={(e) => setDeliveryAddress({ ...deliveryAddress, city: e.target.value })}
-                  placeholder="City"
-                />
-              </div>
-              <div className="GlassCheckout-formGroup">
-                <label className="GlassCheckout-formLabel">Postal Code</label>
-                <input
-                  type="text"
-                  className="GlassCheckout-formInput"
-                  value={deliveryAddress.postalCode}
-                  onChange={(e) => setDeliveryAddress({ ...deliveryAddress, postalCode: e.target.value })}
-                  placeholder="Postal Code"
-                />
-              </div>
-              <div className="GlassCheckout-formGroup">
+                <label className="GlassCheckout-formLabel">Pick Location</label>
                 <button 
-                  className="GlassCheckout-getDistanceButton"
-                  onClick={calculateDistanceFromMap}
-                  disabled={isCalculatingDistance}
+                  className="GlassCheckout-pickLocationButton"
+                  onClick={() => setShowLocationPicker(true)}
                 >
-                  {isCalculatingDistance ? "Calculating..." : "📍 Get Distance"}
+                  🗺️ Pick on Map
                 </button>
               </div>
-            </div>
-            
-            <div className="GlassCheckout-formRow">
               <div className="GlassCheckout-formGroup">
                 <label className="GlassCheckout-formLabel">Distance (km)</label>
                 <input
                   type="number"
+                  step="0.1"
                   className="GlassCheckout-formInput"
-                  value={distance}
-                  readOnly
-                  placeholder="Auto calculated"
+                  value={manualDistance}
+                  onChange={handleManualDistanceChange}
+                  placeholder="Enter distance"
                 />
               </div>
               <div className="GlassCheckout-formGroup">
@@ -700,10 +872,17 @@ const GlassOrderCheckout = () => {
               </div>
             </div>
 
+            {selectedLocation && (
+              <div className="GlassCheckout-selectedLocationInfo">
+                <p><strong>Selected:</strong> {selectedLocation.address.substring(0, 100)}</p>
+                <p><strong>Distance:</strong> {selectedLocation.distance} km {selectedLocation.duration !== "Manual entry" && `| Time: ${selectedLocation.duration}`}</p>
+              </div>
+            )}
+
             <div className="GlassCheckout-priceInfo">
-              <p>🚚 Base: Rs 5,000 (first 15km) | Extra: Rs 50/km after 15km</p>
-              {distance > 15 && (
-                <p>Extra km: {(distance - 15).toFixed(1)} km × Rs 50 = Rs {((distance - 15) * 50).toFixed(2)}</p>
+              <p>🚚 Base: Rs 6,000 (first 15km) | Extra: Rs 150/km after 15km</p>
+              {currentDistanceValue && parseFloat(currentDistanceValue) > 15 && (
+                <p>Extra: {(parseFloat(currentDistanceValue) - 15).toFixed(1)} km × Rs 150 = Rs {((parseFloat(currentDistanceValue) - 15) * 150).toFixed(2)}</p>
               )}
             </div>
 
@@ -764,6 +943,58 @@ const GlassOrderCheckout = () => {
           Proceed to Payment
         </button>
       </div>
+
+      {showLocationPicker && (
+        <div className="GlassCheckout-modalOverlay">
+          <div className="GlassCheckout-modal GlassCheckout-mapModal">
+            <div className="GlassCheckout-modalHeader">
+              <h2>Select Delivery Location</h2>
+              <button className="GlassCheckout-modalClose" onClick={() => setShowLocationPicker(false)}>×</button>
+            </div>
+            <div className="GlassCheckout-modalBody">
+              <div className="GlassCheckout-searchContainer">
+                <div className="GlassCheckout-searchWrapper">
+                  <input
+                    type="text"
+                    placeholder="Search location..."
+                    className="GlassCheckout-searchInput"
+                    value={mapSearchTerm}
+                    onChange={(e) => setMapSearchTerm(e.target.value)}
+                    onKeyPress={(e) => e.key === 'Enter' && searchLocation()}
+                  />
+                  <button 
+                    className="GlassCheckout-searchButton"
+                    onClick={searchLocation}
+                    disabled={isCalculatingDistance}
+                  >
+                    Search
+                  </button>
+                </div>
+              </div>
+
+              <div className="GlassCheckout-mapInstructions">
+                <p>💡 Click on map to select delivery location. Blue marker is our warehouse.</p>
+              </div>
+              
+              {!mapLoaded ? (
+                <div className="GlassCheckout-mapLoading">
+                  <p>Loading map...</p>
+                </div>
+              ) : (
+                <div 
+                  id="location-picker-map" 
+                  className="GlassCheckout-mapContainer"
+                ></div>
+              )}
+            </div>
+            <div className="GlassCheckout-modalFooter">
+              <button className="GlassCheckout-modalCancel" onClick={() => setShowLocationPicker(false)}>
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {showPaymentModal && (
         <div className="GlassCheckout-modalOverlay">
