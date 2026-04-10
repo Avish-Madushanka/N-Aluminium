@@ -1,5 +1,5 @@
 .GlassCheckout-wrapper {
-  max-width: 1200px;
+  max-width: 1500px;
   margin: 0 auto;
   padding: 20px;
 }
@@ -9,7 +9,7 @@
 }
 
 .GlassCheckout-backButton {
-  background-color: #6c757d;
+  background-color: #494949;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -21,23 +21,29 @@
 }
 
 .GlassCheckout-backButton:hover {
-  background-color: #5a6268;
+  background-color: #2b2b2b;
   transform: translateX(-2px);
 }
 
-.GlassCheckout-orderSummary {
-  background-color: white;
+.GlassCheckout-ordersContainer {
+  background: white;
+  padding: 20px;
+  box-shadow: 0 8px 20px #74747414;
+  margin-bottom: 50px;
+  overflow-x: auto;
+}
+
+.GlassCheckout-deliveryContainer {
+  background: white;
   border-radius: 15px;
-  padding: 30px;
-  max-width: 1000px;
-  margin: 0 auto;
-  border-left: 5px solid #3498db;
+  padding: 20px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
 }
 
 .GlassCheckout-sectionTitle {
   font-size: 1.8em;
-  color: #34495e;
+  color: #12122e;
+  font-family: 'Merriweather', serif;
   margin-bottom: 20px;
   border-bottom: 2px solid #ecf0f1;
   padding-bottom: 10px;
@@ -45,74 +51,151 @@
 }
 
 .GlassCheckout-transportTitle {
-  margin-top: 30px;
   border-bottom-color: #f39c12;
 }
 
-.GlassCheckout-itemList {
-  list-style: none;
-  padding: 0;
-  margin-bottom: 25px;
+.GlassCheckout-ordersTable {
+  width: 100%;
+  overflow-x: auto;
 }
 
-.GlassCheckout-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 0;
-  border-bottom: 1px dashed #ecf0f1;
+.GlassCheckout-ordersTableElement {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85em;
 }
 
-.GlassCheckout-item:last-child {
-  border-bottom: none;
+.GlassCheckout-ordersTableElement th,
+.GlassCheckout-ordersTableElement td {
+  border: 1px solid #ecf0f1;
+  padding: 12px 8px;
+  text-align: center;
+  vertical-align: middle;
+  background-color: #fffafa;
 }
 
-.GlassCheckout-itemInfo {
-  flex: 1;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 8px;
-}
-
-.GlassCheckout-itemName {
+.GlassCheckout-ordersTableElement th {
+  background-color: #292929;
+  color: white;
   font-weight: 600;
-  min-width: 120px;
-  color: #555;
+  font-size: 1em;
 }
 
-.GlassCheckout-itemDetails {
-  color: #7f8c8d;
-  font-size: 0.9em;
-  flex: 1;
+.GlassCheckout-ordersTableElement tbody tr:hover {
+  background-color: #f8f9fa;
 }
 
-.GlassCheckout-itemPrice {
+.GlassCheckout-totalPriceCell {
+  font-weight: 700;
+  color: #cf1515;
+}
+
+.GlassCheckout-editInput {
+  padding: 5px;
+  border-radius: 4px;
+  border: 1px solid #dcdcdc;
+  text-align: center;
+  font-size: 0.85em;
+}
+
+.GlassCheckout-editInput:focus {
+  outline: none;
+  border-color: #000000;
+}
+
+.GlassCheckout-editBtn {
+  background: #313131;
+  color: white;
+  border: none;
+  padding: 5px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85em;
+  margin: 0 2px;
+  transition: background 0.3s ease;
+}
+
+.GlassCheckout-editBtn:hover {
+  background: #000000;
+}
+
+.GlassCheckout-deleteBtn {
+  background: #ff3e28;
+  color: white;
+  border: none;
+  padding: 5px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85em;
+  margin: 0 2px;
+  transition: background 0.3s ease;
+}
+
+.GlassCheckout-deleteBtn:hover {
+  background: #c0392b;
+}
+
+.GlassCheckout-saveBtn {
+  width: 80px;
+  background: #0a833c;
+  color: white;
+  border: none;
+  padding: 5px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85em;
+  margin: 0 2px;
+  transition: background 0.3s ease;
+}
+
+.GlassCheckout-saveBtn:hover {
+  background: #00b14a;
+}
+
+.GlassCheckout-cancelBtn {
+  background: #313131;
+  width: 80px;
+  color: white;
+  border: none;
+  padding: 5px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85em;
+  margin: 0 2px;
+  transition: background 0.3s ease;
+}
+
+.GlassCheckout-cancelBtn:hover {
+  background: #525252;
+}
+
+.GlassCheckout-tableFooter {
+  background-color: #f8f9fa;
   font-weight: 600;
-  color: #e67e22;
-  min-width: 100px;
+}
+
+.GlassCheckout-footerLabel {
   text-align: right;
-}
-
-.GlassCheckout-totalGlassPrice {
-  text-align: right;
-  font-size: 1.2em;
-  font-weight: 600;
-  margin-top: 12px;
   color: #34495e;
 }
 
-.GlassCheckout-weightInfo {
-  text-align: right;
-  font-size: 1em;
-  color: #7f8c8d;
-  margin-top: 5px;
+.GlassCheckout-footerValue {
+  text-align: center;
+  color: #cf0000;
+  font-size: 1.1em;
 }
 
-.GlassCheckout-weightValue {
-  font-weight: 600;
-  color: #e67e22;
-}
+
+
+
+
+
+/*----------------Delivery--------------- */
+
+
+
+
+
 
 .GlassCheckout-deliveryMethodSelection {
   display: flex;
@@ -514,23 +597,24 @@
   background-color: #45a049;
 }
 
-@media (max-width: 768px) {
-  .GlassCheckout-orderSummary {
-    margin: 30px 15px;
-    padding: 20px;
+@media (max-width: 968px) {
+  .GlassCheckout-ordersTable {
+    font-size: 0.75em;
   }
+  
+  .GlassCheckout-ordersTableElement th,
+  .GlassCheckout-ordersTableElement td {
+    padding: 8px 4px;
+  }
+  
+  .GlassCheckout-editInput {
+    width: 50px;
+  }
+}
 
+@media (max-width: 768px) {
   .GlassCheckout-sectionTitle {
     font-size: 1.5em;
-  }
-
-  .GlassCheckout-itemInfo {
-    flex-direction: column;
-    gap: 5px;
-  }
-
-  .GlassCheckout-itemPrice {
-    text-align: left;
   }
 
   .GlassCheckout-deliveryMethodSelection {
@@ -567,5 +651,43 @@
 
   .GlassCheckout-wrapper {
     padding: 10px;
+  }
+  
+  .GlassCheckout-ordersTableElement {
+    font-size: 0.7em;
+  }
+  
+  .GlassCheckout-editBtn, 
+  .GlassCheckout-deleteBtn, 
+  .GlassCheckout-saveBtn, 
+  .GlassCheckout-cancelBtn {
+    padding: 3px 5px;
+    font-size: 0.7em;
+  }
+}
+
+@media (max-width: 480px) {
+  .GlassCheckout-heroTitle {
+    font-size: 1.4em;
+  }
+  
+  .GlassCheckout-heroSubtitle {
+    font-size: 0.8em;
+  }
+  
+  .GlassCheckout-confirmationCard {
+    padding: 20px;
+    margin: 20px;
+  }
+  
+  .GlassCheckout-confirmationHeader {
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+  }
+  
+  .GlassCheckout-checkboxGroup {
+    flex-direction: column;
+    gap: 10px;
   }
 }

@@ -19,6 +19,12 @@ const pickupLocations = [
 const GlassOrderCheckout = () => {
   const navigate = useNavigate();
   const [selectedItems, setSelectedItems] = useState([]);
+  const [editingItem, setEditingItem] = useState(null);
+  const [editFormData, setEditFormData] = useState({
+    widthFt: "",
+    heightFt: "",
+    quantity: ""
+  });
   const [deliveryMethod, setDeliveryMethod] = useState(null);
   const [selectedPickupLocation, setSelectedPickupLocation] = useState(null);
   const [pickupDate, setPickupDate] = useState("");
@@ -76,6 +82,56 @@ const GlassOrderCheckout = () => {
   const transportCost = deliveryMethod === "pickup" ? 0 : calculateLorryPrice();
   const insuranceCost = insurance && deliveryMethod === "lorry" ? totalGlassPrice * 0.02 : 0;
   const grandTotal = totalGlassPrice + transportCost + insuranceCost;
+
+  const handleDeleteItem = (id) => {
+    const updatedItems = selectedItems.filter(item => item.id !== id);
+    setSelectedItems(updatedItems);
+    localStorage.setItem('glassOrderItems', JSON.stringify(updatedItems));
+    if (updatedItems.length === 0) {
+      navigate('/GlassOrder');
+    }
+  };
+
+  const handleEditItem = (item) => {
+    setEditingItem(item);
+    setEditFormData({
+      widthFt: item.widthFt,
+      heightFt: item.heightFt,
+      quantity: item.quantity
+    });
+  };
+
+  const handleUpdateItem = () => {
+    if (!editFormData.widthFt || !editFormData.heightFt || !editFormData.quantity) return;
+    
+    const areaSqFt = parseFloat(editFormData.widthFt) * parseFloat(editFormData.heightFt);
+    const calculatedPrice = editingItem.unitPrice * areaSqFt * parseInt(editFormData.quantity);
+    const weight = (areaSqFt * parseInt(editFormData.quantity) * 2.5) / 10.764;
+    
+    const updatedItem = {
+      ...editingItem,
+      widthFt: parseFloat(editFormData.widthFt),
+      heightFt: parseFloat(editFormData.heightFt),
+      quantity: parseInt(editFormData.quantity),
+      areaSqFt: areaSqFt,
+      weight: weight,
+      totalPrice: calculatedPrice
+    };
+    
+    const updatedItems = selectedItems.map(item => 
+      item.id === editingItem.id ? updatedItem : item
+    );
+    
+    setSelectedItems(updatedItems);
+    localStorage.setItem('glassOrderItems', JSON.stringify(updatedItems));
+    setEditingItem(null);
+    setEditFormData({ widthFt: "", heightFt: "", quantity: "" });
+  };
+
+  const handleCancelEdit = () => {
+    setEditingItem(null);
+    setEditFormData({ widthFt: "", heightFt: "", quantity: "" });
+  };
 
   const handleConfirmOrder = () => {
     if (deliveryMethod === "pickup" && (!selectedPickupLocation || !pickupDate || !pickupTimeSlot)) {
@@ -230,29 +286,108 @@ const GlassOrderCheckout = () => {
         </button>
       </div>
 
-      <div className="GlassCheckout-orderSummary">
-        <h2 className="GlassCheckout-sectionTitle">Your Order</h2>
-        <ul className="GlassCheckout-itemList">
-          {selectedItems.map((item) => (
-            <li key={item.id} className="GlassCheckout-item">
-              <div className="GlassCheckout-itemInfo">
-                <span className="GlassCheckout-itemName">{item.glassType}</span>
-                <span className="GlassCheckout-itemDetails">
-                  {item.size} / {item.quality} | {item.widthFt}'x{item.heightFt}' | Qty: {item.quantity} | Area:{" "}
-                  {item.areaSqFt.toFixed(2)}ft²
-                </span>
-                <span className="GlassCheckout-itemPrice">Rs {item.totalPrice.toFixed(2)}</span>
-              </div>
-            </li>
-          ))}
-        </ul>
-        <div className="GlassCheckout-totalGlassPrice">
-          Total Glass Price: <span className="GlassCheckout-priceValue">Rs {totalGlassPrice.toFixed(2)}</span>
+      <div className="GlassCheckout-ordersContainer">
+        <h2 className="GlassCheckout-sectionTitle">Your Glass Orders ({selectedItems.length})</h2>
+        <div className="GlassCheckout-ordersTable">
+          <table className="GlassCheckout-ordersTableElement">
+            <thead>
+              <tr>
+                <th>Glass Type</th>
+                <th>Quality</th>
+                <th>Size</th>
+                <th>Dimensions (ft)</th>
+                <th>Area (ft²)</th>
+                <th>Qty</th>
+                <th>Weight (kg)</th>
+                <th>Unit Price</th>
+                <th>Total (Rs)</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {selectedItems.map((item) => (
+                <tr key={item.id}>
+                  {editingItem && editingItem.id === item.id ? (
+                    <>
+                      <td>{item.glassType}</td>
+                      <td>{item.quality}</td>
+                      <td>{item.size}</td>
+                      <td>
+                        <input
+                          type="number"
+                          step="0.1"
+                          className="GlassCheckout-editInput"
+                          value={editFormData.widthFt}
+                          onChange={(e) => setEditFormData({...editFormData, widthFt: e.target.value})}
+                          placeholder="Width"
+                          style={{width: "60px", marginRight: "5px"}}
+                        />
+                        x
+                        <input
+                          type="number"
+                          step="0.1"
+                          className="GlassCheckout-editInput"
+                          value={editFormData.heightFt}
+                          onChange={(e) => setEditFormData({...editFormData, heightFt: e.target.value})}
+                          placeholder="Height"
+                          style={{width: "60px", marginLeft: "5px"}}
+                        />
+                      </td>
+                      <td>{item.areaSqFt.toFixed(2)}</td>
+                      <td>
+                        <input
+                          type="number"
+                          className="GlassCheckout-editInput"
+                          value={editFormData.quantity}
+                          onChange={(e) => setEditFormData({...editFormData, quantity: e.target.value})}
+                          style={{width: "60px"}}
+                        />
+                      </td>
+                      <td>{item.weight.toFixed(1)}</td>
+                      <td>Rs {item.unitPrice.toFixed(2)}</td>
+                      <td>
+                        <button className="GlassCheckout-saveBtn" onClick={handleUpdateItem}>Save</button>
+                        <button className="GlassCheckout-cancelBtn" onClick={handleCancelEdit}>Cancel</button>
+                      </td>
+                      <td></td>
+                    </>
+                  ) : (
+                    <>
+                      <td><strong>{item.glassType}</strong></td>
+                      <td>{item.quality}</td>
+                      <td>{item.size}</td>
+                      <td>{item.widthFt}' x {item.heightFt}'</td>
+                      <td>{item.areaSqFt.toFixed(2)}</td>
+                      <td>{item.quantity}</td>
+                      <td>{item.weight.toFixed(1)}</td>
+                      <td>Rs {item.unitPrice.toFixed(2)}</td>
+                      <td className="GlassCheckout-totalPriceCell">Rs {item.totalPrice.toFixed(2)}</td>
+                      <td>
+                        <button className="GlassCheckout-editBtn" onClick={() => handleEditItem(item)}>✏️</button>
+                        <button className="GlassCheckout-deleteBtn" onClick={() => handleDeleteItem(item.id)}>🗑️</button>
+                      </td>
+                    </>
+                  )}
+                </tr>
+              ))}
+            </tbody>
+            <tfoot>
+              <tr className="GlassCheckout-tableFooter">
+                <td colSpan="8" className="GlassCheckout-footerLabel"><strong>Total Glass Price:</strong></td>
+                <td className="GlassCheckout-footerValue"><strong>Rs {totalGlassPrice.toFixed(2)}</strong></td>
+                <td></td>
+              </tr>
+              <tr className="GlassCheckout-tableFooter">
+                <td colSpan="8" className="GlassCheckout-footerLabel"><strong>Total Weight:</strong></td>
+                <td className="GlassCheckout-footerValue"><strong>{totalWeight.toFixed(1)} kg</strong></td>
+                <td></td>
+              </tr>
+            </tfoot>
+          </table>
         </div>
-        <div className="GlassCheckout-weightInfo">
-          Total Weight: <span className="GlassCheckout-weightValue">{totalWeight.toFixed(1)} kg</span>
-        </div>
+      </div>
 
+      <div className="GlassCheckout-deliveryContainer">
         <h2 className="GlassCheckout-sectionTitle GlassCheckout-transportTitle">Delivery Options</h2>
         <div className="GlassCheckout-deliveryMethodSelection">
           <label className={`GlassCheckout-deliveryOption ${deliveryMethod === "pickup" ? "GlassCheckout-deliveryOptionActive" : ""}`}>
