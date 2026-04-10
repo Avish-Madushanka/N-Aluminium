@@ -2,20 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./GlassOrderCheckout.css";
 
-const lorryOptions = [
-  { id: "small", name: "Small Lorry", capacity: "1 Ton", basePrice: 5000, pricePerKm: 50, maxWeight: 500 },
-  { id: "medium", name: "Medium Lorry", capacity: "2.5 Ton", basePrice: 8000, pricePerKm: 75, maxWeight: 1200 },
-  { id: "large", name: "Large Lorry", capacity: "5 Ton", basePrice: 12000, pricePerKm: 100, maxWeight: 2500 },
-  { id: "crane", name: "Crane Lorry", capacity: "8 Ton", basePrice: 25000, pricePerKm: 150, maxWeight: 4000 },
-];
-
-const pickupLocations = [
-  { id: 1, name: "Colombo Main Branch", address: "123 Galle Road, Colombo 03", distance: 0 },
-  { id: 2, name: "Kandy Branch", address: "45 Peradeniya Road, Kandy", distance: 115 },
-  { id: 3, name: "Galle Branch", address: "78 Lighthouse Street, Galle", distance: 130 },
-  { id: 4, name: "Negombo Branch", address: "22 Beach Road, Negombo", distance: 40 },
-];
-
 const GlassOrderCheckout = () => {
   const navigate = useNavigate();
   const [selectedItems, setSelectedItems] = useState([]);
@@ -26,15 +12,21 @@ const GlassOrderCheckout = () => {
     quantity: ""
   });
   const [deliveryMethod, setDeliveryMethod] = useState(null);
-  const [selectedPickupLocation, setSelectedPickupLocation] = useState(null);
   const [pickupDate, setPickupDate] = useState("");
   const [pickupTimeSlot, setPickupTimeSlot] = useState("");
+  
+  const [userInfo, setUserInfo] = useState({
+    fullName: "",
+    email: "",
+    phone: ""
+  });
+  
   const [deliveryAddress, setDeliveryAddress] = useState({
     street: "",
     city: "",
-    postalCode: "",
-    instructions: "",
+    postalCode: ""
   });
+  
   const [distance, setDistance] = useState("");
   const [deliveryDate, setDeliveryDate] = useState("");
   const [deliveryTimeSlot, setDeliveryTimeSlot] = useState("");
@@ -43,6 +35,11 @@ const GlassOrderCheckout = () => {
   const [orderConfirmed, setOrderConfirmed] = useState(false);
   const [orderStatus, setOrderStatus] = useState("pending");
   const [driverDetails, setDriverDetails] = useState(null);
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState("");
+  const [isCalculatingDistance, setIsCalculatingDistance] = useState(false);
+
+  const COMPANY_ADDRESS = "Alubomulla, Panadura, Sri Lanka";
 
   useEffect(() => {
     const storedItems = JSON.parse(localStorage.getItem('glassOrderItems') || '[]');
@@ -55,32 +52,22 @@ const GlassOrderCheckout = () => {
   const totalGlassPrice = selectedItems.reduce((sum, item) => sum + item.totalPrice, 0);
   const totalWeight = selectedItems.reduce((sum, item) => sum + item.weight, 0);
   
-  const calculateLorryPrice = () => {
-    if (!deliveryMethod || deliveryMethod !== "lorry" || !distance) return 0;
-    const baseDistance = parseFloat(distance) || 0;
-    let selectedLorry = null;
-    for (const lorry of lorryOptions) {
-      if (totalWeight <= lorry.maxWeight) {
-        selectedLorry = lorry;
-        break;
-      }
+  const calculateDeliveryPrice = () => {
+    if (!deliveryMethod || deliveryMethod !== "delivery" || !distance) return 0;
+    const kmDistance = parseFloat(distance) || 0;
+    
+    let totalCost = 5000;
+    if (kmDistance > 15) {
+      const extraKm = kmDistance - 15;
+      totalCost += extraKm * 50;
     }
-    if (!selectedLorry) selectedLorry = lorryOptions[lorryOptions.length - 1];
-    let totalCost = selectedLorry.basePrice + (baseDistance * selectedLorry.pricePerKm);
+    
     if (urgentDelivery) totalCost += totalCost * 0.25;
     return totalCost;
   };
   
-  const selectedLorryForDisplay = () => {
-    if (!deliveryMethod || deliveryMethod !== "lorry") return null;
-    for (const lorry of lorryOptions) {
-      if (totalWeight <= lorry.maxWeight) return lorry;
-    }
-    return lorryOptions[lorryOptions.length - 1];
-  };
-  
-  const transportCost = deliveryMethod === "pickup" ? 0 : calculateLorryPrice();
-  const insuranceCost = insurance && deliveryMethod === "lorry" ? totalGlassPrice * 0.02 : 0;
+  const transportCost = deliveryMethod === "pickup" ? 0 : calculateDeliveryPrice();
+  const insuranceCost = insurance && deliveryMethod === "delivery" ? totalGlassPrice * 0.02 : 0;
   const grandTotal = totalGlassPrice + transportCost + insuranceCost;
 
   const handleDeleteItem = (id) => {
@@ -133,18 +120,138 @@ const GlassOrderCheckout = () => {
     setEditFormData({ widthFt: "", heightFt: "", quantity: "" });
   };
 
-  const handleConfirmOrder = () => {
-    if (deliveryMethod === "pickup" && (!selectedPickupLocation || !pickupDate || !pickupTimeSlot)) {
-      alert("Please complete pickup details");
+  const validateUserInfo = () => {
+    if (!userInfo.fullName.trim()) {
+      alert("Please enter your full name");
+      return false;
+    }
+    if (!userInfo.email.trim()) {
+      alert("Please enter your email address");
+      return false;
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(userInfo.email)) {
+      alert("Please enter a valid email address");
+      return false;
+    }
+    if (!userInfo.phone.trim()) {
+      alert("Please enter your phone number");
+      return false;
+    }
+    const phoneRegex = /^[0-9]{10}$/;
+    if (!phoneRegex.test(userInfo.phone.replace(/\D/g, ''))) {
+      alert("Please enter a valid 10-digit phone number");
+      return false;
+    }
+    return true;
+  };
+
+  const calculateDistanceFromMap = () => {
+    if (!deliveryAddress.street || !deliveryAddress.city) {
+      alert("Please enter your full address first");
       return;
     }
-    if (deliveryMethod === "lorry" && (!deliveryAddress.street || !deliveryAddress.city || !distance || !deliveryDate || !deliveryTimeSlot)) {
-      alert("Please complete delivery details");
+    
+    setIsCalculatingDistance(true);
+    
+    const destinationAddress = `${deliveryAddress.street}, ${deliveryAddress.city}, ${deliveryAddress.postalCode}, Sri Lanka`;
+    const originAddress = COMPANY_ADDRESS;
+    
+    const geocodeUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(originAddress)}&key=YOUR_GOOGLE_MAPS_API_KEY`;
+    
+    fetch(geocodeUrl)
+      .then(response => response.json())
+      .then(originData => {
+        if (originData.results && originData.results[0]) {
+          const originCoords = originData.results[0].geometry.location;
+          
+          const destGeocodeUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(destinationAddress)}&key=YOUR_GOOGLE_MAPS_API_KEY`;
+          
+          return fetch(destGeocodeUrl)
+            .then(response => response.json())
+            .then(destData => {
+              if (destData.results && destData.results[0]) {
+                const destCoords = destData.results[0].geometry.location;
+                
+                const distanceMatrixUrl = `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${originCoords.lat},${originCoords.lng}&destinations=${destCoords.lat},${destCoords.lng}&key=YOUR_GOOGLE_MAPS_API_KEY`;
+                
+                return fetch(distanceMatrixUrl);
+              } else {
+                throw new Error("Could not find destination address");
+              }
+            });
+        } else {
+          throw new Error("Could not find company location");
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.rows && data.rows[0] && data.rows[0].elements[0]) {
+          const distanceInKm = data.rows[0].elements[0].distance.value / 1000;
+          setDistance(distanceInKm.toFixed(1));
+          alert(`Distance calculated: ${distanceInKm.toFixed(1)} km`);
+        } else {
+          alert("Could not calculate distance. Please check your address.");
+        }
+      })
+      .catch(error => {
+        console.error("Error calculating distance:", error);
+        alert("Error calculating distance. Please try again or enter distance manually.");
+      })
+      .finally(() => {
+        setIsCalculatingDistance(false);
+      });
+  };
+
+  const handleProceedToPayment = () => {
+    if (deliveryMethod === "pickup") {
+      if (!pickupDate) {
+        alert("Please select pickup date");
+        return;
+      }
+      if (!pickupTimeSlot) {
+        alert("Please select pickup time slot");
+        return;
+      }
+      if (!validateUserInfo()) {
+        return;
+      }
+      setShowPaymentModal(true);
+    } else if (deliveryMethod === "delivery") {
+      if (!deliveryAddress.street || !deliveryAddress.city) {
+        alert("Please complete delivery address");
+        return;
+      }
+      if (!distance || distance <= 0) {
+        alert("Please calculate distance first using 'Get Distance' button");
+        return;
+      }
+      if (!deliveryDate) {
+        alert("Please select delivery date");
+        return;
+      }
+      if (!deliveryTimeSlot) {
+        alert("Please select delivery time slot");
+        return;
+      }
+      if (!validateUserInfo()) {
+        return;
+      }
+      setShowPaymentModal(true);
+    }
+  };
+
+  const handlePaymentConfirm = () => {
+    if (!paymentMethod) {
+      alert("Please select a payment method");
       return;
     }
+    
     setOrderConfirmed(true);
     setOrderStatus("confirmed");
-    if (deliveryMethod === "lorry") {
+    setShowPaymentModal(false);
+    
+    if (deliveryMethod === "delivery") {
       setDriverDetails({
         name: "Kamal Perera",
         contact: "0771234567",
@@ -157,10 +264,10 @@ const GlassOrderCheckout = () => {
     localStorage.removeItem('glassOrderItems');
     setSelectedItems([]);
     setDeliveryMethod(null);
-    setSelectedPickupLocation(null);
     setPickupDate("");
     setPickupTimeSlot("");
-    setDeliveryAddress({ street: "", city: "", postalCode: "", instructions: "" });
+    setUserInfo({ fullName: "", email: "", phone: "" });
+    setDeliveryAddress({ street: "", city: "", postalCode: "" });
     setDistance("");
     setDeliveryDate("");
     setDeliveryTimeSlot("");
@@ -169,6 +276,8 @@ const GlassOrderCheckout = () => {
     setOrderConfirmed(false);
     setOrderStatus("pending");
     setDriverDetails(null);
+    setShowPaymentModal(false);
+    setPaymentMethod("");
     navigate('/GlassOrder');
   };
 
@@ -220,10 +329,18 @@ const GlassOrderCheckout = () => {
             </div>
           </div>
           <div className="GlassCheckout-confirmationSection">
+            <h3>Customer Details</h3>
+            <div>
+              <p><strong>Name:</strong> {userInfo.fullName}</p>
+              <p><strong>Email:</strong> {userInfo.email}</p>
+              <p><strong>Phone:</strong> {userInfo.phone}</p>
+            </div>
+          </div>
+          <div className="GlassCheckout-confirmationSection">
             <h3>Delivery Details</h3>
             {deliveryMethod === "pickup" ? (
               <div>
-                <p><strong>Pickup Location:</strong> {pickupLocations.find(l => l.id === parseInt(selectedPickupLocation))?.name}</p>
+                <p><strong>Pickup Location:</strong> Glass House Panadura - Alubomulla</p>
                 <p><strong>Pickup Date:</strong> {pickupDate}</p>
                 <p><strong>Pickup Time:</strong> {pickupTimeSlot}</p>
                 <p className="GlassCheckout-fragileWarning">⚠️ Fragile item - Handle with care. Please bring ID for verification.</p>
@@ -319,8 +436,8 @@ const GlassOrderCheckout = () => {
                           className="GlassCheckout-editInput"
                           value={editFormData.widthFt}
                           onChange={(e) => setEditFormData({...editFormData, widthFt: e.target.value})}
-                          placeholder="Width"
-                          style={{width: "60px", marginRight: "5px"}}
+                          placeholder="W"
+                          style={{width: "50px", marginRight: "3px"}}
                         />
                         x
                         <input
@@ -329,8 +446,8 @@ const GlassOrderCheckout = () => {
                           className="GlassCheckout-editInput"
                           value={editFormData.heightFt}
                           onChange={(e) => setEditFormData({...editFormData, heightFt: e.target.value})}
-                          placeholder="Height"
-                          style={{width: "60px", marginLeft: "5px"}}
+                          placeholder="H"
+                          style={{width: "50px", marginLeft: "3px"}}
                         />
                       </td>
                       <td>{item.areaSqFt.toFixed(2)}</td>
@@ -340,7 +457,7 @@ const GlassOrderCheckout = () => {
                           className="GlassCheckout-editInput"
                           value={editFormData.quantity}
                           onChange={(e) => setEditFormData({...editFormData, quantity: e.target.value})}
-                          style={{width: "60px"}}
+                          style={{width: "50px"}}
                         />
                       </td>
                       <td>{item.weight.toFixed(1)}</td>
@@ -404,143 +521,192 @@ const GlassOrderCheckout = () => {
               <small>Collect from our branch</small>
             </div>
           </label>
-          <label className={`GlassCheckout-deliveryOption ${deliveryMethod === "lorry" ? "GlassCheckout-deliveryOptionActive" : ""}`}>
+          <label className={`GlassCheckout-deliveryOption ${deliveryMethod === "delivery" ? "GlassCheckout-deliveryOptionActive" : ""}`}>
             <input
               type="radio"
               name="deliveryMethod"
-              value="lorry"
-              checked={deliveryMethod === "lorry"}
-              onChange={() => setDeliveryMethod("lorry")}
+              value="delivery"
+              checked={deliveryMethod === "delivery"}
+              onChange={() => setDeliveryMethod("delivery")}
             />
             <span className="GlassCheckout-deliveryIcon">🚚</span>
             <div>
-              <strong>Lorry Transport</strong>
+              <strong>Home Delivery</strong>
               <small>Doorstep delivery</small>
             </div>
           </label>
         </div>
 
-        {deliveryMethod === "pickup" && (
-          <div className="GlassCheckout-pickupSection">
-            <h3>Pickup Details</h3>
+        <div className="GlassCheckout-userInfoSection">
+          <h4>Customer Information</h4>
+          <div className="GlassCheckout-formRow">
             <div className="GlassCheckout-formGroup">
-              <label className="GlassCheckout-formLabel">Select Pickup Location:</label>
-              <select
-                className="GlassCheckout-formSelect"
-                value={selectedPickupLocation || ""}
-                onChange={(e) => setSelectedPickupLocation(e.target.value)}
-              >
-                <option value="">Select a branch</option>
-                {pickupLocations.map((loc) => (
-                  <option key={loc.id} value={loc.id}>
-                    {loc.name} - {loc.address}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="GlassCheckout-formGroup">
-              <label className="GlassCheckout-formLabel">Pickup Date:</label>
+              <label className="GlassCheckout-formLabel">Full Name *</label>
               <input
-                type="date"
+                type="text"
                 className="GlassCheckout-formInput"
-                value={pickupDate}
-                onChange={(e) => setPickupDate(e.target.value)}
-                min={new Date().toISOString().split("T")[0]}
+                value={userInfo.fullName}
+                onChange={(e) => setUserInfo({...userInfo, fullName: e.target.value})}
+                placeholder="Enter full name"
               />
             </div>
             <div className="GlassCheckout-formGroup">
-              <label className="GlassCheckout-formLabel">Pickup Time Slot:</label>
-              <select
-                className="GlassCheckout-formSelect"
-                value={pickupTimeSlot}
-                onChange={(e) => setPickupTimeSlot(e.target.value)}
-              >
-                <option value="">Select time slot</option>
-                <option value="09:00-11:00">09:00 AM - 11:00 AM</option>
-                <option value="11:00-13:00">11:00 AM - 01:00 PM</option>
-                <option value="13:00-15:00">01:00 PM - 03:00 PM</option>
-                <option value="15:00-17:00">03:00 PM - 05:00 PM</option>
-              </select>
+              <label className="GlassCheckout-formLabel">Email *</label>
+              <input
+                type="email"
+                className="GlassCheckout-formInput"
+                value={userInfo.email}
+                onChange={(e) => setUserInfo({...userInfo, email: e.target.value})}
+                placeholder="your@email.com"
+              />
+            </div>
+            <div className="GlassCheckout-formGroup">
+              <label className="GlassCheckout-formLabel">Phone *</label>
+              <input
+                type="tel"
+                className="GlassCheckout-formInput"
+                value={userInfo.phone}
+                onChange={(e) => setUserInfo({...userInfo, phone: e.target.value})}
+                placeholder="0712345678"
+              />
+            </div>
+          </div>
+        </div>
+
+        {deliveryMethod === "pickup" && (
+          <div className="GlassCheckout-pickupSection">
+            <h3>Pickup Details</h3>
+            <div className="GlassCheckout-locationInfo">
+              <p>📍 <strong>Pickup Location:</strong> Glass House Panadura - Alubomulla, Sri Lanka</p>
+            </div>
+            <div className="GlassCheckout-formRow">
+              <div className="GlassCheckout-formGroup">
+                <label className="GlassCheckout-formLabel">Pickup Date</label>
+                <input
+                  type="date"
+                  className="GlassCheckout-formInput"
+                  value={pickupDate}
+                  onChange={(e) => setPickupDate(e.target.value)}
+                  min={new Date().toISOString().split("T")[0]}
+                />
+              </div>
+              <div className="GlassCheckout-formGroup">
+                <label className="GlassCheckout-formLabel">Time Slot</label>
+                <select
+                  className="GlassCheckout-formSelect"
+                  value={pickupTimeSlot}
+                  onChange={(e) => setPickupTimeSlot(e.target.value)}
+                >
+                  <option value="">Select time</option>
+                  <option value="09:00-11:00">09:00 AM - 11:00 AM</option>
+                  <option value="11:00-13:00">11:00 AM - 01:00 PM</option>
+                  <option value="13:00-15:00">01:00 PM - 03:00 PM</option>
+                  <option value="15:00-17:00">03:00 PM - 05:00 PM</option>
+                </select>
+              </div>
             </div>
             <div className="GlassCheckout-pickupInfo">
-              <p>📋 <strong>Important:</strong> Please bring a valid ID for verification. Our staff will assist with loading.</p>
-              <p>⚠️ <strong>Fragile Warning:</strong> Glass items are delicate. Please ensure proper handling during transport.</p>
+              <p>📋 Bring ID for verification | ⚠️ Fragile - Handle with care</p>
             </div>
           </div>
         )}
 
-        {deliveryMethod === "lorry" && (
+        {deliveryMethod === "delivery" && (
           <div className="GlassCheckout-lorrySection">
             <h3>Delivery Details</h3>
-            <div className="GlassCheckout-formGroup">
-              <label className="GlassCheckout-formLabel">Street Address:</label>
-              <input
-                type="text"
-                className="GlassCheckout-formInput"
-                value={deliveryAddress.street}
-                onChange={(e) => setDeliveryAddress({ ...deliveryAddress, street: e.target.value })}
-                placeholder="House No, Street Name"
-              />
+            <div className="GlassCheckout-locationInfo">
+              <p>🏭 <strong>Shipping From:</strong> Glass House Panadura - Alubomulla, Sri Lanka</p>
             </div>
-            <div className="GlassCheckout-formGroup">
-              <label className="GlassCheckout-formLabel">City:</label>
-              <input
-                type="text"
-                className="GlassCheckout-formInput"
-                value={deliveryAddress.city}
-                onChange={(e) => setDeliveryAddress({ ...deliveryAddress, city: e.target.value })}
-                placeholder="City"
-              />
+            
+            <div className="GlassCheckout-formRow">
+              <div className="GlassCheckout-formGroup GlassCheckout-fullWidth">
+                <label className="GlassCheckout-formLabel">Street Address</label>
+                <input
+                  type="text"
+                  className="GlassCheckout-formInput"
+                  value={deliveryAddress.street}
+                  onChange={(e) => setDeliveryAddress({ ...deliveryAddress, street: e.target.value })}
+                  placeholder="House No, Street Name"
+                />
+              </div>
             </div>
-            <div className="GlassCheckout-formGroup">
-              <label className="GlassCheckout-formLabel">Postal Code:</label>
-              <input
-                type="text"
-                className="GlassCheckout-formInput"
-                value={deliveryAddress.postalCode}
-                onChange={(e) => setDeliveryAddress({ ...deliveryAddress, postalCode: e.target.value })}
-                placeholder="Postal Code"
-              />
+            
+            <div className="GlassCheckout-formRow">
+              <div className="GlassCheckout-formGroup">
+                <label className="GlassCheckout-formLabel">City</label>
+                <input
+                  type="text"
+                  className="GlassCheckout-formInput"
+                  value={deliveryAddress.city}
+                  onChange={(e) => setDeliveryAddress({ ...deliveryAddress, city: e.target.value })}
+                  placeholder="City"
+                />
+              </div>
+              <div className="GlassCheckout-formGroup">
+                <label className="GlassCheckout-formLabel">Postal Code</label>
+                <input
+                  type="text"
+                  className="GlassCheckout-formInput"
+                  value={deliveryAddress.postalCode}
+                  onChange={(e) => setDeliveryAddress({ ...deliveryAddress, postalCode: e.target.value })}
+                  placeholder="Postal Code"
+                />
+              </div>
+              <div className="GlassCheckout-formGroup">
+                <button 
+                  className="GlassCheckout-getDistanceButton"
+                  onClick={calculateDistanceFromMap}
+                  disabled={isCalculatingDistance}
+                >
+                  {isCalculatingDistance ? "Calculating..." : "📍 Get Distance"}
+                </button>
+              </div>
             </div>
-            <div className="GlassCheckout-formGroup">
-              <label className="GlassCheckout-formLabel">Distance from Warehouse (km):</label>
-              <input
-                type="number"
-                className="GlassCheckout-formInput"
-                value={distance}
-                onChange={(e) => setDistance(e.target.value)}
-                placeholder="Enter distance in km"
-                min="0"
-              />
+            
+            <div className="GlassCheckout-formRow">
+              <div className="GlassCheckout-formGroup">
+                <label className="GlassCheckout-formLabel">Distance (km)</label>
+                <input
+                  type="number"
+                  className="GlassCheckout-formInput"
+                  value={distance}
+                  readOnly
+                  placeholder="Auto calculated"
+                />
+              </div>
+              <div className="GlassCheckout-formGroup">
+                <label className="GlassCheckout-formLabel">Delivery Date</label>
+                <input
+                  type="date"
+                  className="GlassCheckout-formInput"
+                  value={deliveryDate}
+                  onChange={(e) => setDeliveryDate(e.target.value)}
+                  min={new Date().toISOString().split("T")[0]}
+                />
+              </div>
+              <div className="GlassCheckout-formGroup">
+                <label className="GlassCheckout-formLabel">Time Slot</label>
+                <select
+                  className="GlassCheckout-formSelect"
+                  value={deliveryTimeSlot}
+                  onChange={(e) => setDeliveryTimeSlot(e.target.value)}
+                >
+                  <option value="">Select time</option>
+                  <option value="09:00-11:00">09:00 AM - 11:00 AM</option>
+                  <option value="11:00-13:00">11:00 AM - 01:00 PM</option>
+                  <option value="13:00-15:00">01:00 PM - 03:00 PM</option>
+                  <option value="15:00-17:00">03:00 PM - 05:00 PM</option>
+                </select>
+              </div>
             </div>
-            <div className="GlassCheckout-vehicleInfo">
-              <p>🚛 <strong>Recommended Vehicle:</strong> {selectedLorryForDisplay()?.name} ({selectedLorryForDisplay()?.capacity})</p>
-              <p>Base Price: Rs {selectedLorryForDisplay()?.basePrice} + Rs {selectedLorryForDisplay()?.pricePerKm}/km</p>
+
+            <div className="GlassCheckout-priceInfo">
+              <p>🚚 Base: Rs 5,000 (first 15km) | Extra: Rs 50/km after 15km</p>
+              {distance > 15 && (
+                <p>Extra km: {(distance - 15).toFixed(1)} km × Rs 50 = Rs {((distance - 15) * 50).toFixed(2)}</p>
+              )}
             </div>
-            <div className="GlassCheckout-formGroup">
-              <label className="GlassCheckout-formLabel">Delivery Date:</label>
-              <input
-                type="date"
-                className="GlassCheckout-formInput"
-                value={deliveryDate}
-                onChange={(e) => setDeliveryDate(e.target.value)}
-                min={new Date().toISOString().split("T")[0]}
-              />
-            </div>
-            <div className="GlassCheckout-formGroup">
-              <label className="GlassCheckout-formLabel">Delivery Time Slot:</label>
-              <select
-                className="GlassCheckout-formSelect"
-                value={deliveryTimeSlot}
-                onChange={(e) => setDeliveryTimeSlot(e.target.value)}
-              >
-                <option value="">Select time slot</option>
-                <option value="09:00-11:00">09:00 AM - 11:00 AM</option>
-                <option value="11:00-13:00">11:00 AM - 01:00 PM</option>
-                <option value="13:00-15:00">01:00 PM - 03:00 PM</option>
-                <option value="15:00-17:00">03:00 PM - 05:00 PM</option>
-              </select>
-            </div>
+
             <div className="GlassCheckout-checkboxGroup">
               <label className="GlassCheckout-checkboxLabel">
                 <input
@@ -548,7 +714,7 @@ const GlassOrderCheckout = () => {
                   checked={urgentDelivery}
                   onChange={(e) => setUrgentDelivery(e.target.checked)}
                 />
-                🚀 Urgent Delivery (+25% on transport cost)
+                🚀 Urgent Delivery (+25%)
               </label>
               <label className="GlassCheckout-checkboxLabel">
                 <input
@@ -556,12 +722,12 @@ const GlassOrderCheckout = () => {
                   checked={insurance}
                   onChange={(e) => setInsurance(e.target.checked)}
                 />
-                🛡️ Glass Insurance (2% of glass value)
+                🛡️ Insurance (2% of glass value)
               </label>
             </div>
+            
             <div className="GlassCheckout-lorryInfo">
-              <p>📦 <strong>Packaging:</strong> All glass will be secured in wooden frames with foam padding.</p>
-              <p>⚠️ <strong>Fragile Warning:</strong> Professional handling required. Drivers are trained for glass delivery.</p>
+              <p>📦 Wooden frame packaging | ⚠️ Professional handling required</p>
             </div>
           </div>
         )}
@@ -591,13 +757,102 @@ const GlassOrderCheckout = () => {
         )}
 
         <button
-          className="GlassCheckout-confirmButton"
-          onClick={handleConfirmOrder}
+          className="GlassCheckout-paymentButton"
+          onClick={handleProceedToPayment}
           disabled={!deliveryMethod}
         >
-          Confirm Order
+          Proceed to Payment
         </button>
       </div>
+
+      {showPaymentModal && (
+        <div className="GlassCheckout-modalOverlay">
+          <div className="GlassCheckout-modal">
+            <div className="GlassCheckout-modalHeader">
+              <h2>Payment Details</h2>
+              <button className="GlassCheckout-modalClose" onClick={() => setShowPaymentModal(false)}>×</button>
+            </div>
+            <div className="GlassCheckout-modalBody">
+              <div className="GlassCheckout-paymentAmount">
+                <span>Total Amount:</span>
+                <strong>Rs {grandTotal.toFixed(2)}</strong>
+              </div>
+              
+              <div className="GlassCheckout-paymentMethods">
+                <h3>Select Payment Method</h3>
+                <label className="GlassCheckout-paymentOption">
+                  <input
+                    type="radio"
+                    name="paymentMethod"
+                    value="card"
+                    checked={paymentMethod === "card"}
+                    onChange={(e) => setPaymentMethod(e.target.value)}
+                  />
+                  <span className="GlassCheckout-paymentIcon">💳</span>
+                  <div>
+                    <strong>Credit/Debit Card</strong>
+                    <small>Visa, MasterCard, Amex</small>
+                  </div>
+                </label>
+                
+                <label className="GlassCheckout-paymentOption">
+                  <input
+                    type="radio"
+                    name="paymentMethod"
+                    value="bank"
+                    checked={paymentMethod === "bank"}
+                    onChange={(e) => setPaymentMethod(e.target.value)}
+                  />
+                  <span className="GlassCheckout-paymentIcon">🏦</span>
+                  <div>
+                    <strong>Bank Transfer</strong>
+                    <small>Direct bank payment</small>
+                  </div>
+                </label>
+                
+                <label className="GlassCheckout-paymentOption">
+                  <input
+                    type="radio"
+                    name="paymentMethod"
+                    value="cash"
+                    checked={paymentMethod === "cash"}
+                    onChange={(e) => setPaymentMethod(e.target.value)}
+                  />
+                  <span className="GlassCheckout-paymentIcon">💵</span>
+                  <div>
+                    <strong>Cash on Delivery/Pickup</strong>
+                    <small>Pay when you receive</small>
+                  </div>
+                </label>
+                
+                <label className="GlassCheckout-paymentOption">
+                  <input
+                    type="radio"
+                    name="paymentMethod"
+                    value="mobile"
+                    checked={paymentMethod === "mobile"}
+                    onChange={(e) => setPaymentMethod(e.target.value)}
+                  />
+                  <span className="GlassCheckout-paymentIcon">📱</span>
+                  <div>
+                    <strong>Mobile Payment</strong>
+                    <small>PayPal, Apple Pay, Google Pay</small>
+                  </div>
+                </label>
+              </div>
+              
+              <div className="GlassCheckout-orderSummary">
+                <h3>Order Summary</h3>
+                <p>Items: {selectedItems.length} | Weight: {totalWeight.toFixed(1)} kg | {deliveryMethod === "pickup" ? "Self Pickup" : "Home Delivery"}</p>
+              </div>
+            </div>
+            <div className="GlassCheckout-modalFooter">
+              <button className="GlassCheckout-modalCancel" onClick={() => setShowPaymentModal(false)}>Cancel</button>
+              <button className="GlassCheckout-modalConfirm" onClick={handlePaymentConfirm}>Confirm & Pay</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
