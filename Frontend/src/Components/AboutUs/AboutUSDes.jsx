@@ -33,7 +33,7 @@ const AboutUsDes = () => {
           <div className="AB-left-section">
             <h1 className="AB-title">Work Together to Transform Aluminum Management</h1>
             <p className="AB-description">
-              Aluminum waste is a growing environmental and economic challenge. Our <strong> MetaTrade platform </strong> solves this by combining smart collection, recycling, fabrication, and a digital marketplace—helping reduce waste, improve resource efficiency, and support a circular economy.
+              Aluminum waste is a growing environmental and economic challenge. Our <strong> ALUX platform </strong> solves this by combining smart collection, recycling, fabrication, and a digital marketplace—helping reduce waste, improve resource efficiency, and support a circular economy.
             </p>
             <div className="AB-image-card">
               <img

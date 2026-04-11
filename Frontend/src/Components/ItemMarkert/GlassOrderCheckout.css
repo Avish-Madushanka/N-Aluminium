@@ -510,12 +510,40 @@
 .GlassCheckout-modal {
   background-color: white;
   border-radius: 16px;
-  max-width: 500px;
+  max-width: 600px;
   width: 90%;
   max-height: 85vh;
   overflow-y: auto;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
   animation: slideUp 0.3s ease;
+}
+
+.GlassCheckout-billModal {
+  background-color: white;
+  border-radius: 16px;
+  max-width: 800px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.3s ease;
+}
+
+.GlassCheckout-billHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  border-bottom: 2px solid #ecf0f1;
+  background-color: #202020;
+  color: white;
+  border-radius: 16px 16px 0 0;
+}
+
+.GlassCheckout-billHeader h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
 }
 
 .GlassCheckout-modalHeader {
@@ -524,14 +552,15 @@
   align-items: center;
   padding: 15px 20px;
   border-bottom: 2px solid #ecf0f1;
-  background-color:#292929;
+  background-color: #202020;
   color: white;
   border-radius: 16px 16px 0 0;
 }
 
 .GlassCheckout-modalHeader h2 {
   margin: 0;
-  font-size: 1.3em;
+  font-size: 1.5rem;
+  font-weight: 600;
 }
 
 .GlassCheckout-modalClose {
@@ -551,15 +580,176 @@
   padding: 20px;
 }
 
+.GlassCheckout-billContent {
+  padding: 40px;
+}
+
+.GlassCheckout-billCompany {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.GlassCheckout-billCompany h3 {
+  font-size: 1.6rem;
+  color: #202020;
+  margin-bottom: 5px;
+}
+
+.GlassCheckout-billCompany p {
+  margin: 3px 0;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.GlassCheckout-billDivider {
+  height: 1px;
+  background: linear-gradient(to right, transparent, #ddd, transparent);
+  margin: 15px 0;
+}
+
+.GlassCheckout-billInfo {
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+.GlassCheckout-billRow {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 0;
+}
+
+.GlassCheckout-billCustomer {
+  margin-bottom: 15px;
+}
+
+.GlassCheckout-billCustomer h4 {
+  color: #1f1f1f;
+  margin-bottom: 10px;
+  font-size: 1.1rem;
+}
+
+.GlassCheckout-billCustomer p {
+  margin: 5px 0;
+  color: #555;
+  font-size: 1rem;
+}
+
+.GlassCheckout-billItems {
+  margin-bottom: 15px;
+}
+
+.GlassCheckout-billItems h4 {
+  color: #202020;
+  margin-bottom: 10px;
+  font-size: 1.1rem;
+}
+
+.GlassCheckout-billTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+}
+
+.GlassCheckout-billTable th,
+.GlassCheckout-billTable td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.GlassCheckout-billTable th {
+  background-color: #f2f2f2;
+  font-weight: 600;
+}
+
+.GlassCheckout-billTotals {
+  margin-bottom: 15px;
+}
+
+.GlassCheckout-billGrandTotal {
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: #d9534f;
+  border-top: 2px solid #ddd;
+  padding-top: 8px;
+  margin-top: 5px;
+}
+
+.GlassCheckout-billFooter {
+  text-align: center;
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px dashed #ddd;
+}
+
+.GlassCheckout-billFooter p {
+  margin: 3px 0;
+  color: #888;
+  font-size: 0.8rem;
+}
+
+.GlassCheckout-billActions {
+  display: flex;
+  gap: 10px;
+  padding: 15px 20px;
+  border-top: 1px solid #ecf0f1;
+  justify-content: center;
+}
+
+.GlassCheckout-printBtn,
+.GlassCheckout-downloadBtn,
+.GlassCheckout-doneBtn {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.GlassCheckout-printBtn {
+  background-color: #002035;
+  color: white;
+}
+
+.GlassCheckout-printBtn:hover {
+  background-color: #00121f;
+  transform: translateY(-2px);
+}
+
+.GlassCheckout-downloadBtn {
+  background-color: #ae2b27;
+  color: white;
+}
+
+.GlassCheckout-downloadBtn:hover {
+  background-color: #530404;
+  transform: translateY(-2px);
+}
+
+.GlassCheckout-doneBtn {
+  background-color: #353535;
+  color: white;
+}
+
+.GlassCheckout-doneBtn:hover {
+  background-color: #1d1d1d;
+  transform: translateY(-2px);
+}
+
 .GlassCheckout-paymentAmount {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background-color: #d51f1f;
   color: white;
   padding: 12px;
   border-radius: 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 15px;
+  margin-bottom: 25px;
 }
 
 .GlassCheckout-paymentAmount span {
@@ -571,15 +761,16 @@
 }
 
 .GlassCheckout-paymentMethods h3 {
-  color: #2c3e50;
-  margin-bottom: 10px;
-  font-size: 0.95em;
+  color: #1d1d1d;
+  margin-bottom: 15px;
+  font-size: 1rem;
 }
 
 .GlassCheckout-paymentOption {
   display: flex;
   align-items: center;
   gap: 12px;
+  height: 70px;
   padding: 8px 12px;
   margin-bottom: 8px;
   background-color: #f8f9fa;
@@ -614,12 +805,12 @@
 }
 
 .GlassCheckout-paymentOption strong {
-  color: #2c3e50;
-  font-size: 0.85em;
+  color: #172330;
+  font-size: 1rem;
 }
 
 .GlassCheckout-paymentOption small {
-  font-size: 0.7em;
+  font-size: 0.9rem;
   color: #7f8c8d;
 }
 
@@ -633,56 +824,57 @@
 .GlassCheckout-orderSummary h3 {
   color: #2c3e50;
   margin-bottom: 8px;
-  font-size: 0.9em;
+  font-size: 1.2rem;
 }
 
 .GlassCheckout-orderSummary p {
   margin: 3px 0;
   color: #555;
-  font-size: 0.85em;
+  font-size: 1rem;
 }
 
 .GlassCheckout-modalFooter {
-  width: 300px;
+  width: 400px;
   margin: 0 auto;
   display: flex;
   gap: 12px;
   padding: 15px 20px;
   border-top: 1px solid #ecf0f1;
-
   justify-content: center;
 }
+
 .GlassCheckout-modalCancel {
   flex: 1;
   padding: 10px;
-  background-color: #970202;
+  background-color: #d60000;
   color: white;
   border: none;
   border-radius: 6px;
-  font-size: 0.9em;
+  font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
 .GlassCheckout-modalCancel:hover {
-  background-color: #610101;
+  background-color: #8a0000;
 }
 
 .GlassCheckout-modalConfirm {
   flex: 1;
   padding: 10px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background-color: #353535;
   color: white;
   border: none;
   border-radius: 6px;
-  font-size: 0.9em;
+  font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .GlassCheckout-modalConfirm:hover {
+  background-color: #181818;
   transform: translateY(-2px);
   box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
 }
@@ -966,6 +1158,32 @@
   font-size: 0.9em;
 }
 
+.GlassCheckout-paypalContainer {
+  margin: 20px 0;
+  min-height: 150px;
+}
+
+@media print {
+  .GlassCheckout-modalOverlay {
+    position: relative;
+    background: white;
+  }
+  
+  .GlassCheckout-billModal {
+    box-shadow: none;
+    max-width: 100%;
+    margin: 0;
+  }
+  
+  .GlassCheckout-billActions {
+    display: none;
+  }
+  
+  .GlassCheckout-modalClose {
+    display: none;
+  }
+}
+
 @media (max-width: 968px) {
   .GlassCheckout-ordersTable {
     font-size: 0.7em;
@@ -1052,6 +1270,14 @@
   }
 
   .GlassCheckout-searchWrapper {
+    flex-direction: column;
+  }
+  
+  .GlassCheckout-modalFooter {
+    width: 100%;
+  }
+  
+  .GlassCheckout-billActions {
     flex-direction: column;
   }
 }

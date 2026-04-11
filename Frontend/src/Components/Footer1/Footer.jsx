@@ -14,7 +14,7 @@ const Footer = () => {
           
           <div className="mt-footer-brand-col">
             <div className="mt-footer-logo-box">
-              <span className="mt-footer-brand-name">MetaTrade</span>
+              <span className="mt-footer-brand-name">ALUX</span>
             </div>
             <p className="mt-footer-tagline">
               Revolutionizing aluminum recycling through smart technology and sustainable trade solutions for a greener future.
@@ -67,7 +67,7 @@ const Footer = () => {
 
         <div className="mt-footer-bottom">
           <p className="mt-copyright-text">
-            © {currentYear} <span className="mt-highlight">MetaTrade</span>. All rights reserved. Designed for Sustainability.
+            © {currentYear} <span className="mt-highlight">ALUX</span>. All rights reserved. Designed for Sustainability.
           </p>
         </div>
       </div>

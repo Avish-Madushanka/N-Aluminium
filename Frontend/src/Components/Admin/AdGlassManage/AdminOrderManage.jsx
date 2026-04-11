@@ -155,7 +155,7 @@ const AdminOrderManage = () => {
               <h3>Delivery Details</h3>
               {order.deliveryMethod === "pickup" ? (
                 <>
-                  <div><strong>Pickup Location:</strong> Glass House Panadura - Alubomulla</div>
+                  <div><strong>Pickup Location:</strong> ALUX Panadura - Alubomulla</div>
                   <div><strong>Pickup Date:</strong> {order.pickupDate}</div>
                   <div><strong>Pickup Time:</strong> {order.pickupTimeSlot}</div>
                 </>

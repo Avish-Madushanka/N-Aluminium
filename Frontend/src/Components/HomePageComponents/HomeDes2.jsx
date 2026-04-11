@@ -62,7 +62,7 @@ const HomeDes2 = () => {
     <section className="HomeDES2-wrapper" ref={sectionRef}>
       <div className="HomeDES2-container">
         <div className="HomeDES2-content-pane">
-          <span className="HomeDES2-brand-label">METATRADE ALUMINUM PLATFORM</span>
+          <span className="HomeDES2-brand-label">ALUX ALUMINUM PLATFORM</span>
           <h2 className="HomeDES2-main-heading">Smart Solutions for Aluminum Recycling, Fabrication & Sustainable Trade</h2>
           <p className="HomeDES2-text-accent">
             We transform aluminum collection and reuse through smart technology, connecting users with real-time pricing and a seamless marketplace to build a sustainable future.

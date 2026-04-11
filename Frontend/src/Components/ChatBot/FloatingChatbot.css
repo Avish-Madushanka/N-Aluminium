@@ -4,24 +4,24 @@
 ═══════════════════════════════════════ */
 
 :root {
-  --alux-green:      #1a6e2e;
-  --alux-green-dk:   #145a24;
-  --alux-green-lt:   #e8f5ec;
-  --alux-green-mid:  #2d8a47;
-  --alux-header-bg:  #0d3d1a;
-  --alux-accent:     #39a85a;
-  --alux-white:      #ffffff;
-  --alux-bg:         #f7f9f7;
-  --alux-border:     #e0e8e1;
-  --alux-text:       #1a1a1a;
-  --alux-muted:      #6b7c6e;
-  --alux-bubble-bot: #ffffff;
-  --alux-radius:     16px;
-  --alux-font:       'Segoe UI', system-ui, -apple-system, sans-serif;
+  --ALUX-green:      #1a6e2e;
+  --ALUX-green-dk:   #145a24;
+  --ALUX-green-lt:   #e8f5ec;
+  --ALUX-green-mid:  #2d8a47;
+  --ALUX-header-bg:  #0d3d1a;
+  --ALUX-accent:     #39a85a;
+  --ALUX-white:      #ffffff;
+  --ALUX-bg:         #f7f9f7;
+  --ALUX-border:     #e0e8e1;
+  --ALUX-text:       #1a1a1a;
+  --ALUX-muted:      #6b7c6e;
+  --ALUX-bubble-bot: #ffffff;
+  --ALUX-radius:     16px;
+  --ALUX-font:       'Segoe UI', system-ui, -apple-system, sans-serif;
 }
 
 /* ── Launcher button ── */
-.alux-launcher {
+.ALUX-launcher {
   position: fixed;
   right: 24px;
   bottom: 24px;
@@ -32,52 +32,52 @@
   padding: 0 22px 0 16px;
   height: 50px;
   border-radius: 25px;
-  background: var(--alux-green);
-  color: var(--alux-white);
+  background: var(--ALUX-green);
+  color: var(--ALUX-white);
   border: none;
   font-size: 14px;
   font-weight: 600;
-  font-family: var(--alux-font);
+  font-family: var(--ALUX-font);
   cursor: pointer;
   box-shadow: 0 4px 18px rgba(26,110,46,0.38);
   transition: transform 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
   letter-spacing: 0.2px;
 }
-.alux-launcher:hover {
-  background: var(--alux-green-dk);
+.ALUX-launcher:hover {
+  background: var(--ALUX-green-dk);
   transform: translateY(-2px);
   box-shadow: 0 6px 24px rgba(26,110,46,0.48);
 }
 
 /* ── Chat window shell ── */
-.alux-chat {
+.ALUX-chat {
   position: fixed;
   right: 24px;
   bottom: 24px;
   z-index: 1000;
   width: 370px;
-  border-radius: var(--alux-radius);
-  background: var(--alux-white);
+  border-radius: var(--ALUX-radius);
+  background: var(--ALUX-white);
   box-shadow: 0 10px 48px rgba(0,0,0,0.16), 0 2px 8px rgba(0,0,0,0.06);
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  font-family: var(--alux-font);
+  font-family: var(--ALUX-font);
   transition: height 0.3s cubic-bezier(0.4,0,0.2,1);
-  animation: alux-rise 0.26s cubic-bezier(0.4,0,0.2,1);
+  animation: ALUX-rise 0.26s cubic-bezier(0.4,0,0.2,1);
 }
-.alux-expanded  { height: 560px; }
-.alux-minimized { height: 58px;  }
+.ALUX-expanded  { height: 560px; }
+.ALUX-minimized { height: 58px;  }
 
-@keyframes alux-rise {
+@keyframes ALUX-rise {
   from { opacity: 0; transform: translateY(14px) scale(0.97); }
   to   { opacity: 1; transform: translateY(0)    scale(1);    }
 }
 
 /* ── Header ── */
-.alux-header {
-  background: var(--alux-header-bg);
-  color: var(--alux-white);
+.ALUX-header {
+  background: var(--ALUX-header-bg);
+  color: var(--ALUX-white);
   padding: 0 12px 0 16px;
   height: 58px;
   display: flex;
@@ -85,41 +85,41 @@
   justify-content: space-between;
   flex-shrink: 0;
 }
-.alux-header-left {
+.ALUX-header-left {
   display: flex;
   align-items: center;
   gap: 11px;
 }
-.alux-avatar {
+.ALUX-avatar {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: var(--alux-green);
+  background: var(--ALUX-green);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
   box-shadow: 0 0 0 3px rgba(57,168,90,0.3);
 }
-.alux-header-info {
+.ALUX-header-info {
   display: flex;
   flex-direction: column;
   gap: 2px;
 }
-.alux-name {
+.ALUX-name {
   font-size: 15px;
   font-weight: 700;
   letter-spacing: 0.2px;
   line-height: 1;
 }
-.alux-status {
+.ALUX-status {
   font-size: 11px;
   color: rgba(255,255,255,0.65);
   display: flex;
   align-items: center;
   gap: 4px;
 }
-.alux-dot {
+.ALUX-dot {
   display: inline-block;
   width: 7px;
   height: 7px;
@@ -129,12 +129,12 @@
 }
 
 /* header buttons */
-.alux-header-actions {
+.ALUX-header-actions {
   display: flex;
   align-items: center;
   gap: 2px;
 }
-.alux-ctrl {
+.ALUX-ctrl {
   background: none;
   border: none;
   color: rgba(255,255,255,0.65);
@@ -147,28 +147,28 @@
   justify-content: center;
   transition: background 0.15s, color 0.15s;
 }
-.alux-ctrl:hover {
+.ALUX-ctrl:hover {
   background: rgba(255,255,255,0.1);
-  color: var(--alux-white);
+  color: var(--ALUX-white);
 }
-.alux-close:hover {
+.ALUX-close:hover {
   background: rgba(220,60,60,0.22);
   color: #ff8080;
 }
 
 /* ── Body wrapper ── */
-.alux-body {
+.ALUX-body {
   flex: 1;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  background: var(--alux-bg);
+  background: var(--ALUX-bg);
 }
 
 /* ══════════════════════
    HOME / QUICK TOPICS
 ══════════════════════ */
-.alux-home {
+.ALUX-home {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -176,75 +176,75 @@
   overflow-y: auto;
 }
 
-.alux-home-hero {
-  background: var(--alux-white);
-  border: 1px solid var(--alux-border);
+.ALUX-home-hero {
+  background: var(--ALUX-white);
+  border: 1px solid var(--ALUX-border);
   border-radius: 12px;
   padding: 18px 16px;
   text-align: center;
   margin-bottom: 16px;
 }
-.alux-hero-icon {
+.ALUX-hero-icon {
   font-size: 28px;
   margin-bottom: 8px;
   line-height: 1;
 }
-.alux-hero-title {
+.ALUX-hero-title {
   margin: 0 0 4px;
   font-size: 17px;
   font-weight: 700;
-  color: var(--alux-text);
+  color: var(--ALUX-text);
 }
-.alux-hero-sub {
+.ALUX-hero-sub {
   margin: 0;
   font-size: 13px;
-  color: var(--alux-muted);
+  color: var(--ALUX-muted);
   line-height: 1.5;
 }
 
-.alux-section-label {
+.ALUX-section-label {
   font-size: 11px;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.6px;
-  color: var(--alux-muted);
+  color: var(--ALUX-muted);
   margin: 0 0 8px 2px;
 }
 
-.alux-topics {
+.ALUX-topics {
   display: flex;
   flex-direction: column;
   gap: 6px;
   margin-bottom: 14px;
 }
-.alux-topic-btn {
+.ALUX-topic-btn {
   display: flex;
   align-items: center;
   gap: 10px;
   padding: 10px 12px;
-  background: var(--alux-white);
-  border: 1px solid var(--alux-border);
+  background: var(--ALUX-white);
+  border: 1px solid var(--ALUX-border);
   border-radius: 10px;
   cursor: pointer;
   font-size: 13.5px;
-  font-family: var(--alux-font);
-  color: var(--alux-text);
+  font-family: var(--ALUX-font);
+  color: var(--ALUX-text);
   text-align: left;
   font-weight: 500;
   transition: border-color 0.15s, background 0.15s, transform 0.12s, color 0.15s;
 }
-.alux-topic-btn:hover {
-  border-color: var(--alux-green);
-  background: var(--alux-green-lt);
-  color: var(--alux-green-dk);
+.ALUX-topic-btn:hover {
+  border-color: var(--ALUX-green);
+  background: var(--ALUX-green-lt);
+  color: var(--ALUX-green-dk);
   transform: translateX(3px);
 }
 .topic-icon  { font-size: 16px; flex-shrink: 0; }
 .topic-label { flex: 1; }
 .topic-arrow { flex-shrink: 0; opacity: 0.35; transition: opacity 0.15s; }
-.alux-topic-btn:hover .topic-arrow { opacity: 1; }
+.ALUX-topic-btn:hover .topic-arrow { opacity: 1; }
 
-.alux-divider {
+.ALUX-divider {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -252,48 +252,48 @@
   font-size: 11.5px;
   color: #b0bdb2;
 }
-.alux-divider::before,
-.alux-divider::after {
+.ALUX-divider::before,
+.ALUX-divider::after {
   content: '';
   flex: 1;
   height: 1px;
-  background: var(--alux-border);
+  background: var(--ALUX-border);
 }
 
 /* ══════════════════
    MESSAGE AREA
 ══════════════════ */
-.alux-messages {
+.ALUX-messages {
   flex: 1;
   padding: 14px 14px 6px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 10px;
-  background: var(--alux-bg);
+  background: var(--ALUX-bg);
 }
 
-.alux-row {
+.ALUX-row {
   display: flex;
   align-items: flex-end;
   gap: 7px;
-  animation: alux-fadein 0.22s ease-out;
+  animation: ALUX-fadein 0.22s ease-out;
 }
-.alux-row.user { flex-direction: row-reverse; }
+.ALUX-row.user { flex-direction: row-reverse; }
 
-.alux-msg-avatar {
+.ALUX-msg-avatar {
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  background: var(--alux-green);
-  color: var(--alux-white);
+  background: var(--ALUX-green);
+  color: var(--ALUX-white);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
 }
 
-.alux-bubble {
+.ALUX-bubble {
   max-width: 74%;
   padding: 10px 14px;
   border-radius: 16px;
@@ -301,18 +301,18 @@
   line-height: 1.6;
   word-break: break-word;
 }
-.alux-row.bot .alux-bubble {
-  background: var(--alux-bubble-bot);
-  color: var(--alux-text);
+.ALUX-row.bot .ALUX-bubble {
+  background: var(--ALUX-bubble-bot);
+  color: var(--ALUX-text);
   border-bottom-left-radius: 4px;
-  border: 1px solid var(--alux-border);
+  border: 1px solid var(--ALUX-border);
 }
-.alux-row.user .alux-bubble {
-  background: var(--alux-green);
-  color: var(--alux-white);
+.ALUX-row.user .ALUX-bubble {
+  background: var(--ALUX-green);
+  color: var(--ALUX-white);
   border-bottom-right-radius: 4px;
 }
-.alux-bubble.alux-error {
+.ALUX-bubble.ALUX-error {
   background: #fff4f4;
   border-color: #f5c0c0;
   color: #c0392b;
@@ -331,12 +331,12 @@
   height: 7px;
   border-radius: 50%;
   background: #b0bdb2;
-  animation: alux-bounce 1.2s infinite ease-in-out;
+  animation: ALUX-bounce 1.2s infinite ease-in-out;
 }
 .typing-dots span:nth-child(2) { animation-delay: 0.18s; }
 .typing-dots span:nth-child(3) { animation-delay: 0.36s; }
 
-@keyframes alux-bounce {
+@keyframes ALUX-bounce {
   0%, 80%, 100% { transform: scale(0.72); opacity: 0.45; }
   40%           { transform: scale(1.1);  opacity: 1; }
 }
@@ -344,46 +344,46 @@
 /* ══════════════════
    INPUT BAR
 ══════════════════ */
-.alux-input-bar {
+.ALUX-input-bar {
   display: flex;
   align-items: center;
   gap: 8px;
   padding: 10px 12px;
-  background: var(--alux-white);
-  border-top: 1px solid var(--alux-border);
+  background: var(--ALUX-white);
+  border-top: 1px solid var(--ALUX-border);
   flex-shrink: 0;
 }
-.alux-input-bar input {
+.ALUX-input-bar input {
   flex: 1;
   height: 40px;
   padding: 0 14px;
-  border: 1.5px solid var(--alux-border);
+  border: 1.5px solid var(--ALUX-border);
   border-radius: 20px;
   outline: none;
   font-size: 13.5px;
-  font-family: var(--alux-font);
-  color: var(--alux-text);
-  background: var(--alux-bg);
+  font-family: var(--ALUX-font);
+  color: var(--ALUX-text);
+  background: var(--ALUX-bg);
   transition: border-color 0.15s, background 0.15s;
 }
-.alux-input-bar input:focus {
-  border-color: var(--alux-green);
-  background: var(--alux-white);
+.ALUX-input-bar input:focus {
+  border-color: var(--ALUX-green);
+  background: var(--ALUX-white);
 }
-.alux-input-bar input:disabled {
+.ALUX-input-bar input:disabled {
   opacity: 0.55;
   cursor: not-allowed;
 }
-.alux-input-bar input::placeholder {
+.ALUX-input-bar input::placeholder {
   color: #a8b5ab;
 }
 
-.alux-send {
+.ALUX-send {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: var(--alux-green);
-  color: var(--alux-white);
+  background: var(--ALUX-green);
+  color: var(--ALUX-white);
   border: none;
   cursor: pointer;
   display: flex;
@@ -392,11 +392,11 @@
   flex-shrink: 0;
   transition: background 0.15s, transform 0.12s;
 }
-.alux-send:hover:not(:disabled) {
-  background: var(--alux-green-dk);
+.ALUX-send:hover:not(:disabled) {
+  background: var(--ALUX-green-dk);
   transform: scale(1.07);
 }
-.alux-send:disabled {
+.ALUX-send:disabled {
   background: #c8d5ca;
   cursor: not-allowed;
   transform: none;
@@ -405,31 +405,31 @@
 /* ══════════════════
    SCROLLBARS
 ══════════════════ */
-.alux-messages::-webkit-scrollbar,
-.alux-home::-webkit-scrollbar {
+.ALUX-messages::-webkit-scrollbar,
+.ALUX-home::-webkit-scrollbar {
   width: 4px;
 }
-.alux-messages::-webkit-scrollbar-track,
-.alux-home::-webkit-scrollbar-track {
+.ALUX-messages::-webkit-scrollbar-track,
+.ALUX-home::-webkit-scrollbar-track {
   background: transparent;
 }
-.alux-messages::-webkit-scrollbar-thumb,
-.alux-home::-webkit-scrollbar-thumb {
+.ALUX-messages::-webkit-scrollbar-thumb,
+.ALUX-home::-webkit-scrollbar-thumb {
   background: #c8d5ca;
   border-radius: 4px;
 }
-.alux-messages::-webkit-scrollbar-thumb:hover,
-.alux-home::-webkit-scrollbar-thumb:hover {
+.ALUX-messages::-webkit-scrollbar-thumb:hover,
+.ALUX-home::-webkit-scrollbar-thumb:hover {
   background: #a8b9ab;
 }
 
-@keyframes alux-fadein {
+@keyframes ALUX-fadein {
   from { opacity: 0; transform: translateY(5px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
 /* ── Responsive: smaller screens ── */
 @media (max-width: 420px) {
-  .alux-chat    { width: calc(100vw - 24px); right: 12px; bottom: 12px; }
-  .alux-launcher{ right: 12px; bottom: 12px; }
+  .ALUX-chat    { width: calc(100vw - 24px); right: 12px; bottom: 12px; }
+  .ALUX-launcher{ right: 12px; bottom: 12px; }
 }

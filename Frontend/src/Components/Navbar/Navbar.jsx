@@ -61,8 +61,8 @@ const Navbar = ({ isLoggedIn, userInfo, handleLogout, cartItemCount = 0 }) => {
     <header className={`Nav-header-main ${scrolled ? 'Nav-header-scrolled' : ''}`} ref={headerRef}>
       <div className="Nav-header-container">
         <Link className="Nav-brand-logo" to="/">
-          <img src={logo} alt="MetaTrade" className="Nav-brand-image" />
-          <span className="Nav-brand-text">MetaTrade</span>
+          <img src={logo} alt="ALUX" className="Nav-brand-image" />
+          <span className="Nav-brand-text">ALUX</span>
         </Link>
 
         <div className="Nav-menu-links">

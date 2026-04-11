@@ -6,13 +6,13 @@ function Privacy() {
   return (
     <div className="Privacy-container">
       <header className="Privacy-header">
-        <img src={logo} alt="MetaTrade Logo" className="Privacy-logo" />
+        <img src={logo} alt="ALUX Logo" className="Privacy-logo" />
         <h1>Privacy Policy</h1>
       </header>
 
       <section className="Privacy-content">
         <p>
-          At MetaTrade, we are committed to protecting your privacy. This Privacy Policy
+          At ALUX, we are committed to protecting your privacy. This Privacy Policy
           explains how we collect, use, and safeguard your information when you use our platform.
         </p>
 
@@ -69,7 +69,7 @@ function Privacy() {
       </section>
 
       <footer className="Privacy-footer">
-        <p>© 2026 MetaTrade Aluminum Platform. All rights reserved.</p>
+        <p>© 2026 ALUX Aluminum Platform. All rights reserved.</p>
       </footer>
     </div>
   );

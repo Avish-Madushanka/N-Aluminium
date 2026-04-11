@@ -6,13 +6,13 @@ function Cookie() {
   return (
     <div className="Cookie-container">
       <header className="Cookie-header">
-        <img src={logo} alt="MetaTrade Logo" className="Cookie-logo" />
+        <img src={logo} alt="ALUX Logo" className="Cookie-logo" />
         <h1>Cookie Policy</h1>
       </header>
 
       <section className="Cookie-content">
         <p>
-          This Cookie Policy explains how MetaTrade uses cookies and similar technologies
+          This Cookie Policy explains how ALUX uses cookies and similar technologies
           to recognize you when you visit our website. It explains what these technologies are
           and why we use them, as well as your rights to control our use of them.
         </p>
@@ -60,7 +60,7 @@ function Cookie() {
       </section>
 
       <footer className="Cookie-footer">
-        <p>© 2026 MetaTrade Aluminum Platform. All rights reserved.</p>
+        <p>© 2026 ALUX Aluminum Platform. All rights reserved.</p>
       </footer>
     </div>
   );

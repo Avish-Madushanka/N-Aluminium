@@ -184,7 +184,7 @@ const FloatingChatbot = () => {
   /* ── Launcher button ── */
   if (!isOpen) {
     return (
-      <button className="alux-launcher" onClick={handleOpen} aria-label="Open ALUX AI">
+      <button className="ALUX-launcher" onClick={handleOpen} aria-label="Open ALUX AI">
         <TrendIcon />
         <span>ALUX AI</span>
       </button>
@@ -193,32 +193,32 @@ const FloatingChatbot = () => {
 
   /* ── Chat window ── */
   return (
-    <div className={`alux-chat ${isMinimized ? 'alux-minimized' : 'alux-expanded'}`}>
+    <div className={`ALUX-chat ${isMinimized ? 'ALUX-minimized' : 'ALUX-expanded'}`}>
 
       {/* Header */}
-      <div className="alux-header">
-        <div className="alux-header-left">
-          <div className="alux-avatar"><TrendIcon /></div>
-          <div className="alux-header-info">
-            <span className="alux-name">{BOT_NAME}</span>
-            <span className="alux-status"><span className="alux-dot" />Online</span>
+      <div className="ALUX-header">
+        <div className="ALUX-header-left">
+          <div className="ALUX-avatar"><TrendIcon /></div>
+          <div className="ALUX-header-info">
+            <span className="ALUX-name">{BOT_NAME}</span>
+            <span className="ALUX-status"><span className="ALUX-dot" />Online</span>
           </div>
         </div>
-        <div className="alux-header-actions">
+        <div className="ALUX-header-actions">
           {!isMinimized && messages.length > 0 && (
-            <button className="alux-ctrl" onClick={handleNewChat} title="New chat">
+            <button className="ALUX-ctrl" onClick={handleNewChat} title="New chat">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
                 <path d="M12 5v14M5 12h14" />
               </svg>
             </button>
           )}
-          <button className="alux-ctrl" onClick={() => setIsMinimized(m => !m)} title={isMinimized ? 'Expand' : 'Minimize'}>
+          <button className="ALUX-ctrl" onClick={() => setIsMinimized(m => !m)} title={isMinimized ? 'Expand' : 'Minimize'}>
             {isMinimized
               ? <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" /></svg>
               : <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><path d="M5 12h14" /></svg>
             }
           </button>
-          <button className="alux-ctrl alux-close" onClick={() => setIsOpen(false)} title="Close">
+          <button className="ALUX-ctrl ALUX-close" onClick={() => setIsOpen(false)} title="Close">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
               <path d="M18 6L6 18M6 6l12 12" />
             </svg>
@@ -228,21 +228,21 @@ const FloatingChatbot = () => {
 
       {/* Body */}
       {!isMinimized && (
-        <div className="alux-body">
+        <div className="ALUX-body">
 
           {/* ── Home screen ── */}
           {showHome ? (
-            <div className="alux-home">
-              <div className="alux-home-hero">
-                <div className="alux-hero-icon">♻️</div>
-                <p className="alux-hero-title">Hi, I'm {BOT_NAME}</p>
-                <p className="alux-hero-sub">{BOT_SUBTITLE} — ask me anything about the platform or aluminum sustainability.</p>
+            <div className="ALUX-home">
+              <div className="ALUX-home-hero">
+                <div className="ALUX-hero-icon">♻️</div>
+                <p className="ALUX-hero-title">Hi, I'm {BOT_NAME}</p>
+                <p className="ALUX-hero-sub">{BOT_SUBTITLE} — ask me anything about the platform or aluminum sustainability.</p>
               </div>
 
-              <p className="alux-section-label">Quick topics</p>
-              <div className="alux-topics">
+              <p className="ALUX-section-label">Quick topics</p>
+              <div className="ALUX-topics">
                 {QUICK_TOPICS.map((t, i) => (
-                  <button key={i} className="alux-topic-btn" onClick={() => sendMessage(t.prompt)}>
+                  <button key={i} className="ALUX-topic-btn" onClick={() => sendMessage(t.prompt)}>
                     <span className="topic-icon">{t.icon}</span>
                     <span className="topic-label">{t.label}</span>
                     <svg className="topic-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
@@ -252,9 +252,9 @@ const FloatingChatbot = () => {
                 ))}
               </div>
 
-              <div className="alux-divider"><span>or ask your own question</span></div>
+              <div className="ALUX-divider"><span>or ask your own question</span></div>
 
-              <div className="alux-input-bar">
+              <div className="ALUX-input-bar">
                 <input
                   ref={inputRef}
                   type="text"
@@ -263,7 +263,7 @@ const FloatingChatbot = () => {
                   onKeyDown={handleKeyDown}
                   placeholder="Type a message…"
                 />
-                <button className="alux-send" onClick={handleSend} disabled={!inputValue.trim()}>
+                <button className="ALUX-send" onClick={handleSend} disabled={!inputValue.trim()}>
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
                     <path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z" />
                   </svg>
@@ -275,13 +275,13 @@ const FloatingChatbot = () => {
 
             /* ── Chat messages screen ── */
             <>
-              <div className="alux-messages">
+              <div className="ALUX-messages">
                 {messages.map((msg, i) => (
-                  <div key={i} className={`alux-row ${msg.sender}`}>
+                  <div key={i} className={`ALUX-row ${msg.sender}`}>
                     {msg.sender === 'bot' && (
-                      <div className="alux-msg-avatar"><TrendIcon /></div>
+                      <div className="ALUX-msg-avatar"><TrendIcon /></div>
                     )}
-                    <div className={`alux-bubble${msg.isError ? ' alux-error' : ''}`}>
+                    <div className={`ALUX-bubble${msg.isError ? ' ALUX-error' : ''}`}>
                       {msg.sender === 'bot'
                         ? <FormattedText text={msg.text} />
                         : msg.text
@@ -290,15 +290,15 @@ const FloatingChatbot = () => {
                   </div>
                 ))}
                 {isTyping && (
-                  <div className="alux-row bot">
-                    <div className="alux-msg-avatar"><TrendIcon /></div>
-                    <div className="alux-bubble"><TypingDots /></div>
+                  <div className="ALUX-row bot">
+                    <div className="ALUX-msg-avatar"><TrendIcon /></div>
+                    <div className="ALUX-bubble"><TypingDots /></div>
                   </div>
                 )}
                 <div ref={messagesEndRef} />
               </div>
 
-              <div className="alux-input-bar">
+              <div className="ALUX-input-bar">
                 <input
                   ref={inputRef}
                   type="text"
@@ -308,7 +308,7 @@ const FloatingChatbot = () => {
                   placeholder="Ask ALUX AI anything…"
                   disabled={isTyping}
                 />
-                <button className="alux-send" onClick={handleSend} disabled={isTyping || !inputValue.trim()}>
+                <button className="ALUX-send" onClick={handleSend} disabled={isTyping || !inputValue.trim()}>
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
                     <path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z" />
                   </svg>

@@ -6,13 +6,13 @@ function Terms() {
   return (
     <div className="Terms-container">
       <header className="Terms-header">
-        <img src={logo} alt="MetaTrade Logo" className="Terms-logo" />
+        <img src={logo} alt="ALUX Logo" className="Terms-logo" />
         <h1>Terms & Conditions</h1>
       </header>
 
       <section className="Terms-content">
         <p>
-          Welcome to MetaTrade. By accessing and using our platform, you agree to comply
+          Welcome to ALUX. By accessing and using our platform, you agree to comply
           with and be bound by the following terms and conditions. Please read them carefully
           before using our services.
         </p>
@@ -53,7 +53,7 @@ function Terms() {
 
         <h2>Limitation of Liability</h2>
         <p>
-          MetaTrade is not liable for any indirect or consequential damages resulting from
+          ALUX is not liable for any indirect or consequential damages resulting from
           the use or inability to use our services.
         </p>
 
@@ -71,7 +71,7 @@ function Terms() {
       </section>
 
       <footer className="Terms-footer">
-        <p>© 2026 MetaTrade Aluminum Platform. All rights reserved.</p>
+        <p>© 2026 ALUX Aluminum Platform. All rights reserved.</p>
       </footer>
     </div>
   );

@@ -9,12 +9,12 @@ const AboutUSDes3 = () => {
     {
       id: 1,
       question: "How do I get started?",
-      answer: "Simply create an account on MetaTrade and choose your service. You can request aluminum fabrication, schedule scrap collection, or explore the marketplace based on your needs."
+      answer: "Simply create an account on ALUX and choose your service. You can request aluminum fabrication, schedule scrap collection, or explore the marketplace based on your needs."
     },
     {
       id: 2,
-      question: "What services does MetaTrade provide?",
-      answer: "MetaTrade offers aluminum fabrication, scrap collection, real-time pricing, and a digital marketplace for buying and selling aluminum products and materials."
+      question: "What services does ALUX provide?",
+      answer: "ALUX offers aluminum fabrication, scrap collection, real-time pricing, and a digital marketplace for buying and selling aluminum products and materials."
     },
     {
       id: 3,
@@ -28,7 +28,7 @@ const AboutUSDes3 = () => {
     },
     {
       id: 5,
-      question: "Does MetaTrade provide price updates?",
+      question: "Does ALUX provide price updates?",
       answer: "Yes, the system provides real-time aluminum price updates to help users make better decisions when selling or purchasing materials."
     }
   ];

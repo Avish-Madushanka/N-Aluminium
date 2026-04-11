@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from 'react-hot-toast';
 import axios from 'axios';
 import "./GlassOrderCheckout.css";
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
 
 const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
@@ -57,6 +59,10 @@ const GlassOrderCheckout = () => {
   const companyMarkerRef = useRef(null);
 
   const COMPANY_COORDS = { lat: 6.6578, lng: 79.9027 };
+  const COMPANY_NAME = "ALUX Panadura";
+  const COMPANY_ADDRESS = "Alubomulla, Panadura, Sri Lanka";
+  const COMPANY_PHONE = "+94 72 104 6048";
+  const COMPANY_EMAIL = "donotreply.ALUX@gmail.com";
   const USD_TO_LKR = 300;
 
   useEffect(() => {
@@ -120,6 +126,156 @@ const GlassOrderCheckout = () => {
   const grandTotalLKR = totalGlassPrice + transportCost + insuranceCost;
   const grandTotalUSD = grandTotalLKR / USD_TO_LKR;
   const currentDistanceValue = manualDistance || distance;
+
+  const generatePDFBill = () => {
+    const doc = new jsPDF();
+    const pageWidth = doc.internal.pageSize.getWidth();
+    
+    doc.setFillColor(33, 33, 33);
+    doc.rect(0, 0, pageWidth, 45, 'F');
+    
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(22);
+    doc.setFont("helvetica", "bold");
+    doc.text(COMPANY_NAME, pageWidth / 2, 20, { align: 'center' });
+    
+    doc.setFontSize(10);
+    doc.setTextColor(200, 200, 200);
+    doc.text(COMPANY_ADDRESS, pageWidth / 2, 30, { align: 'center' });
+    doc.text(`${COMPANY_PHONE} | ${COMPANY_EMAIL}`, pageWidth / 2, 37, { align: 'center' });
+    
+    doc.setTextColor(0, 0, 0);
+    doc.setFontSize(18);
+    doc.setFont("helvetica", "bold");
+    doc.text("PAYMENT RECEIPT", pageWidth / 2, 60, { align: 'center' });
+    
+    doc.setDrawColor(200, 200, 200);
+    doc.line(20, 65, pageWidth - 20, 65);
+    
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(100, 100, 100);
+    doc.text(`Bill Number: ${currentOrder?.billNumber || generateBillNumber()}`, 20, 78);
+    doc.text(`Order ID: ${currentOrder?.id || 'N/A'}`, 20, 86);
+    doc.text(`Date: ${new Date().toLocaleString()}`, 20, 94);
+    doc.text(`Payment Method: ${paymentMethod === "card" ? "Credit/Debit Card" : paymentMethod === "bank" ? "Bank Transfer" : paymentMethod === "cash" ? "Cash on Delivery" : paymentMethod === "paypal" ? "PayPal" : "Mobile Payment"}`, 20, 102);
+    
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(0, 0, 0);
+    doc.text("CUSTOMER DETAILS", 20, 118);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(80, 80, 80);
+    doc.text(`Name: ${userInfo.fullName}`, 20, 128);
+    doc.text(`Email: ${userInfo.email}`, 20, 136);
+    doc.text(`Phone: ${userInfo.phone}`, 20, 144);
+    
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(0, 0, 0);
+    doc.text("ORDER ITEMS", 20, 160);
+    
+    const tableData = selectedItems.map(item => [
+      item.glassType,
+      `${item.widthFt}'x${item.heightFt}'`,
+      item.quantity,
+      `Rs ${item.totalPrice.toFixed(2)}`
+    ]);
+    
+    doc.autoTable({
+      startY: 165,
+      head: [['Glass Type', 'Dimensions', 'Qty', 'Price']],
+      body: tableData,
+      theme: 'striped',
+      headStyles: { fillColor: [52, 73, 94], textColor: 255, fontSize: 10 },
+      bodyStyles: { fontSize: 9 },
+      columnStyles: {
+        0: { cellWidth: 70 },
+        1: { cellWidth: 50 },
+        2: { cellWidth: 30 },
+        3: { cellWidth: 40 }
+      },
+      margin: { left: 20 }
+    });
+    
+    let finalY = doc.lastAutoTable.finalY + 10;
+    
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(80, 80, 80);
+    doc.text(`Glass Total:`, pageWidth - 80, finalY);
+    doc.text(`Rs ${totalGlassPrice.toFixed(2)}`, pageWidth - 20, finalY, { align: 'right' });
+    
+    finalY += 8;
+    doc.text(`Transport Cost:`, pageWidth - 80, finalY);
+    doc.text(`Rs ${transportCost.toFixed(2)}`, pageWidth - 20, finalY, { align: 'right' });
+    
+    if (insuranceCost > 0) {
+      finalY += 8;
+      doc.text(`Insurance (2%):`, pageWidth - 80, finalY);
+      doc.text(`Rs ${insuranceCost.toFixed(2)}`, pageWidth - 20, finalY, { align: 'right' });
+    }
+    
+    finalY += 10;
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(220, 53, 69);
+    doc.text(`GRAND TOTAL:`, pageWidth - 80, finalY);
+    doc.text(`Rs ${grandTotalLKR.toFixed(2)}`, pageWidth - 20, finalY, { align: 'right' });
+    
+    finalY += 8;
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(80, 80, 80);
+    doc.text(`Amount in USD:`, pageWidth - 80, finalY);
+    doc.text(`$${grandTotalUSD.toFixed(2)}`, pageWidth - 20, finalY, { align: 'right' });
+    
+    finalY += 15;
+    doc.setDrawColor(200, 200, 200);
+    doc.line(20, finalY, pageWidth - 20, finalY);
+    
+    finalY += 10;
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(0, 0, 0);
+    doc.text("DELIVERY INFORMATION", 20, finalY);
+    
+    finalY += 8;
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(80, 80, 80);
+    
+    if (deliveryMethod === "pickup") {
+      doc.text(`Method: Self Pickup`, 20, finalY);
+      finalY += 6;
+      doc.text(`Pickup Location: ${COMPANY_ADDRESS}`, 20, finalY);
+      finalY += 6;
+      doc.text(`Pickup Date: ${pickupDate}`, 20, finalY);
+      finalY += 6;
+      doc.text(`Pickup Time: ${pickupTimeSlot}`, 20, finalY);
+    } else {
+      doc.text(`Method: Home Delivery`, 20, finalY);
+      finalY += 6;
+      doc.text(`Delivery Address: ${selectedLocation?.address || "Manually entered location"}`, 20, finalY);
+      finalY += 6;
+      doc.text(`Distance: ${currentDistanceValue} km`, 20, finalY);
+      finalY += 6;
+      doc.text(`Delivery Date: ${deliveryDate}`, 20, finalY);
+      finalY += 6;
+      doc.text(`Delivery Time: ${deliveryTimeSlot}`, 20, finalY);
+      if (urgentDelivery) {
+        finalY += 6;
+        doc.text(`Urgent Delivery: Yes (+25% fee)`, 20, finalY);
+      }
+      if (insurance) {
+        finalY += 6;
+        doc.text(`Insurance: Included (2% of glass value)`, 20, finalY);
+      }
+    }
+    
+    finalY += 12;
+    doc.setFillColor(240, 248, 255);
+    doc.rect(20, finalY, pageWidth - 40, 25, 'F');
+    doc.setTextColor(0, 0, 0);
+    doc.setFontSize(9);
+    doc.text("Thank you for your purchase!", pageWidth / 2, finalY + 8, { align: 'center' });
+    doc.text("For inquiries, please contact our customer support.", pageWidth / 2, finalY + 16, { align: 'center' });
+    
+    doc.save(`Bill_${currentOrder?.billNumber || 'receipt'}.pdf`);
+  };
 
   useEffect(() => {
     if (showPaymentModal && paymentMethod === "paypal" && !paypalRendered && grandTotalUSD > 0) {
@@ -507,7 +663,7 @@ const GlassOrderCheckout = () => {
     });
     
     const infoWindow = new window.google.maps.InfoWindow({
-      content: '<div style="padding: 5px;"><strong>Glass House Panadura</strong><br/>Our Warehouse Location</div>'
+      content: '<div style="padding: 5px;"><strong>ALUX Panadura</strong><br/>Our Warehouse Location</div>'
     });
     
     companyMarkerRef.current.addListener("click", () => {
@@ -659,10 +815,10 @@ const GlassOrderCheckout = () => {
         </div>
         <div className="GlassCheckout-billContent">
           <div className="GlassCheckout-billCompany">
-            <h3>Glass House Panadura</h3>
-            <p>Alubomulla, Panadura, Sri Lanka</p>
-            <p>Tel: +94 72 104 6048</p>
-            <p>Email: info@glasshouse.lk</p>
+            <h3>{COMPANY_NAME}</h3>
+            <p>{COMPANY_ADDRESS}</p>
+            <p>Tel: {COMPANY_PHONE}</p>
+            <p>Email: {COMPANY_EMAIL}</p>
           </div>
           
           <div className="GlassCheckout-billDivider"></div>
@@ -759,7 +915,10 @@ const GlassOrderCheckout = () => {
           <button className="GlassCheckout-printBtn" onClick={() => window.print()}>
             🖨️ Print Receipt
           </button>
-          <button className="GlassCheckout-downloadBtn" onClick={() => {
+          <button className="GlassCheckout-downloadBtn" onClick={generatePDFBill}>
+            📥 Download PDF
+          </button>
+          <button className="GlassCheckout-doneBtn" onClick={() => {
             setShowBillModal(false);
             resetOrder();
           }}>
@@ -827,7 +986,7 @@ const GlassOrderCheckout = () => {
               <h3>Delivery Details</h3>
               {deliveryMethod === "pickup" ? (
                 <div>
-                  <p><strong>Pickup Location:</strong> Glass House Panadura - Alubomulla</p>
+                  <p><strong>Pickup Location:</strong> ALUX Panadura - Alubomulla</p>
                   <p><strong>Pickup Date:</strong> {pickupDate}</p>
                   <p><strong>Pickup Time:</strong> {pickupTimeSlot}</p>
                   <p className="GlassCheckout-fragileWarning">⚠️ Fragile item - Handle with care. Please bring payment receipt for verification.</p>
@@ -1068,7 +1227,7 @@ const GlassOrderCheckout = () => {
             <div className="GlassCheckout-pickupSection">
               <h3>Pickup Details</h3>
               <div className="GlassCheckout-locationInfo">
-                <p>📍 <strong>Pickup Location:</strong> Glass House Panadura - Alubomulla, Sri Lanka</p>
+                <p>📍 <strong>Pickup Location:</strong> ALUX Panadura - Alubomulla, Sri Lanka</p>
               </div>
               <div className="GlassCheckout-formRow">
                 <div className="GlassCheckout-formGroup">
@@ -1106,7 +1265,7 @@ const GlassOrderCheckout = () => {
             <div className="GlassCheckout-lorrySection">
               <h3>Delivery Details</h3>
               <div className="GlassCheckout-locationInfo">
-                <p>🏭 <strong>Shipping From:</strong> Glass House Panadura - Alubomulla, Sri Lanka</p>
+                <p>🏭 <strong>Shipping From:</strong> ALUX Panadura - Alubomulla, Sri Lanka</p>
               </div>
               
               <div className="GlassCheckout-formRow">
@@ -1164,9 +1323,9 @@ const GlassOrderCheckout = () => {
               )}
 
               <div className="GlassCheckout-priceInfo">
-                <p>🚚 Base: Rs 6,000 (first 15km) | Extra: Rs 150/km after 15km</p>
-                {currentDistanceValue && parseFloat(currentDistanceValue) > 15 && (
-                  <p>Extra: {(parseFloat(currentDistanceValue) - 15).toFixed(1)} km × Rs 150 = Rs {((parseFloat(currentDistanceValue) - 15) * 150).toFixed(2)}</p>
+                <p>🚚 Base: Rs 6,000 (first 10km) | Extra: Rs 150/km after 10km</p>
+                {currentDistanceValue && parseFloat(currentDistanceValue) > 10 && (
+                  <p>Extra: {(parseFloat(currentDistanceValue) - 10).toFixed(1)} km × Rs 150 = Rs {((parseFloat(currentDistanceValue) - 10) * 150).toFixed(2)}</p>
                 )}
               </div>
 
@@ -1341,21 +1500,6 @@ const GlassOrderCheckout = () => {
                     <div>
                       <strong>Cash on Delivery/Pickup</strong>
                       <small>Pay when you receive</small>
-                    </div>
-                  </label>
-                  
-                  <label className="GlassCheckout-paymentOption">
-                    <input
-                      type="radio"
-                      name="paymentMethod"
-                      value="mobile"
-                      checked={paymentMethod === "mobile"}
-                      onChange={(e) => setPaymentMethod(e.target.value)}
-                    />
-                    <span className="GlassCheckout-paymentIcon">📱</span>
-                    <div>
-                      <strong>Mobile Payment</strong>
-                      <small>PayPal, Apple Pay, Google Pay</small>
                     </div>
                   </label>
 
