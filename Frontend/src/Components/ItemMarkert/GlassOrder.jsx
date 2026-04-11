@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./GlassOrder.css";
 
-const glassProduct = {
+const STORAGE_KEY = "glassProductData";
+
+const defaultGlassProduct = {
   id: 1,
   name: "Start Your Glass Order",
   glassTypes: {
@@ -58,11 +60,10 @@ const productGallery = [
 
 const GlassOrder = () => {
   const navigate = useNavigate();
-  const [selectedGlassType, setSelectedGlassType] = useState(
-    Object.keys(glassProduct.glassTypes)[0]
-  );
-  const [selectedQuality, setSelectedQuality] = useState("Standard");
-  const [selectedSize, setSelectedSize] = useState("4mm");
+  const [glassProduct, setGlassProduct] = useState(defaultGlassProduct);
+  const [selectedGlassType, setSelectedGlassType] = useState("");
+  const [selectedQuality, setSelectedQuality] = useState("");
+  const [selectedSize, setSelectedSize] = useState("");
   const [widthFt, setWidthFt] = useState("");
   const [heightFt, setHeightFt] = useState("");
   const [quantity, setQuantity] = useState(1);
@@ -71,21 +72,59 @@ const GlassOrder = () => {
     return items.length;
   });
 
+  useEffect(() => {
+    const loadGlassData = () => {
+      const savedData = localStorage.getItem(STORAGE_KEY);
+      if (savedData) {
+        const parsedData = JSON.parse(savedData);
+        setGlassProduct(parsedData);
+        const firstType = Object.keys(parsedData.glassTypes)[0];
+        setSelectedGlassType(firstType);
+        if (firstType) {
+          const firstQuality = Object.keys(parsedData.glassTypes[firstType])[0];
+          setSelectedQuality(firstQuality);
+          if (firstQuality) {
+            const firstSize = Object.keys(parsedData.glassTypes[firstType][firstQuality])[0];
+            setSelectedSize(firstSize);
+          }
+        }
+      } else {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultGlassProduct));
+        const firstType = Object.keys(defaultGlassProduct.glassTypes)[0];
+        setSelectedGlassType(firstType);
+        if (firstType) {
+          const firstQuality = Object.keys(defaultGlassProduct.glassTypes[firstType])[0];
+          setSelectedQuality(firstQuality);
+          if (firstQuality) {
+            const firstSize = Object.keys(defaultGlassProduct.glassTypes[firstType][firstQuality])[0];
+            setSelectedSize(firstSize);
+          }
+        }
+      }
+    };
+
+    loadGlassData();
+
+    const handleDataUpdate = () => {
+      loadGlassData();
+    };
+
+    window.addEventListener("glassDataUpdated", handleDataUpdate);
+    return () => window.removeEventListener("glassDataUpdated", handleDataUpdate);
+  }, []);
+
   const currentGlassData = glassProduct.glassTypes[selectedGlassType];
-  const availableQualities = Object.keys(currentGlassData);
-  const availableSizes = currentGlassData[selectedQuality]
+  const availableQualities = currentGlassData ? Object.keys(currentGlassData) : [];
+  const availableSizes = currentGlassData && currentGlassData[selectedQuality]
     ? Object.keys(currentGlassData[selectedQuality])
     : [];
-  const currentUnitPrice =
-    currentGlassData[selectedQuality]?.[selectedSize] || 0;
+  const currentUnitPrice = currentGlassData && currentGlassData[selectedQuality]?.[selectedSize] || 0;
 
   const handleGlassTypeChange = (glassType) => {
     setSelectedGlassType(glassType);
     const firstQuality = Object.keys(glassProduct.glassTypes[glassType])[0];
     setSelectedQuality(firstQuality);
-    const firstSize = Object.keys(
-      glassProduct.glassTypes[glassType][firstQuality]
-    )[0];
+    const firstSize = Object.keys(glassProduct.glassTypes[glassType][firstQuality])[0];
     setSelectedSize(firstSize);
   };
 
@@ -198,7 +237,7 @@ const GlassOrder = () => {
                 <tr className="GlassMain-tableSubHeader">
                   <th>Standard</th>
                   <th>Premium</th>
-                </tr>
+                 </tr>
               </thead>
               <tbody>
                 {(() => {
@@ -222,7 +261,7 @@ const GlassOrder = () => {
                           {i === 0 && (
                             <td rowSpan={maxRows} className="GlassMain-glassTypeCell">
                               {glassType}
-                            </td>
+                             </td>
                           )}
                           <td className="GlassMain-sizeCell">
                             {standardSize ? (
@@ -231,7 +270,7 @@ const GlassOrder = () => {
                                 <span className="GlassMain-priceValue">Rs {standardPrice.toFixed(2)}</span>
                               </div>
                             ) : null}
-                          </td>
+                           </td>
                           <td className="GlassMain-sizeCell">
                             {premiumSize ? (
                               <div className="GlassMain-sizePriceCell">
@@ -239,13 +278,13 @@ const GlassOrder = () => {
                                 <span className="GlassMain-priceValue">Rs {premiumPrice.toFixed(2)}</span>
                               </div>
                             ) : null}
-                          </td>
+                           </td>
                           {i === 0 && (
                             <td rowSpan={maxRows} className="GlassMain-priceNoteCell">
                               Per ft²
-                            </td>
+                             </td>
                           )}
-                        </tr>
+                         </tr>
                       );
                     }
                   });

@@ -51,11 +51,6 @@ import AdminLocationManager from './Components/Admin/AdMapUpdate/AdminLocationMa
 import FloatingChatbot from './Components/ChatBot/FloatingChatbot';
 import AluTReg from './Pages/AluTReg';
 import GlassOrder from './Components/ItemMarkert/GlassOrder';
-import Payment from './Pages/Payment';
-import PaymentMethod from './Components/Payment/PaymentMethod';
-import Payments from './Components/Payment/Payments';
-import PromoCode from './Components/Payment/PromoCode';
-import UserDetails from './Components/Payment/UserDetails';
 import AluRegVideoUp from './Components/AluTReg/AluRegVideoUp';
 import ItemAddForm from './Components/Admin/ItemsAddForm/ItemsAddForm';
 import AluTRegForm from './Components/AluTReg/AluTRegForm';
@@ -71,6 +66,8 @@ import Cookie from './Components/LegalPolicy/Cookie';
 import Terms from './Components/LegalPolicy/Terms';
 import Privacy from './Components/LegalPolicy/Privacy';
 import GlassOrderCheckout from './Components/ItemMarkert/GlassOrderCheckout';
+import AdGlassManage from './Components/Admin/AdGlassManage/AdGlassManage';
+import AdminOrderManage from './Components/Admin/AdGlassManage/AdminOrderManage';
 
 const parseUserInfoFromToken = (token) => {
     if (!token) {
@@ -314,11 +311,6 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
                     <Route path="/AboutUSDiagram" element={<AboutUSDiagram />} />
                     <Route path="/ItemMarkert" element={<ItemMarkert />} />
                     <Route path="/AluTReg" element={<AluTReg />} />
-                    <Route path="/Payment" element={<Payment />} />
-                    <Route path="/PaymentMethod" element={<PaymentMethod />} />
-                    <Route path="/Payments" element={<Payments /> } />
-                    <Route path="/PromoCode" element={<PromoCode /> } />
-                    <Route path="/Userdetails" element={<UserDetails /> } />
                     <Route path="/AluRegVideoUp" element={<AluRegVideoUp /> } />
                     <Route path="/ItemsAddForm" element={<ItemAddForm /> } />
                     <Route path="/AluTRegForm" element={<AluTRegForm /> } />
@@ -360,6 +352,8 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
                            <Route path="/Admin/ProManage" element={<ProManage /> } />
                            <Route path="/Admin/ItemsAddForm" element={<ItemAddForm /> } />
                            <Route path="/Admin/BuyandSellManage" element={<BuyandSellManage /> } />
+                           <Route path="/Admin/AdGlassManage" element={<AdGlassManage /> } />
+                           <Route path="/Admin/AdminOrderManage" element={<AdminOrderManage /> } />
                         </Route>
                      </Route>
 

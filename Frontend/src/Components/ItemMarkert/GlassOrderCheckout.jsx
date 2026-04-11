@@ -1,8 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import toast, { Toaster } from 'react-hot-toast';
+import axios from 'axios';
 import "./GlassOrderCheckout.css";
 
 const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
 
 const GlassOrderCheckout = () => {
   const navigate = useNavigate();
@@ -45,12 +48,16 @@ const GlassOrderCheckout = () => {
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [mapLoaded, setMapLoaded] = useState(false);
   const [manualDistance, setManualDistance] = useState("");
+  const [currentOrder, setCurrentOrder] = useState(null);
+  const [showBillModal, setShowBillModal] = useState(false);
+  const [paypalRendered, setPaypalRendered] = useState(false);
   
   const mapRef = useRef(null);
   const markerRef = useRef(null);
   const companyMarkerRef = useRef(null);
 
   const COMPANY_COORDS = { lat: 6.6578, lng: 79.9027 };
+  const USD_TO_LKR = 300;
 
   useEffect(() => {
     const storedItems = JSON.parse(localStorage.getItem('glassOrderItems') || '[]');
@@ -110,8 +117,97 @@ const GlassOrderCheckout = () => {
   
   const transportCost = deliveryMethod === "pickup" ? 0 : calculateDeliveryPrice();
   const insuranceCost = insurance && deliveryMethod === "delivery" ? totalGlassPrice * 0.02 : 0;
-  const grandTotal = totalGlassPrice + transportCost + insuranceCost;
+  const grandTotalLKR = totalGlassPrice + transportCost + insuranceCost;
+  const grandTotalUSD = grandTotalLKR / USD_TO_LKR;
   const currentDistanceValue = manualDistance || distance;
+
+  useEffect(() => {
+    if (showPaymentModal && paymentMethod === "paypal" && !paypalRendered && grandTotalUSD > 0) {
+      const renderPayPalButton = () => {
+        if (window.paypal && document.getElementById('paypal-button-container')) {
+          window.paypal.Buttons({
+            createOrder: async () => {
+              try {
+                const response = await axios.post(`${BACKEND_URL}/api/create-paypal-order`, {
+                  amount: grandTotalUSD
+                });
+                return response.data.orderId;
+              } catch (error) {
+                console.error('Error creating order:', error);
+                toast.error("Failed to create PayPal order");
+                return null;
+              }
+            },
+            onApprove: async (data) => {
+              try {
+                const captureResponse = await axios.post(`${BACKEND_URL}/api/capture-paypal-order`, {
+                  orderId: data.orderID
+                });
+                
+                if (captureResponse.data.success) {
+                  const orderData = {
+                    items: selectedItems,
+                    userInfo: userInfo,
+                    deliveryMethod: deliveryMethod,
+                    totalGlassPrice: totalGlassPrice,
+                    transportCost: transportCost,
+                    insuranceCost: insuranceCost,
+                    grandTotal: grandTotalLKR,
+                    totalWeight: totalWeight,
+                    paymentMethod: "paypal",
+                    paypalTransactionId: captureResponse.data.transactionId,
+                    pickupDate: pickupDate,
+                    pickupTimeSlot: pickupTimeSlot,
+                    deliveryDate: deliveryDate,
+                    deliveryTimeSlot: deliveryTimeSlot,
+                    deliveryAddress: deliveryAddress,
+                    selectedLocation: selectedLocation,
+                    distance: currentDistanceValue,
+                    urgentDelivery: urgentDelivery,
+                    insurance: insurance
+                  };
+                  
+                  const savedOrder = saveOrderToLocalStorage(orderData);
+                  setCurrentOrder(savedOrder);
+                  localStorage.removeItem('glassOrderItems');
+                  setOrderConfirmed(true);
+                  setOrderStatus("pending");
+                  setShowPaymentModal(false);
+                  setShowBillModal(true);
+                  toast.success("Payment successful! Order placed successfully.");
+                  
+                  if (deliveryMethod === "delivery") {
+                    setDriverDetails({
+                      name: "Kamal Perera",
+                      contact: "0771234567",
+                      vehicleNumber: "ABC-1234",
+                    });
+                  }
+                }
+              } catch (error) {
+                console.error('Error capturing order:', error);
+                toast.error("Payment failed. Please try again.");
+              }
+            },
+            onError: (err) => {
+              console.error('PayPal Error:', err);
+              toast.error("Payment failed. Please try again.");
+            }
+          }).render('#paypal-button-container');
+          setPaypalRendered(true);
+        }
+      };
+      
+      if (document.querySelector('script[src*="paypal.com/sdk/js"]')) {
+        renderPayPalButton();
+      } else {
+        const script = document.createElement('script');
+        script.src = `https://www.paypal.com/sdk/js?client-id=${import.meta.env.VITE_PAYPAL_CLIENT_ID}&currency=USD`;
+        script.onload = renderPayPalButton;
+        document.body.appendChild(script);
+      }
+    }
+  }, [showPaymentModal, paymentMethod, grandTotalUSD, paypalRendered]);
 
   const handleDeleteItem = (id) => {
     const updatedItems = selectedItems.filter(item => item.id !== id);
@@ -120,6 +216,7 @@ const GlassOrderCheckout = () => {
     if (updatedItems.length === 0) {
       navigate('/GlassOrder');
     }
+    toast.success("Item removed from cart");
   };
 
   const handleEditItem = (item) => {
@@ -156,6 +253,7 @@ const GlassOrderCheckout = () => {
     localStorage.setItem('glassOrderItems', JSON.stringify(updatedItems));
     setEditingItem(null);
     setEditFormData({ widthFt: "", heightFt: "", quantity: "" });
+    toast.success("Item updated successfully");
   };
 
   const handleCancelEdit = () => {
@@ -165,28 +263,66 @@ const GlassOrderCheckout = () => {
 
   const validateUserInfo = () => {
     if (!userInfo.fullName.trim()) {
-      alert("Please enter your full name");
+      toast.error("Please enter your full name");
       return false;
     }
     if (!userInfo.email.trim()) {
-      alert("Please enter your email address");
+      toast.error("Please enter your email address");
       return false;
     }
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(userInfo.email)) {
-      alert("Please enter a valid email address");
+      toast.error("Please enter a valid email address");
       return false;
     }
     if (!userInfo.phone.trim()) {
-      alert("Please enter your phone number");
+      toast.error("Please enter your phone number");
       return false;
     }
     const phoneRegex = /^[0-9]{10}$/;
     if (!phoneRegex.test(userInfo.phone.replace(/\D/g, ''))) {
-      alert("Please enter a valid 10-digit phone number");
+      toast.error("Please enter a valid 10-digit phone number");
       return false;
     }
     return true;
+  };
+
+  const handleProceedToPayment = () => {
+    if (deliveryMethod === "pickup") {
+      if (!pickupDate) {
+        toast.error("Please select pickup date");
+        return;
+      }
+      if (!pickupTimeSlot) {
+        toast.error("Please select pickup time slot");
+        return;
+      }
+      if (!validateUserInfo()) {
+        return;
+      }
+      setShowPaymentModal(true);
+    } else if (deliveryMethod === "delivery") {
+      if (!selectedLocation && !manualDistance) {
+        toast.error("Please select a delivery location or enter distance manually");
+        return;
+      }
+      if (!currentDistanceValue || parseFloat(currentDistanceValue) <= 0) {
+        toast.error("Please enter a valid distance");
+        return;
+      }
+      if (!deliveryDate) {
+        toast.error("Please select delivery date");
+        return;
+      }
+      if (!deliveryTimeSlot) {
+        toast.error("Please select delivery time slot");
+        return;
+      }
+      if (!validateUserInfo()) {
+        return;
+      }
+      setShowPaymentModal(true);
+    }
   };
 
   const calculateHaversineDistance = (lat1, lon1, lat2, lon2) => {
@@ -236,6 +372,7 @@ const GlassOrderCheckout = () => {
       })
       .catch(error => {
         console.error("Error searching location:", error);
+        toast.error("Failed to search location");
       })
       .finally(() => {
         setIsCalculatingDistance(false);
@@ -408,53 +545,71 @@ const GlassOrderCheckout = () => {
     }
   };
 
-  const handleProceedToPayment = () => {
-    if (deliveryMethod === "pickup") {
-      if (!pickupDate) {
-        alert("Please select pickup date");
-        return;
-      }
-      if (!pickupTimeSlot) {
-        alert("Please select pickup time slot");
-        return;
-      }
-      if (!validateUserInfo()) {
-        return;
-      }
-      setShowPaymentModal(true);
-    } else if (deliveryMethod === "delivery") {
-      if (!selectedLocation && !manualDistance) {
-        alert("Please select a delivery location or enter distance manually");
-        return;
-      }
-      if (!currentDistanceValue || parseFloat(currentDistanceValue) <= 0) {
-        alert("Please enter a valid distance");
-        return;
-      }
-      if (!deliveryDate) {
-        alert("Please select delivery date");
-        return;
-      }
-      if (!deliveryTimeSlot) {
-        alert("Please select delivery time slot");
-        return;
-      }
-      if (!validateUserInfo()) {
-        return;
-      }
-      setShowPaymentModal(true);
-    }
+  const generateBillNumber = () => {
+    return `BILL-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+  };
+
+  const saveOrderToLocalStorage = (orderData) => {
+    const existingOrders = JSON.parse(localStorage.getItem('glass_orders') || '[]');
+    const newOrder = {
+      id: `ORD-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+      billNumber: generateBillNumber(),
+      ...orderData,
+      orderDate: new Date().toISOString(),
+      status: "pending",
+      paymentStatus: "paid",
+      orderStatusHistory: [
+        {
+          status: "pending",
+          timestamp: new Date().toISOString(),
+          note: "Order placed and payment confirmed"
+        }
+      ]
+    };
+    existingOrders.push(newOrder);
+    localStorage.setItem('glass_orders', JSON.stringify(existingOrders));
+    return newOrder;
   };
 
   const handlePaymentConfirm = () => {
     if (!paymentMethod) {
-      alert("Please select a payment method");
+      toast.error("Please select a payment method");
       return;
     }
     
+    if (paymentMethod === "paypal") {
+      return;
+    }
+    
+    const orderData = {
+      items: selectedItems,
+      userInfo: userInfo,
+      deliveryMethod: deliveryMethod,
+      totalGlassPrice: totalGlassPrice,
+      transportCost: transportCost,
+      insuranceCost: insuranceCost,
+      grandTotal: grandTotalLKR,
+      totalWeight: totalWeight,
+      paymentMethod: paymentMethod,
+      pickupDate: pickupDate,
+      pickupTimeSlot: pickupTimeSlot,
+      deliveryDate: deliveryDate,
+      deliveryTimeSlot: deliveryTimeSlot,
+      deliveryAddress: deliveryAddress,
+      selectedLocation: selectedLocation,
+      distance: currentDistanceValue,
+      urgentDelivery: urgentDelivery,
+      insurance: insurance
+    };
+    
+    const savedOrder = saveOrderToLocalStorage(orderData);
+    setCurrentOrder(savedOrder);
+    localStorage.removeItem('glassOrderItems');
     setOrderConfirmed(true);
-    setOrderStatus("confirmed");
+    setOrderStatus("pending");
     setShowPaymentModal(false);
+    setShowBillModal(true);
+    toast.success("Payment successful! Order placed successfully.");
     
     if (deliveryMethod === "delivery") {
       setDriverDetails({
@@ -485,6 +640,9 @@ const GlassOrderCheckout = () => {
     setShowPaymentModal(false);
     setPaymentMethod("");
     setSelectedLocation(null);
+    setShowBillModal(false);
+    setCurrentOrder(null);
+    setPaypalRendered(false);
     navigate('/GlassOrder');
   };
 
@@ -492,599 +650,755 @@ const GlassOrderCheckout = () => {
     navigate('/GlassOrder');
   };
 
-  if (orderConfirmed) {
-    return (
-      <div className="GlassCheckout-container">
-        <div className="GlassCheckout-hero">
-          <div className="GlassCheckout-heroOverlay"></div>
-          <div className="GlassCheckout-heroContent">
-            <h1 className="GlassCheckout-heroTitle">Order Confirmed!</h1>
-            <p className="GlassCheckout-heroSubtitle">Thank you for your purchase. Your glass order has been successfully placed.</p>
-          </div>
+  const BillModal = () => (
+    <div className="GlassCheckout-modalOverlay">
+      <div className="GlassCheckout-billModal">
+        <div className="GlassCheckout-billHeader">
+          <h2>Payment Receipt</h2>
+          <button className="GlassCheckout-modalClose" onClick={() => setShowBillModal(false)}>×</button>
         </div>
-        <div className="GlassCheckout-confirmationCard">
-          <div className="GlassCheckout-confirmationHeader">
-            <div className="GlassCheckout-statusBadge GlassCheckout-statusConfirmed">✓ ORDER CONFIRMED</div>
-            <div className="GlassCheckout-orderNumber">Order #GL{Math.floor(Math.random() * 10000)}</div>
+        <div className="GlassCheckout-billContent">
+          <div className="GlassCheckout-billCompany">
+            <h3>Glass House Panadura</h3>
+            <p>Alubomulla, Panadura, Sri Lanka</p>
+            <p>Tel: +94 72 104 6048</p>
+            <p>Email: info@glasshouse.lk</p>
           </div>
-          <div className="GlassCheckout-confirmationSection">
-            <h3>Order Summary</h3>
-            {selectedItems.map((item) => (
-              <div key={item.id} className="GlassCheckout-confirmationItem">
-                <span>{item.glassType} - {item.size} ({item.widthFt}'x{item.heightFt}')</span>
-                <span>Qty: {item.quantity}</span>
-                <span>Rs {item.totalPrice.toFixed(2)}</span>
-              </div>
-            ))}
-            <div className="GlassCheckout-confirmationTotal">
-              <span>Total Glass Price:</span>
+          
+          <div className="GlassCheckout-billDivider"></div>
+          
+          <div className="GlassCheckout-billInfo">
+            <div className="GlassCheckout-billRow">
+              <span>Bill Number:</span>
+              <strong>{currentOrder?.billNumber}</strong>
+            </div>
+            <div className="GlassCheckout-billRow">
+              <span>Order ID:</span>
+              <strong>{currentOrder?.id}</strong>
+            </div>
+            <div className="GlassCheckout-billRow">
+              <span>Date:</span>
+              <strong>{new Date(currentOrder?.orderDate).toLocaleString()}</strong>
+            </div>
+            <div className="GlassCheckout-billRow">
+              <span>Payment Method:</span>
+              <strong>{paymentMethod === "card" ? "Credit/Debit Card" : paymentMethod === "bank" ? "Bank Transfer" : paymentMethod === "cash" ? "Cash on Delivery" : paymentMethod === "paypal" ? "PayPal" : "Mobile Payment"}</strong>
+            </div>
+          </div>
+          
+          <div className="GlassCheckout-billDivider"></div>
+          
+          <div className="GlassCheckout-billCustomer">
+            <h4>Customer Details</h4>
+            <p><strong>Name:</strong> {userInfo.fullName}</p>
+            <p><strong>Email:</strong> {userInfo.email}</p>
+            <p><strong>Phone:</strong> {userInfo.phone}</p>
+          </div>
+          
+          <div className="GlassCheckout-billDivider"></div>
+          
+          <div className="GlassCheckout-billItems">
+            <h4>Order Items</h4>
+            <table className="GlassCheckout-billTable">
+              <thead>
+                <tr>
+                  <th>Item</th>
+                  <th>Size</th>
+                  <th>Dimensions</th>
+                  <th>Qty</th>
+                  <th>Price</th>
+                </tr>
+              </thead>
+              <tbody>
+                {selectedItems.map((item, idx) => (
+                  <tr key={idx}>
+                    <td>{item.glassType}</td>
+                    <td>{item.size}</td>
+                    <td>{item.widthFt}'x{item.heightFt}'</td>
+                    <td>{item.quantity}</td>
+                    <td>Rs {item.totalPrice.toFixed(2)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          
+          <div className="GlassCheckout-billDivider"></div>
+          
+          <div className="GlassCheckout-billTotals">
+            <div className="GlassCheckout-billRow">
+              <span>Glass Total:</span>
               <span>Rs {totalGlassPrice.toFixed(2)}</span>
             </div>
-            <div className="GlassCheckout-confirmationTotal">
+            <div className="GlassCheckout-billRow">
               <span>Transport Cost:</span>
               <span>Rs {transportCost.toFixed(2)}</span>
             </div>
             {insuranceCost > 0 && (
-              <div className="GlassCheckout-confirmationTotal">
-                <span>Insurance (2%):</span>
+              <div className="GlassCheckout-billRow">
+                <span>Insurance:</span>
                 <span>Rs {insuranceCost.toFixed(2)}</span>
               </div>
             )}
-            <div className="GlassCheckout-confirmationGrandTotal">
+            <div className="GlassCheckout-billRow GlassCheckout-billGrandTotal">
               <span>Grand Total:</span>
-              <span>Rs {grandTotal.toFixed(2)}</span>
+              <span>Rs {grandTotalLKR.toFixed(2)}</span>
+            </div>
+            <div className="GlassCheckout-billRow">
+              <span>Amount in USD:</span>
+              <span>${grandTotalUSD.toFixed(2)}</span>
             </div>
           </div>
-          <div className="GlassCheckout-confirmationSection">
-            <h3>Customer Details</h3>
-            <div>
-              <p><strong>Name:</strong> {userInfo.fullName}</p>
-              <p><strong>Email:</strong> {userInfo.email}</p>
-              <p><strong>Phone:</strong> {userInfo.phone}</p>
-            </div>
+          
+          <div className="GlassCheckout-billFooter">
+            <p>Thank you for your purchase!</p>
+            <p>Order status can be tracked in Admin Panel</p>
           </div>
-          <div className="GlassCheckout-confirmationSection">
-            <h3>Delivery Details</h3>
-            {deliveryMethod === "pickup" ? (
-              <div>
-                <p><strong>Pickup Location:</strong> Glass House Panadura - Alubomulla</p>
-                <p><strong>Pickup Date:</strong> {pickupDate}</p>
-                <p><strong>Pickup Time:</strong> {pickupTimeSlot}</p>
-                <p className="GlassCheckout-fragileWarning">⚠️ Fragile item - Handle with care. Please bring payment receipt for verification.</p>
-              </div>
-            ) : (
-              <div>
-                <p><strong>Delivery Address:</strong> {selectedLocation?.address || "Manually entered location"}</p>
-                <p><strong>Distance:</strong> {currentDistanceValue} km</p>
-                <p><strong>Delivery Date:</strong> {deliveryDate}</p>
-                <p><strong>Delivery Time:</strong> {deliveryTimeSlot}</p>
-                {urgentDelivery && <p><strong>Urgent Delivery:</strong> Yes (+25% fee)</p>}
-                {insurance && <p><strong>Insurance:</strong> Included (2% of glass value)</p>}
-                {driverDetails && (
-                  <div className="GlassCheckout-driverDetails">
-                    <p><strong>Driver:</strong> {driverDetails.name}</p>
-                    <p><strong>Contact:</strong> {driverDetails.contact}</p>
-                    <p><strong>Vehicle:</strong> {driverDetails.vehicleNumber}</p>
-                  </div>
-                )}
-                <p className="GlassCheckout-fragileWarning">⚠️ Fragile glass - Professional handling with wooden frame packaging</p>
-              </div>
-            )}
-          </div>
-          <div className="GlassCheckout-statusTracker">
-            <h3>Order Status</h3>
-            <div className="GlassCheckout-statusSteps">
-              <div className={`GlassCheckout-statusStep ${orderStatus !== "pending" ? "GlassCheckout-statusActive" : ""}`}>
-                <div className="GlassCheckout-stepIcon">1</div>
-                <span>Order Placed</span>
-              </div>
-              <div className={`GlassCheckout-statusStep ${orderStatus === "processing" || orderStatus === "dispatched" || orderStatus === "ontheway" || orderStatus === "delivered" ? "GlassCheckout-statusActive" : ""}`}>
-                <div className="GlassCheckout-stepIcon">2</div>
-                <span>Processing</span>
-              </div>
-              <div className={`GlassCheckout-statusStep ${orderStatus === "dispatched" || orderStatus === "ontheway" || orderStatus === "delivered" ? "GlassCheckout-statusActive" : ""}`}>
-                <div className="GlassCheckout-stepIcon">3</div>
-                <span>Dispatched</span>
-              </div>
-              <div className={`GlassCheckout-statusStep ${orderStatus === "ontheway" || orderStatus === "delivered" ? "GlassCheckout-statusActive" : ""}`}>
-                <div className="GlassCheckout-stepIcon">4</div>
-                <span>On The Way</span>
-              </div>
-              <div className={`GlassCheckout-statusStep ${orderStatus === "delivered" ? "GlassCheckout-statusActive" : ""}`}>
-                <div className="GlassCheckout-stepIcon">5</div>
-                <span>Delivered</span>
-              </div>
-            </div>
-          </div>
-          <button className="GlassCheckout-newOrderButton" onClick={resetOrder}>Place New Order</button>
+        </div>
+        <div className="GlassCheckout-billActions">
+          <button className="GlassCheckout-printBtn" onClick={() => window.print()}>
+            🖨️ Print Receipt
+          </button>
+          <button className="GlassCheckout-downloadBtn" onClick={() => {
+            setShowBillModal(false);
+            resetOrder();
+          }}>
+            Done
+          </button>
         </div>
       </div>
+    </div>
+  );
+
+  if (orderConfirmed) {
+    return (
+      <>
+        <Toaster position="top-right" />
+        <div className="GlassCheckout-container">
+          <div className="GlassCheckout-hero">
+            <div className="GlassCheckout-heroOverlay"></div>
+            <div className="GlassCheckout-heroContent">
+              <h1 className="GlassCheckout-heroTitle">Order Confirmed!</h1>
+              <p className="GlassCheckout-heroSubtitle">Thank you for your purchase. Your glass order has been successfully placed.</p>
+            </div>
+          </div>
+          <div className="GlassCheckout-confirmationCard">
+            <div className="GlassCheckout-confirmationHeader">
+              <div className="GlassCheckout-statusBadge GlassCheckout-statusConfirmed">✓ ORDER CONFIRMED</div>
+              <div className="GlassCheckout-orderNumber">Order #{currentOrder?.id}</div>
+            </div>
+            <div className="GlassCheckout-confirmationSection">
+              <h3>Order Summary</h3>
+              {selectedItems.map((item) => (
+                <div key={item.id} className="GlassCheckout-confirmationItem">
+                  <span>{item.glassType} - {item.size} ({item.widthFt}'x{item.heightFt}')</span>
+                  <span>Qty: {item.quantity}</span>
+                  <span>Rs {item.totalPrice.toFixed(2)}</span>
+                </div>
+              ))}
+              <div className="GlassCheckout-confirmationTotal">
+                <span>Total Glass Price:</span>
+                <span>Rs {totalGlassPrice.toFixed(2)}</span>
+              </div>
+              <div className="GlassCheckout-confirmationTotal">
+                <span>Transport Cost:</span>
+                <span>Rs {transportCost.toFixed(2)}</span>
+              </div>
+              {insuranceCost > 0 && (
+                <div className="GlassCheckout-confirmationTotal">
+                  <span>Insurance (2%):</span>
+                  <span>Rs {insuranceCost.toFixed(2)}</span>
+                </div>
+              )}
+              <div className="GlassCheckout-confirmationGrandTotal">
+                <span>Grand Total:</span>
+                <span>Rs {grandTotalLKR.toFixed(2)}</span>
+              </div>
+            </div>
+            <div className="GlassCheckout-confirmationSection">
+              <h3>Customer Details</h3>
+              <div>
+                <p><strong>Name:</strong> {userInfo.fullName}</p>
+                <p><strong>Email:</strong> {userInfo.email}</p>
+                <p><strong>Phone:</strong> {userInfo.phone}</p>
+              </div>
+            </div>
+            <div className="GlassCheckout-confirmationSection">
+              <h3>Delivery Details</h3>
+              {deliveryMethod === "pickup" ? (
+                <div>
+                  <p><strong>Pickup Location:</strong> Glass House Panadura - Alubomulla</p>
+                  <p><strong>Pickup Date:</strong> {pickupDate}</p>
+                  <p><strong>Pickup Time:</strong> {pickupTimeSlot}</p>
+                  <p className="GlassCheckout-fragileWarning">⚠️ Fragile item - Handle with care. Please bring payment receipt for verification.</p>
+                </div>
+              ) : (
+                <div>
+                  <p><strong>Delivery Address:</strong> {selectedLocation?.address || "Manually entered location"}</p>
+                  <p><strong>Distance:</strong> {currentDistanceValue} km</p>
+                  <p><strong>Delivery Date:</strong> {deliveryDate}</p>
+                  <p><strong>Delivery Time:</strong> {deliveryTimeSlot}</p>
+                  {urgentDelivery && <p><strong>Urgent Delivery:</strong> Yes (+25% fee)</p>}
+                  {insurance && <p><strong>Insurance:</strong> Included (2% of glass value)</p>}
+                  {driverDetails && (
+                    <div className="GlassCheckout-driverDetails">
+                      <p><strong>Driver:</strong> {driverDetails.name}</p>
+                      <p><strong>Contact:</strong> {driverDetails.contact}</p>
+                      <p><strong>Vehicle:</strong> {driverDetails.vehicleNumber}</p>
+                    </div>
+                  )}
+                  <p className="GlassCheckout-fragileWarning">⚠️ Fragile glass - Professional handling with wooden frame packaging</p>
+                </div>
+              )}
+            </div>
+            <div className="GlassCheckout-statusTracker">
+              <h3>Order Status</h3>
+              <div className="GlassCheckout-statusSteps">
+                <div className={`GlassCheckout-statusStep ${orderStatus !== "pending" ? "GlassCheckout-statusActive" : ""}`}>
+                  <div className="GlassCheckout-stepIcon">1</div>
+                  <span>Order Placed</span>
+                </div>
+                <div className={`GlassCheckout-statusStep ${orderStatus === "processing" || orderStatus === "dispatched" || orderStatus === "ontheway" || orderStatus === "delivered" ? "GlassCheckout-statusActive" : ""}`}>
+                  <div className="GlassCheckout-stepIcon">2</div>
+                  <span>Processing</span>
+                </div>
+                <div className={`GlassCheckout-statusStep ${orderStatus === "dispatched" || orderStatus === "ontheway" || orderStatus === "delivered" ? "GlassCheckout-statusActive" : ""}`}>
+                  <div className="GlassCheckout-stepIcon">3</div>
+                  <span>Dispatched</span>
+                </div>
+                <div className={`GlassCheckout-statusStep ${orderStatus === "ontheway" || orderStatus === "delivered" ? "GlassCheckout-statusActive" : ""}`}>
+                  <div className="GlassCheckout-stepIcon">4</div>
+                  <span>On The Way</span>
+                </div>
+                <div className={`GlassCheckout-statusStep ${orderStatus === "delivered" ? "GlassCheckout-statusActive" : ""}`}>
+                  <div className="GlassCheckout-stepIcon">5</div>
+                  <span>Delivered</span>
+                </div>
+              </div>
+            </div>
+            <button className="GlassCheckout-newOrderButton" onClick={resetOrder}>Place New Order</button>
+          </div>
+        </div>
+        {showBillModal && <BillModal />}
+      </>
     );
   }
 
   return (
-    <div className="GlassCheckout-wrapper">
-      <div className="GlassCheckout-backButtonContainer">
-        <button className="GlassCheckout-backButton" onClick={handleBackToOrder}>
-          ← Back to Order Page
-        </button>
-      </div>
+    <>
+      <Toaster position="top-right" />
+      <div className="GlassCheckout-wrapper">
+        <div className="GlassCheckout-backButtonContainer">
+          <button className="GlassCheckout-backButton" onClick={handleBackToOrder}>
+            ← Back to Order Page
+          </button>
+        </div>
 
-      <div className="GlassCheckout-ordersContainer">
-        <h2 className="GlassCheckout-sectionTitle">Your Glass Orders ({selectedItems.length})</h2>
-        <div className="GlassCheckout-ordersTable">
-          <table className="GlassCheckout-ordersTableElement">
-            <thead>
-              <tr>
-                <th>Glass Type</th>
-                <th>Quality</th>
-                <th>Size</th>
-                <th>Dimensions (ft)</th>
-                <th>Area (ft²)</th>
-                <th>Qty</th>
-                <th>Weight (kg)</th>
-                <th>Unit Price</th>
-                <th>Total (Rs)</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {selectedItems.map((item) => (
-                <tr key={item.id}>
-                  {editingItem && editingItem.id === item.id ? (
-                    <>
-                      <td>{item.glassType}</td>
-                      <td>{item.quality}</td>
-                      <td>{item.size}</td>
-                      <td>
-                        <input
-                          type="number"
-                          step="0.1"
-                          className="GlassCheckout-editInput"
-                          value={editFormData.widthFt}
-                          onChange={(e) => setEditFormData({...editFormData, widthFt: e.target.value})}
-                          placeholder="W"
-                          style={{width: "50px", marginRight: "3px"}}
-                        />
-                        x
-                        <input
-                          type="number"
-                          step="0.1"
-                          className="GlassCheckout-editInput"
-                          value={editFormData.heightFt}
-                          onChange={(e) => setEditFormData({...editFormData, heightFt: e.target.value})}
-                          placeholder="H"
-                          style={{width: "50px", marginLeft: "3px"}}
-                        />
-                      </td>
-                      <td>{item.areaSqFt.toFixed(2)}</td>
-                      <td>
-                        <input
-                          type="number"
-                          className="GlassCheckout-editInput"
-                          value={editFormData.quantity}
-                          onChange={(e) => setEditFormData({...editFormData, quantity: e.target.value})}
-                          style={{width: "50px"}}
-                        />
-                      </td>
-                      <td>{item.weight.toFixed(1)}</td>
-                      <td>Rs {item.unitPrice.toFixed(2)}</td>
-                      <td>
-                        <button className="GlassCheckout-saveBtn" onClick={handleUpdateItem}>Save</button>
-                        <button className="GlassCheckout-cancelBtn" onClick={handleCancelEdit}>Cancel</button>
-                      </td>
-                      <td></td>
-                    </>
-                  ) : (
-                    <>
-                      <td><strong>{item.glassType}</strong></td>
-                      <td>{item.quality}</td>
-                      <td>{item.size}</td>
-                      <td>{item.widthFt}' x {item.heightFt}'</td>
-                      <td>{item.areaSqFt.toFixed(2)}</td>
-                      <td>{item.quantity}</td>
-                      <td>{item.weight.toFixed(1)}</td>
-                      <td>Rs {item.unitPrice.toFixed(2)}</td>
-                      <td className="GlassCheckout-totalPriceCell">Rs {item.totalPrice.toFixed(2)}</td>
-                      <td>
-                        <button className="GlassCheckout-editBtn" onClick={() => handleEditItem(item)}>✏️</button>
-                        <button className="GlassCheckout-deleteBtn" onClick={() => handleDeleteItem(item.id)}>🗑️</button>
-                      </td>
-                    </>
-                  )}
+        <div className="GlassCheckout-ordersContainer">
+          <h2 className="GlassCheckout-sectionTitle">Your Glass Orders ({selectedItems.length})</h2>
+          <div className="GlassCheckout-ordersTable">
+            <table className="GlassCheckout-ordersTableElement">
+              <thead>
+                <tr>
+                  <th>Glass Type</th>
+                  <th>Quality</th>
+                  <th>Size</th>
+                  <th>Dimensions (ft)</th>
+                  <th>Area (ft²)</th>
+                  <th>Qty</th>
+                  <th>Weight (kg)</th>
+                  <th>Unit Price</th>
+                  <th>Total (Rs)</th>
+                  <th>Actions</th>
                 </tr>
-              ))}
-            </tbody>
-            <tfoot>
-              <tr className="GlassCheckout-tableFooter">
-                <td colSpan="8" className="GlassCheckout-footerLabel"><strong>Total Glass Price:</strong></td>
-                <td className="GlassCheckout-footerValue"><strong>Rs {totalGlassPrice.toFixed(2)}</strong></td>
-                <td></td>
-              </tr>
-              <tr className="GlassCheckout-tableFooter">
-                <td colSpan="8" className="GlassCheckout-footerLabel"><strong>Total Weight:</strong></td>
-                <td className="GlassCheckout-footerValue"><strong>{totalWeight.toFixed(1)} kg</strong></td>
-                <td></td>
-              </tr>
-            </tfoot>
-          </table>
-        </div>
-      </div>
-
-      <div className="GlassCheckout-deliveryContainer">
-        <h2 className="GlassCheckout-sectionTitle GlassCheckout-transportTitle">Delivery Options</h2>
-        <div className="GlassCheckout-deliveryMethodSelection">
-          <label className={`GlassCheckout-deliveryOption ${deliveryMethod === "pickup" ? "GlassCheckout-deliveryOptionActive" : ""}`}>
-            <input
-              type="radio"
-              name="deliveryMethod"
-              value="pickup"
-              checked={deliveryMethod === "pickup"}
-              onChange={() => setDeliveryMethod("pickup")}
-            />
-            <span className="GlassCheckout-deliveryIcon">🏬</span>
-            <div>
-              <strong>Self Pickup</strong>
-              <small>Collect from our branch</small>
-            </div>
-          </label>
-          <label className={`GlassCheckout-deliveryOption ${deliveryMethod === "delivery" ? "GlassCheckout-deliveryOptionActive" : ""}`}>
-            <input
-              type="radio"
-              name="deliveryMethod"
-              value="delivery"
-              checked={deliveryMethod === "delivery"}
-              onChange={() => setDeliveryMethod("delivery")}
-            />
-            <span className="GlassCheckout-deliveryIcon">🚚</span>
-            <div>
-              <strong>Home Delivery</strong>
-              <small>Doorstep delivery</small>
-            </div>
-          </label>
-        </div>
-
-        <div className="GlassCheckout-userInfoSection">
-          <h4>Customer Information</h4>
-          <div className="GlassCheckout-formRow">
-            <div className="GlassCheckout-formGroup">
-              <label className="GlassCheckout-formLabel">Full Name *</label>
-              <input
-                type="text"
-                className="GlassCheckout-formInput"
-                value={userInfo.fullName}
-                onChange={(e) => setUserInfo({...userInfo, fullName: e.target.value})}
-                placeholder="Enter full name"
-              />
-            </div>
-            <div className="GlassCheckout-formGroup">
-              <label className="GlassCheckout-formLabel">Email *</label>
-              <input
-                type="email"
-                className="GlassCheckout-formInput"
-                value={userInfo.email}
-                onChange={(e) => setUserInfo({...userInfo, email: e.target.value})}
-                placeholder="your@email.com"
-              />
-            </div>
-            <div className="GlassCheckout-formGroup">
-              <label className="GlassCheckout-formLabel">Phone *</label>
-              <input
-                type="tel"
-                className="GlassCheckout-formInput"
-                value={userInfo.phone}
-                onChange={(e) => setUserInfo({...userInfo, phone: e.target.value})}
-                placeholder="0712345678"
-              />
-            </div>
+              </thead>
+              <tbody>
+                {selectedItems.map((item) => (
+                  <tr key={item.id}>
+                    {editingItem && editingItem.id === item.id ? (
+                      <>
+                        <td>{item.glassType}</td>
+                        <td>{item.quality}</td>
+                        <td>{item.size}</td>
+                        <td>
+                          <input
+                            type="number"
+                            step="0.1"
+                            className="GlassCheckout-editInput"
+                            value={editFormData.widthFt}
+                            onChange={(e) => setEditFormData({...editFormData, widthFt: e.target.value})}
+                            placeholder="W"
+                            style={{width: "50px", marginRight: "3px"}}
+                          />
+                          x
+                          <input
+                            type="number"
+                            step="0.1"
+                            className="GlassCheckout-editInput"
+                            value={editFormData.heightFt}
+                            onChange={(e) => setEditFormData({...editFormData, heightFt: e.target.value})}
+                            placeholder="H"
+                            style={{width: "50px", marginLeft: "3px"}}
+                          />
+                        </td>
+                        <td>{item.areaSqFt.toFixed(2)}</td>
+                        <td>
+                          <input
+                            type="number"
+                            className="GlassCheckout-editInput"
+                            value={editFormData.quantity}
+                            onChange={(e) => setEditFormData({...editFormData, quantity: e.target.value})}
+                            style={{width: "50px"}}
+                          />
+                        </td>
+                        <td>{item.weight.toFixed(1)}</td>
+                        <td>Rs {item.unitPrice.toFixed(2)}</td>
+                        <td>
+                          <button className="GlassCheckout-saveBtn" onClick={handleUpdateItem}>Save</button>
+                          <button className="GlassCheckout-cancelBtn" onClick={handleCancelEdit}>Cancel</button>
+                        </td>
+                        <td></td>
+                      </>
+                    ) : (
+                      <>
+                        <td><strong>{item.glassType}</strong></td>
+                        <td>{item.quality}</td>
+                        <td>{item.size}</td>
+                        <td>{item.widthFt}' x {item.heightFt}'</td>
+                        <td>{item.areaSqFt.toFixed(2)}</td>
+                        <td>{item.quantity}</td>
+                        <td>{item.weight.toFixed(1)}</td>
+                        <td>Rs {item.unitPrice.toFixed(2)}</td>
+                        <td className="GlassCheckout-totalPriceCell">Rs {item.totalPrice.toFixed(2)}</td>
+                        <td>
+                          <button className="GlassCheckout-editBtn" onClick={() => handleEditItem(item)}>✏️</button>
+                          <button className="GlassCheckout-deleteBtn" onClick={() => handleDeleteItem(item.id)}>🗑️</button>
+                        </td>
+                      </>
+                    )}
+                  </tr>
+                ))}
+              </tbody>
+              <tfoot>
+                <tr className="GlassCheckout-tableFooter">
+                  <td colSpan="8" className="GlassCheckout-footerLabel"><strong>Total Glass Price:</strong></td>
+                  <td className="GlassCheckout-footerValue"><strong>Rs {totalGlassPrice.toFixed(2)}</strong></td>
+                  <td></td>
+                </tr>
+                <tr className="GlassCheckout-tableFooter">
+                  <td colSpan="8" className="GlassCheckout-footerLabel"><strong>Total Weight:</strong></td>
+                  <td className="GlassCheckout-footerValue"><strong>{totalWeight.toFixed(1)} kg</strong></td>
+                  <td></td>
+                </tr>
+              </tfoot>
+            </table>
           </div>
         </div>
 
-        {deliveryMethod === "pickup" && (
-          <div className="GlassCheckout-pickupSection">
-            <h3>Pickup Details</h3>
-            <div className="GlassCheckout-locationInfo">
-              <p>📍 <strong>Pickup Location:</strong> Glass House Panadura - Alubomulla, Sri Lanka</p>
-            </div>
+        <div className="GlassCheckout-deliveryContainer">
+          <h2 className="GlassCheckout-sectionTitle GlassCheckout-transportTitle">Delivery Options</h2>
+          <div className="GlassCheckout-deliveryMethodSelection">
+            <label className={`GlassCheckout-deliveryOption ${deliveryMethod === "pickup" ? "GlassCheckout-deliveryOptionActive" : ""}`}>
+              <input
+                type="radio"
+                name="deliveryMethod"
+                value="pickup"
+                checked={deliveryMethod === "pickup"}
+                onChange={() => setDeliveryMethod("pickup")}
+              />
+              <span className="GlassCheckout-deliveryIcon">🏬</span>
+              <div>
+                <strong>Self Pickup</strong>
+                <small>Collect from our branch</small>
+              </div>
+            </label>
+            <label className={`GlassCheckout-deliveryOption ${deliveryMethod === "delivery" ? "GlassCheckout-deliveryOptionActive" : ""}`}>
+              <input
+                type="radio"
+                name="deliveryMethod"
+                value="delivery"
+                checked={deliveryMethod === "delivery"}
+                onChange={() => setDeliveryMethod("delivery")}
+              />
+              <span className="GlassCheckout-deliveryIcon">🚚</span>
+              <div>
+                <strong>Home Delivery</strong>
+                <small>Doorstep delivery</small>
+              </div>
+            </label>
+          </div>
+
+          <div className="GlassCheckout-userInfoSection">
+            <h4>Customer Information</h4>
             <div className="GlassCheckout-formRow">
               <div className="GlassCheckout-formGroup">
-                <label className="GlassCheckout-formLabel">Pickup Date</label>
+                <label className="GlassCheckout-formLabel">Full Name *</label>
                 <input
-                  type="date"
+                  type="text"
                   className="GlassCheckout-formInput"
-                  value={pickupDate}
-                  onChange={(e) => setPickupDate(e.target.value)}
-                  min={new Date().toISOString().split("T")[0]}
+                  value={userInfo.fullName}
+                  onChange={(e) => setUserInfo({...userInfo, fullName: e.target.value})}
+                  placeholder="Enter full name"
                 />
               </div>
               <div className="GlassCheckout-formGroup">
-                <label className="GlassCheckout-formLabel">Time Slot</label>
-                <select
-                  className="GlassCheckout-formSelect"
-                  value={pickupTimeSlot}
-                  onChange={(e) => setPickupTimeSlot(e.target.value)}
-                >
-                  <option value="">Select time</option>
-                  <option value="09:00-11:00">09:00 AM - 11:00 AM</option>
-                  <option value="11:00-13:00">11:00 AM - 01:00 PM</option>
-                  <option value="13:00-15:00">01:00 PM - 03:00 PM</option>
-                  <option value="15:00-17:00">03:00 PM - 05:00 PM</option>
-                </select>
+                <label className="GlassCheckout-formLabel">Email *</label>
+                <input
+                  type="email"
+                  className="GlassCheckout-formInput"
+                  value={userInfo.email}
+                  onChange={(e) => setUserInfo({...userInfo, email: e.target.value})}
+                  placeholder="your@email.com"
+                />
               </div>
-            </div>
-            <div className="GlassCheckout-pickupInfo">
-              <p>📋 Bring payment receipt for verification | ⚠️ Fragile - Handle with care</p>
+              <div className="GlassCheckout-formGroup">
+                <label className="GlassCheckout-formLabel">Phone *</label>
+                <input
+                  type="tel"
+                  className="GlassCheckout-formInput"
+                  value={userInfo.phone}
+                  onChange={(e) => setUserInfo({...userInfo, phone: e.target.value})}
+                  placeholder="0712345678"
+                />
+              </div>
             </div>
           </div>
-        )}
 
-        {deliveryMethod === "delivery" && (
-          <div className="GlassCheckout-lorrySection">
-            <h3>Delivery Details</h3>
-            <div className="GlassCheckout-locationInfo">
-              <p>🏭 <strong>Shipping From:</strong> Glass House Panadura - Alubomulla, Sri Lanka</p>
-            </div>
-            
-            <div className="GlassCheckout-formRow">
-              <div className="GlassCheckout-formGroup">
-                <label className="GlassCheckout-formLabel">Pick Location</label>
-                <button 
-                  className="GlassCheckout-pickLocationButton"
-                  onClick={() => setShowLocationPicker(true)}
-                >
-                  🗺️ Pick on Map
-                </button>
+          {deliveryMethod === "pickup" && (
+            <div className="GlassCheckout-pickupSection">
+              <h3>Pickup Details</h3>
+              <div className="GlassCheckout-locationInfo">
+                <p>📍 <strong>Pickup Location:</strong> Glass House Panadura - Alubomulla, Sri Lanka</p>
               </div>
-              <div className="GlassCheckout-formGroup">
-                <label className="GlassCheckout-formLabel">Distance (km)</label>
-                <input
-                  type="number"
-                  step="0.1"
-                  className="GlassCheckout-formInput"
-                  value={manualDistance}
-                  onChange={handleManualDistanceChange}
-                  placeholder="Enter distance"
-                />
-              </div>
-              <div className="GlassCheckout-formGroup">
-                <label className="GlassCheckout-formLabel">Delivery Date</label>
-                <input
-                  type="date"
-                  className="GlassCheckout-formInput"
-                  value={deliveryDate}
-                  onChange={(e) => setDeliveryDate(e.target.value)}
-                  min={new Date().toISOString().split("T")[0]}
-                />
-              </div>
-              <div className="GlassCheckout-formGroup">
-                <label className="GlassCheckout-formLabel">Time Slot</label>
-                <select
-                  className="GlassCheckout-formSelect"
-                  value={deliveryTimeSlot}
-                  onChange={(e) => setDeliveryTimeSlot(e.target.value)}
-                >
-                  <option value="">Select time</option>
-                  <option value="09:00-11:00">09:00 AM - 11:00 AM</option>
-                  <option value="11:00-13:00">11:00 AM - 01:00 PM</option>
-                  <option value="13:00-15:00">01:00 PM - 03:00 PM</option>
-                  <option value="15:00-17:00">03:00 PM - 05:00 PM</option>
-                </select>
-              </div>
-            </div>
-
-            {selectedLocation && (
-              <div className="GlassCheckout-selectedLocationInfo">
-                <p><strong>Selected:</strong> {selectedLocation.address.substring(0, 100)}</p>
-                <p><strong>Distance:</strong> {selectedLocation.distance} km {selectedLocation.duration !== "Manual entry" && `| Time: ${selectedLocation.duration}`}</p>
-              </div>
-            )}
-
-            <div className="GlassCheckout-priceInfo">
-              <p>🚚 Base: Rs 6,000 (first 15km) | Extra: Rs 150/km after 15km</p>
-              {currentDistanceValue && parseFloat(currentDistanceValue) > 15 && (
-                <p>Extra: {(parseFloat(currentDistanceValue) - 15).toFixed(1)} km × Rs 150 = Rs {((parseFloat(currentDistanceValue) - 15) * 150).toFixed(2)}</p>
-              )}
-            </div>
-
-            <div className="GlassCheckout-checkboxGroup">
-              <label className="GlassCheckout-checkboxLabel">
-                <input
-                  type="checkbox"
-                  checked={urgentDelivery}
-                  onChange={(e) => setUrgentDelivery(e.target.checked)}
-                />
-                🚀 Urgent Delivery (+25%)
-              </label>
-              <label className="GlassCheckout-checkboxLabel">
-                <input
-                  type="checkbox"
-                  checked={insurance}
-                  onChange={(e) => setInsurance(e.target.checked)}
-                />
-                🛡️ Insurance (2% of glass value)
-              </label>
-            </div>
-            
-            <div className="GlassCheckout-lorryInfo">
-              <p>📦 Wooden frame packaging | ⚠️ Professional handling required</p>
-            </div>
-          </div>
-        )}
-
-        {deliveryMethod && (
-          <div className="GlassCheckout-transportCostSummary">
-            <h3>Cost Summary</h3>
-            <div className="GlassCheckout-costRow">
-              <span>Glass Total:</span>
-              <span>Rs {totalGlassPrice.toFixed(2)}</span>
-            </div>
-            <div className="GlassCheckout-costRow">
-              <span>Transport Cost:</span>
-              <span>Rs {transportCost.toFixed(2)}</span>
-            </div>
-            {insuranceCost > 0 && (
-              <div className="GlassCheckout-costRow">
-                <span>Insurance (2%):</span>
-                <span>Rs {insuranceCost.toFixed(2)}</span>
-              </div>
-            )}
-            <div className="GlassCheckout-costRow GlassCheckout-grandTotalRow">
-              <span>Grand Total:</span>
-              <span>Rs {grandTotal.toFixed(2)}</span>
-            </div>
-          </div>
-        )}
-
-        <button
-          className="GlassCheckout-paymentButton"
-          onClick={handleProceedToPayment}
-          disabled={!deliveryMethod}
-        >
-          Proceed to Payment
-        </button>
-      </div>
-
-      {showLocationPicker && (
-        <div className="GlassCheckout-modalOverlay">
-          <div className="GlassCheckout-modal GlassCheckout-mapModal">
-            <div className="GlassCheckout-modalHeader">
-              <h2>Select Delivery Location</h2>
-              <button className="GlassCheckout-modalClose" onClick={() => setShowLocationPicker(false)}>×</button>
-            </div>
-            <div className="GlassCheckout-modalBody">
-              <div className="GlassCheckout-searchContainer">
-                <div className="GlassCheckout-searchWrapper">
+              <div className="GlassCheckout-formRow">
+                <div className="GlassCheckout-formGroup">
+                  <label className="GlassCheckout-formLabel">Pickup Date</label>
                   <input
-                    type="text"
-                    placeholder="Search location..."
-                    className="GlassCheckout-searchInput"
-                    value={mapSearchTerm}
-                    onChange={(e) => setMapSearchTerm(e.target.value)}
-                    onKeyPress={(e) => e.key === 'Enter' && searchLocation()}
+                    type="date"
+                    className="GlassCheckout-formInput"
+                    value={pickupDate}
+                    onChange={(e) => setPickupDate(e.target.value)}
+                    min={new Date().toISOString().split("T")[0]}
                   />
-                  <button 
-                    className="GlassCheckout-searchButton"
-                    onClick={searchLocation}
-                    disabled={isCalculatingDistance}
+                </div>
+                <div className="GlassCheckout-formGroup">
+                  <label className="GlassCheckout-formLabel">Time Slot</label>
+                  <select
+                    className="GlassCheckout-formSelect"
+                    value={pickupTimeSlot}
+                    onChange={(e) => setPickupTimeSlot(e.target.value)}
                   >
-                    Search
+                    <option value="">Select time</option>
+                    <option value="09:00-11:00">09:00 AM - 11:00 AM</option>
+                    <option value="11:00-13:00">11:00 AM - 01:00 PM</option>
+                    <option value="13:00-15:00">01:00 PM - 03:00 PM</option>
+                    <option value="15:00-17:00">03:00 PM - 05:00 PM</option>
+                  </select>
+                </div>
+              </div>
+              <div className="GlassCheckout-pickupInfo">
+                <p>📋 Bring payment receipt for verification | ⚠️ Fragile - Handle with care</p>
+              </div>
+            </div>
+          )}
+
+          {deliveryMethod === "delivery" && (
+            <div className="GlassCheckout-lorrySection">
+              <h3>Delivery Details</h3>
+              <div className="GlassCheckout-locationInfo">
+                <p>🏭 <strong>Shipping From:</strong> Glass House Panadura - Alubomulla, Sri Lanka</p>
+              </div>
+              
+              <div className="GlassCheckout-formRow">
+                <div className="GlassCheckout-formGroup">
+                  <label className="GlassCheckout-formLabel">Pick Location</label>
+                  <button 
+                    className="GlassCheckout-pickLocationButton"
+                    onClick={() => setShowLocationPicker(true)}
+                  >
+                    🗺️ Pick on Map
                   </button>
                 </div>
-              </div>
-
-              <div className="GlassCheckout-mapInstructions">
-                <p>💡 Click on map to select delivery location. Blue marker is our warehouse.</p>
-              </div>
-              
-              {!mapLoaded ? (
-                <div className="GlassCheckout-mapLoading">
-                  <p>Loading map...</p>
+                <div className="GlassCheckout-formGroup">
+                  <label className="GlassCheckout-formLabel">Distance (km)</label>
+                  <input
+                    type="number"
+                    step="0.1"
+                    className="GlassCheckout-formInput"
+                    value={manualDistance}
+                    onChange={handleManualDistanceChange}
+                    placeholder="Enter distance"
+                  />
                 </div>
-              ) : (
-                <div 
-                  id="location-picker-map" 
-                  className="GlassCheckout-mapContainer"
-                ></div>
-              )}
-            </div>
-            <div className="GlassCheckout-modalFooter">
-              <button className="GlassCheckout-modalCancel" onClick={() => setShowLocationPicker(false)}>
-                Close
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+                <div className="GlassCheckout-formGroup">
+                  <label className="GlassCheckout-formLabel">Delivery Date</label>
+                  <input
+                    type="date"
+                    className="GlassCheckout-formInput"
+                    value={deliveryDate}
+                    onChange={(e) => setDeliveryDate(e.target.value)}
+                    min={new Date().toISOString().split("T")[0]}
+                  />
+                </div>
+                <div className="GlassCheckout-formGroup">
+                  <label className="GlassCheckout-formLabel">Time Slot</label>
+                  <select
+                    className="GlassCheckout-formSelect"
+                    value={deliveryTimeSlot}
+                    onChange={(e) => setDeliveryTimeSlot(e.target.value)}
+                  >
+                    <option value="">Select time</option>
+                    <option value="09:00-11:00">09:00 AM - 11:00 AM</option>
+                    <option value="11:00-13:00">11:00 AM - 01:00 PM</option>
+                    <option value="13:00-15:00">01:00 PM - 03:00 PM</option>
+                    <option value="15:00-17:00">03:00 PM - 05:00 PM</option>
+                  </select>
+                </div>
+              </div>
 
-      {showPaymentModal && (
-        <div className="GlassCheckout-modalOverlay">
-          <div className="GlassCheckout-modal">
-            <div className="GlassCheckout-modalHeader">
-              <h2>Payment Details</h2>
-              <button className="GlassCheckout-modalClose" onClick={() => setShowPaymentModal(false)}>×</button>
-            </div>
-            <div className="GlassCheckout-modalBody">
-              <div className="GlassCheckout-paymentAmount">
-                <span>Total Amount:</span>
-                <strong>Rs {grandTotal.toFixed(2)}</strong>
+              {selectedLocation && (
+                <div className="GlassCheckout-selectedLocationInfo">
+                  <p><strong>Selected:</strong> {selectedLocation.address.substring(0, 100)}</p>
+                  <p><strong>Distance:</strong> {selectedLocation.distance} km {selectedLocation.duration !== "Manual entry" && `| Time: ${selectedLocation.duration}`}</p>
+                </div>
+              )}
+
+              <div className="GlassCheckout-priceInfo">
+                <p>🚚 Base: Rs 6,000 (first 15km) | Extra: Rs 150/km after 15km</p>
+                {currentDistanceValue && parseFloat(currentDistanceValue) > 15 && (
+                  <p>Extra: {(parseFloat(currentDistanceValue) - 15).toFixed(1)} km × Rs 150 = Rs {((parseFloat(currentDistanceValue) - 15) * 150).toFixed(2)}</p>
+                )}
               </div>
-              
-              <div className="GlassCheckout-paymentMethods">
-                <h3>Select Payment Method</h3>
-                <label className="GlassCheckout-paymentOption">
+
+              <div className="GlassCheckout-checkboxGroup">
+                <label className="GlassCheckout-checkboxLabel">
                   <input
-                    type="radio"
-                    name="paymentMethod"
-                    value="card"
-                    checked={paymentMethod === "card"}
-                    onChange={(e) => setPaymentMethod(e.target.value)}
+                    type="checkbox"
+                    checked={urgentDelivery}
+                    onChange={(e) => setUrgentDelivery(e.target.checked)}
                   />
-                  <span className="GlassCheckout-paymentIcon">💳</span>
-                  <div>
-                    <strong>Credit/Debit Card</strong>
-                    <small>Visa, MasterCard, Amex</small>
-                  </div>
+                  🚀 Urgent Delivery (+25%)
                 </label>
-                
-                <label className="GlassCheckout-paymentOption">
+                <label className="GlassCheckout-checkboxLabel">
                   <input
-                    type="radio"
-                    name="paymentMethod"
-                    value="bank"
-                    checked={paymentMethod === "bank"}
-                    onChange={(e) => setPaymentMethod(e.target.value)}
+                    type="checkbox"
+                    checked={insurance}
+                    onChange={(e) => setInsurance(e.target.checked)}
                   />
-                  <span className="GlassCheckout-paymentIcon">🏦</span>
-                  <div>
-                    <strong>Bank Transfer</strong>
-                    <small>Direct bank payment</small>
-                  </div>
-                </label>
-                
-                <label className="GlassCheckout-paymentOption">
-                  <input
-                    type="radio"
-                    name="paymentMethod"
-                    value="cash"
-                    checked={paymentMethod === "cash"}
-                    onChange={(e) => setPaymentMethod(e.target.value)}
-                  />
-                  <span className="GlassCheckout-paymentIcon">💵</span>
-                  <div>
-                    <strong>Cash on Delivery/Pickup</strong>
-                    <small>Pay when you receive</small>
-                  </div>
-                </label>
-                
-                <label className="GlassCheckout-paymentOption">
-                  <input
-                    type="radio"
-                    name="paymentMethod"
-                    value="mobile"
-                    checked={paymentMethod === "mobile"}
-                    onChange={(e) => setPaymentMethod(e.target.value)}
-                  />
-                  <span className="GlassCheckout-paymentIcon">📱</span>
-                  <div>
-                    <strong>Mobile Payment</strong>
-                    <small>PayPal, Apple Pay, Google Pay</small>
-                  </div>
+                  🛡️ Insurance (2% of glass value)
                 </label>
               </div>
               
-              <div className="GlassCheckout-orderSummary">
-                <h3>Order Summary</h3>
-                <p>Items: {selectedItems.length} | Weight: {totalWeight.toFixed(1)} kg | {deliveryMethod === "pickup" ? "Self Pickup" : "Home Delivery"}</p>
+              <div className="GlassCheckout-lorryInfo">
+                <p>📦 Wooden frame packaging | ⚠️ Professional handling required</p>
               </div>
             </div>
-            <div className="GlassCheckout-modalFooter">
-              <button className="GlassCheckout-modalCancel" onClick={() => setShowPaymentModal(false)}>Cancel</button>
-              <button className="GlassCheckout-modalConfirm" onClick={handlePaymentConfirm}>Confirm & Pay</button>
+          )}
+
+          {deliveryMethod && (
+            <div className="GlassCheckout-transportCostSummary">
+              <h3>Cost Summary</h3>
+              <div className="GlassCheckout-costRow">
+                <span>Glass Total:</span>
+                <span>Rs {totalGlassPrice.toFixed(2)}</span>
+              </div>
+              <div className="GlassCheckout-costRow">
+                <span>Transport Cost:</span>
+                <span>Rs {transportCost.toFixed(2)}</span>
+              </div>
+              {insuranceCost > 0 && (
+                <div className="GlassCheckout-costRow">
+                  <span>Insurance (2%):</span>
+                  <span>Rs {insuranceCost.toFixed(2)}</span>
+                </div>
+              )}
+              <div className="GlassCheckout-costRow GlassCheckout-grandTotalRow">
+                <span>Grand Total:</span>
+                <span>Rs {grandTotalLKR.toFixed(2)}</span>
+              </div>
+              <div className="GlassCheckout-costRow">
+                <span>Amount in USD:</span>
+                <span>${grandTotalUSD.toFixed(2)}</span>
+              </div>
+            </div>
+          )}
+
+          <button
+            className="GlassCheckout-paymentButton"
+            onClick={handleProceedToPayment}
+            disabled={!deliveryMethod}
+          >
+            Proceed to Payment
+          </button>
+        </div>
+
+        {showLocationPicker && (
+          <div className="GlassCheckout-modalOverlay">
+            <div className="GlassCheckout-modal GlassCheckout-mapModal">
+              <div className="GlassCheckout-modalHeader">
+                <h2>Select Delivery Location</h2>
+                <button className="GlassCheckout-modalClose" onClick={() => setShowLocationPicker(false)}>×</button>
+              </div>
+              <div className="GlassCheckout-modalBody">
+                <div className="GlassCheckout-searchContainer">
+                  <div className="GlassCheckout-searchWrapper">
+                    <input
+                      type="text"
+                      placeholder="Search location..."
+                      className="GlassCheckout-searchInput"
+                      value={mapSearchTerm}
+                      onChange={(e) => setMapSearchTerm(e.target.value)}
+                      onKeyPress={(e) => e.key === 'Enter' && searchLocation()}
+                    />
+                    <button 
+                      className="GlassCheckout-searchButton"
+                      onClick={searchLocation}
+                      disabled={isCalculatingDistance}
+                    >
+                      Search
+                    </button>
+                  </div>
+                </div>
+
+                <div className="GlassCheckout-mapInstructions">
+                  <p>💡 Click on map to select delivery location. Blue marker is our warehouse.</p>
+                </div>
+                
+                {!mapLoaded ? (
+                  <div className="GlassCheckout-mapLoading">
+                    <p>Loading map...</p>
+                  </div>
+                ) : (
+                  <div 
+                    id="location-picker-map" 
+                    className="GlassCheckout-mapContainer"
+                  ></div>
+                )}
+              </div>
+              <div className="GlassCheckout-modalFooter">
+                <button className="GlassCheckout-modalCancel" onClick={() => setShowLocationPicker(false)}>
+                  Close
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
-    </div>
+        )}
+
+        {showPaymentModal && (
+          <div className="GlassCheckout-modalOverlay">
+            <div className="GlassCheckout-modal">
+              <div className="GlassCheckout-modalHeader">
+                <h2>Payment Details</h2>
+                <button className="GlassCheckout-modalClose" onClick={() => setShowPaymentModal(false)}>×</button>
+              </div>
+              <div className="GlassCheckout-modalBody">
+                <div className="GlassCheckout-paymentAmount">
+                  <span>Total Amount:</span>
+                  <strong>Rs {grandTotalLKR.toFixed(2)} (${grandTotalUSD.toFixed(2)})</strong>
+                </div>
+                
+                <div className="GlassCheckout-paymentMethods">
+                  <h3>Select Payment Method</h3>
+                  <label className="GlassCheckout-paymentOption">
+                    <input
+                      type="radio"
+                      name="paymentMethod"
+                      value="card"
+                      checked={paymentMethod === "card"}
+                      onChange={(e) => setPaymentMethod(e.target.value)}
+                    />
+                    <span className="GlassCheckout-paymentIcon">💳</span>
+                    <div>
+                      <strong>Credit/Debit Card</strong>
+                      <small>Visa, MasterCard, Amex</small>
+                    </div>
+                  </label>
+                  
+                  <label className="GlassCheckout-paymentOption">
+                    <input
+                      type="radio"
+                      name="paymentMethod"
+                      value="bank"
+                      checked={paymentMethod === "bank"}
+                      onChange={(e) => setPaymentMethod(e.target.value)}
+                    />
+                    <span className="GlassCheckout-paymentIcon">🏦</span>
+                    <div>
+                      <strong>Bank Transfer</strong>
+                      <small>Direct bank payment</small>
+                    </div>
+                  </label>
+                  
+                  <label className="GlassCheckout-paymentOption">
+                    <input
+                      type="radio"
+                      name="paymentMethod"
+                      value="cash"
+                      checked={paymentMethod === "cash"}
+                      onChange={(e) => setPaymentMethod(e.target.value)}
+                    />
+                    <span className="GlassCheckout-paymentIcon">💵</span>
+                    <div>
+                      <strong>Cash on Delivery/Pickup</strong>
+                      <small>Pay when you receive</small>
+                    </div>
+                  </label>
+                  
+                  <label className="GlassCheckout-paymentOption">
+                    <input
+                      type="radio"
+                      name="paymentMethod"
+                      value="mobile"
+                      checked={paymentMethod === "mobile"}
+                      onChange={(e) => setPaymentMethod(e.target.value)}
+                    />
+                    <span className="GlassCheckout-paymentIcon">📱</span>
+                    <div>
+                      <strong>Mobile Payment</strong>
+                      <small>PayPal, Apple Pay, Google Pay</small>
+                    </div>
+                  </label>
+
+                  <label className="GlassCheckout-paymentOption">
+                    <input
+                      type="radio"
+                      name="paymentMethod"
+                      value="paypal"
+                      checked={paymentMethod === "paypal"}
+                      onChange={(e) => setPaymentMethod(e.target.value)}
+                    />
+                    <span className="GlassCheckout-paymentIcon">🅿️</span>
+                    <div>
+                      <strong>PayPal</strong>
+                      <small>Pay with PayPal account</small>
+                    </div>
+                  </label>
+                </div>
+
+                {paymentMethod === "paypal" && (
+                  <div id="paypal-button-container" className="GlassCheckout-paypalContainer"></div>
+                )}
+                
+                <div className="GlassCheckout-orderSummary">
+                  <h3>Order Summary</h3>
+                  <p>Items: {selectedItems.length} | Weight: {totalWeight.toFixed(1)} kg | {deliveryMethod === "pickup" ? "Self Pickup" : "Home Delivery"}</p>
+                </div>
+              </div>
+              <div className="GlassCheckout-modalFooter">
+                <button className="GlassCheckout-modalCancel" onClick={() => {
+                  setShowPaymentModal(false);
+                  setPaymentMethod("");
+                  setPaypalRendered(false);
+                }}>Cancel</button>
+                {paymentMethod !== "paypal" && paymentMethod !== "" && (
+                  <button className="GlassCheckout-modalConfirm" onClick={handlePaymentConfirm}>Confirm & Pay</button>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </>
   );
 };
 
