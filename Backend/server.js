@@ -12,7 +12,7 @@ console.log('[Server Startup] Initializing: Attempting to load route modules...'
 let clientRoutes, bOwnerRoutes, authRoutes, calendarSettingsRoutes,
     bookingRoutes, reviewRoutes, scrapTypeRoutes, shopLocationRoutes, adminRoutes,
     saleItemRoutes, adminStatsRoutes, projectRoutes, itemRoutes, cartRoutes, 
-    quotationRoutes, alumniRoutes, buyAndSellRoutes;
+    quotationRoutes, alumniRoutes, buyAndSellRoutes, glassRoutes;
 
 const loadRoute = (routeName, path) => {
   try {
@@ -46,6 +46,7 @@ cartRoutes = loadRoute('cartRoutes', './routes/cartRoutes');
 quotationRoutes = loadRoute('quotationRoutes', './routes/quotationRoutes');
 alumniRoutes = loadRoute('alumniRoutes', './routes/alumniRoutes');
 buyAndSellRoutes = loadRoute('buyAndSellRoutes', './routes/buyAndSellRoutes');
+glassRoutes = loadRoute('glassRoutes', './routes/glassRoutes');
 
 console.log('\n=== BUY AND SELL ROUTES DEBUG ===');
 if (buyAndSellRoutes) {
@@ -88,6 +89,17 @@ if (itemRoutes) {
   console.log('  Stack length:', itemRoutes.stack ? itemRoutes.stack.length : 0);
 } else {
   console.error('✗ itemRoutes is NULL or UNDEFINED!');
+}
+console.log('=== END DEBUG ===\n');
+
+console.log('\n=== GLASS ROUTES DEBUG ===');
+if (glassRoutes) {
+  console.log('✓ glassRoutes loaded successfully');
+  console.log('  Type:', typeof glassRoutes);
+  console.log('  Is Router:', !!glassRoutes.stack);
+  console.log('  Stack length:', glassRoutes.stack ? glassRoutes.stack.length : 0);
+} else {
+  console.error('✗ glassRoutes is NULL or UNDEFINED!');
 }
 console.log('=== END DEBUG ===\n');
 
@@ -245,6 +257,7 @@ mountRoute(app, '/api/admin/stats', adminStatsRoutes);
 mountRoute(app, '/api/quotations', quotationRoutes);
 mountRoute(app, '/api/alumni', alumniRoutes);
 mountRoute(app, '/api/buy-and-sell', buyAndSellRoutes);
+mountRoute(app, '/api/glass', glassRoutes);
 
 if (itemRoutes) {
     mountRoute(app, '/api/items', itemRoutes);

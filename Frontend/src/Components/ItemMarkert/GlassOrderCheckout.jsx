@@ -4,7 +4,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import axios from 'axios';
 import "./GlassOrderCheckout.css";
 import jsPDF from 'jspdf';
-import 'jspdf-autotable';
+import autoTable from 'jspdf-autotable';
 
 const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
@@ -180,7 +180,7 @@ const GlassOrderCheckout = () => {
       `Rs ${item.totalPrice.toFixed(2)}`
     ]);
     
-    doc.autoTable({
+  autoTable(doc, {
       startY: 165,
       head: [['Glass Type', 'Dimensions', 'Qty', 'Price']],
       body: tableData,

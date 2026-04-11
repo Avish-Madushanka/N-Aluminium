@@ -71,6 +71,9 @@ const GlassOrder = () => {
     const items = JSON.parse(localStorage.getItem('glassOrderItems') || '[]');
     return items.length;
   });
+  const [showMyOrders, setShowMyOrders] = useState(false);
+  const [userOrders, setUserOrders] = useState([]);
+  const [userEmail, setUserEmail] = useState("");
 
   useEffect(() => {
     const loadGlassData = () => {
@@ -182,6 +185,108 @@ const GlassOrder = () => {
     navigate('/GlassOrderCheckout');
   };
 
+  const loadMyOrders = () => {
+    const email = prompt("Enter your email to view your orders:", userEmail);
+    if (email && email.trim()) {
+      setUserEmail(email.trim());
+      const allOrders = JSON.parse(localStorage.getItem('glass_orders') || '[]');
+      const filteredOrders = allOrders.filter(order => order.userInfo.email.toLowerCase() === email.trim().toLowerCase());
+      setUserOrders(filteredOrders.sort((a, b) => new Date(b.orderDate) - new Date(a.orderDate)));
+      setShowMyOrders(true);
+    }
+  };
+
+  const getStatusBadgeClass = (status) => {
+    switch(status) {
+      case 'pending': return 'order-status-pending';
+      case 'processing': return 'order-status-processing';
+      case 'dispatched': return 'order-status-dispatched';
+      case 'ontheway': return 'order-status-ontheway';
+      case 'delivered': return 'order-status-delivered';
+      default: return 'order-status-pending';
+    }
+  };
+
+  const getStatusText = (status) => {
+    switch(status) {
+      case 'pending': return 'Pending';
+      case 'processing': return 'Processing';
+      case 'dispatched': return 'Dispatched';
+      case 'ontheway': return 'On The Way';
+      case 'delivered': return 'Delivered';
+      default: return 'Pending';
+    }
+  };
+
+  const MyOrdersModal = () => (
+    <div className="my-orders-modal-overlay">
+      <div className="my-orders-modal">
+        <div className="my-orders-modal-header">
+          <h2>My Orders</h2>
+          <button className="my-orders-modal-close" onClick={() => setShowMyOrders(false)}>×</button>
+        </div>
+        <div className="my-orders-modal-body">
+          {userOrders.length === 0 ? (
+            <div className="no-orders-message">
+              <p>No orders found for email: {userEmail}</p>
+              <p>Please make sure you entered the correct email address used during checkout.</p>
+            </div>
+          ) : (
+            <>
+              <div className="user-email-info">Orders for: <strong>{userEmail}</strong></div>
+              {userOrders.map((order) => (
+                <div key={order.id} className="my-order-card">
+                  <div className="my-order-header">
+                    <div>
+                      <span className="my-order-id">Order ID: {order.id}</span>
+                      <span className="my-order-bill">Bill: {order.billNumber}</span>
+                    </div>
+                    <span className={getStatusBadgeClass(order.status)}>{getStatusText(order.status)}</span>
+                  </div>
+                  <div className="my-order-date">Date: {new Date(order.orderDate).toLocaleString()}</div>
+                  <div className="my-order-items">
+                    <table className="my-order-items-table">
+                      <thead>
+                        <tr>
+                          <th>Product</th>
+                          <th>Dimensions</th>
+                          <th>Qty</th>
+                          <th>Price</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {order.items.map((item, idx) => (
+                          <tr key={idx}>
+                            <td>{item.glassType} - {item.size}</td>
+                            <td>{item.widthFt}' x {item.heightFt}'</td>
+                            <td>{item.quantity}</td>
+                            <td>Rs {item.totalPrice.toFixed(2)}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                  <div className="my-order-footer">
+                    <div className="my-order-delivery">
+                      <strong>Delivery:</strong> {order.deliveryMethod === "pickup" ? "Self Pickup" : "Home Delivery"}
+                      {order.deliveryMethod === "delivery" && <span> - Distance: {order.distance} km</span>}
+                    </div>
+                    <div className="my-order-total">
+                      <strong>Total Amount:</strong> Rs {order.grandTotal.toFixed(2)}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </>
+          )}
+        </div>
+        <div className="my-orders-modal-footer">
+          <button className="my-orders-close-btn" onClick={() => setShowMyOrders(false)}>Close</button>
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <div className="GlassMain-container">
       <div className="GlassMain-hero">
@@ -237,7 +342,7 @@ const GlassOrder = () => {
                 <tr className="GlassMain-tableSubHeader">
                   <th>Standard</th>
                   <th>Premium</th>
-                 </tr>
+                </tr>
               </thead>
               <tbody>
                 {(() => {
@@ -261,7 +366,7 @@ const GlassOrder = () => {
                           {i === 0 && (
                             <td rowSpan={maxRows} className="GlassMain-glassTypeCell">
                               {glassType}
-                             </td>
+                            </td>
                           )}
                           <td className="GlassMain-sizeCell">
                             {standardSize ? (
@@ -270,7 +375,7 @@ const GlassOrder = () => {
                                 <span className="GlassMain-priceValue">Rs {standardPrice.toFixed(2)}</span>
                               </div>
                             ) : null}
-                           </td>
+                          </td>
                           <td className="GlassMain-sizeCell">
                             {premiumSize ? (
                               <div className="GlassMain-sizePriceCell">
@@ -278,13 +383,13 @@ const GlassOrder = () => {
                                 <span className="GlassMain-priceValue">Rs {premiumPrice.toFixed(2)}</span>
                               </div>
                             ) : null}
-                           </td>
+                          </td>
                           {i === 0 && (
                             <td rowSpan={maxRows} className="GlassMain-priceNoteCell">
                               Per ft²
-                             </td>
+                            </td>
                           )}
-                         </tr>
+                        </tr>
                       );
                     }
                   });
@@ -398,17 +503,27 @@ const GlassOrder = () => {
                 >
                   Add to Cart
                 </button>
-                <button
-                  className="GlassMain-checkOrderBtn"
-                  onClick={handleCheckOrder}
-                >
-                  🛒 Check Your Order ({cartCount})
-                </button>
+                <div className="GlassMain-buttonGroup">
+                  <button
+                    className="GlassMain-checkOrderBtn"
+                    onClick={handleCheckOrder}
+                  >
+                    🛒 Check Your Order ({cartCount})
+                  </button>
+                  <button
+                    className="GlassMain-myOrdersBtn"
+                    onClick={loadMyOrders}
+                  >
+                    📋 My Orders
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+
+      {showMyOrders && <MyOrdersModal />}
     </div>
   );
 };

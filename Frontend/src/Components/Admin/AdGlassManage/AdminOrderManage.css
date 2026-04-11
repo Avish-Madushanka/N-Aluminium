@@ -345,6 +345,149 @@
   cursor: pointer;
 }
 
+.delete-order-btn {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  margin-left: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.delete-order-btn:hover {
+  background-color: #c82333;
+}
+
+.order-modal-delete-btn {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+.order-modal-delete-btn:hover {
+  background-color: #c82333;
+}
+
+.delete-confirm-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1100;
+  animation: fadeIn 0.3s ease;
+}
+
+.delete-confirm-content {
+  background-color: white;
+  border-radius: 12px;
+  padding: 25px;
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+  animation: slideUp 0.3s ease;
+}
+
+.delete-confirm-content h3 {
+  color: #dc3545;
+  margin-bottom: 15px;
+  font-size: 1.3rem;
+}
+
+.delete-confirm-content p {
+  color: #555;
+  margin-bottom: 10px;
+}
+
+.delete-confirm-buttons {
+  display: flex;
+  gap: 15px;
+  margin-top: 25px;
+  justify-content: center;
+}
+
+.delete-confirm-yes {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+.delete-confirm-yes:hover {
+  background-color: #c82333;
+}
+
+.delete-confirm-no {
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+.delete-confirm-no:hover {
+  background-color: #5a6268;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .delete-order-btn {
+    padding: 4px 8px;
+    font-size: 0.7rem;
+    margin-left: 5px;
+  }
+  
+  .delete-confirm-content {
+    padding: 20px;
+    margin: 15px;
+  }
+  
+  .delete-confirm-buttons {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .delete-confirm-yes,
+  .delete-confirm-no {
+    width: 100%;
+  }
+}
+
 @media (max-width: 768px) {
   .admin-orders-container {
     padding: 10px;

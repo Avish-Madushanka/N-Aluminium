@@ -414,6 +414,320 @@
   cursor: not-allowed;
 }
 
+.GlassMain-buttonGroup {
+  display: flex;
+  gap: 12px;
+  margin-top: 15px;
+}
+
+.GlassMain-myOrdersBtn {
+  flex: 1;
+  padding: 12px;
+  background-color: #17a2b8;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.GlassMain-myOrdersBtn:hover {
+  background-color: #138496;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(23, 162, 184, 0.4);
+}
+
+.GlassMain-checkOrderBtn {
+  flex: 1;
+  padding: 12px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.GlassMain-checkOrderBtn:hover {
+  background-color: #218838;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+}
+
+.my-orders-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+.my-orders-modal {
+  background-color: white;
+  border-radius: 16px;
+  max-width: 900px;
+  width: 90%;
+  max-height: 85vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.3s ease;
+}
+
+.my-orders-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  border-bottom: 2px solid #ecf0f1;
+  background-color: #202020;
+  color: white;
+  border-radius: 16px 16px 0 0;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.my-orders-modal-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.my-orders-modal-close {
+  background: none;
+  border: none;
+  font-size: 1.8em;
+  cursor: pointer;
+  color: white;
+  transition: transform 0.2s ease;
+}
+
+.my-orders-modal-close:hover {
+  transform: scale(1.1);
+}
+
+.my-orders-modal-body {
+  padding: 20px;
+}
+
+.user-email-info {
+  background-color: #e8f4fd;
+  padding: 10px 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  color: #2c3e50;
+}
+
+.no-orders-message {
+  text-align: center;
+  padding: 40px 20px;
+  color: #7f8c8d;
+}
+
+.no-orders-message p {
+  margin: 10px 0;
+}
+
+.my-order-card {
+  background-color: #f8f9fa;
+  border-radius: 12px;
+  padding: 15px;
+  margin-bottom: 20px;
+  border: 1px solid #e0e0e0;
+  transition: box-shadow 0.3s ease;
+}
+
+.my-order-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.my-order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.my-order-id {
+  font-weight: bold;
+  color: #2c3e50;
+  margin-right: 15px;
+}
+
+.my-order-bill {
+  color: #6c757d;
+  font-size: 0.85rem;
+}
+
+.my-order-date {
+  color: #6c757d;
+  font-size: 0.85rem;
+  margin-bottom: 12px;
+}
+
+.my-order-items-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 12px 0;
+  font-size: 0.85rem;
+}
+
+.my-order-items-table th,
+.my-order-items-table td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.my-order-items-table th {
+  background-color: #e9ecef;
+  font-weight: 600;
+}
+
+.my-order-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid #dee2e6;
+}
+
+.my-order-delivery {
+  color: #6c757d;
+  font-size: 0.85rem;
+}
+
+.my-order-total {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #dc3545;
+}
+
+.my-orders-modal-footer {
+  padding: 15px 20px;
+  border-top: 1px solid #ecf0f1;
+  display: flex;
+  justify-content: center;
+  position: sticky;
+  bottom: 0;
+  background-color: white;
+  border-radius: 0 0 16px 16px;
+}
+
+.my-orders-close-btn {
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  padding: 10px 30px;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.my-orders-close-btn:hover {
+  background-color: #5a6268;
+}
+
+.order-status-pending {
+  background-color: #f39c12;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.order-status-processing {
+  background-color: #3498db;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.order-status-dispatched {
+  background-color: #9b59b6;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.order-status-ontheway {
+  background-color: #e67e22;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.order-status-delivered {
+  background-color: #27ae60;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .GlassMain-buttonGroup {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .my-order-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .my-order-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .my-order-items-table {
+    font-size: 0.7rem;
+  }
+  
+  .my-order-items-table th,
+  .my-order-items-table td {
+    padding: 5px;
+  }
+  
+  .my-orders-modal {
+    width: 95%;
+    max-height: 90vh;
+  }
+}
+
+@media (max-width: 480px) {
+  .my-order-items-table {
+    display: block;
+    overflow-x: auto;
+  }
+}
+
 @media (max-width: 1024px) {
   .GlassMain-orderLayout {
     flex-direction: column;

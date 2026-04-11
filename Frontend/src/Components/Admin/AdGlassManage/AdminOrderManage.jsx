@@ -8,10 +8,11 @@ const AdminOrderManage = () => {
   const [filterStatus, setFilterStatus] = useState("all");
   const [showOrderModal, setShowOrderModal] = useState(false);
   const [statusNote, setStatusNote] = useState("");
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [orderToDelete, setOrderToDelete] = useState(null);
 
   useEffect(() => {
     loadOrders();
-    
     const interval = setInterval(loadOrders, 5000);
     return () => clearInterval(interval);
   }, []);
@@ -74,6 +75,22 @@ const AdminOrderManage = () => {
     }
   };
 
+  const deleteOrder = () => {
+    if (!orderToDelete) return;
+    
+    const updatedOrders = orders.filter(order => order.id !== orderToDelete.id);
+    localStorage.setItem('glass_orders', JSON.stringify(updatedOrders));
+    setOrders(updatedOrders);
+    toast.success(`Order ${orderToDelete.id} deleted successfully`);
+    setShowDeleteConfirm(false);
+    setOrderToDelete(null);
+    
+    if (selectedOrder && selectedOrder.id === orderToDelete.id) {
+      setShowOrderModal(false);
+      setSelectedOrder(null);
+    }
+  };
+
   const getFilteredOrders = () => {
     if (filterStatus === "all") return orders;
     return orders.filter(order => order.status === filterStatus);
@@ -110,7 +127,7 @@ const AdminOrderManage = () => {
                 <div><strong>Bill Number:</strong> {order.billNumber}</div>
                 <div><strong>Order Date:</strong> {new Date(order.orderDate).toLocaleString()}</div>
                 <div><strong>Status:</strong> <span className={getStatusBadgeClass(order.status)}>{getStatusText(order.status)}</span></div>
-                <div><strong>Payment Method:</strong> {order.paymentMethod === "card" ? "Credit/Debit Card" : order.paymentMethod === "bank" ? "Bank Transfer" : order.paymentMethod === "cash" ? "Cash on Delivery" : "Mobile Payment"}</div>
+                <div><strong>Payment Method:</strong> {order.paymentMethod === "card" ? "Credit/Debit Card" : order.paymentMethod === "bank" ? "Bank Transfer" : order.paymentMethod === "cash" ? "Cash on Delivery" : order.paymentMethod === "paypal" ? "PayPal" : "Mobile Payment"}</div>
                 <div><strong>Delivery Method:</strong> {order.deliveryMethod === "pickup" ? "Self Pickup" : "Home Delivery"}</div>
                 <div><strong>Total Amount:</strong> Rs {order.grandTotal.toFixed(2)}</div>
               </div>
@@ -215,6 +232,11 @@ const AdminOrderManage = () => {
             </div>
           </div>
           <div className="order-modal-footer">
+            <button className="order-modal-delete-btn" onClick={() => {
+              onClose();
+              setOrderToDelete(order);
+              setShowDeleteConfirm(true);
+            }}>Delete Order</button>
             <button className="order-modal-close-btn" onClick={onClose}>Close</button>
           </div>
         </div>
@@ -329,7 +351,11 @@ const AdminOrderManage = () => {
                   <button className="view-order-btn" onClick={() => {
                     setSelectedOrder(order);
                     setShowOrderModal(true);
-                  }}>View Details</button>
+                  }}>View</button>
+                  <button className="delete-order-btn" onClick={() => {
+                    setOrderToDelete(order);
+                    setShowDeleteConfirm(true);
+                  }}>Delete</button>
                 </td>
               </tr>
             ))}
@@ -342,6 +368,23 @@ const AdminOrderManage = () => {
           setShowOrderModal(false);
           setSelectedOrder(null);
         }} />
+      )}
+
+      {showDeleteConfirm && orderToDelete && (
+        <div className="delete-confirm-modal">
+          <div className="delete-confirm-content">
+            <h3>Confirm Delete</h3>
+            <p>Are you sure you want to delete order <strong>{orderToDelete.id}</strong>?</p>
+            <p>This action cannot be undone.</p>
+            <div className="delete-confirm-buttons">
+              <button className="delete-confirm-yes" onClick={deleteOrder}>Yes, Delete</button>
+              <button className="delete-confirm-no" onClick={() => {
+                setShowDeleteConfirm(false);
+                setOrderToDelete(null);
+              }}>Cancel</button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
