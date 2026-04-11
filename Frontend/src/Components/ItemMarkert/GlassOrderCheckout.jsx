@@ -7,7 +7,7 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
 const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5003';
 
 const GlassOrderCheckout = () => {
   const navigate = useNavigate();
@@ -156,7 +156,7 @@ const GlassOrderCheckout = () => {
     doc.setFont("helvetica", "normal");
     doc.setTextColor(100, 100, 100);
     doc.text(`Bill Number: ${currentOrder?.billNumber || generateBillNumber()}`, 20, 78);
-    doc.text(`Order ID: ${currentOrder?.id || 'N/A'}`, 20, 86);
+    doc.text(`Order ID: ${currentOrder?.orderId || 'N/A'}`, 20, 86);
     doc.text(`Date: ${new Date().toLocaleString()}`, 20, 94);
     doc.text(`Payment Method: ${paymentMethod === "card" ? "Credit/Debit Card" : paymentMethod === "bank" ? "Bank Transfer" : paymentMethod === "cash" ? "Cash on Delivery" : paymentMethod === "paypal" ? "PayPal" : "Mobile Payment"}`, 20, 102);
     
@@ -180,7 +180,7 @@ const GlassOrderCheckout = () => {
       `Rs ${item.totalPrice.toFixed(2)}`
     ]);
     
-  autoTable(doc, {
+    autoTable(doc, {
       startY: 165,
       head: [['Glass Type', 'Dimensions', 'Qty', 'Price']],
       body: tableData,
@@ -277,6 +277,16 @@ const GlassOrderCheckout = () => {
     doc.save(`Bill_${currentOrder?.billNumber || 'receipt'}.pdf`);
   };
 
+  const saveOrderToDatabase = async (orderData) => {
+    try {
+      const response = await axios.post(`${BACKEND_URL}/api/glass/orders`, orderData);
+      return response.data.data;
+    } catch (error) {
+      console.error('Error saving order:', error);
+      throw error;
+    }
+  };
+
   useEffect(() => {
     if (showPaymentModal && paymentMethod === "paypal" && !paypalRendered && grandTotalUSD > 0) {
       const renderPayPalButton = () => {
@@ -284,7 +294,7 @@ const GlassOrderCheckout = () => {
           window.paypal.Buttons({
             createOrder: async () => {
               try {
-                const response = await axios.post(`${BACKEND_URL}/api/create-paypal-order`, {
+                const response = await axios.post(`${BACKEND_URL}/api/glass/paypal/create-order`, {
                   amount: grandTotalUSD
                 });
                 return response.data.orderId;
@@ -296,7 +306,7 @@ const GlassOrderCheckout = () => {
             },
             onApprove: async (data) => {
               try {
-                const captureResponse = await axios.post(`${BACKEND_URL}/api/capture-paypal-order`, {
+                const captureResponse = await axios.post(`${BACKEND_URL}/api/glass/paypal/capture-order`, {
                   orderId: data.orderID
                 });
                 
@@ -323,7 +333,7 @@ const GlassOrderCheckout = () => {
                     insurance: insurance
                   };
                   
-                  const savedOrder = saveOrderToLocalStorage(orderData);
+                  const savedOrder = await saveOrderToDatabase(orderData);
                   setCurrentOrder(savedOrder);
                   localStorage.removeItem('glassOrderItems');
                   setOrderConfirmed(true);
@@ -705,29 +715,7 @@ const GlassOrderCheckout = () => {
     return `BILL-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
   };
 
-  const saveOrderToLocalStorage = (orderData) => {
-    const existingOrders = JSON.parse(localStorage.getItem('glass_orders') || '[]');
-    const newOrder = {
-      id: `ORD-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
-      billNumber: generateBillNumber(),
-      ...orderData,
-      orderDate: new Date().toISOString(),
-      status: "pending",
-      paymentStatus: "paid",
-      orderStatusHistory: [
-        {
-          status: "pending",
-          timestamp: new Date().toISOString(),
-          note: "Order placed and payment confirmed"
-        }
-      ]
-    };
-    existingOrders.push(newOrder);
-    localStorage.setItem('glass_orders', JSON.stringify(existingOrders));
-    return newOrder;
-  };
-
-  const handlePaymentConfirm = () => {
+  const handlePaymentConfirm = async () => {
     if (!paymentMethod) {
       toast.error("Please select a payment method");
       return;
@@ -758,21 +746,25 @@ const GlassOrderCheckout = () => {
       insurance: insurance
     };
     
-    const savedOrder = saveOrderToLocalStorage(orderData);
-    setCurrentOrder(savedOrder);
-    localStorage.removeItem('glassOrderItems');
-    setOrderConfirmed(true);
-    setOrderStatus("pending");
-    setShowPaymentModal(false);
-    setShowBillModal(true);
-    toast.success("Payment successful! Order placed successfully.");
-    
-    if (deliveryMethod === "delivery") {
-      setDriverDetails({
-        name: "Kamal Perera",
-        contact: "0771234567",
-        vehicleNumber: "ABC-1234",
-      });
+    try {
+      const savedOrder = await saveOrderToDatabase(orderData);
+      setCurrentOrder(savedOrder);
+      localStorage.removeItem('glassOrderItems');
+      setOrderConfirmed(true);
+      setOrderStatus("pending");
+      setShowPaymentModal(false);
+      setShowBillModal(true);
+      toast.success("Payment successful! Order placed successfully.");
+      
+      if (deliveryMethod === "delivery") {
+        setDriverDetails({
+          name: "Kamal Perera",
+          contact: "0771234567",
+          vehicleNumber: "ABC-1234",
+        });
+      }
+    } catch (error) {
+      toast.error("Failed to save order. Please try again.");
     }
   };
 
@@ -830,11 +822,11 @@ const GlassOrderCheckout = () => {
             </div>
             <div className="GlassCheckout-billRow">
               <span>Order ID:</span>
-              <strong>{currentOrder?.id}</strong>
+              <strong>{currentOrder?.orderId}</strong>
             </div>
             <div className="GlassCheckout-billRow">
               <span>Date:</span>
-              <strong>{new Date(currentOrder?.orderDate).toLocaleString()}</strong>
+              <strong>{new Date(currentOrder?.createdAt).toLocaleString()}</strong>
             </div>
             <div className="GlassCheckout-billRow">
               <span>Payment Method:</span>
@@ -944,7 +936,7 @@ const GlassOrderCheckout = () => {
           <div className="GlassCheckout-confirmationCard">
             <div className="GlassCheckout-confirmationHeader">
               <div className="GlassCheckout-statusBadge GlassCheckout-statusConfirmed">✓ ORDER CONFIRMED</div>
-              <div className="GlassCheckout-orderNumber">Order #{currentOrder?.id}</div>
+              <div className="GlassCheckout-orderNumber">Order #{currentOrder?.orderId}</div>
             </div>
             <div className="GlassCheckout-confirmationSection">
               <h3>Order Summary</h3>
@@ -1132,7 +1124,7 @@ const GlassOrderCheckout = () => {
                         <td>
                           <button className="GlassCheckout-editBtn" onClick={() => handleEditItem(item)}>✏️</button>
                           <button className="GlassCheckout-deleteBtn" onClick={() => handleDeleteItem(item.id)}>🗑️</button>
-                        </td>
+                         </td>
                       </>
                     )}
                   </tr>
@@ -1143,14 +1135,14 @@ const GlassOrderCheckout = () => {
                   <td colSpan="8" className="GlassCheckout-footerLabel"><strong>Total Glass Price:</strong></td>
                   <td className="GlassCheckout-footerValue"><strong>Rs {totalGlassPrice.toFixed(2)}</strong></td>
                   <td></td>
-                </tr>
+                 </tr>
                 <tr className="GlassCheckout-tableFooter">
                   <td colSpan="8" className="GlassCheckout-footerLabel"><strong>Total Weight:</strong></td>
                   <td className="GlassCheckout-footerValue"><strong>{totalWeight.toFixed(1)} kg</strong></td>
                   <td></td>
-                </tr>
+                 </tr>
               </tfoot>
-            </table>
+             </table>
           </div>
         </div>
 
@@ -1323,9 +1315,9 @@ const GlassOrderCheckout = () => {
               )}
 
               <div className="GlassCheckout-priceInfo">
-                <p>🚚 Base: Rs 6,000 (first 10km) | Extra: Rs 150/km after 10km</p>
-                {currentDistanceValue && parseFloat(currentDistanceValue) > 10 && (
-                  <p>Extra: {(parseFloat(currentDistanceValue) - 10).toFixed(1)} km × Rs 150 = Rs {((parseFloat(currentDistanceValue) - 10) * 150).toFixed(2)}</p>
+                <p>🚚 Base: Rs 6,000 (first 15km) | Extra: Rs 150/km after 15km</p>
+                {currentDistanceValue && parseFloat(currentDistanceValue) > 15 && (
+                  <p>Extra: {(parseFloat(currentDistanceValue) - 15).toFixed(1)} km × Rs 150 = Rs {((parseFloat(currentDistanceValue) - 15) * 150).toFixed(2)}</p>
                 )}
               </div>
 

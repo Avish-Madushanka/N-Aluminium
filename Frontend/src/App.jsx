@@ -68,6 +68,7 @@ import Privacy from './Components/LegalPolicy/Privacy';
 import GlassOrderCheckout from './Components/ItemMarkert/GlassOrderCheckout';
 import AdGlassManage from './Components/Admin/AdGlassManage/AdGlassManage';
 import AdminOrderManage from './Components/Admin/AdGlassManage/AdminOrderManage';
+import MyOrders from './Components/ItemMarkert/MyOrders';
 
 const parseUserInfoFromToken = (token) => {
     if (!token) {
@@ -331,6 +332,7 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
                         <Route path="/GlassOrder" element={<GlassOrder /> } />
                         <Route path="/GlassOrderCheckout" element={<GlassOrderCheckout selectedItems={orderItems} onReset={handleResetOrder} /> } />
                         <Route path="/ItemsCartManage" element={<ItemsCartManage /> } />
+                        <Route path="/MyOrders" element={<MyOrders /> } />
                     </Route>
 
                     <Route element={<ProtectedRoute requiredRole="admin" />}>

@@ -1,0 +1,358 @@
+.myorders-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  min-height: 100vh;
+  background: #f5f5f5;
+}
+
+.myorders-header {
+  background: linear-gradient(135deg, #1a1a2e, #16213e);
+  color: white;
+  padding: 30px;
+  border-radius: 16px;
+  margin-bottom: 30px;
+}
+
+.myorders-back-btn {
+  background: rgba(255,255,255,0.2);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  margin-bottom: 15px;
+  transition: all 0.3s ease;
+}
+
+.myorders-back-btn:hover {
+  background: rgba(255,255,255,0.3);
+}
+
+.myorders-header h1 {
+  margin: 10px 0;
+  font-size: 2rem;
+}
+
+.myorders-header p {
+  color: #ccc;
+  margin: 0;
+}
+
+.myorders-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+}
+
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #d30905;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.myorders-empty {
+  text-align: center;
+  padding: 60px 20px;
+  background: white;
+  border-radius: 16px;
+}
+
+.empty-icon {
+  font-size: 80px;
+  margin-bottom: 20px;
+}
+
+.myorders-empty h2 {
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.myorders-empty p {
+  color: #666;
+  margin-bottom: 30px;
+}
+
+.start-ordering-btn {
+  background: #d30905;
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.start-ordering-btn:hover {
+  background: #b80703;
+  transform: translateY(-2px);
+}
+
+.myorders-list {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.myorder-card {
+  background: white;
+  border-radius: 16px;
+  padding: 25px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.myorder-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+}
+
+.myorder-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 15px;
+}
+
+.myorder-ids {
+  display: flex;
+  gap: 20px;
+}
+
+.myorder-orderid {
+  font-weight: bold;
+  color: #d30905;
+  font-size: 1.1rem;
+}
+
+.myorder-billno {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.myorder-date {
+  color: #888;
+  font-size: 0.85rem;
+  margin-bottom: 20px;
+}
+
+.order-progress-tracker {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 12px;
+  margin: 20px 0;
+}
+
+.progress-steps {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.progress-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  min-width: 60px;
+}
+
+.step-circle {
+  width: 40px;
+  height: 40px;
+  background-color: #e0e0e0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: #999;
+  margin-bottom: 8px;
+  transition: all 0.3s ease;
+}
+
+.progress-step.active .step-circle {
+  background-color: #28a745;
+  color: white;
+  box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+}
+
+.step-label {
+  font-size: 0.75rem;
+  color: #666;
+  text-align: center;
+}
+
+.progress-step.active .step-label {
+  color: #28a745;
+  font-weight: 600;
+}
+
+.progress-line {
+  flex: 1;
+  height: 3px;
+  background-color: #e0e0e0;
+  margin: 0 5px;
+  transition: all 0.3s ease;
+}
+
+.progress-line.active {
+  background-color: #28a745;
+}
+
+.myorder-items h3 {
+  color: #333;
+  margin-bottom: 15px;
+  font-size: 1.1rem;
+}
+
+.myorder-items-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.myorder-items-table th,
+.myorder-items-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+.myorder-items-table th {
+  background: #f8f9fa;
+  font-weight: 600;
+  color: #555;
+}
+
+.myorder-summary {
+  background: #f8f9fa;
+  padding: 15px 20px;
+  border-radius: 12px;
+  margin: 20px 0;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+}
+
+.summary-row.total {
+  border-top: 2px solid #ddd;
+  margin-top: 8px;
+  padding-top: 12px;
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: #d30905;
+}
+
+.myorder-delivery {
+  margin-top: 20px;
+}
+
+.myorder-delivery h3 {
+  color: #333;
+  margin-bottom: 15px;
+  font-size: 1rem;
+}
+
+.delivery-info {
+  background: #f0f7ff;
+  padding: 15px;
+  border-radius: 12px;
+}
+
+.delivery-info p {
+  margin: 8px 0;
+  color: #555;
+}
+
+.delivered-success-badge {
+  background: #28a745;
+  color: white;
+  padding: 12px;
+  border-radius: 8px;
+  text-align: center;
+  margin-top: 20px;
+  font-weight: 600;
+}
+
+.myorder-status-pending { background: #f39c12; color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+.myorder-status-processing { background: #3498db; color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+.myorder-status-dispatched { background: #9b59b6; color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+.myorder-status-ontheway { background: #e67e22; color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+.myorder-status-delivered { background: #27ae60; color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+
+@media (max-width: 768px) {
+  .myorders-container {
+    padding: 10px;
+  }
+  
+  .myorders-header {
+    padding: 20px;
+  }
+  
+  .myorder-card {
+    padding: 15px;
+  }
+  
+  .myorder-ids {
+    flex-direction: column;
+    gap: 5px;
+  }
+  
+  .progress-steps {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .progress-line {
+    width: 2px;
+    height: 20px;
+    margin: 5px 0;
+  }
+  
+  .progress-step {
+    flex-direction: row;
+    width: 100%;
+    justify-content: flex-start;
+    gap: 15px;
+  }
+  
+  .step-circle {
+    margin-bottom: 0;
+  }
+  
+  .myorder-items-table {
+    font-size: 0.8rem;
+  }
+  
+  .myorder-items-table th,
+  .myorder-items-table td {
+    padding: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .myorder-items-table {
+    display: block;
+    overflow-x: auto;
+  }
+}
