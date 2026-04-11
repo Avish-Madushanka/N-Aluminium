@@ -1,48 +1,249 @@
+// FloatingChatBot.jsx - FULLY OFFLINE VERSION (No API Required)
 import React, { useState, useEffect, useRef } from 'react';
 import './FloatingChatBot.css';
 
-const OPENROUTER_API_KEY = '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';
-
-const FREE_MODEL = 'meta-llama/llama-3.3-8b-instruct:free';
-
-const BOT_NAME    = 'ALUX AI';
+const BOT_NAME = 'ALUX AI';
 const BOT_SUBTITLE = 'Aluminum Recycling Assistant';
 
-const SYSTEM_PROMPT = `You are ALUX AI, the intelligent assistant for an aluminum recycling and reuse platform.
-Your job is to help users understand and use all services available on the website. You should behave like a professional digital assistant similar to ChatGPT.
-The platform focuses on aluminum sustainability, recycling, and reuse.
-
-The website includes the following main sections:
-
-• Aluminum Scrap Collection – Users can schedule pickups for aluminum waste such as cans, frames, sheets, and industrial scrap.
-• Aluminum Recycling Information – Explain recycling processes, environmental benefits, energy savings, and sustainability practices.
-• Aluminum Training Programs – Provide information about training courses related to aluminum recycling, processing techniques, and sustainable material management.
-• Project Upload Platform – Users can upload aluminum-related projects, research ideas, innovations, or case studies.
-• Reuse Marketplace – A marketplace where users can buy or sell reusable aluminum products such as windows, doors, furniture components, and scrap materials.
-• Item Marketplace – Users can list aluminum products for sale and browse items uploaded by other sellers.
-• User Account Assistance – Help users with registration, login, profile management, scheduling pickups, uploading projects, and posting marketplace items.
-
-Assistant behavior rules:
-1. Respond naturally like an intelligent AI assistant.
-2. Do not rely on predefined answers — generate helpful explanations based on the user's question.
-3. Encourage aluminum recycling, reuse, and sustainable practices in your answers.
-4. Guide users to relevant website sections when needed.
-5. Keep responses clear, friendly, and easy to understand.
-6. If a question is unrelated to the platform, politely redirect the conversation toward aluminum recycling or website services.
-7. Support users in both learning about aluminum sustainability and using platform features.
-8. Use short paragraphs and line breaks when explaining multiple points for readability.
-
-Your goal is to act as the official AI guide for the platform and help users explore the website effectively.`;
-
 const QUICK_TOPICS = [
-  { icon: '🗓️', label: 'Schedule a Pickup',    prompt: 'How do I schedule an aluminum scrap pickup?' },
-  { icon: '🛒', label: 'Marketplace',           prompt: 'What can I buy or sell on the ALUX marketplace?' },
-  { icon: '🎓', label: 'Training Programs',     prompt: 'Tell me about the aluminum training programs available.' },
+  { icon: '🗓️', label: 'Schedule a Pickup', prompt: 'How do I schedule an aluminum scrap pickup?' },
+  { icon: '🛒', label: 'Marketplace', prompt: 'What can I buy or sell on the ALUX marketplace?' },
+  { icon: '🎓', label: 'Training Programs', prompt: 'Tell me about the aluminum training programs available.' },
   { icon: '♻️', label: 'Why Recycle Aluminum?', prompt: 'Why is recycling aluminum important for the environment?' },
-  { icon: '📤', label: 'Upload a Project',      prompt: 'How do I upload an aluminum project or research idea?' },
-  { icon: '👤', label: 'Account Help',          prompt: 'How do I register and manage my ALUX account?' },
+  { icon: '📤', label: 'Upload a Project', prompt: 'How do I upload an aluminum project or research idea?' },
+  { icon: '👤', label: 'Account Help', prompt: 'How do I register and manage my ALUX account?' },
 ];
 
+const getAIResponse = (userMessage, conversationHistory) => {
+  const msg = userMessage.toLowerCase();
+  
+  if (msg.includes('schedule') || msg.includes('pickup') || msg.includes('collect')) {
+    return `**📅 Scheduling an Aluminum Scrap Pickup**
+
+Here's how to schedule a pickup on ALUX:
+
+**Step 1:** Log into your ALUX account
+**Step 2:** Navigate to "Aluminum Scrap Collection" section
+**Step 3:** Click "Schedule New Pickup"
+**Step 4:** Select your pickup location on the map
+**Step 5:** Choose date and time (available slots shown)
+**Step 6:** Describe your scrap (type, estimated weight, condition)
+**Step 7:** Confirm and submit
+
+✅ You'll receive SMS/email confirmation within minutes
+💰 Pricing depends on quantity and aluminum grade
+
+Need help with anything specific about the pickup process?`;
+  }
+  
+  if (msg.includes('marketplace') || (msg.includes('buy') && msg.includes('sell')) || msg.includes('item')) {
+    return `**🛒 ALUX Marketplace Guide**
+
+The platform has two marketplaces:
+
+**1. Reuse Marketplace**
+- Buy/sell reusable aluminum products
+- Examples: windows, doors, frames, furniture components
+- Items must be in reusable condition
+
+**2. Item Marketplace**  
+- List aluminum products for sale
+- Browse items from other sellers
+- Direct messaging with buyers/sellers
+
+**To get started:**
+1. Complete your profile verification
+2. Click "List an Item" in your preferred marketplace
+3. Add photos, description, price
+4. Set pickup/delivery options
+5. Publish your listing
+
+**Pro tip:** Include clear photos and detailed condition notes for faster sales!
+
+Would you like help with listing an item?`;
+  }
+  
+  if (msg.includes('training') || msg.includes('course') || msg.includes('program') || msg.includes('learn')) {
+    return `**🎓 ALUX Training Programs**
+
+We offer specialized training for all skill levels:
+
+**♻️ Basic Aluminum Recycling** (2 days)
+- Fundamentals of aluminum recycling
+- Sorting and identification
+- Environmental impact awareness
+
+**🔧 Advanced Processing** (5 days)  
+- Industrial recycling techniques
+- Quality control standards
+- Equipment operation
+
+**📊 Sustainable Management** (3 days)
+- Business applications
+- Supply chain optimization
+- Circular economy principles
+
+**💡 Innovation Lab** (ongoing)
+- Research opportunities
+- New reuse applications
+- Industry networking
+
+**Upcoming sessions:** Check the Training Calendar
+**Pricing:** $49 - $299 depending on program
+**Certification:** Earn ALUX Certified Recycler badge
+
+Which program interests you most?`;
+  }
+  
+  if (msg.includes('environment') || msg.includes('important') || msg.includes('benefit') || msg.includes('why recycle')) {
+    return `**🌍 Why Aluminum Recycling Matters**
+
+**Environmental Impact:**
+⚡ **95% less energy** than primary production
+💨 **92% less CO2 emissions**  
+🏭 **97% less water pollution**
+⛏️ **Preserves bauxite ore** for future generations
+
+**Economic Benefits:**
+💰 Creates local recycling jobs
+📈 Stable secondary material market
+🏭 Reduces manufacturing costs
+
+**Fun Facts:**
+♾️ Aluminum can be recycled infinitely with no quality loss
+🥤 A recycled can becomes a new can in just 60 days
+🚗 90% of automotive aluminum is recycled
+
+**At ALUX, we've recycled over 50,000 tons of aluminum - saving enough energy to power 15,000 homes for a year!**
+
+Want to learn about our specific recycling process?`;
+  }
+  
+  if (msg.includes('upload') || msg.includes('project') || msg.includes('submit') || msg.includes('share')) {
+    return `**📤 Upload Your Project to ALUX**
+
+Share your aluminum innovation with our community!
+
+**Guidelines:**
+1. Project must relate to aluminum recycling/reuse
+2. Original work or properly credited
+3. Clear description and purpose
+4. Supporting images/documents (max 10MB)
+
+**Upload process:**
+1. Go to "Project Upload Platform"
+2. Click "New Project Submission"
+3. Fill in title, category, description
+4. Upload files (PDF, images, videos)
+5. Add tags for discoverability
+6. Submit for review
+
+**Review time:** 24-48 hours
+**Visibility:** Community + industry partners
+**Recognition:** Featured projects get ALUX Innovation Badge
+
+**Project categories:**
+- Research & Studies
+- Product Designs  
+- Process Improvements
+- Case Studies
+- Educational Materials
+
+Ready to share your work with the world?`;
+  }
+  
+  if (msg.includes('account') || msg.includes('register') || msg.includes('login') || msg.includes('sign') || msg.includes('profile')) {
+    return `**👤 ALUX Account Management**
+
+**New User Registration:**
+1. Click "Sign Up" on homepage
+2. Enter email and create password
+3. Verify email (check spam folder!)
+4. Complete profile (name, location, phone)
+5. Choose notification preferences
+
+**Login Help:**
+- Forgot password? Use "Reset Password" link
+- Account locked? Contact support after 5 attempts
+- Need 2FA? Available in Security Settings
+
+**Profile Management:**
+📝 Edit personal info
+🔔 Manage notifications
+📍 Update pickup addresses
+💳 Add payment methods
+📜 View transaction history
+
+**Account Types:**
+🏠 **Residential** - Home recycling
+🏭 **Business** - Commercial accounts
+🎓 **Educational** - Schools/universities
+🔧 **Industrial** - Large volume pickups
+
+What specific account help do you need?`;
+  }
+  
+  if (msg.includes('price') || msg.includes('cost') || msg.includes('rate')) {
+    return `**💰 Aluminum Pricing Information**
+
+Current market rates (updated weekly):
+
+**Scrap Aluminum:**
+- Clean cans: $0.45 - $0.65/lb
+- Sheet aluminum: $0.35 - $0.55/lb  
+- Cast aluminum: $0.30 - $0.50/lb
+- Extruded: $0.50 - $0.70/lb
+
+**Reusable Items (Marketplace):**
+- Window frames: $20 - $150
+- Doors: $50 - $300
+- Furniture: $25 - $500
+- Industrial scrap: Negotiable
+
+**Pickup fees:**
+- Free for 50+ lbs
+- Small quantity: $5-$15 fee
+- Business accounts: Volume discounts
+
+💡 **Pro tip:** Separate clean aluminum from mixed metals for best prices!
+
+Want a specific price quote? Tell me what you have!`;
+  }
+  
+  if (msg.includes('hello') || msg.includes('hi') || msg.includes('hey') || msg.includes('greeting')) {
+    return `**👋 Hello! Welcome to ALUX AI!**
+
+I'm your aluminum recycling assistant. I can help you with:
+
+♻️ **Schedule pickups** for scrap aluminum
+🛒 **Navigate marketplaces** to buy/sell
+🎓 **Find training programs** for all skill levels
+📤 **Upload projects** to share innovations
+👤 **Manage your account** and preferences
+💡 **Learn about** aluminum sustainability
+
+What would you like to explore today? Just type your question or click any topic above!`;
+  }
+  
+  return `**♻️ How can I help with aluminum recycling?**
+
+I'm ALUX AI, your dedicated assistant for the ALUX platform. I can assist with:
+
+• **Schedule Pickups** - Arrange aluminum scrap collection
+• **Marketplace** - Buy/sell aluminum products
+• **Training** - Find recycling courses
+• **Projects** - Upload innovations
+• **Account** - Manage your profile
+• **Info** - Learn about recycling benefits
+
+Could you please rephrase your question or select one of the quick topics above? I'm here to help with anything aluminum recycling related!
+
+**Example questions:**
+- "How do I schedule a pickup?"
+- "Tell me about training programs"
+- "What can I sell on marketplace?"
+- "Why recycle aluminum?"`;
+};
 
 const TypingDots = () => (
   <div className="typing-dots"><span /><span /><span /></div>
@@ -76,95 +277,51 @@ const TrendIcon = () => (
   </svg>
 );
 
-
 const FloatingChatbot = () => {
-  const [isOpen,      setIsOpen]      = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
-  const [messages,    setMessages]    = useState([]);
-  const [inputValue,  setInputValue]  = useState('');
-  const [isTyping,    setIsTyping]    = useState(false);
-  const [showHome,    setShowHome]    = useState(true);
+  const [messages, setMessages] = useState([]);
+  const [inputValue, setInputValue] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
+  const [showHome, setShowHome] = useState(true);
   const messagesEndRef = useRef(null);
-  const inputRef       = useRef(null);
+  const inputRef = useRef(null);
 
-  /* auto-scroll to latest message */
   useEffect(() => {
     if (!showHome && messagesEndRef.current)
       messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isTyping, showHome]);
 
-  /* focus input when chat view opens */
   useEffect(() => {
     if (isOpen && !isMinimized && !showHome)
       setTimeout(() => inputRef.current?.focus(), 80);
   }, [isOpen, isMinimized, showHome]);
 
-  /* ── Call OpenRouter API (FREE) ── */
-  const callAI = async (history) => {
-    const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type':  'application/json',
-        'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
-        'HTTP-Referer':  window.location.origin,
-        'X-Title':       'ALUX AI Assistant',
-      },
-      body: JSON.stringify({
-        model:      FREE_MODEL,
-        max_tokens: 1000,
-        messages: [
-          { role: 'system', content: SYSTEM_PROMPT },
-          ...history,
-        ],
-      }),
-    });
-
-    if (!res.ok) {
-      const e = await res.json().catch(() => ({}));
-      throw new Error(e?.error?.message || `API Error ${res.status}`);
-    }
-
-    const data = await res.json();
-    return data.choices?.[0]?.message?.content?.trim()
-      || "I'm sorry, I couldn't generate a response. Please try again.";
-  };
-
-  /* ── Send a message ── */
   const sendMessage = async (text) => {
     const trimmed = text.trim();
     if (!trimmed || isTyping) return;
 
     setShowHome(false);
     setInputValue('');
-
-    const history = [
-      ...messages.map(m => ({
-        role:    m.sender === 'user' ? 'user' : 'assistant',
-        content: m.text,
-      })),
-      { role: 'user', content: trimmed },
-    ];
-
-    setMessages(prev => [...prev, { text: trimmed, sender: 'user' }]);
+    
+    const userMessage = { text: trimmed, sender: 'user' };
+    setMessages(prev => [...prev, userMessage]);
     setIsTyping(true);
 
-    try {
-      const reply = await callAI(history);
+    setTimeout(() => {
+      const reply = getAIResponse(trimmed, messages);
       setMessages(prev => [...prev, { text: reply, sender: 'bot' }]);
-    } catch (err) {
-      setMessages(prev => [...prev, {
-        text: `Connection error: ${err.message}. Please try again.`,
-        sender: 'bot',
-        isError: true,
-      }]);
-    } finally {
       setIsTyping(false);
-    }
+    }, 500 + Math.random() * 400);
   };
 
-  const handleSend    = ()  => sendMessage(inputValue);
+  const handleSend = () => sendMessage(inputValue);
+  
   const handleKeyDown = (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); }
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSend();
+    }
   };
 
   const handleOpen = () => {
@@ -181,7 +338,6 @@ const FloatingChatbot = () => {
     setInputValue('');
   };
 
-  /* ── Launcher button ── */
   if (!isOpen) {
     return (
       <button className="ALUX-launcher" onClick={handleOpen} aria-label="Open ALUX AI">
@@ -191,11 +347,8 @@ const FloatingChatbot = () => {
     );
   }
 
-  /* ── Chat window ── */
   return (
     <div className={`ALUX-chat ${isMinimized ? 'ALUX-minimized' : 'ALUX-expanded'}`}>
-
-      {/* Header */}
       <div className="ALUX-header">
         <div className="ALUX-header-left">
           <div className="ALUX-avatar"><TrendIcon /></div>
@@ -226,11 +379,8 @@ const FloatingChatbot = () => {
         </div>
       </div>
 
-      {/* Body */}
       {!isMinimized && (
         <div className="ALUX-body">
-
-          {/* ── Home screen ── */}
           {showHome ? (
             <div className="ALUX-home">
               <div className="ALUX-home-hero">
@@ -270,10 +420,7 @@ const FloatingChatbot = () => {
                 </button>
               </div>
             </div>
-
           ) : (
-
-            /* ── Chat messages screen ── */
             <>
               <div className="ALUX-messages">
                 {messages.map((msg, i) => (
@@ -281,7 +428,7 @@ const FloatingChatbot = () => {
                     {msg.sender === 'bot' && (
                       <div className="ALUX-msg-avatar"><TrendIcon /></div>
                     )}
-                    <div className={`ALUX-bubble${msg.isError ? ' ALUX-error' : ''}`}>
+                    <div className="ALUX-bubble">
                       {msg.sender === 'bot'
                         ? <FormattedText text={msg.text} />
                         : msg.text

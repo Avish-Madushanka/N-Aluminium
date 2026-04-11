@@ -1,26 +1,5 @@
-/* ═══════════════════════════════════════
-   ALUX AI Chatbot — FloatingChatBot.css
-   Green eco theme, clean & professional
-═══════════════════════════════════════ */
+/* FloatingChatBot.css */
 
-:root {
-  --ALUX-green:      #1a6e2e;
-  --ALUX-green-dk:   #145a24;
-  --ALUX-green-lt:   #e8f5ec;
-  --ALUX-green-mid:  #2d8a47;
-  --ALUX-header-bg:  #0d3d1a;
-  --ALUX-accent:     #39a85a;
-  --ALUX-white:      #ffffff;
-  --ALUX-bg:         #f7f9f7;
-  --ALUX-border:     #e0e8e1;
-  --ALUX-text:       #1a1a1a;
-  --ALUX-muted:      #6b7c6e;
-  --ALUX-bubble-bot: #ffffff;
-  --ALUX-radius:     16px;
-  --ALUX-font:       'Segoe UI', system-ui, -apple-system, sans-serif;
-}
-
-/* ── Launcher button ── */
 .ALUX-launcher {
   position: fixed;
   right: 24px;
@@ -32,52 +11,63 @@
   padding: 0 22px 0 16px;
   height: 50px;
   border-radius: 25px;
-  background: var(--ALUX-green);
-  color: var(--ALUX-white);
+  background: #1a6e2e;
+  color: #ffffff;
   border: none;
   font-size: 14px;
   font-weight: 600;
-  font-family: var(--ALUX-font);
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
   cursor: pointer;
-  box-shadow: 0 4px 18px rgba(26,110,46,0.38);
+  box-shadow: 0 4px 18px rgba(26, 110, 46, 0.38);
   transition: transform 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
   letter-spacing: 0.2px;
 }
+
 .ALUX-launcher:hover {
-  background: var(--ALUX-green-dk);
+  background: #145a24;
   transform: translateY(-2px);
-  box-shadow: 0 6px 24px rgba(26,110,46,0.48);
+  box-shadow: 0 6px 24px rgba(26, 110, 46, 0.48);
 }
 
-/* ── Chat window shell ── */
 .ALUX-chat {
   position: fixed;
   right: 24px;
   bottom: 24px;
   z-index: 1000;
   width: 370px;
-  border-radius: var(--ALUX-radius);
-  background: var(--ALUX-white);
-  box-shadow: 0 10px 48px rgba(0,0,0,0.16), 0 2px 8px rgba(0,0,0,0.06);
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 10px 48px rgba(0, 0, 0, 0.16), 0 2px 8px rgba(0, 0, 0, 0.06);
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  font-family: var(--ALUX-font);
-  transition: height 0.3s cubic-bezier(0.4,0,0.2,1);
-  animation: ALUX-rise 0.26s cubic-bezier(0.4,0,0.2,1);
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  transition: height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: ALUX-rise 0.26s cubic-bezier(0.4, 0, 0.2, 1);
 }
-.ALUX-expanded  { height: 560px; }
-.ALUX-minimized { height: 58px;  }
+
+.ALUX-expanded {
+  height: 560px;
+}
+
+.ALUX-minimized {
+  height: 58px;
+}
 
 @keyframes ALUX-rise {
-  from { opacity: 0; transform: translateY(14px) scale(0.97); }
-  to   { opacity: 1; transform: translateY(0)    scale(1);    }
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
-/* ── Header ── */
 .ALUX-header {
-  background: var(--ALUX-header-bg);
-  color: var(--ALUX-white);
+  background: #0d3d1a;
+  color: #ffffff;
   padding: 0 12px 0 16px;
   height: 58px;
   display: flex;
@@ -85,59 +75,65 @@
   justify-content: space-between;
   flex-shrink: 0;
 }
+
 .ALUX-header-left {
   display: flex;
   align-items: center;
   gap: 11px;
 }
+
 .ALUX-avatar {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: var(--ALUX-green);
+  background: #1a6e2e;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  box-shadow: 0 0 0 3px rgba(57,168,90,0.3);
+  box-shadow: 0 0 0 3px rgba(57, 168, 90, 0.3);
 }
+
 .ALUX-header-info {
   display: flex;
   flex-direction: column;
   gap: 2px;
 }
+
 .ALUX-name {
   font-size: 15px;
   font-weight: 700;
   letter-spacing: 0.2px;
   line-height: 1;
 }
+
 .ALUX-status {
   font-size: 11px;
-  color: rgba(255,255,255,0.65);
+  color: rgba(255, 255, 255, 0.65);
   display: flex;
   align-items: center;
   gap: 4px;
 }
+
 .ALUX-dot {
   display: inline-block;
   width: 7px;
   height: 7px;
   border-radius: 50%;
   background: #4cde70;
-  box-shadow: 0 0 5px rgba(76,222,112,0.7);
+  box-shadow: 0 0 5px rgba(76, 222, 112, 0.7);
 }
 
-/* header buttons */
 .ALUX-header-actions {
   display: flex;
   align-items: center;
   gap: 2px;
 }
+
 .ALUX-ctrl {
   background: none;
   border: none;
-  color: rgba(255,255,255,0.65);
+  color: rgba(255, 255, 255, 0.65);
   cursor: pointer;
   width: 32px;
   height: 32px;
@@ -147,27 +143,25 @@
   justify-content: center;
   transition: background 0.15s, color 0.15s;
 }
+
 .ALUX-ctrl:hover {
-  background: rgba(255,255,255,0.1);
-  color: var(--ALUX-white);
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
 }
+
 .ALUX-close:hover {
-  background: rgba(220,60,60,0.22);
+  background: rgba(220, 60, 60, 0.22);
   color: #ff8080;
 }
 
-/* ── Body wrapper ── */
 .ALUX-body {
   flex: 1;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  background: var(--ALUX-bg);
+  background: #f7f9f7;
 }
 
-/* ══════════════════════
-   HOME / QUICK TOPICS
-══════════════════════ */
 .ALUX-home {
   flex: 1;
   display: flex;
@@ -177,28 +171,31 @@
 }
 
 .ALUX-home-hero {
-  background: var(--ALUX-white);
-  border: 1px solid var(--ALUX-border);
+  background: #ffffff;
+  border: 1px solid #e0e8e1;
   border-radius: 12px;
   padding: 18px 16px;
   text-align: center;
   margin-bottom: 16px;
 }
+
 .ALUX-hero-icon {
   font-size: 28px;
   margin-bottom: 8px;
   line-height: 1;
 }
+
 .ALUX-hero-title {
   margin: 0 0 4px;
   font-size: 17px;
   font-weight: 700;
-  color: var(--ALUX-text);
+  color: #1a1a1a;
 }
+
 .ALUX-hero-sub {
   margin: 0;
   font-size: 13px;
-  color: var(--ALUX-muted);
+  color: #6b7c6e;
   line-height: 1.5;
 }
 
@@ -207,7 +204,7 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.6px;
-  color: var(--ALUX-muted);
+  color: #6b7c6e;
   margin: 0 0 8px 2px;
 }
 
@@ -217,32 +214,49 @@
   gap: 6px;
   margin-bottom: 14px;
 }
+
 .ALUX-topic-btn {
   display: flex;
   align-items: center;
   gap: 10px;
   padding: 10px 12px;
-  background: var(--ALUX-white);
-  border: 1px solid var(--ALUX-border);
+  background: #ffffff;
+  border: 1px solid #e0e8e1;
   border-radius: 10px;
   cursor: pointer;
   font-size: 13.5px;
-  font-family: var(--ALUX-font);
-  color: var(--ALUX-text);
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  color: #1a1a1a;
   text-align: left;
   font-weight: 500;
   transition: border-color 0.15s, background 0.15s, transform 0.12s, color 0.15s;
 }
+
 .ALUX-topic-btn:hover {
-  border-color: var(--ALUX-green);
-  background: var(--ALUX-green-lt);
-  color: var(--ALUX-green-dk);
+  border-color: #1a6e2e;
+  background: #e8f5ec;
+  color: #145a24;
   transform: translateX(3px);
 }
-.topic-icon  { font-size: 16px; flex-shrink: 0; }
-.topic-label { flex: 1; }
-.topic-arrow { flex-shrink: 0; opacity: 0.35; transition: opacity 0.15s; }
-.ALUX-topic-btn:hover .topic-arrow { opacity: 1; }
+
+.topic-icon {
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.topic-label {
+  flex: 1;
+}
+
+.topic-arrow {
+  flex-shrink: 0;
+  opacity: 0.35;
+  transition: opacity 0.15s;
+}
+
+.ALUX-topic-btn:hover .topic-arrow {
+  opacity: 1;
+}
 
 .ALUX-divider {
   display: flex;
@@ -252,17 +266,15 @@
   font-size: 11.5px;
   color: #b0bdb2;
 }
+
 .ALUX-divider::before,
 .ALUX-divider::after {
   content: '';
   flex: 1;
   height: 1px;
-  background: var(--ALUX-border);
+  background: #e0e8e1;
 }
 
-/* ══════════════════
-   MESSAGE AREA
-══════════════════ */
 .ALUX-messages {
   flex: 1;
   padding: 14px 14px 6px;
@@ -270,7 +282,7 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  background: var(--ALUX-bg);
+  background: #f7f9f7;
 }
 
 .ALUX-row {
@@ -279,14 +291,17 @@
   gap: 7px;
   animation: ALUX-fadein 0.22s ease-out;
 }
-.ALUX-row.user { flex-direction: row-reverse; }
+
+.ALUX-row.user {
+  flex-direction: row-reverse;
+}
 
 .ALUX-msg-avatar {
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  background: var(--ALUX-green);
-  color: var(--ALUX-white);
+  background: #1a6e2e;
+  color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -301,30 +316,33 @@
   line-height: 1.6;
   word-break: break-word;
 }
+
 .ALUX-row.bot .ALUX-bubble {
-  background: var(--ALUX-bubble-bot);
-  color: var(--ALUX-text);
+  background: #ffffff;
+  color: #1a1a1a;
   border-bottom-left-radius: 4px;
-  border: 1px solid var(--ALUX-border);
+  border: 1px solid #e0e8e1;
 }
+
 .ALUX-row.user .ALUX-bubble {
-  background: var(--ALUX-green);
-  color: var(--ALUX-white);
+  background: #1a6e2e;
+  color: #ffffff;
   border-bottom-right-radius: 4px;
 }
+
 .ALUX-bubble.ALUX-error {
   background: #fff4f4;
   border-color: #f5c0c0;
   color: #c0392b;
 }
 
-/* ── Typing dots ── */
 .typing-dots {
   display: flex;
   align-items: center;
   gap: 4px;
   padding: 3px 2px;
 }
+
 .typing-dots span {
   display: inline-block;
   width: 7px;
@@ -333,47 +351,60 @@
   background: #b0bdb2;
   animation: ALUX-bounce 1.2s infinite ease-in-out;
 }
-.typing-dots span:nth-child(2) { animation-delay: 0.18s; }
-.typing-dots span:nth-child(3) { animation-delay: 0.36s; }
 
-@keyframes ALUX-bounce {
-  0%, 80%, 100% { transform: scale(0.72); opacity: 0.45; }
-  40%           { transform: scale(1.1);  opacity: 1; }
+.typing-dots span:nth-child(2) {
+  animation-delay: 0.18s;
 }
 
-/* ══════════════════
-   INPUT BAR
-══════════════════ */
+.typing-dots span:nth-child(3) {
+  animation-delay: 0.36s;
+}
+
+@keyframes ALUX-bounce {
+  0%, 80%, 100% {
+    transform: scale(0.72);
+    opacity: 0.45;
+  }
+  40% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+}
+
 .ALUX-input-bar {
   display: flex;
   align-items: center;
   gap: 8px;
   padding: 10px 12px;
-  background: var(--ALUX-white);
-  border-top: 1px solid var(--ALUX-border);
+  background: #ffffff;
+  border-top: 1px solid #e0e8e1;
   flex-shrink: 0;
 }
+
 .ALUX-input-bar input {
   flex: 1;
   height: 40px;
   padding: 0 14px;
-  border: 1.5px solid var(--ALUX-border);
+  border: 1.5px solid #e0e8e1;
   border-radius: 20px;
   outline: none;
   font-size: 13.5px;
-  font-family: var(--ALUX-font);
-  color: var(--ALUX-text);
-  background: var(--ALUX-bg);
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  color: #1a1a1a;
+  background: #f7f9f7;
   transition: border-color 0.15s, background 0.15s;
 }
+
 .ALUX-input-bar input:focus {
-  border-color: var(--ALUX-green);
-  background: var(--ALUX-white);
+  border-color: #1a6e2e;
+  background: #ffffff;
 }
+
 .ALUX-input-bar input:disabled {
   opacity: 0.55;
   cursor: not-allowed;
 }
+
 .ALUX-input-bar input::placeholder {
   color: #a8b5ab;
 }
@@ -382,8 +413,8 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: var(--ALUX-green);
-  color: var(--ALUX-white);
+  background: #1a6e2e;
+  color: #ffffff;
   border: none;
   cursor: pointer;
   display: flex;
@@ -392,44 +423,58 @@
   flex-shrink: 0;
   transition: background 0.15s, transform 0.12s;
 }
+
 .ALUX-send:hover:not(:disabled) {
-  background: var(--ALUX-green-dk);
+  background: #145a24;
   transform: scale(1.07);
 }
+
 .ALUX-send:disabled {
   background: #c8d5ca;
   cursor: not-allowed;
   transform: none;
 }
 
-/* ══════════════════
-   SCROLLBARS
-══════════════════ */
 .ALUX-messages::-webkit-scrollbar,
 .ALUX-home::-webkit-scrollbar {
   width: 4px;
 }
+
 .ALUX-messages::-webkit-scrollbar-track,
 .ALUX-home::-webkit-scrollbar-track {
   background: transparent;
 }
+
 .ALUX-messages::-webkit-scrollbar-thumb,
 .ALUX-home::-webkit-scrollbar-thumb {
   background: #c8d5ca;
   border-radius: 4px;
 }
+
 .ALUX-messages::-webkit-scrollbar-thumb:hover,
 .ALUX-home::-webkit-scrollbar-thumb:hover {
   background: #a8b9ab;
 }
 
 @keyframes ALUX-fadein {
-  from { opacity: 0; transform: translateY(5px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-/* ── Responsive: smaller screens ── */
 @media (max-width: 420px) {
-  .ALUX-chat    { width: calc(100vw - 24px); right: 12px; bottom: 12px; }
-  .ALUX-launcher{ right: 12px; bottom: 12px; }
+  .ALUX-chat {
+    width: calc(100vw - 24px);
+    right: 12px;
+    bottom: 12px;
+  }
+  .ALUX-launcher {
+    right: 12px;
+    bottom: 12px;
+  }
 }
