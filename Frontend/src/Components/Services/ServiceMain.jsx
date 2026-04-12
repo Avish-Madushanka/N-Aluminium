@@ -6,9 +6,10 @@ import "./ServiceMain.css";
 import Img1 from '../../assets/s1.jpg';
 import Img2 from '../../assets/s2.jpg';
 import Img3 from '../../assets/s3.jpg';
-import Img4 from '../../assets/s4.jpg';
+/* import Img4 from '../../assets/s4.jpg'; */
 import Img5 from '../../assets/s5.jpg';
 import Img6 from '../../assets/s6.jpg';
+import Img7 from '../../assets/s7.jpg';
 
 function ServiceMain() {
   const services = [
@@ -31,10 +32,10 @@ function ServiceMain() {
       link: "/ItemMarkert",
     },
     {
-      title: "test",
-      desc: "Support for industrial and personal aluminum fabrication projects.",
-      img: Img4,
-      link: "/Pro",
+      title: "Custom Glass Platform",
+      desc: "Digital platform for custom glass design, pricing, and order management.",
+      img: Img7,
+      link: "/GlassOrder",
     },
     {
       title: "Aluminum Fabrication",
@@ -83,7 +84,7 @@ function ServiceMain() {
                 <h3 className="Ser-card-title">{service.title}</h3>
                 <p className="Ser-card-text">{service.desc}</p>
                 <Link to={service.link} className="Ser-read-more-btn">
-                  Read More
+                  View Details
                   <span className="Ser-btn-icon">
                     <ArrowRight size={16} />
                   </span>
