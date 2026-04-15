@@ -69,6 +69,8 @@ import GlassOrderCheckout from './Components/ItemMarkert/GlassOrderCheckout';
 import AdGlassManage from './Components/Admin/AdGlassManage/AdGlassManage';
 import AdminOrderManage from './Components/Admin/AdGlassManage/AdminOrderManage';
 import MyOrders from './Components/ItemMarkert/MyOrders';
+import AluminumQuotationSystem from './Components/AluminumQuotationSystem/AluminumQuotationSystem';
+import AdQuotation from './Components/Admin/AdQuotation/AdQuotation';
 
 const parseUserInfoFromToken = (token) => {
     if (!token) {
@@ -333,6 +335,7 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
                         <Route path="/GlassOrderCheckout" element={<GlassOrderCheckout selectedItems={orderItems} onReset={handleResetOrder} /> } />
                         <Route path="/ItemsCartManage" element={<ItemsCartManage /> } />
                         <Route path="/MyOrders" element={<MyOrders /> } />
+                        <Route path="/AluminumQuotationSystem" element={<AluminumQuotationSystem /> } />
                     </Route>
 
                     <Route element={<ProtectedRoute requiredRole="admin" />}>
@@ -356,6 +359,7 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
                            <Route path="/Admin/BuyandSellManage" element={<BuyandSellManage /> } />
                            <Route path="/Admin/AdGlassManage" element={<AdGlassManage /> } />
                            <Route path="/Admin/AdminOrderManage" element={<AdminOrderManage /> } />
+                           <Route path="/Admin/AdQuotation" element={<AdQuotation /> } />
                         </Route>
                      </Route>
 

@@ -1,0 +1,406 @@
+.alp-admin-login-container {
+  min-height: calc(100vh - 120px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+}
+
+.alp-admin-login-card {
+  background: white;
+  border-radius: 32px;
+  padding: 48px;
+  max-width: 450px;
+  width: 100%;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  animation: alpLoginFadeIn 0.5s ease;
+}
+
+@keyframes alpLoginFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.alp-admin-login-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1e293b;
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.alp-admin-input {
+  width: 100%;
+  padding: 14px 18px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 14px;
+  font-size: 15px;
+  margin-bottom: 20px;
+  transition: all 0.3s ease;
+}
+
+.alp-admin-input:focus {
+  outline: none;
+  border-color: #d30905;
+  box-shadow: 0 0 0 3px rgba(211, 9, 5, 0.1);
+}
+
+.alp-admin-login-btn {
+  width: 100%;
+  background: linear-gradient(135deg, #d30905 0%, #a80703 100%);
+  color: white;
+  border: none;
+  padding: 14px 28px;
+  border-radius: 40px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 8px;
+}
+
+.alp-admin-login-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(211, 9, 5, 0.3);
+}
+
+.alp-admin-dashboard {
+  display: flex;
+  min-height: calc(100vh - 120px);
+}
+
+.alp-admin-sidebar {
+  width: 280px;
+  background: white;
+  box-shadow: 2px 0 12px rgba(0, 0, 0, 0.05);
+  padding: 28px 0;
+}
+
+.alp-sidebar-header {
+  padding: 0 24px 24px 24px;
+  border-bottom: 1px solid #e2e8f0;
+  margin-bottom: 24px;
+}
+
+.alp-sidebar-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.alp-sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.alp-sidebar-link {
+  background: transparent;
+  border: none;
+  padding: 14px 24px;
+  text-align: left;
+  font-size: 15px;
+  font-weight: 500;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.alp-sidebar-link:hover {
+  background: #f1f5f9;
+  color: #d30905;
+}
+
+.alp-sidebar-link.active {
+  background: #fef2f2;
+  color: #d30905;
+  border-right: 3px solid #d30905;
+}
+
+.alp-admin-main {
+  flex: 1;
+  padding: 32px 40px;
+  overflow-y: auto;
+}
+
+.alp-section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 28px;
+}
+
+.alp-requests-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+  gap: 24px;
+}
+
+.alp-request-card {
+  background: white;
+  border-radius: 20px;
+  padding: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 1px solid #e2e8f0;
+}
+
+.alp-request-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1);
+  border-color: #d30905;
+}
+
+.alp-request-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.alp-request-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1e293b;
+  flex: 1;
+}
+
+.alp-request-card-body {
+  margin-bottom: 16px;
+}
+
+.alp-request-client,
+.alp-request-email,
+.alp-request-material,
+.alp-request-files {
+  font-size: 13px;
+  color: #475569;
+  margin-bottom: 8px;
+}
+
+.alp-request-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 16px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.alp-request-date {
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+.alp-view-btn {
+  background: transparent;
+  border: 1px solid #d30905;
+  color: #d30905;
+  padding: 6px 16px;
+  border-radius: 40px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.alp-view-btn:hover {
+  background: #d30905;
+  color: white;
+}
+
+.alp-stats-section {
+  background: white;
+  border-radius: 24px;
+  padding: 32px;
+}
+
+.alp-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 24px;
+}
+
+.alp-stat-card {
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border-radius: 20px;
+  padding: 28px 20px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.alp-stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.alp-stat-value {
+  font-size: 42px;
+  font-weight: 800;
+  color: #d30905;
+  margin-bottom: 8px;
+}
+
+.alp-stat-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.alp-admin-section {
+  background: #f8fafc;
+  padding: 24px;
+  border-radius: 20px;
+  margin-top: 8px;
+}
+
+.alp-status-buttons {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.alp-status-btn {
+  background: white;
+  border: 1px solid #e2e8f0;
+  padding: 8px 20px;
+  border-radius: 40px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.alp-status-btn:hover {
+  border-color: #d30905;
+  color: #d30905;
+}
+
+.alp-status-btn.active {
+  background: #d30905;
+  border-color: #d30905;
+  color: white;
+}
+
+.alp-quote-form {
+  margin-top: 8px;
+}
+
+.alp-quote-form .alp-label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.alp-quote-form .alp-input,
+.alp-quote-form .alp-textarea {
+  width: 100%;
+  margin-bottom: 20px;
+  padding: 12px 16px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 14px;
+}
+
+.alp-quote-form .alp-input:focus,
+.alp-quote-form .alp-textarea:focus {
+  outline: none;
+  border-color: #d30905;
+  box-shadow: 0 0 0 3px rgba(211, 9, 5, 0.1);
+}
+
+.alp-send-quote-btn {
+  width: 100%;
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  color: white;
+  border: none;
+  padding: 14px 24px;
+  border-radius: 40px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.alp-send-quote-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(5, 150, 105, 0.3);
+}
+
+@media (max-width: 900px) {
+  .alp-admin-dashboard {
+    flex-direction: column;
+  }
+
+  .alp-admin-sidebar {
+    width: 100%;
+    padding: 16px 0;
+  }
+
+  .alp-sidebar-nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 0 20px;
+  }
+
+  .alp-sidebar-link {
+    padding: 10px 18px;
+    border-radius: 40px;
+  }
+
+  .alp-sidebar-link.active {
+    border-right: none;
+    background: #d30905;
+    color: white;
+  }
+
+  .alp-admin-main {
+    padding: 24px 20px;
+  }
+
+  .alp-requests-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .alp-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .alp-admin-login-card {
+    padding: 32px 24px;
+  }
+
+  .alp-admin-login-title {
+    font-size: 24px;
+  }
+
+  .alp-stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .alp-status-buttons {
+    flex-direction: column;
+  }
+
+  .alp-status-btn {
+    width: 100%;
+    text-align: center;
+  }
+}
