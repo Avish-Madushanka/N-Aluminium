@@ -4,6 +4,7 @@ import './AluminumQuotationSystem.css';
 const AluminumQuotationSystem = () => {
   const [view, setView] = useState('landing');
   const [activeTab, setActiveTab] = useState('request');
+  const [statusFilter, setStatusFilter] = useState('all');
   const [myRequests, setMyRequests] = useState([]);
   const [selectedRequest, setSelectedRequest] = useState(null);
   const [showDetailModal, setShowDetailModal] = useState(false);
@@ -18,19 +19,30 @@ const AluminumQuotationSystem = () => {
     projectTitle: '',
     projectDescription: '',
     materialType: 'Aluminum 6063',
-    budget: ''
+    color: 'Mill Finish'
   });
 
   const [files, setFiles] = useState([]);
   const [dragActive, setDragActive] = useState(false);
 
   const materialOptions = [
-    'Aluminum 6063',
-    'Aluminum 6061',
-    'Aluminum 5052',
-    'Aluminum 7075',
-    'Aluminum Composite Panel',
-    'Powder Coated Aluminum'
+    'Select Material Type',
+    '6061 – Structural Use',
+    '6063 – Windows/ Doors',
+    '6005A – Heavy Structural',
+    '5052 – Roofing / Outdoor',
+    '3003 – Panels / Decorative'
+  ];
+
+  const colorOptions = [
+    'Select Color',
+    'White Color',
+    'Black Color',
+    'Red Color',
+    'Grey Color',
+    'Blue Color',
+    'Powder Coated',
+    'Wood Finish'
   ];
 
   useEffect(() => {
@@ -54,6 +66,13 @@ const AluminumQuotationSystem = () => {
     setLoading(false);
   };
 
+  const getFilteredRequests = () => {
+    if (statusFilter === 'all') {
+      return myRequests;
+    }
+    return myRequests.filter(r => r.status === statusFilter);
+  };
+
   const validateEmail = (email) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(email);
@@ -62,12 +81,6 @@ const AluminumQuotationSystem = () => {
   const validatePhone = (phone) => {
     const re = /^[0-9]{10}$/;
     return re.test(phone);
-  };
-
-  const validateBudget = (budget) => {
-    if (!budget) return true;
-    const num = parseFloat(budget);
-    return !isNaN(num) && num >= 0 && num <= 999999999;
   };
 
   const validateFormFields = () => {
@@ -105,10 +118,6 @@ const AluminumQuotationSystem = () => {
       newErrors.projectDescription = 'Description must be at least 10 characters';
     } else if (formData.projectDescription.trim().length > 2000) {
       newErrors.projectDescription = 'Description must be less than 2000 characters';
-    }
-
-    if (formData.budget && !validateBudget(formData.budget)) {
-      newErrors.budget = 'Please enter a valid budget amount';
     }
 
     if (files.length === 0) {
@@ -193,12 +202,12 @@ const AluminumQuotationSystem = () => {
     const newRequest = {
       id: Date.now().toString(),
       ...formData,
-      budget: formData.budget ? parseFloat(formData.budget) : null,
       files: filePreviews,
       status: 'Pending',
       submittedAt: new Date().toISOString(),
       quotedPrice: null,
-      adminNotes: null
+      adminNotes: null,
+      adminFiles: []
     };
 
     const stored = localStorage.getItem('aluminum_quotations_user_V2');
@@ -207,11 +216,6 @@ const AluminumQuotationSystem = () => {
     localStorage.setItem('aluminum_quotations_user_V2', JSON.stringify(allRequests));
     localStorage.setItem('aluminum_user_email_V2', formData.email);
 
-    const adminStored = localStorage.getItem('aluminum_quotations_admin_V2');
-    let adminRequests = adminStored ? JSON.parse(adminStored) : [];
-    adminRequests.unshift(newRequest);
-    localStorage.setItem('aluminum_quotations_admin_V2', JSON.stringify(adminRequests));
-
     setFormData({
       fullName: '',
       email: '',
@@ -219,7 +223,7 @@ const AluminumQuotationSystem = () => {
       projectTitle: '',
       projectDescription: '',
       materialType: 'Aluminum 6063',
-      budget: ''
+      color: 'Mill Finish'
     });
     setFiles([]);
     setErrors({});
@@ -248,6 +252,11 @@ const AluminumQuotationSystem = () => {
     return `LKR ${amount.toLocaleString()}`;
   };
 
+  const pendingCount = myRequests.filter(r => r.status === 'Pending').length;
+  const reviewedCount = myRequests.filter(r => r.status === 'Reviewed').length;
+  const quotedCount = myRequests.filter(r => r.status === 'Quoted').length;
+  const filteredRequests = getFilteredRequests();
+
   return (
     <div className="alp-container">
       <div className="alp-header">
@@ -255,9 +264,6 @@ const AluminumQuotationSystem = () => {
           <h1 className="alp-title">Aluminum Quotation System</h1>
           <p className="alp-subtitle">Premium Aluminum Solutions | Custom Project Quotations</p>
         </div>
-        <button className="alp-admin-toggle-btn" onClick={() => setView(view === 'landing' ? 'admin-login' : 'landing')}>
-          {view === 'landing' ? 'Admin →' : '← User Mode'}
-        </button>
       </div>
 
       {successMessage && (
@@ -319,7 +325,7 @@ const AluminumQuotationSystem = () => {
                     className={`alp-input ${errors.phone ? 'alp-input-error' : ''}`}
                     value={formData.phone}
                     onChange={handleInputChange}
-                    placeholder="0712345678"
+                    placeholder="071 **** ***"
                   />
                   {errors.phone && <span className="alp-error-text">{errors.phone}</span>}
                 </div>
@@ -363,19 +369,18 @@ const AluminumQuotationSystem = () => {
                 </div>
 
                 <div className="alp-form-group">
-                  <label className="alp-label">Budget (LKR) - Optional</label>
-                  <input
-                    type="number"
-                    name="budget"
-                    className={`alp-input ${errors.budget ? 'alp-input-error' : ''}`}
-                    value={formData.budget}
+                  <label className="alp-label">Color / Finish *</label>
+                  <select
+                    name="color"
+                    className="alp-select"
+                    value={formData.color}
                     onChange={handleInputChange}
-                    placeholder="Enter approximate budget"
-                    min="0"
-                    step="1000"
-                  />
-                  {errors.budget && <span className="alp-error-text">{errors.budget}</span>}
-                  <span className="alp-hint-text">Leave empty if you don't have a budget range</span>
+                  >
+                    {colorOptions.map(option => (
+                      <option key={option} value={option}>{option}</option>
+                    ))}
+                  </select>
+                  <span className="alp-hint-text">Select desired color or finish for your aluminum profiles</span>
                 </div>
 
                 <div className="alp-form-group alp-full-width">
@@ -447,38 +452,82 @@ const AluminumQuotationSystem = () => {
                   </button>
                 </div>
               ) : (
-                <div className="alp-my-requests-list">
-                  {myRequests.map(request => (
-                    <div key={request.id} className="alp-my-request-card">
-                      <div className="alp-my-request-header">
-                        <h3 className="alp-my-request-title">{request.projectTitle}</h3>
-                        <span className={getStatusBadgeClass(request.status)}>{request.status}</span>
-                      </div>
-                      <div className="alp-my-request-body">
-                        <p className="alp-my-request-material"><strong>Material:</strong> {request.materialType}</p>
-                        <p className="alp-my-request-budget"><strong>Budget:</strong> {formatCurrency(request.budget)}</p>
-                        <p className="alp-my-request-desc"><strong>Description:</strong> {request.projectDescription.substring(0, 100)}...</p>
-                        {request.quotedPrice && (
-                          <div className="alp-quoted-price">
-                            <strong>Quoted Price:</strong> {formatCurrency(request.quotedPrice)}
-                          </div>
-                        )}
-                        {request.adminNotes && (
-                          <div className="alp-quoted-notes">
-                            <strong>Admin Notes:</strong> {request.adminNotes}
-                          </div>
-                        )}
-                        <div className="alp-my-request-files">
-                          <strong>Attachments:</strong> {request.files.length} file(s)
-                        </div>
-                      </div>
-                      <div className="alp-my-request-footer">
-                        <span className="alp-my-request-date">Submitted: {new Date(request.submittedAt).toLocaleDateString()}</span>
-                        <button className="alp-view-details-btn" onClick={() => handleViewRequest(request)}>View Details</button>
-                      </div>
+                <>
+                  <div className="alp-status-filters">
+                    <button 
+                      className={`alp-status-filter-btn ${statusFilter === 'all' ? 'active' : ''}`}
+                      onClick={() => setStatusFilter('all')}
+                    >
+                      All ({myRequests.length})
+                    </button>
+                    <button 
+                      className={`alp-status-filter-btn ${statusFilter === 'Pending' ? 'active' : ''}`}
+                      onClick={() => setStatusFilter('Pending')}
+                    >
+                      Pending ({pendingCount})
+                    </button>
+                    <button 
+                      className={`alp-status-filter-btn ${statusFilter === 'Reviewed' ? 'active' : ''}`}
+                      onClick={() => setStatusFilter('Reviewed')}
+                    >
+                      Reviewed ({reviewedCount})
+                    </button>
+                    <button 
+                      className={`alp-status-filter-btn ${statusFilter === 'Quoted' ? 'active' : ''}`}
+                      onClick={() => setStatusFilter('Quoted')}
+                    >
+                      Quoted ({quotedCount})
+                    </button>
+                  </div>
+
+                  {filteredRequests.length === 0 ? (
+                    <div className="alp-empty-state">
+                      <div className="alp-empty-icon">🔍</div>
+                      <p>No {statusFilter !== 'all' ? statusFilter.toLowerCase() : ''} requests found</p>
+                      <button className="alp-empty-btn" onClick={() => setStatusFilter('all')}>
+                        View All Requests →
+                      </button>
                     </div>
-                  ))}
-                </div>
+                  ) : (
+                    <div className="alp-my-requests-list">
+                      {filteredRequests.map(request => (
+                        <div key={request.id} className="alp-my-request-card">
+                          <div className="alp-my-request-header">
+                            <h3 className="alp-my-request-title">{request.projectTitle}</h3>
+                            <span className={getStatusBadgeClass(request.status)}>{request.status}</span>
+                          </div>
+                          <div className="alp-my-request-body">
+                            <p className="alp-my-request-material"><strong>Material:</strong> {request.materialType}</p>
+                            <p className="alp-my-request-color"><strong>Color/Finish:</strong> {request.color}</p>
+                            <p className="alp-my-request-desc"><strong>Description:</strong> {request.projectDescription.substring(0, 100)}...</p>
+                            {request.quotedPrice && (
+                              <div className="alp-quoted-price">
+                                <strong>Quoted Price:</strong> {formatCurrency(request.quotedPrice)}
+                              </div>
+                            )}
+                            {request.adminNotes && (
+                              <div className="alp-quoted-notes">
+                                <strong>Admin Notes:</strong> {request.adminNotes}
+                              </div>
+                            )}
+                            {request.adminFiles && request.adminFiles.length > 0 && (
+                              <div className="alp-admin-files-info">
+                                <strong>Admin Shared Files:</strong> {request.adminFiles.length} file(s)
+                              </div>
+                            )}
+                            <div className="alp-my-request-files">
+                              <strong>Attachments:</strong> {request.files.length} file(s)
+                            </div>
+                          </div>
+                          <div className="alp-my-request-footer">
+                            <span className="alp-my-request-date">Submitted: {new Date(request.submittedAt).toLocaleDateString()}</span>
+                            <button className="alp-view-details-btn" onClick={() => handleViewRequest(request)}>View Details</button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </>
               )}
             </div>
           )}
@@ -506,7 +555,7 @@ const AluminumQuotationSystem = () => {
               <div className="alp-detail-section">
                 <h3 className="alp-detail-subtitle">Project Details</h3>
                 <p><strong>Material Type:</strong> {selectedRequest.materialType}</p>
-                <p><strong>Budget:</strong> {formatCurrency(selectedRequest.budget)}</p>
+                <p><strong>Color/Finish:</strong> {selectedRequest.color}</p>
                 <p><strong>Description:</strong></p>
                 <p className="alp-detail-description">{selectedRequest.projectDescription}</p>
               </div>
@@ -516,10 +565,15 @@ const AluminumQuotationSystem = () => {
                 <div className="alp-detail-files">
                   {selectedRequest.files.map((file, idx) => (
                     <div key={idx} className="alp-detail-file">
-                      {file.type.startsWith('image/') ? (
-                        <img src={file.preview} alt={file.name} className="alp-detail-file-img" />
+                      {file.type && file.type.startsWith('image/') ? (
+                        <img 
+                          src={file.preview} 
+                          alt={file.name} 
+                          className="alp-detail-file-img"
+                          onClick={() => window.open(file.preview, '_blank')}
+                        />
                       ) : (
-                        <div className="alp-detail-file-pdf">
+                        <div className="alp-detail-file-pdf" onClick={() => window.open(file.preview, '_blank')}>
                           <span className="alp-detail-pdf-icon">📄</span>
                           <span>{file.name}</span>
                         </div>
@@ -528,6 +582,31 @@ const AluminumQuotationSystem = () => {
                   ))}
                 </div>
               </div>
+
+              {selectedRequest.adminFiles && selectedRequest.adminFiles.length > 0 && (
+                <div className="alp-detail-section">
+                  <h3 className="alp-detail-subtitle">Admin Shared Files</h3>
+                  <div className="alp-detail-files">
+                    {selectedRequest.adminFiles.map((file, idx) => (
+                      <div key={idx} className="alp-detail-file">
+                        {file.type && file.type.startsWith('image/') ? (
+                          <img 
+                            src={file.preview} 
+                            alt={file.name} 
+                            className="alp-detail-file-img"
+                            onClick={() => window.open(file.preview, '_blank')}
+                          />
+                        ) : (
+                          <div className="alp-detail-file-pdf" onClick={() => window.open(file.preview, '_blank')}>
+                            <span className="alp-detail-pdf-icon">📎</span>
+                            <span>{file.name}</span>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               {selectedRequest.quotedPrice && (
                 <div className="alp-detail-section alp-quote-received">
