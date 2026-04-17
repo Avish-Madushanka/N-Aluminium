@@ -12,7 +12,7 @@ console.log('[Server Startup] Initializing: Attempting to load route modules...'
 let clientRoutes, bOwnerRoutes, authRoutes, calendarSettingsRoutes,
     bookingRoutes, reviewRoutes, scrapTypeRoutes, shopLocationRoutes, adminRoutes,
     saleItemRoutes, adminStatsRoutes, projectRoutes, itemRoutes, cartRoutes, 
-    quotationRoutes, alumniRoutes, buyAndSellRoutes, glassRoutes;
+    quotationRoutes, alumniRoutes, buyAndSellRoutes, glassRoutes, aluQuotationRoutes;
 
 const loadRoute = (routeName, path) => {
   try {
@@ -47,6 +47,7 @@ quotationRoutes = loadRoute('quotationRoutes', './routes/quotationRoutes');
 alumniRoutes = loadRoute('alumniRoutes', './routes/alumniRoutes');
 buyAndSellRoutes = loadRoute('buyAndSellRoutes', './routes/buyAndSellRoutes');
 glassRoutes = loadRoute('glassRoutes', './routes/glassRoutes');
+aluQuotationRoutes = loadRoute('aluQuotationRoutes', './routes/aluQuotationRoutes');
 
 console.log('\n=== BUY AND SELL ROUTES DEBUG ===');
 if (buyAndSellRoutes) {
@@ -103,6 +104,17 @@ if (glassRoutes) {
 }
 console.log('=== END DEBUG ===\n');
 
+console.log('\n=== ALU QUOTATION ROUTES DEBUG ===');
+if (aluQuotationRoutes) {
+  console.log('✓ aluQuotationRoutes loaded successfully');
+  console.log('  Type:', typeof aluQuotationRoutes);
+  console.log('  Is Router:', !!aluQuotationRoutes.stack);
+  console.log('  Stack length:', aluQuotationRoutes.stack ? aluQuotationRoutes.stack.length : 0);
+} else {
+  console.error('✗ aluQuotationRoutes is NULL or UNDEFINED!');
+}
+console.log('=== END DEBUG ===\n');
+
 console.log('[Server Startup] Loading controllers and middleware...');
 const { createInitialAdmin } = require('./controllers/adminController');
 const errorHandler = require('./middleware/errorHandler');
@@ -125,7 +137,7 @@ app.use('/uploads', express.static(uploadsDirectory));
 
 if (fs.existsSync(uploadsDirectory)) {
     console.log(`[Server Config] Serving static files from ${uploadsDirectory} at /uploads`);
-    const subdirectories = ['saleitems', 'projects', 'profiles', 'items', 'cart', 'alumni'];
+    const subdirectories = ['saleitems', 'projects', 'profiles', 'items', 'cart', 'alumni', 'quotations'];
     subdirectories.forEach(subDir => {
         const fullSubDirPath = path.join(uploadsDirectory, subDir);
         if (fs.existsSync(fullSubDirPath)) {
@@ -145,7 +157,7 @@ if (fs.existsSync(uploadsDirectory)) {
     try {
         fs.mkdirSync(uploadsDirectory, { recursive: true });
         console.log(`[Server Config] Successfully created 'uploads' directory at ${uploadsDirectory}`);
-        const subdirectoriesToCreate = ['saleitems', 'projects', 'profiles', 'items', 'cart', 'alumni'];
+        const subdirectoriesToCreate = ['saleitems', 'projects', 'profiles', 'items', 'cart', 'alumni', 'quotations'];
         subdirectoriesToCreate.forEach(subDir => {
             const fullSubDirPath = path.join(uploadsDirectory, subDir);
             fs.mkdirSync(fullSubDirPath, { recursive: true });
@@ -220,6 +232,18 @@ app.get('/api/test-items', (req, res) => {
   });
 });
 
+app.get('/api/test-alu-quotations', (req, res) => {
+  res.json({ 
+    message: 'Alu Quotations test endpoint working', 
+    timestamp: new Date().toISOString(),
+    routes: {
+      aluQuotationsLoaded: !!aluQuotationRoutes,
+      aluQuotationsType: aluQuotationRoutes ? typeof aluQuotationRoutes : 'null',
+      isRouter: aluQuotationRoutes ? !!aluQuotationRoutes.stack : false
+    }
+  });
+});
+
 console.log('[Server Config] Mounting routes directly...');
 
 const routeMountMap = new WeakMap();
@@ -258,6 +282,7 @@ mountRoute(app, '/api/quotations', quotationRoutes);
 mountRoute(app, '/api/alumni', alumniRoutes);
 mountRoute(app, '/api/buy-and-sell', buyAndSellRoutes);
 mountRoute(app, '/api/glass', glassRoutes);
+mountRoute(app, '/api/alu-quotations', aluQuotationRoutes);
 
 if (itemRoutes) {
     mountRoute(app, '/api/items', itemRoutes);

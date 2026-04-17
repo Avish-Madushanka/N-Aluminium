@@ -6,10 +6,11 @@ import "./ServiceMain.css";
 import Img1 from '../../assets/s1.jpg';
 import Img2 from '../../assets/s2.jpg';
 import Img3 from '../../assets/s3.jpg';
-/* import Img4 from '../../assets/s4.jpg'; */
+import Img4 from '../../assets/s4.jpg'; 
 import Img5 from '../../assets/s5.jpg';
 import Img6 from '../../assets/s6.jpg';
 import Img7 from '../../assets/s7.jpg';
+import Img8 from '../../assets/s8.jpg';
 
 function ServiceMain() {
   const services = [
@@ -48,6 +49,18 @@ function ServiceMain() {
       desc: "Buy and sell aluminum materials easily with secure transactions.",
       img: Img6,
       link: "/BuyandSell",
+    },
+    {
+      title: "Get Aluminum Quote",
+      desc: "Upload your requirements and get fast, professional quotations from experts.",
+      img: Img8,
+      link: "/AluminumQuotationSystem",
+    },
+    {
+      title: "Product Visualization",
+      desc: "Rotate and inspect aluminum designs in real-time for precise project understanding.",
+      img: Img4,
+      link: "/",
     },
   ];
 
