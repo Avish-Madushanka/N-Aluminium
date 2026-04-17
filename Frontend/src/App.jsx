@@ -71,6 +71,7 @@ import AdminOrderManage from './Components/Admin/AdGlassManage/AdminOrderManage'
 import MyOrders from './Components/ItemMarkert/MyOrders';
 import AluminumQuotationSystem from './Components/AluminumQuotationSystem/AluminumQuotationSystem';
 import AdQuotation from './Components/Admin/AdQuotation/AdQuotation';
+import AluminumSystem3D from './Components/AluminumSystem3D/AluminumSystem3D';
 
 const parseUserInfoFromToken = (token) => {
     if (!token) {
@@ -336,6 +337,7 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
                         <Route path="/ItemsCartManage" element={<ItemsCartManage /> } />
                         <Route path="/MyOrders" element={<MyOrders /> } />
                         <Route path="/AluminumQuotationSystem" element={<AluminumQuotationSystem /> } />
+                        <Route path="/AluminumSystem3D" element={<AluminumSystem3D /> } />
                     </Route>
 
                     <Route element={<ProtectedRoute requiredRole="admin" />}>
