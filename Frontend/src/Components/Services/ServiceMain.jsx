@@ -216,7 +216,7 @@ function ServiceMain() {
           </p>
           <div className="Ser-cta-btns">
             <Link to="/Project" className="Ser-cta-btn-primary">Get Started Now</Link>
-            <Link to="/Proreq" className="Ser-cta-btn-secondary">Request Service</Link>
+            <Link to="/AluminumQuotationSystem" className="Ser-cta-btn-secondary">Send your Quotation</Link>
           </div>
           <div className="Ser-cta-trust">
             <span><img src="https://cdn-icons-png.flaticon.com/128/16484/16484401.png" alt="check" width="16" height="16" className="Ser-cta-icon" /> Expert Craftsmanship</span>

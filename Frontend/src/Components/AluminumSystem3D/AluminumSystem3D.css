@@ -1,274 +1,211 @@
-/* components/AluminumSystem3D/Alu3D.css */
-.Alu3D-container {
+/* AluminumSystem3D.css */
+.viewer-container {
   display: flex;
   width: 100vw;
   height: 100vh;
   overflow: hidden;
-  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
-  background: linear-gradient(135deg, #0a0a1a 0%, #1a1a2e 100%);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #0a0a0f 0%, #151520 100%);
 }
 
-.Alu3D-control-panel {
-  width: 320px;
-  background: rgba(20, 20, 35, 0.95);
-  backdrop-filter: blur(10px);
-  border-right: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 20px 16px;
+.control-panel {
+  width: 360px;
+  background: rgba(18, 18, 28, 0.95);
+  backdrop-filter: blur(12px);
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 24px 20px;
   overflow-y: auto;
   z-index: 10;
-  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3);
+  box-shadow: 4px 0 25px rgba(0, 0, 0, 0.4);
 }
 
-.Alu3D-control-group {
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 24px;
   padding-bottom: 16px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.Alu3D-group-title {
+.panel-title {
   color: #ffaa44;
-  font-size: 13px;
-  font-weight: 600;
-  margin-bottom: 12px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-}
-
-.Alu3D-upload-area {
-  background: rgba(255, 170, 68, 0.1);
-  border: 2px dashed rgba(255, 170, 68, 0.5);
-  border-radius: 12px;
-  padding: 16px;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.Alu3D-upload-area:hover {
-  background: rgba(255, 170, 68, 0.2);
-  border-color: #ffaa44;
-}
-
-.Alu3D-upload-icon {
-  font-size: 32px;
-  margin-bottom: 8px;
-}
-
-.Alu3D-upload-text {
-  color: #ffaa44;
-  font-size: 13px;
-  font-weight: 500;
+  font-size: 1.35rem;
+  font-weight: 700;
   margin: 0;
+  letter-spacing: -0.5px;
 }
 
-.Alu3D-upload-subtext {
-  color: #888;
-  font-size: 11px;
-  margin: 4px 0 0;
-}
-
-.Alu3D-uploaded-list {
-  margin-top: 12px;
-  max-height: 250px;
-  overflow-y: auto;
-}
-
-.Alu3D-uploaded-list h4 {
-  color: #ccc;
-  font-size: 12px;
-  margin: 0 0 8px;
-}
-
-.Alu3D-uploaded-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 8px;
-  margin-bottom: 6px;
-}
-
-.Alu3D-uploaded-thumb {
-  width: 40px;
-  height: 40px;
-  object-fit: cover;
-  border-radius: 6px;
-}
-
-.Alu3D-uploaded-info {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.Alu3D-uploaded-name {
-  color: #ddd;
-  font-size: 11px;
-  font-weight: 500;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.Alu3D-uploaded-finish {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 4px;
-  color: #ddd;
-  font-size: 10px;
-  padding: 3px 6px;
-  cursor: pointer;
-}
-
-.Alu3D-uploaded-rotate {
-  background: rgba(255, 170, 68, 0.15);
-  border: none;
-  color: #ffaa44;
-  width: 30px;
-  height: 30px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 14px;
-  transition: all 0.2s ease;
-}
-
-.Alu3D-uploaded-rotate:hover {
-  background: rgba(255, 170, 68, 0.3);
-}
-
-.Alu3D-uploaded-delete {
-  background: rgba(255, 68, 68, 0.2);
-  border: none;
-  color: #ff6666;
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
-  cursor: pointer;
-  font-size: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease;
-}
-
-.Alu3D-uploaded-delete:hover {
-  background: rgba(255, 68, 68, 0.4);
-  color: #ff4444;
-}
-
-.Alu3D-btn {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: #e0e0e0;
-  padding: 8px 14px;
-  margin: 4px 6px 4px 0;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 12px;
-  font-weight: 500;
-  transition: all 0.2s ease;
-}
-
-.Alu3D-btn:hover {
-  background: rgba(255, 170, 68, 0.2);
-  border-color: #ffaa44;
-  color: #ffaa44;
-}
-
-.Alu3D-btn.active {
-  background: #ffaa44;
-  border-color: #ffaa44;
-  color: #1a1a2e;
-}
-
-.Alu3D-btn-small {
+.panel-badge {
   background: rgba(255, 170, 68, 0.15);
   border: 1px solid rgba(255, 170, 68, 0.3);
   color: #ffaa44;
-  padding: 5px 10px;
-  margin: 4px 0;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.7rem;
   font-weight: 500;
+}
+
+.tab-buttons {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #aaa;
+  font-size: 0.85rem;
+  font-weight: 500;
+  border-radius: 12px;
+  cursor: pointer;
   transition: all 0.2s ease;
-  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
-.Alu3D-btn-small:hover {
-  background: rgba(255, 170, 68, 0.3);
+.tab-btn:hover {
+  background: rgba(255, 170, 68, 0.1);
+  border-color: rgba(255, 170, 68, 0.3);
+  color: #ffaa44;
 }
 
-.Alu3D-finish-buttons {
+.tab-btn.active {
+  background: #ffaa44;
+  color: #1a1a2e;
+  border-color: #ffaa44;
+}
+
+.tab-icon {
+  font-size: 1rem;
+}
+
+.control-section {
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.control-section h3 {
+  color: #e0e0e0;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-bottom: 14px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.color-buttons {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
 }
 
-.Alu3D-finish-btn {
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 11px;
+.color-btn {
+  padding: 8px 14px;
+  border-radius: 24px;
+  font-size: 0.75rem;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.15);
   background: rgba(255, 255, 255, 0.05);
-  color: #ccc;
 }
 
-.Alu3D-finish-btn.active {
-  transform: scale(1.02);
-  box-shadow: 0 0 12px rgba(255, 170, 68, 0.5);
+.color-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.color-btn.active {
   border-color: #ffaa44;
+  box-shadow: 0 0 12px rgba(255, 170, 68, 0.4);
 }
 
-.Alu3D-checkbox {
+.dimension-row {
   display: flex;
-  align-items: center;
-  gap: 10px;
-  color: #ccc;
-  font-size: 12px;
+  gap: 16px;
+}
+
+.dimension-item {
+  flex: 1;
+}
+
+.dimension-item label {
+  display: block;
+  color: #aaa;
+  font-size: 0.7rem;
+  margin-bottom: 4px;
+  font-weight: 500;
+}
+
+.dimension-value {
+  color: #ffaa44;
+  font-size: 0.85rem;
+  font-weight: 600;
   margin-bottom: 8px;
-  cursor: pointer;
 }
 
-.Alu3D-checkbox input {
-  width: 16px;
-  height: 16px;
-  cursor: pointer;
-  accent-color: #ffaa44;
-}
-
-.Alu3D-select {
+.dimension-item input {
   width: 100%;
-  padding: 8px 12px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 8px;
-  color: #e0e0e0;
-  font-size: 12px;
-  margin-bottom: 12px;
-  cursor: pointer;
-}
-
-.Alu3D-select option {
-  background: #1a1a2e;
-}
-
-.Alu3D-control-group input[type="range"] {
-  width: 100%;
-  margin: 8px 0;
   height: 4px;
   -webkit-appearance: none;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
   outline: none;
 }
 
-.Alu3D-control-group input[type="range"]::-webkit-slider-thumb {
+.dimension-item input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  background: #ffaa44;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.dimension-item input::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+.slider-group {
+  margin-bottom: 16px;
+}
+
+.slider-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.slider-header label {
+  color: #aaa;
+  font-size: 0.7rem;
+  font-weight: 500;
+}
+
+.slider-value {
+  color: #ffaa44;
+  font-size: 0.7rem;
+  font-weight: 500;
+}
+
+.slider-group input {
+  width: 100%;
+  height: 4px;
+  -webkit-appearance: none;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+  outline: none;
+}
+
+.slider-group input::-webkit-slider-thumb {
   -webkit-appearance: none;
   width: 14px;
   height: 14px;
@@ -277,227 +214,218 @@
   cursor: pointer;
 }
 
-.Alu3D-control-group label {
-  font-size: 11px;
-  color: #aaa;
-  display: block;
-  margin-top: 4px;
-}
-
-.Alu3D-progress {
+.action-btn {
   width: 100%;
-  height: 4px;
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: 2px;
-  margin: 12px 0;
-  overflow: hidden;
-}
-
-.Alu3D-progress-bar {
-  height: 100%;
-  background: linear-gradient(90deg, #ffaa44, #ff6600);
-  border-radius: 2px;
-  transition: width 0.3s ease;
-}
-
-.Alu3D-step-message {
-  font-size: 11px;
-  color: #ffaa44;
-  margin-top: 8px;
-  text-align: center;
-}
-
-.Alu3D-section-buttons {
-  display: flex;
-  gap: 8px;
-}
-
-.Alu3D-dimension-input {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 10px;
-}
-
-.Alu3D-dimension-input label {
-  width: 45px;
-  color: #aaa;
-  font-size: 12px;
-  margin: 0;
-}
-
-.Alu3D-dimension-input input {
-  flex: 1;
-}
-
-.Alu3D-dimension-input span {
-  width: 40px;
-  color: #ffaa44;
-  font-size: 11px;
-  text-align: right;
-}
-
-.Alu3D-canvas-wrapper {
-  flex: 1;
-  position: relative;
-  background: #0a0a1a;
-}
-
-.Alu3D-info-panel {
-  width: 260px;
-  background: rgba(20, 20, 35, 0.9);
-  backdrop-filter: blur(10px);
-  border-left: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 20px 16px;
-  overflow-y: auto;
-  z-index: 10;
-}
-
-.Alu3D-info-section {
-  margin-bottom: 24px;
-  padding-bottom: 16px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.Alu3D-info-section h4 {
-  color: #ffaa44;
-  font-size: 12px;
-  font-weight: 600;
-  margin-bottom: 12px;
-  letter-spacing: 0.5px;
-}
-
-.Alu3D-info-section p {
-  color: #bbb;
-  font-size: 11px;
-  margin: 6px 0;
-  line-height: 1.5;
-}
-
-.Alu3D-modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.8);
-  backdrop-filter: blur(5px);
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.Alu3D-modal {
-  background: #1a1a2e;
-  border-radius: 16px;
-  width: 90%;
-  max-width: 500px;
+  background: linear-gradient(135deg, #2a2a3e, #1a1a2e);
   border: 1px solid rgba(255, 170, 68, 0.3);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
-}
-
-.Alu3D-modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px 20px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.Alu3D-modal-header h3 {
   color: #ffaa44;
-  margin: 0;
-  font-size: 16px;
-}
-
-.Alu3D-modal-close {
-  background: none;
-  border: none;
-  color: #aaa;
-  font-size: 24px;
+  padding: 12px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
   cursor: pointer;
-  padding: 0;
-  width: 32px;
-  height: 32px;
+  transition: all 0.2s ease;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 8px;
+  gap: 10px;
 }
 
-.Alu3D-modal-close:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
+.action-btn:hover {
+  background: rgba(255, 170, 68, 0.12);
+  transform: translateY(-2px);
 }
 
-.Alu3D-modal-body {
-  padding: 24px;
+.action-btn.open {
+  background: rgba(76, 175, 80, 0.15);
+  border-color: #4caf50;
+  color: #4caf50;
 }
 
-.Alu3D-upload-area-large {
+.action-icon {
+  font-size: 1rem;
+}
+
+.upload-area {
   background: rgba(255, 170, 68, 0.05);
-  border: 2px dashed rgba(255, 170, 68, 0.3);
-  border-radius: 16px;
-  padding: 40px;
+  border: 2px dashed rgba(255, 170, 68, 0.25);
+  border-radius: 12px;
+  padding: 16px;
   text-align: center;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
-.Alu3D-upload-area-large:hover {
+.upload-area:hover {
   background: rgba(255, 170, 68, 0.1);
   border-color: #ffaa44;
 }
 
-.Alu3D-upload-icon-large {
-  font-size: 48px;
+.upload-icon {
+  font-size: 28px;
+  margin-bottom: 6px;
+}
+
+.upload-area p {
+  color: #ffaa44;
+  font-size: 0.8rem;
+  margin: 4px 0;
+}
+
+.upload-subtext {
+  color: #888;
+  font-size: 0.65rem;
+}
+
+.image-preview {
+  margin-top: 12px;
+  text-align: center;
+}
+
+.image-preview img {
+  width: 100%;
+  max-height: 100px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 8px;
+}
+
+.remove-texture {
+  background: rgba(255, 68, 68, 0.15);
+  border: 1px solid rgba(255, 68, 68, 0.3);
+  color: #ff6666;
+  padding: 5px 10px;
+  border-radius: 8px;
+  font-size: 0.7rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.remove-texture:hover {
+  background: rgba(255, 68, 68, 0.25);
+}
+
+.texture-badge {
+  background: rgba(76, 175, 80, 0.15);
+  border: 1px solid rgba(76, 175, 80, 0.3);
+  color: #4caf50;
+  padding: 8px;
+  border-radius: 10px;
+  font-size: 0.7rem;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.toggle-group {
   margin-bottom: 16px;
 }
 
-.Alu3D-upload-formats {
-  font-size: 11px;
-  color: #666;
-  margin-top: 12px;
+.toggle-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #ccc;
+  font-size: 0.8rem;
+  cursor: pointer;
 }
 
-.Alu3D-processing {
-  text-align: center;
-  padding: 24px;
+.toggle-label input {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: #ffaa44;
 }
 
-.Alu3D-spinner {
-  width: 40px;
-  height: 40px;
-  border: 3px solid rgba(255, 170, 68, 0.3);
-  border-top-color: #ffaa44;
-  border-radius: 50%;
-  margin: 0 auto 16px;
-  animation: spin 0.8s linear infinite;
+.reset-btn {
+  width: 100%;
+  background: rgba(255, 170, 68, 0.1);
+  border: 1px solid rgba(255, 170, 68, 0.25);
+  color: #ffaa44;
+  padding: 10px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-@keyframes spin {
-  to { transform: rotate(360deg); }
+.reset-btn:hover {
+  background: rgba(255, 170, 68, 0.15);
+  transform: translateY(-2px);
 }
 
-@media (max-width: 1024px) {
-  .Alu3D-control-panel { width: 280px; }
-  .Alu3D-info-panel { width: 220px; }
+.info-panel {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 12px;
+  padding: 14px;
+  margin-top: 20px;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.info-label {
+  color: #888;
+  font-size: 0.7rem;
+  font-weight: 500;
+}
+
+.info-value {
+  color: #ddd;
+  font-size: 0.7rem;
+  font-weight: 500;
+}
+
+.canvas-wrapper {
+  flex: 1;
+  position: relative;
+  background: radial-gradient(circle at center, #151520 0%, #0a0a0f 100%);
+}
+
+.canvas-info {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  gap: 12px;
+  z-index: 20;
+}
+
+.info-badge {
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  padding: 6px 14px;
+  border-radius: 20px;
+  color: #ffaa44;
+  font-size: 0.7rem;
+  font-weight: 500;
+  border: 1px solid rgba(255, 170, 68, 0.2);
 }
 
 @media (max-width: 768px) {
-  .Alu3D-control-panel {
+  .control-panel {
+    width: 300px;
     position: absolute;
-    left: -280px;
+    left: -300px;
     transition: left 0.3s ease;
     height: 100%;
-    z-index: 20;
+    z-index: 30;
   }
-  .Alu3D-info-panel {
-    position: absolute;
-    right: -220px;
-    transition: right 0.3s ease;
-    height: 100%;
-    z-index: 20;
+  
+  .control-panel.open {
+    left: 0;
+  }
+  
+  .canvas-info {
+    bottom: 12px;
+    right: 12px;
+  }
+  
+  .info-badge {
+    padding: 4px 10px;
+    font-size: 0.6rem;
   }
 }

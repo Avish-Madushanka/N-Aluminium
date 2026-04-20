@@ -1,0 +1,580 @@
+.Items3Dview-type-bar {
+  background: linear-gradient(135deg, #0a1628 0%, #0e214d 100%);
+  display: flex;
+  justify-content: center;
+  padding: 16px 0;
+  gap: 20px;
+  flex-wrap: wrap;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.Items3Dview-type-item {
+  color: rgba(255,255,255,0.7);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 20px;
+  cursor: pointer;
+  min-width: 120px;
+  transition: all 0.3s ease;
+  border-radius: 12px;
+  position: relative;
+}
+
+.Items3Dview-type-item:hover {
+  color: white;
+  background: rgba(255,255,255,0.1);
+}
+
+.Items3Dview-type-item.active {
+  background: #3b66ff;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(59,102,255,0.3);
+}
+
+.Items3Dview-type-icon { 
+  font-size: 28px; 
+  margin-bottom: 6px; 
+}
+
+.Items3Dview-type-label { 
+  font-size: 12px; 
+  font-weight: 700; 
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.Items3Dview-type-count {
+  font-size: 10px;
+  margin-top: 4px;
+  opacity: 0.8;
+}
+
+.Items3Dview-main-content {
+  display: flex;
+  margin: 0 auto;
+  padding: 40px;
+  gap: 40px;
+}
+
+.Items3Dview-filters {
+  width: 300px;
+  flex-shrink: 0;
+  background: white;
+  padding: 24px;
+  border-radius: 16px;
+  align-self: flex-start;
+  position: sticky;
+  top: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  border: 1px solid #e9ecef;
+}
+
+.Items3Dview-filter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.Items3Dview-filter-header h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a1a2e;
+}
+
+.Items3Dview-filter-header button {
+  background: none;
+  border: none;
+  color: #3b66ff;
+  font-size: 12px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.Items3Dview-filter-header button:hover {
+  text-decoration: underline;
+}
+
+.Items3Dview-filter-row {
+  margin-bottom: 28px;
+}
+
+.Items3Dview-filter-row label {
+  display: block;
+  color: #6c757d;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.Items3Dview-pill-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.Items3Dview-pill-group span {
+  padding: 6px 14px;
+  cursor: pointer;
+  border-radius: 20px;
+  background: #f8f9fa;
+  color: #495057;
+  font-size: 12px;
+  transition: all 0.2s;
+  border: 1px solid #e9ecef;
+}
+
+.Items3Dview-pill-group span:hover {
+  background: #e9ecef;
+  transform: translateY(-1px);
+}
+
+.Items3Dview-pill-group span.active {
+  background: #3b66ff;
+  color: #fff;
+  border-color: #3b66ff;
+  box-shadow: 0 2px 4px rgba(59,102,255,0.2);
+}
+
+.Items3Dview-content-area { 
+  flex: 1; 
+}
+
+.Items3Dview-results-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.Items3Dview-results-count {
+  color: #6c757d;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.Items3Dview-sort {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.Items3Dview-sort label {
+  color: #6c757d;
+  font-size: 13px;
+}
+
+.Items3Dview-sort select {
+  padding: 6px 12px;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  background: white;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.Items3Dview-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 30px;
+}
+
+.Items3Dview-card {
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  border: 1px solid #e9ecef;
+}
+
+.Items3Dview-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.1);
+}
+
+.Items3Dview-card-image-box {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  aspect-ratio: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+.Items3Dview-card-image-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s;
+}
+
+.Items3Dview-card:hover img { 
+  transform: scale(1.05); 
+}
+
+.Items3Dview-360-icon {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(4px);
+  padding: 4px 8px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: white;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.Items3Dview-card-stats {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(4px);
+  padding: 4px 8px;
+  border-radius: 20px;
+  display: flex;
+  gap: 8px;
+  color: white;
+  font-size: 11px;
+}
+
+.Items3Dview-card-title {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 16px 16px 8px;
+  color: #1a1a2e;
+  line-height: 1.3;
+}
+
+.Items3Dview-card-subtitle {
+  font-size: 12px;
+  color: #6c757d;
+  margin: 0 16px 12px;
+  line-height: 1.4;
+}
+
+.Items3Dview-card-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  border-top: 1px solid #e9ecef;
+  background: #f8f9fa;
+}
+
+.Items3Dview-card-type {
+  font-size: 11px;
+  color: #3b66ff;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.Items3Dview-card-polygons {
+  font-size: 11px;
+  color: #6c757d;
+}
+
+/* Detail View Styles */
+.Items3Dview-detail-view {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 40px;
+}
+
+.Items3Dview-back-btn {
+  background: none;
+  border: none;
+  color: #3b66ff;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 8px 0;
+  margin-bottom: 24px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.Items3Dview-back-btn:hover {
+  color: #2a4fd8;
+}
+
+.Items3Dview-detail-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  background: white;
+  border-radius: 24px;
+  padding: 32px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+
+.Items3Dview-detail-image {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #f8f9fa;
+}
+
+.Items3Dview-detail-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.Items3Dview-detail-badge {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  background: #3b66ff;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.Items3Dview-detail-thumbnails {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.Items3Dview-thumb {
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  border: 2px solid transparent;
+}
+
+.Items3Dview-thumb.active {
+  border-color: #3b66ff;
+}
+
+.Items3Dview-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.Items3Dview-viewer-options {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.Items3Dview-viewer-btn {
+  flex: 1;
+  padding: 10px;
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.Items3Dview-viewer-btn.active {
+  background: #3b66ff;
+  color: white;
+  border-color: #3b66ff;
+}
+
+.Items3Dview-detail-breadcrumb {
+  font-size: 12px;
+  color: #6c757d;
+  margin-bottom: 16px;
+}
+
+.Items3Dview-detail-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin-bottom: 16px;
+}
+
+.Items3Dview-detail-description {
+  color: #495057;
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.Items3Dview-detail-stats {
+  display: flex;
+  gap: 24px;
+  padding: 16px 0;
+  border-top: 1px solid #e9ecef;
+  border-bottom: 1px solid #e9ecef;
+  margin-bottom: 24px;
+}
+
+.Items3Dview-stat {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #6c757d;
+  font-size: 14px;
+}
+
+.Items3Dview-stat .stat-icon {
+  font-size: 18px;
+}
+
+.Items3Dview-detail-features {
+  margin-bottom: 24px;
+}
+
+.Items3Dview-feature {
+  padding: 8px 0;
+  color: #495057;
+  font-size: 14px;
+}
+
+.Items3Dview-detail-specs {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 24px;
+}
+
+.Items3Dview-spec-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  font-size: 14px;
+}
+
+.Items3Dview-spec-label {
+  color: #6c757d;
+  font-weight: 500;
+}
+
+.Items3Dview-spec-value {
+  color: #1a1a2e;
+}
+
+.Items3Dview-detail-actions {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.Items3Dview-btn-collect,
+.Items3Dview-btn-share {
+  flex: 1;
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.Items3Dview-btn-collect {
+  background: #3b66ff;
+  color: white;
+  border: none;
+}
+
+.Items3Dview-btn-collect:hover {
+  background: #2a4fd8;
+  transform: translateY(-1px);
+}
+
+.Items3Dview-btn-share {
+  background: white;
+  color: #3b66ff;
+  border: 1px solid #3b66ff;
+}
+
+.Items3Dview-btn-share:hover {
+  background: #f8f9fa;
+}
+
+.Items3Dview-detail-footer {
+  padding-top: 24px;
+  border-top: 1px solid #e9ecef;
+}
+
+.Items3Dview-library-info {
+  text-align: center;
+  color: #6c757d;
+  font-size: 12px;
+}
+
+.Items3Dview-library-info strong {
+  display: block;
+  color: #1a1a2e;
+  margin-bottom: 4px;
+}
+
+.Items3Dview-no-results {
+  text-align: center;
+  padding: 80px 20px;
+  background: white;
+  border-radius: 16px;
+  margin-top: 20px;
+}
+
+.Items3Dview-no-results p {
+  color: #6c757d;
+  margin-bottom: 20px;
+}
+
+.Items3Dview-no-results button {
+  background: #3b66ff;
+  color: white;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .Items3Dview-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .Items3Dview-detail-content {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}
+
+@media (max-width: 900px) {
+  .Items3Dview-main-content {
+    flex-direction: column;
+  }
+  
+  .Items3Dview-filters {
+    width: auto;
+    position: static;
+  }
+  
+  .Items3Dview-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .Items3Dview-type-item {
+    min-width: 90px;
+    padding: 8px 12px;
+  }
+  
+  .Items3Dview-type-icon {
+    font-size: 20px;
+  }
+}

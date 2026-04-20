@@ -72,6 +72,7 @@ import MyOrders from './Components/ItemMarkert/MyOrders';
 import AluminumQuotationSystem from './Components/AluminumQuotationSystem/AluminumQuotationSystem';
 import AdQuotation from './Components/Admin/AdQuotation/AdQuotation';
 import AluminumSystem3D from './Components/AluminumSystem3D/AluminumSystem3D';
+import Items3Dview from './Components/Items3Dview/Items3Dview';
 
 const parseUserInfoFromToken = (token) => {
     if (!token) {
@@ -319,6 +320,9 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
                     <Route path="/ItemsAddForm" element={<ItemAddForm /> } />
                     <Route path="/AluTRegForm" element={<AluTRegForm /> } />
                     <Route path="/SaleForm" element={<SaleForm /> } />
+                    <Route path="/Items3Dview"element={<Items3Dview /> } />
+
+
                     <Route path="/Cookie" element={<Cookie />} />
                     <Route path="/Terms" element={<Terms />} />
                     <Route path="/Privacy" element={<Privacy />} />
