@@ -5,12 +5,11 @@ const authMiddleware = require('../middleware/authMiddleware');
 const router = express.Router();
 
 console.log('[Routes/Client] Loaded.');
-const log = (req, res, next) => { console.log(`[Routes/Client] Hit: ${req.method} ${req.originalUrl}`); next(); };
 
-router.post( '/register', log, uploadProfilePhoto, clientController.registerClient );
+router.post('/register', uploadProfilePhoto, clientController.registerClient);
 
-router.get( '/:id', log, authMiddleware.protect, authMiddleware.authorize('client', 'admin'), authMiddleware.checkOwnershipOrAdmin(), clientController.getClientProfile );
+router.get('/:id', authMiddleware.protect, authMiddleware.authorize('client', 'admin'), authMiddleware.checkOwnershipOrAdmin(), clientController.getClientProfile);
 
-router.put( '/:id', log, authMiddleware.protect, authMiddleware.authorize('client', 'admin'), authMiddleware.checkOwnershipOrAdmin(), uploadProfilePhoto, clientController.updateClientProfile );
+router.put('/:id', authMiddleware.protect, authMiddleware.authorize('client', 'admin'), authMiddleware.checkOwnershipOrAdmin(), uploadProfilePhoto, clientController.updateClientProfile);
 
 module.exports = router;

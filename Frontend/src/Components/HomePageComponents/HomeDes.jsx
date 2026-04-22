@@ -6,11 +6,11 @@ const HomeDes = () => {
   const adventureData = [
     {
       id: 1,
-      title: "test",
-      desc: "Direct trading platform for aluminum scraps and processed materials.",
-      img: "https://www.inotherm.com/wp-content/uploads/2024/11/moderna_AGE_1326_MS-6071_-RAL_MATT_serija-70_BT-610-1-896x753.jpg?x10087",
+      title: "Custom Glass ",
+      desc: "Smart solution for custom glass design and ordering.",
+      img: "https://www.flemingconstructiongroup.com/wp-content/uploads/2022/09/AdobeStock_216792368-scaled.jpeg",
       bgColor: "hmd-bg-grey",
-      path: "/BuyandSell"
+      path: "/GlassOrder"
     },
     {
       id: 2,
@@ -57,7 +57,7 @@ const HomeDes = () => {
                 <img src={item.img} alt={item.title} />
                 <div className="hmd-adv-hover-overlay">
                   <Link to={item.path} className="hmd-adv-inner-btn">
-                    START JOURNEY
+                    More Details
                   </Link>
                 </div>
               </div>

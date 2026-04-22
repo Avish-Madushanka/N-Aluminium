@@ -4,7 +4,11 @@ const bcrypt = require('bcryptjs');
 const fs = require('fs');
 const path = require('path');
 
-const UPLOADS_DIR = path.join(__dirname, '..', 'uploads');
+const UPLOADS_DIR = path.join(__dirname, '..', 'uploads', 'profiles');
+
+if (!fs.existsSync(UPLOADS_DIR)) {
+    fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+}
 
 exports.registerClient = async (req, res, next) => {
     try {
@@ -33,7 +37,7 @@ exports.registerClient = async (req, res, next) => {
         });
         
         if (req.file) {
-            newClient.profilePhoto = `/uploads/${req.file.filename}`;
+            newClient.profilePhoto = `/uploads/profiles/${req.file.filename}`;
         }
         
         await newClient.save();
@@ -125,7 +129,7 @@ exports.updateClientProfile = async (req, res, next) => {
                 !clientBeforeUpdate.profilePhoto.startsWith('http')) {
                 oldPhotoDbPath = clientBeforeUpdate.profilePhoto;
             }
-            updates.profilePhoto = `/uploads/${req.file.filename}`;
+            updates.profilePhoto = `/uploads/profiles/${req.file.filename}`;
         }
 
         if (Object.keys(updates).length === 0) {
@@ -153,7 +157,7 @@ exports.updateClientProfile = async (req, res, next) => {
 
         if (oldPhotoDbPath) {
             const oldFileName = path.basename(oldPhotoDbPath);
-            const diskPathForOldPhoto = path.join(UPLOADS_DIR, oldFileName);
+            const diskPathForOldPhoto = path.join(__dirname, '..', 'uploads', 'profiles', oldFileName);
             if (fs.existsSync(diskPathForOldPhoto)) {
                 try {
                     fs.unlinkSync(diskPathForOldPhoto);

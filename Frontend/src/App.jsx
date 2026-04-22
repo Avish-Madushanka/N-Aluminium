@@ -6,9 +6,10 @@ import {
     useNavigate,
     useLocation,
     Navigate,
-    Outlet,
     Link
 } from 'react-router-dom';
+import ScrollToTop from "./ScrollToTop";
+
 import { ClipLoader } from 'react-spinners';
 import { jwtDecode } from 'jwt-decode';
 import { AuthContext, useAuth } from './context/AuthContext';
@@ -119,6 +120,9 @@ function App() {
     const handleLogout = useCallback((message = "You have been logged out.") => {
         localStorage.removeItem("token");
         localStorage.removeItem("userInfo");
+        sessionStorage.removeItem('redirectAfterLogin');
+        sessionStorage.removeItem('attemptedPath');
+        sessionStorage.removeItem('requiredRole');
         setAuthState({ isLoggedIn: false, userInfo: null, isLoading: false });
         setLogoutMessage(message);
     }, []);
@@ -219,7 +223,12 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
     useEffect(() => {
         const storedItems = localStorage.getItem('glassOrderItems');
         if (storedItems) {
-            setOrderItems(JSON.parse(storedItems));
+            try {
+                setOrderItems(JSON.parse(storedItems));
+            } catch (e) {
+                console.error('Failed to parse glassOrderItems:', e);
+                setOrderItems([]);
+            }
         }
     }, []);
 
@@ -236,18 +245,38 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
 
     useEffect(() => {
         const currentPath = location.pathname.toLowerCase();
+        const storedRedirectPath = sessionStorage.getItem('redirectAfterLogin');
+        
         if (auth.isLoggedIn && auth.userInfo && currentPath === '/login') {
-            let redirectPath = '/';
-            switch (auth.userInfo.role) {
-                case 'admin': redirectPath = '/Admin/Dashboard'; break;
-                case 'client': redirectPath = '/'; break;
-                case 'businessOwner': redirectPath = '/BOwnerHome'; break;
-                default:
-                    redirectPath = '/';
+            let redirectPath = null;
+            
+            if (storedRedirectPath && storedRedirectPath !== '/login' && storedRedirectPath !== '/Login') {
+                redirectPath = storedRedirectPath;
+                sessionStorage.removeItem('redirectAfterLogin');
             }
+            
             const fromPath = location.state?.from?.pathname;
-            const destination = (fromPath && fromPath !== '/login' && fromPath !== '/') ? fromPath : redirectPath;
-            navigate(destination, { replace: true, state: {} });
+            if (!redirectPath && fromPath && fromPath !== '/login' && fromPath !== '/Login' && fromPath !== '/') {
+                redirectPath = fromPath;
+            }
+            
+            if (!redirectPath) {
+                switch (auth.userInfo.role) {
+                    case 'admin': 
+                        redirectPath = '/Admin/Dashboard'; 
+                        break;
+                    case 'businessOwner': 
+                        redirectPath = '/BOwnerHome'; 
+                        break;
+                    case 'client': 
+                        redirectPath = '/'; 
+                        break;
+                    default: 
+                        redirectPath = '/';
+                }
+            }
+            
+            navigate(redirectPath, { replace: true, state: {} });
         }
     }, [auth.isLoggedIn, auth.userInfo, navigate, location]);
 
@@ -287,6 +316,7 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
 
     return (
         <div className="App-wrapper">
+            <ScrollToTop />
             <Navbar isLoggedIn={auth.isLoggedIn} userInfo={auth.userInfo} handleLogout={auth.logout} />
             
             {logoutMessage && (location.pathname.toLowerCase() === '/login') && (
@@ -320,15 +350,17 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
                     <Route path="/ItemsAddForm" element={<ItemAddForm /> } />
                     <Route path="/AluTRegForm" element={<AluTRegForm /> } />
                     <Route path="/SaleForm" element={<SaleForm /> } />
-                    <Route path="/Items3Dview"element={<Items3Dview /> } />
-
-
+                    <Route path="/Items3Dview" element={<Items3Dview /> } />
                     <Route path="/Cookie" element={<Cookie />} />
                     <Route path="/Terms" element={<Terms />} />
                     <Route path="/Privacy" element={<Privacy />} />
                     <Route path="/test-items" element={<ItemsManage />} />
 
-                    <Route path="/Login" element={ auth.isLoggedIn && auth.userInfo ? (<Navigate to={ (auth.userInfo.role === 'admin' && '/Admin/Dashboard') || (auth.userInfo.role === 'client' && '/') || (auth.userInfo.role === 'businessOwner' && '/BOwnerHome') || '/' } replace /> ) : ( <Login /> )} />
+                    <Route path="/Login" element={
+                        auth.isLoggedIn && auth.userInfo ? 
+                        (<Navigate to="/" replace />) : 
+                        (<Login />)
+                    } />
                     
                     <Route element={<ProtectedRoute requiredRole="client" />}>
                         <Route path="/UserCalendar" element={<UserCalendar userInfo={auth.userInfo} />} />

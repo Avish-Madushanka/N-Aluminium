@@ -1,16 +1,16 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import axiosInstance from '../../api/axiosInstance'; 
-import API_ENDPOINTS from '../../apiConfig';        
-import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';  
-import './Login.css'; 
+import axiosInstance from '../../api/axiosInstance';
+import API_ENDPOINTS from '../../apiConfig';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
+import './Login.css';
 
-function Login() { 
+function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const [serverStatus, setServerStatus] = useState('checking'); 
+  const [serverStatus, setServerStatus] = useState('checking');
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [resetEmail, setResetEmail] = useState('');
   const [resetMessage, setResetMessage] = useState('');
@@ -20,6 +20,10 @@ function Login() {
 
   const auth = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const from = location.state?.from?.pathname || '/';
+  const storedRedirectPath = sessionStorage.getItem('redirectAfterLogin');
 
   const isConnectionError = (msg) =>
     msg && /connection error|cannot reach|timed out|network error|failed to fetch/i.test(String(msg).toLowerCase());
@@ -30,7 +34,7 @@ function Login() {
       setErrorMessage('');
     }
 
-    const healthCheckEndpoint = API_ENDPOINTS?.HEALTH || '/health'; 
+    const healthCheckEndpoint = API_ENDPOINTS?.HEALTH || '/health';
 
     if (!healthCheckEndpoint) {
       setServerStatus('error');
@@ -39,7 +43,7 @@ function Login() {
     }
 
     try {
-      await axiosInstance.get(healthCheckEndpoint, { timeout: 7000 }); 
+      await axiosInstance.get(healthCheckEndpoint, { timeout: 7000 });
       setServerStatus('online');
       return true;
     } catch (err) {
@@ -87,18 +91,38 @@ function Login() {
       const response = await axiosInstance.post(API_ENDPOINTS.AUTH.LOGIN, { email, password });
 
       if (response.data?.success && response.data?.token && response.data?.data) {
-        auth.login(response.data.token, response.data.data); 
-        
+        auth.login(response.data.token, response.data.data);
+
         const userRole = response.data.data.role;
-        if (userRole === 'admin') {
-          navigate('/admin/dashboard'); 
-        } else if (userRole === 'client') {
-          navigate('/client/dashboard'); 
-        } else if (userRole === 'businessOwner') {
-          navigate('/bo/dashboard'); 
-        } else {
-          navigate('/');
+        
+        let redirectPath = null;
+        
+        if (storedRedirectPath && storedRedirectPath !== '/login' && storedRedirectPath !== '/Login') {
+          redirectPath = storedRedirectPath;
+          console.log('Redirecting to stored path:', redirectPath);
         }
+        else if (from && from !== '/' && from !== '/login' && from !== '/Login') {
+          redirectPath = from;
+          console.log('Redirecting to from state path:', redirectPath);
+        }
+        else {
+          if (userRole === 'admin') {
+            redirectPath = '/admin/dashboard';
+          } else if (userRole === 'client') {
+            redirectPath = '/client/dashboard';
+          } else if (userRole === 'businessOwner') {
+            redirectPath = '/bo/dashboard';
+          } else {
+            redirectPath = '/';
+          }
+          console.log('Redirecting to role-based path:', redirectPath);
+        }
+
+        sessionStorage.removeItem('redirectAfterLogin');
+        sessionStorage.removeItem('attemptedPath');
+        sessionStorage.removeItem('requiredRole');
+        
+        navigate(redirectPath, { replace: true });
       } else {
         const errMsg = response.data?.message || 'Login failed: Unexpected response from server.';
         setErrorMessage(errMsg);
@@ -130,7 +154,7 @@ function Login() {
     e.preventDefault();
     setResetError('');
     setResetMessage('');
-    
+
     if (!resetEmail) {
       setResetError("Please enter your email address.");
       return;
@@ -189,18 +213,18 @@ function Login() {
     } else if (error.response) {
       const { status, data } = error.response;
       const msg = data?.message || `Login error (Status ${status}). Please try again.`;
-      
+
       if (status === 400) setErrorMessage(msg || "Invalid input. Please check your details.");
       else if (status === 401) setErrorMessage(msg || 'Incorrect email or password.');
       else if (status === 403) setErrorMessage(msg || 'Access Denied.');
-      else if (status === 404) setErrorMessage("Login service not found. Please contact support."); 
+      else if (status === 404) setErrorMessage("Login service not found. Please contact support.");
       else setErrorMessage(msg);
 
       if (status >= 500) setServerStatus('error');
     } else if (error.request) {
       setErrorMessage('Network Error: Unable to connect to the server.');
       setServerStatus('offline');
-    } else { 
+    } else {
       setErrorMessage(error.message || 'An unexpected error occurred during login.');
     }
   };
@@ -237,13 +261,13 @@ function Login() {
                     <p>Connecting to server...</p>
                   </div>
                 )}
-                
+
                 {errorMessage && (
                   <div className="LOG-error-message">
                     {errorMessage}
                   </div>
                 )}
-                
+
                 <form onSubmit={handleSubmit} className="LOG-form">
                   <div className="LOG-form-group">
                     <label htmlFor="LOG-email">Email Address</label>
@@ -256,7 +280,7 @@ function Login() {
                       disabled={isLoading || serverStatus === 'checking'}
                     />
                   </div>
-                  
+
                   <div className="LOG-form-group">
                     <label htmlFor="LOG-password">Password</label>
                     <input
@@ -268,9 +292,9 @@ function Login() {
                       disabled={isLoading || serverStatus === 'checking'}
                     />
                   </div>
-                  
+
                   <div className="LOG-forgot-password">
-                    <button 
+                    <button
                       type="button"
                       onClick={handleForgotPasswordClick}
                       className="LOG-forgot-btn"
@@ -279,9 +303,9 @@ function Login() {
                       Forgot Password?
                     </button>
                   </div>
-                  
-                  <button 
-                    type="submit" 
+
+                  <button
+                    type="submit"
                     className="LOG-submit-btn"
                     disabled={isLoading || serverStatus !== 'online'}
                   >
@@ -317,19 +341,19 @@ function Login() {
                         <p>Connecting to server...</p>
                       </div>
                     )}
-                    
+
                     {resetError && (
                       <div className="LOG-error-message">
                         {resetError}
                       </div>
                     )}
-                    
+
                     {resetMessage && (
                       <div className="LOG-info-message">
                         {resetMessage}
                       </div>
                     )}
-                    
+
                     <form onSubmit={handleResetPassword} className="LOG-form">
                       <div className="LOG-form-group">
                         <label htmlFor="LOG-reset-email">Email Address</label>
@@ -342,16 +366,16 @@ function Login() {
                           disabled={isResetting || serverStatus === 'checking'}
                         />
                       </div>
-                      
-                      <button 
-                        type="submit" 
+
+                      <button
+                        type="submit"
                         className="LOG-reset-btn"
                         disabled={isResetting || serverStatus !== 'online'}
                       >
                         {isResetting ? 'Sending...' : 'Send Reset Instructions'}
                       </button>
-                      
-                      <button 
+
+                      <button
                         type="button"
                         onClick={handleBackToLogin}
                         className="LOG-back-link"

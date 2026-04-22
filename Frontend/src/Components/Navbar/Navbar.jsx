@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link, NavLink, useLocation } from 'react-router-dom';
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X, LogOut, ShoppingCart } from 'lucide-react';
 import "./Navbar.css";
 import logo from "../../assets/logo.png";
@@ -8,6 +8,7 @@ const Navbar = ({ isLoggedIn, userInfo, handleLogout, cartItemCount = 0 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
   const headerRef = useRef(null);
   const mobileMenuRef = useRef(null);
 
@@ -37,8 +38,17 @@ const Navbar = ({ isLoggedIn, userInfo, handleLogout, cartItemCount = 0 }) => {
     setIsOpen(!isOpen);
   };
 
+  const handleLoginClick = () => {
+    const currentPath = location.pathname;
+    sessionStorage.setItem('redirectAfterLogin', currentPath);
+    navigate('/Login');
+  };
+
   const triggerLogout = () => {
     if (window.confirm("Are you sure you want to log out?")) {
+      sessionStorage.removeItem('redirectAfterLogin');
+      sessionStorage.removeItem('attemptedPath');
+      sessionStorage.removeItem('requiredRole');
       handleLogout();
     }
   };
@@ -52,7 +62,6 @@ const Navbar = ({ isLoggedIn, userInfo, handleLogout, cartItemCount = 0 }) => {
     if (userRole === 'client') return '/ClientProfile';
     return '/Profile';
   };
-
 
   const phoneIconUrl = "https://cdn-icons-png.flaticon.com/128/9840/9840072.png";
   const locationIconUrl = "https://cdn-icons-png.flaticon.com/128/9131/9131546.png";
@@ -117,7 +126,7 @@ const Navbar = ({ isLoggedIn, userInfo, handleLogout, cartItemCount = 0 }) => {
             </div>
           ) : (
             <div className="Nav-auth-buttons">
-              <Link to="/Login" className="Nav-login-btn">Login</Link>
+              <button onClick={handleLoginClick} className="Nav-login-btn">Login</button>
               <Link to="/ClientForm" className="Nav-signup-btn">Sign Up</Link>
             </div>
           )}
@@ -218,13 +227,15 @@ const Navbar = ({ isLoggedIn, userInfo, handleLogout, cartItemCount = 0 }) => {
           
           {!isLoggedIn && (
             <div className="Nav-mobile-auth-buttons">
-              <Link 
-                to="/Login" 
+              <button 
+                onClick={() => {
+                  setIsOpen(false);
+                  handleLoginClick();
+                }} 
                 className="Nav-mobile-login-btn"
-                onClick={() => setIsOpen(false)}
               >
                 Login
-              </Link>
+              </button>
               <Link 
                 to="/ClientForm" 
                 className="Nav-mobile-signup-btn"

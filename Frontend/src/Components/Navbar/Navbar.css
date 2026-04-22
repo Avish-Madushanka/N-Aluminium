@@ -239,6 +239,7 @@
   font-weight: 600;
   transition: all 0.3s ease;
   background: transparent;
+  cursor: pointer;
 }
 
 .Nav-login-btn:hover {
@@ -495,6 +496,7 @@
   font-size: 1rem;
   font-weight: 600;
   transition: all 0.3s ease;
+  cursor: pointer;
 }
 
 .Nav-mobile-login-btn:hover {

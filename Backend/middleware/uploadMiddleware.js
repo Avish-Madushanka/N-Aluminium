@@ -12,7 +12,7 @@ if (!fs.existsSync(uploadsDir)) {
     }
 }
 
-const subdirectories = ['saleitems', 'projects', 'profiles', 'items', 'cart'];
+const subdirectories = ['saleitems', 'projects', 'profiles', 'items', 'cart', 'quotations'];
 subdirectories.forEach(subDir => {
     const subDirPath = path.join(uploadsDir, subDir);
     if (!fs.existsSync(subDirPath)) {
@@ -129,8 +129,8 @@ const profilePhotoStorage = multer.diskStorage({
     },
     filename: (req, file, cb) => {
         const safeName = file.originalname.replace(/[^a-zA-Z0-9.-]/g, '_');
-        const userId = req.user ? req.user._id : 'anonymous';
-        const finalFilename = `profile-${userId}-${Date.now()}${path.extname(safeName)}`;
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E3);
+        const finalFilename = `profile-${uniqueSuffix}${path.extname(safeName)}`;
         cb(null, finalFilename);
     }
 });
@@ -149,8 +149,28 @@ const coverPhotoStorage = multer.diskStorage({
     },
     filename: (req, file, cb) => {
         const safeName = file.originalname.replace(/[^a-zA-Z0-9.-]/g, '_');
-        const userId = req.user ? req.user._id : 'anonymous';
-        const finalFilename = `cover-${userId}-${Date.now()}${path.extname(safeName)}`;
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E3);
+        const finalFilename = `cover-${uniqueSuffix}${path.extname(safeName)}`;
+        cb(null, finalFilename);
+    }
+});
+
+const quotationStorage = multer.diskStorage({
+    destination: function(req, file, cb) {
+        const quotationsUploadsDir = path.join(uploadsDir, 'quotations');
+        if (!fs.existsSync(quotationsUploadsDir)) {
+            try {
+                fs.mkdirSync(quotationsUploadsDir, { recursive: true });
+            } catch (mkdirErr) {
+                return cb(mkdirErr);
+            }
+        }
+        cb(null, quotationsUploadsDir);
+    },
+    filename: (req, file, cb) => {
+        const safeName = file.originalname.replace(/[^a-zA-Z0-9.-]/g, '_');
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E3);
+        const finalFilename = `quotation-${uniqueSuffix}${path.extname(safeName)}`;
         cb(null, finalFilename);
     }
 });
@@ -201,6 +221,32 @@ const uploadCoverPhotoMiddleware = multer({
     fileFilter: imageFileFilter
 }).single('coverPhoto');
 
+const uploadQuotationFilesMiddleware = multer({
+    storage: quotationStorage,
+    limits: { fileSize: 5 * 1024 * 1024 },
+    fileFilter: function(req, file, cb) {
+        const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf'];
+        if (allowedTypes.includes(file.mimetype)) {
+            cb(null, true);
+        } else {
+            cb(new Error('Invalid file type. Only JPG, PNG, and PDF files are allowed.'), false);
+        }
+    }
+}).array('files', 10);
+
+const uploadAdminFilesMiddleware = multer({
+    storage: quotationStorage,
+    limits: { fileSize: 5 * 1024 * 1024 },
+    fileFilter: function(req, file, cb) {
+        const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf'];
+        if (allowedTypes.includes(file.mimetype)) {
+            cb(null, true);
+        } else {
+            cb(new Error('Invalid file type. Only JPG, PNG, and PDF files are allowed.'), false);
+        }
+    }
+}).array('adminFiles', 10);
+
 const generalUpload = multer({ 
     storage: generalStorage, 
     limits: { fileSize: 5 * 1024 * 1024 },
@@ -224,5 +270,7 @@ module.exports = {
     uploadSaleItemImage: directSaleItemUploadMiddleware,
     uploadProjectImages: uploadProjectImagesMiddleware,
     uploadItemImage: uploadItemImageMiddleware,
-    uploadCartImage: uploadCartImageMiddleware
+    uploadCartImage: uploadCartImageMiddleware,
+    uploadQuotationFiles: uploadQuotationFilesMiddleware,
+    uploadAdminFiles: uploadAdminFilesMiddleware
 };

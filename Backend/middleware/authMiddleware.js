@@ -6,7 +6,7 @@ const Client = require('../models/Client');
 const BusinessOwner = require('../models/BusinessOwner');
 
 console.log('[AuthMiddleware] Module loaded.');
-console.log('[AuthMiddleware] Post-Import Check - BusinessOwner Type:', typeof BusinessOwner, 'Has findById:', typeof BusinessOwner?.findById === 'function');
+console.log('[AuthMiddleware] Models - Client:', !!Client, 'Admin:', !!Admin, 'BusinessOwner:', !!BusinessOwner);
 
 exports.protect = async (req, res, next) => {
     console.log(`[Auth Protect] Running for: ${req.method} ${req.originalUrl}`);
@@ -55,7 +55,7 @@ exports.protect = async (req, res, next) => {
         }
 
         req.user = user;
-        console.log(`[Auth Protect] SUCCESS. User attached: ID ${req.user.id}, Role ${req.user.role}`);
+        console.log(`[Auth Protect] SUCCESS. User attached: ID ${req.user._id}, Role ${req.user.role}`);
         next();
 
     } catch (err) {
@@ -92,7 +92,7 @@ exports.checkOwnershipOrAdmin = (Model = null) => {
     console.log('[Auth CheckOwnership] Setup.');
     return async (req, res, next) => {
         const resourceId = req.params.id;
-        const loggedInUserId = req.user?.id;
+        const loggedInUserId = req.user?._id?.toString();
         const loggedInUserRole = req.user?.role;
 
         console.log(`[Auth CheckOwnership] Checking resource: ${resourceId}. User: ${loggedInUserId}, Role: ${loggedInUserRole}`);
