@@ -10,31 +10,29 @@
 }
 
 .ATreq-title {
+  height: 80px;
   background: #1a1a1a;
   color: white;
   padding: 20px 30px;
   border-radius: 20px;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   font-size: 28px;
   font-weight: 700;
-  position: relative;
-  gap: 15px;
-  flex-wrap: wrap;
-}
-
-.ATreq-title span {
+  margin: 0;
+  margin-bottom: 20px;
   position: relative;
   padding-left: 45px;
+  flex: 1;
 }
 
-.ATreq-title span:before {
+.ATreq-title:before {
   content: '';
   position: absolute;
-  left: 20px;
+  left: 30px;
   top: 50%;
   transform: translateY(-50%);
   width: 5px;
@@ -65,17 +63,21 @@
 
 .ATreq-stats {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
-  margin-bottom: 30px;
+  grid-template-columns: repeat(auto-fit, minmax(150px, max-content));
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 20px;
 }
 
 .ATreq-stat-card {
+  width: 200px;
+  height: 120px;
   background: #e7e7e7;
   padding: 20px;
-  border-radius: 12px;
+  border-radius: 10px;
   box-shadow: 0 2px 10px rgba(0,0,0,0.05);
   transition: all 0.3s;
+
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -83,25 +85,20 @@
   text-align: center;
 }
 
-.ATreq-stat-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-}
-
 .ATreq-stat-card.pending {
-  background: linear-gradient(135deg, #ffeacb 0%, #fff5e8 100%);
+  background-color: #ffeacb;
 }
 
 .ATreq-stat-card.approved {
-  background: linear-gradient(135deg, #bfffdb 0%, #e8f5e9 100%);
+  background-color: #bfffdb;
 }
 
 .ATreq-stat-card.rejected {
-  background: linear-gradient(135deg, #ffcfc9 0%, #ffebee 100%);
+  background-color: #ffcfc9;
 }
 
 .ATreq-stat-card.completed {
-  background: linear-gradient(135deg, #d3edff 0%, #e3f2fd 100%);
+  background-color: #d3edff;
 }
 
 .ATreq-stat-label {
@@ -109,14 +106,11 @@
   font-size: 14px;
   color: #666;
   margin-bottom: 8px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
 }
 
 .ATreq-stat-value {
   display: block;
-  font-size: 32px;
+  font-size: 28px;
   font-weight: 700;
   color: #333;
 }
@@ -130,7 +124,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  animation: ATreq-slideDown 0.3s ease-out;
+  animation: slideDown 0.3s ease-out;
 }
 
 .ATreq-error {
@@ -142,7 +136,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  animation: ATreq-slideDown 0.3s ease-out;
+  animation: slideDown 0.3s ease-out;
 }
 
 .ATreq-successClose,
@@ -170,21 +164,21 @@
 .ATreq-filters {
   background: white;
   padding: 20px;
-  border-radius: 12px;
-  margin-bottom: 30px;
+  border-radius: 10px;
+  margin-bottom: 50px;
   box-shadow: 0 2px 10px rgba(0,0,0,0.05);
 }
 
 .ATreq-filter-group {
   display: flex;
-  gap: 12px;
+  gap: 10px;
   flex-wrap: wrap;
 }
 
 .ATreq-filter-btn {
-  padding: 8px 20px;
+  padding: 8px 16px;
   border: 2px solid #e0e0e0;
-  border-radius: 8px;
+  border-radius: 6px;
   background: white;
   color: #666;
   font-size: 14px;
@@ -196,7 +190,6 @@
 .ATreq-filter-btn:hover {
   border-color: #545ee6;
   color: #545ee6;
-  transform: translateY(-2px);
 }
 
 .ATreq-filter-btn.active {
@@ -207,7 +200,7 @@
 
 .ATreq-loading {
   text-align: center;
-  padding: 60px;
+  padding: 50px;
   font-size: 18px;
   color: #666;
 }
@@ -248,7 +241,7 @@
 .ATreq-table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 800px;
+  min-width: 1000px;
 }
 
 .ATreq-table th {
@@ -322,8 +315,8 @@
 
 .ATreq-status-badge {
   display: inline-block;
-  padding: 4px 12px;
-  border-radius: 20px;
+  padding: 4px 8px;
+  border-radius: 4px;
   font-size: 12px;
   font-weight: 500;
   text-transform: capitalize;
@@ -350,11 +343,11 @@
 }
 
 .ATreq-view-btn {
-  padding: 8px 16px;
+  padding: 6px 12px;
   background: #2196F3;
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 4px;
   font-size: 12px;
   font-weight: 500;
   cursor: pointer;
@@ -377,8 +370,7 @@
   align-items: center;
   justify-content: center;
   z-index: 1000;
-  animation: ATreq-fadeIn 0.3s ease-out;
-  padding: 20px;
+  animation: fadeIn 0.3s ease-out;
 }
 
 .ATreq-modal-content {
@@ -389,7 +381,7 @@
   max-height: 90vh;
   overflow-y: auto;
   box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-  animation: ATreq-scaleIn 0.3s ease-out;
+  animation: scaleIn 0.3s ease-out;
 }
 
 .ATreq-modal-header {
@@ -402,8 +394,6 @@
   top: 0;
   background: white;
   z-index: 10;
-  flex-wrap: wrap;
-  gap: 15px;
 }
 
 .ATreq-modal-header h2 {
@@ -458,8 +448,6 @@
 .ATreq-info-row {
   display: flex;
   margin-bottom: 10px;
-  flex-wrap: wrap;
-  gap: 10px;
 }
 
 .ATreq-info-label {
@@ -494,10 +482,6 @@
   height: 80px;
   border-radius: 8px;
   overflow: hidden;
-  background: #f0f0f0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .ATreq-item-image img {
@@ -514,13 +498,12 @@
 
 .ATreq-item-specs {
   display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
+  gap: 15px;
   margin-bottom: 8px;
 }
 
 .ATreq-item-spec {
-  font-size: 12px;
+  font-size: 13px;
   color: #666;
   background: #e0e0e0;
   padding: 2px 8px;
@@ -529,9 +512,7 @@
 
 .ATreq-item-pricing {
   display: flex;
-  flex-wrap: wrap;
   justify-content: space-between;
-  gap: 10px;
   margin-bottom: 8px;
   font-size: 14px;
   color: #333;
@@ -646,7 +627,7 @@
   box-shadow: 0 6px 15px rgba(244, 67, 54, 0.4);
 }
 
-@keyframes ATreq-slideDown {
+@keyframes slideDown {
   from {
     opacity: 0;
     transform: translateY(-20px);
@@ -657,7 +638,7 @@
   }
 }
 
-@keyframes ATreq-fadeIn {
+@keyframes fadeIn {
   from {
     opacity: 0;
   }
@@ -666,7 +647,7 @@
   }
 }
 
-@keyframes ATreq-scaleIn {
+@keyframes scaleIn {
   from {
     opacity: 0;
     transform: scale(0.9);

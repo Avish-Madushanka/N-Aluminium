@@ -168,12 +168,6 @@ function AdNavComponent({ handleLogout }) {
                     </ul>
                 </div>
             </nav>
-
-            <div className="admin-logout">
-                <NavLink to="/login" onClick={performLogout}>
-                    <FontAwesomeIcon icon={faSignOutAlt} className="admin-menu-icon" /> Logout
-                </NavLink>
-            </div>
         </aside>
     );
 }
