@@ -347,10 +347,10 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
                     <Route path="/ItemMarkert" element={<ItemMarkert />} />
                     <Route path="/AluTReg" element={<AluTReg />} />
                     <Route path="/AluRegVideoUp" element={<AluRegVideoUp /> } />
-                    <Route path="/ItemsAddForm" element={<ItemAddForm /> } />
                     <Route path="/AluTRegForm" element={<AluTRegForm /> } />
                     <Route path="/SaleForm" element={<SaleForm /> } />
                     <Route path="/Items3Dview" element={<Items3Dview /> } />
+                    
                     <Route path="/Cookie" element={<Cookie />} />
                     <Route path="/Terms" element={<Terms />} />
                     <Route path="/Privacy" element={<Privacy />} />
@@ -393,7 +393,7 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
                            <Route path="/Admin/AdminAlumni" element={<AdminAlumni /> } />
                            <Route path="/Admin/VideoManage" element={<VideoManage /> } />
                            <Route path="/Admin/ProManage" element={<ProManage /> } />
-                           <Route path="/Admin/ItemsAddForm" element={<ItemAddForm /> } />
+                           <Route path="/Admin/ItemsAddForm" element={<ItemAddForm onClose={() => navigate('/Admin/Dashboard')} /> } />
                            <Route path="/Admin/BuyandSellManage" element={<BuyandSellManage /> } />
                            <Route path="/Admin/AdGlassManage" element={<AdGlassManage /> } />
                            <Route path="/Admin/AdminOrderManage" element={<AdminOrderManage /> } />

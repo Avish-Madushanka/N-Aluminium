@@ -3,28 +3,41 @@
   background-color: #ffffff;
   min-height: 100vh;
   color: #333;
-  padding: 40px;
-  max-width: 1400px;
+  padding: 30px;
   margin: 0 auto;
 }
 
 .AdGM-header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  height: 80px;
+  background: #1a1a1a;
+  color: white;
   padding: 20px 30px;
-  border-radius: 15px;
+  border-radius: 20px;
   margin-bottom: 30px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .AdGM-title {
-  color: white;
-  margin: 0;
-  font-size: 1.5em;
+  font-size: 28px;
   font-weight: 700;
+  margin: 0;
+  position: relative;
+  padding-left: 15px;
+}
+
+.AdGM-title:before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 5px;
+  height: 35px;
+  background: #e69b54;
+  border-radius: 3px;
 }
 
 .AdGM-headerControls {
@@ -45,12 +58,12 @@
 
 .AdGM-filterSelect:focus {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+  box-shadow: 0 0 0 2px rgba(235, 235, 235, 0.3);
 }
 
 .AdGM-addPriceBtn {
   padding: 8px 20px;
-  background-color: #27ae60;
+  background-color: #e69b54;
   color: white;
   border: none;
   border-radius: 8px;
@@ -61,7 +74,7 @@
 }
 
 .AdGM-addPriceBtn:hover {
-  background-color: #229954;
+  background-color: #dd8839;
   transform: translateY(-2px);
 }
 

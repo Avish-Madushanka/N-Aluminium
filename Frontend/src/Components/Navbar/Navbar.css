@@ -29,6 +29,7 @@
 }
 
 .Nav-brand-logo {
+  gap: 15px;
   display: flex;
   align-items: center;
   text-decoration: none;
@@ -41,7 +42,7 @@
 }
 
 .Nav-brand-image {
-  height: 42px;
+  height: 50px;
   width: auto;
   transition: transform 0.3s ease;
 }
@@ -52,9 +53,10 @@
 
 .Nav-brand-text {
   color: #000000;
-  font-size: 2.1rem;
-  margin-left: 12px;
-  font-weight: bolder;
+  font-size: 3.1rem;
+  font-family: "Black And White Picture", system-ui;
+  font-weight: 400;
+  font-style: normal;
 }
 
 .Nav-contact-info {

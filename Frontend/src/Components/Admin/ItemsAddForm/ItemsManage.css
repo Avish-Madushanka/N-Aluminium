@@ -6,20 +6,21 @@
 }
 
 .ItemMng-header {
+  height: 80px;
+  background: #1a1a1a;
+  color: white;
+  padding: 20px 30px;
+  border-radius: 20px;
+  margin-bottom: 30px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 30px;
-  background: white;
-  padding: 20px 30px;
-  border-radius: 15px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .ItemMng-title {
   font-size: 28px;
   font-weight: 700;
-  color: #333;
   margin: 0;
   position: relative;
   padding-left: 15px;
@@ -32,14 +33,14 @@
   top: 50%;
   transform: translateY(-50%);
   width: 5px;
-  height: 30px;
-  background: #4CAF50;
+  height: 35px;
+  background: #545ee6;
   border-radius: 3px;
 }
 
 .ItemMng-addButton {
   padding: 12px 25px;
-  background: #4CAF50;
+  background: #545ee6;
   color: white;
   border: none;
   border-radius: 8px;
@@ -51,9 +52,9 @@
 }
 
 .ItemMng-addButton:hover {
-  background: #45a049;
+  background: #3e47cf;
   transform: translateY(-2px);
-  box-shadow: 0 6px 15px rgba(76, 175, 80, 0.4);
+  box-shadow: 0 6px 15px rgba(76, 91, 175, 0.4);
 }
 
 .ItemMng-success {

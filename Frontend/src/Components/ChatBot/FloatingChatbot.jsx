@@ -1,4 +1,3 @@
-// FloatingChatBot.jsx - FULLY OFFLINE VERSION (No API Required)
 import React, { useState, useEffect, useRef } from 'react';
 import './FloatingChatBot.css';
 

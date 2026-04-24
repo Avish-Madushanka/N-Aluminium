@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Users, CheckCircle, XCircle, Clock, Eye, Mail, Trash2, Search, Filter } from "lucide-react";
+import { Users, CheckCircle, XCircle, Clock, Eye, Mail, Trash2, Search, Filter, FileText, Image as ImageIcon, Download } from "lucide-react";
 import "./AdminAlumni.css";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5003/api";
@@ -11,7 +11,6 @@ function AdminAlumni() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [selectedRegistration, setSelectedRegistration] = useState(null);
-  const [showDetails, setShowDetails] = useState(false);
   const [statusFilter, setStatusFilter] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
   const [page, setPage] = useState(1);
@@ -94,7 +93,6 @@ function AdminAlumni() {
         fetchStats();
         fetchRegistrations();
         if (selectedRegistration && selectedRegistration._id === id) {
-          setShowDetails(false);
           setSelectedRegistration(null);
         }
       }
@@ -111,26 +109,35 @@ function AdminAlumni() {
 
   const getStatusBadge = (status) => {
     const badges = {
-      pending: { class: "AA-badge-pending", icon: Clock },
-      approved: { class: "AA-badge-approved", icon: CheckCircle },
-      rejected: { class: "AA-badge-rejected", icon: XCircle }
+      pending: { class: "AA-badge-pending", icon: Clock, label: "Pending" },
+      approved: { class: "AA-badge-approved", icon: CheckCircle, label: "Approved" },
+      rejected: { class: "AA-badge-rejected", icon: XCircle, label: "Rejected" }
     };
     const badge = badges[status] || badges.pending;
     const Icon = badge.icon;
     return (
       <span className={`AA-status-badge ${badge.class}`}>
         <Icon size={14} />
-        {status}
+        {badge.label}
       </span>
     );
   };
 
   return (
-    <div className="AA-container">
+    <div className="AA-page">
       <div className="AA-header">
-        <h1><Users size={24} /> Alumni Registrations</h1>
-        <p>Manage and review alumni registration requests</p>
+        <h2 className="AA-title">Alumni Registrations</h2>
       </div>
+
+      {error && (
+        <div className="AA-error-message">
+          <div className="AA-error-content">
+            <span className="AA-error-icon">!</span>
+            <span>{error}</span>
+          </div>
+          <button type="button" className="AA-error-close" onClick={() => setError('')}>×</button>
+        </div>
+      )}
 
       <div className="AA-stats-grid">
         <div className="AA-stat-card">
@@ -173,8 +180,6 @@ function AdminAlumni() {
         </div>
       </div>
 
-      {error && <div className="AA-error">{error}</div>}
-
       {loading ? (
         <div className="AA-loading">Loading...</div>
       ) : (
@@ -195,7 +200,7 @@ function AdminAlumni() {
               <tbody>
                 {filteredRegistrations.map(reg => (
                   <tr key={reg._id}>
-                    <td>{reg.fullName}</td>
+                    <td className="AA-nameCell" onClick={() => setSelectedRegistration(reg)}>{reg.fullName}</td>
                     <td>{reg.idNumber}</td>
                     <td>{reg.email}</td>
                     <td>{reg.phone}</td>
@@ -204,22 +209,22 @@ function AdminAlumni() {
                     <td className="AA-actions">
                       <button
                         className="AA-btn-view"
-                        onClick={() => {
-                          setSelectedRegistration(reg);
-                          setShowDetails(true);
-                        }}
+                        onClick={() => setSelectedRegistration(reg)}
+                        title="View Details"
                       >
                         <Eye size={16} />
                       </button>
                       <button
                         className="AA-btn-email"
                         onClick={() => window.location.href = `mailto:${reg.email}`}
+                        title="Send Email"
                       >
                         <Mail size={16} />
                       </button>
                       <button
                         className="AA-btn-delete"
                         onClick={() => handleDelete(reg._id)}
+                        title="Delete"
                       >
                         <Trash2 size={16} />
                       </button>
@@ -246,110 +251,148 @@ function AdminAlumni() {
         </>
       )}
 
-      {showDetails && selectedRegistration && (
-        <div className="AA-modal-overlay" onClick={() => setShowDetails(false)}>
+      {selectedRegistration && (
+        <div className="AA-modal-overlay" onClick={() => setSelectedRegistration(null)}>
           <div className="AA-modal" onClick={e => e.stopPropagation()}>
             <div className="AA-modal-header">
               <h2>Registration Details</h2>
-              <button className="AA-modal-close" onClick={() => setShowDetails(false)}>×</button>
+              <button className="AA-modal-close" onClick={() => setSelectedRegistration(null)}>×</button>
             </div>
             
             <div className="AA-modal-body">
-              <div className="AA-detail-grid">
-                <div className="AA-detail-item">
-                  <label>Full Name</label>
-                  <p>{selectedRegistration.fullName}</p>
-                </div>
-                
-                <div className="AA-detail-item">
-                  <label>ID Number</label>
-                  <p>{selectedRegistration.idNumber}</p>
-                </div>
-                
-                <div className="AA-detail-item">
-                  <label>Birthday</label>
-                  <p>{new Date(selectedRegistration.birthday).toLocaleDateString()}</p>
-                </div>
-                
-                <div className="AA-detail-item">
-                  <label>Gender</label>
-                  <p>{selectedRegistration.gender === "male" ? "Male" : "Female"}</p>
-                </div>
-                
-                <div className="AA-detail-item">
-                  <label>Email</label>
-                  <p>{selectedRegistration.email}</p>
-                </div>
-                
-                <div className="AA-detail-item">
-                  <label>Phone</label>
-                  <p>{selectedRegistration.phone}</p>
-                </div>
-                
-                <div className="AA-detail-item AA-full-width">
-                  <label>Address</label>
-                  <p>{selectedRegistration.address}</p>
-                </div>
-                
-                <div className="AA-detail-item">
-                  <label>ID Photo</label>
-                  <a 
-                    href={`http://localhost:5003${selectedRegistration.idPhoto}`}
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="AA-file-link"
-                  >
-                    View Photo
-                  </a>
-                </div>
-                
-                {selectedRegistration.cvFile && (
-                  <div className="AA-detail-item">
-                    <label>CV File</label>
-                    <a 
-                      href={`http://localhost:5003${selectedRegistration.cvFile}`}
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="AA-file-link"
-                    >
-                      Download CV
-                    </a>
+              <div className="AA-twoColumn">
+                <div className="AA-leftColumn">
+                  <div className="AA-card">
+                    <h3 className="AA-sectionTitle">
+                      <Users size={18} /> Personal Information
+                    </h3>
+                    <div className="AA-fields">
+                      <div className="AA-fieldGroup">
+                        <label className="AA-label">Full Name</label>
+                        <input type="text" className="AA-input" value={selectedRegistration.fullName} readOnly />
+                      </div>
+
+                      <div className="AA-fieldGroup">
+                        <label className="AA-label">ID Number</label>
+                        <input type="text" className="AA-input" value={selectedRegistration.idNumber} readOnly />
+                      </div>
+
+                      <div className="AA-row">
+                        <div className="AA-fieldGroup">
+                          <label className="AA-label">Birthday</label>
+                          <input type="text" className="AA-input" value={new Date(selectedRegistration.birthday).toLocaleDateString()} readOnly />
+                        </div>
+
+                        <div className="AA-fieldGroup">
+                          <label className="AA-label">Gender</label>
+                          <input type="text" className="AA-input" value={selectedRegistration.gender === "male" ? "Male" : "Female"} readOnly />
+                        </div>
+                      </div>
+
+                      <div className="AA-fieldGroup">
+                        <label className="AA-label">Email</label>
+                        <input type="email" className="AA-input" value={selectedRegistration.email} readOnly />
+                      </div>
+
+                      <div className="AA-fieldGroup">
+                        <label className="AA-label">Phone</label>
+                        <input type="text" className="AA-input" value={selectedRegistration.phone} readOnly />
+                      </div>
+
+                      <div className="AA-fieldGroup">
+                        <label className="AA-label">Address</label>
+                        <textarea className="AA-textarea" value={selectedRegistration.address} readOnly rows="3" />
+                      </div>
+                    </div>
                   </div>
-                )}
-                
-                <div className="AA-detail-item">
-                  <label>Status</label>
-                  <div>{getStatusBadge(selectedRegistration.status)}</div>
                 </div>
-                
-                <div className="AA-detail-item">
-                  <label>Submitted</label>
-                  <p>{new Date(selectedRegistration.createdAt).toLocaleString()}</p>
+
+                <div className="AA-rightColumn">
+                  <div className="AA-card">
+                    <h3 className="AA-sectionTitle">
+                      <FileText size={18} /> Documents & Status
+                    </h3>
+                    <div className="AA-fields">
+                      <div className="AA-fieldGroup">
+                        <label className="AA-label">ID Photo</label>
+                        <div className="AA-imageUpload">
+                          {selectedRegistration.idPhoto ? (
+                            <div className="AA-imagePreview">
+                              <img src={`http://localhost:5003${selectedRegistration.idPhoto}`} alt="ID Photo" />
+                              <a 
+                                href={`http://localhost:5003${selectedRegistration.idPhoto}`}
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                className="AA-fileLink"
+                              >
+                                <ImageIcon size={14} /> View Full Size
+                              </a>
+                            </div>
+                          ) : (
+                            <div className="AA-uploadPlaceholder">
+                              <span className="AA-uploadIcon">📄</span>
+                              <span>No ID photo uploaded</span>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+
+                      {selectedRegistration.cvFile && (
+                        <div className="AA-fieldGroup">
+                          <label className="AA-label">CV / Resume</label>
+                          <a 
+                            href={`http://localhost:5003${selectedRegistration.cvFile}`}
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="AA-fileLink AA-downloadBtn"
+                          >
+                            <Download size={14} /> Download CV
+                          </a>
+                        </div>
+                      )}
+
+                      <div className="AA-fieldGroup">
+                        <label className="AA-label">Registration Status</label>
+                        <div className="AA-statusOptions">
+                          <div 
+                            className={`AA-statusOption ${selectedRegistration.status === 'pending' ? 'AA-statusActive' : ''}`}
+                            onClick={() => handleStatusUpdate(selectedRegistration._id, "pending")}
+                          >
+                            <Clock size={16} />
+                            <span>Pending</span>
+                            {selectedRegistration.status === 'pending' && <span className="AA-statusCheck">✓</span>}
+                          </div>
+                          <div 
+                            className={`AA-statusOption ${selectedRegistration.status === 'approved' ? 'AA-statusActive' : ''}`}
+                            onClick={() => handleStatusUpdate(selectedRegistration._id, "approved")}
+                          >
+                            <CheckCircle size={16} />
+                            <span>Approved</span>
+                            {selectedRegistration.status === 'approved' && <span className="AA-statusCheck">✓</span>}
+                          </div>
+                          <div 
+                            className={`AA-statusOption ${selectedRegistration.status === 'rejected' ? 'AA-statusActive' : ''}`}
+                            onClick={() => handleStatusUpdate(selectedRegistration._id, "rejected")}
+                          >
+                            <XCircle size={16} />
+                            <span>Rejected</span>
+                            {selectedRegistration.status === 'rejected' && <span className="AA-statusCheck">✓</span>}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="AA-fieldGroup">
+                        <label className="AA-label">Submitted On</label>
+                        <input type="text" className="AA-input" value={new Date(selectedRegistration.createdAt).toLocaleString()} readOnly />
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
             
             <div className="AA-modal-footer">
-              {selectedRegistration.status === "pending" && (
-                <>
-                  <button
-                    className="AA-btn-approve"
-                    onClick={() => handleStatusUpdate(selectedRegistration._id, "approved")}
-                  >
-                    <CheckCircle size={16} /> Approve
-                  </button>
-                  <button
-                    className="AA-btn-reject"
-                    onClick={() => handleStatusUpdate(selectedRegistration._id, "rejected")}
-                  >
-                    <XCircle size={16} /> Reject
-                  </button>
-                </>
-              )}
-              <button
-                className="AA-btn-close"
-                onClick={() => setShowDetails(false)}
-              >
+              <button className="AA-cancel" onClick={() => setSelectedRegistration(null)}>
                 Close
               </button>
             </div>

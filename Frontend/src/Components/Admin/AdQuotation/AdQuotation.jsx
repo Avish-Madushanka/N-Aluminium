@@ -256,8 +256,7 @@ const AdQuotation = () => {
     <div className="ADQ-container">
       <div className="ADQ-header">
         <div className="ADQ-header-content">
-          <h1 className="ADQ-title">Manage Aluminum Quotation Requests</h1>
-          <p className="ADQ-subtitle">Review, update status, and send professional quotations to clients</p>
+          <h1 className="ADQ-title">Manage Quotation Requests</h1>
         </div>
       </div>
 

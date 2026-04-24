@@ -10,24 +10,55 @@
 }
 
 .ATreq-title {
+  height: 80px;
+  background: #1a1a1a;
+  color: white;
+  padding: 20px 30px;
+  border-radius: 20px;
+  margin-bottom: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   font-size: 28px;
   font-weight: 700;
-  color: #333;
-  margin: 0 0 20px 0;
+  margin: 0;
+  margin-bottom: 20px;
   position: relative;
-  padding-left: 15px;
+  padding-left: 45px;
+  flex: 1;
 }
 
 .ATreq-title:before {
   content: '';
   position: absolute;
-  left: 0;
+  left: 30px;
   top: 50%;
   transform: translateY(-50%);
   width: 5px;
-  height: 30px;
-  background: #4CAF50;
+  height: 35px;
+  background: #545ee6;
   border-radius: 3px;
+}
+
+.ATreq-close {
+  background: rgba(255,255,255,0.1);
+  border: none;
+  font-size: 32px;
+  cursor: pointer;
+  color: white;
+  transition: all 0.3s;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ATreq-close:hover {
+  background: rgba(255,255,255,0.2);
+  transform: rotate(90deg);
 }
 
 .ATreq-stats {
@@ -627,6 +658,23 @@
 @media (max-width: 768px) {
   .ATreq-container {
     padding: 15px;
+  }
+
+  .ATreq-header {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .ATreq-title {
+    width: 100%;
+    font-size: 20px;
+    padding: 15px 20px;
+    height: auto;
+  }
+
+  .ATreq-title:before {
+    left: 15px;
+    height: 25px;
   }
 
   .ATreq-stats {

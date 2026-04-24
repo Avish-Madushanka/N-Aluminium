@@ -23,16 +23,36 @@
 }
 
 .adshopmap-header-content {
+  height: 80px;
+  background: #1a1a1a;
+  color: white;
+  padding: 20px 30px;
+  border-radius: 20px;
+  margin-bottom: 30px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .adshopmap-title {
-  font-size: 24px;
-  font-weight: 600;
-  color: #2d3748;
+  font-size: 28px;
+  font-weight: 700;
   margin: 0;
+  position: relative;
+  padding-left: 20px;
+}
+
+.adshopmap-title:before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 5px;
+  height: 40px;
+  background: #059e12;
+  border-radius: 3px;
 }
 
 .adshopmap-stats {
@@ -147,8 +167,8 @@
 .adshopmap-add-button {
   display: flex;
   align-items: center;
-  padding: 8px 16px;
-  background-color: #4299e1;
+  padding: 15px 16px;
+  background-color: #059e12;
   color: white;
   border: none;
   border-radius: 4px;
@@ -159,7 +179,7 @@
 }
 
 .adshopmap-add-button:hover {
-  background-color: #3182ce;
+  background-color: #027c0d;
 }
 
 .adshopmap-close-button {

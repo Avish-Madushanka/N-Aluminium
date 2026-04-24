@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import API_ENDPOINTS from '../../../apiConfig';
-import axiosInstance from '../../../api/axiosInstance'; 
+import axiosInstance from '../../../api/axiosInstance';
 import './AdScrap.css';
 import { ClipLoader } from 'react-spinners';
 import { FaEdit, FaTrash, FaPlus, FaToggleOn, FaToggleOff, FaSave, FaTimes } from 'react-icons/fa';
@@ -15,12 +15,10 @@ try {
     console.error("[AdScrap Initial Load] Error during initial logging of API_ENDPOINTS. This usually means the import failed.", e);
 }
 
-
 const AdScrap = () => {
     const [scrapTypes, setScrapTypes] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
-
     const [isFormVisible, setIsFormVisible] = useState(false);
     const [currentScrapType, setCurrentScrapType] = useState({
         _id: null,
@@ -176,7 +174,7 @@ const AdScrap = () => {
         }
     };
 
-     const handleToggleActive = async (scrapType) => {
+    const handleToggleActive = async (scrapType) => {
         if (typeof API_ENDPOINTS === 'undefined' || !API_ENDPOINTS?.SCRAP_TYPES?.UPDATE_ONE) {
             console.error('[AdScrap ToggleActive] CRITICAL: API_ENDPOINTS or UPDATE_ONE path is not defined.', API_ENDPOINTS);
             setError('Configuration error: API endpoint for updating scrap type is missing. Check console.');
@@ -201,7 +199,7 @@ const AdScrap = () => {
 
     if (isLoading && !isFormVisible && scrapTypes.length === 0) {
         return (
-            <div className="adscrap-loading">
+            <div className="ADSP-loading">
                 <ClipLoader size={50} color="#f97316" />
                 <p>Loading Scrap Types...</p>
             </div>
@@ -210,7 +208,7 @@ const AdScrap = () => {
 
     if (typeof API_ENDPOINTS === 'undefined' || !API_ENDPOINTS.SCRAP_TYPES) {
         return (
-            <div className="admin-scrap-management error-state">
+            <div className="ADSP-management error-state">
                 <h1>Configuration Error</h1>
                 <p className="error-message global-error" style={{backgroundColor: '#ffdddd', border: '1px solid red', padding: '15px', borderRadius: '5px'}}>
                     CRITICAL: The API configuration for Scrap Types (API_ENDPOINTS.SCRAP_TYPES) could not be loaded.
@@ -222,103 +220,105 @@ const AdScrap = () => {
     }
 
     return (
-        <div className="admin-scrap-management">
-            <h1 className="admin-scrap-title">Manage Scrap Types</h1>
-            {error && <p className="error-message global-error">{error}</p>}
-            <button onClick={handleAddNew} className="add-new-scrap-btn" disabled={isFormVisible || isLoading}>
-                <FaPlus /> Add New Scrap Type
-            </button>
-            {isFormVisible && (
-                <div className="scrap-form-container">
-                    <form onSubmit={handleSubmit} className="scrap-form">
-                        <h2>{isEditing ? 'Edit' : 'Add New'} Scrap Type</h2>
-                        {formError && <p className="error-message form-error">{formError}</p>}
-                        <div className="form-group">
-                            <label htmlFor="name">Name:</label>
-                            <input type="text" id="name" name="name" value={currentScrapType.name} onChange={handleInputChange} required />
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="price">Price:</label>
-                            <input type="number" id="price" name="price" step="0.01" min="0" value={currentScrapType.price} onChange={handleInputChange} required />
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="unit">Unit:</label>
-                            <input type="text" id="unit" name="unit" value={currentScrapType.unit} onChange={handleInputChange} placeholder="e.g., kg, item, ton"/>
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="description">Description (Optional):</label>
-                            <textarea id="description" name="description" value={currentScrapType.description} onChange={handleInputChange}></textarea>
-                        </div>
-                        <div className="form-group form-group-checkbox">
-                            <label htmlFor="isActive">Active:</label>
-                            <input type="checkbox" id="isActive" name="isActive" checked={currentScrapType.isActive} onChange={handleInputChange} />
-                        </div>
-                        <div className="form-actions">
-                            <button type="submit" className="save-btn" disabled={isLoading}>
-                                {isLoading ? <ClipLoader size={18} color="#fff" /> : <FaSave />} {isEditing ? 'Update' : 'Create'}
-                            </button>
-                            <button type="button" onClick={resetForm} className="cancel-btn" disabled={isLoading}>
-                                <FaTimes /> Cancel
-                            </button>
-                        </div>
-                    </form>
+            <div className="ADSP-management">
+                <div className="ADSP-header">
+                    <h1 className="ADSP-title">Manage Scrap Types</h1>
+                    <button onClick={handleAddNew} className="ADSP-add-btn" disabled={isFormVisible || isLoading}>
+                        <FaPlus /> Add New Scrap Type
+                    </button>
                 </div>
-            )}
-            <div className="scrap-types-table-container">
-                <table className="scrap-types-table">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Price</th>
-                            <th>Unit</th>
-                            <th>Description</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {scrapTypes.length === 0 && !isLoading && (
-                            <tr><td colSpan="6" style={{ textAlign: 'center' }}>No scrap types found.</td></tr>
-                        )}
-                        {scrapTypes.map((st) => (
-                            <tr key={st._id} className={!st.isActive ? 'inactive-row' : ''}>
-                                <td>{st.name}</td>
-                                <td>{typeof st.price === 'number' ? st.price.toFixed(2) : String(st.price)}</td>
-                                <td>{st.unit}</td>
-                                <td className="description-cell">{st.description || '-'}</td>
-                                <td>
-                                    <button
-                                        onClick={() => handleToggleActive(st)}
-                                        className={`status-toggle ${st.isActive ? 'active' : 'inactive'}`}
-                                        title={st.isActive ? 'Set to Inactive' : 'Set to Active'}
-                                        disabled={isLoading}
-                                    >
-                                        {st.isActive ? <FaToggleOn /> : <FaToggleOff />}
-                                        {st.isActive ? ' Active' : ' Inactive'}
-                                    </button>
-                                </td>
-                                <td className="actions-cell">
-                                    <button onClick={() => handleEdit(st)} className="action-btn edit-btn" title="Edit" disabled={isLoading || isFormVisible}>
-                                        <FaEdit />
-                                    </button>
-                                    {st.isActive && (
-                                         <button onClick={() => handleDelete(st._id, st.name)} className="action-btn delete-btn" title="Deactivate (Soft Delete)" disabled={isLoading || isFormVisible}>
-                                             <FaTrash />
-                                         </button>
-                                    )}
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-                {isLoading && scrapTypes.length > 0 && !isFormVisible && (
-                    <div className="table-loader">
-                        <ClipLoader size={30} color="#f97316" /> <p>Updating list...</p>
+                {error && <p className="error-message global-error">{error}</p>}
+                {isFormVisible && (
+                    <div className="ADSP-form-container">
+                        <form onSubmit={handleSubmit} className="ADSP-form">
+                            <h2>{isEditing ? 'Edit' : 'Add New'} Scrap Type</h2>
+                            {formError && <p className="error-message form-error">{formError}</p>}
+                            <div className="ADSP-form-group">
+                                <label htmlFor="name">Name:</label>
+                                <input type="text" id="name" name="name" value={currentScrapType.name} onChange={handleInputChange} required />
+                            </div>
+                            <div className="ADSP-form-group">
+                                <label htmlFor="price">Price:</label>
+                                <input type="number" id="price" name="price" step="0.01" min="0" value={currentScrapType.price} onChange={handleInputChange} required />
+                            </div>
+                            <div className="ADSP-form-group">
+                                <label htmlFor="unit">Unit:</label>
+                                <input type="text" id="unit" name="unit" value={currentScrapType.unit} onChange={handleInputChange} placeholder="e.g., kg, item, ton"/>
+                            </div>
+                            <div className="ADSP-form-group">
+                                <label htmlFor="description">Description (Optional):</label>
+                                <textarea id="description" name="description" value={currentScrapType.description} onChange={handleInputChange}></textarea>
+                            </div>
+                            <div className="ADSP-form-group ADSP-form-group-checkbox">
+                                <label htmlFor="isActive">Active:</label>
+                                <input type="checkbox" id="isActive" name="isActive" checked={currentScrapType.isActive} onChange={handleInputChange} />
+                            </div>
+                            <div className="ADSP-form-actions">
+                                <button type="submit" className="ADSP-save-btn" disabled={isLoading}>
+                                    {isLoading ? <ClipLoader size={18} color="#fff" /> : <FaSave />} {isEditing ? 'Update' : 'Create'}
+                                </button>
+                                <button type="button" onClick={resetForm} className="ADSP-cancel-btn" disabled={isLoading}>
+                                    <FaTimes /> Cancel
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 )}
+                <div className="ADSP-table-container">
+                    <table className="ADSP-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Price</th>
+                                <th>Unit</th>
+                                <th>Description</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {scrapTypes.length === 0 && !isLoading && (
+                                <tr><td colSpan="6" style={{ textAlign: 'center' }}>No scrap types found.</td></tr>
+                            )}
+                            {scrapTypes.map((st) => (
+                                <tr key={st._id} className={!st.isActive ? 'ADSP-inactive-row' : ''}>
+                                    <td>{st.name}</td>
+                                    <td>{typeof st.price === 'number' ? st.price.toFixed(2) : String(st.price)}</td>
+                                    <td>{st.unit}</td>
+                                    <td className="ADSP-description-cell">{st.description || '-'}</td>
+                                    <td>
+                                        <button
+                                            onClick={() => handleToggleActive(st)}
+                                            className={`ADSP-status-toggle ${st.isActive ? 'active' : 'inactive'}`}
+                                            title={st.isActive ? 'Set to Inactive' : 'Set to Active'}
+                                            disabled={isLoading}
+                                        >
+                                            {st.isActive ? <FaToggleOn /> : <FaToggleOff />}
+                                            {st.isActive ? ' Active' : ' Inactive'}
+                                        </button>
+                                    </td>
+                                    <td className="ADSP-actions-cell">
+                                        <button onClick={() => handleEdit(st)} className="ADSP-action-btn ADSP-edit-btn" title="Edit" disabled={isLoading || isFormVisible}>
+                                            <FaEdit />
+                                        </button>
+                                        {st.isActive && (
+                                            <button onClick={() => handleDelete(st._id, st.name)} className="ADSP-action-btn ADSP-delete-btn" title="Deactivate (Soft Delete)" disabled={isLoading || isFormVisible}>
+                                                <FaTrash />
+                                            </button>
+                                        )}
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                    {isLoading && scrapTypes.length > 0 && !isFormVisible && (
+                        <div className="ADSP-table-loader">
+                            <ClipLoader size={30} color="#f97316" /> <p>Updating list...</p>
+                        </div>
+                    )}
+                </div>
             </div>
-        </div>
-    );
+        );
 };
 
 export default AdScrap;

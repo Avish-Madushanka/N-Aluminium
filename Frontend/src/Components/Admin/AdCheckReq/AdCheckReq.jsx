@@ -23,7 +23,7 @@ const renderStatus = (status) => {
         cancelled: { text: 'Cancelled', classes: 'bg-red-100 text-red-800' },
     };
     const statusInfo = statusMap[status?.toLowerCase()] || { text: status || 'Unknown', classes: 'bg-gray-100 text-gray-800' };
-    return <span className={`status-badge ${statusInfo.classes}`}>{statusInfo.text}</span>;
+    return <span className={`CPQ-status-badge ${statusInfo.classes}`}>{statusInfo.text}</span>;
 };
 
 const formatWeightDisplay = (weight) => {
@@ -226,74 +226,74 @@ const AdCheckReq = () => {
     };
 
     if (isLoading && requests.length === 0) {
-        return <div className="adcr-loading-container"><ClipLoader size={50} color="#f97316" /><p>Loading Requests...</p></div>;
+        return <div className="CPQ-loading-container"><ClipLoader size={50} color="#f97316" /><p>Loading Requests...</p></div>;
     }
 
     return (
-        <div className="ad-check-req-container">
-            <div className="adcr-header-section">
-                <h2 className="adcr-page-title">Manage Pickup Requests</h2>
-                <button onClick={() => fetchRequests(true)} className="adcr-refresh-button" title="Refresh List" disabled={isLoading}>
+        <div className="CPQ-container">
+            <div className="CPQ-header-section">
+                <h2 className="CPQ-page-title">Manage Pickup Requests</h2>
+                <button onClick={() => fetchRequests(true)} className="CPQ-refresh-button" title="Refresh List" disabled={isLoading}>
                     <RefreshCw size={16} /> {isLoading && actionLoading !== 'refresh' ? 'Refreshing...' : 'Refresh'}
                 </button>
             </div>
 
-            {error && !isModalOpen && <div className="adcr-error-banner"><AlertTriangle size={18} /><span>{error}</span></div>}
+            {error && !isModalOpen && <div className="CPQ-error-banner"><AlertTriangle size={18} /><span>{error}</span></div>}
 
             {requests.length === 0 && !isLoading && (
-                <div className="adcr-empty-state-container">
-                    <Package size={48} className="adcr-empty-icon" />
-                    <p className="adcr-empty-state-title">No pickup requests found.</p>
+                <div className="CPQ-empty-state-container">
+                    <Package size={48} className="CPQ-empty-icon" />
+                    <p className="CPQ-empty-state-title">No pickup requests found.</p>
                 </div>
             )}
 
             {requests.length > 0 && (
-                <div className="adcr-table-wrapper">
-                    <table className="adcr-requests-table">
+                <div className="CPQ-table-wrapper">
+                    <table className="CPQ-requests-table">
                         <thead>
                             <tr>
-                                <th className="adcr-th-style"><User size={14} /> Customer</th>
-                                <th className="adcr-th-style"><Calendar size={14} /> Date & Time Slot</th>
-                                <th className="adcr-th-style"><MapPin size={14} /> Location & Area</th>
-                                <th className="adcr-th-style"><Weight size={14} /> Est. Wt.</th>
-                                <th className="adcr-th-style">Status</th>
-                                <th className="adcr-th-style">Actions</th>
+                                <th className="CPQ-th-style"><User size={14} /> Customer</th>
+                                <th className="CPQ-th-style"><Calendar size={14} /> Date & Time Slot</th>
+                                <th className="CPQ-th-style"><MapPin size={14} /> Location & Area</th>
+                                <th className="CPQ-th-style"><Weight size={14} /> Est. Wt.</th>
+                                <th className="CPQ-th-style">Status</th>
+                                <th className="CPQ-th-style">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             {requests.map((req) => (
-                                <tr key={req._id} className={`adcr-table-row ${actionLoading === req._id ? 'row-loading-overlay' : ''}`}>
-                                    <td className="adcr-td-style">
+                                <tr key={req._id} className={`CPQ-table-row ${actionLoading === req._id ? 'row-loading-overlay' : ''}`}>
+                                    <td className="CPQ-td-style">
                                         <div><strong>{req.contactDetails?.name || 'N/A'}</strong> ({req.bookingId})</div>
-                                        {req.contactDetails?.phone && <div className="adcr-sub-text"><Phone size={12} /> {req.contactDetails.phone}</div>}
-                                        {req.contactDetails?.email && <div className="adcr-sub-text adcr-break-all"><Mail size={12} /> {req.contactDetails.email}</div>}
-                                        {req.userId && <div className="adcr-sub-text">User ID: {typeof req.userId === 'object' ? req.userId.name || req.userId._id : req.userId}</div>}
+                                        {req.contactDetails?.phone && <div className="CPQ-sub-text"><Phone size={12} /> {req.contactDetails.phone}</div>}
+                                        {req.contactDetails?.email && <div className="CPQ-sub-text CPQ-break-all"><Mail size={12} /> {req.contactDetails.email}</div>}
+                                        {req.userId && <div className="CPQ-sub-text">User ID: {typeof req.userId === 'object' ? req.userId.name || req.userId._id : req.userId}</div>}
                                     </td>
-                                    <td className="adcr-td-style">
+                                    <td className="CPQ-td-style">
                                         <div>{formatDate(req.selectedDate)}</div>
-                                        <div className="adcr-sub-text"><Clock size={12} /> {req.timeSlotId || 'N/A'}</div>
+                                        <div className="CPQ-sub-text"><Clock size={12} /> {req.timeSlotId || 'N/A'}</div>
                                     </td>
-                                    <td className="adcr-td-style adcr-location-cell">
+                                    <td className="CPQ-td-style CPQ-location-cell">
                                         <div>{req.pickupLocation || 'N/A'}</div>
-                                        <div className="adcr-sub-text"><Map size={12} /> Area: {req.serviceAreaId || 'N/A'}</div>
+                                        <div className="CPQ-sub-text"><Map size={12} /> Area: {req.serviceAreaId || 'N/A'}</div>
                                     </td>
-                                    <td className="adcr-td-style">{formatWeightDisplay(req.estimatedWeight)}</td>
-                                    <td className="adcr-td-style">{renderStatus(req.status)}</td>
-                                    <td className="adcr-td-style">
-                                        <div className="adcr-action-buttons-container">
+                                    <td className="CPQ-td-style">{formatWeightDisplay(req.estimatedWeight)}</td>
+                                    <td className="CPQ-td-style">{renderStatus(req.status)}</td>
+                                    <td className="CPQ-td-style">
+                                        <div className="CPQ-action-buttons-container">
                                             {(actionLoading === req._id && !isSavingEdit) ? (<ClipLoader size={18} color="#f97316" />) : (<>
-                                                <button onClick={() => handleViewDetails(req)} className="adcr-action-btn adcr-view-btn" title="View Details" disabled={!!actionLoading}> <Eye size={16} /> </button>
-                                                <button onClick={() => handleOpenEditModal(req)} className="adcr-action-btn adcr-edit-btn" title="Edit Request" disabled={!!actionLoading || req.status === 'completed' || req.status === 'cancelled'}> <Edit size={16} /> </button>
+                                                <button onClick={() => handleViewDetails(req)} className="CPQ-action-btn CPQ-view-btn" title="View Details" disabled={!!actionLoading}> <Eye size={16} /> </button>
+                                                <button onClick={() => handleOpenEditModal(req)} className="CPQ-action-btn CPQ-edit-btn" title="Edit Request" disabled={!!actionLoading || req.status === 'completed' || req.status === 'cancelled'}> <Edit size={16} /> </button>
                                                 
                                                 {req.status === 'pending' && (<>
-                                                    <button onClick={() => handleUpdateStatus(req._id, 'confirmed')} className="adcr-action-btn adcr-confirm-btn" title="Confirm Request" disabled={!!actionLoading}> <CheckSquare size={16} /> </button>
-                                                    <button onClick={() => handleUpdateStatus(req._id, 'cancelled')} className="adcr-action-btn adcr-cancel-btn" title="Cancel Request" disabled={!!actionLoading}> <XSquare size={16} /> </button>
+                                                    <button onClick={() => handleUpdateStatus(req._id, 'confirmed')} className="CPQ-action-btn CPQ-confirm-btn" title="Confirm Request" disabled={!!actionLoading}> <CheckSquare size={16} /> </button>
+                                                    <button onClick={() => handleUpdateStatus(req._id, 'cancelled')} className="CPQ-action-btn CPQ-cancel-btn" title="Cancel Request" disabled={!!actionLoading}> <XSquare size={16} /> </button>
                                                 </>)}
                                                 {req.status === 'confirmed' && req.status !== 'completed' && (
-                                                    <button onClick={() => handleUpdateStatus(req._id, 'completed')} className="adcr-action-btn adcr-complete-btn" title="Mark as Completed" disabled={!!actionLoading}> <CheckSquare size={16} /> Mark Done </button>
+                                                    <button onClick={() => handleUpdateStatus(req._id, 'completed')} className="CPQ-action-btn CPQ-complete-btn" title="Mark as Completed" disabled={!!actionLoading}> <CheckSquare size={16} /> Mark Done </button>
                                                 )}
                                                 {(req.status !== 'completed') && ( 
-                                                    <button onClick={() => handleDelete(req._id, req.bookingId)} className="adcr-action-btn adcr-delete-btn" title="Delete Request" disabled={!!actionLoading}> <Trash2 size={16} /> </button>
+                                                    <button onClick={() => handleDelete(req._id, req.bookingId)} className="CPQ-action-btn CPQ-delete-btn" title="Delete Request" disabled={!!actionLoading}> <Trash2 size={16} /> </button>
                                                 )}
                                             </>)}
                                         </div>
