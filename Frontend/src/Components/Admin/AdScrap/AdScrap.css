@@ -4,10 +4,10 @@
     background-color: #f9f9f9;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    min-height: 100vh;
 }
 
 .ADSP-header {
-    height: 80px;
     background: #1a1a1a;
     color: white;
     padding: 20px 30px;
@@ -17,6 +17,8 @@
     justify-content: space-between;
     align-items: center;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    flex-wrap: wrap;
+    gap: 15px;
 }
 
 .ADSP-title {
@@ -28,15 +30,15 @@
 }
 
 .ADSP-title:before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 5px;
-  height: 40px;
-  background: #059e12;
-  border-radius: 3px;
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 5px;
+    height: 40px;
+    background: #059e12;
+    border-radius: 3px;
 }
 
 .error-message {
@@ -89,6 +91,9 @@
     box-shadow: 0 1px 5px rgba(0,0,0,0.1);
     margin-bottom: 25px;
     animation: fadeIn 0.3s ease;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 @keyframes fadeIn {
@@ -139,8 +144,8 @@
 .ADSP-form-group input[type="number"]:focus,
 .ADSP-form-group textarea:focus {
     outline: none;
-    border-color: #f97316;
-    box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.1);
+    border-color: #059e12;
+    box-shadow: 0 0 0 2px rgba(5, 158, 18, 0.1);
 }
 
 .ADSP-form-group textarea {
@@ -186,12 +191,12 @@
 }
 
 .ADSP-save-btn {
-    background-color: #4CAF50;
+    background-color: #059e12;
     color: white;
 }
 
 .ADSP-save-btn:hover {
-    background-color: #45a049;
+    background-color: #027c0d;
     transform: translateY(-1px);
 }
 
@@ -214,6 +219,7 @@
 .ADSP-table-container {
     overflow-x: auto;
     position: relative;
+    border-radius: 8px;
 }
 
 .ADSP-table {
@@ -280,7 +286,7 @@
 }
 
 .ADSP-status-toggle.active {
-    color: #4CAF50;
+    color: #059e12;
     background-color: #e8f5e9;
 }
 
@@ -384,14 +390,39 @@
     margin-bottom: 20px;
 }
 
+@media (max-width: 1024px) {
+    .ADSP-management {
+        padding: 20px;
+    }
+    
+    .ADSP-title {
+        font-size: 24px;
+    }
+    
+    .ADSP-form-container {
+        max-width: 90%;
+    }
+}
+
 @media (max-width: 768px) {
     .ADSP-management {
-        padding: 12px;
+        padding: 15px;
     }
     
     .ADSP-header {
+        padding: 15px 20px;
         flex-direction: column;
         text-align: center;
+    }
+    
+    .ADSP-title {
+        font-size: 22px;
+        padding-left: 0;
+        text-align: center;
+    }
+    
+    .ADSP-title:before {
+        display: none;
     }
     
     .ADSP-add-btn {
@@ -399,37 +430,38 @@
         justify-content: center;
     }
     
-    .ADSP-title {
-        font-size: 20px;
-    }
-    
     .ADSP-form-container {
-        padding: 15px;
+        padding: 20px;
+        max-width: 95%;
     }
     
     .ADSP-form h2 {
-        font-size: 18px;
+        font-size: 20px;
     }
     
     .ADSP-table th,
     .ADSP-table td {
-        padding: 8px 10px;
+        padding: 10px 12px;
+        font-size: 13px;
+    }
+    
+    .ADSP-table th {
         font-size: 12px;
     }
     
     .ADSP-description-cell {
-        max-width: 150px;
+        max-width: 180px;
     }
     
     .ADSP-status-toggle {
         font-size: 12px;
-        padding: 4px 8px;
+        padding: 4px 10px;
     }
     
     .ADSP-action-btn {
         font-size: 14px;
         margin: 0 2px;
-        padding: 4px 6px;
+        padding: 5px 7px;
     }
     
     .ADSP-form-actions {
@@ -442,9 +474,89 @@
     }
 }
 
+@media (max-width: 640px) {
+    .ADSP-management {
+        padding: 12px;
+    }
+    
+    .ADSP-header {
+        padding: 12px 15px;
+    }
+    
+    .ADSP-title {
+        font-size: 20px;
+    }
+    
+    .ADSP-add-btn {
+        padding: 10px 16px;
+        font-size: 14px;
+    }
+    
+    .ADSP-form-container {
+        padding: 15px;
+    }
+    
+    .ADSP-form h2 {
+        font-size: 18px;
+    }
+    
+    .ADSP-form-group label {
+        font-size: 13px;
+    }
+    
+    .ADSP-form-group input[type="text"],
+    .ADSP-form-group input[type="number"],
+    .ADSP-form-group textarea {
+        padding: 8px 10px;
+        font-size: 13px;
+    }
+    
+    .ADSP-table th,
+    .ADSP-table td {
+        padding: 8px 10px;
+        font-size: 12px;
+    }
+    
+    .ADSP-table th {
+        font-size: 11px;
+    }
+    
+    .ADSP-description-cell {
+        max-width: 120px;
+    }
+    
+    .ADSP-status-toggle {
+        font-size: 11px;
+        padding: 3px 8px;
+    }
+    
+    .ADSP-status-toggle svg {
+        width: 12px;
+        height: 12px;
+    }
+    
+    .ADSP-action-btn {
+        font-size: 12px;
+        padding: 4px 6px;
+    }
+    
+    .ADSP-action-btn svg {
+        width: 12px;
+        height: 12px;
+    }
+    
+    .ADSP-edit-btn, .ADSP-delete-btn {
+        margin: 0 1px;
+    }
+}
+
 @media (max-width: 480px) {
     .ADSP-management {
-        padding: 8px;
+        padding: 10px;
+    }
+    
+    .ADSP-header {
+        padding: 10px 12px;
     }
     
     .ADSP-title {
@@ -452,8 +564,20 @@
     }
     
     .ADSP-add-btn {
-        padding: 8px 16px;
-        font-size: 14px;
+        padding: 8px 14px;
+        font-size: 13px;
+    }
+    
+    .ADSP-form-container {
+        padding: 12px;
+    }
+    
+    .ADSP-form h2 {
+        font-size: 16px;
+    }
+    
+    .ADSP-table {
+        min-width: 550px;
     }
     
     .ADSP-table th,
@@ -462,27 +586,43 @@
         font-size: 11px;
     }
     
-    .ADSP-description-cell {
-        max-width: 100px;
-    }
-    
     .ADSP-status-toggle {
-        font-size: 11px;
-        padding: 3px 6px;
-    }
-    
-    .ADSP-status-toggle svg {
-        width: 14px;
-        height: 14px;
+        font-size: 10px;
+        padding: 2px 6px;
     }
     
     .ADSP-action-btn {
-        font-size: 12px;
-        padding: 3px 5px;
+        font-size: 10px;
+        padding: 3px 4px;
     }
     
-    .ADSP-action-btn svg {
-        width: 12px;
-        height: 12px;
+    .ADSP-edit-btn, .ADSP-delete-btn {
+        margin: 0 0px;
+    }
+}
+
+@media (min-width: 1400px) {
+    .ADSP-management {
+        padding: 50px;
+        max-width: 1600px;
+        margin: 0 auto;
+    }
+    
+    .ADSP-title {
+        font-size: 32px;
+    }
+    
+    .ADSP-form-container {
+        max-width: 700px;
+    }
+    
+    .ADSP-table th,
+    .ADSP-table td {
+        padding: 15px 20px;
+        font-size: 15px;
+    }
+    
+    .ADSP-description-cell {
+        max-width: 350px;
     }
 }

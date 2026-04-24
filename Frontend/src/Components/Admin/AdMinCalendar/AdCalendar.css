@@ -1,13 +1,12 @@
 .AdCal-Updt-container {
-  padding: 40px;
-  background-color: #f9fafb;
+  padding: 30px;
+  background-color: #ffffff;
   min-height: calc(100vh - 60px);
   font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   color: #202224;
 }
 
 .AdCal-Updt-header {
-  height: 80px;
   background: #1a1a1a;
   color: white;
   padding: 20px 30px;
@@ -17,6 +16,8 @@
   justify-content: space-between;
   align-items: center;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  flex-wrap: wrap;
+  gap: 15px;
 }
 
 .AdCal-Updt-header h1 {
@@ -39,34 +40,31 @@
   border-radius: 3px;
 }
 
-@keyframes AdCal-Updt-gradient {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+.AdCal-Updt-header-icon {
+  color: #059e12;
 }
 
 .AdCal-Updt-error-banner,
 .AdCal-Updt-success-banner {
-  padding: 0.875rem 1.25rem;
-  border-radius: 0.5rem;
-  margin-bottom: 1.5rem;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  padding: 12px 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
   display: flex;
   align-items: center;
-  gap: 0.875rem;
-  font-size: 0.9375rem;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  gap: 12px;
+  font-size: 14px;
+  transition: all 0.2s ease;
   border-left: 4px solid transparent;
 }
 
 .AdCal-Updt-error-banner {
-  background-color: rgba(254, 226, 226, 0.9);
+  background-color: #fee2e2;
   color: #dc2626;
   border-color: #dc2626;
 }
 
 .AdCal-Updt-success-banner {
-  background-color: rgba(220, 252, 231, 0.9);
+  background-color: #dcfce7;
   color: #16a34a;
   border-color: #16a34a;
 }
@@ -75,11 +73,12 @@
   margin-left: auto;
   background: none;
   border: none;
-  padding: 0.25rem;
+  padding: 4px;
   cursor: pointer;
   color: inherit;
   opacity: 0.7;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.2s ease;
+  font-size: 18px;
 }
 
 .AdCal-Updt-close-banner-button:hover {
@@ -89,75 +88,55 @@
 
 .AdCal-Updt-tabs {
   display: flex;
-  gap: 0.5rem;
+  gap: 8px;
   margin-bottom: -1px;
   border-bottom: 1px solid #d1d5db;
-  position: relative;
+  flex-wrap: wrap;
 }
 
 .AdCal-Updt-tab {
   display: inline-flex;
   align-items: center;
-  gap: 0.625rem;
-  padding: 0.875rem 1.5rem;
+  gap: 8px;
+  padding: 12px 24px;
   border: 1px solid transparent;
   border-bottom: none;
-  border-radius: 0.5rem 0.5rem 0 0;
+  border-radius: 10px 10px 0 0;
   font-weight: 500;
-  font-size: 0.9375rem;
-  color: #6b7280;
+  font-size: 14px;
+  color: #000000;
   background-color: transparent;
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  z-index: 1;
+  transition: all 0.2s ease;
 }
 
 .AdCal-Updt-tab:hover {
-  background-color: #f3f4f6;
-  color: #374151;
+  background-color: #f5f5f5;
+  color: #2c2c2c;
 }
 
 .AdCal-Updt-tab.active {
   background-color: #ffffff;
-  color: #ef0606;
+  color: #ff0000;
   border-color: #d1d5db #d1d5db #ffffff;
   font-weight: 600;
 }
 
 .AdCal-Updt-content {
   background-color: #ffffff;
-  padding: 1.5rem;
-  border-radius: 0 0.75rem 0.75rem 0.75rem;
-  border: 1px solid #d1d5db;
+  padding: 24px;
   border-top: none;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   min-height: 300px;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.AdCal-Updt-content:hover {
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
 .AdCal-Updt-section-heading {
-  font-size: 1.25rem;
+  font-size: 24px;
   font-weight: 700;
-  color: #202224;
-  margin-bottom: 1.5rem;
-  padding-bottom: 0.75rem;
+  color: #131313;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
   border-bottom: 1px solid #e5e7eb;
   position: relative;
-}
-
-.AdCal-Updt-section-heading::after {
-  content: '';
-  position: absolute;
-  bottom: -1px;
-  left: 0;
-  width: 50px;
-  height: 2px;
-  background: #ef0606;
 }
 
 .AdCal-Updt-dates-tab,
@@ -165,73 +144,86 @@
 .AdCal-Updt-areas-tab {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 24px;
 }
 
 .AdCal-Updt-tab-section {
   background-color: #f9fafb;
-  padding: 1.5rem;
-  border-radius: 0.5rem;
+  padding: 20px;
+  border-radius: 12px;
   border: 1px solid #e5e7eb;
+}
+
+.AdCal-Updt-two-column-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.AdCal-Updt-special-card,
+.AdCal-Updt-calendar-card {
+  background-color: #f9fafb;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+}
+
+.AdCal-Updt-special-card .AdCal-Updt-section-heading,
+.AdCal-Updt-calendar-card .AdCal-Updt-section-heading {
+  margin-top: 0;
 }
 
 .AdCal-Updt-day-toggles {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.875rem;
-  margin-bottom: 1rem;
+  gap: 12px;
+  margin-bottom: 16px;
 }
 
 .AdCal-Updt-day-toggle {
-  padding: 0.625rem 1.25rem;
-  border: 1px solid #d1d5db;
-  border-radius: 0.5rem;
-  font-size: 0.9375rem;
+  padding: 8px 20px;
+  border: 1px solid #cacaca;
+  border-radius: 30px;
+  font-size: 14px;
   font-weight: 500;
-  color: #6b7280;
+  color: #424242;
   background-color: #ffffff;
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  overflow: hidden;
+  transition: all 0.2s ease;
 }
 
 .AdCal-Updt-day-toggle:hover {
+  color: #6b6b6b;
   background-color: #f3f4f6;
-  border-color: #9ca3af;
+  border-color: #6b6b6b;
   transform: translateY(-2px);
 }
 
 .AdCal-Updt-day-toggle.active {
-  background-color: rgba(220, 252, 231, 0.5);
-  color: #16a34a;
-  border-color: #86efac;
+  background-color: #dcfce7;
+  color: #00850b;
+  border-color: #00850b;
   font-weight: 600;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 }
 
 .AdCal-Updt-add-special-date {
   display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-  padding: 1rem;
-  background-color: #f9fafb;
-  border-radius: 0.5rem;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 20px;
 }
 
 .AdCal-Updt-form-group {
-  margin-bottom: 1rem;
-  flex: 1;
-  min-width: 150px;
+  margin-bottom: 0;
 }
 
 .AdCal-Updt-form-group label {
   display: block;
-  font-size: 0.8125rem;
-  font-weight: 500;
+  font-size: 15px;
+  font-weight: 600;
   color: #6b7280;
-  margin-bottom: 0.375rem;
+  margin-bottom: 6px;
 }
 
 .AdCal-Updt-form-group input[type="text"],
@@ -239,161 +231,161 @@
 .AdCal-Updt-form-group select {
   display: block;
   width: 100%;
-  padding: 0.625rem 0.875rem;
+  height: 50px;
+  padding: 8px 12px;
   border: 1px solid #d1d5db;
-  border-radius: 0.5rem;
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
-  font-size: 0.9375rem;
+  border-radius: 8px;
+  font-size: 16px;
   background-color: #ffffff;
   color: #202224;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.2s ease;
 }
 
 .AdCal-Updt-form-group input:focus,
 .AdCal-Updt-form-group select:focus {
   outline: none;
-  border-color: #2563eb;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25);
+  border-color: #059e12;
+  box-shadow: 0 0 0 2px rgba(5, 158, 18, 0.1);
 }
 
-.AdCal-Updt-form-group.AdCal-Updt-checkbox {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.AdCal-Updt-form-group.AdCal-Updt-checkbox label {
-  margin-bottom: 0;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.AdCal-Updt-add-button,
-.AdCal-Updt-save-button {
+.AdCal-Updt-add-button {
+  width: 200px;
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1.5rem;
-  background-color: #ef0606;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background-color: #0d410b;
   color: white;
   border: none;
-  border-radius: 0.5rem;
-  font-size: 0.9375rem;
-  font-weight: 500;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  margin-top: 10px;
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+  margin-bottom: 30px;
 }
 
-.AdCal-Updt-add-button:hover,
-.AdCal-Updt-save-button:hover {
-  background-color: #c2410c;
+.AdCal-Updt-add-button:hover {
+  background-color: #027c0d;
   transform: translateY(-2px);
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
 .AdCal-Updt-special-dates-list {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  margin-top: 1rem;
+  gap: 10px;
+  max-height: 300px;
+  overflow-y: auto;
 }
 
 .AdCal-Updt-special-date-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.75rem 1rem;
-  background-color: white;
+  padding: 12px 16px;
+  background-color: #ffffff;
   border: 1px solid #e5e7eb;
-  border-radius: 0.5rem;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 10px;
+  transition: all 0.2s ease;
 }
 
 .AdCal-Updt-special-date-item:hover {
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .AdCal-Updt-date-info {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 12px;
   flex-wrap: wrap;
 }
 
 .AdCal-Updt-date {
   font-weight: 600;
   color: #202224;
+  font-size: 13px;
 }
 
 .AdCal-Updt-status {
-  padding: 0.25rem 0.5rem;
-  border-radius: 0.25rem;
-  font-size: 0.75rem;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 11px;
   font-weight: 600;
   text-transform: uppercase;
 }
 
 .AdCal-Updt-status.available {
-  background-color: #86efac;
-  color: #16a34a;
+  background-color: #dcfce7;
+  color: #059e12;
 }
 
 .AdCal-Updt-status.unavailable {
-  background-color: #fca5a5;
+  background-color: #fee2e2;
   color: #dc2626;
 }
 
 .AdCal-Updt-reason {
   color: #6b7280;
   font-style: italic;
-  font-size: 0.875rem;
+  font-size: 11px;
+}
+
+.AdCal-Updt-delete-button {
+  padding: 6px;
+  border-radius: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #dc2626;
+}
+
+.AdCal-Updt-delete-button:hover {
+  background-color: #fee2e2;
 }
 
 .AdCal-Updt-calendar {
-  margin-top: 1.5rem;
   background: white;
-  border-radius: 0.75rem;
-  padding: 1.5rem;
+  border-radius: 12px;
+  padding: 15px;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.AdCal-Updt-calendar:hover {
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
 .AdCal-Updt-calendar-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 15px;
 }
 
 .AdCal-Updt-nav-button {
-  padding: 0.5rem;
+  padding: 6px;
   border-radius: 50%;
   background: none;
   border: none;
   cursor: pointer;
   color: #6b7280;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.2s ease;
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 32px;
+  height: 32px;
 }
 
 .AdCal-Updt-nav-button:hover {
   background-color: #e5e7eb;
   color: #374151;
-  transform: scale(1.1);
+  transform: scale(1.05);
 }
 
 .AdCal-Updt-current-month {
-  font-size: 1.25rem;
+  font-size: 16px;
   font-weight: 700;
   color: #202224;
   text-transform: uppercase;
@@ -402,29 +394,25 @@
 
 .AdCal-Updt-weekday-header {
   display: grid;
-  grid-template-columns: repeat(7, minmax(0, 1fr));
+  grid-template-columns: repeat(7, 1fr);
   text-align: center;
-  margin-bottom: 1rem;
+  margin-bottom: 8px;
   font-weight: 600;
   color: #6b7280;
-  text-transform: uppercase;
-  font-size: 0.8125rem;
-  letter-spacing: 0.05em;
+  font-size: 11px;
 }
 
 .AdCal-Updt-weekday {
-  padding: 0.5rem;
+  padding: 6px;
 }
 
 .AdCal-Updt-calendar-grid {
   display: grid;
-  grid-template-columns: repeat(7, minmax(0, 1fr));
+  grid-template-columns: repeat(7, 1fr);
   gap: 2px;
   background-color: #e5e7eb;
-  border: 1px solid #e5e7eb;
-  border-radius: 0.5rem;
+  border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 }
 
 .AdCal-Updt-calendar-day,
@@ -432,19 +420,17 @@
   background-color: #ffffff;
   aspect-ratio: 1 / 1;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
   position: relative;
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  font-size: 0.9375rem;
-  border: 2px solid transparent;
+  transition: all 0.2s ease;
+  font-size: 13px;
+  font-weight: 500;
 }
 
 .AdCal-Updt-calendar-day:not(.past):hover {
-  background-color: #fcd34d;
-  box-shadow: inset 0 0 0 1px #d97706;
+  background-color: #fff1c5;
   transform: scale(1.02);
   z-index: 1;
 }
@@ -454,26 +440,15 @@
   cursor: default;
 }
 
-.AdCal-Updt-day-number {
-  font-weight: 600;
-  color: #374151;
-  position: relative;
-  z-index: 1;
-}
-
 .AdCal-Updt-calendar-day.past {
   background-color: #f3f4f6;
   color: #9ca3af;
   cursor: not-allowed;
 }
 
-.AdCal-Updt-calendar-day.past .AdCal-Updt-day-number {
-  color: #9ca3af;
-}
-
 .AdCal-Updt-calendar-day.available {
-  border-color: #16a34a;
-  background-color: rgba(220, 252, 231, 0.3);
+  border: 2px solid #059e12;
+  background-color: #f0fdf4;
 }
 
 .AdCal-Updt-calendar-day.unavailable {
@@ -482,99 +457,82 @@
 }
 
 .AdCal-Updt-calendar-day.special-available {
-  background-color: #86efac;
-  border-color: #16a34a;
-  border-style: dashed;
-  animation: AdCal-Updt-pulse 2s infinite;
+  background-color: #dcfce7;
+  border: 2px dashed #059e12;
 }
 
 .AdCal-Updt-calendar-day.special-unavailable {
-  background-color: #fca5a5;
-  border-color: #dc2626;
-  border-style: dashed;
-  animation: AdCal-Updt-pulse 2s infinite;
+  background-color: #fee2e2;
+  border: 2px dashed #dc2626;
 }
 
 .AdCal-Updt-calendar-day.selected {
-  box-shadow: 0 0 0 2px #ef0606;
-  z-index: 2;
-}
-
-.AdCal-Updt-status-indicator {
-  position: absolute;
-  bottom: 0.25rem;
-  right: 0.25rem;
-  width: 0.5rem;
-  height: 0.5rem;
-  border-radius: 50%;
-}
-
-@keyframes AdCal-Updt-pulse {
-  0% { opacity: 0.9; }
-  50% { opacity: 1; }
-  100% { opacity: 0.9; }
+  box-shadow: 0 0 0 2px #059e12;
+  background-color: #e6f7e6;
 }
 
 .AdCal-Updt-date-settings {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 1.5rem;
-  margin-top: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
 }
 
 .AdCal-Updt-time-slots-selection,
 .AdCal-Updt-service-areas-selection {
-  background-color: #f9fafb;
-  padding: 1rem;
-  border-radius: 0.5rem;
+  background-color: #ffffff;
+  padding: 16px;
+  border-radius: 10px;
   border: 1px solid #e5e7eb;
 }
 
 .AdCal-Updt-time-slots-selection h3,
 .AdCal-Updt-service-areas-selection h3 {
-  font-size: 1rem;
+  font-size: 15px;
   font-weight: 600;
-  margin-bottom: 1rem;
+  margin-bottom: 12px;
   color: #202224;
 }
 
 .AdCal-Updt-time-slots-grid,
 .AdCal-Updt-service-areas-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 0.75rem;
-  margin-top: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 10px;
+  margin-top: 12px;
 }
 
 .AdCal-Updt-time-slot-card,
 .AdCal-Updt-service-area-card {
-  padding: 0.75rem;
-  background-color: white;
+  padding: 10px;
+  background-color: #f9fafb;
   border: 1px solid #e5e7eb;
-  border-radius: 0.5rem;
+  border-radius: 8px;
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.2s ease;
   text-align: center;
 }
 
 .AdCal-Updt-time-slot-card:hover,
 .AdCal-Updt-service-area-card:hover {
-  border-color: #ef0606;
+  border-color: #059e12;
+  transform: translateY(-2px);
 }
 
 .AdCal-Updt-time-slot-card.selected,
 .AdCal-Updt-service-area-card.selected {
-  background-color: #fdba74;
-  border-color: #ef0606;
+  background-color: #dcfce7;
+  border-color: #059e12;
 }
 
 .AdCal-Updt-time-slot-label {
   font-weight: 600;
-  margin-bottom: 0.25rem;
+  font-size: 13px;
+  margin-bottom: 4px;
 }
 
 .AdCal-Updt-time-slot-time {
-  font-size: 0.8125rem;
+  font-size: 11px;
   color: #6b7280;
 }
 
@@ -582,16 +540,17 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+  gap: 8px;
+  font-size: 13px;
 }
 
 .AdCal-Updt-info-text {
-  margin-top: 1rem;
-  font-size: 0.8125rem;
+  margin-top: 12px;
+  font-size: 11px;
   color: #6b7280;
   display: flex;
   align-items: center;
-  gap: 0.25rem;
+  gap: 4px;
   font-style: italic;
 }
 
@@ -599,43 +558,46 @@
   text-align: center;
   color: #9ca3af;
   font-style: italic;
-  padding: 1rem;
+  padding: 20px;
 }
 
 .AdCal-Updt-edit-form {
-  background-color: #f9fafb;
-  padding: 1.5rem;
-  border-radius: 0.5rem;
-  margin-bottom: 1.5rem;
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
   border: 1px solid #e5e7eb;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .AdCal-Updt-edit-form h3 {
-  margin-bottom: 1rem;
-  font-size: 1.125rem;
+  margin-bottom: 16px;
+  font-size: 16px;
   font-weight: 600;
   color: #202224;
 }
 
 .AdCal-Updt-form-actions {
   display: flex;
-  gap: 0.75rem;
-  margin-top: 1rem;
+  gap: 12px;
+  margin-top: 16px;
 }
 
 .AdCal-Updt-cancel-button {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1.5rem;
+  gap: 6px;
+  padding: 10px 20px;
   background-color: #6b7280;
   color: white;
   border: none;
-  border-radius: 0.5rem;
-  font-size: 0.9375rem;
-  font-weight: 500;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.2s ease;
 }
 
 .AdCal-Updt-cancel-button:hover {
@@ -643,11 +605,31 @@
   transform: translateY(-2px);
 }
 
+.AdCal-Updt-save-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 20px;
+  background-color: #059e12;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.AdCal-Updt-save-button:hover {
+  background-color: #027c0d;
+  transform: translateY(-2px);
+}
+
 .AdCal-Updt-time-slots-list,
 .AdCal-Updt-service-areas-list {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 10px;
 }
 
 .AdCal-Updt-time-slot-item,
@@ -655,17 +637,17 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem;
+  padding: 12px 16px;
   background-color: white;
   border: 1px solid #e5e7eb;
-  border-radius: 0.5rem;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 10px;
+  transition: all 0.2s ease;
 }
 
 .AdCal-Updt-time-slot-item:hover,
 .AdCal-Updt-service-area-item:hover {
   transform: translateY(-2px);
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .AdCal-Updt-time-slot-item.inactive,
@@ -682,166 +664,141 @@
 .AdCal-Updt-slot-label,
 .AdCal-Updt-area-name {
   font-weight: 600;
-  margin-bottom: 0.25rem;
-  color: #202224;
+  margin-bottom: 4px;
+  color: #1b1b1b;
+  font-size: 24px;
 }
 
 .AdCal-Updt-slot-time,
 .AdCal-Updt-slot-status,
 .AdCal-Updt-area-status {
-  font-size: 0.8125rem;
+  font-size: 16px;
   color: #6b7280;
 }
 
 .AdCal-Updt-slot-actions,
 .AdCal-Updt-area-actions {
   display: flex;
-  gap: 0.5rem;
+  gap: 8px;
 }
 
 .AdCal-Updt-toggle-button {
-  padding: 0.375rem 0.875rem;
-  border-radius: 9999px;
-  font-size: 0.8125rem;
-  font-weight: 500;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
   border: 1px solid;
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.2s ease;
 }
 
 .AdCal-Updt-toggle-button.active {
-  background-color: #86efac;
-  color: #16a34a;
+  background-color: #dcfce7;
+  color: #059e12;
   border-color: #86efac;
 }
 
 .AdCal-Updt-toggle-button.inactive {
-  background-color: #fca5a5;
+  background-color: #fee2e2;
   color: #dc2626;
-  border-color: #fca5a5;
-}
-
-.AdCal-Updt-edit-button,
-.AdCal-Updt-delete-button {
-  padding: 0.5rem;
-  border-radius: 50%;
-  background: none;
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  border-color: #fecaca;
 }
 
 .AdCal-Updt-edit-button {
+  padding: 6px;
+  border-radius: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   color: #2563eb;
 }
 
 .AdCal-Updt-edit-button:hover {
-  background-color: rgba(224, 231, 255, 0.5);
-}
-
-.AdCal-Updt-delete-button {
-  color: #dc2626;
-}
-
-.AdCal-Updt-delete-button:hover {
-  background-color: rgba(254, 226, 226, 0.5);
+  background-color: #dbeafe;
 }
 
 .AdCal-Updt-footer {
-  margin-top: 2.5rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid #e5e7eb;
+  margin-top: 30px;
+  padding-top: 20px;
   text-align: right;
 }
 
 .AdCal-Updt-save-settings-button {
   display: inline-flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.875rem 1.75rem;
-  background-color: #16a34a;
+  gap: 10px;
+  padding: 12px 28px;
+  background-color: #059e12;
   color: white;
   border: none;
-  border-radius: 0.5rem;
-  font-size: 1rem;
+  border-radius: 10px;
+  font-size: 15px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
 }
 
 .AdCal-Updt-save-settings-button:hover:not(:disabled) {
-  background-color: #15803d;
+  background-color: #027c0d;
   transform: translateY(-2px);
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
 .AdCal-Updt-save-settings-button:disabled {
-  background-color: #16a34a;
   opacity: 0.7;
   cursor: not-allowed;
-  transform: none;
 }
 
 .AdCal-Updt-loading-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 300px;
-  padding: 2rem;
+  min-height: 400px;
   flex-direction: column;
-  gap: 1rem;
+  gap: 15px;
 }
 
-.AdCal-Updt-loading-container span {
-  color: #6b7280;
-  font-weight: 500;
+@media (max-width: 1024px) {
+  .AdCal-Updt-two-column-section {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
 }
 
 @media (max-width: 768px) {
   .AdCal-Updt-container {
-    padding: 1rem;
+    padding: 15px;
   }
 
   .AdCal-Updt-header {
     flex-direction: column;
     align-items: flex-start;
-    gap: 0.5rem;
-    padding-bottom: 1rem;
   }
 
   .AdCal-Updt-header h1 {
-    font-size: 1.5rem;
+    font-size: 20px;
   }
 
   .AdCal-Updt-tabs {
     flex-direction: column;
-    gap: 0.25rem;
   }
 
   .AdCal-Updt-tab {
     width: 100%;
     justify-content: flex-start;
-    border-radius: 0.5rem;
+    border-radius: 8px;
     border: 1px solid #d1d5db;
-    background-color: #f9fafb;
   }
 
   .AdCal-Updt-tab.active {
-    border-color: #ef0606;
-    background-color: #ffffff;
+    border-color: #00ff15;
   }
 
   .AdCal-Updt-content {
-    padding: 1rem;
-    border-radius: 0.5rem;
-  }
-
-  .AdCal-Updt-section-heading {
-    font-size: 1rem;
+    padding: 15px;
   }
 
   .AdCal-Updt-day-toggles {
@@ -853,38 +810,15 @@
     text-align: center;
   }
 
-  .AdCal-Updt-calendar-header {
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .AdCal-Updt-weekday-header {
-    font-size: 0.75rem;
-  }
-
-  .AdCal-Updt-calendar-day,
-  .AdCal-Updt-calendar-empty {
-    font-size: 0.8125rem;
-  }
-
-  .AdCal-Updt-add-special-date {
-    flex-direction: column;
-  }
-
   .AdCal-Updt-date-settings {
-    grid-template-columns: 1fr;
-  }
-
-  .AdCal-Updt-time-slots-grid,
-  .AdCal-Updt-service-areas-grid {
     grid-template-columns: 1fr;
   }
 
   .AdCal-Updt-time-slot-item,
   .AdCal-Updt-service-area-item {
     flex-direction: column;
-    gap: 0.75rem;
     text-align: center;
+    gap: 10px;
   }
 
   .AdCal-Updt-slot-actions,
@@ -905,26 +839,37 @@
 }
 
 @media (max-width: 480px) {
+  .AdCal-Updt-container {
+    padding: 10px;
+  }
+
   .AdCal-Updt-header h1 {
-    font-size: 1.25rem;
+    font-size: 18px;
   }
 
   .AdCal-Updt-tab {
-    font-size: 0.875rem;
-    padding: 0.5rem;
+    font-size: 12px;
+    padding: 8px 12px;
   }
 
   .AdCal-Updt-calendar-day,
   .AdCal-Updt-calendar-empty {
-    aspect-ratio: 1 / 1.2;
+    font-size: 11px;
   }
 
   .AdCal-Updt-weekday {
-    font-size: 0.7rem;
-    padding: 0.25rem;
+    font-size: 9px;
+    padding: 3px;
   }
 
-  .AdCal-Updt-day-number {
-    font-size: 0.75rem;
+  .AdCal-Updt-date-info {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .AdCal-Updt-special-date-item {
+    flex-direction: column;
+    gap: 10px;
   }
 }

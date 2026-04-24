@@ -314,12 +314,14 @@ const AdCalendar = () => {
   };
 
   if (isLoading || !settingsData) {
-    return <div className="AdCal-Updt-loading-container"><ClipLoader size={50} color="#ef0606" /><span>Loading Settings...</span></div>;
+    return <div className="AdCal-Updt-loading-container"><ClipLoader size={50} color="#059e12" /><span>Loading Settings...</span></div>;
   }
 
   return (
     <div className="AdCal-Updt-container">
-      <div className="AdCal-Updt-header"><h1>Manage Pickup Availability</h1></div>
+      <div className="AdCal-Updt-header">
+        <h1>Manage Pickup Availability</h1>
+      </div>
       {error && <div className="AdCal-Updt-error-banner"><AlertTriangle size={18} /><span>{error}</span><button onClick={() => setError('')} className="AdCal-Updt-close-banner-button">✕</button></div>}
       {success && <div className="AdCal-Updt-success-banner"><Check size={18} /><span>{success}</span><button onClick={() => setSuccess('')} className="AdCal-Updt-close-banner-button">✕</button></div>}
 
@@ -350,34 +352,52 @@ const AdCalendar = () => {
               </div>
             </div>
 
-            <div className="AdCal-Updt-tab-section">
-              <h2 className="AdCal-Updt-section-heading">Special Date Overrides</h2>
-              <div className="AdCal-Updt-add-special-date">
-                <div className="AdCal-Updt-form-group"><label>Date</label><input type="date" value={newSpecialDate.date} onChange={(e) => setNewSpecialDate({...newSpecialDate, date: e.target.value})} /></div>
-                <div className="AdCal-Updt-form-group"><label>Status</label><select value={newSpecialDate.status} onChange={(e) => setNewSpecialDate({...newSpecialDate, status: e.target.value})}><option value="available">Available</option><option value="unavailable">Unavailable</option></select></div>
-                <div className="AdCal-Updt-form-group"><label>Reason (Opt.)</label><input type="text" value={newSpecialDate.reason} onChange={(e) => setNewSpecialDate({...newSpecialDate, reason: e.target.value})} placeholder="e.g., Holiday" /></div>
-                <button onClick={addSpecialDate} className="AdCal-Updt-add-button"><Plus size={16} /> Add Override</button>
-              </div>
-              <div className="AdCal-Updt-special-dates-list">
-                {settingsData.specialDates && settingsData.specialDates.map(sd => (
-                  <div key={sd.id} className="AdCal-Updt-special-date-item">
-                    <div className="AdCal-Updt-date-info"><span className="AdCal-Updt-date">{sd.date}</span><span className={`AdCal-Updt-status ${sd.status}`}>{sd.status}</span>{sd.reason && <span className="AdCal-Updt-reason">{sd.reason}</span>}</div>
-                    <button onClick={() => removeSpecialDate(sd.date)} className="AdCal-Updt-delete-button"><Trash size={16} /></button>
+            <div className="AdCal-Updt-two-column-section">
+              <div className="AdCal-Updt-special-card">
+                <h2 className="AdCal-Updt-section-heading">Special Date Overrides</h2>
+                <div className="AdCal-Updt-add-special-date">
+                  <div className="AdCal-Updt-form-group">
+                    <label>Date</label>
+                    <input type="date" value={newSpecialDate.date} onChange={(e) => setNewSpecialDate({...newSpecialDate, date: e.target.value})} />
                   </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="AdCal-Updt-tab-section">
-              <h2 className="AdCal-Updt-section-heading">Calendar View</h2>
-              <div className="AdCal-Updt-calendar">
-                <div className="AdCal-Updt-calendar-header">
-                  <button onClick={goToPrevMonth} className="AdCal-Updt-nav-button"><ChevronLeft size={20} /></button>
-                  <h3 className="AdCal-Updt-current-month">{monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}</h3>
-                  <button onClick={goToNextMonth} className="AdCal-Updt-nav-button"><ChevronRight size={20} /></button>
+                  <div className="AdCal-Updt-form-group">
+                    <label>Status</label>
+                    <select value={newSpecialDate.status} onChange={(e) => setNewSpecialDate({...newSpecialDate, status: e.target.value})}>
+                      <option value="available">Available</option>
+                      <option value="unavailable">Unavailable</option>
+                    </select>
+                  </div>
+                  <div className="AdCal-Updt-form-group">
+                    <label>Reason (Opt.)</label>
+                    <input type="text" value={newSpecialDate.reason} onChange={(e) => setNewSpecialDate({...newSpecialDate, reason: e.target.value})} placeholder="e.g., Holiday" />
+                  </div>
+                  <button onClick={addSpecialDate} className="AdCal-Updt-add-button"><Plus size={16} /> Add Override</button>
                 </div>
-                <div className="AdCal-Updt-weekday-header">{daysOfWeek.map(day => <div key={day} className="AdCal-Updt-weekday">{day}</div>)}</div>
-                <div className="AdCal-Updt-calendar-grid">{renderCalendar()}</div>
+                <div className="AdCal-Updt-special-dates-list">
+                  {settingsData.specialDates && settingsData.specialDates.map(sd => (
+                    <div key={sd.id} className="AdCal-Updt-special-date-item">
+                      <div className="AdCal-Updt-date-info">
+                        <span className="AdCal-Updt-date">{sd.date}</span>
+                        <span className={`AdCal-Updt-status ${sd.status}`}>{sd.status}</span>
+                        {sd.reason && <span className="AdCal-Updt-reason">{sd.reason}</span>}
+                      </div>
+                      <button onClick={() => removeSpecialDate(sd.date)} className="AdCal-Updt-delete-button"><Trash size={16} /></button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="AdCal-Updt-calendar-card">
+                <h2 className="AdCal-Updt-section-heading">Calendar View</h2>
+                <div className="AdCal-Updt-calendar">
+                  <div className="AdCal-Updt-calendar-header">
+                    <button onClick={goToPrevMonth} className="AdCal-Updt-nav-button"><ChevronLeft size={20} /></button>
+                    <h3 className="AdCal-Updt-current-month">{monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}</h3>
+                    <button onClick={goToNextMonth} className="AdCal-Updt-nav-button"><ChevronRight size={20} /></button>
+                  </div>
+                  <div className="AdCal-Updt-weekday-header">{daysOfWeek.map(day => <div key={day} className="AdCal-Updt-weekday">{day}</div>)}</div>
+                  <div className="AdCal-Updt-calendar-grid">{renderCalendar()}</div>
+                </div>
               </div>
             </div>
 
@@ -394,20 +414,21 @@ const AdCalendar = () => {
                           const isSelectedForDate = dateSpecificSettings?.timeSlots?.includes(slot.id) ?? false;
                           return (
                             <div key={slot.id} className={`AdCal-Updt-time-slot-card ${isSelectedForDate ? 'selected' : ''}`} onClick={() => toggleTimeSlotForDate(slot.id)}>
-                              <div className="AdCal-Updt-time-slot-label">{slot.label}</div><div className="AdCal-Updt-time-slot-time">{slot.time}</div>
+                              <div className="AdCal-Updt-time-slot-label">{slot.label}</div>
+                              <div className="AdCal-Updt-time-slot-time">{slot.time}</div>
                             </div>);
                         })}
                       </div>
                     ) : <p className="AdCal-Updt-no-items">No active global time slots.</p>}
-                     <p className="AdCal-Updt-info-text"><Info size={14}/> Toggling here overrides global availability for THIS DATE ONLY. If no slots are selected here, all globally active slots are considered available for this date (if the day itself is available).</p>
+                    <p className="AdCal-Updt-info-text"><Info size={14}/> Toggling here overrides global availability for THIS DATE ONLY.</p>
                   </div>
                   <div className="AdCal-Updt-service-areas-selection">
                     <h3>Available Service Areas for this Date</h3>
-                     {settingsData.serviceAreas && settingsData.serviceAreas.filter(sa => sa.active).length > 0 ? (
+                    {settingsData.serviceAreas && settingsData.serviceAreas.filter(sa => sa.active).length > 0 ? (
                       <div className="AdCal-Updt-service-areas-grid">
                         {settingsData.serviceAreas.filter(sa => sa.active).map(area => {
-                           const dateSpecificSettings = settingsData.dateSettings.get(selectedDate.date);
-                           const isSelectedForDate = dateSpecificSettings?.serviceAreas?.includes(area.id) ?? false;
+                          const dateSpecificSettings = settingsData.dateSettings.get(selectedDate.date);
+                          const isSelectedForDate = dateSpecificSettings?.serviceAreas?.includes(area.id) ?? false;
                           return (
                             <div key={area.id} className={`AdCal-Updt-service-area-card ${isSelectedForDate ? 'selected' : ''}`} onClick={() => toggleServiceAreaForDate(area.id)}>
                               <MapPin size={18} /><span>{area.name}</span>
@@ -415,7 +436,7 @@ const AdCalendar = () => {
                         })}
                       </div>
                     ) : <p className="AdCal-Updt-no-items">No active global service areas.</p>}
-                    <p className="AdCal-Updt-info-text"><Info size={14}/> Toggling here overrides global availability for THIS DATE ONLY. If no areas are selected here, all globally active areas are considered available for this date (if the day itself is available).</p>
+                    <p className="AdCal-Updt-info-text"><Info size={14}/> Toggling here overrides global availability for THIS DATE ONLY.</p>
                   </div>
                 </div>
               </div>
@@ -442,7 +463,11 @@ const AdCalendar = () => {
               <div className="AdCal-Updt-time-slots-list">
                 {settingsData.timeSlots && settingsData.timeSlots.map(slot => (
                   <div key={slot.id} className={`AdCal-Updt-time-slot-item ${!slot.active ? 'inactive' : ''}`}>
-                    <div className="AdCal-Updt-slot-info"><div className="AdCal-Updt-slot-label">{slot.label}</div><div className="AdCal-Updt-slot-time">{slot.time}</div><div className="AdCal-Updt-slot-status">{slot.active ? 'Active' : 'Inactive'}</div></div>
+                    <div className="AdCal-Updt-slot-info">
+                      <div className="AdCal-Updt-slot-label">{slot.label}</div>
+                      <div className="AdCal-Updt-slot-time">{slot.time}</div>
+                      <div className="AdCal-Updt-slot-status">{slot.active ? 'Active' : 'Inactive'}</div>
+                    </div>
                     <div className="AdCal-Updt-slot-actions">
                       <button onClick={() => handleToggleActive('timeSlots', slot.id)} className={`AdCal-Updt-toggle-button ${slot.active ? 'active' : 'inactive'}`}>{slot.active ? 'Set Inactive' : 'Set Active'}</button>
                       <button onClick={() => setEditingTimeSlot({...slot})} className="AdCal-Updt-edit-button"><Edit size={16} /></button>
@@ -457,7 +482,7 @@ const AdCalendar = () => {
 
         {activeTab === 'areas' && (
           <div className="AdCal-Updt-areas-tab">
-             <div className="AdCal-Updt-tab-section">
+            <div className="AdCal-Updt-tab-section">
               <h2 className="AdCal-Updt-section-heading">Manage Service Areas</h2>
               {editingServiceArea ? (
                 <div className="AdCal-Updt-edit-form">
@@ -473,7 +498,10 @@ const AdCalendar = () => {
               <div className="AdCal-Updt-service-areas-list">
                 {settingsData.serviceAreas && settingsData.serviceAreas.map(area => (
                   <div key={area.id} className={`AdCal-Updt-service-area-item ${!area.active ? 'inactive' : ''}`}>
-                    <div className="AdCal-Updt-area-info"><div className="AdCal-Updt-area-name">{area.name}</div><div className="AdCal-Updt-area-status">{area.active ? 'Active' : 'Inactive'}</div></div>
+                    <div className="AdCal-Updt-area-info">
+                      <div className="AdCal-Updt-area-name">{area.name}</div>
+                      <div className="AdCal-Updt-area-status">{area.active ? 'Active' : 'Inactive'}</div>
+                    </div>
                     <div className="AdCal-Updt-area-actions">
                       <button onClick={() => handleToggleActive('serviceAreas', area.id)} className={`AdCal-Updt-toggle-button ${area.active ? 'active' : 'inactive'}`}>{area.active ? 'Set Inactive' : 'Set Active'}</button>
                       <button onClick={() => setEditingServiceArea({...area})} className="AdCal-Updt-edit-button"><Edit size={16} /></button>
