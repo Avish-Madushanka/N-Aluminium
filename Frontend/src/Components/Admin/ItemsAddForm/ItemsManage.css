@@ -750,6 +750,18 @@
   }
 }
 
+@media (max-width: 1024px) {
+  .ItemMng-formGrid {
+    grid-template-columns: 280px 1fr;
+    gap: 20px;
+  }
+  
+  .ItemMng-colorGrid,
+  .ItemMng-sizeGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 @media (max-width: 768px) {
   .ItemMng-container {
     padding: 15px;
@@ -759,15 +771,36 @@
     flex-direction: column;
     gap: 15px;
     text-align: center;
-    padding: 15px;
+    padding: 20px;
+    height: auto;
+    min-height: 80px;
+  }
+
+  .ItemMng-title {
+    padding-left: 0;
+    font-size: 24px;
   }
 
   .ItemMng-title:before {
     display: none;
   }
 
+  .ItemMng-addButton {
+    width: 100%;
+    max-width: 250px;
+  }
+
   .ItemMng-formGrid {
     grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .ItemMng-formLeft {
+    padding: 15px;
+  }
+
+  .ItemMng-imageUpload {
+    height: 250px;
   }
 
   .ItemMng-row {
@@ -783,18 +816,303 @@
   .ItemMng-modal {
     width: 95%;
     margin: 10px;
+    max-height: 85vh;
+  }
+
+  .ItemMng-modalHeader {
+    padding: 15px 20px;
+  }
+
+  .ItemMng-modalHeader h2 {
+    font-size: 20px;
+  }
+
+  .ItemMng-form {
+    padding: 20px;
   }
 
   .ItemMng-formActions {
     flex-direction: column;
+    gap: 12px;
   }
 
   .ItemMng-cancelButton,
   .ItemMng-submitButton {
     width: 100%;
+    padding: 12px 20px;
   }
 
   .ItemMng-actionButtons {
     flex-direction: column;
+    gap: 6px;
+  }
+
+  .ItemMng-editButton,
+  .ItemMng-deleteButton {
+    width: 100%;
+    text-align: center;
+  }
+
+  .ItemMng-tableContainer {
+    padding: 12px;
+  }
+
+  .ItemMng-table {
+    min-width: 800px;
+  }
+
+  .ItemMng-table th,
+  .ItemMng-table td {
+    padding: 10px 12px;
+  }
+}
+
+@media (max-width: 600px) {
+  .ItemMng-container {
+    padding: 12px;
+  }
+
+  .ItemMng-header {
+    padding: 15px;
+    border-radius: 15px;
+  }
+
+  .ItemMng-title {
+    font-size: 20px;
+  }
+
+  .ItemMng-addButton {
+    font-size: 14px;
+    padding: 10px 20px;
+  }
+
+  .ItemMng-modalHeader h2 {
+    font-size: 18px;
+  }
+
+  .ItemMng-modalClose {
+    font-size: 28px;
+    width: 36px;
+    height: 36px;
+  }
+
+  .ItemMng-imageUpload {
+    height: 200px;
+  }
+
+  .ItemMng-colorGrid,
+  .ItemMng-sizeGrid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .ItemMng-colorItem,
+  .ItemMng-sizeItem {
+    padding: 6px 8px;
+  }
+
+  .ItemMng-label {
+    font-size: 13px;
+  }
+
+  .ItemMng-input,
+  .ItemMng-select,
+  .ItemMng-textarea {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+
+  .ItemMng-submitButton,
+  .ItemMng-cancelButton {
+    font-size: 14px;
+  }
+
+  .ItemMng-success,
+  .ItemMng-error {
+    padding: 12px 15px;
+    font-size: 13px;
+  }
+
+  .ItemMng-confirmModal {
+    padding: 20px;
+    width: 92%;
+  }
+
+  .ItemMng-confirmModal h3 {
+    font-size: 18px;
+  }
+
+  .ItemMng-confirmModal p {
+    font-size: 14px;
+  }
+
+  .ItemMng-confirmCancel,
+  .ItemMng-confirmDelete {
+    padding: 8px 20px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .ItemMng-container {
+    padding: 10px;
+  }
+
+  .ItemMng-header {
+    padding: 12px;
+    border-radius: 12px;
+  }
+
+  .ItemMng-title {
+    font-size: 18px;
+  }
+
+  .ItemMng-addButton {
+    font-size: 13px;
+    padding: 8px 16px;
+  }
+
+  .ItemMng-form {
+    padding: 15px;
+  }
+
+  .ItemMng-imageUpload {
+    height: 180px;
+  }
+
+  .ItemMng-uploadIcon {
+    font-size: 36px;
+  }
+
+  .ItemMng-uploadPlaceholder p {
+    font-size: 12px;
+  }
+
+  .ItemMng-removeImage {
+    width: 28px;
+    height: 28px;
+    font-size: 16px;
+    top: 6px;
+    right: 6px;
+  }
+
+  .ItemMng-table th,
+  .ItemMng-table td {
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+
+  .ItemMng-tableImage {
+    width: 45px;
+    height: 45px;
+  }
+
+  .ItemMng-productName {
+    font-size: 13px;
+  }
+
+  .ItemMng-productDescription {
+    font-size: 10px;
+  }
+
+  .ItemMng-currentPrice {
+    font-size: 14px;
+  }
+
+  .ItemMng-originalPrice {
+    font-size: 11px;
+  }
+
+  .ItemMng-categoryBadge,
+  .ItemMng-stockBadge,
+  .ItemMng-discountBadge,
+  .ItemMng-featuredBadge {
+    font-size: 10px;
+    padding: 3px 6px;
+  }
+
+  .ItemMng-checkbox {
+    font-size: 13px;
+  }
+
+  .ItemMng-checkbox input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+  }
+
+  .ItemMng-fieldError {
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 380px) {
+  .ItemMng-container {
+    padding: 8px;
+  }
+
+  .ItemMng-title {
+    font-size: 16px;
+  }
+
+  .ItemMng-addButton {
+    font-size: 12px;
+    padding: 7px 14px;
+  }
+
+  .ItemMng-modalHeader {
+    padding: 12px 15px;
+  }
+
+  .ItemMng-modalHeader h2 {
+    font-size: 16px;
+  }
+
+  .ItemMng-modalClose {
+    font-size: 24px;
+    width: 32px;
+    height: 32px;
+  }
+
+  .ItemMng-form {
+    padding: 12px;
+  }
+
+  .ItemMng-imageUpload {
+    height: 160px;
+  }
+
+  .ItemMng-label {
+    font-size: 12px;
+    margin-bottom: 5px;
+  }
+
+  .ItemMng-input,
+  .ItemMng-select,
+  .ItemMng-textarea {
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+
+  .ItemMng-submitButton,
+  .ItemMng-cancelButton {
+    font-size: 13px;
+    padding: 10px 16px;
+  }
+
+  .ItemMng-table th,
+  .ItemMng-table td {
+    padding: 6px 8px;
+    font-size: 11px;
+  }
+
+  .ItemMng-tableImage {
+    width: 35px;
+    height: 35px;
+  }
+
+  .ItemMng-editButton,
+  .ItemMng-deleteButton {
+    font-size: 10px;
+    padding: 4px 8px;
   }
 }

@@ -6,7 +6,6 @@
 }
 
 .BSM-header {
-  height: 80px;
   background: #1a1a1a;
   color: white;
   padding: 20px 30px;
@@ -16,6 +15,8 @@
   justify-content: space-between;
   align-items: center;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  flex-wrap: wrap;
+  gap: 15px;
 }
 
 .BSM-title {
@@ -23,7 +24,7 @@
   font-weight: 700;
   margin: 0;
   position: relative;
-  padding-left: 15px;
+  padding-left: 20px;
 }
 
 .BSM-title:before {
@@ -34,32 +35,33 @@
   transform: translateY(-50%);
   width: 5px;
   height: 35px;
-  background: #adadad;
+  background: #ff9800;
   border-radius: 3px;
 }
 
 .BSM-addButton {
-  padding: 12px 25px;
-  background: #707070;
+  padding: 12px 28px;
+  background: #ff9800;
   color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .BSM-addButton:hover {
-  background: #727272;
+  background: #f57c00;
   transform: translateY(-2px);
-  box-shadow: 0 6px 10px rgba(236, 236, 236, 0.2);
+  box-shadow: 0 6px 15px rgba(255, 152, 0, 0.3);
 }
 
 .BSM-success {
   background: #4caf50;
   color: white;
   padding: 15px 20px;
-  border-radius: 10px;
+  border-radius: 12px;
   margin-bottom: 20px;
   display: flex;
   justify-content: space-between;
@@ -71,7 +73,7 @@
   background: #f44336;
   color: white;
   padding: 15px 20px;
-  border-radius: 10px;
+  border-radius: 12px;
   margin-bottom: 20px;
   display: flex;
   justify-content: space-between;
@@ -107,12 +109,14 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0,0,0,0.5);
+  background: rgba(0,0,0,0.6);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
+  backdrop-filter: blur(4px);
   animation: BSM-fadeIn 0.3s ease-out;
+  padding: 20px;
 }
 
 .BSM-modal {
@@ -122,7 +126,7 @@
   max-width: 1100px;
   max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.3);
   animation: BSM-scaleIn 0.3s ease-out;
 }
 
@@ -136,6 +140,9 @@
   top: 0;
   background: white;
   z-index: 10;
+  border-radius: 20px 20px 0 0;
+  flex-wrap: wrap;
+  gap: 15px;
 }
 
 .BSM-modalHeader h2 {
@@ -181,6 +188,9 @@
   background: #f9f9f9;
   border-radius: 15px;
   padding: 20px;
+  position: sticky;
+  top: 20px;
+  height: fit-content;
 }
 
 .BSM-imageUpload {
@@ -196,6 +206,7 @@
 
 .BSM-imageUpload:hover {
   border-color: #ff9800;
+  background: #fff8f0;
 }
 
 .BSM-uploadLabel {
@@ -259,6 +270,7 @@
 .BSM-removeImage:hover {
   background: white;
   transform: scale(1.1);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
 .BSM-additionalImages {
@@ -271,25 +283,28 @@
   border: 2px solid #e0e0e0;
   border-radius: 8px;
   margin-top: 10px;
+  cursor: pointer;
 }
 
 .BSM-additionalGrid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  gap: 12px;
   margin-top: 15px;
 }
 
 .BSM-additionalPreview {
   position: relative;
-  height: 80px;
+  aspect-ratio: 1;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #e0e0e0;
 }
 
 .BSM-additionalPreview img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 8px;
 }
 
 .BSM-removeAdditional {
@@ -323,6 +338,7 @@
 
 .BSM-fieldGroup {
   width: 100%;
+  margin-bottom: 5px;
 }
 
 .BSM-label {
@@ -339,10 +355,11 @@
   width: 100%;
   padding: 12px 15px;
   border: 2px solid #e0e0e0;
-  border-radius: 8px;
+  border-radius: 10px;
   font-size: 14px;
   transition: all 0.3s;
   font-family: 'Roboto', sans-serif;
+  background: white;
 }
 
 .BSM-input:focus,
@@ -365,7 +382,7 @@
 
 .BSM-textarea {
   resize: vertical;
-  min-height: 80px;
+  min-height: 100px;
 }
 
 .BSM-row {
@@ -380,13 +397,14 @@
   gap: 15px;
   padding-top: 20px;
   border-top: 2px solid #f0f0f0;
+  flex-wrap: wrap;
 }
 
 .BSM-cancelButton {
   padding: 12px 30px;
   background: #f5f5f5;
   border: 2px solid #e0e0e0;
-  border-radius: 8px;
+  border-radius: 10px;
   font-size: 16px;
   font-weight: 600;
   color: #666;
@@ -403,7 +421,7 @@
   padding: 12px 30px;
   background: #ff9800;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
   font-size: 16px;
   font-weight: 600;
   color: white;
@@ -421,14 +439,15 @@
 .BSM-submitButton:disabled {
   background: #ffcc80;
   cursor: not-allowed;
+  transform: none;
 }
 
 .BSM-confirmModal {
   background: white;
-  border-radius: 15px;
+  border-radius: 20px;
   padding: 30px;
   width: 90%;
-  max-width: 400px;
+  max-width: 450px;
   text-align: center;
   animation: BSM-scaleIn 0.3s ease-out;
 }
@@ -436,7 +455,7 @@
 .BSM-confirmModal h3 {
   margin: 0 0 15px 0;
   color: #333;
-  font-size: 22px;
+  font-size: 24px;
 }
 
 .BSM-confirmModal p {
@@ -449,13 +468,14 @@
   display: flex;
   gap: 15px;
   justify-content: center;
+  flex-wrap: wrap;
 }
 
 .BSM-confirmCancel {
   padding: 10px 25px;
   background: #f5f5f5;
   border: 2px solid #e0e0e0;
-  border-radius: 8px;
+  border-radius: 10px;
   font-size: 15px;
   font-weight: 600;
   color: #666;
@@ -471,7 +491,7 @@
   padding: 10px 25px;
   background: #f44336;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
   font-size: 15px;
   font-weight: 600;
   color: white;
@@ -489,14 +509,14 @@
   background: white;
   border-radius: 15px;
   padding: 20px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 15px rgba(0,0,0,0.08);
   overflow-x: auto;
 }
 
 .BSM-table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 1000px;
+  min-width: 900px;
 }
 
 .BSM-table th {
@@ -517,13 +537,14 @@
 
 .BSM-table tr:hover {
   background: #f8f9fa;
+  transition: background 0.2s ease;
 }
 
 .BSM-tableImage {
   width: 60px;
   height: 60px;
   object-fit: cover;
-  border-radius: 8px;
+  border-radius: 10px;
   border: 1px solid #dee2e6;
 }
 
@@ -548,16 +569,17 @@
 .BSM-categoryBadge {
   background: #fff3e0;
   color: #ff9800;
-  padding: 4px 8px;
-  border-radius: 4px;
+  padding: 4px 12px;
+  border-radius: 20px;
   font-size: 12px;
   font-weight: 500;
+  display: inline-block;
 }
 
 .BSM-conditionBadge {
   display: inline-block;
-  padding: 4px 8px;
-  border-radius: 4px;
+  padding: 4px 12px;
+  border-radius: 20px;
   font-size: 12px;
   font-weight: 500;
 }
@@ -593,14 +615,15 @@
 
 .BSM-currentPrice {
   color: #ff9800;
-  font-size: 16px;
+  font-size: 18px;
+  font-weight: 700;
 }
 
 .BSM-oldPrice {
   color: #999;
   font-size: 12px;
   text-decoration: line-through;
-  margin-top: 2px;
+  margin-top: 4px;
 }
 
 .BSM-contactInfo {
@@ -616,19 +639,21 @@
 .BSM-address {
   color: #666;
   font-size: 11px;
+  word-break: break-word;
 }
 
 .BSM-actionButtons {
   display: flex;
   gap: 8px;
+  flex-wrap: wrap;
 }
 
 .BSM-editButton {
-  padding: 6px 12px;
+  padding: 6px 14px;
   background: #2196f3;
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 8px;
   font-size: 12px;
   font-weight: 500;
   cursor: pointer;
@@ -641,11 +666,11 @@
 }
 
 .BSM-deleteButton {
-  padding: 6px 12px;
+  padding: 6px 14px;
   background: #f44336;
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 8px;
   font-size: 12px;
   font-weight: 500;
   cursor: pointer;
@@ -659,14 +684,14 @@
 
 .BSM-loading {
   text-align: center;
-  padding: 50px;
+  padding: 60px;
   font-size: 18px;
   color: #666;
 }
 
 .BSM-noData {
   text-align: center;
-  padding: 50px;
+  padding: 60px;
   color: #999;
   font-size: 16px;
 }
@@ -702,6 +727,21 @@
   }
 }
 
+@media (max-width: 1024px) {
+  .BSM-container {
+    padding: 20px;
+  }
+  
+  .BSM-formGrid {
+    grid-template-columns: 300px 1fr;
+    gap: 20px;
+  }
+  
+  .BSM-title {
+    font-size: 24px;
+  }
+}
+
 @media (max-width: 768px) {
   .BSM-container {
     padding: 15px;
@@ -709,17 +749,36 @@
 
   .BSM-header {
     flex-direction: column;
-    gap: 15px;
     text-align: center;
-    padding: 15px;
+    padding: 18px 20px;
+  }
+
+  .BSM-title {
+    padding-left: 0;
+    text-align: center;
   }
 
   .BSM-title:before {
     display: none;
   }
 
+  .BSM-addButton {
+    width: 100%;
+    max-width: 250px;
+  }
+
   .BSM-formGrid {
     grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .BSM-formLeft {
+    position: relative;
+    top: 0;
+  }
+
+  .BSM-imageUpload {
+    height: 220px;
   }
 
   .BSM-row {
@@ -729,7 +788,19 @@
 
   .BSM-modal {
     width: 95%;
-    margin: 10px;
+    max-height: 85vh;
+  }
+
+  .BSM-modalHeader {
+    padding: 15px 20px;
+  }
+
+  .BSM-modalHeader h2 {
+    font-size: 20px;
+  }
+
+  .BSM-form {
+    padding: 20px;
   }
 
   .BSM-formActions {
@@ -739,9 +810,213 @@
   .BSM-cancelButton,
   .BSM-submitButton {
     width: 100%;
+    text-align: center;
+  }
+
+  .BSM-table th,
+  .BSM-table td {
+    padding: 10px 12px;
+    font-size: 12px;
+  }
+
+  .BSM-tableImage {
+    width: 45px;
+    height: 45px;
+  }
+
+  .BSM-currentPrice {
+    font-size: 14px;
   }
 
   .BSM-actionButtons {
     flex-direction: column;
+    gap: 5px;
+  }
+
+  .BSM-editButton,
+  .BSM-deleteButton {
+    width: 100%;
+    text-align: center;
+  }
+
+  .BSM-additionalGrid {
+    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+  }
+}
+
+@media (max-width: 480px) {
+  .BSM-container {
+    padding: 10px;
+  }
+
+  .BSM-header {
+    padding: 12px 15px;
+  }
+
+  .BSM-title {
+    font-size: 20px;
+  }
+
+  .BSM-addButton {
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+
+  .BSM-success,
+  .BSM-error {
+    padding: 12px 15px;
+    font-size: 13px;
+  }
+
+  .BSM-modalHeader {
+    padding: 12px 15px;
+  }
+
+  .BSM-modalHeader h2 {
+    font-size: 18px;
+  }
+
+  .BSM-modalClose {
+    width: 32px;
+    height: 32px;
+    font-size: 24px;
+  }
+
+  .BSM-form {
+    padding: 15px;
+  }
+
+  .BSM-imageUpload {
+    height: 180px;
+  }
+
+  .BSM-uploadIcon {
+    font-size: 36px;
+  }
+
+  .BSM-label {
+    font-size: 12px;
+  }
+
+  .BSM-input,
+  .BSM-select,
+  .BSM-textarea {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+
+  .BSM-table th,
+  .BSM-table td {
+    padding: 8px 10px;
+    font-size: 11px;
+  }
+
+  .BSM-tableImage {
+    width: 35px;
+    height: 35px;
+  }
+
+  .BSM-productName {
+    font-size: 12px;
+  }
+
+  .BSM-currentPrice {
+    font-size: 12px;
+  }
+
+  .BSM-categoryBadge,
+  .BSM-conditionBadge {
+    padding: 2px 8px;
+    font-size: 10px;
+  }
+
+  .BSM-editButton,
+  .BSM-deleteButton {
+    padding: 4px 10px;
+    font-size: 10px;
+  }
+
+  .BSM-confirmModal {
+    padding: 20px;
+    margin: 15px;
+  }
+
+  .BSM-confirmModal h3 {
+    font-size: 20px;
+  }
+
+  .BSM-confirmModal p {
+    font-size: 14px;
+  }
+
+  .BSM-confirmActions {
+    flex-direction: column;
+  }
+
+  .BSM-confirmCancel,
+  .BSM-confirmDelete {
+    width: 100%;
+  }
+
+  .BSM-additionalGrid {
+    grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+    gap: 8px;
+  }
+
+  .BSM-removeAdditional {
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+    top: -6px;
+    right: -6px;
+  }
+}
+
+@media (min-width: 1400px) {
+  .BSM-container {
+    padding: 40px;
+    max-width: 1600px;
+    margin: 0 auto;
+  }
+  
+  .BSM-formGrid {
+    gap: 40px;
+  }
+  
+  .BSM-imageUpload {
+    height: 320px;
+  }
+  
+  .BSM-table th,
+  .BSM-table td {
+    padding: 18px;
+    font-size: 15px;
+  }
+  
+  .BSM-currentPrice {
+    font-size: 20px;
+  }
+}
+
+@media print {
+  .BSM-header,
+  .BSM-addButton,
+  .BSM-modalOverlay,
+  .BSM-actionButtons {
+    display: none;
+  }
+  
+  .BSM-container {
+    padding: 0;
+    background: white;
+  }
+  
+  .BSM-tableContainer {
+    box-shadow: none;
+    padding: 0;
+  }
+  
+  .BSM-table {
+    border: 1px solid #ddd;
   }
 }

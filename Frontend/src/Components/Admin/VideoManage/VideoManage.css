@@ -390,9 +390,19 @@
   .VideoManage-grid {
     grid-template-columns: repeat(3, 1fr);
   }
+  
+  .VideoManage-title-section {
+    height: auto;
+    min-height: 80px;
+    padding: 20px 24px;
+  }
 }
 
 @media (max-width: 768px) {
+  .VideoManage-library {
+    padding: 20px;
+  }
+  
   .VideoManage-header-actions {
     flex-direction: column;
     align-items: stretch;
@@ -400,6 +410,16 @@
   
   .VideoManage-search-section {
     width: 100%;
+    flex-direction: column;
+  }
+  
+  .VideoManage-search-wrapper {
+    width: 100%;
+  }
+  
+  .VideoManage-filters-btn {
+    width: 100%;
+    white-space: normal;
   }
   
   .VideoManage-add-btn {
@@ -409,10 +429,62 @@
   
   .VideoManage-grid {
     grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
   }
   
   .VideoManage-title {
-    font-size: 24px;
+    font-size: 22px;
+  }
+  
+  .VideoManage-title-section {
+    flex-direction: column;
+    text-align: center;
+    gap: 12px;
+    height: auto;
+    padding: 20px;
+  }
+  
+  .VideoManage-title:before {
+    display: none;
+  }
+  
+  .VideoManage-title {
+    padding-left: 0;
+  }
+  
+  .VideoManage-form-container {
+    padding: 24px;
+    margin: 16px;
+    max-width: calc(100% - 32px);
+  }
+}
+
+@media (max-width: 600px) {
+  .VideoManage-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  
+  .VideoManage-video-title {
+    font-size: 12px;
+    white-space: normal;
+    word-break: break-word;
+    line-height: 1.3;
+  }
+  
+  .VideoManage-delete-btn {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .VideoManage-duration {
+    font-size: 10px;
+    padding: 2px 6px;
+  }
+  
+  .VideoManage-yt-badge {
+    font-size: 9px;
+    padding: 3px 6px;
   }
 }
 
@@ -423,6 +495,7 @@
   
   .VideoManage-search-section {
     flex-direction: column;
+    width: 100%;
   }
   
   .VideoManage-filters-btn {
@@ -430,6 +503,48 @@
   }
   
   .VideoManage-form-container {
-    padding: 24px;
+    padding: 20px;
+  }
+  
+  .VideoManage-form-actions {
+    flex-direction: column;
+  }
+  
+  .VideoManage-submit-btn, 
+  .VideoManage-cancel-btn {
+    width: 100%;
+  }
+  
+  .VideoManage-title-section {
+    padding: 16px;
+  }
+  
+  .VideoManage-title {
+    font-size: 20px;
+  }
+  
+  .VideoManage-count {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 380px) {
+  .VideoManage-library {
+    padding: 12px;
+  }
+  
+  .VideoManage-grid {
+    gap: 16px;
+  }
+  
+  .VideoManage-card:hover {
+    transform: none;
+  }
+  
+  .VideoManage-delete-btn {
+    width: 26px;
+    height: 26px;
+    top: 6px;
+    right: 6px;
   }
 }

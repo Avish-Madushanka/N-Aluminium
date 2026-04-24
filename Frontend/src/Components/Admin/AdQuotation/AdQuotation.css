@@ -72,7 +72,7 @@
 }
 
 .ADQ-main-content {
-  max-width: 1400px;
+  max-width: 1600px;
   margin: 0 auto;
   padding: 32px;
 }
@@ -292,12 +292,13 @@
 
 .ADQ-stats-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 24px;
 }
 
 .ADQ-stat-card {
-  background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+  width: auto;
+  background-color:#ffffff ;
   padding: 28px 20px;
   text-align: center;
   border-radius: 16px;

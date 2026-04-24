@@ -1,11 +1,12 @@
 .AA-page {
-  padding: 30px;
+  padding: 20px;
   margin: 0 auto;
   font-family: 'Inter', sans-serif;
+  background-color: #f5f5f5;
+  min-height: 100vh;
 }
 
 .AA-header {
-  height: 80px;
   background: #1a1a1a;
   color: white;
   padding: 20px 30px;
@@ -15,44 +16,49 @@
   justify-content: space-between;
   align-items: center;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.AA-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0;
+  position: relative;
+  padding-left: 20px;
 }
 
 .AA-title:before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 5px;
-    height: 35px;
-    background: #b81515;
-    border-radius: 3px;
-}
-.AA-title {
-    font-size: 28px;
-    font-weight: 700;
-    margin: 0;
-    position: relative;
-    padding-left: 15px;
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 5px;
+  height: 35px;
+  background: #b81515;
+  border-radius: 3px;
 }
 
 .AA-close {
-    background: rgba(255, 255, 255, 0.2);
-    border: none;
-    color: white;
-    font-size: 32px;
-    cursor: pointer;
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s;
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  font-size: 32px;
+  cursor: pointer;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
 }
 
 .AA-close:hover {
-  color: #6e6e6e;
+  background: rgba(255, 255, 255, 0.3);
+  transform: rotate(90deg);
+  color: white;
 }
 
 .AA-error-message {
@@ -106,35 +112,48 @@
 
 .AA-stats-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 20px;
   margin-bottom: 30px;
 }
 
 .AA-stat-card {
   background: white;
-  border-radius: 10px;
+  border-radius: 12px;
   padding: 20px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  border-left: 4px solid #3498db;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.AA-stat-card.AA-stat-pending {
-  border-left-color: #f39c12;
+.AA-stat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 }
 
-.AA-stat-card.AA-stat-approved {
-  border-left-color: #27ae60;
+.AA-stat-pending {
+  background: linear-gradient(135deg, #ffeacb 0%, #fff5e8 100%);
 }
 
-.AA-stat-card.AA-stat-rejected {
-  border-left-color: #e74c3c;
+.AA-stat-approved {
+  background: linear-gradient(135deg, #bfffdb 0%, #e8f5e9 100%);
+}
+
+.AA-stat-rejected {
+  background: linear-gradient(135deg, #ffcfc9 0%, #ffebee 100%);
 }
 
 .AA-stat-label {
   display: block;
   color: #7f8c8d;
   font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
   margin-bottom: 8px;
 }
 
@@ -151,20 +170,25 @@
   align-items: center;
   margin-bottom: 20px;
   gap: 20px;
+  flex-wrap: wrap;
 }
 
-.AA-search, .AA-filter {
+.AA-search {
+  flex: 1;
+  min-width: 200px;
   display: flex;
   align-items: center;
   gap: 8px;
   background: white;
   border: 1px solid #e0e0e0;
-  border-radius: 6px;
+  border-radius: 8px;
   padding: 8px 12px;
+  transition: all 0.2s ease;
 }
 
-.AA-search {
-  flex: 1;
+.AA-search:focus-within {
+  border-color: #d30905;
+  box-shadow: 0 0 0 2px rgba(211, 9, 5, 0.1);
 }
 
 .AA-search input {
@@ -174,24 +198,38 @@
   font-size: 0.95rem;
 }
 
+.AA-filter {
+  min-width: 180px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 8px 12px;
+}
+
 .AA-filter select {
   border: none;
   outline: none;
   background: none;
   font-size: 0.95rem;
   cursor: pointer;
+  width: 100%;
 }
 
 .AA-table-container {
   background: white;
-  border-radius: 10px;
+  border-radius: 12px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   overflow-x: auto;
+  margin-bottom: 20px;
 }
 
 .AA-table {
   width: 100%;
   border-collapse: collapse;
+  min-width: 600px;
 }
 
 .AA-table th {
@@ -200,7 +238,9 @@
   text-align: left;
   color: #2c3e50;
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
   border-bottom: 2px solid #e0e0e0;
 }
 
@@ -208,6 +248,11 @@
   padding: 15px;
   border-bottom: 1px solid #e0e0e0;
   color: #2c3e50;
+  font-size: 0.9rem;
+}
+
+.AA-table tr:hover {
+  background-color: #f8f9fa;
 }
 
 .AA-nameCell {
@@ -224,10 +269,10 @@
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  padding: 4px 8px;
-  border-radius: 12px;
-  font-size: 0.8rem;
-  font-weight: 500;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
   text-transform: capitalize;
 }
 
@@ -249,23 +294,33 @@
 .AA-actions {
   display: flex;
   gap: 8px;
+  flex-wrap: wrap;
 }
 
 .AA-actions button {
+  width: 36px;
+  height: 36px;
   padding: 6px;
   border: none;
-  border-radius: 4px;
+  border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.AA-actions button:hover {
+  transform: translateY(-2px);
 }
 
 .AA-btn-view {
-  background: #3498db;
+  background: #216894;
   color: white;
 }
 
 .AA-btn-view:hover {
-  background: #2980b9;
+  background: #0e334d;
 }
 
 .AA-btn-email {
@@ -291,19 +346,22 @@
   justify-content: center;
   gap: 8px;
   margin-top: 20px;
+  flex-wrap: wrap;
 }
 
 .AA-page-btn {
-  padding: 8px 12px;
+  padding: 8px 14px;
   border: 1px solid #e0e0e0;
   background: white;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
   transition: all 0.2s ease;
+  font-size: 0.9rem;
 }
 
 .AA-page-btn:hover {
   background: #f8f9fa;
+  border-color: #d30905;
 }
 
 .AA-page-active {
@@ -313,12 +371,12 @@
 }
 
 .AA-page-active:hover {
-  background: #ad0000;
+  background: #b81515;
 }
 
 .AA-loading {
   text-align: center;
-  padding: 40px;
+  padding: 60px;
   color: #7f8c8d;
 }
 
@@ -334,15 +392,28 @@
   align-items: center;
   z-index: 1000;
   backdrop-filter: blur(5px);
+  padding: 20px;
 }
 
 .AA-modal {
   background: white;
-  border-radius: 12px;
+  border-radius: 16px;
   width: 90%;
   max-width: 1000px;
   max-height: 90vh;
   overflow-y: auto;
+  animation: modalSlideIn 0.3s ease;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .AA-modal-header {
@@ -352,7 +423,10 @@
   padding: 20px 24px;
   border-bottom: 1px solid #e0e0e0;
   background: #f8f9fa;
-  border-radius: 12px 12px 0 0;
+  border-radius: 16px 16px 0 0;
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
 .AA-modal-header h2 {
@@ -374,10 +448,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  border-radius: 50%;
 }
 
 .AA-modal-close:hover {
   color: #d30905;
+  background: rgba(211, 9, 5, 0.1);
 }
 
 .AA-modal-body {
@@ -400,7 +476,7 @@
 .AA-card {
   background: white;
   border: 1px solid #e0e0e0;
-  border-radius: 8px;
+  border-radius: 12px;
   overflow: hidden;
 }
 
@@ -431,7 +507,7 @@
 
 .AA-label {
   display: block;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   color: #7f8c8d;
   margin-bottom: 6px;
   text-transform: uppercase;
@@ -441,9 +517,9 @@
 
 .AA-input {
   width: 100%;
-  padding: 8px 12px;
+  padding: 10px 12px;
   border: 1px solid #e0e0e0;
-  border-radius: 4px;
+  border-radius: 8px;
   font-size: 0.9rem;
   background: #fafafa;
   cursor: default;
@@ -451,9 +527,9 @@
 
 .AA-textarea {
   width: 100%;
-  padding: 8px 12px;
+  padding: 10px 12px;
   border: 1px solid #e0e0e0;
-  border-radius: 4px;
+  border-radius: 8px;
   font-size: 0.9rem;
   font-family: inherit;
   background: #fafafa;
@@ -520,21 +596,24 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .AA-downloadBtn:hover {
   background: #e0e0e0;
-  text-decoration: none;
 }
 
 .AA-statusOptions {
   display: flex;
   gap: 12px;
   margin-top: 8px;
+  flex-wrap: wrap;
 }
 
 .AA-statusOption {
   flex: 1;
+  min-width: 100px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -545,6 +624,7 @@
   cursor: pointer;
   transition: all 0.2s ease;
   position: relative;
+  font-weight: 500;
 }
 
 .AA-statusOption:hover {
@@ -580,15 +660,17 @@
   padding: 16px 24px;
   border-top: 1px solid #e0e0e0;
   background: #f8f9fa;
-  border-radius: 0 0 12px 12px;
+  border-radius: 0 0 16px 16px;
+  position: sticky;
+  bottom: 0;
 }
 
 .AA-cancel {
-  padding: 8px 20px;
+  padding: 10px 24px;
   background: #95a5a6;
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
   font-weight: 500;
   transition: all 0.2s ease;
@@ -596,40 +678,262 @@
 
 .AA-cancel:hover {
   background: #7f8c8d;
+  transform: translateY(-1px);
+}
+
+@media (max-width: 1024px) {
+  .AA-page {
+    padding: 15px;
+  }
+  
+  .AA-title {
+    font-size: 24px;
+  }
+  
+  .AA-stat-value {
+    font-size: 1.75rem;
+  }
+  
+  .AA-twoColumn {
+    gap: 20px;
+  }
 }
 
 @media (max-width: 768px) {
   .AA-page {
-    padding: 20px;
+    padding: 12px;
+  }
+  
+  .AA-header {
+    padding: 15px 20px;
+  }
+  
+  .AA-title {
+    font-size: 20px;
+    padding-left: 15px;
+  }
+  
+  .AA-title:before {
+    height: 28px;
+  }
+  
+  .AA-close {
+    width: 38px;
+    height: 38px;
+    font-size: 28px;
   }
   
   .AA-stats-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+  }
+  
+  .AA-stat-card {
+    padding: 15px;
+  }
+  
+  .AA-stat-label {
+    font-size: 0.75rem;
+  }
+  
+  .AA-stat-value {
+    font-size: 1.5rem;
   }
   
   .AA-controls {
     flex-direction: column;
+    gap: 12px;
   }
   
   .AA-search, .AA-filter {
     width: 100%;
   }
   
+  .AA-table th, .AA-table td {
+    padding: 10px 12px;
+    font-size: 0.85rem;
+  }
+  
+  .AA-table th {
+    font-size: 0.75rem;
+  }
+  
+  .AA-actions button {
+    width: 32px;
+    height: 32px;
+  }
+  
   .AA-twoColumn {
     grid-template-columns: 1fr;
-    gap: 20px;
+    gap: 16px;
   }
   
   .AA-row {
     grid-template-columns: 1fr;
+    gap: 12px;
   }
   
   .AA-statusOptions {
     flex-direction: column;
   }
   
-  .AA-table th, .AA-table td {
+  .AA-statusOption {
+    min-width: auto;
+  }
+  
+  .AA-modal-body {
+    padding: 16px;
+  }
+  
+  .AA-sectionTitle {
+    padding: 12px 16px;
+    font-size: 0.9rem;
+  }
+  
+  .AA-fields {
+    padding: 16px;
+  }
+  
+  .AA-modal-header h2 {
+    font-size: 1.1rem;
+  }
+  
+  .AA-modal-footer {
+    padding: 12px 16px;
+  }
+  
+  .AA-cancel {
+    padding: 8px 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .AA-page {
     padding: 10px;
+  }
+  
+  .AA-header {
+    padding: 12px 15px;
+  }
+  
+  .AA-title {
+    font-size: 18px;
+  }
+  
+  .AA-title:before {
+    height: 24px;
+    width: 3px;
+  }
+  
+  .AA-close {
+    width: 32px;
+    height: 32px;
+    font-size: 24px;
+  }
+  
+  .AA-stats-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  
+  .AA-stat-card {
+    padding: 12px;
+  }
+  
+  .AA-stat-value {
+    font-size: 1.25rem;
+  }
+  
+  .AA-table th, .AA-table td {
+    padding: 8px 10px;
+    font-size: 0.75rem;
+  }
+  
+  .AA-status-badge {
+    padding: 3px 8px;
+    font-size: 0.65rem;
+  }
+  
+  .AA-actions {
+    gap: 4px;
+  }
+  
+  .AA-actions button {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .AA-page-btn {
+    padding: 6px 10px;
+    font-size: 0.8rem;
+  }
+  
+  .AA-modal {
+    width: 95%;
+    max-height: 95vh;
+  }
+  
+  .AA-modal-header {
+    padding: 12px 16px;
+  }
+  
+  .AA-modal-header h2 {
+    font-size: 1rem;
+  }
+  
+  .AA-modal-body {
+    padding: 12px;
+  }
+  
+  .AA-fieldGroup {
+    margin-bottom: 12px;
+  }
+  
+  .AA-input, .AA-textarea {
+    padding: 8px 10px;
+    font-size: 0.85rem;
+  }
+  
+  .AA-label {
+    font-size: 0.7rem;
+  }
+  
+  .AA-cancel {
+    padding: 6px 16px;
+    font-size: 0.85rem;
+  }
+  
+  .AA-imagePreview img {
+    max-height: 150px;
+  }
+  
+  .AA-uploadPlaceholder {
+    padding: 20px;
+  }
+  
+  .AA-uploadIcon {
+    font-size: 28px;
+  }
+}
+
+@media (min-width: 1400px) {
+  .AA-page {
+    padding: 30px 40px;
+  }
+  
+  .AA-stats-grid {
+    gap: 25px;
+  }
+  
+  .AA-stat-card {
+    padding: 25px;
+  }
+  
+  .AA-stat-value {
+    font-size: 2.25rem;
+  }
+  
+  .AA-table th, .AA-table td {
+    padding: 18px;
   }
 }

@@ -782,6 +782,17 @@
   }
 }
 
+@media (max-width: 1024px) {
+  .ProManage-twoColumn {
+    grid-template-columns: 350px 1fr;
+    gap: 24px;
+  }
+  
+  .ProManage-previewsGrid {
+    grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+  }
+}
+
 @media (max-width: 768px) {
   .ProManage-container {
     padding: 15px;
@@ -791,11 +802,23 @@
     flex-direction: column;
     gap: 15px;
     text-align: center;
-    padding: 15px;
+    padding: 20px;
+    height: auto;
+    min-height: 80px;
+  }
+
+  .ProManage-title {
+    padding-left: 0;
+    font-size: 24px;
   }
 
   .ProManage-title:before {
     display: none;
+  }
+
+  .ProManage-addButton {
+    width: 100%;
+    max-width: 220px;
   }
 
   .ProManage-twoColumn {
@@ -811,22 +834,400 @@
   .ProManage-modal {
     width: 95%;
     margin: 10px;
+    max-height: 85vh;
+  }
+
+  .ProManage-modalHeader {
+    padding: 15px 20px;
+  }
+
+  .ProManage-modalHeader h2 {
+    font-size: 20px;
+  }
+
+  .ProManage-form {
+    padding: 20px;
   }
 
   .ProManage-actions {
     flex-direction: column;
+    gap: 12px;
   }
 
   .ProManage-cancelButton,
   .ProManage-submitButton {
     width: 100%;
+    padding: 12px 20px;
   }
 
   .ProManage-actionButtons {
     flex-direction: column;
+    gap: 6px;
+  }
+
+  .ProManage-editButton,
+  .ProManage-deleteButton {
+    width: 100%;
+    text-align: center;
+  }
+
+  .ProManage-tableContainer {
+    padding: 12px;
+  }
+
+  .ProManage-table {
+    min-width: 700px;
+  }
+
+  .ProManage-table th,
+  .ProManage-table td {
+    padding: 10px 12px;
   }
 
   .ProManage-previewsGrid {
     grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 10px;
+  }
+
+  .ProManage-coverPreview {
+    max-width: 200px;
+    height: 150px;
+  }
+}
+
+@media (max-width: 600px) {
+  .ProManage-container {
+    padding: 12px;
+  }
+
+  .ProManage-header {
+    padding: 15px;
+    border-radius: 15px;
+  }
+
+  .ProManage-title {
+    font-size: 20px;
+  }
+
+  .ProManage-addButton {
+    font-size: 14px;
+    padding: 10px 20px;
+  }
+
+  .ProManage-modalHeader h2 {
+    font-size: 18px;
+  }
+
+  .ProManage-modalClose {
+    font-size: 28px;
+    width: 36px;
+    height: 36px;
+  }
+
+  .ProManage-card {
+    padding: 15px;
+  }
+
+  .ProManage-sectionTitle {
+    font-size: 16px;
+    margin-bottom: 15px;
+  }
+
+  .ProManage-uploadPlaceholder {
+    min-height: 160px;
+    padding: 30px 15px;
+  }
+
+  .ProManage-uploadIcon {
+    font-size: 36px;
+  }
+
+  .ProManage-coverPreview {
+    max-width: 180px;
+    height: 135px;
+  }
+
+  .ProManage-coverLabel {
+    font-size: 13px;
+  }
+
+  .ProManage-label {
+    font-size: 13px;
+  }
+
+  .ProManage-input,
+  .ProManage-select,
+  .ProManage-textarea {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+
+  .ProManage-submitButton,
+  .ProManage-cancelButton {
+    font-size: 14px;
+  }
+
+  .ProManage-success,
+  .ProManage-error {
+    padding: 12px 15px;
+    font-size: 13px;
+  }
+
+  .ProManage-table th,
+  .ProManage-table td {
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+
+  .ProManage-tableImage {
+    width: 45px;
+    height: 45px;
+  }
+
+  .ProManage-projectTitle {
+    font-size: 13px;
+  }
+
+  .ProManage-projectDescription {
+    font-size: 10px;
+  }
+
+  .ProManage-typeBadge,
+  .ProManage-featuredBadge {
+    font-size: 10px;
+    padding: 3px 6px;
+  }
+
+  .ProManage-imageCountNumber {
+    font-size: 16px;
+  }
+
+  .ProManage-imageCountLabel {
+    font-size: 9px;
+  }
+
+  .ProManage-previewsGrid {
+    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+    gap: 8px;
+  }
+
+  .ProManage-removeImage {
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+  }
+
+  .ProManage-setCover {
+    font-size: 9px;
+    padding: 3px;
+  }
+
+  .ProManage-coverIndicator {
+    font-size: 9px;
+    padding: 2px 6px;
+  }
+
+  .ProManage-confirmModal {
+    padding: 20px;
+    width: 92%;
+  }
+
+  .ProManage-confirmModal h3 {
+    font-size: 18px;
+  }
+
+  .ProManage-confirmModal p {
+    font-size: 14px;
+  }
+
+  .ProManage-confirmCancel,
+  .ProManage-confirmDelete {
+    padding: 8px 20px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .ProManage-container {
+    padding: 10px;
+  }
+
+  .ProManage-header {
+    padding: 12px;
+    border-radius: 12px;
+  }
+
+  .ProManage-title {
+    font-size: 18px;
+  }
+
+  .ProManage-addButton {
+    font-size: 13px;
+    padding: 8px 16px;
+  }
+
+  .ProManage-form {
+    padding: 15px;
+  }
+
+  .ProManage-card {
+    padding: 12px;
+  }
+
+  .ProManage-sectionTitle {
+    font-size: 15px;
+  }
+
+  .ProManage-sectionTitle:after {
+    width: 40px;
+  }
+
+  .ProManage-uploadPlaceholder {
+    min-height: 140px;
+    padding: 20px 12px;
+  }
+
+  .ProManage-uploadIcon {
+    font-size: 32px;
+  }
+
+  .ProManage-uploadHint {
+    font-size: 10px;
+  }
+
+  .ProManage-coverPreview {
+    max-width: 150px;
+    height: 110px;
+  }
+
+  .ProManage-coverBadge {
+    font-size: 10px;
+    padding: 3px 8px;
+  }
+
+  .ProManage-coverHint {
+    font-size: 10px;
+  }
+
+  .ProManage-previewsGrid {
+    grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+    gap: 8px;
+  }
+
+  .ProManage-label {
+    font-size: 12px;
+    margin-bottom: 5px;
+  }
+
+  .ProManage-input,
+  .ProManage-select,
+  .ProManage-textarea {
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+
+  .ProManage-checkbox {
+    font-size: 13px;
+  }
+
+  .ProManage-checkbox input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+  }
+
+  .ProManage-checkboxHint {
+    font-size: 10px;
+    margin-left: 26px;
+  }
+
+  .ProManage-table th,
+  .ProManage-table td {
+    padding: 6px 8px;
+    font-size: 11px;
+  }
+
+  .ProManage-tableImage {
+    width: 35px;
+    height: 35px;
+  }
+
+  .ProManage-editButton,
+  .ProManage-deleteButton {
+    font-size: 10px;
+    padding: 4px 8px;
+  }
+}
+
+@media (max-width: 380px) {
+  .ProManage-container {
+    padding: 8px;
+  }
+
+  .ProManage-title {
+    font-size: 16px;
+  }
+
+  .ProManage-addButton {
+    font-size: 12px;
+    padding: 7px 14px;
+  }
+
+  .ProManage-modalHeader {
+    padding: 12px 15px;
+  }
+
+  .ProManage-modalHeader h2 {
+    font-size: 16px;
+  }
+
+  .ProManage-modalClose {
+    font-size: 24px;
+    width: 32px;
+    height: 32px;
+  }
+
+  .ProManage-form {
+    padding: 12px;
+  }
+
+  .ProManage-coverPreview {
+    max-width: 130px;
+    height: 95px;
+  }
+
+  .ProManage-previewsGrid {
+    grid-template-columns: repeat(auto-fill, minmax(55px, 1fr));
+    gap: 6px;
+  }
+
+  .ProManage-removeImage {
+    width: 18px;
+    height: 18px;
+    font-size: 10px;
+  }
+
+  .ProManage-setCover {
+    font-size: 8px;
+    padding: 2px;
+  }
+
+  .ProManage-coverIndicator {
+    font-size: 8px;
+    padding: 2px 4px;
+  }
+
+  .ProManage-table th,
+  .ProManage-table td {
+    padding: 5px 6px;
+    font-size: 10px;
+  }
+
+  .ProManage-tableImage {
+    width: 30px;
+    height: 30px;
+  }
+
+  .ProManage-projectTitle {
+    font-size: 11px;
   }
 }

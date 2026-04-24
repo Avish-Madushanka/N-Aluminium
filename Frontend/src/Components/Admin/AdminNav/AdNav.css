@@ -81,6 +81,7 @@
 .nav-category > ul > li:not(.nav-group) > a.active {
   background-color: #1a3a3a;
   color: #4ade80;
+  border: 1px solid #ffffff;
 }
 
 .nav-group {
@@ -129,6 +130,7 @@
 .nav-submenu a.active {
   background-color: #1a3a3a;
   color: #4ade80;
+  border: 1px solid #ffffff;
 }
 
 .submenu-icon {
