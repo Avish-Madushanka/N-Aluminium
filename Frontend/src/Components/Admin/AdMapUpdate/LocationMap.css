@@ -11,7 +11,7 @@
 .adshopmap-content {
   display: flex;
   flex-direction: column;
-  gap: 50px;
+  gap: 20px;
 }
 
 .adshopmap-header {
@@ -61,37 +61,42 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  align-items: center;
   gap: 20px;
-  margin: 0 auto;
-  padding: 0;
+  margin-top: 10px;
 }
 
 .adshopmap-stat {
-  background-color: #b9b9b9;
-  font-weight: 600;
   padding: 20px;
   width: 200px;
   border-radius: 12px;
-  color: rgb(0, 0, 0);
   text-align: center;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   cursor: pointer;
 }
 
+.adshopmap-stat:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
 .adshopmap-stat-blue {
-  width: 200px;
-  background-color: #7ebeff;
+  background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+  color: white;
 }
 
 .adshopmap-stat-green {
-  width: 200px;
-  background-color:#ff9456;
+  background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+  color: white;
 }
 
 .adshopmap-stat-purple {
-  width: 200px;
-  background-color:#9462ff;
+  background: linear-gradient(135deg, #9f7aea 0%, #805ad5 100%);
+  color: white;
+}
+
+.adshopmap-stat-yellow {
+  background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%);
+  color: white;
 }
 
 .adshopmap-stat-label {
@@ -113,6 +118,18 @@
   padding: 25px;
   border-radius: 12px;
   box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+  animation: adshopmap-slideDown 0.3s ease;
+}
+
+@keyframes adshopmap-slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .adshopmap-form-header {
@@ -139,6 +156,18 @@
   background: #f7fafc;
   border-radius: 8px;
   border-left: 3px solid #059e12;
+}
+
+.adshopmap-form-error {
+  background-color: #fee2e2;
+  color: #dc2626;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
 }
 
 .adshopmap-form {
@@ -174,6 +203,7 @@
   border-radius: 8px;
   font-size: 14px;
   transition: all 0.3s ease;
+  box-sizing: border-box;
 }
 
 .adshopmap-form-input:focus {
@@ -208,6 +238,12 @@
 .adshopmap-add-button:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(5, 158, 18, 0.3);
+}
+
+.adshopmap-add-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
 }
 
 .adshopmap-close-button {
@@ -263,6 +299,12 @@
   box-shadow: 0 4px 12px rgba(72, 187, 120, 0.3);
 }
 
+.adshopmap-save-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
 .adshopmap-icon-mr {
   margin-right: 6px;
 }
@@ -300,6 +342,14 @@
   margin-bottom: 15px;
 }
 
+.adshopmap-search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #a0aec0;
+}
+
 .adshopmap-search-input {
   width: 100%;
   padding: 10px 12px 10px 38px;
@@ -307,6 +357,7 @@
   border-radius: 10px;
   font-size: 14px;
   transition: all 0.3s ease;
+  box-sizing: border-box;
 }
 
 .adshopmap-search-input:focus {
@@ -315,28 +366,18 @@
   box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
 }
 
-.adshopmap-search-container::before {
-  content: '🔍';
-  position: absolute;
-  left: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 14px;
-  opacity: 0.6;
-}
-
 .adshopmap-tabs {
   display: flex;
-  border-bottom: 1px solid #e2e8f0;
   gap: 4px;
+  flex-wrap: wrap;
 }
 
 .adshopmap-tab {
-  padding: 10px 20px;
+  padding: 8px 16px;
   background: none;
   border: none;
   border-bottom: 2px solid transparent;
-  font-size: 14px;
+  font-size: 18px;
   font-weight: 600;
   color: #718096;
   cursor: pointer;
@@ -394,7 +435,7 @@
 }
 
 .adshopmap-location-name {
-  font-size: 16px;
+  font-size: 24px;
   font-weight: 700;
   color: #2d3748;
   margin: 0;
@@ -444,14 +485,13 @@
 .adshopmap-location-detail {
   display: flex;
   align-items: center;
-  font-size: 13px;
+  font-size: 16px;
   color: #4a5568;
   gap: 8px;
 }
 
 .adshopmap-detail-icon {
   flex-shrink: 0;
-  font-size: 14px;
 }
 
 .adshopmap-additional-info {
@@ -470,6 +510,11 @@
 .adshopmap-info-partner {
   background-color: #faf5ff;
   color: #6b46c1;
+}
+
+.adshopmap-info-outlet {
+  background-color: #fefcbf;
+  color: #975a16;
 }
 
 .adshopmap-info-other {
@@ -502,6 +547,80 @@
   background: #f8fafc;
 }
 
+.adshopmap-info-window {
+  padding: 12px;
+  min-width: 220px;
+  max-width: 280px;
+}
+
+.adshopmap-info-window h4 {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #2d3748;
+}
+
+.adshopmap-info-window p {
+  margin: 6px 0;
+  font-size: 12px;
+  color: #4a5568;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.adshopmap-info-window-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+  padding-top: 8px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.adshopmap-info-edit {
+  background-color: #4299e1;
+  color: white;
+  border: none;
+  padding: 5px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.3s ease;
+  flex: 1;
+  justify-content: center;
+}
+
+.adshopmap-info-edit:hover {
+  background-color: #3182ce;
+  transform: translateY(-1px);
+}
+
+.adshopmap-info-delete {
+  background-color: #f56565;
+  color: white;
+  border: none;
+  padding: 5px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.3s ease;
+  flex: 1;
+  justify-content: center;
+}
+
+.adshopmap-info-delete:hover {
+  background-color: #e53e3e;
+  transform: translateY(-1px);
+}
+
 .adshopmap-map-instructions {
   padding: 15px;
   font-size: 13px;
@@ -511,13 +630,81 @@
   background: #f8fafc;
 }
 
-.loading-spinner {
+.adshopmap-global-loader {
   display: flex;
-  justify-content: center;
   align-items: center;
-  padding: 60px;
-  font-size: 16px;
+  justify-content: center;
+  gap: 12px;
+  padding: 20px;
+  background: white;
+  border-radius: 12px;
   color: #059e12;
+  font-weight: 500;
+}
+
+.adshopmap-global-error {
+  background-color: #fee2e2;
+  color: #dc2626;
+  padding: 15px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.adshopmap-close-error-button {
+  background: none;
+  border: none;
+  color: #dc2626;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.adshopmap-close-error-button:hover {
+  background-color: rgba(220, 38, 38, 0.1);
+}
+
+.error-state {
+  text-align: center;
+  padding: 60px 20px;
+  background: white;
+  border-radius: 12px;
+}
+
+.error-state h2 {
+  margin: 20px 0 10px;
+  color: #2d3748;
+}
+
+.error-state p {
+  color: #718096;
+}
+
+.error-state code {
+  background: #f7fafc;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: monospace;
+}
+
+.animate-spin {
+  animation: adshopmap-spin 1s linear infinite;
+}
+
+@keyframes adshopmap-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @media (max-width: 1200px) {
@@ -548,17 +735,13 @@
     font-size: 24px;
   }
   
-  .adshopmap-stat-value {
-    font-size: 28px;
-  }
-
-  .adshopmap-stats {
-    gap: 15px;
-  }
-  
   .adshopmap-stat {
     width: 180px;
     padding: 15px;
+  }
+  
+  .adshopmap-stat-value {
+    font-size: 28px;
   }
 }
 
@@ -583,14 +766,14 @@
   }
   
   .adshopmap-stats {
-    flex-direction: column;
+    flex-wrap: wrap;
     gap: 12px;
   }
   
   .adshopmap-stat {
-    width: 100%;
-    max-width: 280px;
-    padding: 15px;
+    width: calc(50% - 12px);
+    min-width: 140px;
+    padding: 12px;
   }
   
   .adshopmap-stat-value {
@@ -639,13 +822,14 @@
   }
   
   .adshopmap-tabs {
-    flex-wrap: wrap;
+    justify-content: center;
   }
   
   .adshopmap-tab {
     flex: 1;
     text-align: center;
-    padding: 8px 12px;
+    padding: 6px 12px;
+    font-size: 12px;
   }
   
   .adshopmap-location-header {
@@ -672,16 +856,17 @@
     font-size: 18px;
   }
   
+  .adshopmap-stat {
+    width: 100%;
+    min-width: auto;
+  }
+  
   .adshopmap-stat-label {
     font-size: 12px;
   }
   
   .adshopmap-stat-value {
     font-size: 20px;
-  }
-  
-  .adshopmap-stat {
-    max-width: 100%;
   }
   
   .adshopmap-form-container {
@@ -706,10 +891,9 @@
     font-size: 13px;
   }
   
-  .adshopmap-add-button,
   .adshopmap-cancel-button,
   .adshopmap-save-button {
-    padding: 10px 16px;
+    padding: 8px 16px;
     font-size: 13px;
   }
   
@@ -734,18 +918,27 @@
     font-size: 11px;
   }
   
-  .adshopmap-tab {
-    font-size: 12px;
-    padding: 6px 10px;
-  }
-  
   .adshopmap-search-input {
     font-size: 12px;
     padding: 8px 10px 8px 35px;
   }
   
-  .adshopmap-stats {
-    gap: 10px;
+  .adshopmap-info-window {
+    min-width: 180px;
+    max-width: 220px;
+  }
+  
+  .adshopmap-info-window h4 {
+    font-size: 14px;
+  }
+  
+  .adshopmap-info-window p {
+    font-size: 11px;
+  }
+  
+  .adshopmap-info-window-actions {
+    flex-direction: column;
+    gap: 8px;
   }
 }
 
@@ -769,12 +962,13 @@
     font-size: 32px;
   }
   
-  .adshopmap-stat-value {
-    font-size: 36px;
+  .adshopmap-stat {
+    width: 220px;
+    padding: 25px;
   }
   
-  .adshopmap-form-grid {
-    gap: 25px;
+  .adshopmap-stat-value {
+    font-size: 36px;
   }
   
   .adshopmap-form-input {
@@ -782,32 +976,23 @@
     font-size: 15px;
   }
   
-  .adshopmap-stats {
-    gap: 25px;
-  }
-  
-  .adshopmap-stat {
-    width: 220px;
-    padding: 25px;
+  .adshopmap-info-window {
+    min-width: 250px;
+    max-width: 320px;
   }
 }
 
 @media print {
-  .adshopmap-header,
+  .adshopmap-header-content,
+  .adshopmap-stats,
   .adshopmap-form-container,
+  .adshopmap-locations-header,
+  .adshopmap-map-instructions,
+  .adshopmap-info-window-actions,
   .adshopmap-edit-button,
   .adshopmap-delete-button,
-  .adshopmap-add-button,
-  .adshopmap-map-container {
+  .adshopmap-add-button {
     display: none;
-  }
-  
-  .adshopmap-locations-container {
-    height: auto;
-  }
-  
-  .adshopmap-locations-list {
-    overflow: visible;
   }
   
   .adshopmap-container {
@@ -815,7 +1000,20 @@
     background: white;
   }
   
+  .adshopmap-locations-container,
+  .adshopmap-map-container {
+    height: auto;
+    break-inside: avoid;
+  }
+  
   .adshopmap-location-item {
-    page-break-inside: avoid;
+    break-inside: avoid;
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+  }
+  
+  .adshopmap-map-card {
+    box-shadow: none;
+    border: 1px solid #ddd;
   }
 }
