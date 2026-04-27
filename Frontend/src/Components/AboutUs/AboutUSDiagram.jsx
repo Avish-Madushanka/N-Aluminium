@@ -2,17 +2,29 @@ import React from "react";
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
   PieChart, Pie, Cell,
-  AreaChart, Area
+  AreaChart, Area,
+  LineChart, Line
 } from "recharts";
 import "./AboutUSDiagram.css";
 
 const usageData = [
   { year: "2020", usage: 72000, recycled: 36000 },
-  { year: "2021", usage: 74000, recycled: 38540 },
-  { year: "2022", usage: 75500, recycled: 40210 },
-  { year: "2023", usage: 96600, recycled: 50500 },
-  { year: "2024", usage: 100200, recycled: 57395 },
+  { year: "2021", usage: 78000, recycled: 40000 },
+  { year: "2022", usage: 86000, recycled: 48000 },
+  { year: "2023", usage: 96000, recycled: 58000 },
+  { year: "2024", usage: 110000, recycled: 70000 },
+  { year: "2025", usage: 125000, recycled: 90000 },
+  { year: "2026", usage: 140000, recycled: 110000 },
+  { year: "2027", usage: 160000, recycled: 130000 },
+  { year: "2028", usage: 180000, recycled: 155000 },
+  { year: "2029", usage: 200000, recycled: 180000 },
+  { year: "2030", usage: 220000, recycled: 210000 }
 ];
+
+const efficiencyData = usageData.map(item => ({
+  year: item.year,
+  efficiency: (item.recycled / item.usage) * 100
+}));
 
 const scrapValueData = [
   { year: "2020", value: 0.90 },
@@ -20,14 +32,20 @@ const scrapValueData = [
   { year: "2022", value: 1.12 },
   { year: "2023", value: 1.18 },
   { year: "2024", value: 1.25 },
+  { year: "2025", value: 1.35 },
+  { year: "2026", value: 1.45 },
+  { year: "2027", value: 1.60 },
+  { year: "2028", value: 1.75 },
+  { year: "2029", value: 1.90 },
+  { year: "2030", value: 2.10 }
 ];
 
 const pieData = [
-  { name: "Transport", value: 40 },
+  { name: "Households", value: 30 },
   { name: "Construction", value: 25 },
-  { name: "Packaging", value: 15 },
-  { name: "Electronics", value: 10 },
-  { name: "Other", value: 10 },
+  { name: "Factories", value: 20 },
+  { name: "Shops", value: 15 },
+  { name: "Other", value: 10 }
 ];
 
 const COLORS = ["#1f3b53", "#5a748d", "#82ca9d", "#a0d8ef", "#c1e1c1"];
@@ -36,92 +54,79 @@ const AboutUSDiagram = () => {
   return (
     <div className="ABDiagram-container">
 
-      <h2 className="ABDiagram-title">Aluminum Usage vs Recycling</h2>
-      <p className="ABDiagram-subtitle">Visualizing the growing gap between aluminum usage and recycling</p>
-      <div className="ABDiagram-chart-wrapper ABDiagram-area">
-        <ResponsiveContainer width="100%" height={400}>
-          <AreaChart data={usageData}>
-            <defs>
-              <linearGradient id="colorUsage" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#1f3b53" stopOpacity={0.8} />
-                <stop offset="95%" stopColor="#1f3b53" stopOpacity={0} />
-              </linearGradient>
-              <linearGradient id="colorRecycled" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#5a748d" stopOpacity={0.8} />
-                <stop offset="95%" stopColor="#5a748d" stopOpacity={0} />
-              </linearGradient>
-            </defs>
-            <XAxis dataKey="year" />
-            <YAxis />
-            <CartesianGrid strokeDasharray="3 3" />
-            <Tooltip />
-            <Legend />
-            <Area type="monotone" dataKey="usage" stroke="#1f3b53" fill="url(#colorUsage)" />
-            <Area type="monotone" dataKey="recycled" stroke="#5a748d" fill="url(#colorRecycled)" />
-          </AreaChart>
-        </ResponsiveContainer>
-        <p className="ABDiagram-description">
-          This area chart presents a year-over-year comparison of total aluminum consumption versus the amount recycled.
-          Over the past five years, while overall usage has significantly increased—from 72,000 tons in 2020 to over 100,000 tons in 2024—the recycling rates have not kept pace.
-          This widening gap suggests growing pressure on raw material extraction, energy consumption, and environmental impact.
-          The rising trend in usage without proportionate recycling highlights the urgent need for better waste collection systems,
-          improved recycling infrastructure, and increased public awareness of sustainable aluminum consumption.
+      <div className="ABDiagram-header">
+        <h2>Aluminum Recycling Intelligence Dashboard (2020–2030)</h2>
+        <p>
+          A data-driven visualization of aluminum usage, recycling efficiency, source distribution,
+          and market value trends shaping the future of sustainable waste management.
         </p>
       </div>
 
-      <h2 className="ABDiagram-title">Sector-wise Aluminum Usage (2023)</h2>
-      <p className="ABDiagram-subtitle">Distribution of aluminum usage across key sectors</p>
-      <div className="ABDiagram-chart-wrapper ABDiagram-pie">
-        <ResponsiveContainer width="100%" height={400}>
-          <PieChart>
-            <Pie
-              data={pieData}
-              cx="50%"
-              cy="50%"
-              innerRadius={80}
-              outerRadius={120}
-              fill="#8884d8"
-              dataKey="value"
-              label
-            >
-              {pieData.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-              ))}
-            </Pie>
-            <Tooltip />
-            <Legend />
-          </PieChart>
-        </ResponsiveContainer>
-        <p className="ABDiagram-description">
-          This pie chart showcases how aluminum was distributed across major industrial sectors in 2023.
-          Transportation leads the chart with 40% usage, underscoring the metal’s vital role in automotive and aerospace industries where lightweight and corrosion-resistant materials are essential.
-          Construction follows at 25%, where aluminum is used extensively for doors, windows, and structural elements.
-          Packaging (15%), electronics (10%), and miscellaneous uses (10%) round out the remainder.
-          Understanding sectoral demand helps policy makers and recyclers prioritize their strategies for collection, reuse, and circular economy initiatives.
-        </p>
+      <div className="ABDiagram-grid">
+
+        <div className="ABDiagram-card large">
+          <h3>Usage vs Recycling Growth</h3>
+          <ResponsiveContainer width="100%" height={320}>
+            <AreaChart data={usageData}>
+              <defs>
+                <linearGradient id="u" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#1f3b53" stopOpacity={0.8} />
+                  <stop offset="95%" stopColor="#1f3b53" stopOpacity={0} />
+                </linearGradient>
+                <linearGradient id="r" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8} />
+                  <stop offset="95%" stopColor="#82ca9d" stopOpacity={0} />
+                </linearGradient>
+              </defs>
+              <XAxis dataKey="year" />
+              <YAxis />
+              <Tooltip />
+              <Area dataKey="usage" stroke="#1f3b53" fill="url(#u)" />
+              <Area dataKey="recycled" stroke="#82ca9d" fill="url(#r)" />
+            </AreaChart>
+          </ResponsiveContainer>
+        </div>
+
+        <div className="ABDiagram-card small">
+          <h3>Efficiency Rate</h3>
+          <ResponsiveContainer width="100%" height={250}>
+            <LineChart data={efficiencyData}>
+              <XAxis dataKey="year" />
+              <YAxis unit="%" />
+              <Tooltip />
+              <Line type="monotone" dataKey="efficiency" stroke="#e67e22" strokeWidth={3} />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+
+        <div className="ABDiagram-card small">
+          <h3>Scrap Sources</h3>
+          <ResponsiveContainer width="100%" height={250}>
+            <PieChart>
+              <Pie data={pieData} innerRadius={60} outerRadius={90} dataKey="value">
+                {pieData.map((_, i) => (
+                  <Cell key={i} fill={COLORS[i]} />
+                ))}
+              </Pie>
+              <Tooltip />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+
+        <div className="ABDiagram-card full">
+          <h3>Market Value Trend</h3>
+          <ResponsiveContainer width="100%" height={320}>
+            <BarChart data={scrapValueData}>
+              <XAxis dataKey="year" />
+              <YAxis />
+              <Tooltip />
+              <Bar dataKey="value" fill="#27ae60" radius={[6, 6, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+
       </div>
 
-      <h2 className="ABDiagram-title">Aluminum Scrap Value per Kg</h2>
-      <p className="ABDiagram-subtitle">Estimated market value of 1kg of aluminum scrap (in USD)</p>
-      <div className="ABDiagram-chart-wrapper ABDiagram-bar">
-        <ResponsiveContainer width="100%" height={400}>
-          <BarChart data={scrapValueData}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="year" />
-            <YAxis domain={[0, 1.5]} tickFormatter={(value) => `$${value.toFixed(2)}`} />
-            <Tooltip formatter={(value) => `$${value.toFixed(2)}`} />
-            <Legend />
-            <Bar dataKey="value" fill="#82ca9d" radius={[4, 4, 0, 0]} name="Price per Kg" />
-          </BarChart>
-        </ResponsiveContainer>
-        <p className="ABDiagram-description">
-          This bar chart reflects the fluctuating but steadily increasing market price of aluminum scrap between 2020 and 2024.
-          The price has risen from $0.90/kg to $1.25/kg, highlighting the growing economic value of recycled materials.
-          These price increases may be driven by multiple factors such as rising global demand, limited availability of virgin ore, and increased production costs.
-          The data also underscores the financial incentives for recycling operations and scrap collectors.
-          Encouraging scrap collection not only supports environmental sustainability but also provides economic opportunities, especially in developing regions.
-        </p>
-      </div>
     </div>
   );
 };
