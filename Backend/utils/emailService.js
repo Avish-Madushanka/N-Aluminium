@@ -12,7 +12,7 @@ const transporter = nodemailer.createTransport({
 
 const sendEmail = async (to, subject, htmlContent) => {
   const mailOptions = {
-    from: `"${process.env.EMAIL_FROM_NAME || 'EcoSynk Team'}" <${process.env.EMAIL_USER}>`,
+    from: `"${process.env.EMAIL_FROM_NAME || 'ALUX Panadura'}" <${process.env.EMAIL_USER}>`,
     to: to,
     subject: subject,
     html: htmlContent,
@@ -21,8 +21,10 @@ const sendEmail = async (to, subject, htmlContent) => {
   try {
     const info = await transporter.sendMail(mailOptions);
     console.log(`Email sent to ${to}: ${info.messageId}`);
+    return true;
   } catch (error) {
     console.error(`Error sending email to ${to}:`, error);
+    return false;
   }
 };
 
@@ -54,7 +56,7 @@ const sendBookingStatusUpdateEmail = async (booking, newStatus) => {
         </div>
         <p>Our team will arrive at the specified location during the selected time slot.</p>
         <p>If you have any questions, please contact us.</p>
-        <p>Thank you,<br>The ${process.env.EMAIL_FROM_NAME || 'EcoSynk Team'}</p>
+        <p>Thank you,<br>The ${process.env.EMAIL_FROM_NAME || 'ALUX Panadura Team'}</p>
         <p style="font-size: 12px; color: #7f8c8d;">
           <a href="${frontendUrl}" style="color: #3498db;">Visit our website</a>
         </p>
@@ -74,7 +76,7 @@ const sendBookingStatusUpdateEmail = async (booking, newStatus) => {
           ${booking.adminNotes ? `<p style="margin: 5px 0;"><strong>Reason:</strong> ${booking.adminNotes}</p>` : ''}
         </div>
         <p>If you have any questions, please contact us.</p>
-        <p>Sincerely,<br>The ${process.env.EMAIL_FROM_NAME || 'EcoSynk Team'}</p>
+        <p>Sincerely,<br>The ${process.env.EMAIL_FROM_NAME || 'ALUX Panadura Team'}</p>
         <p style="font-size: 12px; color: #7f8c8d;">
           <a href="${frontendUrl}" style="color: #3498db;">Visit our website</a>
         </p>
@@ -178,10 +180,99 @@ const sendAlumniStatusUpdateEmail = async (alumni, status, reason = '') => {
   }
 };
 
+const sendReviewReplyEmail = async (to, name, subject, reply, review) => {
+  const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+  
+  const htmlContent = `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #f9f9f9;">
+      <div style="background: #1a1a2e; padding: 25px; text-align: center;">
+        <h1 style="color: white; margin: 0;">ALUX Panadura</h1>
+        <p style="color: #ccc; margin: 5px 0 0;">Alubomulla, Panadura, Sri Lanka</p>
+      </div>
+      
+      <div style="padding: 25px; background: white;">
+        <h2 style="color: #1a1a2e;">Response to Your Review</h2>
+        <p>Dear ${name},</p>
+        <p>Thank you for taking the time to share your feedback with us. We truly appreciate your input.</p>
+        
+        <div style="background: #f0f7ff; padding: 15px; border-radius: 8px; margin: 20px 0;">
+          <p style="margin: 5px 0;"><strong>Your Review Subject:</strong> ${review.subject}</p>
+          <p style="margin: 5px 0;"><strong>Your Rating:</strong> ${'★'.repeat(review.rating)}${'☆'.repeat(5 - review.rating)} (${review.rating}/5)</p>
+          <p style="margin: 10px 0 0;"><strong>Your Review:</strong></p>
+          <p style="margin: 5px 0 0; color: #555;">"${review.reviewText}"</p>
+        </div>
+        
+        <div style="background: #e8f5e9; padding: 15px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #d30905;">
+          <p style="margin: 0 0 10px 0;"><strong>Our Response:</strong></p>
+          <p style="margin: 0; color: #333; line-height: 1.6;">${reply}</p>
+        </div>
+        
+        <p>Your feedback helps us improve our services and provide better experiences for all our customers.</p>
+        
+        <p style="text-align: center; margin: 30px 0;">
+          <a href="${frontendUrl}/reviews" style="background: #d30905; color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px; display: inline-block;">View All Reviews</a>
+        </p>
+        
+        <p>Best regards,<br><strong>ALUX Panadura Team</strong></p>
+      </div>
+      
+      <div style="background: #1a1a2e; padding: 20px; text-align: center; color: #ccc; font-size: 12px;">
+        <p style="margin: 0;">ALUX Panadura - Alubomulla, Panadura, Sri Lanka</p>
+        <p style="margin: 5px 0;">Tel: +94 72 104 6048 | Email: donotreply.ALUX@gmail.com</p>
+        <p style="margin: 10px 0 0;">&copy; ${new Date().getFullYear()} ALUX Panadura. All rights reserved.</p>
+      </div>
+    </div>
+  `;
+
+  await sendEmail(to, subject || `Response to Your Review: ${review.subject}`, htmlContent);
+};
+
+const sendContactReplyEmail = async (to, name, subject, reply) => {
+  const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+  
+  const htmlContent = `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #f9f9f9;">
+      <div style="background: #1a1a2e; padding: 25px; text-align: center;">
+        <h1 style="color: white; margin: 0;">ALUX Panadura</h1>
+        <p style="color: #ccc; margin: 5px 0 0;">Alubomulla, Panadura, Sri Lanka</p>
+      </div>
+      
+      <div style="padding: 25px; background: white;">
+        <h2 style="color: #1a1a2e;">Response to Your Inquiry</h2>
+        <p>Dear ${name},</p>
+        <p>Thank you for contacting ALUX Panadura. We appreciate your interest in our services.</p>
+        
+        <div style="background: #e8f5e9; padding: 15px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #d30905;">
+          <p style="margin: 0 0 10px 0;"><strong>Our Response:</strong></p>
+          <p style="margin: 0; color: #333; line-height: 1.6;">${reply}</p>
+        </div>
+        
+        <p>If you have any further questions, please don't hesitate to contact us.</p>
+        
+        <p style="text-align: center; margin: 30px 0;">
+          <a href="${frontendUrl}/contact" style="background: #d30905; color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px; display: inline-block;">Contact Us Again</a>
+        </p>
+        
+        <p>Best regards,<br><strong>ALUX Panadura Team</strong></p>
+      </div>
+      
+      <div style="background: #1a1a2e; padding: 20px; text-align: center; color: #ccc; font-size: 12px;">
+        <p style="margin: 0;">ALUX Panadura - Alubomulla, Panadura, Sri Lanka</p>
+        <p style="margin: 5px 0;">Tel: +94 72 104 6048 | Email: donotreply.ALUX@gmail.com</p>
+        <p style="margin: 10px 0 0;">&copy; ${new Date().getFullYear()} ALUX Panadura. All rights reserved.</p>
+      </div>
+    </div>
+  `;
+
+  await sendEmail(to, subject || `Response to Your Inquiry: ${name}`, htmlContent);
+};
+
 module.exports = { 
   sendEmail, 
   sendBookingStatusUpdateEmail,
   sendAlumniApprovalEmail,
   sendAlumniRejectionEmail,
-  sendAlumniStatusUpdateEmail 
+  sendAlumniStatusUpdateEmail,
+  sendReviewReplyEmail,
+  sendContactReplyEmail
 };

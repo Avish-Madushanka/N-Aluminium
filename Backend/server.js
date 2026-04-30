@@ -12,7 +12,7 @@ console.log('[Server Startup] Initializing: Attempting to load route modules...'
 let clientRoutes, bOwnerRoutes, authRoutes, calendarSettingsRoutes,
     bookingRoutes, reviewRoutes, scrapTypeRoutes, shopLocationRoutes, adminRoutes,
     saleItemRoutes, adminStatsRoutes, projectRoutes, itemRoutes, cartRoutes, 
-    quotationRoutes, alumniRoutes, buyAndSellRoutes, glassRoutes, aluQuotationRoutes;
+    quotationRoutes, alumniRoutes, buyAndSellRoutes, glassRoutes, aluQuotationRoutes, contactRoutes;
 
 const loadRoute = (routeName, path) => {
   try {
@@ -48,6 +48,7 @@ alumniRoutes = loadRoute('alumniRoutes', './routes/alumniRoutes');
 buyAndSellRoutes = loadRoute('buyAndSellRoutes', './routes/buyAndSellRoutes');
 glassRoutes = loadRoute('glassRoutes', './routes/glassRoutes');
 aluQuotationRoutes = loadRoute('aluQuotationRoutes', './routes/aluQuotationRoutes');
+contactRoutes = loadRoute('contactRoutes', './routes/contactRoutes');
 
 console.log('\n=== BUY AND SELL ROUTES DEBUG ===');
 if (buyAndSellRoutes) {
@@ -112,6 +113,17 @@ if (aluQuotationRoutes) {
   console.log('  Stack length:', aluQuotationRoutes.stack ? aluQuotationRoutes.stack.length : 0);
 } else {
   console.error('✗ aluQuotationRoutes is NULL or UNDEFINED!');
+}
+console.log('=== END DEBUG ===\n');
+
+console.log('\n=== CONTACT ROUTES DEBUG ===');
+if (contactRoutes) {
+  console.log('✓ contactRoutes loaded successfully');
+  console.log('  Type:', typeof contactRoutes);
+  console.log('  Is Router:', !!contactRoutes.stack);
+  console.log('  Stack length:', contactRoutes.stack ? contactRoutes.stack.length : 0);
+} else {
+  console.error('✗ contactRoutes is NULL or UNDEFINED!');
 }
 console.log('=== END DEBUG ===\n');
 
@@ -244,6 +256,18 @@ app.get('/api/test-alu-quotations', (req, res) => {
   });
 });
 
+app.get('/api/test-contact', (req, res) => {
+  res.json({ 
+    message: 'Contact test endpoint working', 
+    timestamp: new Date().toISOString(),
+    routes: {
+      contactLoaded: !!contactRoutes,
+      contactType: contactRoutes ? typeof contactRoutes : 'null',
+      isRouter: contactRoutes ? !!contactRoutes.stack : false
+    }
+  });
+});
+
 console.log('[Server Config] Mounting routes directly...');
 
 const routeMountMap = new WeakMap();
@@ -283,6 +307,7 @@ mountRoute(app, '/api/alumni', alumniRoutes);
 mountRoute(app, '/api/buy-and-sell', buyAndSellRoutes);
 mountRoute(app, '/api/glass', glassRoutes);
 mountRoute(app, '/api/alu-quotations', aluQuotationRoutes);
+mountRoute(app, '/api/contact', contactRoutes);
 
 if (itemRoutes) {
     mountRoute(app, '/api/items', itemRoutes);

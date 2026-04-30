@@ -386,7 +386,6 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
                            <Route path="/Admin/Emails" element={<EmailDisplay />} />
                            <Route path="/Admin/ManageOwners" element={<HandleBOwners />} />
                            <Route path="/ProAddForm" element={<ProAddForm />} />
-                           <Route path="/Admin/Reviews" element={<DisReview />} />
                            <Route path="/Admin/AdminLocationManager" element={<AdminLocationManager />} />
                            <Route path="/Admin/ItemsManage" element={<ItemsManage /> } />
                            <Route path="/Admin/AccItemReq" element={<AccItemReq /> } />
@@ -398,6 +397,7 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
                            <Route path="/Admin/AdGlassManage" element={<AdGlassManage /> } />
                            <Route path="/Admin/AdminOrderManage" element={<AdminOrderManage /> } />
                            <Route path="/Admin/AdQuotation" element={<AdQuotation /> } />
+                           <Route path="/Admin/DisReview" element={<DisReview /> } />
                         </Route>
                      </Route>
 

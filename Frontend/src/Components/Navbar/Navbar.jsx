@@ -100,10 +100,6 @@ const Navbar = ({ isLoggedIn, userInfo, handleLogout, cartItemCount = 0 }) => {
 
         <div className="Nav-contact-info">
           <div className="Nav-contact-item">
-            <img src={phoneIconUrl} alt="Phone" className="Nav-contact-icon-img" />
-            <span>+94 72 104 6048</span>
-          </div>
-          <div className="Nav-contact-item">
             <img src={locationIconUrl} alt="Location" className="Nav-contact-icon-img" />
             <span>PANADURA</span>
           </div>
@@ -153,10 +149,7 @@ const Navbar = ({ isLoggedIn, userInfo, handleLogout, cartItemCount = 0 }) => {
           )}
           
           <div className="Nav-mobile-contact">
-            <div className="Nav-mobile-contact-item">
-              <img src={phoneIconUrl} alt="Phone" className="Nav-mobile-contact-icon-img" />
-              <span>+94 72 104 6048</span>
-            </div>
+            
             <div className="Nav-mobile-contact-item">
               <img src={locationIconUrl} alt="Location" className="Nav-mobile-contact-icon-img" />
               <span>Panadura</span>

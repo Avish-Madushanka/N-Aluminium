@@ -24,11 +24,7 @@ const reviewSchema = new mongoose.Schema({
         type: Number,
         required: [true, 'Please provide a rating'],
         min: [1, 'Rating must be at least 1'],
-        max: [5, 'Rating cannot be more than 5'],
-        validate: {
-            validator: Number.isInteger,
-            message: '{VALUE} is not an integer value for rating'
-        }
+        max: [5, 'Rating cannot be more than 5']
     },
     reviewText: {
         type: String,
@@ -36,11 +32,19 @@ const reviewSchema = new mongoose.Schema({
         trim: true,
         maxlength: [2000, 'Review text cannot be more than 2000 characters']
     },
-    
-    isApproved: { 
+    isApproved: {
         type: Boolean,
-        default: false 
+        default: false
+    },
+    adminReply: {
+        type: String,
+        default: ''
+    },
+    repliedAt: {
+        type: Date
     }
-}, { timestamps: true }); 
+}, { 
+    timestamps: true 
+});
 
 module.exports = mongoose.models.Review || mongoose.model('Review', reviewSchema);
