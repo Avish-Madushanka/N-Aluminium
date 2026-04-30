@@ -2,22 +2,15 @@ import React from 'react';
 import './AdNav.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
-    faSignOutAlt, 
     faCalendarAlt, 
     faCalculator, 
     faStore, 
     faClipboardList, 
-    faCreditCard, 
-    faLink, 
     faGraduationCap, 
     faVideo, 
     faBox, 
-    faGlassCheers, 
     faProjectDiagram, 
     faExchangeAlt, 
-    faChartLine,
-    faBoxes,
-    faTag,
     faClock,
     faTruck,
     faChalkboardUser,
@@ -28,7 +21,11 @@ import {
     faWineGlassAlt,
     faMoneyBillWave,
     faFileAlt,
-    faGlobe
+    faGlobe,
+    faStar,
+    faStarHalfAlt,
+    faCommentDots,
+    faEnvelope
 } from '@fortawesome/free-solid-svg-icons';
 import { NavLink, useNavigate } from 'react-router-dom';
 
@@ -163,6 +160,11 @@ function AdNavComponent({ handleLogout }) {
                         <li>
                             <NavLink to="/Admin/" className={({ isActive }) => isActive ? 'active' : ''}>
                                 <FontAwesomeIcon icon={faGlobe} className="admin-menu-icon" /> 360 Dashboard
+                            </NavLink>
+                        </li>
+                        <li>
+                            <NavLink to="/Admin/DisReview" className={({ isActive }) => isActive ? 'active' : ''}>
+                                <FontAwesomeIcon icon={faEnvelope} className="admin-menu-icon" /> Manage All Reviews
                             </NavLink>
                         </li>
                     </ul>
