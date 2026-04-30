@@ -35,7 +35,7 @@
   transform: translateY(-50%);
   width: 5px;
   height: 35px;
-  background: #f8d407;
+  background: #00ffdd;
   border-radius: 3px;
 }
 
@@ -87,6 +87,7 @@
   gap: 16px;
   margin-bottom: 32px;
   border-bottom: 2px solid #e2e8f0;
+  flex-wrap: wrap;
 }
 
 .DCon-tab {
@@ -202,6 +203,8 @@
   padding: 16px 20px;
   background: #f8fafc;
   border-bottom: 1px solid #e2e8f0;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .DCon-contact-name {
@@ -224,6 +227,7 @@
   border-radius: 20px;
   font-size: 11px;
   font-weight: 600;
+  white-space: nowrap;
 }
 
 .DCon-status-badge-pending::before {
@@ -237,6 +241,7 @@
   border-radius: 20px;
   font-size: 11px;
   font-weight: 600;
+  white-space: nowrap;
 }
 
 .DCon-status-badge-read::before {
@@ -250,6 +255,7 @@
   border-radius: 20px;
   font-size: 11px;
   font-weight: 600;
+  white-space: nowrap;
 }
 
 .DCon-status-badge-responded::before {
@@ -284,6 +290,8 @@
   padding: 12px 20px;
   background: #f8fafc;
   border-top: 1px solid #e2e8f0;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .DCon-contact-date {
@@ -364,6 +372,7 @@
   align-items: center;
   gap: 16px;
   margin-bottom: 16px;
+  flex-wrap: wrap;
 }
 
 .DCon-expertise-label {
@@ -379,6 +388,7 @@
   background: #e2e8f0;
   border-radius: 5px;
   overflow: hidden;
+  min-width: 100px;
 }
 
 .DCon-bar-fill {
@@ -449,6 +459,8 @@
   position: sticky;
   top: 0;
   z-index: 10;
+  flex-wrap: wrap;
+  gap: 15px;
 }
 
 .DCon-modal-id {
@@ -865,34 +877,342 @@
   color: #1e293b;
 }
 
+@media (max-width: 1200px) {
+  .DCon-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  
+  .DCon-contacts-grid {
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 20px;
+  }
+}
+
+@media (max-width: 992px) {
+  .DCon-container {
+    padding: 30px;
+  }
+  
+  .DCon-header {
+    padding: 25px 30px;
+  }
+  
+  .DCon-title {
+    font-size: 26px;
+  }
+  
+  .DCon-card-body {
+    padding: 24px;
+  }
+  
+  .DCon-detail-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
+
 @media (max-width: 768px) {
-  .DCon-container { padding: 20px; }
-  .DCon-header { padding: 20px 24px; }
-  .DCon-title { font-size: 22px; }
-  .DCon-filter-bar { padding: 16px 20px; flex-direction: column; align-items: stretch; }
-  .DCon-search-wrapper { min-width: auto; }
-  .DCon-filter-controls { flex-direction: column; gap: 12px; }
-  .DCon-filter-group { width: 100%; }
-  .DCon-filter-select { width: 100%; }
-  .DCon-clear-filters-btn { width: 100%; text-align: center; }
-  .DCon-card-header { padding: 18px 20px; }
-  .DCon-card-title { font-size: 18px; }
-  .DCon-card-subtitle { font-size: 12px; }
-  .DCon-card-body { padding: 20px; }
-  .DCon-contacts-grid { grid-template-columns: 1fr; gap: 16px; }
-  .DCon-stats-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
-  .DCon-modal { width: 95%; }
-  .DCon-detail-grid { grid-template-columns: 1fr; }
-  .DCon-modal-header { padding: 16px 20px; }
-  .DCon-modal-title { font-size: 18px; }
-  .DCon-modal-body { padding: 20px; }
+  .DCon-container {
+    padding: 20px;
+  }
+  
+  .DCon-header {
+    padding: 20px 24px;
+    margin-bottom: 20px;
+  }
+  
+  .DCon-title {
+    font-size: 22px;
+  }
+  
+  .DCon-subtitle {
+    font-size: 12px;
+  }
+  
+  .DCon-main-content {
+    padding: 0;
+  }
+  
+  .DCon-tabs {
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+  
+  .DCon-tab {
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+  
+  .DCon-card-header {
+    padding: 18px 20px;
+  }
+  
+  .DCon-card-title {
+    font-size: 18px;
+  }
+  
+  .DCon-card-subtitle {
+    font-size: 12px;
+  }
+  
+  .DCon-card-body {
+    padding: 20px;
+  }
+  
+  .DCon-filter-bar {
+    padding: 16px 20px;
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .DCon-search-wrapper {
+    min-width: auto;
+  }
+  
+  .DCon-filter-controls {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .DCon-filter-group {
+    width: 100%;
+  }
+  
+  .DCon-filter-select {
+    width: 100%;
+  }
+  
+  .DCon-clear-filters-btn {
+    width: 100%;
+    text-align: center;
+  }
+  
+  .DCon-results-info {
+    padding: 10px 20px;
+    font-size: 12px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .DCon-contacts-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  .DCon-contact-card-header {
+    flex-direction: column;
+  }
+  
+  .DCon-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  
+  .DCon-stat-card {
+    padding: 20px 15px;
+  }
+  
+  .DCon-stat-value {
+    font-size: 32px;
+  }
+  
+  .DCon-stat-label {
+    font-size: 12px;
+  }
+  
+  .DCon-expertise-distribution {
+    padding: 20px;
+  }
+  
+  .DCon-distribution-title {
+    font-size: 16px;
+    margin-bottom: 20px;
+  }
+  
+  .DCon-expertise-bar {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  
+  .DCon-expertise-label {
+    width: 100%;
+  }
+  
+  .DCon-bar-container {
+    width: 100%;
+    min-width: auto;
+  }
+  
+  .DCon-expertise-count {
+    width: auto;
+    text-align: left;
+  }
+  
+  .DCon-modal {
+    width: 95%;
+  }
+  
+  .DCon-modal-header {
+    padding: 16px 20px;
+  }
+  
+  .DCon-modal-title {
+    font-size: 18px;
+  }
+  
+  .DCon-modal-body {
+    padding: 20px;
+  }
+  
+  .DCon-detail-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 14px;
+  }
+  
+  .DCon-detail-grid p {
+    font-size: 13px;
+  }
+  
+  .DCon-message-content {
+    padding: 14px;
+  }
+  
+  .DCon-message-text {
+    font-size: 13px;
+  }
+  
+  .DCon-admin-section {
+    padding: 16px;
+  }
+  
+  .DCon-status-buttons {
+    justify-content: center;
+  }
+  
+  .DCon-status-btn, 
+  .DCon-delete-btn {
+    padding: 8px 16px;
+    font-size: 12px;
+  }
+  
+  .DCon-send-reply-btn {
+    padding: 12px 20px;
+    font-size: 13px;
+  }
+  
+  .DCon-modal-footer {
+    padding: 14px 20px;
+  }
+  
+  .DCon-modal-close-btn {
+    padding: 8px 24px;
+    font-size: 12px;
+  }
 }
 
 @media (max-width: 480px) {
-  .DCon-stats-grid { grid-template-columns: 1fr; }
-  .DCon-expertise-bar { flex-wrap: wrap; gap: 8px; }
-  .DCon-expertise-label { width: 100%; }
-  .DCon-expertise-count { width: auto; }
-  .DCon-status-buttons { flex-direction: column; }
-  .DCon-status-btn, .DCon-delete-btn { width: 100%; text-align: center; }
+  .DCon-container {
+    padding: 15px;
+  }
+  
+  .DCon-header {
+    padding: 16px 20px;
+  }
+  
+  .DCon-title {
+    font-size: 20px;
+    padding-left: 15px;
+  }
+  
+  .DCon-title:before {
+    width: 4px;
+    height: 28px;
+  }
+  
+  .DCon-subtitle {
+    font-size: 11px;
+    padding-left: 15px;
+  }
+  
+  .DCon-tabs {
+    gap: 4px;
+  }
+  
+  .DCon-tab {
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+  
+  .DCon-stats-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  .DCon-stat-card {
+    padding: 16px;
+  }
+  
+  .DCon-stat-value {
+    font-size: 28px;
+  }
+  
+  .DCon-status-buttons {
+    flex-direction: column;
+  }
+  
+  .DCon-status-btn, 
+  .DCon-delete-btn {
+    width: 100%;
+    text-align: center;
+  }
+  
+  .DCon-contact-card-footer {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+    gap: 10px;
+  }
+  
+  .DCon-view-btn {
+    width: 100%;
+    text-align: center;
+  }
+  
+  .DCon-success-message {
+    top: 10px;
+    right: 10px;
+    left: 10px;
+    text-align: center;
+    font-size: 14px;
+    padding: 10px 16px;
+  }
+  
+  .DCon-modal-close {
+    width: 32px;
+    height: 32px;
+    font-size: 16px;
+  }
+  
+  .DCon-reply-info {
+    padding: 12px;
+  }
+  
+  .DCon-reply-customer, 
+  .DCon-reply-subject {
+    font-size: 12px;
+  }
+  
+  .DCon-subject-input {
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+  
+  .DCon-textarea {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
 }
