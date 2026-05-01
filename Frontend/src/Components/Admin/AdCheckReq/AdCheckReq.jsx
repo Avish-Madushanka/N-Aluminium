@@ -50,7 +50,6 @@ const AdCheckReq = () => {
     const [sortOrder, setSortOrder] = useState('newest');
 
     const fetchCalendarSettings = useCallback(async () => {
-        console.log("[AdCheckReq] Fetching calendar settings for modal...");
         try {
             const response = await axiosInstance.get(API_ENDPOINTS.CALENDAR_SETTINGS.GET);
             if (response.data?.success && response.data.data) {
@@ -71,7 +70,7 @@ const AdCheckReq = () => {
         if (showLoadingSpinner) setIsLoading(true);
         setError('');
         try {
-            const response = await axiosInstance.get(API_ENDPOINTS.BOOKINGS.GET_ALL || '/bookings');
+            const response = await axiosInstance.get(API_ENDPOINTS.BOOKINGS.GET_ALL);
             if (response.data?.success) {
                 const sortedRequests = (response.data.data || []).sort((a, b) => {
                     const statusOrder = { 'pending': 1, 'confirmed': 2, 'cancelled': 3, 'completed': 4 };
@@ -131,32 +130,37 @@ const AdCheckReq = () => {
     }, [requests, searchTerm, filterStatus, sortBy, sortOrder]);
 
     const handleUpdateStatus = async (id, newStatus) => {
-        setActionLoading(id); setError('');
+        setActionLoading(id);
+        setError('');
         const originalRequests = requests.map(r => ({...r})); 
         setRequests(prev => prev.map(req => req._id === id ? { ...req, status: newStatus } : req));
         
-        let payload = { status: newStatus };
-
         try {
-            await axiosInstance.put(`${API_ENDPOINTS.BOOKINGS.UPDATE_STATUS_BASE || '/bookings'}/${id}/status`, payload);
-
+            const updateUrl = API_ENDPOINTS.BOOKINGS.UPDATE_STATUS(id);
+            await axiosInstance.put(updateUrl, { status: newStatus });
         } catch (err) {
             setError(err.response?.data?.message || `Failed to update status for request ${id}.`);
             setRequests(originalRequests);
-        } finally { setActionLoading(null); }
+        } finally { 
+            setActionLoading(null); 
+        }
     };
 
     const handleDelete = async (id, bookingIdToDisplay) => {
         if (!window.confirm(`Are you sure you want to DELETE booking request ${bookingIdToDisplay || id}?`)) return;
-        setActionLoading(id); setError('');
+        setActionLoading(id);
+        setError('');
         const originalRequests = [...requests];
         setRequests(prev => prev.filter(req => req._id !== id));
         try {
-            await axiosInstance.delete(`${API_ENDPOINTS.BOOKINGS.DELETE_BASE || '/api/bookings'}/${id}`);
+            const deleteUrl = API_ENDPOINTS.BOOKINGS.DELETE_ONE(id);
+            await axiosInstance.delete(deleteUrl);
         } catch (err) {
             setError(err.response?.data?.message || `Failed to delete request ${id}.`);
             setRequests(originalRequests);
-        } finally { setActionLoading(null); }
+        } finally { 
+            setActionLoading(null); 
+        }
     };
 
     const handleOpenEditModal = (request) => {
@@ -176,7 +180,11 @@ const AdCheckReq = () => {
         setIsModalOpen(true);
     };
 
-    const handleCloseEditModal = () => { setIsModalOpen(false); setEditingRequest(null); setModalError(''); };
+    const handleCloseEditModal = () => { 
+        setIsModalOpen(false); 
+        setEditingRequest(null); 
+        setModalError(''); 
+    };
 
     const handleEditInputChange = (event) => {
         const { name, value, type, checked } = event.target;
@@ -195,20 +203,25 @@ const AdCheckReq = () => {
 
     const handleSaveEdit = async () => {
         if (!editingRequest?._id) {
-            setModalError("No request selected for editing."); return;
+            setModalError("No request selected for editing.");
+            return;
         }
-        setIsSavingEdit(true); setModalError(''); setError('');
+        setIsSavingEdit(true);
+        setModalError('');
+        setError('');
 
         try {
             const payload = { ...editingRequest };
 
             if (payload.selectedDate) {
-                 try {
+                try {
                     payload.selectedDate = new Date(payload.selectedDate).toISOString();
-                 } catch(dateError) {
+                } catch(dateError) {
                     throw new Error("Invalid date format for pickup date.");
-                 }
-            } else { payload.selectedDate = null; }
+                }
+            } else { 
+                payload.selectedDate = null; 
+            }
 
             if (payload.estimatedWeight === '' || payload.estimatedWeight === null || payload.estimatedWeight === undefined) {
                 payload.estimatedWeight = null;
@@ -232,10 +245,8 @@ const AdCheckReq = () => {
             delete payload.userId;
             delete payload.userModel;
 
-            const response = await axiosInstance.put(
-                `${API_ENDPOINTS.BOOKINGS.UPDATE_BASE || '/api/bookings'}/${editingRequest._id}`,
-                payload
-            );
+            const updateUrl = API_ENDPOINTS.BOOKINGS.UPDATE_ONE(editingRequest._id);
+            const response = await axiosInstance.put(updateUrl, payload);
 
             if (response.data?.success) {
                 setRequests(prevRequests =>

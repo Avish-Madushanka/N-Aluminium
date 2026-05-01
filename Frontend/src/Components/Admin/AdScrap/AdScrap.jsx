@@ -114,13 +114,6 @@ const AdScrap = () => {
              return;
         }
 
-        const endpointPath = isEditing ? API_ENDPOINTS.SCRAP_TYPES.UPDATE_ONE : API_ENDPOINTS.SCRAP_TYPES.CREATE;
-        if (!endpointPath) {
-            console.error(`[AdScrap Submit] Configuration Error: Endpoint for ${isEditing ? 'update' : 'create'} is not defined in API_ENDPOINTS.SCRAP_TYPES.`);
-            setFormError(`Configuration error: Endpoint for ${isEditing ? 'updating' : 'creating'} scrap type is missing. Check console.`);
-            return;
-        }
-
         setIsLoading(true);
         const payload = {
             ...currentScrapType,
@@ -130,10 +123,11 @@ const AdScrap = () => {
         try {
             let response;
             if (isEditing) {
-                response = await axiosInstance.put(`${endpointPath}/${currentScrapType._id}`, payload);
+                const updateUrl = API_ENDPOINTS.SCRAP_TYPES.UPDATE_ONE(currentScrapType._id);
+                response = await axiosInstance.put(updateUrl, payload);
             } else {
                 const { _id, ...createPayload } = payload;
-                response = await axiosInstance.post(endpointPath, createPayload);
+                response = await axiosInstance.post(API_ENDPOINTS.SCRAP_TYPES.CREATE, createPayload);
             }
 
             if (response.data && response.data.success) {
@@ -151,6 +145,7 @@ const AdScrap = () => {
     };
 
     const handleDelete = async (id, name) => {
+        // FIX: Check if DELETE_ONE exists (it's a function)
         if (typeof API_ENDPOINTS === 'undefined' || !API_ENDPOINTS?.SCRAP_TYPES?.DELETE_ONE) {
             console.error('[AdScrap Delete] CRITICAL: API_ENDPOINTS or DELETE_ONE path is not defined.', API_ENDPOINTS);
             setError('Configuration error: API endpoint for deleting scrap type is missing. Check console.');
@@ -159,7 +154,8 @@ const AdScrap = () => {
         if (window.confirm(`Are you sure you want to deactivate scrap type: "${name}"? This is a soft delete.`)) {
             setIsLoading(true);
             try {
-                const response = await axiosInstance.delete(`${API_ENDPOINTS.SCRAP_TYPES.DELETE_ONE}/${id}`);
+                const deleteUrl = API_ENDPOINTS.SCRAP_TYPES.DELETE_ONE(id);
+                const response = await axiosInstance.delete(deleteUrl);
                 if (response.data && response.data.success) {
                     fetchScrapTypes();
                 } else {
@@ -183,7 +179,8 @@ const AdScrap = () => {
         setIsLoading(true);
         const updatedScrapType = { ...scrapType, isActive: !scrapType.isActive };
         try {
-            const response = await axiosInstance.put(`${API_ENDPOINTS.SCRAP_TYPES.UPDATE_ONE}/${scrapType._id}`, updatedScrapType);
+            const updateUrl = API_ENDPOINTS.SCRAP_TYPES.UPDATE_ONE(scrapType._id);
+            const response = await axiosInstance.put(updateUrl, updatedScrapType);
             if (response.data && response.data.success) {
                 fetchScrapTypes();
             } else {
