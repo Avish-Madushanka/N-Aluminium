@@ -838,6 +838,257 @@
   }
 }
 
+.UCal-notification-wrapper {
+  position: relative;
+}
+
+.UCal-notification-bell {
+  position: relative;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  color: #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.UCal-notification-bell:hover {
+  background-color: #f0f0f0;
+  transform: translateY(-2px);
+}
+
+.UCal-notification-badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: #ff4444;
+  color: white;
+  font-size: 10px;
+  font-weight: bold;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+}
+
+.UCal-notification-dropdown {
+  position: absolute;
+  top: 45px;
+  right: 0;
+  width: 320px;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  overflow: hidden;
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.UCal-notification-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 16px;
+  background-color: #f8f8f8;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.UCal-notification-header h3 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: #333;
+}
+
+.UCal-notification-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+  transition: all 0.3s ease;
+}
+
+.UCal-notification-close:hover {
+  color: #333;
+}
+
+.UCal-notification-list {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.UCal-notification-loading {
+  display: flex;
+  justify-content: center;
+  padding: 40px;
+}
+
+.UCal-notification-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  color: #999;
+  text-align: center;
+}
+
+.UCal-notification-empty svg {
+  margin-bottom: 12px;
+  color: #ccc;
+}
+
+.UCal-notification-empty p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.UCal-notification-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 16px;
+  border-bottom: 1px solid #f0f0f0;
+  transition: background-color 0.3s ease;
+}
+
+.UCal-notification-item:hover {
+  background-color: #f9f9f9;
+}
+
+.UCal-notification-info {
+  flex: 1;
+}
+
+.UCal-notification-date {
+  font-size: 13px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.UCal-notification-message {
+  font-size: 12px;
+  color: #666;
+}
+
+.UCal-notification-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+
+.UCal-notification-status span {
+  font-size: 11px;
+}
+
+.notif-status-pending {
+  background-color: #fff3e0;
+  color: #ff9800;
+}
+
+.notif-status-approved {
+  background-color: #e8f5e9;
+  color: #4caf50;
+}
+
+.notif-status-rejected {
+  background-color: #ffebee;
+  color: #f44336;
+}
+
+.notif-status-completed {
+  background-color: #e3f2fd;
+  color: #2196f3;
+}
+
+.UCal-notification-footer {
+  padding: 12px 16px;
+  border-top: 1px solid #e0e0e0;
+  text-align: center;
+  background-color: #fafafa;
+}
+
+.UCal-notification-refresh {
+  background: none;
+  border: none;
+  color: #666;
+  font-size: 12px;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.UCal-notification-refresh:hover {
+  color: #333;
+}
+
+.UCal-user-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.UCal-user-header h1 {
+  margin: 0;
+  font-size: 24px;
+  color: #333;
+}
+
+@media (max-width: 768px) {
+  .UCal-notification-dropdown {
+    position: fixed;
+    top: auto;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 40px);
+    max-width: 320px;
+  }
+  
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translate(-50%, -10px);
+    }
+    to {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+  }
+  
+  .UCal-user-header h1 {
+    font-size: 18px;
+  }
+}
+
 @media (min-width: 768px) {
   .UCal-pickup-details-form {
     grid-template-columns: 1fr 1fr;

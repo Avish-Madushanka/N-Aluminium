@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import {
     ChevronLeft, ChevronRight, Calendar, Recycle, Clock, MapPin, Truck,
-    CheckCircle, AlertTriangle, Info, Plus, User, Phone, Mail, Package, Weight, Loader2
+    CheckCircle, AlertTriangle, Info, Plus, User, Phone, Mail, Package, Weight, Loader2, Bell, X
 } from 'lucide-react';
 import './UserCalendar.css';
 import axiosInstance from '../../api/axiosInstance';
@@ -33,6 +33,9 @@ const UserCalendar = ({ userInfo }) => {
     });
     const [bookingConfirmed, setBookingConfirmed] = useState(false);
     const [bookingId, setBookingId] = useState("");
+    const [showNotifications, setShowNotifications] = useState(false);
+    const [userBookings, setUserBookings] = useState([]);
+    const [loadingBookings, setLoadingBookings] = useState(false);
 
     const daysOfWeek = useMemo(() => ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], []);
     const monthNames = useMemo(() => ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'], []);
@@ -46,41 +49,64 @@ const UserCalendar = ({ userInfo }) => {
     }), []);
 
     useEffect(() => {
-        const fetchCalendarSettings = async () => {
-            setIsLoading(true);
-            setError(null);
-            try {
-                const response = await axiosInstance.get(API_ENDPOINTS.CALENDAR_SETTINGS.GET);
-                if (response.data && response.data.success && response.data.data) {
-                    const fetched = response.data.data;
-                    const apiAvailableDaysObject = (fetched.availableDays && Object.keys(fetched.availableDays).length > 0)
-                        ? fetched.availableDays
-                        : Object.fromEntries(fallbackSettings.availableDays);
-                    const apiDateSettingsObject = fetched.dateSettings || {};
-
-                    setBackendSettings({
-                        ...fallbackSettings,
-                        ...fetched,
-                        availableDays: new Map(Object.entries(apiAvailableDaysObject)),
-                        dateSettings: new Map(Object.entries(apiDateSettingsObject)),
-                        timeSlots: fetched.timeSlots || fallbackSettings.timeSlots,
-                        serviceAreas: fetched.serviceAreas || fallbackSettings.serviceAreas,
-                        specialDates: fetched.specialDates || fallbackSettings.specialDates,
-                    });
-                } else {
-                    setError(response.data?.message || 'Could not load scheduling options from server.');
-                    setBackendSettings(fallbackSettings);
-                }
-            } catch (err) {
-                setError(err.response?.data?.message || err.message || 'Failed to load scheduling options.');
-                setBackendSettings(fallbackSettings);
-                console.error("Error fetching user calendar settings:", err);
-            } finally {
-                setIsLoading(false);
-            }
-        };
         fetchCalendarSettings();
-    }, [fallbackSettings]);
+        if (userInfo?.email) {
+            fetchUserBookings();
+        }
+    }, [userInfo]);
+
+    const fetchCalendarSettings = async () => {
+        setIsLoading(true);
+        setError(null);
+        try {
+            const response = await axiosInstance.get(API_ENDPOINTS.CALENDAR_SETTINGS.GET);
+            if (response.data && response.data.success && response.data.data) {
+                const fetched = response.data.data;
+                const apiAvailableDaysObject = (fetched.availableDays && Object.keys(fetched.availableDays).length > 0)
+                    ? fetched.availableDays
+                    : Object.fromEntries(fallbackSettings.availableDays);
+                const apiDateSettingsObject = fetched.dateSettings || {};
+
+                setBackendSettings({
+                    ...fallbackSettings,
+                    ...fetched,
+                    availableDays: new Map(Object.entries(apiAvailableDaysObject)),
+                    dateSettings: new Map(Object.entries(apiDateSettingsObject)),
+                    timeSlots: fetched.timeSlots || fallbackSettings.timeSlots,
+                    serviceAreas: fetched.serviceAreas || fallbackSettings.serviceAreas,
+                    specialDates: fetched.specialDates || fallbackSettings.specialDates,
+                });
+            } else {
+                setError(response.data?.message || 'Could not load scheduling options from server.');
+                setBackendSettings(fallbackSettings);
+            }
+        } catch (err) {
+            setError(err.response?.data?.message || err.message || 'Failed to load scheduling options.');
+            setBackendSettings(fallbackSettings);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const fetchUserBookings = async () => {
+        setLoadingBookings(true);
+        try {
+            const response = await axiosInstance.get(API_ENDPOINTS.BOOKINGS.GET_USER_BOOKINGS);
+            if (response.data && response.data.success) {
+                let bookingsData = response.data.data;
+                if (Array.isArray(bookingsData)) {
+                    setUserBookings(bookingsData);
+                } else {
+                    setUserBookings([]);
+                }
+            }
+        } catch (err) {
+            console.error("Error fetching user bookings:", err);
+            setUserBookings([]);
+        } finally {
+            setLoadingBookings(false);
+        }
+    };
 
     const settings = useMemo(() => {
         if (!backendSettings) return fallbackSettings;
@@ -164,35 +190,36 @@ const UserCalendar = ({ userInfo }) => {
         setError(null);
 
         const selectedDateObj = selectedDate ? new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate()) : null;
+        const selectedTimeSlotObj = settings.timeSlots.find(slot => slot.id === timeSlot);
+        const selectedServiceAreaObj = settings.serviceAreas.find(area => area.id === serviceArea);
 
         const bookingData = {
             selectedDate: selectedDateObj ? selectedDateObj.toISOString() : null,
             timeSlotId: timeSlot,
+            timeSlotLabel: selectedTimeSlotObj?.label,
+            timeSlotRange: selectedTimeSlotObj?.time,
             serviceAreaId: serviceArea,
+            serviceAreaName: selectedServiceAreaObj?.name,
             estimatedWeight: estimatedWeight ? parseFloat(estimatedWeight) : null,
             pickupLocation: pickupLocation,
             contactDetails: contactDetails,
+            status: 'pending',
+            createdAt: new Date().toISOString()
         };
 
-        console.log("Submitting Booking Data:", JSON.stringify(bookingData, null, 2));
-
         try {
-            if (!API_ENDPOINTS.BOOKINGS || !API_ENDPOINTS.BOOKINGS.CREATE) {
-                throw new Error("API endpoint for creating bookings is not defined.");
-            }
             const response = await axiosInstance.post(API_ENDPOINTS.BOOKINGS.CREATE, bookingData);
 
             if (response.data && response.data.success) {
-                setBookingId(response.data.data.bookingId || response.data.data._id);
+                const newBookingId = response.data.data.bookingId || response.data.data._id;
+                setBookingId(newBookingId);
                 setBookingConfirmed(true);
+                fetchUserBookings();
             } else {
                 throw new Error(response.data?.message || 'Booking request failed.');
             }
         } catch (err) {
             console.error("Booking submission error:", err);
-            if (err.response) {
-                console.error("Server response data:", JSON.stringify(err.response.data, null, 2));
-            }
             setError(err.response?.data?.message || err.message || 'An unexpected error occurred during booking.');
         } finally {
             setIsSubmitting(false);
@@ -207,6 +234,25 @@ const UserCalendar = ({ userInfo }) => {
     const prevStep = () => {
         setError(null);
         setBookingStep(prev => prev - 1);
+    };
+
+    const getStatusDisplay = (status) => {
+        switch(status) {
+            case 'pending':
+                return { text: 'Pending', class: 'notif-status-pending', icon: <Clock size={14} /> };
+            case 'approved':
+                return { text: 'Approved', class: 'notif-status-approved', icon: <CheckCircle size={14} /> };
+            case 'rejected':
+                return { text: 'Rejected', class: 'notif-status-rejected', icon: <XCircle size={14} /> };
+            case 'completed':
+                return { text: 'Completed', class: 'notif-status-completed', icon: <CheckCircle size={14} /> };
+            default:
+                return { text: 'Pending', class: 'notif-status-pending', icon: <Clock size={14} /> };
+        }
+    };
+
+    const getUnreadCount = () => {
+        return userBookings.filter(booking => booking.status === 'pending').length;
     };
 
     const renderCalendar = useCallback(() => {
@@ -236,15 +282,14 @@ const UserCalendar = ({ userInfo }) => {
                     key={`day-${day}`}
                     className={dayClass}
                     onClick={() => handleDateSelect(day, month, year)}
-                    disabled={isPast || !isAvailable}
-                    aria-label={`Select date ${monthNames[month]} ${day}, ${year}${!isAvailable ? ' (Unavailable)' : ''}`}>
+                    disabled={isPast || !isAvailable}>
                     <span className="UCal-day-number">{day}</span>
                     {specialDate && <span className="UCal-special-indicator" title={specialDate.reason || 'Special Day'}>*</span>}
                 </button>
             );
         }
         return calendarDays;
-    }, [currentDate, getMonthData, selectedDate, isCollectionDay, isPastDate, getSpecialDateStatus, monthNames, handleDateSelect]);
+    }, [currentDate, getMonthData, selectedDate, isCollectionDay, isPastDate, getSpecialDateStatus, handleDateSelect]);
 
     const renderSummaryItem = (IconComponent, label, value) => {
         if (label === "Est. Weight") value = formatWeight(value);
@@ -296,11 +341,11 @@ const UserCalendar = ({ userInfo }) => {
                 return (
                     <div className="UCal-calendar-container">
                         <div className="UCal-calendar-header">
-                            <button onClick={goToPrevMonth} className="UCal-nav-button" aria-label="Previous month" disabled={isLoading}>
+                            <button onClick={goToPrevMonth} className="UCal-nav-button" disabled={isLoading}>
                                 <ChevronLeft size={20} />
                             </button>
                             <h2 className="UCal-current-month">{monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}</h2>
-                            <button onClick={goToNextMonth} className="UCal-nav-button" aria-label="Next month" disabled={isLoading}>
+                            <button onClick={goToNextMonth} className="UCal-nav-button" disabled={isLoading}>
                                 <ChevronRight size={20} />
                             </button>
                         </div>
@@ -347,8 +392,7 @@ const UserCalendar = ({ userInfo }) => {
                                         <button
                                             key={slot.id}
                                             className={`UCal-option-card UCal-time-slot-card ${timeSlot === slot.id ? 'UCal-selected' : ''}`}
-                                            onClick={() => setTimeSlot(slot.id)}
-                                            aria-pressed={timeSlot === slot.id}>
+                                            onClick={() => setTimeSlot(slot.id)}>
                                             <Clock size={24} />
                                             <h3>{slot.label}</h3>
                                             <p>{slot.time}</p>
@@ -367,8 +411,7 @@ const UserCalendar = ({ userInfo }) => {
                                         <button
                                             key={area.id}
                                             className={`UCal-option-card UCal-service-area-card ${serviceArea === area.id ? 'UCal-selected' : ''}`}
-                                            onClick={() => setServiceArea(area.id)}
-                                            aria-pressed={serviceArea === area.id}>
+                                            onClick={() => setServiceArea(area.id)}>
                                             <MapPin size={24} />
                                             <h3>{area.name}</h3>
                                         </button>
@@ -478,8 +521,9 @@ const UserCalendar = ({ userInfo }) => {
                     <div className="UCal-step-container UCal-booking-confirmation">
                         <div className="UCal-confirmation-header">
                             <CheckCircle size={48} className="UCal-confirmation-icon" />
-                            <h2>Booking Confirmed!</h2>
+                            <h2>Booking Submitted!</h2>
                             <p className="UCal-booking-id">Booking ID: <strong>{bookingId}</strong></p>
+                            <p className="UCal-booking-status">Status: <span className="UCal-status-pending">Pending Approval</span></p>
                         </div>
                         <div className="UCal-confirmation-details UCal-review-details">
                             <div className="UCal-review-section UCal-confirmation-section">
@@ -501,7 +545,7 @@ const UserCalendar = ({ userInfo }) => {
                             </div>
                         </div>
                         <div className="UCal-confirmation-instructions">
-                            <Info size={16} /> A confirmation email has been sent to {contactDetails.email} (mock). Please keep your Booking ID for reference.
+                            <Info size={16} /> Your booking request has been sent. Check notifications for status updates.
                         </div>
                         <button onClick={resetForm} className="UCal-new-booking-button">
                             <Plus size={16} /> Schedule Another Pickup
@@ -539,7 +583,7 @@ const UserCalendar = ({ userInfo }) => {
                             </button>
                             <button onClick={confirmBooking} className="UCal-confirm-button" disabled={isSubmitting}>
                                 {isSubmitting ? <Loader2 size={16} className="UCal-animate-spin" /> : <CheckCircle size={16} />}
-                                {isSubmitting ? 'Confirming...' : 'Confirm Booking'}
+                                {isSubmitting ? 'Submitting...' : 'Submit Booking'}
                             </button>
                         </div>
                     </div>
@@ -557,6 +601,67 @@ const UserCalendar = ({ userInfo }) => {
             <div className="UCal-user-calendar-container">
                 <div className="UCal-user-header">
                     <h1>Schedule Aluminum Recycling Pickup</h1>
+                    <div className="UCal-notification-wrapper">
+                        <button 
+                            className="UCal-notification-bell"
+                            onClick={() => setShowNotifications(!showNotifications)}
+                        >
+                            <Bell size={22} />
+                            {getUnreadCount() > 0 && (
+                                <span className="UCal-notification-badge">{getUnreadCount()}</span>
+                            )}
+                        </button>
+
+                        {showNotifications && (
+                            <div className="UCal-notification-dropdown">
+                                <div className="UCal-notification-header">
+                                    <h3>My Booking Status</h3>
+                                    <button onClick={() => setShowNotifications(false)} className="UCal-notification-close">
+                                        <X size={16} />
+                                    </button>
+                                </div>
+                                <div className="UCal-notification-list">
+                                    {loadingBookings ? (
+                                        <div className="UCal-notification-loading">
+                                            <Loader2 size={24} className="UCal-animate-spin" />
+                                        </div>
+                                    ) : userBookings.length === 0 ? (
+                                        <div className="UCal-notification-empty">
+                                            <CheckCircle size={32} />
+                                            <p>No bookings yet</p>
+                                        </div>
+                                    ) : (
+                                        userBookings.map(booking => {
+                                            const statusInfo = getStatusDisplay(booking.status);
+                                            return (
+                                                <div key={booking._id || booking.bookingId} className="UCal-notification-item">
+                                                    <div className="UCal-notification-info">
+                                                        <div className="UCal-notification-date">
+                                                            {formatDate(new Date(booking.selectedDate))}
+                                                        </div>
+                                                        <div className="UCal-notification-message">
+                                                            Pickup request
+                                                        </div>
+                                                    </div>
+                                                    <div className={`UCal-notification-status ${statusInfo.class}`}>
+                                                        {statusInfo.icon}
+                                                        <span>{statusInfo.text}</span>
+                                                    </div>
+                                                </div>
+                                            );
+                                        })
+                                    )}
+                                </div>
+                                {userBookings.length > 0 && (
+                                    <div className="UCal-notification-footer">
+                                        <button onClick={() => fetchUserBookings()} className="UCal-notification-refresh">
+                                            Refresh
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                        )}
+                    </div>
                 </div>
 
                 {(isLoading && bookingStep === 0 && !backendSettings) &&
@@ -569,7 +674,7 @@ const UserCalendar = ({ userInfo }) => {
                 {!isLoading && error && bookingStep === 0 &&
                     <div className="UCal-error-message-container UCal-global-error">
                         <AlertTriangle size={18} />
-                        <span>{error} Please try refreshing. If the problem persists, contact support.</span>
+                        <span>{error}</span>
                     </div>
                 }
 

@@ -3,8 +3,9 @@ import axiosInstance from '../../../api/axiosInstance';
 import API_ENDPOINTS from '../../../apiConfig';
 import {
   User, Phone, Mail, MapPin, Package, Weight, Clock, Calendar, Edit,
-  CheckSquare, XSquare, Eye, Trash2, AlertTriangle, RefreshCw, Map
-} from 'lucide-react'; 
+  CheckSquare, XSquare, Eye, Trash2, AlertTriangle, RefreshCw, Map,
+  Search, Filter, ArrowUpDown
+} from 'lucide-react';
 import { ClipLoader } from 'react-spinners';
 import EditBookingModal from './EditBookingModal';
 import './AdCheckReq.css';
@@ -33,6 +34,7 @@ const formatWeightDisplay = (weight) => {
 
 const AdCheckReq = () => {
     const [requests, setRequests] = useState([]);
+    const [filteredRequests, setFilteredRequests] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState('');
     const [actionLoading, setActionLoading] = useState(null);
@@ -41,6 +43,11 @@ const AdCheckReq = () => {
     const [isSavingEdit, setIsSavingEdit] = useState(false);
     const [modalError, setModalError] = useState('');
     const [calendarSettings, setCalendarSettings] = useState({ timeSlots: [], serviceAreas: [] });
+    
+    const [searchTerm, setSearchTerm] = useState('');
+    const [filterStatus, setFilterStatus] = useState('all');
+    const [sortBy, setSortBy] = useState('date');
+    const [sortOrder, setSortOrder] = useState('newest');
 
     const fetchCalendarSettings = useCallback(async () => {
         console.log("[AdCheckReq] Fetching calendar settings for modal...");
@@ -73,6 +80,7 @@ const AdCheckReq = () => {
                     return new Date(a.selectedDate) - new Date(b.selectedDate);
                 });
                 setRequests(sortedRequests);
+                setFilteredRequests(sortedRequests);
             } else {
                 throw new Error(response.data?.message || 'Failed to fetch requests.');
             }
@@ -87,6 +95,40 @@ const AdCheckReq = () => {
         fetchRequests();
         fetchCalendarSettings();
     }, [fetchRequests, fetchCalendarSettings]);
+
+    useEffect(() => {
+        let result = [...requests];
+        
+        if (searchTerm) {
+            result = result.filter(req => 
+                req.bookingId?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                req.contactDetails?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                req.contactDetails?.phone?.includes(searchTerm) ||
+                req.contactDetails?.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                req.pickupLocation?.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+        }
+        
+        if (filterStatus !== 'all') {
+            result = result.filter(req => req.status === filterStatus);
+        }
+        
+        if (sortBy === 'date') {
+            result.sort((a, b) => {
+                const dateA = new Date(a.selectedDate);
+                const dateB = new Date(b.selectedDate);
+                return sortOrder === 'newest' ? dateB - dateA : dateA - dateB;
+            });
+        } else if (sortBy === 'weight') {
+            result.sort((a, b) => {
+                const weightA = a.estimatedWeight || 0;
+                const weightB = b.estimatedWeight || 0;
+                return sortOrder === 'highToLow' ? weightB - weightA : weightA - weightB;
+            });
+        }
+        
+        setFilteredRequests(result);
+    }, [requests, searchTerm, filterStatus, sortBy, sortOrder]);
 
     const handleUpdateStatus = async (id, newStatus) => {
         setActionLoading(id); setError('');
@@ -225,6 +267,13 @@ const AdCheckReq = () => {
         handleOpenEditModal(request);
     };
 
+    const clearFilters = () => {
+        setSearchTerm('');
+        setFilterStatus('all');
+        setSortBy('date');
+        setSortOrder('newest');
+    };
+
     if (isLoading && requests.length === 0) {
         return <div className="CPQ-loading-container"><ClipLoader size={50} color="#f97316" /><p>Loading Requests...</p></div>;
     }
@@ -240,14 +289,91 @@ const AdCheckReq = () => {
 
             {error && !isModalOpen && <div className="CPQ-error-banner"><AlertTriangle size={18} /><span>{error}</span></div>}
 
-            {requests.length === 0 && !isLoading && (
+            <div className="CPQ-filters-section">
+                <div className="CPQ-search-box">
+                    <Search size={18} className="CPQ-search-icon" />
+                    <input
+                        type="text"
+                        placeholder="Search by name, phone, email, booking ID or location..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className="CPQ-search-input"
+                    />
+                </div>
+
+                <div className="CPQ-filter-controls">
+                    <div className="CPQ-filter-group">
+                        <Filter size={16} />
+                        <select 
+                            value={filterStatus} 
+                            onChange={(e) => setFilterStatus(e.target.value)}
+                            className="CPQ-filter-select"
+                        >
+                            <option value="all">All Status</option>
+                            <option value="pending">Pending</option>
+                            <option value="confirmed">Confirmed</option>
+                            <option value="completed">Completed</option>
+                            <option value="cancelled">Cancelled</option>
+                        </select>
+                    </div>
+
+                    <div className="CPQ-filter-group">
+                        <ArrowUpDown size={16} />
+                        <select 
+                            value={sortBy} 
+                            onChange={(e) => setSortBy(e.target.value)}
+                            className="CPQ-filter-select"
+                        >
+                            <option value="date">Sort by Date</option>
+                            <option value="weight">Sort by Weight</option>
+                        </select>
+                    </div>
+
+                    <div className="CPQ-filter-group">
+                        <select 
+                            value={sortOrder} 
+                            onChange={(e) => setSortOrder(e.target.value)}
+                            className="CPQ-filter-select"
+                        >
+                            {sortBy === 'date' ? (
+                                <>
+                                    <option value="newest">Newest First</option>
+                                    <option value="oldest">Oldest First</option>
+                                </>
+                            ) : (
+                                <>
+                                    <option value="highToLow">Weight: High to Low</option>
+                                    <option value="lowToHigh">Weight: Low to High</option>
+                                </>
+                            )}
+                        </select>
+                    </div>
+
+                    {(searchTerm || filterStatus !== 'all' || sortBy !== 'date' || sortOrder !== 'newest') && (
+                        <button onClick={clearFilters} className="CPQ-clear-filters-btn">
+                            Clear Filters
+                        </button>
+                    )}
+                </div>
+            </div>
+
+            <div className="CPQ-results-info">
+                Showing {filteredRequests.length} of {requests.length} requests
+            </div>
+
+            {filteredRequests.length === 0 && !isLoading && (
                 <div className="CPQ-empty-state-container">
                     <Package size={48} className="CPQ-empty-icon" />
-                    <p className="CPQ-empty-state-title">No pickup requests found.</p>
+                    <p className="CPQ-empty-state-title">No matching requests found.</p>
+                    {(searchTerm || filterStatus !== 'all') && (
+                        <button onClick={clearFilters} className="CPQ-clear-filters-empty-btn">
+                            Clear all filters
+                        </button>
+                    )}
                 </div>
             )}
 
-            {requests.length > 0 && (
+            {filteredRequests.length > 0 && (
                 <div className="CPQ-table-wrapper">
                     <table className="CPQ-requests-table">
                         <thead>
@@ -261,7 +387,7 @@ const AdCheckReq = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {requests.map((req) => (
+                            {filteredRequests.map((req) => (
                                 <tr key={req._id} className={`CPQ-table-row ${actionLoading === req._id ? 'row-loading-overlay' : ''}`}>
                                     <td className="CPQ-td-style">
                                         <div><strong>{req.contactDetails?.name || 'N/A'}</strong> ({req.bookingId})</div>

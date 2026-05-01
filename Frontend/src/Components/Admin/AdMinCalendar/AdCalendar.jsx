@@ -5,8 +5,8 @@ import {
 } from 'lucide-react';
 import { ClipLoader } from 'react-spinners';
 import './AdCalendar.css';
-import axiosInstance from '../../../api/axiosInstance'; 
-import API_ENDPOINTS from '../../../apiConfig';  
+import axiosInstance from '../../../api/axiosInstance';
+import API_ENDPOINTS from '../../../apiConfig';
 
 const DEFAULT_AVAILABLE_DAYS_OBJECT = { '0': false, '1': true, '2': false, '3': true, '4': false, '5': true, '6': false };
 
@@ -15,7 +15,7 @@ const AdCalendar = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-  const [settingsData, setSettingsData] = useState(null); 
+  const [settingsData, setSettingsData] = useState(null);
   const [currentDate, setCurrentDate] = useState(new Date());
   const [activeTab, setActiveTab] = useState('dates');
   const [selectedDate, setSelectedDate] = useState(null);
@@ -47,7 +47,7 @@ const AdCalendar = () => {
       setError('');
       try {
         if (!API_ENDPOINTS.CALENDAR_SETTINGS || !API_ENDPOINTS.CALENDAR_SETTINGS.GET) {
-            throw new Error("API endpoint for getting calendar settings is not defined.");
+          throw new Error("API endpoint for getting calendar settings is not defined.");
         }
         const response = await axiosInstance.get(API_ENDPOINTS.CALENDAR_SETTINGS.GET);
         if (response.data && response.data.success && response.data.data) {
@@ -60,10 +60,10 @@ const AdCalendar = () => {
           const adDateSettingsObject = fetchedData.dateSettings || {};
 
           setSettingsData({
-            ...initializeDefaultSettings(), 
-            ...fetchedData,                 
-            availableDays: new Map(Object.entries(adDaysObject)), 
-            dateSettings: new Map(Object.entries(adDateSettingsObject)),  
+            ...initializeDefaultSettings(),
+            ...fetchedData,
+            availableDays: new Map(Object.entries(adDaysObject)),
+            dateSettings: new Map(Object.entries(adDateSettingsObject)),
             timeSlots: fetchedData.timeSlots || initializeDefaultSettings().timeSlots,
             serviceAreas: fetchedData.serviceAreas || initializeDefaultSettings().serviceAreas,
             specialDates: fetchedData.specialDates || initializeDefaultSettings().specialDates,
@@ -105,7 +105,7 @@ const AdCalendar = () => {
     setSelectedDate({ date: dateStr, day, month, year, dayOfWeek: daysOfWeek[new Date(year, month, day).getDay()] });
   };
 
-  const toggleDayAvailability = (dayIndexStr) => { 
+  const toggleDayAvailability = (dayIndexStr) => {
     setSettingsData(prev => {
       const newAvailableDays = new Map(prev.availableDays);
       newAvailableDays.set(dayIndexStr, !newAvailableDays.get(dayIndexStr));
@@ -125,9 +125,13 @@ const AdCalendar = () => {
     setSuccess(`Added special date override for ${newSpecialDate.date}`);
   };
 
-  const removeSpecialDate = (date) => {
-    setSettingsData(prev => ({ ...prev, specialDates: prev.specialDates.filter(d => d.date !== date) }));
-    setSuccess(`Removed special date override for ${date}`);
+  const removeSpecialDate = (dateId) => {
+    setSettingsData(prev => ({
+      ...prev,
+      specialDates: prev.specialDates.filter(d => d.id !== dateId)
+    }));
+    const removedDate = settingsData?.specialDates.find(d => d.id === dateId);
+    setSuccess(`Removed special date override for ${removedDate?.date || dateId}`);
   };
 
   const getSpecialDateStatus = (dateStr) => {
@@ -172,20 +176,20 @@ const AdCalendar = () => {
   const deleteTimeSlot = (id) => {
     if (!window.confirm("Are you sure you want to delete this time slot? This may affect date-specific settings.")) return;
     setSettingsData(prev => {
-        const newDateSettings = new Map(prev.dateSettings);
-        newDateSettings.forEach((dateSetting, dateKey) => {
-            if (dateSetting.timeSlots && dateSetting.timeSlots.includes(id)) {
-                newDateSettings.set(dateKey, {
-                    ...dateSetting,
-                    timeSlots: dateSetting.timeSlots.filter(tsId => tsId !== id)
-                });
-            }
-        });
-        return {
-            ...prev,
-            timeSlots: prev.timeSlots.filter(ts => ts.id !== id),
-            dateSettings: newDateSettings
-        };
+      const newDateSettings = new Map(prev.dateSettings);
+      newDateSettings.forEach((dateSetting, dateKey) => {
+        if (dateSetting.timeSlots && dateSetting.timeSlots.includes(id)) {
+          newDateSettings.set(dateKey, {
+            ...dateSetting,
+            timeSlots: dateSetting.timeSlots.filter(tsId => tsId !== id)
+          });
+        }
+      });
+      return {
+        ...prev,
+        timeSlots: prev.timeSlots.filter(ts => ts.id !== id),
+        dateSettings: newDateSettings
+      };
     });
     setSuccess("Time slot deleted");
   };
@@ -207,21 +211,21 @@ const AdCalendar = () => {
 
   const deleteServiceArea = (id) => {
     if (!window.confirm("Are you sure you want to delete this service area? This may affect date-specific settings.")) return;
-     setSettingsData(prev => {
-        const newDateSettings = new Map(prev.dateSettings);
-        newDateSettings.forEach((dateSetting, dateKey) => {
-            if (dateSetting.serviceAreas && dateSetting.serviceAreas.includes(id)) {
-                 newDateSettings.set(dateKey, {
-                    ...dateSetting,
-                    serviceAreas: dateSetting.serviceAreas.filter(saId => saId !== id)
-                });
-            }
-        });
-        return {
-            ...prev,
-            serviceAreas: prev.serviceAreas.filter(sa => sa.id !== id),
-            dateSettings: newDateSettings
-        };
+    setSettingsData(prev => {
+      const newDateSettings = new Map(prev.dateSettings);
+      newDateSettings.forEach((dateSetting, dateKey) => {
+        if (dateSetting.serviceAreas && dateSetting.serviceAreas.includes(id)) {
+          newDateSettings.set(dateKey, {
+            ...dateSetting,
+            serviceAreas: dateSetting.serviceAreas.filter(saId => saId !== id)
+          });
+        }
+      });
+      return {
+        ...prev,
+        serviceAreas: prev.serviceAreas.filter(sa => sa.id !== id),
+        dateSettings: newDateSettings
+      };
     });
     setSuccess("Service area deleted");
   };
@@ -264,21 +268,21 @@ const AdCalendar = () => {
     setSuccess('');
 
     if (!settingsData) {
-        setError("Settings data is not loaded yet.");
-        setIsSaving(false);
-        return;
+      setError("Settings data is not loaded yet.");
+      setIsSaving(false);
+      return;
     }
     
     const settingsToSave = {
       ...settingsData,
-      availableDays: Object.fromEntries(settingsData.availableDays), 
-      dateSettings: Object.fromEntries(settingsData.dateSettings),   
+      availableDays: Object.fromEntries(settingsData.availableDays),
+      dateSettings: Object.fromEntries(settingsData.dateSettings),
     };
     
     try {
-        if (!API_ENDPOINTS.CALENDAR_SETTINGS || !API_ENDPOINTS.CALENDAR_SETTINGS.UPDATE) {
-            throw new Error("API endpoint for updating calendar settings is not defined.");
-        }
+      if (!API_ENDPOINTS.CALENDAR_SETTINGS || !API_ENDPOINTS.CALENDAR_SETTINGS.UPDATE) {
+        throw new Error("API endpoint for updating calendar settings is not defined.");
+      }
       const response = await axiosInstance.put(API_ENDPOINTS.CALENDAR_SETTINGS.UPDATE, settingsToSave);
       if (response.data && response.data.success) {
         setSuccess('All settings saved successfully!');
@@ -341,13 +345,13 @@ const AdCalendar = () => {
               <h2 className="AdCal-Updt-section-heading">Regular Weekly Availability</h2>
               <div className="AdCal-Updt-day-toggles">
                 {settingsData.availableDays && daysOfWeek.map((dayName, index) => {
-                    const dayIndexStr = index.toString();
-                    const isAvailable = settingsData.availableDays.get(dayIndexStr);
-                    return (
-                        <button key={dayIndexStr} className={`AdCal-Updt-day-toggle ${isAvailable ? 'active' : ''}`} onClick={() => toggleDayAvailability(dayIndexStr)}>
-                            {dayName}
-                        </button>
-                    );
+                  const dayIndexStr = index.toString();
+                  const isAvailable = settingsData.availableDays.get(dayIndexStr);
+                  return (
+                    <button key={dayIndexStr} className={`AdCal-Updt-day-toggle ${isAvailable ? 'active' : ''}`} onClick={() => toggleDayAvailability(dayIndexStr)}>
+                      {dayName}
+                    </button>
+                  );
                 })}
               </div>
             </div>
@@ -381,7 +385,7 @@ const AdCalendar = () => {
                         <span className={`AdCal-Updt-status ${sd.status}`}>{sd.status}</span>
                         {sd.reason && <span className="AdCal-Updt-reason">{sd.reason}</span>}
                       </div>
-                      <button onClick={() => removeSpecialDate(sd.date)} className="AdCal-Updt-delete-button"><Trash size={16} /></button>
+                      <button onClick={() => removeSpecialDate(sd.id)} className="AdCal-Updt-delete-button"><Trash size={16} /></button>
                     </div>
                   ))}
                 </div>

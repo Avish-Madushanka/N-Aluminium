@@ -2,13 +2,13 @@ import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   ChevronLeft, ChevronRight, Calendar as CalendarIcon,
-  Recycle, Clock, MapPin, Truck, AlertTriangle, Info, Loader2
+  Recycle, Clock, MapPin, Truck, AlertTriangle, Info, Loader2, CheckCircle, XCircle
 } from 'lucide-react';
 import './CalendarDisplay.css';
-import API_ENDPOINTS from '../../apiConfig'; 
+import API_ENDPOINTS from '../../apiConfig';
 
 const API_BASE_URL = API_ENDPOINTS.API_ROOT;
-console.log("Imported API_ENDPOINTS:", API_ENDPOINTS); 
+console.log("Imported API_ENDPOINTS:", API_ENDPOINTS);
 
 const fallbackSettings = {
   availableDays: { '0': false, '1': false, '2': false, '3': false, '4': false, '5': false, '6': false },
@@ -39,7 +39,7 @@ const CalendarDisplay = () => {
     if (base.availableDays instanceof Map) {
       availableDaysObject = Object.fromEntries(base.availableDays);
     } else if (typeof base.availableDays !== 'object' || base.availableDays === null || Array.isArray(base.availableDays)) {
-      if (backendSettings) { 
+      if (backendSettings) {
         console.warn("CalendarDisplay: backendSettings.availableDays is not a valid object, using fallback. Received:", base.availableDays);
       }
       availableDaysObject = fallbackSettings.availableDays;
@@ -84,7 +84,7 @@ const CalendarDisplay = () => {
     if (settings.availableDays && typeof settings.availableDays === 'object' && settings.availableDays.hasOwnProperty(date.getDay().toString())) {
       return settings.availableDays[date.getDay().toString()] === true;
     }
-    return false; 
+    return false;
   }, [settings.availableDays, getSpecialDateStatus, isPastDate, isToday]);
 
   const findNextAvailableDays = useCallback((count) => {
@@ -96,7 +96,7 @@ const CalendarDisplay = () => {
     let currentDateIteration = new Date();
     currentDateIteration.setHours(0, 0, 0, 0);
     
-    const maxIterations = 90; 
+    const maxIterations = 90;
     for (let i = 0; i < maxIterations && available.length < count; i++) {
       const day = currentDateIteration.getDate();
       const month = currentDateIteration.getMonth();
@@ -120,7 +120,7 @@ const CalendarDisplay = () => {
         console.error(apiConfigErrorMsg, "Current value for API_BASE_URL:", API_BASE_URL);
         setError(apiConfigErrorMsg);
         setIsLoading(false);
-        setBackendSettings(null); 
+        setBackendSettings(null);
         return;
       }
 
@@ -132,7 +132,7 @@ const CalendarDisplay = () => {
           let responseBodySnippet = "(Could not read error response body)";
           try {
             const errorBodyText = await response.text();
-            responseBodySnippet = errorBodyText.substring(0, 200); 
+            responseBodySnippet = errorBodyText.substring(0, 200);
             try {
               const jsonError = JSON.parse(errorBodyText);
               if (jsonError && jsonError.message) {
@@ -161,7 +161,7 @@ const CalendarDisplay = () => {
           throw new Error(`Expected JSON response from server, but received '${contentType || 'unknown content type'}'. Body preview: ${bodySnippet}...`);
         }
 
-        const settingsData = await response.json(); 
+        const settingsData = await response.json();
         
         if (settingsData && settingsData.success && settingsData.data) {
           if (typeof settingsData.data.availableDays !== 'object' || settingsData.data.availableDays === null) {
@@ -176,19 +176,19 @@ const CalendarDisplay = () => {
         console.error("Error fetching initial data (see details below):", err.message);
         if (err.stack) console.error(err.stack);
         setError(err.message || 'Could not load scheduling options. Please try refreshing the page.');
-        setBackendSettings(null); 
+        setBackendSettings(null);
       } finally {
         setIsLoading(false);
       }
     };
     
     fetchData();
-  }, []); 
+  }, []);
 
   useEffect(() => {
     if (!isLoading && settings && Object.keys(settings.availableDays).length > 0) {
       setNextFourAvailableDays(findNextAvailableDays(4));
-    } else if (!isLoading && error) { 
+    } else if (!isLoading && error) {
       setNextFourAvailableDays([]);
     }
   }, [isLoading, settings, error, findNextAvailableDays]);
@@ -222,7 +222,7 @@ const CalendarDisplay = () => {
     navigate('/UserCalendar');
   };
   
-  const handleScheduleAvailableDay = ( ) => { 
+  const handleScheduleAvailableDay = (date) => {
     navigate('/UserCalendar');
   };
 
@@ -237,7 +237,6 @@ const CalendarDisplay = () => {
     if (isLoading && !backendSettings && !error) {
         return <div className="CDis-calendar-message"><p>Loading days...</p></div>;
     }
-
 
     const { year, month, startingDayOfWeek, daysInMonth } = getMonthData(currentDate);
     const calendarDays = [];
@@ -273,8 +272,11 @@ const CalendarDisplay = () => {
           aria-pressed={isSel}
         >
           <span className="CDis-day-number">{day}</span>
+
           {specialDate && (
-            <span className="CDis-special-indicator" title={specialDate.reason || (specialDate.status === 'available' ? 'Special availability status' : 'Special unavailability status')}>*</span>
+            <span className="CDis-special-indicator" title={specialDate.reason || (specialDate.status === 'available' ? 'Special availability status' : 'Special unavailability status')}>
+              <Info size={8} />
+            </span>
           )}
         </button>
       );
@@ -292,13 +294,12 @@ const CalendarDisplay = () => {
         </div>
       )}
       
-      {!isLoading && error && ( 
+      {!isLoading && error && (
         <div className="CDis-error-message-container CDis-global-error">
           <AlertTriangle size={18} />
           <span>{error}</span>
         </div>
       )}
-
 
       <div className="CDis-dashboard-grid">
         <div className="CDis-calendar-column">
@@ -312,7 +313,7 @@ const CalendarDisplay = () => {
                 onClick={goToPrevMonth} 
                 className="CDis-nav-button" 
                 aria-label="Previous month" 
-                disabled={isLoading && !backendSettings && !error} 
+                disabled={isLoading && !backendSettings && !error}
               >
                 <ChevronLeft size={20} />
               </button>
@@ -343,14 +344,14 @@ const CalendarDisplay = () => {
             
             <div className="CDis-calendar-legend">
               <span className="CDis-legend-item CDis-today">Today</span>
-              <span className="CDis-legend-item CDis-available">Available</span>
+              <span className="CDis-legend-item CDis-available-indicator">Available</span>
+              <span className="CDis-legend-item CDis-unavailable-indicator">Unavailable</span>
               <span className="CDis-legend-item CDis-selected">Selected</span>
-              <span className="CDis-legend-item CDis-unavailable">Unavailable</span>
               <span className="CDis-legend-item CDis-past">Past</span>
             </div>
             
             <div className="CDis-calendar-instructions">
-              <Info size={16} /> Click an available day (green) to proceed to scheduling.
+              <Info size={16} /> Click an available day (green circle) to proceed to scheduling.
             </div>
           </div>
         </div>
@@ -390,10 +391,10 @@ const CalendarDisplay = () => {
                 <Info size={18} />
                 <p>No upcoming collection days found in the near future. Please check the main calendar or contact support.</p>
               </div>
-            ) : ( 
+            ) : (
               <div className="CDis-no-pickups CDis-text-small">
                 <AlertTriangle size={18} />
-                <p>{error || "Could not load upcoming availability due to an error."}</p> 
+                <p>{error || "Could not load upcoming availability due to an error."}</p>
               </div>
             )}
           </div>

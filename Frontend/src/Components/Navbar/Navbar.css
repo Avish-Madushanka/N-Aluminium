@@ -154,6 +154,182 @@
   gap: 20px;
 }
 
+.Nav-notification-wrapper {
+  position: relative;
+}
+
+.Nav-notification-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 4px;
+}
+
+.Nav-notification-icon:hover {
+  color: #747474;
+  transform: translateY(-2px);
+}
+
+.Nav-notification-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background-color: #ff4444;
+  color: white;
+  font-size: 0.65rem;
+  font-weight: bold;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.Nav-notification-dropdown {
+  position: absolute;
+  top: 45px;
+  right: 0;
+  width: 360px;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+  z-index: 1001;
+  overflow: hidden;
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.Nav-notification-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  border-bottom: 1px solid #e0e0e0;
+  background-color: #f8f8f8;
+}
+
+.Nav-notification-header h4 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #000;
+}
+
+.Nav-notification-mark-all {
+  background: none;
+  border: none;
+  font-size: 0.75rem;
+  color: #747474;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.Nav-notification-mark-all:hover {
+  color: #000;
+  text-decoration: underline;
+}
+
+.Nav-notification-list {
+  max-height: 380px;
+  overflow-y: auto;
+}
+
+.Nav-notification-item {
+  padding: 14px 16px;
+  border-bottom: 1px solid #f0f0f0;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.Nav-notification-item:hover {
+  background-color: #f9f9f9;
+}
+
+.Nav-notification-item.unread {
+  background-color: #f0f7ff;
+  position: relative;
+}
+
+.Nav-notification-item.unread::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background-color: #007bff;
+}
+
+.Nav-notification-content {
+  flex: 1;
+}
+
+.Nav-notification-message {
+  margin: 0 0 6px 0;
+  font-size: 0.85rem;
+  color: #333;
+  line-height: 1.4;
+}
+
+.Nav-notification-time {
+  font-size: 0.7rem;
+  color: #999;
+}
+
+.Nav-notification-footer {
+  padding: 12px 16px;
+  border-top: 1px solid #e0e0e0;
+  text-align: center;
+  background-color: #f8f8f8;
+}
+
+.Nav-view-all {
+  color: #747474;
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.Nav-view-all:hover {
+  color: #000;
+  text-decoration: underline;
+}
+
 .Nav-cart-icon {
   position: relative;
   display: flex;
@@ -527,6 +703,283 @@
   padding-top: 80px;
 }
 
+.Nav-notification-wrapper {
+  position: relative;
+}
+
+.Nav-notification-icon {
+  position: relative;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  color: #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.Nav-notification-icon:hover {
+  background-color: #f0f0f0;
+  transform: translateY(-2px);
+}
+
+.Nav-notification-badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: #ff4444;
+  color: white;
+  font-size: 10px;
+  font-weight: bold;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+}
+
+.Nav-notification-dropdown {
+  position: absolute;
+  top: 45px;
+  right: 0;
+  width: 320px;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  overflow: hidden;
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.Nav-notification-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 16px;
+  background-color: #f8f8f8;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.Nav-notification-header h4 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: #333;
+}
+
+.Nav-notification-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.Nav-notification-close:hover {
+  color: #333;
+}
+
+.Nav-notification-list {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.Nav-notification-loading {
+  display: flex;
+  justify-content: center;
+  padding: 40px;
+  color: #999;
+}
+
+.Nav-notification-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  color: #999;
+  text-align: center;
+}
+
+.Nav-notification-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 16px;
+  border-bottom: 1px solid #f0f0f0;
+  transition: background-color 0.3s ease;
+}
+
+.Nav-notification-item:hover {
+  background-color: #f9f9f9;
+}
+
+.Nav-notification-info {
+  flex: 1;
+}
+
+.Nav-notification-date {
+  font-size: 13px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.Nav-notification-message {
+  font-size: 12px;
+  color: #666;
+}
+
+.Nav-notification-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+
+.Nav-notification-status span {
+  font-size: 11px;
+}
+
+.notif-status-pending {
+  background-color: #fff3e0;
+  color: #ff9800;
+}
+
+.notif-status-approved {
+  background-color: #e8f5e9;
+  color: #4caf50;
+}
+
+.notif-status-rejected {
+  background-color: #ffebee;
+  color: #f44336;
+}
+
+.notif-status-completed {
+  background-color: #e3f2fd;
+  color: #2196f3;
+}
+
+.Nav-notification-footer {
+  padding: 12px 16px;
+  border-top: 1px solid #e0e0e0;
+  text-align: center;
+  background-color: #fafafa;
+}
+
+.Nav-view-all {
+  color: #666;
+  text-decoration: none;
+  font-size: 12px;
+  transition: color 0.3s ease;
+}
+
+.Nav-view-all:hover {
+  color: #333;
+  text-decoration: underline;
+}
+
+.Nav-notification-time {
+  font-size: 10px;
+  color: #aaa;
+  margin-top: 4px;
+}
+
+.Nav-notification-empty svg {
+  margin-bottom: 12px;
+  color: #ccc;
+}
+
+.Nav-notification-empty p {
+  margin: 0 0 12px 0;
+  font-size: 14px;
+  color: #999;
+}
+
+.Nav-notification-book-now {
+  display: inline-block;
+  padding: 8px 16px;
+  background-color: #4caf50;
+  color: white;
+  text-decoration: none;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.Nav-notification-book-now:hover {
+  background-color: #45a049;
+  transform: translateY(-2px);
+}
+
+.Nav-notification-refresh {
+  background: none;
+  border: none;
+  color: #666;
+  font-size: 12px;
+  cursor: pointer;
+  margin-left: 16px;
+  transition: color 0.3s ease;
+}
+
+.Nav-notification-refresh:hover {
+  color: #333;
+}
+
+.Nav-notification-footer {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+@media (max-width: 768px) {
+  .Nav-notification-dropdown {
+    position: fixed;
+    top: auto;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 40px);
+    max-width: 320px;
+  }
+  
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translate(-50%, -10px);
+    }
+    to {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+  }
+}
+
 @media (max-width: 768px) {
   .main-content {
     padding-top: 70px;
@@ -575,6 +1028,26 @@
     background-color: #000000;
     color: white;
     transform: translateY(-2px);
+  }
+
+  .Nav-notification-dropdown {
+    position: fixed;
+    top: auto;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 40px);
+    max-width: 360px;
+  }
+
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translate(-50%, -10px);
+    }
+    to {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
   }
 }
 
@@ -630,5 +1103,9 @@
   
   .Nav-mobile-contact-item {
     font-size: 0.85rem;
+  }
+
+  .Nav-notification-dropdown {
+    width: calc(100% - 32px);
   }
 }
