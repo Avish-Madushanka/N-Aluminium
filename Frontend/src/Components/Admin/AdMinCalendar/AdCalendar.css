@@ -350,46 +350,44 @@
 }
 
 .AdCal-Updt-calendar {
-  background: white;
-  border-radius: 12px;
-  padding: 15px;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  background: #f2f2f2;
+  border-radius: 20px;
+  padding: 25px;
+  box-shadow: none;
 }
 
 .AdCal-Updt-calendar-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
 
 .AdCal-Updt-nav-button {
-  padding: 6px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
-  background: none;
   border: none;
-  cursor: pointer;
-  color: #6b7280;
-  transition: all 0.2s ease;
+  background: transparent;
+  color: #9ca3af;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .AdCal-Updt-nav-button:hover {
-  background-color: #e5e7eb;
-  color: #374151;
-  transform: scale(1.05);
+  background: #e5e7eb;
+  color: #000;
 }
 
 .AdCal-Updt-current-month {
-  font-size: 16px;
+  font-size: 28px;
   font-weight: 700;
-  color: #202224;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  color: #2d2d2d;
+  text-transform: none;
+  letter-spacing: 0;
 }
 
 .AdCal-Updt-weekday-header {
@@ -404,33 +402,42 @@
 
 .AdCal-Updt-weekday {
   padding: 6px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 500;
+  color: #9ca3af;
 }
 
 .AdCal-Updt-calendar-grid {
+  padding: 20px ;
+  background: transparent;
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 2px;
-  background-color: #e5e7eb;
+  gap: 10px;
+  background-color: #f7f7f7;
   border-radius: 8px;
   overflow: hidden;
 }
 
 .AdCal-Updt-calendar-day,
 .AdCal-Updt-calendar-empty {
-  background-color: #ffffff;
-  aspect-ratio: 1 / 1;
+  width: 50px;
+  height: 50px;
+  margin: auto;
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
+  font-size: 14px;
+  font-weight: 500;
+  color: #2d2d2d;
+  border-radius: 50%;
   cursor: pointer;
   transition: all 0.2s ease;
-  font-size: 13px;
-  font-weight: 500;
+  background: transparent;
 }
 
 .AdCal-Updt-calendar-day:not(.past):hover {
-  background-color: #fff1c5;
+  background-color: #dfdfdf;
   transform: scale(1.02);
   z-index: 1;
 }
@@ -441,28 +448,28 @@
 }
 
 .AdCal-Updt-calendar-day.past {
-  background-color: #f3f4f6;
+  background-color: #aaaaaa;
   color: #9ca3af;
   cursor: not-allowed;
 }
 
 .AdCal-Updt-calendar-day.available {
-  border: 2px solid #059e12;
-  background-color: #f0fdf4;
+  border: 2px solid #efffeb;
+  background-color: #c8ffb3;
 }
 
 .AdCal-Updt-calendar-day.unavailable {
-  background-color: #f3f4f6;
+  background-color: #fff2f2;
   color: #9ca3af;
 }
 
 .AdCal-Updt-calendar-day.special-available {
   background-color: #dcfce7;
-  border: 2px dashed #059e12;
+  border: 2px dashed #7ac780;
 }
 
 .AdCal-Updt-calendar-day.special-unavailable {
-  background-color: #fee2e2;
+  background-color: #ffc8c8;
   border: 2px dashed #dc2626;
 }
 

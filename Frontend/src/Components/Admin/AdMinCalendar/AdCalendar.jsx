@@ -305,7 +305,7 @@ const AdCalendar = () => {
       const dayClasses = ['AdCal-Updt-calendar-day', isPast ? 'past' : 'future', isAvailable ? 'available' : 'unavailable', specialStatus ? `special-${specialStatus}` : '', isSelected ? 'selected' : ''].filter(Boolean).join(' ');
       calendarCells.push(
         <div key={`day-${day}`} className={dayClasses} onClick={() => !isPast && handleDateSelect(day)} role="button" tabIndex={isPast ? -1 : 0}>
-          <span className="AdCal-Updt-day-number">{day}</span>
+          <span className="AdCal-Updt-day-number-circle">{day}</span>
           {specialStatus && <div className="AdCal-Updt-status-indicator"></div>}
         </div>
       );
