@@ -28,6 +28,8 @@ import Service from './Pages/Service';
 import Map from './Pages/Map';
 import ContactUs from './Pages/ContactUs';
 import UnauthorizedPage from './Pages/UnauthorizedPage';
+import AluTReg from './Pages/AluTReg';
+
 import Login from './Components/Login/Login';
 import ItemMarkert from './Components/ItemMarkert/ItemMarkert';
 import ClientForm from './Components/RegistrationForm/ClientForm';
@@ -50,7 +52,7 @@ import DisReview from './Components/Admin/DisReview/DisReview';
 import AdScrap from './Components/Admin/AdScrap/AdScrap';
 import AdminLocationManager from './Components/Admin/AdMapUpdate/AdminLocationManager';
 import FloatingChatbot from './Components/ChatBot/FloatingChatbot';
-import AluTReg from './Pages/AluTReg';
+
 import GlassOrder from './Components/ItemMarkert/GlassOrder';
 import AluRegVideoUp from './Components/AluTReg/AluRegVideoUp';
 import ItemAddForm from './Components/Admin/ItemsAddForm/ItemsAddForm';
@@ -194,9 +196,21 @@ function App() {
 
     if (authState.isLoading) {
         return (
-            <div className="app-loading-container">
-                <ClipLoader size={70} color="#f97316" />
-                <p className="app-loading-text">Loading Application...</p>
+            <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '100vh',
+                width: '100vw',
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                backgroundColor: '#ffffff',
+                zIndex: 9999
+            }}>
+                <ClipLoader size={60} color="#f91616" />
+                <p style={{ marginTop: '20px', fontSize: '1.2rem', color: '#666' }}>Loading Application...</p>
             </div>
         );
     }
@@ -300,18 +314,45 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
         }
     }, [logoutMessage, location.pathname, navigate, auth.isLoggedIn]);
 
-    const popupStyle = {
-        position: 'fixed', top: '80px', left: '50%', transform: 'translateX(-50%)',
-        padding: '15px 25px', backgroundColor: '#fff3cd', color: '#856404',
-        border: '1px solid #ffeeba', borderRadius: '8px',
-        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)', zIndex: 1050,
-        textAlign: 'center', maxWidth: 'calc(100% - 40px)', width: 'auto', minWidth: '300px',
-        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+    const getUserRoleForChatbot = () => {
+        if (!auth.isLoggedIn || !auth.userInfo) return 'client';
+        const role = auth.userInfo.role;
+        if (role === 'admin') return 'admin';
+        if (role === 'businessOwner') return 'business';
+        return 'client';
     };
+
+    const popupStyle = {
+        position: 'fixed',
+        top: '80px',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        padding: '15px 25px',
+        backgroundColor: '#fff3cd',
+        color: '#856404',
+        border: '1px solid #ffeeba',
+        borderRadius: '8px',
+        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+        zIndex: 1050,
+        textAlign: 'center',
+        maxWidth: 'calc(100% - 40px)',
+        width: 'auto',
+        minWidth: '300px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+    };
+    
     const closeButtonStyle = {
-        background: 'none', border: 'none', color: 'inherit',
-        fontSize: '1.5rem', fontWeight: 'bold', cursor: 'pointer',
-        padding: '0 0.5rem', marginLeft: '15px', lineHeight: '1',
+        background: 'none',
+        border: 'none',
+        color: 'inherit',
+        fontSize: '1.5rem',
+        fontWeight: 'bold',
+        cursor: 'pointer',
+        padding: '0 0.5rem',
+        marginLeft: '15px',
+        lineHeight: '1',
     };
 
     return (
@@ -402,16 +443,35 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
                      </Route>
 
                     <Route path="*" element={ 
-                        <div className="page-not-found-container">
-                            <h1 className="page-not-found-title">404 - Page Not Found</h1>
-                            <p className="page-not-found-message">The page you are looking for does not exist.</p>
-                            <Link to="/" className="page-not-found-link">Go to Homepage</Link>
+                        <div style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            minHeight: '60vh',
+                            textAlign: 'center',
+                            padding: '2rem'
+                        }}>
+                            <h1 style={{ fontSize: '3rem', color: '#f97316', marginBottom: '1rem' }}>404 - Page Not Found</h1>
+                            <p style={{ fontSize: '1.2rem', color: '#666', marginBottom: '2rem' }}>The page you are looking for does not exist.</p>
+                            <Link to="/" style={{
+                                display: 'inline-block',
+                                padding: '12px 24px',
+                                backgroundColor: '#f97316',
+                                color: 'white',
+                                textDecoration: 'none',
+                                borderRadius: '8px',
+                                transition: 'background-color 0.3s'
+                            }}>Go to Homepage</Link>
                         </div>
                     } />
                 </Routes>
             </main>
             <Footer1 />
-            <FloatingChatbot /> 
+            <FloatingChatbot 
+                userRole={getUserRoleForChatbot()}
+                userId={auth.isLoggedIn ? auth.userInfo?.id : null}
+            />
         </div>
     );
 }

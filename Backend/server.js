@@ -131,6 +131,8 @@ console.log('[Server Startup] Loading controllers and middleware...');
 const { createInitialAdmin } = require('./controllers/adminController');
 const errorHandler = require('./middleware/errorHandler');
 
+const chatbotRoutes = require('./routes/chatbotRoutes');
+
 const app = express();
 const PORT = process.env.PORT || 5003;
 
@@ -331,6 +333,9 @@ if (cartRoutes) {
     console.error('[Server Config] ERROR: cartRoutes is null or undefined!');
 }
 
+console.log('[Server Config] Mounting ALUX Chatbot routes...');
+mountRoute(app, '/api/chatbot', chatbotRoutes);
+
 app.use('*', (req, res) => {
     console.log(`[404] ${req.method} ${req.originalUrl} - Route not found`);
     res.status(404).json({ 
@@ -388,6 +393,7 @@ const startServer = async () => {
             console.log(`[Server Startup] SERVER LISTENING on http://localhost:${PORT}`);
             console.log(`[Server Startup] Environment: ${process.env.NODE_ENV || 'development'}`);
             console.log(`[Server Startup] Frontend URL configured for CORS: ${process.env.FRONTEND_URL || 'http://localhost:5173'}`);
+            console.log(`[Server Startup] ALUX Chatbot available at: http://localhost:${PORT}/api/chatbot/query`);
 
             try {
                 console.log('[Server Startup] Attempting to create initial admin user...');

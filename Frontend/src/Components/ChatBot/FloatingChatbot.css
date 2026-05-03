@@ -1,4 +1,4 @@
-.ALUX-launcher {
+.alux-launcher {
   position: fixed;
   right: 24px;
   bottom: 24px;
@@ -21,13 +21,13 @@
   letter-spacing: 0.2px;
 }
 
-.ALUX-launcher:hover {
+.alux-launcher:hover {
   background: #145a24;
   transform: translateY(-2px);
   box-shadow: 0 6px 24px rgba(26, 110, 46, 0.48);
 }
 
-.ALUX-chat {
+.alux-chat {
   position: fixed;
   right: 24px;
   bottom: 24px;
@@ -41,18 +41,18 @@
   overflow: hidden;
   font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
   transition: height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  animation: ALUX-rise 0.26s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: alux-rise 0.26s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.ALUX-expanded {
+.alux-expanded {
   height: 560px;
 }
 
-.ALUX-minimized {
+.alux-minimized {
   height: 58px;
 }
 
-@keyframes ALUX-rise {
+@keyframes alux-rise {
   from {
     opacity: 0;
     transform: translateY(14px) scale(0.97);
@@ -63,7 +63,7 @@
   }
 }
 
-.ALUX-header {
+.alux-header {
   background: #0d3d1a;
   color: #ffffff;
   padding: 0 12px 0 16px;
@@ -74,13 +74,13 @@
   flex-shrink: 0;
 }
 
-.ALUX-header-left {
+.alux-header-left {
   display: flex;
   align-items: center;
   gap: 11px;
 }
 
-.ALUX-avatar {
+.alux-avatar {
   width: 36px;
   height: 36px;
   border-radius: 50%;
@@ -92,20 +92,20 @@
   box-shadow: 0 0 0 3px rgba(57, 168, 90, 0.3);
 }
 
-.ALUX-header-info {
+.alux-header-info {
   display: flex;
   flex-direction: column;
   gap: 2px;
 }
 
-.ALUX-name {
+.alux-name {
   font-size: 15px;
   font-weight: 700;
   letter-spacing: 0.2px;
   line-height: 1;
 }
 
-.ALUX-status {
+.alux-status {
   font-size: 11px;
   color: rgba(255, 255, 255, 0.65);
   display: flex;
@@ -113,7 +113,7 @@
   gap: 4px;
 }
 
-.ALUX-dot {
+.alux-dot {
   display: inline-block;
   width: 7px;
   height: 7px;
@@ -122,13 +122,13 @@
   box-shadow: 0 0 5px rgba(76, 222, 112, 0.7);
 }
 
-.ALUX-header-actions {
+.alux-header-actions {
   display: flex;
   align-items: center;
   gap: 2px;
 }
 
-.ALUX-ctrl {
+.alux-ctrl {
   background: none;
   border: none;
   color: rgba(255, 255, 255, 0.65);
@@ -142,17 +142,17 @@
   transition: background 0.15s, color 0.15s;
 }
 
-.ALUX-ctrl:hover {
+.alux-ctrl:hover {
   background: rgba(255, 255, 255, 0.1);
   color: #ffffff;
 }
 
-.ALUX-close:hover {
+.alux-close:hover {
   background: rgba(220, 60, 60, 0.22);
   color: #ff8080;
 }
 
-.ALUX-body {
+.alux-body {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -160,7 +160,7 @@
   background: #f7f9f7;
 }
 
-.ALUX-home {
+.alux-home {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -168,7 +168,7 @@
   overflow-y: auto;
 }
 
-.ALUX-home-hero {
+.alux-home-hero {
   background: #ffffff;
   border: 1px solid #e0e8e1;
   border-radius: 12px;
@@ -177,68 +177,68 @@
   margin-bottom: 16px;
 }
 
-.ALUX-hero-icon {
+.alux-hero-icon {
   font-size: 28px;
   margin-bottom: 8px;
   line-height: 1;
 }
 
-.ALUX-hero-title {
+.alux-hero-title {
   margin: 0 0 4px;
   font-size: 17px;
   font-weight: 700;
   color: #1a1a1a;
 }
 
-.ALUX-hero-sub {
+.alux-hero-sub {
   margin: 0;
   font-size: 13px;
   color: #6b7c6e;
   line-height: 1.5;
 }
 
-.ALUX-section-label {
+.alux-section-label {
   font-size: 11px;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.6px;
+  letter-spacing: 1px;
   color: #6b7c6e;
-  margin: 0 0 8px 2px;
+  margin: 0 0 12px 2px;
 }
 
-.ALUX-topics {
+.alux-topics {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  margin-bottom: 14px;
+  gap: 8px;
+  margin-bottom: 20px;
 }
 
-.ALUX-topic-btn {
+.alux-topic-btn {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 10px 12px;
+  gap: 12px;
+  padding: 12px 14px;
   background: #ffffff;
   border: 1px solid #e0e8e1;
-  border-radius: 10px;
+  border-radius: 12px;
   cursor: pointer;
   font-size: 13.5px;
   font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
   color: #1a1a1a;
   text-align: left;
   font-weight: 500;
-  transition: border-color 0.15s, background 0.15s, transform 0.12s, color 0.15s;
+  transition: all 0.2s ease;
 }
 
-.ALUX-topic-btn:hover {
+.alux-topic-btn:hover {
   border-color: #1a6e2e;
   background: #e8f5ec;
   color: #145a24;
-  transform: translateX(3px);
+  transform: translateX(4px);
 }
 
 .topic-icon {
-  font-size: 16px;
+  font-size: 18px;
   flex-shrink: 0;
 }
 
@@ -246,55 +246,45 @@
   flex: 1;
 }
 
-.topic-arrow {
-  flex-shrink: 0;
-  opacity: 0.35;
-  transition: opacity 0.15s;
-}
-
-.ALUX-topic-btn:hover .topic-arrow {
-  opacity: 1;
-}
-
-.ALUX-divider {
+.alux-divider {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 10px;
-  font-size: 11.5px;
+  margin: 8px 0 12px;
+  font-size: 11px;
   color: #b0bdb2;
 }
 
-.ALUX-divider::before,
-.ALUX-divider::after {
+.alux-divider::before,
+.alux-divider::after {
   content: '';
   flex: 1;
   height: 1px;
   background: #e0e8e1;
 }
 
-.ALUX-messages {
+.alux-messages {
   flex: 1;
-  padding: 14px 14px 6px;
+  padding: 16px 12px 8px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
   background: #f7f9f7;
 }
 
-.ALUX-row {
+.alux-row {
   display: flex;
   align-items: flex-end;
-  gap: 7px;
-  animation: ALUX-fadein 0.22s ease-out;
+  gap: 8px;
+  animation: alux-fadein 0.25s ease-out;
 }
 
-.ALUX-row.user {
+.alux-row.user {
   flex-direction: row-reverse;
 }
 
-.ALUX-msg-avatar {
+.alux-msg-avatar {
   width: 28px;
   height: 28px;
   border-radius: 50%;
@@ -306,39 +296,60 @@
   flex-shrink: 0;
 }
 
-.ALUX-bubble {
+.alux-bubble {
   max-width: 74%;
   padding: 10px 14px;
-  border-radius: 16px;
+  border-radius: 18px;
   font-size: 13.5px;
-  line-height: 1.6;
+  line-height: 1.5;
   word-break: break-word;
 }
 
-.ALUX-row.bot .ALUX-bubble {
+.alux-row.bot .alux-bubble {
   background: #ffffff;
   color: #1a1a1a;
   border-bottom-left-radius: 4px;
   border: 1px solid #e0e8e1;
 }
 
-.ALUX-row.user .ALUX-bubble {
+.alux-row.user .alux-bubble {
   background: #1a6e2e;
   color: #ffffff;
   border-bottom-right-radius: 4px;
 }
 
-.ALUX-bubble.ALUX-error {
-  background: #fff4f4;
-  border-color: #f5c0c0;
-  color: #c0392b;
+.alux-suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 8px 0 4px 36px;
+}
+
+.alux-suggestion-chip {
+  background: #e8f0ea;
+  border: 1px solid #c8dccf;
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  color: #1a6e2e;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-weight: 500;
+}
+
+.alux-suggestion-chip:hover {
+  background: #1a6e2e;
+  border-color: #1a6e2e;
+  color: #ffffff;
+  transform: translateY(-1px);
 }
 
 .typing-dots {
   display: flex;
   align-items: center;
   gap: 4px;
-  padding: 3px 2px;
+  padding: 2px 0;
 }
 
 .typing-dots span {
@@ -347,69 +358,66 @@
   height: 7px;
   border-radius: 50%;
   background: #b0bdb2;
-  animation: ALUX-bounce 1.2s infinite ease-in-out;
+  animation: alux-bounce 1.3s infinite ease-in-out;
 }
 
-.typing-dots span:nth-child(2) {
-  animation-delay: 0.18s;
-}
+.typing-dots span:nth-child(1) { animation-delay: 0s; }
+.typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+.typing-dots span:nth-child(3) { animation-delay: 0.4s; }
 
-.typing-dots span:nth-child(3) {
-  animation-delay: 0.36s;
-}
-
-@keyframes ALUX-bounce {
-  0%, 80%, 100% {
-    transform: scale(0.72);
-    opacity: 0.45;
+@keyframes alux-bounce {
+  0%, 60%, 100% {
+    transform: translateY(0);
+    opacity: 0.5;
   }
-  40% {
-    transform: scale(1.1);
+  30% {
+    transform: translateY(-6px);
     opacity: 1;
   }
 }
 
-.ALUX-input-bar {
+.alux-input-bar {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 10px 12px;
+  gap: 10px;
+  padding: 12px 14px;
   background: #ffffff;
-  border-top: 1px solid #e0e8e1;
+  border-top: 1px solid #eef2ef;
   flex-shrink: 0;
 }
 
-.ALUX-input-bar input {
+.alux-input-bar input {
   flex: 1;
-  height: 40px;
-  padding: 0 14px;
+  height: 42px;
+  padding: 0 16px;
   border: 1.5px solid #e0e8e1;
-  border-radius: 20px;
+  border-radius: 24px;
   outline: none;
   font-size: 13.5px;
   font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
   color: #1a1a1a;
-  background: #f7f9f7;
-  transition: border-color 0.15s, background 0.15s;
+  background: #fafcfa;
+  transition: all 0.15s ease;
 }
 
-.ALUX-input-bar input:focus {
+.alux-input-bar input:focus {
   border-color: #1a6e2e;
   background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(26, 110, 46, 0.1);
 }
 
-.ALUX-input-bar input:disabled {
+.alux-input-bar input:disabled {
   opacity: 0.55;
   cursor: not-allowed;
 }
 
-.ALUX-input-bar input::placeholder {
-  color: #a8b5ab;
+.alux-input-bar input::placeholder {
+  color: #b8c4bb;
 }
 
-.ALUX-send {
-  width: 40px;
-  height: 40px;
+.alux-send {
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
   background: #1a6e2e;
   color: #ffffff;
@@ -419,45 +427,46 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  transition: background 0.15s, transform 0.12s;
+  transition: all 0.15s ease;
 }
 
-.ALUX-send:hover:not(:disabled) {
+.alux-send:hover:not(:disabled) {
   background: #145a24;
-  transform: scale(1.07);
+  transform: scale(1.05);
 }
 
-.ALUX-send:disabled {
-  background: #c8d5ca;
+.alux-send:disabled {
+  background: #c8d9cc;
   cursor: not-allowed;
   transform: none;
 }
 
-.ALUX-messages::-webkit-scrollbar,
-.ALUX-home::-webkit-scrollbar {
-  width: 4px;
+.alux-messages::-webkit-scrollbar,
+.alux-home::-webkit-scrollbar {
+  width: 5px;
 }
 
-.ALUX-messages::-webkit-scrollbar-track,
-.ALUX-home::-webkit-scrollbar-track {
-  background: transparent;
+.alux-messages::-webkit-scrollbar-track,
+.alux-home::-webkit-scrollbar-track {
+  background: #eef2ef;
+  border-radius: 3px;
 }
 
-.ALUX-messages::-webkit-scrollbar-thumb,
-.ALUX-home::-webkit-scrollbar-thumb {
-  background: #c8d5ca;
-  border-radius: 4px;
+.alux-messages::-webkit-scrollbar-thumb,
+.alux-home::-webkit-scrollbar-thumb {
+  background: #b8cebf;
+  border-radius: 3px;
 }
 
-.ALUX-messages::-webkit-scrollbar-thumb:hover,
-.ALUX-home::-webkit-scrollbar-thumb:hover {
-  background: #a8b9ab;
+.alux-messages::-webkit-scrollbar-thumb:hover,
+.alux-home::-webkit-scrollbar-thumb:hover {
+  background: #84a38f;
 }
 
-@keyframes ALUX-fadein {
+@keyframes alux-fadein {
   from {
     opacity: 0;
-    transform: translateY(5px);
+    transform: translateY(6px);
   }
   to {
     opacity: 1;
@@ -465,14 +474,37 @@
   }
 }
 
-@media (max-width: 420px) {
-  .ALUX-chat {
+@media (max-width: 480px) {
+  .alux-chat {
     width: calc(100vw - 24px);
     right: 12px;
     bottom: 12px;
   }
-  .ALUX-launcher {
+  
+  .alux-launcher {
     right: 12px;
     bottom: 12px;
+    padding: 0 18px 0 14px;
+    height: 46px;
+    font-size: 13px;
+  }
+  
+  .alux-expanded {
+    height: 520px;
+  }
+  
+  .alux-bubble {
+    max-width: 85%;
+    font-size: 13px;
+    padding: 8px 12px;
+  }
+  
+  .alux-suggestions {
+    padding-left: 32px;
+  }
+  
+  .alux-suggestion-chip {
+    padding: 5px 12px;
+    font-size: 11px;
   }
 }
