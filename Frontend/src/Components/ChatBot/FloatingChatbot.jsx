@@ -10,12 +10,19 @@ const QUICK_TOPICS = [
   { icon: '💰', label: 'Check Prices', prompt: 'What is the price per kg?' },
   { icon: '♻️', label: 'Accepted Materials', prompt: 'What materials are accepted?' },
   { icon: '📍', label: 'Service Areas', prompt: 'What areas do you cover?' },
-  { icon: '📝', label: 'Modify Booking', prompt: 'How do I modify or cancel my booking?' },
-  { icon: '🌍', label: 'Why Recycle?', prompt: 'What are the benefits of recycling aluminum?' }
+  { icon: '🥤', label: 'Glass Orders', prompt: 'Glass prices' },
+  { icon: '📋', label: 'My Quotes', prompt: 'My quotes' },
+  { icon: '🛒', label: 'Marketplace', prompt: 'Marketplace items' },
+  { icon: '📁', label: 'ALUX Projects', prompt: 'ALUX Projects' },
+  { icon: '🎓', label: 'Training', prompt: 'Training program' },
+  { icon: '💼', label: 'Buy & Sell', prompt: 'Buy and sell guide' }
 ];
 
 const TypingDots = () => (
-  <div className="typing-dots"><span /><span /><span /></div>
+  <div className="typing-dots">
+    <span></span>
+    span<span></span>
+  </div>
 );
 
 const FormattedText = ({ text }) => {
@@ -45,7 +52,37 @@ const ChatIcon = () => (
   </svg>
 );
 
-const FloatingChatbot = ({ userRole = 'client', userId = null }) => {
+const CloseIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+    <path d="M18 6L6 18M6 6l12 12" />
+  </svg>
+);
+
+const MinusIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+    <path d="M5 12h14" />
+  </svg>
+);
+
+const ExpandIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+    <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" />
+  </svg>
+);
+
+const NewChatIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+    <path d="M12 5v14M5 12h14" />
+  </svg>
+);
+
+const SendIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+    <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" />
+  </svg>
+);
+
+const FloatingChatbot = ({ userRole = 'client', userId = null, userEmail = null }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
   const [messages, setMessages] = useState([]);
@@ -76,19 +113,36 @@ const FloatingChatbot = ({ userRole = 'client', userId = null }) => {
     setShowHome(false);
     setInputValue('');
     
-    const userMessage = { text: trimmed, sender: 'user' };
+    const userMessage = { text: trimmed, sender: 'user', timestamp: new Date() };
     setMessages(prev => [...prev, userMessage]);
     setIsTyping(true);
 
     try {
+      const storedUserInfo = localStorage.getItem('userInfo');
+      let userEmailToSend = userEmail;
+      let userRoleToSend = userRole;
+      let userIdToSend = userId;
+      
+      if (storedUserInfo && !userEmailToSend) {
+        try {
+          const userInfo = JSON.parse(storedUserInfo);
+          userEmailToSend = userInfo.email;
+          userIdToSend = userInfo.id;
+          userRoleToSend = userInfo.role === 'businessOwner' ? 'business' : userInfo.role;
+        } catch (e) {
+          console.error('Failed to parse userInfo:', e);
+        }
+      }
+
       const response = await fetch(`${API_URL}/query`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
           message: trimmed, 
-          userRole: userRole,
-          userId: userId,
-          sessionId: sessionId
+          userRole: userRoleToSend,
+          userId: userIdToSend,
+          sessionId: sessionId,
+          userEmail: userEmailToSend
         })
       });
       
@@ -98,20 +152,24 @@ const FloatingChatbot = ({ userRole = 'client', userId = null }) => {
       
       const data = await response.json();
       
-      setMessages(prev => [...prev, { text: data.response, sender: 'bot' }]);
-      setSuggestions(data.suggestedQuestions || []);
+      setMessages(prev => [...prev, { 
+        text: data.response, 
+        sender: 'bot', 
+        timestamp: new Date(),
+        roleDetected: data.roleDetected 
+      }]);
+      
+      if (data.suggestedQuestions && data.suggestedQuestions.length > 0) {
+        setSuggestions(data.suggestedQuestions);
+      }
     } catch (error) {
       console.error('Chatbot API error:', error);
-      let errorMessage = "⚠️ Sorry, I'm having trouble connecting to the ALUX assistant. ";
+      let errorMessage = "⚠️ Sorry, I'm having trouble connecting to the ALUX assistant.\n\n";
       
       if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
-        errorMessage += "Please make sure the backend server is running on port 5003.\n\n";
-        errorMessage += "**Troubleshooting:**\n";
-        errorMessage += "1. Run `cd backend && npm run dev`\n";
-        errorMessage += "2. Check if MongoDB is connected\n";
-        errorMessage += "3. Verify the server is running on http://localhost:5003";
+        errorMessage += "Make sure backend server is running on port 5003: cd backend && npm run dev";
       } else if (error.message.includes('HTTP 404')) {
-        errorMessage += "The chatbot endpoint was not found. Please check if the backend routes are properly configured.";
+        errorMessage += "The chatbot endpoint was not found.";
       } else if (error.message.includes('HTTP 500')) {
         errorMessage += "The server encountered an error. Please try again later.";
       } else {
@@ -120,8 +178,17 @@ const FloatingChatbot = ({ userRole = 'client', userId = null }) => {
       
       setMessages(prev => [...prev, { 
         text: errorMessage, 
-        sender: 'bot' 
+        sender: 'bot',
+        timestamp: new Date(),
+        isError: true 
       }]);
+      
+      setSuggestions([
+        "What is the price per kg?",
+        "How do I book a pickup?",
+        "Glass prices",
+        "Check server status"
+      ]);
     } finally {
       setIsTyping(false);
     }
@@ -152,6 +219,12 @@ const FloatingChatbot = ({ userRole = 'client', userId = null }) => {
     setSuggestions([]);
   };
 
+  const formatTime = (timestamp) => {
+    if (!timestamp) return '';
+    const date = new Date(timestamp);
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  };
+
   if (!isOpen) {
     return (
       <button className="alux-launcher" onClick={handleOpen} aria-label="Open ALUX AI">
@@ -165,35 +238,28 @@ const FloatingChatbot = ({ userRole = 'client', userId = null }) => {
     <div className={`alux-chat ${isMinimized ? 'alux-minimized' : 'alux-expanded'}`}>
       <div className="alux-header">
         <div className="alux-header-left">
-          <div className="alux-avatar"><ChatIcon /></div>
+          <div className="alux-avatar">
+            <ChatIcon />
+          </div>
           <div className="alux-header-info">
             <span className="alux-name">{BOT_NAME}</span>
-            <span className="alux-status"><span className="alux-dot" />Online</span>
+            <span className="alux-status">
+              <span className="alux-dot"></span>
+              Online
+            </span>
           </div>
         </div>
         <div className="alux-header-actions">
           {!isMinimized && messages.length > 0 && (
             <button className="alux-ctrl" onClick={handleNewChat} title="New chat">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                <path d="M12 5v14M5 12h14" />
-              </svg>
+              <NewChatIcon />
             </button>
           )}
-          <button className="alux-ctrl" onClick={() => setIsMinimized(m => !m)}>
-            {isMinimized ? (
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" />
-              </svg>
-            ) : (
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                <path d="M5 12h14" />
-              </svg>
-            )}
+          <button className="alux-ctrl" onClick={() => setIsMinimized(!isMinimized)} title={isMinimized ? 'Expand' : 'Minimize'}>
+            {isMinimized ? <ExpandIcon /> : <MinusIcon />}
           </button>
-          <button className="alux-ctrl alux-close" onClick={() => setIsOpen(false)}>
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-              <path d="M18 6L6 18M6 6l12 12" />
-            </svg>
+          <button className="alux-ctrl alux-close" onClick={() => setIsOpen(false)} title="Close">
+            <CloseIcon />
           </button>
         </div>
       </div>
@@ -206,64 +272,99 @@ const FloatingChatbot = ({ userRole = 'client', userId = null }) => {
                 <div className="alux-hero-icon">♻️</div>
                 <p className="alux-hero-title">Hi, I'm {BOT_NAME}</p>
                 <p className="alux-hero-sub">{BOT_SUBTITLE}</p>
+                <p className="alux-hero-desc">
+                  I can help you with prices, bookings, glass orders, quotations, marketplace, training, projects, and buy & sell!
+                </p>
               </div>
 
               <p className="alux-section-label">Quick actions</p>
               <div className="alux-topics">
-                {QUICK_TOPICS.map((t, i) => (
-                  <button key={i} className="alux-topic-btn" onClick={() => sendMessage(t.prompt)}>
-                    <span className="topic-icon">{t.icon}</span>
-                    <span className="topic-label">{t.label}</span>
+                {QUICK_TOPICS.map((topic, index) => (
+                  <button 
+                    key={index} 
+                    className="alux-topic-btn" 
+                    onClick={() => sendMessage(topic.prompt)}
+                  >
+                    <span className="topic-icon">{topic.icon}</span>
+                    <span className="topic-label">{topic.label}</span>
                   </button>
                 ))}
               </div>
 
-              <div className="alux-divider"><span>or ask anything</span></div>
+              <div className="alux-divider">
+                <span>or ask anything</span>
+              </div>
 
               <div className="alux-input-bar">
                 <input
                   ref={inputRef}
                   type="text"
                   value={inputValue}
-                  onChange={e => setInputValue(e.target.value)}
+                  onChange={(e) => setInputValue(e.target.value)}
                   onKeyDown={handleKeyDown}
                   placeholder="Type a message..."
+                  autoFocus
                 />
-                <button className="alux-send" onClick={handleSend} disabled={!inputValue.trim()}>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                    <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" />
-                  </svg>
+                <button 
+                  className="alux-send" 
+                  onClick={handleSend} 
+                  disabled={!inputValue.trim()}
+                >
+                  <SendIcon />
                 </button>
               </div>
             </div>
           ) : (
             <>
               <div className="alux-messages">
-                {messages.map((msg, i) => (
-                  <div key={i} className={`alux-row ${msg.sender}`}>
+                {messages.map((msg, index) => (
+                  <div key={index} className={`alux-message-row ${msg.sender}`}>
                     {msg.sender === 'bot' && (
-                      <div className="alux-msg-avatar"><ChatIcon /></div>
+                      <div className="alux-message-avatar">
+                        <ChatIcon />
+                      </div>
                     )}
-                    <div className="alux-bubble">
-                      {msg.sender === 'bot' ? <FormattedText text={msg.text} /> : msg.text}
+                    <div className={`alux-message-bubble ${msg.isError ? 'alux-error' : ''}`}>
+                      {msg.sender === 'bot' ? (
+                        <FormattedText text={msg.text} />
+                      ) : (
+                        msg.text
+                      )}
+                      <div className="alux-message-time">
+                        {formatTime(msg.timestamp)}
+                      </div>
                     </div>
                   </div>
                 ))}
+                
                 {isTyping && (
-                  <div className="alux-row bot">
-                    <div className="alux-msg-avatar"><ChatIcon /></div>
-                    <div className="alux-bubble"><TypingDots /></div>
+                  <div className="alux-message-row bot">
+                    <div className="alux-message-avatar">
+                      <ChatIcon />
+                    </div>
+                    <div className="alux-message-bubble alux-typing">
+                      <TypingDots />
+                    </div>
                   </div>
                 )}
+                
                 {suggestions.length > 0 && !isTyping && messages.length > 0 && (
                   <div className="alux-suggestions">
-                    {suggestions.map((s, i) => (
-                      <button key={i} className="alux-suggestion-chip" onClick={() => sendMessage(s)}>
-                        {s}
-                      </button>
-                    ))}
+                    <p className="alux-suggestions-title">Suggested questions:</p>
+                    <div className="alux-suggestions-list">
+                      {suggestions.slice(0, 6).map((suggestion, index) => (
+                        <button 
+                          key={index} 
+                          className="alux-suggestion-chip" 
+                          onClick={() => sendMessage(suggestion)}
+                        >
+                          {suggestion}
+                        </button>
+                      ))}
+                    </div>
                   </div>
                 )}
+                
                 <div ref={messagesEndRef} />
               </div>
 
@@ -272,15 +373,17 @@ const FloatingChatbot = ({ userRole = 'client', userId = null }) => {
                   ref={inputRef}
                   type="text"
                   value={inputValue}
-                  onChange={e => setInputValue(e.target.value)}
+                  onChange={(e) => setInputValue(e.target.value)}
                   onKeyDown={handleKeyDown}
                   placeholder="Ask ALUX AI anything..."
                   disabled={isTyping}
                 />
-                <button className="alux-send" onClick={handleSend} disabled={isTyping || !inputValue.trim()}>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                    <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" />
-                  </svg>
+                <button 
+                  className="alux-send" 
+                  onClick={handleSend} 
+                  disabled={isTyping || !inputValue.trim()}
+                >
+                  <SendIcon />
                 </button>
               </div>
             </>

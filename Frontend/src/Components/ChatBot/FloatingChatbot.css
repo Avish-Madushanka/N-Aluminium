@@ -32,24 +32,26 @@
   right: 24px;
   bottom: 24px;
   z-index: 1000;
-  width: 370px;
-  border-radius: 16px;
+  width: 400px;
+  border-radius: 20px;
   background: #ffffff;
   box-shadow: 0 10px 48px rgba(0, 0, 0, 0.16), 0 2px 8px rgba(0, 0, 0, 0.06);
   display: flex;
   flex-direction: column;
   overflow: hidden;
   font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-  transition: height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   animation: alux-rise 0.26s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .alux-expanded {
-  height: 560px;
+  height: 620px;
 }
 
 .alux-minimized {
   height: 58px;
+  width: auto;
+  border-radius: 40px;
 }
 
 @keyframes alux-rise {
@@ -164,28 +166,28 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  padding: 18px 16px 14px;
+  padding: 20px 16px 14px;
   overflow-y: auto;
 }
 
 .alux-home-hero {
   background: #ffffff;
   border: 1px solid #e0e8e1;
-  border-radius: 12px;
-  padding: 18px 16px;
+  border-radius: 16px;
+  padding: 20px 16px;
   text-align: center;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
 }
 
 .alux-hero-icon {
-  font-size: 28px;
+  font-size: 36px;
   margin-bottom: 8px;
   line-height: 1;
 }
 
 .alux-hero-title {
   margin: 0 0 4px;
-  font-size: 17px;
+  font-size: 18px;
   font-weight: 700;
   color: #1a1a1a;
 }
@@ -194,7 +196,7 @@
   margin: 0;
   font-size: 13px;
   color: #6b7c6e;
-  line-height: 1.5;
+  line-height: 1.4;
 }
 
 .alux-section-label {
@@ -208,7 +210,7 @@
 
 .alux-topics {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
   gap: 8px;
   margin-bottom: 20px;
 }
@@ -216,13 +218,13 @@
 .alux-topic-btn {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 12px 14px;
+  gap: 8px;
+  padding: 8px 14px;
   background: #ffffff;
   border: 1px solid #e0e8e1;
-  border-radius: 12px;
+  border-radius: 40px;
   cursor: pointer;
-  font-size: 13.5px;
+  font-size: 13px;
   font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
   color: #1a1a1a;
   text-align: left;
@@ -234,16 +236,16 @@
   border-color: #1a6e2e;
   background: #e8f5ec;
   color: #145a24;
-  transform: translateX(4px);
+  transform: translateY(-1px);
 }
 
 .topic-icon {
-  font-size: 18px;
+  font-size: 14px;
   flex-shrink: 0;
 }
 
 .topic-label {
-  flex: 1;
+  flex-shrink: 0;
 }
 
 .alux-divider {
@@ -273,20 +275,20 @@
   background: #f7f9f7;
 }
 
-.alux-row {
+.alux-message-row {
   display: flex;
-  align-items: flex-end;
+  align-items: flex-start;
   gap: 8px;
   animation: alux-fadein 0.25s ease-out;
 }
 
-.alux-row.user {
+.alux-message-row.user {
   flex-direction: row-reverse;
 }
 
-.alux-msg-avatar {
-  width: 28px;
-  height: 28px;
+.alux-message-avatar {
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   background: #1a6e2e;
   color: #ffffff;
@@ -296,33 +298,62 @@
   flex-shrink: 0;
 }
 
-.alux-bubble {
-  max-width: 74%;
+.alux-message-bubble {
+  max-width: 72%;
   padding: 10px 14px;
   border-radius: 18px;
   font-size: 13.5px;
   line-height: 1.5;
   word-break: break-word;
+  position: relative;
 }
 
-.alux-row.bot .alux-bubble {
+.alux-message-row.bot .alux-message-bubble {
   background: #ffffff;
   color: #1a1a1a;
   border-bottom-left-radius: 4px;
   border: 1px solid #e0e8e1;
 }
 
-.alux-row.user .alux-bubble {
+.alux-message-row.user .alux-message-bubble {
   background: #1a6e2e;
   color: #ffffff;
   border-bottom-right-radius: 4px;
+}
+
+.alux-message-bubble.alux-error {
+  background: #fff4f4;
+  border-color: #f5c0c0;
+  color: #c0392b;
+}
+
+.alux-message-time {
+  font-size: 9px;
+  color: #999;
+  margin-top: 4px;
+  text-align: right;
+  opacity: 0.7;
 }
 
 .alux-suggestions {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  padding: 8px 0 4px 36px;
+  padding: 8px 0 4px 40px;
+  margin-top: 4px;
+}
+
+.alux-suggestions-title {
+  font-size: 10px;
+  color: #8b9a8e;
+  margin: 0 0 6px 0;
+  width: 100%;
+}
+
+.alux-suggestions-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
 .alux-suggestion-chip {
@@ -343,6 +374,10 @@
   border-color: #1a6e2e;
   color: #ffffff;
   transform: translateY(-1px);
+}
+
+.alux-typing {
+  padding: 12px 16px;
 }
 
 .typing-dots {
@@ -493,7 +528,7 @@
     height: 520px;
   }
   
-  .alux-bubble {
+  .alux-message-bubble {
     max-width: 85%;
     font-size: 13px;
     padding: 8px 12px;
@@ -506,5 +541,10 @@
   .alux-suggestion-chip {
     padding: 5px 12px;
     font-size: 11px;
+  }
+  
+  .alux-message-avatar {
+    width: 28px;
+    height: 28px;
   }
 }

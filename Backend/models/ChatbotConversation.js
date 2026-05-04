@@ -5,6 +5,7 @@ const chatbotConversationSchema = new mongoose.Schema({
   sessionId: { type: String },
   userMessage: { type: String, required: true },
   botResponse: { type: String, required: true },
+  intentDetected: { type: String },
   roleDetected: { type: String, default: 'client' },
   createdAt: { type: Date, default: Date.now }
 });
