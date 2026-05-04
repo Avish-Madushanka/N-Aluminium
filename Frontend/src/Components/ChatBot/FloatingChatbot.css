@@ -1,30 +1,30 @@
-.alux-launcher {
+.alux-robot-launcher {
   position: fixed;
   right: 24px;
   bottom: 24px;
   z-index: 1001;
+  width: auto;
+  height: auto;
+  background: transparent;
+  border: none;
+  cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 0 22px 0 16px;
-  height: 50px;
-  border-radius: 25px;
-  background: #1a6e2e;
-  color: #ffffff;
-  border: none;
-  font-size: 14px;
-  font-weight: 600;
-  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-  cursor: pointer;
-  box-shadow: 0 4px 18px rgba(26, 110, 46, 0.38);
-  transition: transform 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
-  letter-spacing: 0.2px;
+  justify-content: center;
+  transition: transform 0.25s ease;
+  padding: 0;
+  margin: 0;
 }
 
-.alux-launcher:hover {
-  background: #145a24;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 24px rgba(26, 110, 46, 0.48);
+.alux-robot-launcher:hover {
+  transform: scale(1.08);
+}
+
+.alux-robot-icon {
+  width: 130px;
+  height: 130px;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.15));
 }
 
 .alux-chat {
@@ -32,20 +32,20 @@
   right: 24px;
   bottom: 24px;
   z-index: 1000;
-  width: 400px;
-  border-radius: 20px;
+  width: 420px;
+  border-radius: 24px;
   background: #ffffff;
-  box-shadow: 0 10px 48px rgba(0, 0, 0, 0.16), 0 2px 8px rgba(0, 0, 0, 0.06);
   display: flex;
   flex-direction: column;
   overflow: hidden;
   font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  animation: alux-rise 0.26s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: alux-rise 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
 }
 
 .alux-expanded {
-  height: 620px;
+  height: 650px;
 }
 
 .alux-minimized {
@@ -57,7 +57,7 @@
 @keyframes alux-rise {
   from {
     opacity: 0;
-    transform: translateY(14px) scale(0.97);
+    transform: translateY(20px) scale(0.96);
   }
   to {
     opacity: 1;
@@ -66,10 +66,10 @@
 }
 
 .alux-header {
-  background: #0d3d1a;
+  background: #0f7fa1;
   color: #ffffff;
-  padding: 0 12px 0 16px;
-  height: 58px;
+  padding: 0 16px 0 18px;
+  height: 64px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -79,79 +79,100 @@
 .alux-header-left {
   display: flex;
   align-items: center;
-  gap: 11px;
+  gap: 12px;
 }
 
 .alux-avatar {
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  background: #1a6e2e;
+  background: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  box-shadow: 0 0 0 3px rgba(57, 168, 90, 0.3);
+  overflow: hidden;
+}
+
+.alux-avatar-icon {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.alux-avatar-icon-small {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
 .alux-header-info {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 3px;
 }
 
 .alux-name {
-  font-size: 15px;
+  font-size: 20px;
   font-weight: 700;
-  letter-spacing: 0.2px;
+  letter-spacing: 0.3px;
   line-height: 1;
+  color: #ffffff;
 }
 
 .alux-status {
-  font-size: 11px;
-  color: rgba(255, 255, 255, 0.65);
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 5px;
 }
 
 .alux-dot {
   display: inline-block;
-  width: 7px;
-  height: 7px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
-  background: #4cde70;
-  box-shadow: 0 0 5px rgba(76, 222, 112, 0.7);
+  background: #16fa5a;
+  box-shadow: 0 0 6px rgba(76, 222, 112, 0.8);
+  animation: alux-pulse 2s infinite;
+}
+
+@keyframes alux-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.1); }
 }
 
 .alux-header-actions {
   display: flex;
   align-items: center;
-  gap: 2px;
+  gap: 4px;
 }
 
 .alux-ctrl {
-  background: none;
+  background: rgba(255, 255, 255, 0.1);
   border: none;
-  color: rgba(255, 255, 255, 0.65);
+  color: rgba(255, 255, 255, 0.8);
   cursor: pointer;
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.15s, color 0.15s;
+  transition: all 0.2s ease;
 }
 
 .alux-ctrl:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.2);
   color: #ffffff;
+  transform: scale(1.05);
 }
 
 .alux-close:hover {
-  background: rgba(220, 60, 60, 0.22);
-  color: #ff8080;
+  background: rgba(220, 60, 60, 0.3);
+  color: #ff8888;
 }
 
 .alux-body {
@@ -159,102 +180,116 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  background: #f7f9f7;
+  background: #f8faf8;
 }
 
 .alux-home {
   flex: 1;
   display: flex;
   flex-direction: column;
-  padding: 20px 16px 14px;
+  padding: 24px 20px 20px;
   overflow-y: auto;
 }
 
 .alux-home-hero {
   background: #ffffff;
-  border: 1px solid #e0e8e1;
-  border-radius: 16px;
-  padding: 20px 16px;
+  border: 1px solid #e2e8e2;
+  border-radius: 20px;
+  padding: 24px 20px;
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
-.alux-hero-icon {
-  font-size: 36px;
-  margin-bottom: 8px;
-  line-height: 1;
+.alux-hero-logo {
+  width: 80px;
+  height: 80px;
+  border-radius: 100%;
+  object-fit: cover;
+  margin-bottom: 16px;
+  display: inline-block;
 }
 
 .alux-hero-title {
-  margin: 0 0 4px;
-  font-size: 18px;
+  margin: 0 0 3px;
+  font-size: 20px;
   font-weight: 700;
-  color: #1a1a1a;
+  color: #1f1f1f;
+  letter-spacing: 0.5px;
 }
 
 .alux-hero-sub {
-  margin: 0;
-  font-size: 13px;
-  color: #6b7c6e;
+  margin: 0 0 8px;
+  font-size: 16px;
+  color: #0f7fa1;
   line-height: 1.4;
+  font-weight: 500;
+}
+
+.alux-hero-desc {
+  margin: 0;
+  font-size: 14px;
+  color: #4b4b4b;
+  line-height: 1.5;
 }
 
 .alux-section-label {
   font-size: 11px;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  color: #6b7c6e;
-  margin: 0 0 12px 2px;
+  letter-spacing: 1.2px;
+  color: #6f7270;
+  margin: 0 0 14px 4px;
 }
 
 .alux-topics {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 20px;
+  gap: 10px;
+  margin-bottom: 24px;
 }
 
 .alux-topic-btn {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 8px 14px;
+  gap: 10px;
+  padding: 10px 18px;
   background: #ffffff;
-  border: 1px solid #e0e8e1;
+  border: 1px solid #bfc4bf;
   border-radius: 40px;
   cursor: pointer;
   font-size: 13px;
   font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-  color: #1a1a1a;
+  color: #1a1a2e;
   text-align: left;
   font-weight: 500;
-  transition: all 0.2s ease;
+  transition: all 0.25s ease;
 }
 
 .alux-topic-btn:hover {
-  border-color: #1a6e2e;
-  background: #e8f5ec;
-  color: #145a24;
-  transform: translateY(-1px);
+  border-color: #0f7fa1;
+  background: #e5f1ff;
+  color: #0f7fa1;
+  transform: translateY(-2px);
 }
 
 .topic-icon {
-  font-size: 14px;
+  font-size: 16px;
   flex-shrink: 0;
 }
 
 .topic-label {
+  font-size: 15px;
   flex-shrink: 0;
 }
 
 .alux-divider {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin: 8px 0 12px;
+  gap: 12px;
+  margin: 8px 0 16px;
   font-size: 11px;
-  color: #b0bdb2;
+  color: #b8c4bb;
 }
 
 .alux-divider::before,
@@ -262,24 +297,24 @@
   content: '';
   flex: 1;
   height: 1px;
-  background: #e0e8e1;
+  background: linear-gradient(90deg, transparent, #e2e8e2, transparent);
 }
 
 .alux-messages {
   flex: 1;
-  padding: 16px 12px 8px;
+  padding: 20px 16px 12px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  background: #f7f9f7;
+  gap: 14px;
+  background: #f8faf8;
 }
 
 .alux-message-row {
   display: flex;
   align-items: flex-start;
-  gap: 8px;
-  animation: alux-fadein 0.25s ease-out;
+  gap: 10px;
+  animation: alux-fadein 0.3s ease-out;
 }
 
 .alux-message-row.user {
@@ -287,113 +322,120 @@
 }
 
 .alux-message-avatar {
-  width: 32px;
-  height: 32px;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
-  background: #1a6e2e;
-  color: #ffffff;
+  background: #0f7fa1;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  overflow: hidden;
 }
 
 .alux-message-bubble {
-  max-width: 72%;
-  padding: 10px 14px;
-  border-radius: 18px;
+  max-width: 70%;
+  padding: 12px 16px;
+  border-radius: 20px;
   font-size: 13.5px;
-  line-height: 1.5;
+  line-height: 1.55;
   word-break: break-word;
   position: relative;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
 }
 
 .alux-message-row.bot .alux-message-bubble {
   background: #ffffff;
-  color: #1a1a1a;
-  border-bottom-left-radius: 4px;
-  border: 1px solid #e0e8e1;
+  color: #1a1a2e;
+  border-bottom-left-radius: 5px;
+  border: 1px solid #e8efe8;
 }
 
 .alux-message-row.user .alux-message-bubble {
-  background: #1a6e2e;
+  background: #0f7fa1;
   color: #ffffff;
-  border-bottom-right-radius: 4px;
+  border-bottom-right-radius: 5px;
 }
 
 .alux-message-bubble.alux-error {
   background: #fff4f4;
-  border-color: #f5c0c0;
+  border-color: #f8d7da;
   color: #c0392b;
 }
 
 .alux-message-time {
   font-size: 9px;
-  color: #999;
-  margin-top: 4px;
+  color: #aaa;
+  margin-top: 6px;
   text-align: right;
-  opacity: 0.7;
+}
+
+.alux-message-row.user .alux-message-time {
+  color: rgba(255, 255, 255, 0.6);
 }
 
 .alux-suggestions {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-  padding: 8px 0 4px 40px;
-  margin-top: 4px;
+  gap: 10px;
+  padding: 12px 0 4px 44px;
+  margin-top: 6px;
 }
 
 .alux-suggestions-title {
   font-size: 10px;
   color: #8b9a8e;
-  margin: 0 0 6px 0;
+  margin: 0 0 8px 0;
   width: 100%;
+  font-weight: 500;
+  letter-spacing: 0.5px;
 }
 
 .alux-suggestions-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 10px;
 }
 
 .alux-suggestion-chip {
-  background: #e8f0ea;
-  border: 1px solid #c8dccf;
-  border-radius: 20px;
-  padding: 6px 14px;
+  background: #e8ecf0;
+  border: 1px solid #0f7fa1;
+  border-radius: 24px;
+  padding: 7px 16px;
   font-size: 12px;
   font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-  color: #1a6e2e;
+  color: #0f7fa1;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all 0.2s ease;
   font-weight: 500;
 }
 
 .alux-suggestion-chip:hover {
-  background: #1a6e2e;
-  border-color: #1a6e2e;
+  background: #0f7fa1;
+  border-color: #0f7fa1;
   color: #ffffff;
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(15, 127, 161, 0.3);
 }
 
 .alux-typing {
-  padding: 12px 16px;
+  padding: 14px 18px;
 }
 
 .typing-dots {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 5px;
   padding: 2px 0;
 }
 
 .typing-dots span {
   display: inline-block;
-  width: 7px;
-  height: 7px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
-  background: #b0bdb2;
-  animation: alux-bounce 1.3s infinite ease-in-out;
+  background: #b8cebf;
+  animation: alux-bounce 1.4s infinite ease-in-out;
 }
 
 .typing-dots span:nth-child(1) { animation-delay: 0s; }
@@ -406,7 +448,7 @@
     opacity: 0.5;
   }
   30% {
-    transform: translateY(-6px);
+    transform: translateY(-8px);
     opacity: 1;
   }
 }
@@ -414,8 +456,8 @@
 .alux-input-bar {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 12px 14px;
+  gap: 12px;
+  padding: 14px 18px;
   background: #ffffff;
   border-top: 1px solid #eef2ef;
   flex-shrink: 0;
@@ -423,38 +465,39 @@
 
 .alux-input-bar input {
   flex: 1;
-  height: 42px;
-  padding: 0 16px;
-  border: 1.5px solid #e0e8e1;
-  border-radius: 24px;
+  height: 46px;
+  padding: 0 18px;
+  border: 1.5px solid #e2e8e2;
+  border-radius: 28px;
   outline: none;
   font-size: 13.5px;
   font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-  color: #1a1a1a;
+  color: #1a1a2e;
   background: #fafcfa;
-  transition: all 0.15s ease;
+  transition: all 0.2s ease;
 }
 
 .alux-input-bar input:focus {
-  border-color: #1a6e2e;
+  border-color: #0f7fa1;
   background: #ffffff;
-  box-shadow: 0 0 0 3px rgba(26, 110, 46, 0.1);
 }
 
 .alux-input-bar input:disabled {
   opacity: 0.55;
   cursor: not-allowed;
+  background: #f0f4f0;
 }
 
 .alux-input-bar input::placeholder {
   color: #b8c4bb;
+  font-weight: 400;
 }
 
 .alux-send {
-  width: 42px;
-  height: 42px;
+  width: 46px;
+  height: 46px;
   border-radius: 50%;
-  background: #1a6e2e;
+  background: #0f7fa1;
   color: #ffffff;
   border: none;
   cursor: pointer;
@@ -462,16 +505,16 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  transition: all 0.15s ease;
+  transition: all 0.2s ease;
 }
 
 .alux-send:hover:not(:disabled) {
-  background: #145a24;
-  transform: scale(1.05);
+  background: #0c6580;
+  transform: scale(1.06);
 }
 
 .alux-send:disabled {
-  background: #c8d9cc;
+  background: #c0d2df;
   cursor: not-allowed;
   transform: none;
 }
@@ -484,24 +527,24 @@
 .alux-messages::-webkit-scrollbar-track,
 .alux-home::-webkit-scrollbar-track {
   background: #eef2ef;
-  border-radius: 3px;
+  border-radius: 4px;
 }
 
 .alux-messages::-webkit-scrollbar-thumb,
 .alux-home::-webkit-scrollbar-thumb {
-  background: #b8cebf;
-  border-radius: 3px;
+  background: #c0d4c5;
+  border-radius: 4px;
 }
 
 .alux-messages::-webkit-scrollbar-thumb:hover,
 .alux-home::-webkit-scrollbar-thumb:hover {
-  background: #84a38f;
+  background: #94b09b;
 }
 
 @keyframes alux-fadein {
   from {
     opacity: 0;
-    transform: translateY(6px);
+    transform: translateY(8px);
   }
   to {
     opacity: 1;
@@ -511,31 +554,33 @@
 
 @media (max-width: 480px) {
   .alux-chat {
-    width: calc(100vw - 24px);
-    right: 12px;
-    bottom: 12px;
+    width: calc(100vw - 20px);
+    right: 10px;
+    bottom: 10px;
   }
   
-  .alux-launcher {
-    right: 12px;
-    bottom: 12px;
-    padding: 0 18px 0 14px;
-    height: 46px;
-    font-size: 13px;
+  .alux-robot-launcher {
+    right: 10px;
+    bottom: 10px;
+  }
+  
+  .alux-robot-icon {
+    width: 50px;
+    height: 50px;
   }
   
   .alux-expanded {
-    height: 520px;
+    height: 550px;
   }
   
   .alux-message-bubble {
-    max-width: 85%;
+    max-width: 82%;
     font-size: 13px;
-    padding: 8px 12px;
+    padding: 10px 14px;
   }
   
   .alux-suggestions {
-    padding-left: 32px;
+    padding-left: 36px;
   }
   
   .alux-suggestion-chip {
@@ -544,7 +589,33 @@
   }
   
   .alux-message-avatar {
-    width: 28px;
-    height: 28px;
+    width: 30px;
+    height: 30px;
+  }
+  
+  .alux-topics {
+    gap: 8px;
+  }
+  
+  .alux-topic-btn {
+    padding: 8px 14px;
+    font-size: 12px;
+  }
+  
+  .alux-home-hero {
+    padding: 18px 16px;
+  }
+  
+  .alux-hero-logo {
+    width: 55px;
+    height: 55px;
+  }
+  
+  .alux-hero-title {
+    font-size: 18px;
+  }
+  
+  .alux-hero-sub {
+    font-size: 13px;
   }
 }

@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './FloatingChatBot.css';
+import logo from "../../assets/logo.png";
+import robotIcon from "../../assets/Chatbot4.png";
 
 const BOT_NAME = 'ALUX AI';
 const BOT_SUBTITLE = 'Aluminum Recycling Assistant';
@@ -21,7 +23,8 @@ const QUICK_TOPICS = [
 const TypingDots = () => (
   <div className="typing-dots">
     <span></span>
-    span<span></span>
+    <span></span>
+    <span></span>
   </div>
 );
 
@@ -164,17 +167,7 @@ const FloatingChatbot = ({ userRole = 'client', userId = null, userEmail = null 
       }
     } catch (error) {
       console.error('Chatbot API error:', error);
-      let errorMessage = "⚠️ Sorry, I'm having trouble connecting to the ALUX assistant.\n\n";
-      
-      if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
-        errorMessage += "Make sure backend server is running on port 5003: cd backend && npm run dev";
-      } else if (error.message.includes('HTTP 404')) {
-        errorMessage += "The chatbot endpoint was not found.";
-      } else if (error.message.includes('HTTP 500')) {
-        errorMessage += "The server encountered an error. Please try again later.";
-      } else {
-        errorMessage += error.message;
-      }
+      let errorMessage = "⚠️ Connection Error\n\nUnable to reach ALUX AI assistant. Please check your connection and try again.";
       
       setMessages(prev => [...prev, { 
         text: errorMessage, 
@@ -187,7 +180,7 @@ const FloatingChatbot = ({ userRole = 'client', userId = null, userEmail = null 
         "What is the price per kg?",
         "How do I book a pickup?",
         "Glass prices",
-        "Check server status"
+        "Try again"
       ]);
     } finally {
       setIsTyping(false);
@@ -227,9 +220,8 @@ const FloatingChatbot = ({ userRole = 'client', userId = null, userEmail = null 
 
   if (!isOpen) {
     return (
-      <button className="alux-launcher" onClick={handleOpen} aria-label="Open ALUX AI">
-        <ChatIcon />
-        <span>ALUX AI</span>
+      <button className="alux-robot-launcher" onClick={handleOpen} aria-label="Open ALUX AI">
+        <img src={robotIcon} alt="AI Assistant" className="alux-robot-icon" />
       </button>
     );
   }
@@ -239,7 +231,7 @@ const FloatingChatbot = ({ userRole = 'client', userId = null, userEmail = null 
       <div className="alux-header">
         <div className="alux-header-left">
           <div className="alux-avatar">
-            <ChatIcon />
+            <img src={logo} alt="ALUX" className="alux-avatar-icon" />
           </div>
           <div className="alux-header-info">
             <span className="alux-name">{BOT_NAME}</span>
@@ -269,15 +261,15 @@ const FloatingChatbot = ({ userRole = 'client', userId = null, userEmail = null 
           {showHome ? (
             <div className="alux-home">
               <div className="alux-home-hero">
-                <div className="alux-hero-icon">♻️</div>
-                <p className="alux-hero-title">Hi, I'm {BOT_NAME}</p>
-                <p className="alux-hero-sub">{BOT_SUBTITLE}</p>
+                <img src={logo} alt="ALUX" className="alux-hero-logo" />
+                <p className="alux-hero-title">Hello, Welcome to ALUX Chatbot</p>
+                <p className="alux-hero-sub">Aluminum Recycling Assistant</p>
                 <p className="alux-hero-desc">
-                  I can help you with prices, bookings, glass orders, quotations, marketplace, training, projects, and buy & sell!
+                  Your intelligent assistant for aluminum recycling, glass orders, marketplace, and more.
                 </p>
               </div>
 
-              <p className="alux-section-label">Quick actions</p>
+              <p className="alux-section-label">Quick Actions</p>
               <div className="alux-topics">
                 {QUICK_TOPICS.map((topic, index) => (
                   <button 
@@ -292,7 +284,7 @@ const FloatingChatbot = ({ userRole = 'client', userId = null, userEmail = null 
               </div>
 
               <div className="alux-divider">
-                <span>or ask anything</span>
+                <span>or type your question</span>
               </div>
 
               <div className="alux-input-bar">
@@ -302,7 +294,7 @@ const FloatingChatbot = ({ userRole = 'client', userId = null, userEmail = null 
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
                   onKeyDown={handleKeyDown}
-                  placeholder="Type a message..."
+                  placeholder="Ask me anything..."
                   autoFocus
                 />
                 <button 
@@ -321,7 +313,7 @@ const FloatingChatbot = ({ userRole = 'client', userId = null, userEmail = null 
                   <div key={index} className={`alux-message-row ${msg.sender}`}>
                     {msg.sender === 'bot' && (
                       <div className="alux-message-avatar">
-                        <ChatIcon />
+                        <img src={logo} alt="ALUX" className="alux-avatar-icon-small" />
                       </div>
                     )}
                     <div className={`alux-message-bubble ${msg.isError ? 'alux-error' : ''}`}>
@@ -340,7 +332,7 @@ const FloatingChatbot = ({ userRole = 'client', userId = null, userEmail = null 
                 {isTyping && (
                   <div className="alux-message-row bot">
                     <div className="alux-message-avatar">
-                      <ChatIcon />
+                      <img src={logo} alt="ALUX" className="alux-avatar-icon-small" />
                     </div>
                     <div className="alux-message-bubble alux-typing">
                       <TypingDots />
@@ -350,7 +342,7 @@ const FloatingChatbot = ({ userRole = 'client', userId = null, userEmail = null 
                 
                 {suggestions.length > 0 && !isTyping && messages.length > 0 && (
                   <div className="alux-suggestions">
-                    <p className="alux-suggestions-title">Suggested questions:</p>
+                    <p className="alux-suggestions-title">Suggested Questions</p>
                     <div className="alux-suggestions-list">
                       {suggestions.slice(0, 6).map((suggestion, index) => (
                         <button 
@@ -375,7 +367,7 @@ const FloatingChatbot = ({ userRole = 'client', userId = null, userEmail = null 
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
                   onKeyDown={handleKeyDown}
-                  placeholder="Ask ALUX AI anything..."
+                  placeholder="Type your message..."
                   disabled={isTyping}
                 />
                 <button 
