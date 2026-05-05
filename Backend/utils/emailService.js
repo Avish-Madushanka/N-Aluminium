@@ -1,4 +1,5 @@
 const nodemailer = require('nodemailer');
+const crypto = require('crypto');
 
 const transporter = nodemailer.createTransport({
   host: process.env.EMAIL_HOST,
@@ -26,6 +27,97 @@ const sendEmail = async (to, subject, htmlContent) => {
     console.error(`Error sending email to ${to}:`, error);
     return false;
   }
+};
+
+const sendPasswordResetEmail = async (email, name, resetToken) => {
+  const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+  const resetUrl = `${frontendUrl}/reset-password?token=${resetToken}&email=${encodeURIComponent(email)}`;
+  
+  const htmlContent = `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #f9f9f9;">
+      <div style="background: #1a1a2e; padding: 25px; text-align: center;">
+        <h1 style="color: white; margin: 0;">ALUX Panadura</h1>
+        <p style="color: #ccc; margin: 5px 0 0;">Password Reset Request</p>
+      </div>
+      
+      <div style="padding: 25px; background: white;">
+        <h2 style="color: #1a1a2e;">Reset Your Password</h2>
+        <p>Dear ${name || 'Valued Customer'},</p>
+        <p>We received a request to reset your password for your ALUX Panadura account.</p>
+        
+        <div style="background: #fff3cd; padding: 15px; border-radius: 8px; margin: 20px 0;">
+          <p style="margin: 0; color: #856404;">
+            <strong>⚠️ Security Notice:</strong> This link expires in 1 hour. If you didn't request this, please ignore this email.
+          </p>
+        </div>
+        
+        <div style="text-align: center; margin: 30px 0;">
+          <a href="${resetUrl}" 
+             style="background: #d30905; color: white; padding: 12px 30px; 
+                    text-decoration: none; border-radius: 6px; display: inline-block;">
+            Reset Password
+          </a>
+        </div>
+        
+        <p>Or copy this link: ${resetUrl}</p>
+        
+        <p>If you have any questions, please contact our support team.</p>
+        
+        <p>Best regards,<br><strong>ALUX Panadura Team</strong></p>
+      </div>
+      
+      <div style="background: #1a1a2e; padding: 20px; text-align: center; color: #ccc; font-size: 12px;">
+        <p style="margin: 0;">ALUX Panadura - Alubomulla, Panadura, Sri Lanka</p>
+        <p style="margin: 5px 0;">Tel: +94 72 104 6048 | Email: donotreply.ALUX@gmail.com</p>
+      </div>
+    </div>
+  `;
+
+  return await sendEmail(email, 'Password Reset Request - ALUX Panadura', htmlContent);
+};
+
+const sendPasswordResetSuccessEmail = async (email, name) => {
+  const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+  
+  const htmlContent = `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #f9f9f9;">
+      <div style="background: #1a1a2e; padding: 25px; text-align: center;">
+        <h1 style="color: white; margin: 0;">ALUX Panadura</h1>
+        <p style="color: #ccc; margin: 5px 0 0;">Password Changed Successfully</p>
+      </div>
+      
+      <div style="padding: 25px; background: white;">
+        <h2 style="color: #1a1a2e;">Password Updated</h2>
+        <p>Dear ${name || 'Valued Customer'},</p>
+        <p>Your password has been successfully changed.</p>
+        
+        <div style="background: #e8f5e9; padding: 15px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #27ae60;">
+          <p style="margin: 0; color: #2e7d32;">
+            <strong>✅ Success!</strong> Your account password has been updated.
+          </p>
+        </div>
+        
+        <p>If you did not make this change, please contact our support team immediately.</p>
+        
+        <div style="text-align: center; margin: 30px 0;">
+          <a href="${frontendUrl}/login" 
+             style="background: #d30905; color: white; padding: 12px 30px; 
+                    text-decoration: none; border-radius: 6px; display: inline-block;">
+            Login to Your Account
+          </a>
+        </div>
+        
+        <p>Best regards,<br><strong>ALUX Panadura Team</strong></p>
+      </div>
+      
+      <div style="background: #1a1a2e; padding: 20px; text-align: center; color: #ccc; font-size: 12px;">
+        <p style="margin: 0;">ALUX Panadura - Alubomulla, Panadura, Sri Lanka</p>
+        <p style="margin: 5px 0;">Tel: +94 72 104 6048 | Email: donotreply.ALUX@gmail.com</p>
+      </div>
+    </div>
+  `;
+
+  return await sendEmail(email, 'Password Changed Successfully - ALUX Panadura', htmlContent);
 };
 
 const sendBookingStatusUpdateEmail = async (booking, newStatus) => {
@@ -269,6 +361,8 @@ const sendContactReplyEmail = async (to, name, subject, reply) => {
 
 module.exports = { 
   sendEmail, 
+  sendPasswordResetEmail,
+  sendPasswordResetSuccessEmail,
   sendBookingStatusUpdateEmail,
   sendAlumniApprovalEmail,
   sendAlumniRejectionEmail,

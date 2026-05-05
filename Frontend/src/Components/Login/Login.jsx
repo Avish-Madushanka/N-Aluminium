@@ -25,35 +25,18 @@ function Login() {
   const from = location.state?.from?.pathname || '/';
   const storedRedirectPath = sessionStorage.getItem('redirectAfterLogin');
 
-  const isConnectionError = (msg) =>
-    msg && /connection error|cannot reach|timed out|network error|failed to fetch/i.test(String(msg).toLowerCase());
-
   const checkBackendStatus = useCallback(async () => {
     setServerStatus('checking');
-    if (isConnectionError(errorMessage)) {
-      setErrorMessage('');
-    }
-
-    const healthCheckEndpoint = API_ENDPOINTS?.HEALTH || '/health';
-
-    if (!healthCheckEndpoint) {
-      setServerStatus('error');
-      setErrorMessage("Client configuration error for server health check.");
-      return false;
-    }
-
     try {
-      await axiosInstance.get(healthCheckEndpoint, { timeout: 7000 });
+      await axiosInstance.get(API_ENDPOINTS.HEALTH_CHECK, { timeout: 7000 });
       setServerStatus('online');
       return true;
     } catch (err) {
-      setServerStatus(err.code === 'ECONNABORTED' || !err.response ? 'offline' : 'error');
-      if (!errorMessage || isConnectionError(errorMessage)) {
-        setErrorMessage('Connection Error: Cannot reach the server. Please ensure it is running and accessible.');
-      }
+      setServerStatus('offline');
+      setErrorMessage('Cannot reach the server. Please ensure it is running.');
       return false;
     }
-  }, [errorMessage]);
+  }, []);
 
   useEffect(() => {
     checkBackendStatus();
@@ -62,73 +45,48 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMessage('');
+    
     if (!email || !password) {
-      setErrorMessage(!email ? "Please enter your email address." : "Please enter your password.");
+      setErrorMessage(!email ? 'Please enter your email address.' : 'Please enter your password.');
       return;
     }
+    
     setIsLoading(true);
-
-    if (serverStatus !== 'online') {
-      const isOnline = await checkBackendStatus();
-      if (!isOnline) {
-        setIsLoading(false);
-        return;
-      }
-    }
-
-    if (typeof auth?.login !== 'function') {
-      setErrorMessage("Login system error. Please contact support.");
-      setIsLoading(false);
-      return;
-    }
-    if (typeof API_ENDPOINTS?.AUTH?.LOGIN !== 'string') {
-      setErrorMessage("Configuration error: Login endpoint missing.");
-      setIsLoading(false);
-      return;
-    }
 
     try {
       const response = await axiosInstance.post(API_ENDPOINTS.AUTH.LOGIN, { email, password });
 
       if (response.data?.success && response.data?.token && response.data?.data) {
         auth.login(response.data.token, response.data.data);
-
+        
         const userRole = response.data.data.role;
+        let redirectPath = '/';
         
-        let redirectPath = null;
-        
-        if (storedRedirectPath && storedRedirectPath !== '/login' && storedRedirectPath !== '/Login') {
+        if (storedRedirectPath && storedRedirectPath !== '/login') {
           redirectPath = storedRedirectPath;
-          console.log('Redirecting to stored path:', redirectPath);
-        }
-        else if (from && from !== '/' && from !== '/login' && from !== '/Login') {
+        } else if (from && from !== '/') {
           redirectPath = from;
-          console.log('Redirecting to from state path:', redirectPath);
+        } else if (userRole === 'admin') {
+          redirectPath = '/admin/dashboard';
+        } else if (userRole === 'client') {
+          redirectPath = '/client/dashboard';
+        } else if (userRole === 'businessOwner') {
+          redirectPath = '/bo/dashboard';
         }
-        else {
-          if (userRole === 'admin') {
-            redirectPath = '/admin/dashboard';
-          } else if (userRole === 'client') {
-            redirectPath = '/client/dashboard';
-          } else if (userRole === 'businessOwner') {
-            redirectPath = '/bo/dashboard';
-          } else {
-            redirectPath = '/';
-          }
-          console.log('Redirecting to role-based path:', redirectPath);
-        }
-
-        sessionStorage.removeItem('redirectAfterLogin');
-        sessionStorage.removeItem('attemptedPath');
-        sessionStorage.removeItem('requiredRole');
         
+        sessionStorage.removeItem('redirectAfterLogin');
         navigate(redirectPath, { replace: true });
       } else {
-        const errMsg = response.data?.message || 'Login failed: Unexpected response from server.';
-        setErrorMessage(errMsg);
+        setErrorMessage(response.data?.message || 'Login failed.');
       }
     } catch (err) {
-      handleApiError(err);
+      if (err.response) {
+        setErrorMessage(err.response.data?.message || 'Login failed. Please try again.');
+      } else if (err.request) {
+        setErrorMessage('Network error. Cannot connect to server.');
+      } else {
+        setErrorMessage('An unexpected error occurred.');
+      }
     } finally {
       setIsLoading(false);
     }
@@ -156,48 +114,32 @@ function Login() {
     setResetMessage('');
 
     if (!resetEmail) {
-      setResetError("Please enter your email address.");
+      setResetError('Please enter your email address.');
       return;
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(resetEmail)) {
-      setResetError("Please enter a valid email address.");
+      setResetError('Please enter a valid email address.');
       return;
     }
 
     setIsResetting(true);
 
-    if (serverStatus !== 'online') {
-      const isOnline = await checkBackendStatus();
-      if (!isOnline) {
-        setIsResetting(false);
-        return;
-      }
-    }
-
     try {
-      const forgotPasswordEndpoint = API_ENDPOINTS?.AUTH?.FORGOT_PASSWORD || '/api/auth/forgot-password';
-      const response = await axiosInstance.post(forgotPasswordEndpoint, { email: resetEmail });
+      const response = await axiosInstance.post(API_ENDPOINTS.AUTH.FORGOT_PASSWORD, { email: resetEmail });
 
       if (response.data?.success) {
         setResetSuccess(true);
-        setResetMessage(response.data?.message || 'Password reset instructions have been sent to your email.');
+        setResetMessage(response.data.message || 'Password reset instructions have been sent to your email.');
       } else {
-        setResetError(response.data?.message || 'Failed to process password reset request.');
+        setResetError(response.data?.message || 'Failed to process request.');
       }
     } catch (err) {
       if (err.response) {
-        const { status, data } = err.response;
-        if (status === 404) {
-          setResetError('Email address not found in our records.');
-        } else if (status === 400) {
-          setResetError(data?.message || 'Invalid request. Please check your email address.');
-        } else {
-          setResetError(data?.message || `Error (${status}). Please try again later.`);
-        }
+        setResetError(err.response.data?.message || `Error ${err.response.status}. Please try again.`);
       } else if (err.request) {
-        setResetError('Network error. Unable to connect to the server.');
+        setResetError('Network error. Unable to connect to server.');
       } else {
         setResetError('An unexpected error occurred. Please try again.');
       }
@@ -205,38 +147,6 @@ function Login() {
       setIsResetting(false);
     }
   };
-
-  const handleApiError = (error) => {
-    if (error.code === 'ECONNABORTED' || error.message.toLowerCase().includes('timeout')) {
-      setErrorMessage('Login request timed out. The server might be busy.');
-      setServerStatus('error');
-    } else if (error.response) {
-      const { status, data } = error.response;
-      const msg = data?.message || `Login error (Status ${status}). Please try again.`;
-
-      if (status === 400) setErrorMessage(msg || "Invalid input. Please check your details.");
-      else if (status === 401) setErrorMessage(msg || 'Incorrect email or password.');
-      else if (status === 403) setErrorMessage(msg || 'Access Denied.');
-      else if (status === 404) setErrorMessage("Login service not found. Please contact support.");
-      else setErrorMessage(msg);
-
-      if (status >= 500) setServerStatus('error');
-    } else if (error.request) {
-      setErrorMessage('Network Error: Unable to connect to the server.');
-      setServerStatus('offline');
-    } else {
-      setErrorMessage(error.message || 'An unexpected error occurred during login.');
-    }
-  };
-
-  if (typeof API_ENDPOINTS === 'undefined' || typeof auth === 'undefined' || typeof auth.login !== 'function') {
-    return (
-      <div className="LOG-error-page">
-        <h2>Application Setup Error</h2>
-        <p>A critical part of the application is not working.</p>
-      </div>
-    );
-  }
 
   return (
     <div className="LOG-container">
@@ -328,29 +238,16 @@ function Login() {
 
                 {resetSuccess ? (
                   <div className="LOG-success-message">
-                    <i className="fas fa-check-circle"></i>
-                    <p>{resetMessage || 'Password reset instructions have been sent to your email.'}</p>
+                    <p>{resetMessage}</p>
                     <button onClick={handleBackToLogin} className="LOG-back-btn">
                       Back to Login
                     </button>
                   </div>
                 ) : (
                   <>
-                    {serverStatus === 'checking' && (
-                      <div className="LOG-status-message">
-                        <p>Connecting to server...</p>
-                      </div>
-                    )}
-
                     {resetError && (
                       <div className="LOG-error-message">
                         {resetError}
-                      </div>
-                    )}
-
-                    {resetMessage && (
-                      <div className="LOG-info-message">
-                        {resetMessage}
                       </div>
                     )}
 
@@ -363,14 +260,14 @@ function Login() {
                           value={resetEmail}
                           onChange={(e) => setResetEmail(e.target.value)}
                           placeholder="Enter your registered email"
-                          disabled={isResetting || serverStatus === 'checking'}
+                          disabled={isResetting}
                         />
                       </div>
 
                       <button
                         type="submit"
                         className="LOG-reset-btn"
-                        disabled={isResetting || serverStatus !== 'online'}
+                        disabled={isResetting}
                       >
                         {isResetting ? 'Sending...' : 'Send Reset Instructions'}
                       </button>

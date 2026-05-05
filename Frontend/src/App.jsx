@@ -76,6 +76,7 @@ import AluminumQuotationSystem from './Components/AluminumQuotationSystem/Alumin
 import AdQuotation from './Components/Admin/AdQuotation/AdQuotation';
 import AluminumSystem3D from './Components/AluminumSystem3D/AluminumSystem3D';
 import Items3Dview from './Components/Items3Dview/Items3Dview';
+import ResetPassword from './Components/ResetPassword/ResetPassword';
 
 const parseUserInfoFromToken = (token) => {
     if (!token) {
@@ -83,27 +84,34 @@ const parseUserInfoFromToken = (token) => {
     }
     try {
         const decoded = jwtDecode(token);
-        if (!decoded || typeof decoded !== 'object' || !decoded.exp || !decoded.id || !decoded.email || !decoded.role || typeof decoded.name === 'undefined') {
+        
+        if (!decoded || typeof decoded !== 'object') {
             localStorage.removeItem('token');
             localStorage.removeItem('userInfo');
             return null;
         }
 
         const currentTime = Date.now() / 1000;
-        if (decoded.exp < currentTime) {
+        if (decoded.exp && decoded.exp < currentTime) {
             localStorage.removeItem('token');
             localStorage.removeItem('userInfo');
             return null;
         }
 
-        return {
-            id: decoded.id,
-            name: decoded.name,
+        const userInfo = {
+            id: decoded.id || decoded._id,
             email: decoded.email,
             role: decoded.role,
-            ...(decoded.role === 'businessOwner' && decoded.businessName && { businessName: decoded.businessName }),
+            name: decoded.name || decoded.email?.split('@')[0] || 'User'
         };
+        
+        if (decoded.role === 'businessOwner' && decoded.businessName) {
+            userInfo.businessName = decoded.businessName;
+        }
+        
+        return userInfo;
     } catch (error) {
+        console.error('Token decode error:', error);
         localStorage.removeItem('token');
         localStorage.removeItem('userInfo');
         return null;
@@ -169,6 +177,9 @@ function App() {
     }, []);
 
     const handleLoginSuccess = useCallback((token, backendUserData) => {
+        console.log('Login success - token received:', !!token);
+        console.log('Backend user data:', backendUserData);
+        
         const parsedUser = parseUserInfoFromToken(token);
         if (parsedUser) {
             localStorage.setItem('token', token);
@@ -176,6 +187,7 @@ function App() {
             setAuthState({ isLoggedIn: true, userInfo: parsedUser, isLoading: false });
             setLogoutMessage('');
         } else {
+            console.error('Failed to parse user from token');
             handleLogout("Login failed: Invalid session data received from server. Please try again.");
         }
     }, [handleLogout]);
@@ -391,6 +403,7 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
                     <Route path="/AluTRegForm" element={<AluTRegForm /> } />
                     <Route path="/SaleForm" element={<SaleForm /> } />
                     <Route path="/Items3Dview" element={<Items3Dview /> } />
+                    <Route path="/reset-password" element={<ResetPassword /> } />
                     
                     <Route path="/Cookie" element={<Cookie />} />
                     <Route path="/Terms" element={<Terms />} />

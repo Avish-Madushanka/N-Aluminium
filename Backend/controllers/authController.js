@@ -1,108 +1,170 @@
-
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
+const bcrypt = require('bcryptjs');
+const nodemailer = require('nodemailer');
 const Client = require('../models/Client');
 const BusinessOwner = require('../models/BusinessOwner');
 const Admin = require('../models/Admin');
 
+const PasswordReset = require('../models/PasswordReset');
+
 const findUserByEmail = async (email) => {
-    console.log(`[AuthCtrl findUserByEmail] Searching for email: "${email}"`);
     let user = await Client.findOne({ email }).select('+password');
-    if (user) {
-        console.log(`[AuthCtrl findUserByEmail] Found in Clients.`);
-        return { user, userModelName: 'Client' };
-    }
+    if (user) return { user, userModelName: 'Client' };
     user = await BusinessOwner.findOne({ email }).select('+password');
-    if (user) {
-        console.log(`[AuthCtrl findUserByEmail] Found in BusinessOwners.`);
-        return { user, userModelName: 'BusinessOwner' };
-    }
+    if (user) return { user, userModelName: 'BusinessOwner' };
     user = await Admin.findOne({ email }).select('+password');
-    if (user) {
-        console.log(`[AuthCtrl findUserByEmail] Found in Admins.`);
-        return { user, userModelName: 'Admin' };
-    }
-    console.log(`[AuthCtrl findUserByEmail] User not found.`);
+    if (user) return { user, userModelName: 'Admin' };
     return null;
 };
 
-exports.login = async (req, res, next) => {
-    const { email, password } = req.body;
-    const originalEmail = email;
-    console.log('[AuthCtrl Login] Endpoint hit. Request body:', { email: originalEmail, password: password ? '******' : 'Missing' });
-
+exports.login = async (req, res) => {
     try {
-        if (!originalEmail || !password) {
-            console.log('[AuthCtrl Login] Validation Failed: Email/Password missing.');
-            return res.status(400).json({ success: false, message: 'Please provide both email and password.' });
+        const { email, password } = req.body;
+        
+        if (!email || !password) {
+            return res.status(400).json({ success: false, message: 'Please provide email and password.' });
         }
 
-        const normalizedEmail = originalEmail.toLowerCase(); 
-
-        console.log(`[AuthCtrl Login] Finding user: ${normalizedEmail} (normalized from ${originalEmail})`);
-        const result = await findUserByEmail(normalizedEmail); 
-        if (!result || !result.user) {
-            console.log(`[AuthCtrl Login] Failure: User not found: ${originalEmail}`);
+        const result = await findUserByEmail(email.toLowerCase());
+        if (!result) {
             return res.status(401).json({ success: false, message: 'Invalid email or password.' });
         }
-        const { user, userModelName } = result;
-        console.log(`[AuthCtrl Login] User found in ${userModelName}. ID: ${user._id}, Role: ${user.role}`);
-        console.log(`[AuthCtrl Login] Password status for ${user.email}: ${user.password ? 'Retrieved' : 'NOT RETRIEVED!'}`); 
-
-        if (!user.password) {
-            console.error(`[AuthCtrl Login] CRITICAL SERVER FAILURE: Password field missing for user ${user.email}.`);
-            return res.status(500).json({ success: false, message: 'Internal server error during login (code: L1).' });
-        }
-
-        console.log(`[AuthCtrl Login] Comparing passwords for ${user.email}...`);
+        
+        const { user } = result;
         const isMatch = await user.comparePassword(password);
+        
         if (!isMatch) {
-            console.log(`[AuthCtrl Login] Failure: Password mismatch for ${user.email}.`);
             return res.status(401).json({ success: false, message: 'Invalid email or password.' });
         }
 
-        console.log(`%c[AuthCtrl Login] Auth successful: ${user.email}. Role: ${user.role}. Preparing payload...`, 'color: green; font-weight: bold;');
-        let nameForPayload;
-        if (user.role === 'businessOwner') {
-            nameForPayload = user.ownerName || user.businessName || 'Business User';
-        } else {
-            nameForPayload = user.name || `${user.role.charAt(0).toUpperCase() + user.role.slice(1)} User`;
-        }
-        console.log(`[AuthCtrl Login] Determined JWT 'name': "${nameForPayload}"`);
+        const token = jwt.sign(
+            { id: user._id, email: user.email, role: user.role },
+            process.env.JWT_SECRET,
+            { expiresIn: '7d' }
+        );
 
-        const payload = {
-            id: user._id,
-            email: user.email, 
-            role: user.role,
-            name: nameForPayload,
-            ...(user.role === 'businessOwner' && user.businessName && { businessName: user.businessName }),
-        };
-        console.log('[AuthCtrl Login] Final JWT Payload to be signed:', payload);
-        if (!payload.id || !payload.email || !payload.role || !payload.name) {
-             console.error("[AuthCtrl Login] FATAL ERROR: Payload missing essential fields before signing!", payload);
-             return res.status(500).json({ success: false, message: "Internal server error creating session (code: L2)." });
-        }
-
-        const jwtSecret = process.env.JWT_SECRET;
-        if (!jwtSecret) {
-            console.error("[AuthCtrl Login] CRITICAL FAILURE: JWT_SECRET missing in .env!");
-            return res.status(500).json({ success: false, message: "Server configuration error (code: L3)." });
-        }
-        console.log('[AuthCtrl Login] JWT_SECRET found. Signing token...');
-
-        const token = jwt.sign(payload, jwtSecret, { expiresIn: '1d' });
-        console.log('[AuthCtrl Login] JWT Token generated.');
-
-        const userResponse = user.toObject ? user.toObject() : { ...user };
+        const userResponse = user.toObject();
         delete userResponse.password;
+        
         res.status(200).json({
             success: true,
             message: 'Login successful.',
             token,
             data: userResponse
         });
-
     } catch (error) {
-        console.error('[AuthCtrl Login] Unexpected error occurred in login controller:', error);
-        next(error);
+        console.error('Login error:', error);
+        res.status(500).json({ success: false, message: 'Login failed.' });
+    }
+};
+
+exports.forgotPassword = async (req, res) => {
+    try {
+        const { email } = req.body;
+        
+        if (!email) {
+            return res.status(400).json({ success: false, message: 'Please provide your email address.' });
+        }
+        
+        const result = await findUserByEmail(email.toLowerCase());
+        if (!result) {
+            return res.status(200).json({ success: true, message: 'If an account exists, you will receive reset instructions.' });
+        }
+        
+        const { user } = result;
+        
+        await PasswordReset.deleteMany({ email: email.toLowerCase() });
+        
+        const resetToken = crypto.randomBytes(32).toString('hex');
+        const hashedToken = crypto.createHash('sha256').update(resetToken).digest('hex');
+        
+        await PasswordReset.create({
+            email: email.toLowerCase(),
+            token: hashedToken,
+            expiresAt: new Date(Date.now() + 3600000)
+        });
+        
+        res.status(200).json({
+            success: true,
+            message: 'Password reset instructions have been sent to your email.'
+        });
+    } catch (error) {
+        console.error('Forgot password error:', error);
+        res.status(500).json({ success: false, message: 'Failed to process request.' });
+    }
+};
+
+exports.resetPassword = async (req, res) => {
+    try {
+        const { token, email, newPassword } = req.body;
+        
+        if (!token || !email || !newPassword) {
+            return res.status(400).json({ success: false, message: 'Missing required fields.' });
+        }
+        
+        if (newPassword.length < 6) {
+            return res.status(400).json({ success: false, message: 'Password must be at least 6 characters.' });
+        }
+        
+        const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
+        
+        const resetRequest = await PasswordReset.findOne({
+            email: email.toLowerCase(),
+            token: hashedToken,
+            used: false,
+            expiresAt: { $gt: new Date() }
+        });
+        
+        if (!resetRequest) {
+            return res.status(400).json({ success: false, message: 'Invalid or expired reset token.' });
+        }
+        
+        const result = await findUserByEmail(email);
+        if (!result) {
+            return res.status(404).json({ success: false, message: 'User not found.' });
+        }
+        
+        const { user } = result;
+        user.password = await bcrypt.hash(newPassword, 10);
+        await user.save();
+        
+        resetRequest.used = true;
+        await resetRequest.save();
+        
+        res.status(200).json({
+            success: true,
+            message: 'Password reset successfully. You can now login.'
+        });
+    } catch (error) {
+        console.error('Reset password error:', error);
+        res.status(500).json({ success: false, message: 'Failed to reset password.' });
+    }
+};
+
+exports.verifyResetToken = async (req, res) => {
+    try {
+        const { token, email } = req.query;
+        
+        if (!token || !email) {
+            return res.status(400).json({ success: false, valid: false });
+        }
+        
+        const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
+        
+        const resetRequest = await PasswordReset.findOne({
+            email: email.toLowerCase(),
+            token: hashedToken,
+            used: false,
+            expiresAt: { $gt: new Date() }
+        });
+        
+        if (!resetRequest) {
+            return res.status(400).json({ success: false, valid: false });
+        }
+        
+        res.status(200).json({ success: true, valid: true });
+    } catch (error) {
+        res.status(500).json({ success: false, valid: false });
     }
 };
