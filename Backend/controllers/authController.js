@@ -5,7 +5,6 @@ const nodemailer = require('nodemailer');
 const Client = require('../models/Client');
 const BusinessOwner = require('../models/BusinessOwner');
 const Admin = require('../models/Admin');
-
 const PasswordReset = require('../models/PasswordReset');
 
 const findUserByEmail = async (email) => {
@@ -105,8 +104,6 @@ exports.forgotPassword = async (req, res) => {
             return res.status(200).json({ success: true, message: 'If an account exists, you will receive reset instructions.' });
         }
         
-        const { user } = result;
-        
         await PasswordReset.deleteMany({ email: email.toLowerCase() });
         
         const resetToken = crypto.randomBytes(32).toString('hex');
@@ -160,9 +157,27 @@ exports.resetPassword = async (req, res) => {
             return res.status(404).json({ success: false, message: 'User not found.' });
         }
         
-        const { user } = result;
-        user.password = await bcrypt.hash(newPassword, 10);
-        await user.save();
+        const { user, userModelName } = result;
+        
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(newPassword, salt);
+        
+        if (userModelName === 'Client') {
+            await Client.updateOne(
+                { _id: user._id },
+                { $set: { password: hashedPassword } }
+            );
+        } else if (userModelName === 'BusinessOwner') {
+            await BusinessOwner.updateOne(
+                { _id: user._id },
+                { $set: { password: hashedPassword } }
+            );
+        } else if (userModelName === 'Admin') {
+            await Admin.updateOne(
+                { _id: user._id },
+                { $set: { password: hashedPassword } }
+            );
+        }
         
         resetRequest.used = true;
         await resetRequest.save();
