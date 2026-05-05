@@ -610,6 +610,7 @@
   gap: 15px;
   margin-top: 20px;
   padding-top: 20px;
+  margin-bottom: 20px;
   border-top: 1px solid #e0e0e0;
 }
 
@@ -896,10 +897,6 @@
 
 .UCal-bill-modal {
   max-width: 600px;
-}
-
-.UCal-bill-modal-body {
-  padding: 0;
 }
 
 .UCal-bill-container {

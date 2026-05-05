@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { Menu, X, LogOut, ShoppingCart, Bell, CheckCircle, XCircle, Clock } from 'lucide-react';
+import { Menu, X, LogOut, ShoppingCart, Bell, CheckCircle, XCircle, Clock, Calendar, MapPin, Truck, Weight } from 'lucide-react';
 import "./Navbar.css";
 import logo from "../../assets/logo.png";
 import axiosInstance from '../../api/axiosInstance';
@@ -55,23 +55,24 @@ const Navbar = ({ isLoggedIn, userInfo, handleLogout, cartItemCount = 0 }) => {
   }, [isLoggedIn]);
 
   const fetchUserBookings = async () => {
+    setLoadingBookings(true);
     try {
       const response = await axiosInstance.get(API_ENDPOINTS.BOOKINGS.GET_MY_BOOKINGS);
       if (response.data && response.data.success) {
-        let bookingsData = response.data.data;
-        if (Array.isArray(bookingsData)) {
-          setUserBookings(bookingsData);
-          const pendingCount = bookingsData.filter(booking => booking.status === 'pending').length;
-          setUnreadCount(pendingCount);
-        } else {
-          setUserBookings([]);
-          setUnreadCount(0);
-        }
+        const bookingsData = response.data.data || [];
+        setUserBookings(bookingsData);
+        const pendingCount = bookingsData.filter(booking => booking.status === 'pending').length;
+        setUnreadCount(pendingCount);
+      } else {
+        setUserBookings([]);
+        setUnreadCount(0);
       }
     } catch (err) {
       console.error("Error fetching user bookings:", err);
       setUserBookings([]);
       setUnreadCount(0);
+    } finally {
+      setLoadingBookings(false);
     }
   };
 
@@ -84,9 +85,7 @@ const Navbar = ({ isLoggedIn, userInfo, handleLogout, cartItemCount = 0 }) => {
     setShowNotifications(!showNotifications);
     if (isOpen) setIsOpen(false);
     if (!showNotifications) {
-      setLoadingBookings(true);
       await fetchUserBookings();
-      setLoadingBookings(false);
     }
   };
 
@@ -118,21 +117,40 @@ const Navbar = ({ isLoggedIn, userInfo, handleLogout, cartItemCount = 0 }) => {
   const getStatusDisplay = (status) => {
     switch(status) {
       case 'pending':
-        return { text: 'Pending', class: 'notif-status-pending', icon: <Clock size={14} /> };
-      case 'approved':
-        return { text: 'Approved ✓', class: 'notif-status-approved', icon: <CheckCircle size={14} /> };
-      case 'rejected':
-        return { text: 'Rejected ✗', class: 'notif-status-rejected', icon: <XCircle size={14} /> };
+        return { text: 'Pending', class: 'notif-status-pending', icon: <Clock size={12} /> };
+      case 'confirmed':
+        return { text: 'Confirmed', class: 'notif-status-approved', icon: <CheckCircle size={12} /> };
       case 'completed':
-        return { text: 'Completed', class: 'notif-status-completed', icon: <CheckCircle size={14} /> };
+        return { text: 'Completed', class: 'notif-status-completed', icon: <CheckCircle size={12} /> };
+      case 'cancelled':
+        return { text: 'Cancelled', class: 'notif-status-rejected', icon: <XCircle size={12} /> };
       default:
-        return { text: 'Pending', class: 'notif-status-pending', icon: <Clock size={14} /> };
+        return { text: 'Pending', class: 'notif-status-pending', icon: <Clock size={12} /> };
     }
   };
 
   const formatDate = (dateString) => {
     if (!dateString) return 'N/A';
     return new Date(dateString).toLocaleDateString();
+  };
+
+  const formatTimeSlot = (timeSlotId) => {
+    if (!timeSlotId) return 'N/A';
+    const slotMap = {
+      'ts-1': 'Morning (8:00 AM - 12:00 PM)',
+      'ts-2': 'Afternoon (1:00 PM - 5:00 PM)'
+    };
+    return slotMap[timeSlotId] || timeSlotId;
+  };
+
+  const formatServiceArea = (areaId) => {
+    if (!areaId) return 'N/A';
+    const areaMap = {
+      'sa-1': 'Downtown',
+      'sa-2': 'Westside',
+      'sa-3': 'Eastside'
+    };
+    return areaMap[areaId] || areaId;
   };
 
   const formatTimeAgo = (dateString) => {
@@ -213,31 +231,48 @@ const Navbar = ({ isLoggedIn, userInfo, handleLogout, cartItemCount = 0 }) => {
                 {showNotifications && (
                   <div className="Nav-notification-dropdown">
                     <div className="Nav-notification-header">
-                      <h4>Booking Status</h4>
+                      <h4>My Scrap Bookings</h4>
                       <button onClick={() => setShowNotifications(false)} className="Nav-notification-close">✕</button>
                     </div>
                     <div className="Nav-notification-list">
                       {loadingBookings ? (
-                        <div className="Nav-notification-loading">Loading...</div>
+                        <div className="Nav-notification-loading">Loading bookings...</div>
                       ) : userBookings.length === 0 ? (
                         <div className="Nav-notification-empty">
                           <Clock size={32} />
                           <p>No bookings yet</p>
-                          <Link to="/Service" className="Nav-notification-book-now" onClick={() => setShowNotifications(false)}>
-                            Book Now
+                          <Link to="/UserCalendar" className="Nav-notification-book-now" onClick={() => setShowNotifications(false)}>
+                            Schedule Pickup
                           </Link>
                         </div>
                       ) : (
                         userBookings.map(booking => {
                           const statusInfo = getStatusDisplay(booking.status);
                           return (
-                            <div key={booking._id || booking.bookingId} className="Nav-notification-item">
+                            <div key={booking._id || booking.bookingId} className={`Nav-notification-item ${booking.status === 'pending' ? 'unread' : ''}`}>
                               <div className="Nav-notification-info">
                                 <div className="Nav-notification-date">
                                   {formatDate(booking.selectedDate)}
                                 </div>
-                                <div className="Nav-notification-message">
-                                  Pickup request
+                                <div className="Nav-notification-details">
+                                  <div className="Nav-notification-detail-row">
+                                    <Calendar size={11} />
+                                    <span>{formatDate(booking.selectedDate)}</span>
+                                  </div>
+                                  <div className="Nav-notification-detail-row">
+                                    <Clock size={11} />
+                                    <span>{formatTimeSlot(booking.timeSlotId)}</span>
+                                  </div>
+                                  <div className="Nav-notification-detail-row">
+                                    <MapPin size={11} />
+                                    <span>{formatServiceArea(booking.serviceAreaId)}</span>
+                                  </div>
+                                  {booking.estimatedWeight && (
+                                    <div className="Nav-notification-detail-row">
+                                      <Weight size={11} />
+                                      <span>{booking.estimatedWeight} kg</span>
+                                    </div>
+                                  )}
                                 </div>
                                 <div className="Nav-notification-time">
                                   {formatTimeAgo(booking.updatedAt || booking.createdAt)}
@@ -255,6 +290,9 @@ const Navbar = ({ isLoggedIn, userInfo, handleLogout, cartItemCount = 0 }) => {
                     <div className="Nav-notification-footer">
                       <Link to="/UserCalendar" className="Nav-view-all" onClick={() => setShowNotifications(false)}>
                         Schedule New Pickup
+                      </Link>
+                      <Link to="/UserCalendar" className="Nav-view-all" onClick={() => setShowNotifications(false)}>
+                        View All Bookings
                       </Link>
                       <button onClick={fetchUserBookings} className="Nav-notification-refresh">
                         Refresh

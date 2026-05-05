@@ -59,7 +59,9 @@ const UserCalendar = ({ userInfo }) => {
 
     useEffect(() => {
         fetchCalendarSettings();
-        fetchUserBookings();
+        if (userInfo?.email || contactDetails.email) {
+            fetchUserBookings();
+        }
     }, []);
 
     const fetchCalendarSettings = async () => {
@@ -97,12 +99,18 @@ const UserCalendar = ({ userInfo }) => {
     const fetchUserBookings = async () => {
         setLoadingBookings(true);
         try {
-            const email = contactDetails.email || userInfo?.email;
-            if (email) {
-                const response = await axiosInstance.get(`${API_ENDPOINTS.BOOKINGS.GET_USER_BOOKINGS}?email=${email}`);
-                if (response.data && response.data.success) {
-                    setUserBookings(response.data.data || []);
-                }
+            const token = localStorage.getItem('token');
+            if (!token) {
+                setUserBookings([]);
+                setLoadingBookings(false);
+                return;
+            }
+            
+            const response = await axiosInstance.get(API_ENDPOINTS.BOOKINGS.GET_MY_BOOKINGS);
+            if (response.data && response.data.success) {
+                setUserBookings(response.data.data || []);
+            } else {
+                setUserBookings([]);
             }
         } catch (err) {
             console.error("Error fetching bookings:", err);
@@ -237,14 +245,10 @@ const UserCalendar = ({ userInfo }) => {
         const bookingRequestData = {
             selectedDate: selectedDateObj ? selectedDateObj.toISOString() : null,
             timeSlotId: timeSlot,
-            timeSlotLabel: selectedTimeSlotObj?.label,
-            timeSlotRange: selectedTimeSlotObj?.time,
             serviceAreaId: serviceArea,
-            serviceAreaName: selectedServiceAreaObj?.name,
             estimatedWeight: estimatedWeight ? parseFloat(estimatedWeight) : null,
             pickupLocation: pickupLocation,
-            contactDetails: contactDetails,
-            status: 'pending'
+            contactDetails: contactDetails
         };
 
         try {
@@ -267,8 +271,10 @@ const UserCalendar = ({ userInfo }) => {
     };
 
     const downloadPDF = (booking) => {
-        const printContent = document.getElementById('bill-content');
         const printWindow = window.open('', '_blank');
+        const selectedTimeSlotObj = settings.timeSlots.find(slot => slot.id === booking.timeSlotId);
+        const selectedServiceAreaObj = settings.serviceAreas.find(area => area.id === booking.serviceAreaId);
+        
         printWindow.document.write(`
             <!DOCTYPE html>
             <html>
@@ -290,8 +296,6 @@ const UserCalendar = ({ userInfo }) => {
                     .details-table { width: 100%; border-collapse: collapse; margin: 20px 0; }
                     .details-table td { padding: 10px; border-bottom: 1px solid #e0e0e0; }
                     .details-table td:first-child { font-weight: bold; width: 40%; background: #f8f9fa; }
-                    .status-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; }
-                    .status-pending { background: #fffbeb; color: #f59e0b; }
                     .bill-footer { background: #f8f9fa; padding: 20px; text-align: center; font-size: 12px; color: #666; }
                     @media print { body { background: white; padding: 0; } .bill-container { box-shadow: none; } }
                 </style>
@@ -323,8 +327,8 @@ const UserCalendar = ({ userInfo }) => {
                         <table class="details-table">
                             <tr><th colspan="2">Booking Details</th></tr>
                             <tr><td>Pickup Date</td><td>${booking.selectedDate ? new Date(booking.selectedDate).toLocaleDateString() : 'N/A'}</td></tr>
-                            <tr><td>Time Slot</td><td>${booking.timeSlotLabel || booking.timeSlotId || 'N/A'}</td></tr>
-                            <tr><td>Service Area</td><td>${booking.serviceAreaName || booking.serviceAreaId || 'N/A'}</td></tr>
+                            <tr><td>Time Slot</td><td>${selectedTimeSlotObj?.label || booking.timeSlotId || 'N/A'}</td></tr>
+                            <tr><td>Service Area</td><td>${selectedServiceAreaObj?.name || booking.serviceAreaId || 'N/A'}</td></tr>
                             <tr><td>Pickup Location</td><td>${booking.pickupLocation || 'N/A'}</td></tr>
                             <tr><td>Estimated Weight</td><td>${booking.estimatedWeight ? `${booking.estimatedWeight} kg` : 'N/A'}</td></tr>
                             <tr><td>Booking Created</td><td>${new Date(booking.createdAt).toLocaleString()}</td></tr>
@@ -652,24 +656,35 @@ const UserCalendar = ({ userInfo }) => {
                                 {loadingBookings ? (
                                     <div className="UCal-loading-spinner"><Loader2 size={30} className="UCal-animate-spin" /></div>
                                 ) : userBookings.length === 0 ? (
-                                    <div className="UCal-no-bookings"><Recycle size={48} /><p>No scrap orders found</p><small>Book your first pickup to see orders here</small></div>
+                                    <div className="UCal-no-bookings">
+                                        <Recycle size={48} />
+                                        <p>No scrap orders found</p>
+                                        <small>Book your first pickup to see orders here</small>
+                                    </div>
                                 ) : (
                                     <div className="UCal-bookings-list">
                                         {userBookings.map((booking) => (
                                             <div key={booking._id} className="UCal-booking-card">
                                                 <div className="UCal-booking-card-header">
-                                                    <div><span className="UCal-booking-id-label">Booking ID:</span><span className="UCal-booking-id-value">{booking.bookingId || booking._id}</span></div>
-                                                    <span className={`UCal-booking-status ${getStatusClass(booking.status)}`}>{getStatusText(booking.status)}</span>
+                                                    <div>
+                                                        <span className="UCal-booking-id-label">Booking ID:</span>
+                                                        <span className="UCal-booking-id-value">{booking.bookingId || booking._id}</span>
+                                                    </div>
+                                                    <span className={`UCal-booking-status ${getStatusClass(booking.status)}`}>
+                                                        {getStatusText(booking.status)}
+                                                    </span>
                                                 </div>
                                                 <div className="UCal-booking-card-details">
                                                     <div className="UCal-booking-detail"><Calendar size={14} /><span>{booking.selectedDate ? new Date(booking.selectedDate).toLocaleDateString() : 'N/A'}</span></div>
-                                                    <div className="UCal-booking-detail"><Clock size={14} /><span>{booking.timeSlotLabel || booking.timeSlotId || 'N/A'}</span></div>
-                                                    <div className="UCal-booking-detail"><MapPin size={14} /><span>{booking.serviceAreaName || booking.serviceAreaId || 'N/A'}</span></div>
+                                                    <div className="UCal-booking-detail"><Clock size={14} /><span>{booking.timeSlotId || 'N/A'}</span></div>
+                                                    <div className="UCal-booking-detail"><MapPin size={14} /><span>{booking.serviceAreaId || 'N/A'}</span></div>
                                                     <div className="UCal-booking-detail"><Weight size={14} /><span>{booking.estimatedWeight ? `${booking.estimatedWeight} kg` : 'N/A'}</span></div>
                                                 </div>
                                                 <div className="UCal-booking-card-footer">
                                                     <small>Booked on: {new Date(booking.createdAt).toLocaleDateString()}</small>
-                                                    <button className="UCal-view-bill-btn" onClick={() => { setSelectedBookingForBill(booking); setShowBillModal(true); setShowOrdersModal(false); }}><Eye size={14} /> View Bill</button>
+                                                    <button className="UCal-view-bill-btn" onClick={() => { setSelectedBookingForBill(booking); setShowBillModal(true); setShowOrdersModal(false); }}>
+                                                        <Eye size={14} /> View Bill
+                                                    </button>
                                                 </div>
                                             </div>
                                         ))}
@@ -713,8 +728,8 @@ const UserCalendar = ({ userInfo }) => {
                                             <tbody>
                                                 <tr><th colSpan="2">Booking Details</th></tr>
                                                 <tr><td>Pickup Date</td><td>{selectedBookingForBill.selectedDate ? new Date(selectedBookingForBill.selectedDate).toLocaleDateString() : 'N/A'}</td></tr>
-                                                <tr><td>Time Slot</td><td>{selectedBookingForBill.timeSlotLabel || selectedBookingForBill.timeSlotId || 'N/A'}</td></tr>
-                                                <tr><td>Service Area</td><td>{selectedBookingForBill.serviceAreaName || selectedBookingForBill.serviceAreaId || 'N/A'}</td></tr>
+                                                <tr><td>Time Slot</td><td>{selectedBookingForBill.timeSlotId || 'N/A'}</td></tr>
+                                                <tr><td>Service Area</td><td>{selectedBookingForBill.serviceAreaId || 'N/A'}</td></tr>
                                                 <tr><td>Pickup Location</td><td>{selectedBookingForBill.pickupLocation || 'N/A'}</td></tr>
                                                 <tr><td>Estimated Weight</td><td>{selectedBookingForBill.estimatedWeight ? `${selectedBookingForBill.estimatedWeight} kg` : 'N/A'}</td></tr>
                                                 <tr><td>Booking Created</td><td>{new Date(selectedBookingForBill.createdAt).toLocaleString()}</td></tr>
