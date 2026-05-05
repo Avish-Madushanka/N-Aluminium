@@ -8,7 +8,6 @@ import './CalendarDisplay.css';
 import API_ENDPOINTS from '../../apiConfig';
 
 const API_BASE_URL = API_ENDPOINTS.API_ROOT;
-console.log("Imported API_ENDPOINTS:", API_ENDPOINTS);
 
 const fallbackSettings = {
   availableDays: { '0': false, '1': false, '2': false, '3': false, '4': false, '5': false, '6': false },
@@ -24,7 +23,6 @@ const CalendarDisplay = () => {
   const [error, setError] = useState(null);
   const [nextFourAvailableDays, setNextFourAvailableDays] = useState([]);
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [selectedDateVisual, setSelectedDateVisual] = useState(null);
 
   const daysOfWeek = useMemo(() => ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], []);
   const monthNames = useMemo(() => [
@@ -206,23 +204,22 @@ const CalendarDisplay = () => {
 
   const goToPrevMonth = () => {
     setCurrentDate(prev => new Date(prev.getFullYear(), prev.getMonth() - 1, 1));
-    setSelectedDateVisual(null);
   };
 
   const goToNextMonth = () => {
     setCurrentDate(prev => new Date(prev.getFullYear(), prev.getMonth() + 1, 1));
-    setSelectedDateVisual(null);
   };
 
   const handleDateSelectionAction = (year, month, day) => {
     if (!isCollectionDay(day, month, year)) return;
     
     const selectedDateObject = new Date(year, month, day);
-    setSelectedDateVisual(selectedDateObject);
+    sessionStorage.setItem('selectedPickupDate', selectedDateObject.toISOString());
     navigate('/UserCalendar');
   };
   
   const handleScheduleAvailableDay = (date) => {
+    sessionStorage.setItem('selectedPickupDate', date.toISOString());
     navigate('/UserCalendar');
   };
 
@@ -247,7 +244,6 @@ const CalendarDisplay = () => {
     
     for (let day = 1; day <= daysInMonth; day++) {
       const dateObj = new Date(year, month, day);
-      const isSel = selectedDateVisual && selectedDateVisual.getTime() === dateObj.getTime();
       const isAvail = isCollectionDay(day, month, year);
       const isTod = isToday(day, month, year);
       const isPst = isPastDate(day, month, year);
@@ -258,7 +254,6 @@ const CalendarDisplay = () => {
       else if (isAvail) dayClass += ' CDis-available';
       else dayClass += ' CDis-unavailable';
       
-      if (isSel) dayClass += ' CDis-selected';
       if (isTod) dayClass += ' CDis-today';
       if (specialDate) dayClass += ` CDis-special-${specialDate.status}`;
       
@@ -269,10 +264,8 @@ const CalendarDisplay = () => {
           onClick={() => handleDateSelectionAction(year, month, day)}
           disabled={(isPst && !isTod) || !isAvail}
           aria-label={`Schedule pickup for ${monthNames[month]} ${day}, ${year}${!isAvail ? ' (Unavailable)' : ''}${isTod ? ' (Today)' : ''}`}
-          aria-pressed={isSel}
         >
           <span className="CDis-day-number">{day}</span>
-
           {specialDate && (
             <span className="CDis-special-indicator" title={specialDate.reason || (specialDate.status === 'available' ? 'Special availability status' : 'Special unavailability status')}>
               <Info size={8} />
@@ -346,7 +339,6 @@ const CalendarDisplay = () => {
               <span className="CDis-legend-item CDis-today">Today</span>
               <span className="CDis-legend-item CDis-available-indicator">Available</span>
               <span className="CDis-legend-item CDis-unavailable-indicator">Unavailable</span>
-              <span className="CDis-legend-item CDis-selected">Selected</span>
               <span className="CDis-legend-item CDis-past">Past</span>
             </div>
             

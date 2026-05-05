@@ -174,7 +174,9 @@
 
 .CDis-calendar-day.CDis-today {
   font-weight: 700;
-  border: 2px solid #e05c03;
+  color: #ffffff;
+  border: 2px solid #2c2c2c;
+  background-color: #858585;
 }
 
 .CDis-calendar-day.CDis-today.CDis-selected {

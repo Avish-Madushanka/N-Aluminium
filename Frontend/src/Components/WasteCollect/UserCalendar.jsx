@@ -42,6 +42,18 @@ const UserCalendar = ({ userInfo }) => {
     const daysOfWeek = useMemo(() => ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], []);
     const monthNames = useMemo(() => ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'], []);
 
+    useEffect(() => {
+        const storedDate = sessionStorage.getItem('selectedPickupDate');
+        if (storedDate) {
+            const parsedDate = new Date(storedDate);
+            if (!isNaN(parsedDate.getTime())) {
+                setSelectedDate(parsedDate);
+                setCurrentDate(parsedDate);
+            }
+            sessionStorage.removeItem('selectedPickupDate');
+        }
+    }, []);
+
     const fallbackSettings = useMemo(() => ({
         availableDays: new Map([['0', false], ['1', false], ['2', false], ['3', false], ['4', false], ['5', false], ['6', false]]),
         timeSlots: [
