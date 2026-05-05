@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './FloatingChatBot.css';
 import logo from "../../assets/logo.png";
-import robotIcon from "../../assets/Chatbot4.png";
+import robotIcon from "../../assets/Chatbot.png";
 
 const BOT_NAME = 'ALUX AI';
 const BOT_SUBTITLE = 'Aluminum Recycling Assistant';
@@ -48,12 +48,6 @@ const FormattedText = ({ text }) => {
     </span>
   );
 };
-
-const ChatIcon = () => (
-  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-  </svg>
-);
 
 const CloseIcon = () => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
@@ -220,9 +214,13 @@ const FloatingChatbot = ({ userRole = 'client', userId = null, userEmail = null 
 
   if (!isOpen) {
     return (
-      <button className="alux-robot-launcher" onClick={handleOpen} aria-label="Open ALUX AI">
-        <img src={robotIcon} alt="AI Assistant" className="alux-robot-icon" />
-      </button>
+      <div className="alux-launcher-wrapper">
+        <button className="alux-hover-launcher" onClick={handleOpen}>
+           <div className="launcher-icon-bubble">
+              <img src={robotIcon} alt="AI" className="launcher-img" />
+           </div>
+        </button>
+      </div>
     );
   }
 

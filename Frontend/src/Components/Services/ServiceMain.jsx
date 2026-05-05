@@ -60,7 +60,7 @@ function ServiceMain() {
       title: "Product Visualization",
       desc: "Rotate and inspect aluminum designs in real-time for precise project understanding.",
       img: Img4,
-      link: "/AluminumSystem3D",
+      link: "/Items3Dview",
     },
   ];
 

@@ -1,30 +1,64 @@
-.alux-robot-launcher {
+.alux-launcher-wrapper {
   position: fixed;
   right: 24px;
   bottom: 24px;
   z-index: 1001;
-  width: auto;
-  height: auto;
+}
+
+.alux-hover-launcher {
   background: transparent;
   border: none;
   cursor: pointer;
   display: flex;
   align-items: center;
-  justify-content: center;
-  transition: transform 0.25s ease;
   padding: 0;
   margin: 0;
+  position: relative;
+  transition: transform 0.2s ease;
 }
 
-.alux-robot-launcher:hover {
-  transform: scale(1.08);
+.launcher-icon-bubble {
+  width: 90px;
+  height: 90px;
+  background: #3a8982;
+  border-radius: 50% 50% 0 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
 }
 
-.alux-robot-icon {
-  width: 130px;
-  height: 130px;
+.launcher-img {
+  width: 90%;
+  height: 90%;
   object-fit: contain;
-  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.15));
+}
+
+.launcher-label {
+  background: transparent;
+  height: 50px;
+  padding: 0;
+  width: 0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 16px;
+  color: #ff0000;
+  white-space: nowrap;
+  border-radius: 25px 0 0 25px;
+  transition: all 0.3s ease;
+  transform: translateX(25px);
+  opacity: 0;
+}
+
+.alux-hover-launcher:hover .launcher-label {
+  width: 160px;
+  padding: 0 20px 0 10px;
+  opacity: 1;
+  transform: translateX(5px);
 }
 
 .alux-chat {
@@ -559,14 +593,14 @@
     bottom: 10px;
   }
   
-  .alux-robot-launcher {
+  .alux-launcher-wrapper {
     right: 10px;
     bottom: 10px;
   }
   
-  .alux-robot-icon {
-    width: 50px;
-    height: 50px;
+  .launcher-icon-bubble {
+    width: 60px;
+    height: 60px;
   }
   
   .alux-expanded {
