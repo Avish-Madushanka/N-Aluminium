@@ -225,7 +225,7 @@ function Login() {
 
                 <div className="LOG-signup-link">
                   <p>
-                    Don't have an account? <Link to="/SignUp">Sign Up Now</Link>
+                    Don't have an account? <Link to="/ClientForm">Sign Up Now</Link>
                   </p>
                 </div>
               </>
