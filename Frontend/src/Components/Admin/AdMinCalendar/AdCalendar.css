@@ -659,13 +659,13 @@
   font-weight: 600;
   margin-bottom: 4px;
   color: #1b1b1b;
-  font-size: 16px;
+  font-size: 20px;
 }
 
 .AdCal-Updt-slot-time,
 .AdCal-Updt-slot-status,
 .AdCal-Updt-area-status {
-  font-size: 13px;
+  font-size: 16px;
   color: #6b7280;
 }
 
@@ -678,7 +678,7 @@
 .AdCal-Updt-toggle-button {
   padding: 6px 12px;
   border-radius: 20px;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
   border: 1px solid;
   cursor: pointer;
