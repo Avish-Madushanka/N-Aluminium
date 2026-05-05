@@ -18,6 +18,39 @@ const findUserByEmail = async (email) => {
     return null;
 };
 
+const sendResetEmail = async (email, resetToken) => {
+    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+    const resetUrl = `${frontendUrl}/reset-password?token=${resetToken}&email=${encodeURIComponent(email)}`;
+    
+    const transporter = nodemailer.createTransport({
+        host: process.env.EMAIL_HOST,
+        port: parseInt(process.env.EMAIL_PORT, 10) || 587,
+        secure: process.env.EMAIL_SECURE === 'true',
+        auth: {
+            user: process.env.EMAIL_USER,
+            pass: process.env.EMAIL_PASS,
+        },
+    });
+    
+    const htmlContent = `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+            <h2 style="color: #d30905;">Reset Your Password</h2>
+            <p>Click the button below to reset your password. This link expires in 1 hour.</p>
+            <div style="text-align: center; margin: 30px 0;">
+                <a href="${resetUrl}" style="background: #d30905; color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px;">Reset Password</a>
+            </div>
+            <p>If you didn't request this, please ignore this email.</p>
+        </div>
+    `;
+    
+    await transporter.sendMail({
+        from: `"ALUX Panadura" <${process.env.EMAIL_USER}>`,
+        to: email,
+        subject: 'Reset Your Password',
+        html: htmlContent
+    });
+};
+
 exports.login = async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -84,6 +117,8 @@ exports.forgotPassword = async (req, res) => {
             token: hashedToken,
             expiresAt: new Date(Date.now() + 3600000)
         });
+        
+        await sendResetEmail(email, resetToken);
         
         res.status(200).json({
             success: true,
