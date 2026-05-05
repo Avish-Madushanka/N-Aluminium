@@ -103,9 +103,8 @@ const AdminOrderManage = () => {
     const dispatched = orders.filter(o => o.status === 'dispatched').length;
     const ontheway = orders.filter(o => o.status === 'ontheway').length;
     const delivered = orders.filter(o => o.status === 'delivered').length;
-    const totalRevenue = orders.reduce((sum, o) => sum + o.grandTotal, 0);
     
-    return { total, pending, processing, dispatched, ontheway, delivered, totalRevenue };
+    return { total, pending, processing, dispatched, ontheway, delivered };
   };
 
   const stats = getOrderStatistics();
@@ -274,10 +273,6 @@ const AdminOrderManage = () => {
           <div className="stat-card">
             <div className="stat-value">{stats.delivered}</div>
             <div className="stat-label">Delivered</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-value">Rs {stats.totalRevenue.toFixed(2)}</div>
-            <div className="stat-label">Total Revenue</div>
           </div>
         </div>
       </div>
