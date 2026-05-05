@@ -40,10 +40,6 @@
   border-radius: 3px;
 }
 
-.AdCal-Updt-header-icon {
-  color: #059e12;
-}
-
 .AdCal-Updt-error-banner,
 .AdCal-Updt-success-banner {
   padding: 12px 20px;
@@ -331,20 +327,23 @@
 }
 
 .AdCal-Updt-delete-button {
-  padding: 6px;
+  padding: 6px 12px;
   border-radius: 8px;
   background: none;
-  border: none;
+  border: 1px solid #dc2626;
   cursor: pointer;
   transition: all 0.2s ease;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 6px;
   color: #dc2626;
+  font-size: 12px;
 }
 
 .AdCal-Updt-delete-button:hover {
   background-color: #fee2e2;
+  transform: translateY(-1px);
 }
 
 .AdCal-Updt-calendar {
