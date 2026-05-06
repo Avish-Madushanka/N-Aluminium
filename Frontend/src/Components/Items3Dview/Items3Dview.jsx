@@ -1,582 +1,757 @@
-import React, { useState, useMemo, useEffect, useRef } from 'react';
-import { Canvas, useLoader } from '@react-three/fiber';
-import { OrbitControls, Environment, Html, useProgress } from '@react-three/drei';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import * as THREE from 'three';
-import './Items3Dview.css';
+import React, { useRef, useState, useEffect } from "react";
+import * as THREE from "three";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import "./Items3Dview.css"
 
-function Model3D({ modelUrl, color, glassType, scale = 1 }) {
-  const gltf = useLoader(GLTFLoader, modelUrl);
-  
+function buildSofa(scene) {
+  const group = new THREE.Group();
+  const fabric = new THREE.MeshStandardMaterial({ color: 0xc4a882, roughness: 0.85, metalness: 0.0 });
+  const wood = new THREE.MeshStandardMaterial({ color: 0x5c3d1e, roughness: 0.6, metalness: 0.1 });
+  const cushionMat = new THREE.MeshStandardMaterial({ color: 0xb89a6e, roughness: 0.9, metalness: 0.0 });
+
+  const mkBox = (w, h, d, mat, x, y, z) => {
+    const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat);
+    m.position.set(x, y, z);
+    m.castShadow = true;
+    m.receiveShadow = true;
+    return m;
+  };
+
+  group.add(mkBox(2.4, 0.22, 1.1, fabric, 0, 0.22, 0));
+  group.add(mkBox(2.4, 0.72, 0.22, fabric, 0, 0.61, -0.44));
+  group.add(mkBox(0.18, 0.6, 1.1, fabric, -1.29, 0.52, 0));
+  group.add(mkBox(0.18, 0.6, 1.1, fabric, 1.29, 0.52, 0));
+  group.add(mkBox(1.05, 0.22, 1.15, fabric, -0.67, 0.22, 1.12));
+  group.add(mkBox(1.05, 0.72, 0.22, fabric, -0.67, 0.61, 0.56));
+  group.add(mkBox(0.18, 0.6, 1.15, fabric, -1.29, 0.52, 1.12));
+
+  const cushionGeo = new THREE.BoxGeometry(0.75, 0.15, 0.95);
+  const cx = [-0.79, 0, 0.79];
+  cx.forEach(x => {
+    const c = new THREE.Mesh(cushionGeo, cushionMat);
+    c.position.set(x, 0.375, 0.02);
+    c.castShadow = true;
+    group.add(c);
+  });
+  const cc = new THREE.Mesh(new THREE.BoxGeometry(0.9, 0.15, 0.95), cushionMat);
+  cc.position.set(-0.67, 0.375, 1.12);
+  cc.castShadow = true;
+  group.add(cc);
+
+  const pillowGeo = new THREE.BoxGeometry(0.65, 0.5, 0.18);
+  [-0.82, 0, 0.82].forEach(x => {
+    const p = new THREE.Mesh(pillowGeo, cushionMat);
+    p.position.set(x, 0.62, -0.34);
+    p.castShadow = true;
+    group.add(p);
+  });
+
+  const legGeo = new THREE.CylinderGeometry(0.045, 0.035, 0.19, 8);
+  const legPositions = [
+    [1.1, -0.67], [1.1, 0.48], [-1.1, -0.67], [-0.22, 0.48],
+    [-1.1, 1.6], [-0.22, 1.6]
+  ];
+  legPositions.forEach(([x, z]) => {
+    const leg = new THREE.Mesh(legGeo, wood);
+    leg.position.set(x, 0.025, z);
+    leg.castShadow = true;
+    group.add(leg);
+  });
+
+  group.position.y = 0.1;
+  scene.add(group);
+  return group;
+}
+
+function buildWardrobe(scene) {
+  const group = new THREE.Group();
+  const woodMaterial = new THREE.MeshStandardMaterial({ color: 0x8B5A2B, roughness: 0.4, metalness: 0.1 });
+  const doorMaterial = new THREE.MeshStandardMaterial({ color: 0xA0522D, roughness: 0.3, metalness: 0.05 });
+  const handleMaterial = new THREE.MeshStandardMaterial({ color: 0xCD7F32, metalness: 0.7, roughness: 0.3 });
+
+  const mainBody = new THREE.Mesh(new THREE.BoxGeometry(1.6, 2.2, 0.6), woodMaterial);
+  mainBody.position.set(0, 1.1, 0);
+  mainBody.castShadow = true;
+  mainBody.receiveShadow = true;
+  group.add(mainBody);
+
+  const leftDoor = new THREE.Mesh(new THREE.BoxGeometry(0.78, 2.0, 0.05), doorMaterial);
+  leftDoor.position.set(-0.41, 1.1, 0.31);
+  leftDoor.castShadow = true;
+  group.add(leftDoor);
+
+  const rightDoor = new THREE.Mesh(new THREE.BoxGeometry(0.78, 2.0, 0.05), doorMaterial);
+  rightDoor.position.set(0.41, 1.1, 0.31);
+  rightDoor.castShadow = true;
+  group.add(rightDoor);
+
+  const leftHandle = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 0.12, 8), handleMaterial);
+  leftHandle.rotation.z = Math.PI / 2;
+  leftHandle.position.set(-0.75, 1.1, 0.34);
+  leftHandle.castShadow = true;
+  group.add(leftHandle);
+
+  const rightHandle = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 0.12, 8), handleMaterial);
+  rightHandle.rotation.z = Math.PI / 2;
+  rightHandle.position.set(0.75, 1.1, 0.34);
+  rightHandle.castShadow = true;
+  group.add(rightHandle);
+
+  group.position.y = 0;
+  scene.add(group);
+  return group;
+}
+
+function buildBed(scene) {
+  const group = new THREE.Group();
+  const fabric = new THREE.MeshStandardMaterial({ color: 0x6B8E9B, roughness: 0.7 });
+  const wood = new THREE.MeshStandardMaterial({ color: 0x8B5A2B, roughness: 0.5 });
+
+  const base = new THREE.Mesh(new THREE.BoxGeometry(1.8, 0.3, 2.0), wood);
+  base.position.set(0, 0.15, 0);
+  base.castShadow = true;
+  base.receiveShadow = true;
+  group.add(base);
+
+  const mattress = new THREE.Mesh(new THREE.BoxGeometry(1.7, 0.2, 1.9), fabric);
+  mattress.position.set(0, 0.4, 0);
+  mattress.castShadow = true;
+  mattress.receiveShadow = true;
+  group.add(mattress);
+
+  const headboard = new THREE.Mesh(new THREE.BoxGeometry(1.85, 0.8, 0.1), wood);
+  headboard.position.set(0, 0.7, -1.05);
+  headboard.castShadow = true;
+  group.add(headboard);
+
+  group.position.y = 0;
+  scene.add(group);
+  return group;
+}
+
+function buildBookshelf(scene) {
+  const group = new THREE.Group();
+  const wood = new THREE.MeshStandardMaterial({ color: 0xC19A6B, roughness: 0.4 });
+
+  const back = new THREE.Mesh(new THREE.BoxGeometry(1.2, 1.5, 0.05), wood);
+  back.position.set(0, 0.75, -0.3);
+  back.castShadow = true;
+  group.add(back);
+
+  const shelves = [0.2, 0.5, 0.8, 1.1];
+  shelves.forEach(y => {
+    const shelf = new THREE.Mesh(new THREE.BoxGeometry(1.2, 0.05, 0.4), wood);
+    shelf.position.set(0, y, 0);
+    shelf.castShadow = true;
+    group.add(shelf);
+  });
+
+  const leftSide = new THREE.Mesh(new THREE.BoxGeometry(0.08, 1.5, 0.45), wood);
+  leftSide.position.set(-0.64, 0.75, 0);
+  leftSide.castShadow = true;
+  group.add(leftSide);
+
+  const rightSide = new THREE.Mesh(new THREE.BoxGeometry(0.08, 1.5, 0.45), wood);
+  rightSide.position.set(0.64, 0.75, 0);
+  rightSide.castShadow = true;
+  group.add(rightSide);
+
+  group.position.y = 0;
+  scene.add(group);
+  return group;
+}
+
+function buildDesk(scene) {
+  const group = new THREE.Group();
+  const wood = new THREE.MeshStandardMaterial({ color: 0xDEB887, roughness: 0.4 });
+
+  const top = new THREE.Mesh(new THREE.BoxGeometry(1.4, 0.08, 0.8), wood);
+  top.position.set(0, 0.74, 0);
+  top.castShadow = true;
+  group.add(top);
+
+  const leftLeg = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.7, 0.08), wood);
+  leftLeg.position.set(-0.6, 0.35, -0.3);
+  leftLeg.castShadow = true;
+  group.add(leftLeg);
+
+  const rightLeg = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.7, 0.08), wood);
+  rightLeg.position.set(0.6, 0.35, -0.3);
+  rightLeg.castShadow = true;
+  group.add(rightLeg);
+
+  const backLeftLeg = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.7, 0.08), wood);
+  backLeftLeg.position.set(-0.6, 0.35, 0.3);
+  backLeftLeg.castShadow = true;
+  group.add(backLeftLeg);
+
+  const backRightLeg = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.7, 0.08), wood);
+  backRightLeg.position.set(0.6, 0.35, 0.3);
+  backRightLeg.castShadow = true;
+  group.add(backRightLeg);
+
+  group.position.y = 0;
+  scene.add(group);
+  return group;
+}
+
+function ModelViewer({ modelType, wireframe, autoRotate, onResetView }) {
+  const mountRef = useRef(null);
+  const sceneRef = useRef({});
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
-    if (gltf) {
-      gltf.scene.traverse((child) => {
-        if (child.isMesh && child.material) {
-          if (child.name.toLowerCase().includes('frame') || child.name.toLowerCase().includes('aluminum') || child.name.toLowerCase().includes('wood') || child.name.toLowerCase().includes('door')) {
-            child.material.color = new THREE.Color(color);
-            child.material.metalness = 0.7;
-            child.material.roughness = 0.4;
-          }
-          if (child.name.toLowerCase().includes('glass')) {
-            if (glassType === 'tinted') {
-              child.material.color = new THREE.Color('#87CEEB');
-              child.material.transparent = true;
-              child.material.opacity = 0.7;
-            } else if (glassType === 'frosted') {
-              child.material.color = new THREE.Color('#ffffff');
-              child.material.transparent = true;
-              child.material.opacity = 0.5;
-              child.material.roughness = 0.9;
-            } else {
-              child.material.color = new THREE.Color('#a8d8ea');
-              child.material.transparent = true;
-              child.material.opacity = 0.4;
-            }
-          }
-        }
-      });
-    }
-  }, [gltf, color, glassType]);
+    const el = mountRef.current;
+    const w = el.clientWidth, h = el.clientHeight;
 
-  return gltf ? <primitive object={gltf.scene} scale={[scale, scale, scale]} /> : null;
-}
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setSize(w, h);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    el.appendChild(renderer.domElement);
 
-function LoadingSpinner() {
-  const { progress } = useProgress();
-  return (
-    <Html center>
-      <div className="loading-spinner">
-        <div className="loading-icon">🚪</div>
-        <div className="loading-text">Loading 3D Model... {Math.round(progress)}%</div>
-        <div className="loading-bar"><div className="loading-bar-fill" style={{ width: `${progress}%` }}></div></div>
-      </div>
-    </Html>
-  );
-}
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0xf5f5f5);
 
-function ThreeDViewer({ modelUrl, color, glassType, scale }) {
-  return (
-    <div className="viewer-container">
-      <Canvas camera={{ position: [3, 2, 5], fov: 45 }} shadows>
-        <ambientLight intensity={0.6} />
-        <directionalLight position={[5, 5, 5]} intensity={1} castShadow />
-        <directionalLight position={[-5, 3, 2]} intensity={0.5} />
-        <pointLight position={[0, 3, 0]} intensity={0.3} />
-        <Environment preset="city" />
-        <React.Suspense fallback={<LoadingSpinner />}>
-          <Model3D modelUrl={modelUrl} color={color} glassType={glassType} scale={scale} />
-        </React.Suspense>
-        <OrbitControls enableZoom={true} enablePan={true} zoomSpeed={1.2} rotateSpeed={1} />
-      </Canvas>
-      <div className="viewer-hint">🖱️ Drag to rotate | Scroll to zoom</div>
-    </div>
-  );
-}
+    const camera = new THREE.PerspectiveCamera(42, w / h, 0.1, 100);
+    camera.position.set(3.5, 2.2, 4);
 
-function ThreeSixtyViewer({ images }) {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isDragging, setIsDragging] = useState(false);
-  const [startX, setStartX] = useState(0);
+    const ambient = new THREE.AmbientLight(0xffffff, 0.7);
+    scene.add(ambient);
+    const sun = new THREE.DirectionalLight(0xfff4e0, 1.4);
+    sun.position.set(5, 8, 5);
+    sun.castShadow = true;
+    sun.shadow.camera.near = 0.5;
+    sun.shadow.camera.far = 30;
+    sun.shadow.camera.left = -5;
+    sun.shadow.camera.right = 5;
+    sun.shadow.camera.top = 5;
+    sun.shadow.camera.bottom = -5;
+    sun.shadow.mapSize.set(2048, 2048);
+    scene.add(sun);
+    const fill = new THREE.DirectionalLight(0xd0e8ff, 0.5);
+    fill.position.set(-5, 3, 2);
+    scene.add(fill);
 
-  const handleMouseDown = (e) => {
-    setIsDragging(true);
-    setStartX(e.clientX);
-  };
-
-  const handleMouseMove = (e) => {
-    if (!isDragging) return;
-    const delta = e.clientX - startX;
-    if (Math.abs(delta) > 10) {
-      const direction = delta > 0 ? -1 : 1;
-      setCurrentIndex((prev) => (prev + direction + images.length) % images.length);
-      setStartX(e.clientX);
-    }
-  };
-
-  const handleMouseUp = () => setIsDragging(false);
-
-  return (
-    <div
-      className="threesixty-viewer"
-      onMouseDown={handleMouseDown}
-      onMouseMove={handleMouseMove}
-      onMouseUp={handleMouseUp}
-      onMouseLeave={handleMouseUp}
-    >
-      <img src={images[currentIndex]} className="threesixty-image" alt="360 view" />
-      <div className="threesixty-hint">🖱️ Drag horizontally to rotate 360°</div>
-      <div className="threesixty-counter">{currentIndex + 1} / {images.length}</div>
-    </div>
-  );
-}
-
-const windowModels = [
-  {
-    id: 1,
-    name: 'Aluminum Sliding Window',
-    price: 299,
-    category: 'Windows',
-    type: 'Sliding',
-    format: 'GLB',
-    color: 'Black',
-    style: 'Modern',
-    modelUrl: 'https://threejs.org/examples/models/gltf/DamagedHelmet/glTF/DamagedHelmet.gltf',
-    thumbnail: 'https://images.pexels.com/photos/144361/pexels-photo-144361.jpeg',
-    images360: Array.from({ length: 36 }, (_, i) => `https://picsum.photos/id/100/800/600?w=${i}`),
-    description: 'Sleek aluminum sliding window with thermal break technology. Perfect for modern homes.',
-    features: ['Thermal insulation', 'Double glazing', 'Corrosion resistant', 'Smooth sliding mechanism'],
-    dimensions: { width: 120, height: 150, depth: 5 },
-    material: 'Aluminum 6063-T5',
-    glassOptions: ['transparent', 'tinted', 'frosted']
-  },
-  {
-    id: 2,
-    name: 'Wooden Casement Window',
-    price: 199,
-    category: 'Windows',
-    type: 'Casement',
-    format: 'GLB',
-    color: 'Wood',
-    style: 'Classic',
-    modelUrl: 'https://threejs.org/examples/models/gltf/DamagedHelmet/glTF/DamagedHelmet.gltf',
-    thumbnail: 'https://images.pexels.com/photos/279746/pexels-photo-279746.jpeg',
-    images360: Array.from({ length: 36 }, (_, i) => `https://picsum.photos/id/97/800/600?c=${i}`),
-    description: 'Traditional wooden casement window with crank operation.',
-    features: ['Crank mechanism', 'Screens included', 'Security lock', 'Weather sealed'],
-    dimensions: { width: 90, height: 120, depth: 4 },
-    material: 'Solid Oak Wood',
-    glassOptions: ['transparent', 'tinted', 'frosted']
-  },
-  {
-    id: 3,
-    name: 'Fixed Picture Window',
-    price: 149,
-    category: 'Windows',
-    type: 'Fixed',
-    format: 'GLB',
-    color: 'White',
-    style: 'Modern',
-    modelUrl: 'https://threejs.org/examples/models/gltf/DamagedHelmet/glTF/DamagedHelmet.gltf',
-    thumbnail: 'https://images.pexels.com/photos/164522/pexels-photo-164522.jpeg',
-    images360: Array.from({ length: 36 }, (_, i) => `https://picsum.photos/id/15/800/600?f=${i}`),
-    description: 'Large fixed window for unobstructed views and maximum natural light.',
-    features: ['Panoramic view', 'Energy efficient', 'Low maintenance', 'Solar control glass'],
-    dimensions: { width: 200, height: 120, depth: 3 },
-    material: 'Powder coated Aluminum',
-    glassOptions: ['transparent', 'tinted']
-  },
-  {
-    id: 4,
-    name: 'Black Aluminum Window',
-    price: 349,
-    category: 'Windows',
-    type: 'Sliding',
-    format: 'GLB',
-    color: 'Black',
-    style: 'Modern',
-    modelUrl: 'https://threejs.org/examples/models/gltf/DamagedHelmet/glTF/DamagedHelmet.gltf',
-    thumbnail: 'https://images.pexels.com/photos/275070/pexels-photo-275070.jpeg',
-    images360: Array.from({ length: 36 }, (_, i) => `https://picsum.photos/id/104/800/600?b=${i}`),
-    description: 'Premium black aluminum window with minimalist design.',
-    features: ['Thermal break', 'Tempered glass', 'Insect screens', 'Multi-point locking'],
-    dimensions: { width: 150, height: 180, depth: 5 },
-    material: 'Anodized Aluminum',
-    glassOptions: ['transparent', 'tinted', 'frosted']
-  },
-  {
-    id: 5,
-    name: 'Bay Window Frame',
-    price: 599,
-    category: 'Windows',
-    type: 'Bay',
-    format: 'OBJ',
-    color: 'White',
-    style: 'Classic',
-    modelUrl: 'https://threejs.org/examples/models/gltf/DamagedHelmet/glTF/DamagedHelmet.gltf',
-    thumbnail: 'https://images.pexels.com/photos/210600/pexels-photo-210600.jpeg',
-    images360: Array.from({ length: 48 }, (_, i) => `https://picsum.photos/id/21/800/600?bay=${i}`),
-    description: 'Elegant bay window that extends outward, creating additional space.',
-    features: ['Expands outward', 'Seating area option', 'Enhanced ventilation', 'Decorative design'],
-    dimensions: { width: 240, height: 150, depth: 60 },
-    material: 'Fiberglass reinforced',
-    glassOptions: ['transparent', 'tinted']
-  }
-];
-
-const doorModels = [
-  {
-    id: 6,
-    name: 'French Glass Door',
-    price: 599,
-    category: 'Doors',
-    type: 'French',
-    format: 'GLTF',
-    color: 'White',
-    style: 'Classic',
-    modelUrl: 'https://threejs.org/examples/models/gltf/DamagedHelmet/glTF/DamagedHelmet.gltf',
-    thumbnail: 'https://images.pexels.com/photos/209289/pexels-photo-209289.jpeg',
-    images360: Array.from({ length: 36 }, (_, i) => `https://picsum.photos/id/31/800/600?d=${i}`),
-    description: 'Elegant French door with glass panels for patios and garden access.',
-    features: ['Tempered glass', 'Multi-point locking', 'Weather sealed', 'Easy installation'],
-    dimensions: { width: 180, height: 210, depth: 4 },
-    material: 'Solid Wood with Aluminum cladding',
-    glassOptions: ['transparent', 'frosted']
-  },
-  {
-    id: 7,
-    name: 'Modern Sliding Door',
-    price: 449,
-    category: 'Doors',
-    type: 'Sliding',
-    format: 'GLB',
-    color: 'Black',
-    style: 'Modern',
-    modelUrl: 'https://threejs.org/examples/models/gltf/DamagedHelmet/glTF/DamagedHelmet.gltf',
-    thumbnail: 'https://images.pexels.com/photos/208969/pexels-photo-208969.jpeg',
-    images360: Array.from({ length: 36 }, (_, i) => `https://picsum.photos/id/104/800/600?e=${i}`),
-    description: 'Space-saving sliding glass door with aluminum frame.',
-    features: ['Low-E glass', 'Thermal break', 'Screens included', 'Security lock'],
-    dimensions: { width: 240, height: 210, depth: 4 },
-    material: 'Aluminum',
-    glassOptions: ['transparent', 'tinted']
-  },
-  {
-    id: 8,
-    name: 'Pivot Entry Door',
-    price: 1299,
-    category: 'Doors',
-    type: 'Pivot',
-    format: 'GLTF',
-    color: 'Gray',
-    style: 'Modern',
-    modelUrl: 'https://threejs.org/examples/models/gltf/DamagedHelmet/glTF/DamagedHelmet.gltf',
-    thumbnail: 'https://images.pexels.com/photos/249997/pexels-photo-249997.jpeg',
-    images360: Array.from({ length: 36 }, (_, i) => `https://picsum.photos/id/118/800/600?o=${i}`),
-    description: 'Stunning pivot door for modern entrances and luxury homes.',
-    features: ['Oversized design', 'Premium hardware', 'Thermal insulation', 'Security system'],
-    dimensions: { width: 120, height: 240, depth: 5 },
-    material: 'Steel with Wood veneer',
-    glassOptions: ['transparent']
-  },
-  {
-    id: 9,
-    name: 'Wooden Panel Door',
-    price: 349,
-    category: 'Doors',
-    type: 'Panel',
-    format: 'GLB',
-    color: 'Wood',
-    style: 'Classic',
-    modelUrl: 'https://threejs.org/examples/models/gltf/DamagedHelmet/glTF/DamagedHelmet.gltf',
-    thumbnail: 'https://images.pexels.com/photos/259803/pexels-photo-259803.jpeg',
-    images360: Array.from({ length: 36 }, (_, i) => `https://picsum.photos/id/20/800/600?wd=${i}`),
-    description: 'Solid wooden panel door with classic raised panel design.',
-    features: ['Solid core', 'Sound proof', 'Pre-hung', 'Weather resistant'],
-    dimensions: { width: 90, height: 200, depth: 4 },
-    material: 'Mahogany Wood',
-    glassOptions: []
-  },
-  {
-    id: 10,
-    name: 'Bi-fold Patio Door',
-    price: 899,
-    category: 'Doors',
-    type: 'Bi-fold',
-    format: 'OBJ',
-    color: 'Black',
-    style: 'Modern',
-    modelUrl: 'https://threejs.org/examples/models/gltf/DamagedHelmet/glTF/DamagedHelmet.gltf',
-    thumbnail: 'https://images.pexels.com/photos/235866/pexels-photo-235866.jpeg',
-    images360: Array.from({ length: 48 }, (_, i) => `https://picsum.photos/id/119/800/600?bf=${i}`),
-    description: 'Space-saving bi-fold door that opens completely to connect indoor and outdoor.',
-    features: ['Full opening', 'Stainless steel hardware', 'Weather tight seals', 'Stackable panels'],
-    dimensions: { width: 300, height: 210, depth: 6 },
-    material: 'Aluminum with Thermal break',
-    glassOptions: ['transparent', 'tinted', 'frosted']
-  }
-];
-
-const allProducts = [...windowModels, ...doorModels];
-
-function Items3Dview() {
-  const [models] = useState(allProducts);
-  const [selectedModel, setSelectedModel] = useState(null);
-  const [activeCategory, setActiveCategory] = useState('all');
-  const [filters, setFilters] = useState({
-    price: 'all',
-    format: 'all',
-    type: 'all',
-    color: 'all',
-    style: 'all',
-    search: ''
-  });
-  const [sortBy, setSortBy] = useState('bestMatch');
-  const [favorites, setFavorites] = useState([]);
-  const [customization, setCustomization] = useState({
-    frameColor: '#2c2c2c',
-    glassType: 'transparent',
-    widthScale: 1,
-    heightScale: 1
-  });
-
-  const categories = ['all', 'Windows', 'Doors'];
-
-  const filteredModels = useMemo(() => {
-    let result = models.filter(model => {
-      if (activeCategory !== 'all' && model.category !== activeCategory) return false;
-      if (filters.price === 'free' && model.price !== 0) return false;
-      if (filters.price === 'paid' && model.price === 0) return false;
-      if (filters.format !== 'all' && model.format !== filters.format) return false;
-      if (filters.type !== 'all' && model.type !== filters.type) return false;
-      if (filters.color !== 'all' && model.color !== filters.color) return false;
-      if (filters.style !== 'all' && model.style !== filters.style) return false;
-      if (filters.search && !model.name.toLowerCase().includes(filters.search.toLowerCase())) return false;
-      return true;
-    });
-
-    if (sortBy === 'priceLow') result.sort((a, b) => a.price - b.price);
-    if (sortBy === 'priceHigh') result.sort((a, b) => b.price - a.price);
-    if (sortBy === 'newest') result.sort((a, b) => b.id - a.id);
-
-    return result;
-  }, [models, activeCategory, filters, sortBy]);
-
-  const toggleFavorite = (id) => {
-    setFavorites(prev => prev.includes(id) ? prev.filter(fid => fid !== id) : [...prev, id]);
-  };
-
-  const colorMap = {
-    'Black': '#1a1a1a',
-    'White': '#f5f5f5',
-    'Gray': '#888888',
-    'Wood': '#8B5A2B'
-  };
-
-  const getUniqueTypes = () => {
-    let filtered = models;
-    if (activeCategory !== 'all') {
-      filtered = filtered.filter(m => m.category === activeCategory);
-    }
-    return ['all', ...new Set(filtered.map(m => m.type))];
-  };
-
-  if (selectedModel) {
-    const use360View = selectedModel.format === 'OBJ';
-    const currentColor = colorMap[selectedModel.color] || customization.frameColor;
-    const avgScale = (customization.widthScale + customization.heightScale) / 2;
-
-    return (
-      <div className="app">
-        <div className="detail-header">
-          <button className="back-btn" onClick={() => setSelectedModel(null)}>← Back to Marketplace</button>
-          <span className="breadcrumb">{selectedModel.category} / <strong>{selectedModel.name}</strong></span>
-        </div>
-
-        <div className="detail-layout">
-          <div>
-            {use360View ? (
-              <ThreeSixtyViewer images={selectedModel.images360} />
-            ) : (
-              <ThreeDViewer
-                modelUrl={selectedModel.modelUrl}
-                color={currentColor}
-                glassType={customization.glassType}
-                scale={avgScale}
-              />
-            )}
-            
-            <div className="action-buttons">
-              <button className="btn-primary">🔄 Rotate 360°</button>
-              <button className="btn-secondary">🎨 Customize</button>
-              <button className="btn-secondary">💬 Request Quote</button>
-              <button onClick={() => toggleFavorite(selectedModel.id)} className={`btn-save ${favorites.includes(selectedModel.id) ? 'active' : ''}`}>
-                {favorites.includes(selectedModel.id) ? '★ Saved' : '☆ Save'}
-              </button>
-            </div>
-          </div>
-
-          <div className="info-panel">
-            <h1 className="product-title">{selectedModel.name}</h1>
-            <div className="product-price">{selectedModel.price === 0 ? 'FREE' : `$${selectedModel.price}`}</div>
-            <p className="product-description">{selectedModel.description}</p>
-            
-            <div className="features-section">
-              <h3 className="section-title">Key Features</h3>
-              {selectedModel.features.map((f, idx) => (
-                <div key={idx} className="feature-item">{f}</div>
-              ))}
-            </div>
-
-            <div className="dimensions-box">
-              <h3 className="section-title">Dimensions (cm)</h3>
-              <div className="dimension-row"><span className="dimension-label">Width:</span><span>{selectedModel.dimensions.width} cm</span></div>
-              <div className="dimension-row"><span className="dimension-label">Height:</span><span>{selectedModel.dimensions.height} cm</span></div>
-              <div className="dimension-row"><span className="dimension-label">Depth:</span><span>{selectedModel.dimensions.depth} cm</span></div>
-            </div>
-
-            {selectedModel.glassOptions && selectedModel.glassOptions.length > 0 && (
-              <div className="customization-panel">
-                <h3 className="section-title">Customization</h3>
-                
-                <div className="custom-group">
-                  <label className="custom-label">Frame Color</label>
-                  <div className="color-options">
-                    {['Black', 'White', 'Gray', 'Wood'].map(color => (
-                      <div
-                        key={color}
-                        onClick={() => setCustomization({ ...customization, frameColor: colorMap[color] })}
-                        className={`color-dot ${customization.frameColor === colorMap[color] ? 'active' : ''}`}
-                        style={{ background: colorMap[color] }}
-                      />
-                    ))}
-                  </div>
-                </div>
-
-                <div className="custom-group">
-                  <label className="custom-label">Glass Type</label>
-                  <select className="glass-select" value={customization.glassType} onChange={(e) => setCustomization({ ...customization, glassType: e.target.value })}>
-                    {selectedModel.glassOptions.map(opt => (
-                      <option key={opt} value={opt}>{opt.charAt(0).toUpperCase() + opt.slice(1)}</option>
-                    ))}
-                  </select>
-                </div>
-
-                <div className="custom-group">
-                  <label className="custom-label">Width Scale: {customization.widthScale}x</label>
-                  <input type="range" min="0.5" max="1.8" step="0.05" value={customization.widthScale} onChange={(e) => setCustomization({ ...customization, widthScale: parseFloat(e.target.value) })} />
-                </div>
-
-                <div className="custom-group">
-                  <label className="custom-label">Height Scale: {customization.heightScale}x</label>
-                  <input type="range" min="0.5" max="1.8" step="0.05" value={customization.heightScale} onChange={(e) => setCustomization({ ...customization, heightScale: parseFloat(e.target.value) })} />
-                </div>
-              </div>
-            )}
-
-            <div className="material-detail">
-              <h3 className="section-title">Material</h3>
-              <div className="material-text">{selectedModel.material}</div>
-            </div>
-          </div>
-        </div>
-      </div>
+    const floor = new THREE.Mesh(
+      new THREE.PlaneGeometry(12, 12),
+      new THREE.MeshStandardMaterial({ color: 0xeeeeee, roughness: 1 })
     );
-  }
+    floor.rotation.x = -Math.PI / 2;
+    floor.receiveShadow = true;
+    scene.add(floor);
+
+    const grid = new THREE.GridHelper(10, 20, 0xdddddd, 0xdddddd);
+    grid.position.y = 0.001;
+    scene.add(grid);
+
+    let modelGroup;
+    if (modelType === "sofa") modelGroup = buildSofa(scene);
+    else if (modelType === "wardrobe") modelGroup = buildWardrobe(scene);
+    else if (modelType === "bed") modelGroup = buildBed(scene);
+    else if (modelType === "bookshelf") modelGroup = buildBookshelf(scene);
+    else if (modelType === "desk") modelGroup = buildDesk(scene);
+    else modelGroup = buildSofa(scene);
+    
+    setLoading(false);
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.08;
+    controls.minDistance = 2;
+    controls.maxDistance = 10;
+    controls.target.set(0, 0.5, 0);
+    controls.update();
+
+    sceneRef.current = { renderer, scene, camera, controls, modelGroup, sun };
+
+    const onResize = () => {
+      const w2 = el.clientWidth, h2 = el.clientHeight;
+      camera.aspect = w2 / h2;
+      camera.updateProjectionMatrix();
+      renderer.setSize(w2, h2);
+    };
+    window.addEventListener("resize", onResize);
+
+    let raf;
+    const animate = () => {
+      raf = requestAnimationFrame(animate);
+      controls.update();
+      renderer.render(scene, camera);
+    };
+    animate();
+
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("resize", onResize);
+      renderer.dispose();
+      el.removeChild(renderer.domElement);
+    };
+  }, [modelType]);
+
+  useEffect(() => {
+    const { modelGroup } = sceneRef.current;
+    if (!modelGroup) return;
+    modelGroup.traverse(child => {
+      if (child.isMesh) child.material.wireframe = wireframe;
+    });
+  }, [wireframe]);
+
+  useEffect(() => {
+    const { controls } = sceneRef.current;
+    if (!controls) return;
+    controls.autoRotate = autoRotate;
+    controls.autoRotateSpeed = 1.5;
+  }, [autoRotate]);
+
+  useEffect(() => {
+    if (!onResetView) return;
+    const { camera, controls } = sceneRef.current;
+    if (!camera || !controls) return;
+    camera.position.set(3.5, 2.2, 4);
+    controls.target.set(0, 0.5, 0);
+    controls.update();
+  }, [onResetView]);
 
   return (
-    <div className="app">
-      <div className="main-header">
-        <div className="header-container">
-          <h1 className="logo">🚪 Window & Door Marketplace</h1>
-          
-          <div className="category-tabs">
-            {categories.map(cat => (
-              <button
-                key={cat}
-                onClick={() => setActiveCategory(cat)}
-                className={`category-btn ${activeCategory === cat ? 'active' : ''}`}
-              >
-                {cat === 'all' ? 'All Products' : cat}
-              </button>
+    <div style={{ position: "relative", width: "100%", height: "100%" }}>
+      {loading && (
+        <div style={{
+          position: "absolute", inset: 0, display: "flex",
+          alignItems: "center", justifyContent: "center",
+          background: "#f5f5f5", zIndex: 10, borderRadius: 30
+        }}>
+          <div className="loader-ring" />
+        </div>
+      )}
+      <div ref={mountRef} style={{ width: "100%", height: "100%" }} />
+    </div>
+  );
+}
+
+function ControlsPanel({
+  autoRotate, setAutoRotate,
+  wireframe, setWireframe,
+  onReset, onFullscreen
+}) {
+  return (
+    <div className="controls-panel">
+      <button className="ctrl-btn" onClick={onReset} title="Reset View">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+          <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+          <path d="M3 3v5h5"/>
+        </svg>
+        <span>Reset</span>
+      </button>
+
+      <button className={`ctrl-btn ${autoRotate ? "ctrl-active" : ""}`} onClick={() => setAutoRotate(!autoRotate)} title="Auto Rotate">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+          <path d="M21.5 2v6h-6"/>
+          <path d="M21.34 15.57a10 10 0 1 1-.57-8.38"/>
+        </svg>
+        <span>{autoRotate ? "Stop" : "Rotate"}</span>
+      </button>
+
+      <button className={`ctrl-btn ${wireframe ? "ctrl-active" : ""}`} onClick={() => setWireframe(!wireframe)} title="Wireframe">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+          <polygon points="12 2 22 20 2 20"/>
+          <line x1="12" y1="2" x2="12" y2="20"/>
+          <line x1="2" y1="20" x2="22" y2="20"/>
+          <line x1="7" y1="11" x2="17" y2="11"/>
+        </svg>
+        <span>Wire</span>
+      </button>
+
+      <button className="ctrl-btn" onClick={onFullscreen} title="Fullscreen">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+          <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+        </svg>
+        <span>Full</span>
+      </button>
+    </div>
+  );
+}
+
+function ProductDetails({ selectedItem, collected, onCollect }) {
+  const [shared, setShared] = useState(false);
+  const [likes] = useState(247);
+
+  const handleShare = () => {
+    navigator.clipboard?.writeText(window.location.href).catch(() => {});
+    setShared(true);
+    setTimeout(() => setShared(false), 2000);
+  };
+
+  const getFeatures = (item) => {
+    if (item?.type === "sofa") {
+      return [
+        { icon: "🪵", text: "Warm beige fabric with solid wooden legs" },
+        { icon: "⚡", text: "Optimized polygon count for web & VR" },
+        { icon: "🏠", text: "Suitable for interiors, games & AR/VR" },
+        { icon: "✨", text: "Modern L-shape cozy design language" },
+      ];
+    } else if (item?.type === "wardrobe") {
+      return [
+        { icon: "🪵", text: "Solid oak wood construction" },
+        { icon: "🚪", text: "Double doors with premium handles" },
+        { icon: "📏", text: "Spacious interior with hanging rod" },
+        { icon: "✨", text: "Modern minimalist design" },
+      ];
+    } else if (item?.type === "bed") {
+      return [
+        { icon: "🛏️", text: "Ergonomic headboard design" },
+        { icon: "🪵", text: "Solid wood frame with fabric upholstery" },
+        { icon: "📏", text: "Queen size (180x200cm)" },
+        { icon: "✨", text: "Modern Scandinavian style" },
+      ];
+    } else if (item?.type === "bookshelf") {
+      return [
+        { icon: "📚", text: "Hexagonal unique design" },
+        { icon: "🪵", text: "Premium wood finish" },
+        { icon: "📏", text: "5 spacious compartments" },
+        { icon: "✨", text: "Modern geometric aesthetic" },
+      ];
+    } else {
+      return [
+        { icon: "📏", text: "Spacious work surface" },
+        { icon: "🪵", text: "Solid wood desk with metal legs" },
+        { icon: "💡", text: "Cable management system" },
+        { icon: "✨", text: "Modern ergonomic design" },
+      ];
+    }
+  };
+
+  const getSpecs = (item) => {
+    if (item?.type === "sofa") {
+      return [
+        ["Model Size", "2400 × 1100 × 850 mm"],
+        ["Style", "Modern / Contemporary"],
+        ["Material", "Fabric + Solid Wood"],
+        ["Shape", "L-Shape (Chaise)"],
+        ["Polygon Count", "~12,400 tris"],
+        ["Texture Maps", "Albedo, Normal, AO"],
+      ];
+    } else if (item?.type === "wardrobe") {
+      return [
+        ["Model Size", "1600 × 2200 × 600 mm"],
+        ["Style", "Minimalist / Modern"],
+        ["Material", "Solid Oak Wood"],
+        ["Doors", "Double Sliding"],
+        ["Polygon Count", "~8,200 tris"],
+        ["Texture Maps", "Albedo, Normal, Roughness"],
+      ];
+    } else if (item?.type === "bed") {
+      return [
+        ["Model Size", "1800 × 2000 × 850 mm"],
+        ["Style", "Scandinavian"],
+        ["Material", "Wood + Fabric"],
+        ["Type", "Queen Size Platform"],
+        ["Polygon Count", "~10,500 tris"],
+        ["Texture Maps", "Albedo, Normal, AO"],
+      ];
+    } else if (item?.type === "bookshelf") {
+      return [
+        ["Model Size", "1200 × 1500 × 400 mm"],
+        ["Style", "Geometric / Modern"],
+        ["Material", "Engineered Wood"],
+        ["Shape", "Hexagonal"],
+        ["Polygon Count", "~6,800 tris"],
+        ["Texture Maps", "Albedo, Normal"],
+      ];
+    } else {
+      return [
+        ["Model Size", "1400 × 780 × 750 mm"],
+        ["Style", "Modern / Ergonomic"],
+        ["Material", "Wood + Metal"],
+        ["Type", "Writing Desk"],
+        ["Polygon Count", "~5,200 tris"],
+        ["Texture Maps", "Albedo, Normal, AO"],
+      ];
+    }
+  };
+
+  return (
+    <div className="product-panel">
+      <div className="product-badge">3D Model</div>
+
+      <h1 className="product-title">{selectedItem?.name || "Urban Comfort Sofa"}</h1>
+      <p className="product-subtitle">{selectedItem?.subtitle || "L-Shape Modern Series"}</p>
+
+      <div className="product-stats">
+        <div className="stat">
+          <span className="stat-icon">👁</span>
+          <span className="stat-val">3,820</span>
+          <span className="stat-label">Views</span>
+        </div>
+        <div className="stat-divider" />
+        <div className="stat">
+          <span className="stat-icon">⭐</span>
+          <span className="stat-val">{collected ? likes + 1 : likes}</span>
+          <span className="stat-label">Likes</span>
+        </div>
+        <div className="stat-divider" />
+        <div className="stat">
+          <span className="stat-icon">📦</span>
+          <span className="stat-val">GLB</span>
+          <span className="stat-label">Format</span>
+        </div>
+      </div>
+
+      <div className="section-label">Features</div>
+      <div className="feature-tags">
+        {getFeatures(selectedItem).map((f, i) => (
+          <div className="tag" key={i}>
+            <span className="tag-icon">{f.icon}</span>
+            <span>{f.text}</span>
+          </div>
+        ))}
+      </div>
+
+      <div className="section-label">Specifications</div>
+      <div className="spec-table">
+        {getSpecs(selectedItem).map(([label, value]) => (
+          <div className="spec-row" key={label}>
+            <span className="spec-label">{label}</span>
+            <span className="spec-value">{value}</span>
+          </div>
+        ))}
+      </div>
+
+      <div className="action-buttons">
+        <button className={`btn-collect ${collected ? "collected" : ""}`} onClick={onCollect}>
+          {collected ? "★ Collected" : "☆ Collect"}
+        </button>
+        <button className={`btn-share ${shared ? "shared" : ""}`} onClick={handleShare}>
+          {shared ? "✓ Copied!" : "↗ Share"}
+        </button>
+      </div>
+
+      <div className="license-note">
+        Free for personal and commercial use · No attribution required
+      </div>
+    </div>
+  );
+}
+
+function ItemsGallery({ onSelectItem, selectedItem, searchQuery, setSearchQuery, selectedColor, setSelectedColor, selectedUpdate, setSelectedUpdate }) {
+  const items = [
+    { id: 1, name: "Urban Comfort Sofa", subtitle: "L-Shape Modern Series", type: "sofa", color: "beige", category: "living", icon: "🛋️", date: new Date(2024, 2, 15), badge: "3D Model" },
+    { id: 2, name: "Urban Wardrobe", subtitle: "Modern Closet For Modern Aesthetics", type: "wardrobe", color: "wood", category: "bedroom", icon: "🚪", date: new Date(2024, 3, 10), badge: "3D Model" },
+    { id: 3, name: "Unique Hexagonal Bookshelf", subtitle: "Geometric Design Bookshelf", type: "bookshelf", color: "wood", category: "living", icon: "📚", date: new Date(2024, 3, 5), badge: "3D Model" },
+    { id: 4, name: "Elegant Modern Bed", subtitle: "Queen Size Platform Bed", type: "bed", color: "gray", category: "bedroom", icon: "🛏️", date: new Date(2024, 2, 28), badge: "3D Model" },
+    { id: 5, name: "Stylish Urban Closet", subtitle: "For Modern Living", type: "wardrobe", color: "white", category: "bedroom", icon: "🚪", date: new Date(2024, 3, 12), badge: "3D Model" },
+    { id: 6, name: "Ergonomic Desk", subtitle: "Home Office Workstation", type: "desk", color: "wood", category: "office", icon: "📝", date: new Date(2024, 3, 8), badge: "3D Model" },
+    { id: 7, name: "Modern Coffee Table", subtitle: "Minimalist Round Design", type: "desk", color: "brown", category: "living", icon: "🪑", date: new Date(2024, 2, 20), badge: "3D Model" },
+    { id: 8, name: "Velvet Armchair", subtitle: "Luxury Accent Chair", type: "sofa", color: "purple", category: "living", icon: "💺", date: new Date(2024, 3, 1), badge: "3D Model" },
+    { id: 9, name: "Aluminum Window", subtitle: "Dark Gray Frame Modern Design", type: "window", color: "gray", category: "windows", icon: "🪟", date: new Date(2024, 3, 15), badge: "3D Model" },
+    { id: 10, name: "Sliding Glass Door", subtitle: "Contemporary Aluminum Frame", type: "door", color: "gray", category: "doors", icon: "🚪", date: new Date(2024, 3, 14), badge: "3D Model" },
+  ];
+
+  const colors = ["red", "orange", "yellow", "green", "blue", "purple", "earth", "pink", "wood", "black", "gray", "white", "brown", "beige", "golden"];
+
+  const getColorClass = (color) => {
+    const colorMap = {
+      red: "color-red", orange: "color-orange", yellow: "color-yellow", green: "color-green",
+      blue: "color-blue", purple: "color-purple", earth: "color-earth", pink: "color-pink",
+      wood: "color-wood", black: "color-black", gray: "color-gray", white: "color-white",
+      brown: "color-brown", beige: "color-beige", golden: "color-golden"
+    };
+    return colorMap[color] || "color-gray";
+  };
+
+  const filteredItems = items.filter(item => {
+    const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                          item.subtitle.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesColor = !selectedColor || item.color === selectedColor;
+    
+    let matchesUpdate = true;
+    if (selectedUpdate === "week") {
+      const weekAgo = new Date();
+      weekAgo.setDate(weekAgo.getDate() - 7);
+      matchesUpdate = item.date >= weekAgo;
+    } else if (selectedUpdate === "month") {
+      const monthAgo = new Date();
+      monthAgo.setMonth(monthAgo.getMonth() - 1);
+      matchesUpdate = item.date >= monthAgo;
+    }
+    
+    return matchesSearch && matchesColor && matchesUpdate;
+  });
+
+  return (
+    <div className="gallery-container">
+      <div className="gallery-header">
+        <h1>3D Models Library</h1>
+        <p>Browse our collection of premium 3D furniture and architectural models</p>
+      </div>
+
+      <div className="gallery-filters">
+        <div className="filter-section">
+          <label>Color:</label>
+          <div className="color-filters">
+            <div
+              className={`color-btn ${!selectedColor ? "active" : ""}`}
+              style={{ background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)" }}
+              onClick={() => setSelectedColor(null)}
+              title="All Colors"
+            />
+            {colors.map(color => (
+              <div
+                key={color}
+                className={`color-btn ${getColorClass(color)} ${selectedColor === color ? "active" : ""}`}
+                onClick={() => setSelectedColor(selectedColor === color ? null : color)}
+                title={color}
+              />
             ))}
           </div>
-          
-          <div className="filter-bar">
-            <input
-              type="text"
-              placeholder="Search windows or doors..."
-              className="search-input"
-              value={filters.search}
-              onChange={(e) => setFilters({ ...filters, search: e.target.value })}
-            />
-            
-            <select className="filter-select" value={filters.price} onChange={(e) => setFilters({ ...filters, price: e.target.value })}>
-              <option value="all">All Prices</option>
-              <option value="free">Free</option>
-              <option value="paid">Paid</option>
-            </select>
-            
-            <select className="filter-select" value={filters.format} onChange={(e) => setFilters({ ...filters, format: e.target.value })}>
-              <option value="all">All Formats</option>
-              <option value="GLB">3D Model</option>
-              <option value="GLTF">3D Model</option>
-              <option value="OBJ">360° View</option>
-            </select>
-            
-            <select className="filter-select" value={filters.type} onChange={(e) => setFilters({ ...filters, type: e.target.value })}>
-              <option value="all">All Types</option>
-              {getUniqueTypes().filter(t => t !== 'all').map(type => (
-                <option key={type} value={type}>{type}</option>
-              ))}
-            </select>
-            
-            <select className="filter-select" value={filters.color} onChange={(e) => setFilters({ ...filters, color: e.target.value })}>
-              <option value="all">All Colors</option>
-              <option value="Black">Black</option>
-              <option value="White">White</option>
-              <option value="Gray">Gray</option>
-              <option value="Wood">Wood</option>
-            </select>
-            
-            <select className="filter-select" value={filters.style} onChange={(e) => setFilters({ ...filters, style: e.target.value })}>
-              <option value="all">All Styles</option>
-              <option value="Modern">Modern</option>
-              <option value="Classic">Classic</option>
-            </select>
-            
-            <select className="filter-select" value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
-              <option value="bestMatch">Best Match</option>
-              <option value="priceLow">Price: Low to High</option>
-              <option value="priceHigh">Price: High to Low</option>
-              <option value="newest">Newest</option>
-            </select>
+        </div>
+
+        <div className="filter-section">
+          <label>Updated:</label>
+          <div className="update-filters">
+            <button className={`update-btn ${selectedUpdate === "all" ? "active" : ""}`} onClick={() => setSelectedUpdate("all")}>All</button>
+            <button className={`update-btn ${selectedUpdate === "week" ? "active" : ""}`} onClick={() => setSelectedUpdate("week")}>Last 7 Days</button>
+            <button className={`update-btn ${selectedUpdate === "month" ? "active" : ""}`} onClick={() => setSelectedUpdate("month")}>Last Month</button>
           </div>
+        </div>
+
+        <div className="filter-section search-section">
+          <input
+            type="text"
+            placeholder="Search models..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="search-input"
+          />
         </div>
       </div>
 
-      <div className="marketplace-container">
-        <div className="models-grid">
-          {filteredModels.map(model => (
-            <div key={model.id} className="model-card" onClick={() => setSelectedModel(model)}>
-              <div className="card-image-wrapper">
-                <img src={model.thumbnail} alt={model.name} className="card-image" />
-                {model.price === 0 ? (
-                  <span className="price-badge price-free">FREE</span>
-                ) : (
-                  <span className="price-badge price-paid">${model.price}</span>
-                )}
-                {model.format === 'OBJ' && <span className="format-badge">360° View</span>}
-                <button onClick={(e) => { e.stopPropagation(); toggleFavorite(model.id); }} className="favorite-btn">
-                  {favorites.includes(model.id) ? '★' : '☆'}
-                </button>
+      <div className="items-gallery-grid">
+        {filteredItems.length === 0 ? (
+          <div className="no-results">No models found matching your criteria</div>
+        ) : (
+          filteredItems.map(item => (
+            <div
+              key={item.id}
+              className={`gallery-item-card ${selectedItem?.id === item.id ? "selected" : ""}`}
+              onClick={() => onSelectItem(item)}
+            >
+              <div className="gallery-item-preview">
+                <div className="item-icon">{item.icon}</div>
+                <div className="item-badge">{item.badge}</div>
               </div>
-              <div className="card-content">
-                <div className="card-header">
-                  <h3 className="model-name">{model.name}</h3>
-                  <span className="category-tag">{model.category}</span>
-                </div>
-                <div className="model-tags">
-                  <span className="tag">{model.type}</span>
-                  <span className="tag">{model.style}</span>
-                  <span className="tag">{model.color}</span>
-                </div>
-                <div className="model-meta">
-                  <span>📐 {model.dimensions.width}x{model.dimensions.height}cm</span>
-                </div>
+              <div className="gallery-item-info">
+                <h3>{item.name}</h3>
+                <p>{item.subtitle}</p>
+                <button className="view-3d-btn">View in 3D →</button>
               </div>
             </div>
-          ))}
-        </div>
-        
-        {filteredModels.length === 0 && (
-          <div className="empty-state">
-            <div className="empty-icon">🔍</div>
-            <div className="empty-text">No products found. Try adjusting your filters.</div>
-          </div>
+          ))
         )}
       </div>
     </div>
   );
 }
 
-export default Items3Dview;
+export default function App() {
+  const [currentPage, setCurrentPage] = useState("gallery");
+  const [autoRotate, setAutoRotate] = useState(false);
+  const [wireframe, setWireframe] = useState(false);
+  const [collected, setCollected] = useState(false);
+  const [resetKey, setResetKey] = useState(0);
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedColor, setSelectedColor] = useState(null);
+  const [selectedUpdate, setSelectedUpdate] = useState("all");
+  const viewerRef = useRef(null);
+
+  const items = [
+    { id: 1, name: "Urban Comfort Sofa", subtitle: "L-Shape Modern Series", type: "sofa", color: "beige", category: "living", icon: "🛋️", date: new Date(2024, 2, 15), badge: "3D Model" },
+    { id: 2, name: "Urban Wardrobe", subtitle: "Modern Closet For Modern Aesthetics", type: "wardrobe", color: "wood", category: "bedroom", icon: "🚪", date: new Date(2024, 3, 10), badge: "3D Model" },
+    { id: 3, name: "Unique Hexagonal Bookshelf", subtitle: "Geometric Design Bookshelf", type: "bookshelf", color: "wood", category: "living", icon: "📚", date: new Date(2024, 3, 5), badge: "3D Model" },
+    { id: 4, name: "Elegant Modern Bed", subtitle: "Queen Size Platform Bed", type: "bed", color: "gray", category: "bedroom", icon: "🛏️", date: new Date(2024, 2, 28), badge: "3D Model" },
+    { id: 5, name: "Stylish Urban Closet", subtitle: "For Modern Living", type: "wardrobe", color: "white", category: "bedroom", icon: "🚪", date: new Date(2024, 3, 12), badge: "3D Model" },
+    { id: 6, name: "Ergonomic Desk", subtitle: "Home Office Workstation", type: "desk", color: "wood", category: "office", icon: "📝", date: new Date(2024, 3, 8), badge: "3D Model" },
+    { id: 7, name: "Modern Coffee Table", subtitle: "Minimalist Round Design", type: "desk", color: "brown", category: "living", icon: "🪑", date: new Date(2024, 2, 20), badge: "3D Model" },
+    { id: 8, name: "Velvet Armchair", subtitle: "Luxury Accent Chair", type: "sofa", color: "purple", category: "living", icon: "💺", date: new Date(2024, 3, 1), badge: "3D Model" },
+  ];
+
+  const handleReset = () => setResetKey(k => k + 1);
+
+  const handleFullscreen = () => {
+    const el = viewerRef.current;
+    if (!el) return;
+    if (!document.fullscreenElement) {
+      el.requestFullscreen?.();
+    } else {
+      document.exitFullscreen?.();
+    }
+  };
+
+  useEffect(() => {
+    if (!selectedItem && items.length > 0) {
+      setSelectedItem(items[0]);
+    }
+  }, [selectedItem, items]);
+
+  return (
+    <div className="app-container">
+      <div className="page-nav">
+        <button className={`nav-btn ${currentPage === "gallery" ? "active" : ""}`} onClick={() => setCurrentPage("gallery")}>
+          📚 Gallery
+        </button>
+        <button className={`nav-btn ${currentPage === "viewer" ? "active" : ""}`} onClick={() => setCurrentPage("viewer")}>
+          🎨 3D Viewer
+        </button>
+      </div>
+
+      {currentPage === "gallery" ? (
+        <ItemsGallery
+          onSelectItem={(item) => {
+            setSelectedItem(item);
+            setCurrentPage("viewer");
+          }}
+          selectedItem={selectedItem}
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          selectedColor={selectedColor}
+          setSelectedColor={setSelectedColor}
+          selectedUpdate={selectedUpdate}
+          setSelectedUpdate={setSelectedUpdate}
+        />
+      ) : (
+        <div className="main-layout">
+          <div className="viewer-section">
+            <div className="viewer-layout">
+              <div className="viewer-card" ref={viewerRef}>
+                <div className="canvas-container">
+                  <ModelViewer
+                    modelType={selectedItem?.type || "sofa"}
+                    wireframe={wireframe}
+                    autoRotate={autoRotate}
+                    onResetView={resetKey}
+                  />
+                </div>
+                <ControlsPanel
+                  autoRotate={autoRotate}
+                  setAutoRotate={setAutoRotate}
+                  wireframe={wireframe}
+                  setWireframe={setWireframe}
+                  onReset={handleReset}
+                  onFullscreen={handleFullscreen}
+                />
+              </div>
+              <ProductDetails
+                selectedItem={selectedItem}
+                collected={collected}
+                onCollect={() => setCollected(c => !c)}
+              />
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
