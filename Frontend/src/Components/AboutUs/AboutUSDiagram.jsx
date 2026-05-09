@@ -1,282 +1,403 @@
 import React from "react";
 import {
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
-  PieChart, Pie, Cell,
-  AreaChart, Area,
-  LineChart, Line,
+  AreaChart,
+  Area,
+  BarChart,
+  Bar,
+  LineChart,
+  Line,
+  PieChart,
+  Pie,
+  Cell,
+  RadarChart,
+  Radar,
+  PolarGrid,
+  PolarAngleAxis,
+  PolarRadiusAxis,
+  ResponsiveContainer,
+  CartesianGrid,
+  XAxis,
+  YAxis,
+  Tooltip,
+  Legend,
   ComposedChart
 } from "recharts";
+
 import "./AboutUSDiagram.css";
 
 const usageData = [
-  { year: "2020", usage: 72000, recycled: 36000 },
-  { year: "2021", usage: 78000, recycled: 40000 },
-  { year: "2022", usage: 86000, recycled: 48000 },
-  { year: "2023", usage: 96000, recycled: 58000 },
-  { year: "2024", usage: 110000, recycled: 70000 },
-  { year: "2025", usage: 125000, recycled: 90000 },
-  { year: "2026", usage: 140000, recycled: 110000 },
-  { year: "2027", usage: 160000, recycled: 130000 },
-  { year: "2028", usage: 180000, recycled: 155000 },
-  { year: "2029", usage: 200000, recycled: 180000 },
-  { year: "2030", usage: 220000, recycled: 210000 }
+  { year: "2020", usage: 72000, recycled: 36000, ai: false },
+  { year: "2021", usage: 78000, recycled: 42000, ai: false },
+  { year: "2022", usage: 86000, recycled: 50000, ai: false },
+  { year: "2023", usage: 97000, recycled: 62000, ai: false },
+  { year: "2024", usage: 110000, recycled: 76000, ai: false },
+  { year: "2025", usage: 126000, recycled: 92000, ai: false },
+  { year: "2026", usage: 140000, recycled: 112000, ai: false },
+  { year: "2027", usage: 158000, recycled: 135000, ai: true },
+  { year: "2028", usage: 178000, recycled: 160000, ai: true },
+  { year: "2029", usage: 200000, recycled: 188000, ai: true },
+  { year: "2030", usage: 225000, recycled: 215000, ai: true }
 ];
 
-const efficiencyData = usageData.map(item => ({
+const efficiencyData = usageData.map((item) => ({
   year: item.year,
-  efficiency: Number((item.recycled / item.usage * 100).toFixed(1))
+  efficiency: ((item.recycled / item.usage) * 100).toFixed(1),
+  ai: item.ai
 }));
 
-const scrapValueData = [
-  { year: "2020", value: 0.90 },
-  { year: "2021", value: 1.05 },
-  { year: "2022", value: 1.12 },
-  { year: "2023", value: 1.18 },
-  { year: "2024", value: 1.25 },
-  { year: "2025", value: 1.35 },
-  { year: "2026", value: 1.45 },
-  { year: "2027", value: 1.60 },
-  { year: "2028", value: 1.75 },
-  { year: "2029", value: 1.90 },
-  { year: "2030", value: 2.10 }
+const marketData = [
+  { year: "2020", value: 0.8 },
+  { year: "2021", value: 1.0 },
+  { year: "2022", value: 1.1 },
+  { year: "2023", value: 1.2 },
+  { year: "2024", value: 1.35 },
+  { year: "2025", value: 1.5 },
+  { year: "2026", value: 1.7 },
+  { year: "2027", value: 1.9 },
+  { year: "2028", value: 2.1 },
+  { year: "2029", value: 2.3 },
+  { year: "2030", value: 2.6 }
 ];
 
 const pieData = [
-  { name: "Households", value: 30, color: "#1B5E3F" },
-  { name: "Construction", value: 25, color: "#1565C0" },
-  { name: "Factories", value: 20, color: "#E65100" },
-  { name: "Shops", value: 15, color: "#6A1B9A" },
-  { name: "Other", value: 10, color: "#C2185B" }
-];
-
-const wasteBySectorData = [
-  { year: "2022", households: 28, construction: 32, industry: 24, commercial: 12, other: 4 },
-  { year: "2024", households: 32, construction: 34, industry: 22, commercial: 10, other: 2 },
-  { year: "2026", households: 38, construction: 30, industry: 20, commercial: 8, other: 4 },
-  { year: "2028", households: 42, construction: 28, industry: 18, commercial: 7, other: 5 },
-  { year: "2030", households: 45, construction: 25, industry: 16, commercial: 8, other: 6 }
+  { name: "Households", value: 35 },
+  { name: "Construction", value: 25 },
+  { name: "Industry", value: 20 },
+  { name: "Commercial", value: 12 },
+  { name: "Other", value: 8 }
 ];
 
 const regionalData = [
-  { year: "2020", asia: 34, europe: 48, america: 42 },
-  { year: "2022", asia: 42, europe: 54, america: 47 },
-  { year: "2024", asia: 52, europe: 60, america: 53 },
-  { year: "2026", asia: 62, europe: 65, america: 58 },
-  { year: "2028", asia: 72, europe: 70, america: 64 },
-  { year: "2030", asia: 82, europe: 74, america: 69 }
+  { year: "2020", asia: 35, europe: 50, america: 40 },
+  { year: "2022", asia: 42, europe: 55, america: 46 },
+  { year: "2024", asia: 52, europe: 61, america: 52 },
+  { year: "2026", asia: 64, europe: 67, america: 60 },
+  { year: "2028", asia: 76, europe: 72, america: 66 },
+  { year: "2030", asia: 86, europe: 78, america: 73 }
 ];
 
-const environmentalImpactData = usageData.map((item) => ({
-  year: item.year,
-  co2Reduction: Number((item.recycled * 0.00065).toFixed(1)),
-  energySaved: Number((item.recycled * 0.00092).toFixed(1))
-}));
+const pickupData = [
+  { year: "2020", requests: 1200, completed: 900 },
+  { year: "2022", requests: 2200, completed: 1800 },
+  { year: "2024", requests: 3500, completed: 3000 },
+  { year: "2026", requests: 5200, completed: 4700 },
+  { year: "2028", requests: 7200, completed: 6800 },
+  { year: "2030", requests: 9800, completed: 9400 }
+];
 
-const COLORS = ["#1B5E3F", "#1565C0", "#E65100", "#6A1B9A", "#C2185B"];
+const radarData = [
+  { metric: "CO₂", value: 92 },
+  { metric: "Energy", value: 88 },
+  { metric: "Reuse", value: 95 },
+  { metric: "Collection", value: 86 },
+  { metric: "Efficiency", value: 93 },
+  { metric: "Sustainability", value: 97 }
+];
 
-const CustomTooltip = ({ active, payload, label, unit = "" }) => {
-  if (active && payload && payload.length) {
-    return (
-      <div className="custom-tooltip">
-        <p className="tooltip-label">{label}</p>
-        {payload.map((entry, idx) => (
-          <p key={idx} className="tooltip-value" style={{ color: entry.color }}>
-            {entry.name}: {entry.value}{unit}
-          </p>
-        ))}
-      </div>
-    );
-  }
-  return null;
-};
+const COLORS = [
+  "#1B5E3F",
+  "#1565C0",
+  "#E65100",
+  "#6A1B9A",
+  "#C2185B"
+];
 
 const AboutUSDiagram = () => {
   return (
     <div className="ABDiagram-container">
+
       <div className="ABDiagram-header">
-        <h2>Aluminum Recycling Intelligence Dashboard</h2>
-        <p className="subtitle">2020 – 2030 Forecast & Performance Analytics</p>
-        <p className="description">
-          A comprehensive data-driven platform for tracking aluminum circular economy metrics, 
-          recycling efficiency trends, and environmental impact indicators across global markets.
+        <h1>ALUX Aluminum Recycling Intelligence Dashboard</h1>
+
+        <p className="ABDiagram-subtitle">
+          AI-Powered Recycling Analytics & Forecasting Platform (2020–2030)
+        </p>
+
+        <p className="ABDiagram-description">
+          This intelligent dashboard analyzes aluminum recycling performance,
+          sustainability metrics, environmental impact, smart collection
+          analytics, and AI-driven future predictions for the global circular
+          economy ecosystem.
         </p>
       </div>
 
-      <div className="stats-ribbon">
-        <div className="stat-item">
-          <span className="stat-value">95.5%</span>
-          <span className="stat-label">Projected Efficiency by 2030</span>
+      <div className="ABDiagram-stats">
+
+        <div className="stat-card">
+          <h2>95.5%</h2>
+          <p>AI Predicted Recycling Efficiency</p>
         </div>
-        <div className="stat-divider"></div>
-        <div className="stat-item">
-          <span className="stat-value">220K</span>
-          <span className="stat-label">Tons Annual Usage (2030)</span>
+
+        <div className="stat-card">
+          <h2>225K</h2>
+          <p>Projected Aluminum Usage</p>
         </div>
-        <div className="stat-divider"></div>
-        <div className="stat-item">
-          <span className="stat-value">143</span>
-          <span className="stat-label">CO₂ Reduction (tons, 2030)</span>
+
+        <div className="stat-card">
+          <h2>215K</h2>
+          <p>Recovered Recyclable Material</p>
         </div>
-        <div className="stat-divider"></div>
-        <div className="stat-item">
-          <span className="stat-value">$2.10</span>
-          <span className="stat-label">Scrap Value per KG (2030)</span>
+
+        <div className="stat-card">
+          <h2>$2.6</h2>
+          <p>Predicted Scrap Value / KG</p>
         </div>
+
+      </div>
+
+      <div className="ai-banner">
+        <h3>AI Forecasting Active After 2026</h3>
+        <p>
+          Predictive machine-learning simulations estimate aluminum demand,
+          recycling efficiency, carbon reduction, and smart collection growth
+          between 2027–2030.
+        </p>
       </div>
 
       <div className="ABDiagram-grid">
+
         <div className="ABDiagram-card large">
-          <div className="card-header">
-            <h3>Material Flow Analysis</h3>
-            <span className="badge">Primary Metric</span>
-          </div>
-          <p className="chart-context">Total aluminum consumption versus recovered recyclable volume. The accelerating capture rate demonstrates maturing collection infrastructure and consumer participation.</p>
-          <ResponsiveContainer width="100%" height={340}>
+          <h3>Material Flow Analysis</h3>
+          <p>
+            Total aluminum usage versus recycled material volume across the
+            global recycling ecosystem.
+          </p>
+
+          <ResponsiveContainer width="100%" height={320}>
             <AreaChart data={usageData}>
-              <defs>
-                <linearGradient id="usageGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#0F2B3D" stopOpacity={0.9} />
-                  <stop offset="95%" stopColor="#0F2B3D" stopOpacity={0.05} />
-                </linearGradient>
-                <linearGradient id="recycledGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#1B5E3F" stopOpacity={0.85} />
-                  <stop offset="95%" stopColor="#1B5E3F" stopOpacity={0.05} />
-                </linearGradient>
-              </defs>
-              <CartesianGrid strokeDasharray="4 4" stroke="#E2E8F0" />
-              <XAxis dataKey="year" tick={{ fill: '#475569', fontSize: 11 }} axisLine={{ stroke: '#CBD5E1' }} />
-              <YAxis tick={{ fill: '#475569', fontSize: 11 }} axisLine={{ stroke: '#CBD5E1' }} tickFormatter={(v) => `${v/1000}k`} />
-              <Tooltip content={<CustomTooltip unit=" tons" />} cursor={{ stroke: '#94A3B8', strokeWidth: 1 }} />
-              <Legend wrapperStyle={{ fontSize: 12, paddingTop: 12 }} />
-              <Area type="monotone" dataKey="usage" stroke="#0F2B3D" strokeWidth={2} fill="url(#usageGradient)" name="Total Usage (tons)" />
-              <Area type="monotone" dataKey="recycled" stroke="#1B5E3F" strokeWidth={2} fill="url(#recycledGradient)" name="Recycled Volume (tons)" />
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="year" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+
+              <Area
+                type="monotone"
+                dataKey="usage"
+                stroke="#1565C0"
+                fill="#1565C0"
+                fillOpacity={0.25}
+                name="Usage"
+              />
+
+              <Area
+                type="monotone"
+                dataKey="recycled"
+                stroke="#1B5E3F"
+                fill="#1B5E3F"
+                fillOpacity={0.35}
+                name="Recycled"
+              />
             </AreaChart>
           </ResponsiveContainer>
-          <p className="chart-source">Data Source: International Aluminum Institute | Global Recycling Monitoring Report 2024</p>
         </div>
 
-        <div className="ABDiagram-card small">
-          <div className="card-header">
-            <h3>Circular Efficiency Rate</h3>
-          </div>
-          <p className="chart-context">Percentage of consumed aluminum successfully returned to the material stream. Target threshold of 95% established by EU Circular Economy Action Plan.</p>
-          <ResponsiveContainer width="100%" height={260}>
+        <div className="ABDiagram-card">
+          <h3>Recycling Efficiency Forecast</h3>
+
+          <ResponsiveContainer width="100%" height={300}>
             <LineChart data={efficiencyData}>
-              <CartesianGrid strokeDasharray="4 4" stroke="#E2E8F0" />
-              <XAxis dataKey="year" tick={{ fill: '#475569', fontSize: 10 }} />
-              <YAxis unit="%" domain={[40, 100]} tick={{ fill: '#475569', fontSize: 10 }} />
-              <Tooltip content={<CustomTooltip unit="%" />} />
-              <Line type="monotone" dataKey="efficiency" stroke="#E65100" strokeWidth={3} dot={{ r: 4, fill: "#E65100", strokeWidth: 0 }} name="Efficiency Rate (%)" />
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="year" />
+              <YAxis domain={[40, 100]} />
+              <Tooltip />
+              <Line
+                type="monotone"
+                dataKey="efficiency"
+                stroke="#E65100"
+                strokeWidth={3}
+              />
             </LineChart>
           </ResponsiveContainer>
-          <p className="chart-source">Calculation: (Recycled Volume / Total Usage) × 100</p>
         </div>
 
-        <div className="ABDiagram-card small">
-          <div className="card-header">
-            <h3>Feedstock Composition</h3>
-          </div>
-          <p className="chart-context">Sectoral contribution to recoverable aluminum scrap. Households and construction represent the primary collection channels.</p>
-          <ResponsiveContainer width="100%" height={260}>
+        <div className="ABDiagram-card">
+          <h3>Scrap Source Distribution</h3>
+
+          <ResponsiveContainer width="100%" height={300}>
             <PieChart>
-              <Pie data={pieData} innerRadius={55} outerRadius={85} dataKey="value" label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`} labelLine={{ stroke: '#94A3B8', strokeWidth: 0.5 }}>
-                {pieData.map((_, i) => (
-                  <Cell key={i} fill={COLORS[i]} stroke="#FFFFFF" strokeWidth={2} />
+              <Pie
+                data={pieData}
+                dataKey="value"
+                outerRadius={90}
+                label
+              >
+                {pieData.map((entry, index) => (
+                  <Cell key={index} fill={COLORS[index]} />
                 ))}
               </Pie>
-              <Tooltip content={<CustomTooltip unit="%" />} />
-              <Legend wrapperStyle={{ fontSize: 10, paddingTop: 8 }} />
+
+              <Tooltip />
             </PieChart>
           </ResponsiveContainer>
-          <p className="chart-source">Survey Period: 2023-2024 | Sample: 180 municipal & industrial facilities</p>
         </div>
 
-        <div className="ABDiagram-card full">
-          <div className="card-header">
-            <h3>Secondary Material Valuation</h3>
-            <span className="badge">Market Intelligence</span>
-          </div>
-          <p className="chart-context">LME-based pricing model for processed aluminum scrap. Price appreciation driven by primary aluminum volatility and green material premiums.</p>
+        <div className="ABDiagram-card large">
+          <h3>Secondary Material Market Value</h3>
+
           <ResponsiveContainer width="100%" height={320}>
-            <BarChart data={scrapValueData}>
-              <CartesianGrid strokeDasharray="4 4" stroke="#E2E8F0" />
-              <XAxis dataKey="year" tick={{ fill: '#475569', fontSize: 11 }} />
-              <YAxis unit="$" tick={{ fill: '#475569', fontSize: 11 }} domain={[0, 2.5]} />
-              <Tooltip content={<CustomTooltip unit="$/kg" />} cursor={{ fill: '#F1F5F9' }} />
-              <Bar dataKey="value" fill="#1565C0" radius={[6, 6, 0, 0]} name="Market Value ($/kg)" />
+            <BarChart data={marketData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="year" />
+              <YAxis />
+              <Tooltip />
+
+              <Bar
+                dataKey="value"
+                fill="#1565C0"
+                radius={[8, 8, 0, 0]}
+              />
             </BarChart>
           </ResponsiveContainer>
-          <p className="chart-source">Data Source: London Metal Exchange (LME) | CRU Group Forecast 2025-2030</p>
         </div>
 
         <div className="ABDiagram-card large">
-          <div className="card-header">
-            <h3>Sectoral Waste Generation</h3>
-          </div>
-          <p className="chart-context">Stacked annual waste collection by source category. Household collection shows the most significant growth due to expanded separate collection schemes.</p>
-          <ResponsiveContainer width="100%" height={340}>
-            <BarChart data={wasteBySectorData}>
-              <CartesianGrid strokeDasharray="4 4" stroke="#E2E8F0" />
-              <XAxis dataKey="year" tick={{ fill: '#475569', fontSize: 11 }} />
-              <YAxis tick={{ fill: '#475569', fontSize: 11 }} tickFormatter={(v) => `${v}`} />
-              <Tooltip content={<CustomTooltip unit=" tons" />} cursor={{ fill: '#F8FAFC' }} />
-              <Legend wrapperStyle={{ fontSize: 11, paddingTop: 8 }} />
-              <Bar dataKey="households" stackId="a" fill="#1B5E3F" name="Households" radius={[4, 4, 0, 0]} />
-              <Bar dataKey="construction" stackId="a" fill="#1565C0" name="Construction" />
-              <Bar dataKey="industry" stackId="a" fill="#E65100" name="Industry" />
-              <Bar dataKey="commercial" stackId="a" fill="#6A1B9A" name="Commercial" />
-              <Bar dataKey="other" stackId="a" fill="#C2185B" name="Other" />
-            </BarChart>
-          </ResponsiveContainer>
-          <p className="chart-source">Data Source: EPA | Eurostat | National Environment Agencies (harmonized metric tons)</p>
-        </div>
+          <h3>Regional Recycling Performance</h3>
 
-        <div className="ABDiagram-card large">
-          <div className="card-header">
-            <h3>Regional Performance Benchmark</h3>
-            <span className="badge">Comparative</span>
-          </div>
-          <p className="chart-context">Regional recycling rates weighted by consumption. Asia demonstrates the strongest growth trajectory, while Europe maintains leadership in absolute performance.</p>
-          <ResponsiveContainer width="100%" height={340}>
+          <ResponsiveContainer width="100%" height={320}>
             <LineChart data={regionalData}>
-              <CartesianGrid strokeDasharray="4 4" stroke="#E2E8F0" />
-              <XAxis dataKey="year" tick={{ fill: '#475569', fontSize: 11 }} />
-              <YAxis unit="%" tick={{ fill: '#475569', fontSize: 11 }} domain={[20, 90]} />
-              <Tooltip content={<CustomTooltip unit="%" />} />
-              <Legend wrapperStyle={{ fontSize: 11, paddingTop: 8 }} />
-              <Line type="monotone" dataKey="asia" stroke="#C2185B" strokeWidth={2.5} dot={{ r: 4, fill: "#C2185B", strokeWidth: 0 }} name="Asia-Pacific" />
-              <Line type="monotone" dataKey="europe" stroke="#1565C0" strokeWidth={2.5} dot={{ r: 4, fill: "#1565C0", strokeWidth: 0 }} name="Europe" />
-              <Line type="monotone" dataKey="america" stroke="#1B5E3F" strokeWidth={2.5} dot={{ r: 4, fill: "#1B5E3F", strokeWidth: 0 }} name="Americas" />
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="year" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+
+              <Line dataKey="asia" stroke="#C2185B" strokeWidth={3} />
+              <Line dataKey="europe" stroke="#1565C0" strokeWidth={3} />
+              <Line dataKey="america" stroke="#1B5E3F" strokeWidth={3} />
             </LineChart>
           </ResponsiveContainer>
-          <p className="chart-source">Sources: Eurostat | USGS | Environment Canada | International Aluminum Institute</p>
+        </div>
+
+        <div className="ABDiagram-card large">
+          <h3>Smart Pickup Analytics</h3>
+
+          <ResponsiveContainer width="100%" height={320}>
+            <ComposedChart data={pickupData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="year" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+
+              <Bar dataKey="requests" fill="#1565C0" />
+              <Line
+                type="monotone"
+                dataKey="completed"
+                stroke="#1B5E3F"
+                strokeWidth={3}
+              />
+            </ComposedChart>
+          </ResponsiveContainer>
+        </div>
+
+        <div className="ABDiagram-card">
+          <h3>Sustainability Score</h3>
+
+          <ResponsiveContainer width="100%" height={320}>
+            <RadarChart outerRadius={90} data={radarData}>
+              <PolarGrid />
+              <PolarAngleAxis dataKey="metric" />
+              <PolarRadiusAxis />
+              <Radar
+                dataKey="value"
+                stroke="#1B5E3F"
+                fill="#1B5E3F"
+                fillOpacity={0.4}
+              />
+            </RadarChart>
+          </ResponsiveContainer>
+        </div>
+
+        <div className="ABDiagram-card">
+          <h3>Environmental Impact</h3>
+
+          <div className="impact-list">
+            <div>
+              <span>CO₂ Reduction</span>
+              <strong>143 Tons</strong>
+            </div>
+
+            <div>
+              <span>Energy Saved</span>
+              <strong>208 MWh</strong>
+            </div>
+
+            <div>
+              <span>Landfill Reduction</span>
+              <strong>88%</strong>
+            </div>
+
+            <div>
+              <span>Reuse Efficiency</span>
+              <strong>95%</strong>
+            </div>
+          </div>
         </div>
 
         <div className="ABDiagram-card full">
-          <div className="card-header">
-            <h3>Environmental Impact Assessment</h3>
-            <span className="badge">ESG Metrics</span>
-          </div>
-          <p className="chart-context">Quantified environmental benefits showing CO₂ avoidance (left axis) and energy conservation (right axis). Each kilogram recycled prevents 0.65kg CO₂ and saves 0.92kWh.</p>
-          <ResponsiveContainer width="100%" height={340}>
-            <ComposedChart data={environmentalImpactData}>
-              <CartesianGrid strokeDasharray="4 4" stroke="#E2E8F0" />
-              <XAxis dataKey="year" tick={{ fill: '#475569', fontSize: 11 }} />
-              <YAxis yAxisId="left" label={{ value: 'CO₂ Reduction (tons)', angle: -90, position: 'insideLeft', style: { fontSize: 11, fill: '#475569' } }} tick={{ fill: '#475569', fontSize: 10 }} />
-              <YAxis yAxisId="right" orientation="right" label={{ value: 'Energy Saved (kWh)', angle: 90, position: 'insideRight', style: { fontSize: 11, fill: '#475569' } }} tick={{ fill: '#475569', fontSize: 10 }} />
-              <Tooltip content={<CustomTooltip />} />
-              <Legend wrapperStyle={{ fontSize: 11, paddingTop: 8 }} />
-              <Area yAxisId="left" type="monotone" dataKey="co2Reduction" fill="#1B5E3F" fillOpacity={0.15} stroke="#1B5E3F" strokeWidth={2} name="CO₂ Emissions Avoided (tons)" />
-              <Line yAxisId="right" type="monotone" dataKey="energySaved" stroke="#E65100" strokeWidth={3} dot={{ r: 4, fill: "#E65100", strokeWidth: 0 }} name="Energy Conserved (kWh)" />
-            </ComposedChart>
+          <h3>AI Recycling Demand Forecast</h3>
+
+          <p>
+            Machine-learning models predict exponential recycling demand growth
+            after 2026 driven by smart-city adoption and sustainability
+            regulations.
+          </p>
+
+          <ResponsiveContainer width="100%" height={350}>
+            <AreaChart data={usageData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="year" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+
+              <Area
+                type="monotone"
+                dataKey="usage"
+                stroke="#0F2B3D"
+                fill="#0F2B3D"
+                fillOpacity={0.15}
+              />
+
+              <Area
+                type="monotone"
+                dataKey="recycled"
+                stroke="#1B5E3F"
+                fill="#1B5E3F"
+                fillOpacity={0.25}
+                strokeDasharray="5 5"
+              />
+            </AreaChart>
           </ResponsiveContainer>
-          <p className="chart-source">Methodology: IAI Life Cycle Assessment (2022) | Factors: 0.65kg CO₂/kg | 0.92kWh/kg recycled</p>
+        </div>
+
+      </div>
+
+      <div className="ai-insights">
+        <h2>AI Sustainability Insights</h2>
+
+        <div className="insight-grid">
+
+          <div className="insight-card">
+            AI predicts recycling efficiency may exceed 95% by 2030.
+          </div>
+
+          <div className="insight-card">
+            Household aluminum waste expected to increase by 24%.
+          </div>
+
+          <div className="insight-card">
+            Asia-Pacific projected to dominate global recycling markets.
+          </div>
+
+          <div className="insight-card">
+            Smart pickup systems reduce operational waste significantly.
+          </div>
+
         </div>
       </div>
 
-      <div className="ABDiagram-footer">
-        <p>© 2024 Aluminum Recycling Intelligence Dashboard | Data-driven insights for circular economy decision support</p>
-      </div>
     </div>
   );
 };

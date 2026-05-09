@@ -431,7 +431,7 @@ const ProAddForm = ({ onAddProject, onClose }) => {
                       value={formData.location}
                       onChange={handleChange}
                       className="PROADD-input"
-                      placeholder="e.g., Dhaka, Bangladesh"
+                      placeholder="e.g., Panadura, SriLanka"
                     />
                     {errors.location && touched.location && <div className="PROADD-error">{errors.location}</div>}
                   </div>

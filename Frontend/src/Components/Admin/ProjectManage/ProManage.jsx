@@ -28,11 +28,8 @@ const ProManage = () => {
   const projectTypes = [
     { id: 'aluminum-doors', name: 'Aluminum Doors' },
     { id: 'aluminum-windows', name: 'Aluminum Windows' },
-    { id: 'full-house-aluminum', name: 'Full House Aluminum' },
-    { id: 'curtain-walls', name: 'Curtain Walls' },
-    { id: 'facade-systems', name: 'Facade Systems' },
-    { id: 'skylights', name: 'Skylights' },
-    { id: 'structural-glazing', name: 'Structural Glazing' },
+    { id: 'aluminum-pantry-cupboards', name: 'Aluminum Pantry Cupboards' },
+    { id: 'sivilims', name: 'Sivilims' },
     { id: 'other', name: 'Other' }
   ];
 
@@ -556,7 +553,7 @@ const ProManage = () => {
                             value={formData.location}
                             onChange={handleInputChange}
                             className="ProManage-input"
-                            placeholder="e.g., Dhaka, Bangladesh"
+                            placeholder="e.g., Panadura, Sri Lanka"
                           />
                         </div>
 

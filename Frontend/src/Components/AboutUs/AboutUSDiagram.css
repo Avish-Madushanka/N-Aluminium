@@ -1,369 +1,217 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
 }
 
-.ABDiagram-container {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  background: linear-gradient(180deg, #F8FAFC 0%, #F1F5F9 100%);
-  min-height: 100vh;
+body{
+  background:#f4f7fb;
 }
 
-.ABDiagram-header {
-  text-align: center;
-  padding: 3rem 2rem 2rem;
-  background: linear-gradient(135deg, #0F2B3D 0%, #1B3A4A 100%);
-  color: white;
-  margin-bottom: 2rem;
+.ABDiagram-container{
+  font-family:'Inter',sans-serif;
+  min-height:100vh;
+  background:linear-gradient(to bottom,#f8fbff,#eef3f9);
 }
 
-.ABDiagram-header h2 {
-  font-size: 2.5rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  margin-bottom: 0.5rem;
-  background: linear-gradient(135deg, #FFFFFF 0%, #A8D5BA 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+.ABDiagram-header{
+  background:linear-gradient(135deg,#0F2B3D,#173f56);
+  padding:80px 20px 60px;
+  text-align:center;
+  color:white;
 }
 
-.ABDiagram-header .subtitle {
-  font-size: 1rem;
-  font-weight: 500;
-  color: #A8D5BA;
-  margin-bottom: 1rem;
-  letter-spacing: 0.3px;
+.ABDiagram-header h1{
+  font-size:3rem;
+  font-weight:800;
+  margin-bottom:15px;
 }
 
-.ABDiagram-header .description {
-  font-size: 0.95rem;
-  max-width: 700px;
-  margin: 0 auto;
-  line-height: 1.6;
-  color: #CBD5E1;
-  font-weight: 400;
+.ABDiagram-subtitle{
+  font-size:1.1rem;
+  color:#a8d5ba;
+  margin-bottom:20px;
 }
 
-.stats-ribbon {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 2rem;
-  background: white;
-  max-width: 1000px;
-  margin: -1.5rem auto 2rem;
-  padding: 1.25rem 2rem;
-  border-radius: 1rem;
-  box-shadow: 0 8px 20px -6px rgba(0, 0, 0, 0.08);
-  border: 1px solid #E2E8F0;
-  flex-wrap: wrap;
+.ABDiagram-description{
+  max-width:900px;
+  margin:auto;
+  line-height:1.8;
+  color:#d9e6f2;
 }
 
-.stat-item {
-  text-align: center;
-  padding: 0 1rem;
+.ABDiagram-stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:20px;
+  max-width:1400px;
+  margin:-40px auto 40px;
+  padding:0 20px;
 }
 
-.stat-value {
-  display: block;
-  font-size: 1.75rem;
-  font-weight: 800;
-  color: #0F2B3D;
-  letter-spacing: -0.02em;
+.stat-card{
+  background:white;
+  border-radius:20px;
+  padding:30px;
+  text-align:center;
+  box-shadow:0 10px 30px rgba(0,0,0,0.08);
 }
 
-.stat-label {
-  font-size: 0.75rem;
-  font-weight: 500;
-  color: #64748B;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+.stat-card h2{
+  font-size:2.2rem;
+  color:#0F2B3D;
+  margin-bottom:10px;
 }
 
-.stat-divider {
-  width: 1px;
-  height: 40px;
-  background: #E2E8F0;
+.stat-card p{
+  color:#64748b;
+  font-size:0.9rem;
 }
 
-.ABDiagram-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1.75rem;
-  max-width: 1600px;
-  margin: 0 auto;
-  padding: 0 2rem 2rem;
+.ai-banner{
+  max-width:1400px;
+  margin:0 auto 30px;
+  background:linear-gradient(135deg,#1B5E3F,#1565C0);
+  color:white;
+  padding:25px;
+  border-radius:20px;
 }
 
-.ABDiagram-card {
-  background: #FFFFFF;
-  border-radius: 1rem;
-  padding: 1.5rem;
-  border: 1px solid #E9EDF2;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02), 0 1px 2px rgba(0, 0, 0, 0.03);
-  transition: all 0.25s ease;
-  animation: fadeInUp 0.5s ease-out forwards;
-  opacity: 0;
+.ai-banner h3{
+  margin-bottom:10px;
 }
 
-.ABDiagram-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 24px -12px rgba(0, 0, 0, 0.12);
-  border-color: #D1D9E6;
+.ai-banner p{
+  opacity:0.9;
+  line-height:1.6;
 }
 
-.ABDiagram-card.large {
-  grid-column: span 2;
+.ABDiagram-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:25px;
+  max-width:1400px;
+  margin:auto;
+  padding:0 20px 50px;
 }
 
-.ABDiagram-card.small {
-  grid-column: span 1;
+.ABDiagram-card{
+  background:white;
+  border-radius:20px;
+  padding:25px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.05);
+  transition:0.3s;
 }
 
-.ABDiagram-card.full {
-  grid-column: span 4;
+.ABDiagram-card:hover{
+  transform:translateY(-5px);
 }
 
-.card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  margin-bottom: 0.75rem;
-  flex-wrap: wrap;
-  gap: 0.5rem;
+.ABDiagram-card h3{
+  font-size:1.2rem;
+  margin-bottom:15px;
+  color:#0F2B3D;
 }
 
-.ABDiagram-card h3 {
-  color: #0A1E2F;
-  font-size: 1.1rem;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  margin: 0;
+.ABDiagram-card p{
+  color:#64748b;
+  line-height:1.6;
+  margin-bottom:15px;
 }
 
-.badge {
-  background: #F1F5F9;
-  padding: 0.2rem 0.6rem;
-  border-radius: 2rem;
-  font-size: 0.65rem;
-  font-weight: 600;
-  color: #475569;
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
+.ABDiagram-card.large{
+  grid-column:span 2;
 }
 
-.chart-context {
-  font-size: 0.75rem;
-  color: #5B6E8C;
-  margin-bottom: 1.25rem;
-  line-height: 1.45;
+.ABDiagram-card.full{
+  grid-column:span 2;
 }
 
-.chart-source {
-  font-size: 0.65rem;
-  color: #8A99B0;
-  margin-top: 1rem;
-  padding-top: 0.75rem;
-  border-top: 1px solid #EEF2F6;
-  font-style: normal;
+.impact-list{
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+  margin-top:20px;
 }
 
-.custom-tooltip {
-  background: #FFFFFF;
-  border: 1px solid #E2E8F0;
-  border-radius: 0.5rem;
-  padding: 0.5rem 0.85rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+.impact-list div{
+  background:#f8fbff;
+  padding:18px;
+  border-radius:12px;
+  display:flex;
+  justify-content:space-between;
 }
 
-.tooltip-label {
-  color: #64748B;
-  font-size: 0.7rem;
-  margin-bottom: 0.25rem;
-  font-weight: 500;
+.impact-list span{
+  color:#64748b;
 }
 
-.tooltip-value {
-  font-size: 0.8rem;
-  font-weight: 600;
-  margin: 0.125rem 0;
-  color: #0F172A;
+.impact-list strong{
+  color:#0F2B3D;
 }
 
-.ABDiagram-footer {
-  text-align: center;
-  padding: 2rem;
-  border-top: 1px solid #E2E8F0;
-  margin-top: 1rem;
-  background: #FAFCFE;
+.ai-insights{
+  max-width:1400px;
+  margin:auto;
+  padding:20px 20px 80px;
 }
 
-.ABDiagram-footer p {
-  font-size: 0.75rem;
-  color: #8A99B0;
-  font-weight: 400;
+.ai-insights h2{
+  margin-bottom:25px;
+  color:#0F2B3D;
 }
 
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
+.insight-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:20px;
+}
+
+.insight-card{
+  background:white;
+  padding:25px;
+  border-radius:18px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.05);
+  line-height:1.7;
+  color:#475569;
+  border-left:5px solid #1B5E3F;
+}
+
+@media(max-width:1200px){
+
+  .ABDiagram-stats{
+    grid-template-columns:repeat(2,1fr);
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+
+  .insight-grid{
+    grid-template-columns:repeat(2,1fr);
   }
+
 }
 
-@keyframes fadeInDown {
-  from {
-    opacity: 0;
-    transform: translateY(-12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+@media(max-width:768px){
 
-.ABDiagram-card:nth-child(1) { animation-delay: 0.02s; }
-.ABDiagram-card:nth-child(2) { animation-delay: 0.05s; }
-.ABDiagram-card:nth-child(3) { animation-delay: 0.08s; }
-.ABDiagram-card:nth-child(4) { animation-delay: 0.11s; }
-.ABDiagram-card:nth-child(5) { animation-delay: 0.14s; }
-.ABDiagram-card:nth-child(6) { animation-delay: 0.17s; }
-.ABDiagram-card:nth-child(7) { animation-delay: 0.20s; }
+  .ABDiagram-grid{
+    grid-template-columns:1fr;
+  }
 
-@media (max-width: 1200px) {
-  .ABDiagram-grid {
-    gap: 1.25rem;
-    padding: 0 1.5rem 1.5rem;
-  }
-  .ABDiagram-card {
-    padding: 1.25rem;
-  }
-}
-
-@media (max-width: 900px) {
-  .ABDiagram-header h2 {
-    font-size: 1.8rem;
-  }
-  .ABDiagram-grid {
-    grid-template-columns: 1fr;
-    gap: 1.25rem;
-  }
   .ABDiagram-card.large,
-  .ABDiagram-card.small,
-  .ABDiagram-card.full {
-    grid-column: span 1;
+  .ABDiagram-card.full{
+    grid-column:span 1;
   }
-  .stats-ribbon {
-    margin-left: 1rem;
-    margin-right: 1rem;
-    gap: 1rem;
-    padding: 1rem;
+
+  .ABDiagram-stats{
+    grid-template-columns:1fr;
   }
-  .stat-value {
-    font-size: 1.25rem;
+
+  .insight-grid{
+    grid-template-columns:1fr;
   }
-  .stat-divider {
-    height: 30px;
+
+  .ABDiagram-header h1{
+    font-size:2rem;
   }
-}
 
-@media (max-width: 640px) {
-  .ABDiagram-header {
-    padding: 2rem 1rem 1.5rem;
-  }
-  .ABDiagram-header h2 {
-    font-size: 1.4rem;
-  }
-  .ABDiagram-header .subtitle {
-    font-size: 0.85rem;
-  }
-  .ABDiagram-header .description {
-    font-size: 0.85rem;
-  }
-  .ABDiagram-card h3 {
-    font-size: 1rem;
-  }
-  .stats-ribbon {
-    flex-direction: column;
-    gap: 0.75rem;
-  }
-  .stat-divider {
-    display: none;
-  }
-  .stat-item {
-    padding: 0;
-  }
-}
-
-.recharts-legend-item-text {
-  color: #475569 !important;
-  font-size: 0.7rem !important;
-  font-weight: 500;
-}
-
-.recharts-default-legend {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  justify-content: center;
-  margin-top: 0.5rem;
-}
-
-.recharts-tooltip-cursor {
-  stroke: #CBD5E1;
-  stroke-width: 1px;
-}
-
-.recharts-cartesian-axis-tick-value {
-  fill: #64748B;
-  font-size: 0.7rem;
-}
-
-.recharts-cartesian-axis-line {
-  stroke: #E2E8F0;
-}
-
-.recharts-cartesian-grid-horizontal line,
-.recharts-cartesian-grid-vertical line {
-  stroke: #EBF0F5;
-  stroke-dasharray: 3 3;
-}
-
-.recharts-bar-rectangle {
-  transition: opacity 0.2s ease;
-}
-
-.recharts-bar-rectangle:hover {
-  opacity: 0.85;
-}
-
-.recharts-line-dot {
-  transition: r 0.2s ease;
-}
-
-.recharts-line-dot:hover {
-  r: 5;
-}
-
-.recharts-pie-label {
-  fill: #334155 !important;
-  font-size: 0.65rem !important;
-  font-weight: 500;
-}
-
-.recharts-pie-label-line {
-  stroke: #94A3B8;
-  stroke-width: 0.5;
-}
-
-.recharts-surface {
-  overflow: visible;
 }

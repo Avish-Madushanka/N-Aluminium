@@ -36,7 +36,8 @@ const ProCate1 = () => {
       const response = await axiosInstance.get(API_ENDPOINTS.PROJECTS.GET_ALL);
       
       if (response.data.success) {
-        setProjects(response.data.data || []);
+        const allProjects = response.data.data || [];
+        setProjects(allProjects);
       } else {
         setError("Failed to load projects");
         setProjects([]);
@@ -54,9 +55,9 @@ const ProCate1 = () => {
     const categoryMap = {
       'Aluminum Doors': 'Doors',
       'Aluminum Windows': 'Windows',
-      'Full House Aluminum': 'Windows',
       'Aluminum Pantry Cupboards': 'Pantry Cupboards',
       'Sivilims': 'Sivilims',
+      'Full House Aluminum': 'Windows',
       'Curtain Walls': 'Others',
       'Facade Systems': 'Others',
       'Skylights': 'Others',
@@ -92,8 +93,12 @@ const ProCate1 = () => {
   const getImageUrl = (imagePath) => {
     if (!imagePath) return null;
     if (imagePath.startsWith('http')) return imagePath;
+    if (imagePath.startsWith('/uploads')) {
+      const baseUrl = API_ENDPOINTS.BACKEND_ROOT_URL || 'http://localhost:5003';
+      return `${baseUrl}${imagePath}`;
+    }
     const baseUrl = API_ENDPOINTS.BACKEND_ROOT_URL || 'http://localhost:5003';
-    return `${baseUrl}${imagePath}`;
+    return `${baseUrl}/uploads/projects/${imagePath}`;
   };
 
   if (loading) {

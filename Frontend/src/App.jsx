@@ -77,6 +77,7 @@ import AdQuotation from './Components/Admin/AdQuotation/AdQuotation';
 import AluminumSystem3D from './Components/AluminumSystem3D/AluminumSystem3D';
 import Items3Dview from './Components/Items3Dview/Items3Dview';
 import ResetPassword from './Components/ResetPassword/ResetPassword';
+import Ad3DItems from './Components/Admin/Ad3Ditems/Ad3Ditems';
 
 const parseUserInfoFromToken = (token) => {
     if (!token) {
@@ -452,6 +453,7 @@ function AppContentWrapper({ logoutMessage, setLogoutMessage, navigateRef }) {
                            <Route path="/Admin/AdminOrderManage" element={<AdminOrderManage /> } />
                            <Route path="/Admin/AdQuotation" element={<AdQuotation /> } />
                            <Route path="/Admin/DisReview" element={<DisReview /> } />
+                           <Route path="/Admin/Ad3Ditems" element={<Ad3DItems /> } />
                         </Route>
                      </Route>
 

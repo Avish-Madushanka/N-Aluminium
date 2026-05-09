@@ -142,11 +142,25 @@ function AdNavComponent({ handleLogout }) {
                             </ul>
                         </li>
 
-                        <li>
-                            <NavLink to="/Admin/ProManage" className={({ isActive }) => isActive ? 'active' : ''}>
-                                <FontAwesomeIcon icon={faProjectDiagram} className="admin-menu-icon" /> Manage Upload Projects
-                            </NavLink>
+                        <li className="nav-group">
+                            <div className="nav-group-title">
+                                <FontAwesomeIcon icon={faWineGlassAlt} className="admin-menu-icon" />
+                                Project Upload 
+                            </div>
+                            <ul className="nav-submenu">
+                                <li>
+                                    <NavLink to="/Admin/ProManage" className={({ isActive }) => isActive ? 'active' : ''}>
+                                        <FontAwesomeIcon icon={faProjectDiagram} className="admin-menu-icon submenu-icon" /> Manage Upload Projects
+                                    </NavLink>
+                                </li>
+                                <li>
+                                    <NavLink to="/ProAddForm" className={({ isActive }) => isActive ? 'active' : ''}>
+                                        <FontAwesomeIcon icon={faClipboardList} className="admin-menu-icon submenu-icon" /> Add Projects
+                                    </NavLink>
+                                </li>
+                            </ul>
                         </li>
+
                         <li>
                             <NavLink to="/Admin/BuyandSellManage" className={({ isActive }) => isActive ? 'active' : ''}>
                                 <FontAwesomeIcon icon={faExchangeAlt} className="admin-menu-icon" /> Manage Buy & Sell
@@ -158,7 +172,7 @@ function AdNavComponent({ handleLogout }) {
                             </NavLink>
                         </li>
                         <li>
-                            <NavLink to="/Admin/" className={({ isActive }) => isActive ? 'active' : ''}>
+                            <NavLink to="/Admin/Ad3Ditems" className={({ isActive }) => isActive ? 'active' : ''}>
                                 <FontAwesomeIcon icon={faGlobe} className="admin-menu-icon" /> 360 Dashboard
                             </NavLink>
                         </li>
