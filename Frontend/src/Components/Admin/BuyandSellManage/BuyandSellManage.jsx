@@ -3,11 +3,16 @@ import './BuyandSellManage.css';
 
 const BuyandSellManage = () => {
   const [items, setItems] = useState([]);
+  const [filteredItems, setFilteredItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingItem, setEditingItem] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [categoryFilter, setCategoryFilter] = useState('');
+  const [conditionFilter, setConditionFilter] = useState('');
+  const [priceRange, setPriceRange] = useState({ min: '', max: '' });
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -36,8 +41,49 @@ const BuyandSellManage = () => {
     fetchItems();
   }, []);
 
+  useEffect(() => {
+    filterItems();
+  }, [items, searchTerm, categoryFilter, conditionFilter, priceRange]);
+
   const notifyProductsUpdated = () => {
     window.dispatchEvent(new Event('products-updated'));
+  };
+
+  const filterItems = () => {
+    let filtered = [...items];
+
+    if (searchTerm) {
+      filtered = filtered.filter(item =>
+        item.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.brand?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.description?.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    if (categoryFilter) {
+      filtered = filtered.filter(item => item.type === categoryFilter);
+    }
+
+    if (conditionFilter) {
+      filtered = filtered.filter(item => item.condition === conditionFilter);
+    }
+
+    if (priceRange.min) {
+      filtered = filtered.filter(item => item.price >= parseFloat(priceRange.min));
+    }
+
+    if (priceRange.max) {
+      filtered = filtered.filter(item => item.price <= parseFloat(priceRange.max));
+    }
+
+    setFilteredItems(filtered);
+  };
+
+  const resetFilters = () => {
+    setSearchTerm('');
+    setCategoryFilter('');
+    setConditionFilter('');
+    setPriceRange({ min: '', max: '' });
   };
 
   const fetchItems = async () => {
@@ -60,6 +106,7 @@ const BuyandSellManage = () => {
       
       if (result.success) {
         setItems(result.data);
+        setFilteredItems(result.data);
       } else {
         setError(result.message || 'Failed to fetch items');
       }
@@ -320,6 +367,65 @@ const BuyandSellManage = () => {
         </div>
       )}
 
+      <div className="BSM-filters">
+        <div className="BSM-search-box">
+          <input
+            type="text"
+            placeholder="Search by name, brand, or description..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="BSM-search-input"
+          />
+          <i className="BSM-search-icon">🔍</i>
+        </div>
+
+        <div className="BSM-filter-group">
+          <select
+            value={categoryFilter}
+            onChange={(e) => setCategoryFilter(e.target.value)}
+            className="BSM-filter-select"
+          >
+            <option value="">All Categories</option>
+            {categoryOptions.map(cat => (
+              <option key={cat} value={cat}>{cat}</option>
+            ))}
+          </select>
+
+          <select
+            value={conditionFilter}
+            onChange={(e) => setConditionFilter(e.target.value)}
+            className="BSM-filter-select"
+          >
+            <option value="">All Conditions</option>
+            {conditionOptions.map(cond => (
+              <option key={cond} value={cond}>{cond}</option>
+            ))}
+          </select>
+
+          <div className="BSM-price-range">
+            <input
+              type="number"
+              placeholder="Min Price"
+              value={priceRange.min}
+              onChange={(e) => setPriceRange(prev => ({ ...prev, min: e.target.value }))}
+              className="BSM-price-input"
+            />
+            <span>-</span>
+            <input
+              type="number"
+              placeholder="Max Price"
+              value={priceRange.max}
+              onChange={(e) => setPriceRange(prev => ({ ...prev, max: e.target.value }))}
+              className="BSM-price-input"
+            />
+          </div>
+
+          <button onClick={resetFilters} className="BSM-reset-filters">
+            Reset Filters
+          </button>
+        </div>
+      </div>
+
       {showAddForm && (
         <div className="BSM-modalOverlay">
           <div className="BSM-modal">
@@ -570,6 +676,9 @@ const BuyandSellManage = () => {
         <div className="BSM-loading">Loading items...</div>
       ) : (
         <div className="BSM-tableContainer">
+          <div className="BSM-results-count">
+            Showing {filteredItems.length} of {items.length} items
+          </div>
           <table className="BSM-table">
             <thead>
               <tr>
@@ -584,8 +693,8 @@ const BuyandSellManage = () => {
               </tr>
             </thead>
             <tbody>
-              {items.length > 0 ? (
-                items.map(item => (
+              {filteredItems.length > 0 ? (
+                filteredItems.map(item => (
                   <tr key={item._id}>
                     <td>
                       <img 
@@ -642,7 +751,7 @@ const BuyandSellManage = () => {
               ) : (
                 <tr>
                   <td colSpan="8" className="BSM-noData">
-                    No items found. Click "Add New Item" to create one.
+                    No items found matching your filters.
                   </td>
                 </tr>
               )}

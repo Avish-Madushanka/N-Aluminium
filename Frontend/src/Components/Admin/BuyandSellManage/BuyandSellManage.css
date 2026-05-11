@@ -727,6 +727,142 @@
   }
 }
 
+.BSM-filters {
+  background: white;
+  border-radius: 15px;
+  padding: 20px;
+  margin-bottom: 25px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.BSM-search-box {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.BSM-search-input {
+  width: 100%;
+  padding: 12px 45px 12px 15px;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  font-size: 14px;
+  transition: all 0.3s;
+}
+
+.BSM-search-input:focus {
+  outline: none;
+  border-color: #ff9800;
+  box-shadow: 0 0 0 3px rgba(255, 152, 0, 0.1);
+}
+
+.BSM-search-icon {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #999;
+  font-style: normal;
+  font-size: 18px;
+}
+
+.BSM-filter-group {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.BSM-filter-select {
+  flex: 1;
+  min-width: 150px;
+  padding: 10px 15px;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  font-size: 14px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.BSM-filter-select:focus {
+  outline: none;
+  border-color: #ff9800;
+}
+
+.BSM-price-range {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex: 1;
+  min-width: 200px;
+}
+
+.BSM-price-input {
+  flex: 1;
+  padding: 10px 12px;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  font-size: 14px;
+  transition: all 0.3s;
+}
+
+.BSM-price-input:focus {
+  outline: none;
+  border-color: #ff9800;
+}
+
+.BSM-reset-filters {
+  padding: 10px 20px;
+  background: #f5f5f5;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.BSM-reset-filters:hover {
+  background: #e0e0e0;
+  transform: translateY(-2px);
+}
+
+.BSM-results-count {
+  padding: 10px 15px;
+  background: #f8f9fa;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  font-size: 14px;
+  color: #666;
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .BSM-filter-group {
+    flex-direction: column;
+  }
+  
+  .BSM-filter-select,
+  .BSM-price-range,
+  .BSM-reset-filters {
+    width: 100%;
+  }
+  
+  .BSM-price-range {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .BSM-price-input {
+    width: 100%;
+  }
+  
+  .BSM-results-count {
+    text-align: center;
+  }
+}
+
 @media (max-width: 1024px) {
   .BSM-container {
     padding: 20px;

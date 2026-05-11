@@ -110,22 +110,46 @@ const BSHeader = () => {
   return (
     <div className="bs-header-container">
       <div className="bs-header-hero-section">
-        <div className="bs-header-hero-left">
-          <h1 className="bs-header-hero-title">
-            <span className="bs-header-hero-buy">BUY, </span>
-            <span className="bs-header-hero-sell">SELL, </span>
-            <span className="bs-header-hero-thrift">THRIFT</span>
-            <br />
-            <span className="bs-header-hero-anything">ANYTHING!</span>
-          </h1>
-        </div>
-        
-        <div className="bs-header-hero-right">
-          <img 
-            src="https://media.istockphoto.com/id/2165977842/photo/woman-moving-delivery-boxes.jpg?s=612x612&w=0&k=20&c=cvWBRGy2JP7N-I_RJgEYWHdtAtoMXe0DUK1_siK7s2M=" 
-            alt="Hero Banner" 
-            className="bs-header-hero-image" 
-          />
+        <div className="bs-header-hero-overlay"></div>
+        <div className="bs-header-hero-content">
+          <div className="bs-header-hero-text">
+            <h1 className="bs-header-hero-title">
+              <span className="bs-header-hero-buy">BUY</span>
+              <span className="bs-header-hero-separator">•</span>
+              <span className="bs-header-hero-sell">SELL</span>
+              <span className="bs-header-hero-separator">•</span>
+              <span className="bs-header-hero-thrift">THRIFT</span>
+            </h1>
+            <p className="bs-header-hero-subtitle">Your Premier Marketplace for Reuse Items</p>
+            <div className="bs-header-hero-stats">
+              <div className="bs-header-stat">
+                <span className="bs-header-stat-number">500+</span>
+                <span className="bs-header-stat-label">Items Listed</span>
+              </div>
+              <div className="bs-header-stat">
+                <span className="bs-header-stat-number">200+</span>
+                <span className="bs-header-stat-label">Happy Sellers</span>
+              </div>
+              <div className="bs-header-stat">
+                <span className="bs-header-stat-number">1000+</span>
+                <span className="bs-header-stat-label">Customers</span>
+              </div>
+            </div>
+
+          </div>
+          <div className="bs-header-hero-image-wrapper">
+            <div className="bs-header-hero-image-container">
+              <img 
+                src="https://cdn.prod.website-files.com/64103945fcba0014f0074475/641412519741e402cfb0b299_5-3.png" 
+                alt="Shopping" 
+                className="bs-header-hero-image" 
+              />
+            </div>
+            <div className="bs-header-hero-floating-card">
+              <i className="fas fa-tag"></i>
+              <span>Up to 50% Off</span>
+            </div>
+          </div>
         </div>
       </div>
 
