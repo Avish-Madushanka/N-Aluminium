@@ -3,7 +3,6 @@
   max-width: 1400px;
   margin: 0 auto;
   padding: 24px;
-  padding-top: 50px;
   min-height: 100vh;
 }
 
@@ -127,6 +126,10 @@
   font-size: 18px;
   font-weight: 500;
   color: white;
+  max-width: 70%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .AluRegVideoUp-close-player {
@@ -149,59 +152,33 @@
 
 .AluRegVideoUp-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 24px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
   margin-top: 10px;
 }
 
 .AluRegVideoUp-card {
   cursor: pointer;
-  transition: transform 0.15s, box-shadow 0.15s;
+  transition: transform 0.2s, box-shadow 0.2s;
   border-radius: 12px;
+  background: white;
+  overflow: hidden;
 }
 
 .AluRegVideoUp-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 12px 20px -10px rgba(0,0,0,0.2);
-}
-
-.AluRegVideoUp-card:hover .AluRegVideoUp-thumbnail::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 50px;
-  height: 50px;
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: 50%;
-  z-index: 3;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-}
-
-.AluRegVideoUp-card:hover .AluRegVideoUp-thumbnail::after {
-  content: '▶';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-40%, -50%);
-  color: #000;
-  font-size: 24px;
-  z-index: 4;
-  line-height: 1;
+  box-shadow: 0 12px 24px -8px rgba(0,0,0,0.15);
 }
 
 .AluRegVideoUp-thumbnail {
   position: relative;
   width: 100%;
-  aspect-ratio: 16/9;
+  aspect-ratio: 16 / 9;
   border-radius: 12px;
-  margin-bottom: 8px;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -219,14 +196,37 @@
   z-index: 1;
 }
 
+.AluRegVideoUp-card:hover .AluRegVideoUp-thumbnail::before {
+  background: rgba(0,0,0,0.2);
+}
+
+.AluRegVideoUp-card:hover .AluRegVideoUp-thumbnail::after {
+  content: '▶';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60px;
+  height: 60px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #000;
+  font-size: 28px;
+  z-index: 4;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
 .AluRegVideoUp-duration {
   position: absolute;
   bottom: 8px;
   right: 8px;
-  background: rgba(0, 0, 0, 0.75);
+  background: rgba(0, 0, 0, 0.8);
   color: white;
-  padding: 3px 8px;
-  border-radius: 30px;
+  padding: 4px 8px;
+  border-radius: 4px;
   font-size: 12px;
   font-weight: 500;
   z-index: 2;
@@ -234,15 +234,17 @@
 }
 
 .AluRegVideoUp-video-title {
-  font-size: 14px;
+  font-size: 15px;
   color: #1e293b;
-  margin: 0;
+  margin: 12px 8px 8px 8px;
   line-height: 1.4;
+  font-weight: 500;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
-  font-weight: 480;
-  padding: 0 2px;
+  min-height: 42px;
 }
 
 .AluRegVideoUp-thumbnail-fallback {
@@ -278,16 +280,16 @@
 .AluRegVideoUp-no-results {
   grid-column: 1 / -1;
   text-align: center;
-  padding: 40px;
+  padding: 60px;
   color: #999;
   font-size: 16px;
 }
 
 @media (max-width: 1024px) {
   .AluRegVideoUp-grid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
   }
-  
   .AluRegVideoUp-search-input1 {
     width: 200px;
   }
@@ -298,33 +300,25 @@
     flex-direction: column;
     align-items: flex-start;
   }
-  
   .AluRegVideoUp-search-section1 {
     width: 100%;
   }
-  
   .AluRegVideoUp-search-wrapper1 {
     flex: 1;
   }
-  
   .AluRegVideoUp-search-input1 {
     width: 100%;
   }
-  
-  .AluRegVideoUp-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  
   .AluRegVideoUp-title {
     font-size: 24px;
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 640px) {
   .AluRegVideoUp-grid {
     grid-template-columns: 1fr;
+    gap: 24px;
   }
-  
   .AluRegVideoUp-search-section1 {
     flex-direction: column;
   }

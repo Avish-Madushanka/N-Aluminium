@@ -82,10 +82,6 @@ export default function AluRegVideoUp() {
     setSelectedVideo(null);
   };
 
-  const handleThumbnailError = (videoId) => {
-    setThumbnailError((prev) => ({ ...prev, [videoId]: true }));
-  };
-
   if (loading) {
     return <div className="AluRegVideoUp-loading">Loading videos...</div>;
   }
@@ -97,20 +93,10 @@ export default function AluRegVideoUp() {
           <h1 className="AluRegVideoUp-title">Video Library</h1>
           <span className="AluRegVideoUp-count">{videos.length} Videos</span>
         </div>
-
         <div className="AluRegVideoUp-search-section1">
           <div className="AluRegVideoUp-search-wrapper1">
-            <svg
-              className="AluRegVideoUp-search-icon1"
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-            >
-              <path
-                d="M15.5 14H14.71L14.43 13.73C15.41 12.59 16 11.11 16 9.5C16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-0.59 4.23-1.57L14 14.71V15.5L19 20.49L20.49 19L15.5 14ZM9.5 14C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14Z"
-                fill="#666"
-              />
+            <svg className="AluRegVideoUp-search-icon1" width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <path d="M15.5 14H14.71L14.43 13.73C15.41 12.59 16 11.11 16 9.5C16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-0.59 4.23-1.57L14 14.71V15.5L19 20.49L20.49 19L15.5 14ZM9.5 14C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14Z" fill="#666"/>
             </svg>
             <input
               type="text"
@@ -150,19 +136,9 @@ export default function AluRegVideoUp() {
               </video>
             )}
             <div className="AluRegVideoUp-player-info">
-              <span className="AluRegVideoUp-player-title">
-                {selectedVideo.title}
-              </span>
-              <button
-                className="AluRegVideoUp-close-player"
-                onClick={closePlayer}
-              >
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                >
+              <span className="AluRegVideoUp-player-title">{selectedVideo.title}</span>
+              <button className="AluRegVideoUp-close-player" onClick={closePlayer}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
                 </svg>
                 Close
@@ -176,13 +152,8 @@ export default function AluRegVideoUp() {
         {filteredVideos.map((video) => {
           const thumb = resolvedThumbnail(video);
           const bgImage = thumb || video.thumbnail;
-
           return (
-            <div
-              key={video._id}
-              className="AluRegVideoUp-card"
-              onClick={() => handleVideoClick(video)}
-            >
+            <div key={video._id} className="AluRegVideoUp-card" onClick={() => handleVideoClick(video)}>
               <div
                 className="AluRegVideoUp-thumbnail"
                 style={{
@@ -199,16 +170,13 @@ export default function AluRegVideoUp() {
                     </svg>
                   </div>
                 )}
-                {isYouTubeUrl(video.videoUrl) && (
-                  <span className="AluRegVideoUp-yt-badge">▶ YT</span>
-                )}
+                {isYouTubeUrl(video.videoUrl) && <span className="AluRegVideoUp-yt-badge">▶ YT</span>}
                 <span className="AluRegVideoUp-duration">{video.duration}</span>
               </div>
               <p className="AluRegVideoUp-video-title">{video.title}</p>
             </div>
           );
         })}
-
         {filteredVideos.length === 0 && (
           <div className="AluRegVideoUp-no-results">
             {searchTerm ? `No videos found matching "${searchTerm}"` : 'No videos available'}

@@ -109,14 +109,14 @@ export default function VideoManage() {
       return;
     }
 
-    const video = document.createElement('video');
-    video.preload = 'metadata';
-    video.onloadedmetadata = () => {
-      URL.revokeObjectURL(video.src);
-      const duration = formatDuration(video.duration);
+    const videoElement = document.createElement('video');
+    videoElement.preload = 'metadata';
+    videoElement.onloadedmetadata = () => {
+      URL.revokeObjectURL(videoElement.src);
+      const duration = formatDuration(videoElement.duration);
       setFormData(prev => ({ ...prev, duration }));
     };
-    video.src = URL.createObjectURL(file);
+    videoElement.src = URL.createObjectURL(file);
 
     const videoFormData = new FormData();
     videoFormData.append('title', formData.title || file.name.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' '));
@@ -219,10 +219,6 @@ export default function VideoManage() {
     setFormData({ title: '', videoUrl: '', thumbnail: '', duration: '00:00' });
   };
 
-  const handleThumbnailError = (videoId) => {
-    setThumbnailError((prev) => ({ ...prev, [videoId]: true }));
-  };
-
   if (loading) {
     return <div className="VideoManage-loading">Loading videos...</div>;
   }
@@ -234,7 +230,6 @@ export default function VideoManage() {
           <h1 className="VideoManage-title">Video Management</h1>
           <span className="VideoManage-count">{videos.length} Videos</span>
         </div>
-
         <div className="VideoManage-header-actions">
           <div className="VideoManage-search-section">
             <div className="VideoManage-search-wrapper">
@@ -250,7 +245,6 @@ export default function VideoManage() {
               />
             </div>
           </div>
-          
           <button className="VideoManage-add-btn" onClick={() => setShowForm(true)}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
               <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
@@ -276,7 +270,6 @@ export default function VideoManage() {
                   required
                 />
               </div>
-
               <div className="VideoManage-form-group">
                 <label>Video URL (YouTube or direct MP4) *</label>
                 <input
@@ -288,7 +281,6 @@ export default function VideoManage() {
                   required
                 />
               </div>
-
               <div className="VideoManage-form-group">
                 <label>Thumbnail URL (optional)</label>
                 <input
@@ -299,7 +291,6 @@ export default function VideoManage() {
                   placeholder="https://example.com/thumbnail.jpg"
                 />
               </div>
-
               <div className="VideoManage-form-group">
                 <label>Duration (MM:SS)</label>
                 <input
@@ -311,7 +302,6 @@ export default function VideoManage() {
                   pattern="[0-9]{2}:[0-9]{2}"
                 />
               </div>
-
               <div className="VideoManage-form-upload">
                 <label className="VideoManage-upload-label">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
@@ -327,7 +317,6 @@ export default function VideoManage() {
                   />
                 </label>
               </div>
-
               <div className="VideoManage-form-actions">
                 <button type="submit" className="VideoManage-submit-btn">
                   {editingVideo ? 'Update Video' : 'Add to Library'}
@@ -345,7 +334,6 @@ export default function VideoManage() {
         {filteredVideos.map((video) => {
           const thumb = resolvedThumbnail(video);
           const bgImage = thumb || video.thumbnail;
-
           return (
             <div key={video._id} className="VideoManage-card">
               <div
@@ -383,7 +371,6 @@ export default function VideoManage() {
             </div>
           );
         })}
-
         {filteredVideos.length === 0 && (
           <div className="VideoManage-no-results">
             {searchTerm ? `No videos found matching "${searchTerm}"` : 'No videos in library. Click "Add Video" to get started!'}
