@@ -27,6 +27,13 @@ const ItemsManage = () => {
   const [formErrors, setFormErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filterCategory, setFilterCategory] = useState('');
+  const [filterStock, setFilterStock] = useState('');
+  const [filterFeatured, setFilterFeatured] = useState('');
+  const [sortBy, setSortBy] = useState('name');
+  const [sortOrder, setSortOrder] = useState('asc');
+  const [showFilters, setShowFilters] = useState(false);
 
   const colorOptions = [
     { id: 'white', name: 'White', color: '#ffffff' },
@@ -354,6 +361,93 @@ const ItemsManage = () => {
     }).format(price);
   };
 
+  const clearFilters = () => {
+    setSearchTerm('');
+    setFilterCategory('');
+    setFilterStock('');
+    setFilterFeatured('');
+    setSortBy('name');
+    setSortOrder('asc');
+  };
+
+  const filteredAndSortedItems = () => {
+    let filtered = [...items];
+
+    if (searchTerm) {
+      filtered = filtered.filter(item =>
+        item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (item.description && item.description.toLowerCase().includes(searchTerm.toLowerCase()))
+      );
+    }
+
+    if (filterCategory) {
+      filtered = filtered.filter(item => item.category === filterCategory);
+    }
+
+    if (filterStock) {
+      if (filterStock === 'inStock') {
+        filtered = filtered.filter(item => item.inStock === true);
+      } else if (filterStock === 'outOfStock') {
+        filtered = filtered.filter(item => item.inStock === false);
+      } else if (filterStock === 'lowStock') {
+        filtered = filtered.filter(item => item.stock > 0 && item.stock <= 10);
+      }
+    }
+
+    if (filterFeatured) {
+      filtered = filtered.filter(item => item.featured === (filterFeatured === 'true'));
+    }
+
+    filtered.sort((a, b) => {
+      let aVal, bVal;
+      switch (sortBy) {
+        case 'name':
+          aVal = a.name.toLowerCase();
+          bVal = b.name.toLowerCase();
+          break;
+        case 'price':
+          aVal = a.price;
+          bVal = b.price;
+          break;
+        case 'stock':
+          aVal = a.stock;
+          bVal = b.stock;
+          break;
+        case 'discount':
+          aVal = a.discount || 0;
+          bVal = b.discount || 0;
+          break;
+        default:
+          aVal = a.name.toLowerCase();
+          bVal = b.name.toLowerCase();
+      }
+      
+      if (sortOrder === 'asc') {
+        return aVal > bVal ? 1 : -1;
+      } else {
+        return aVal < bVal ? 1 : -1;
+      }
+    });
+
+    return filtered;
+  };
+
+  const handleSort = (field) => {
+    if (sortBy === field) {
+      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortBy(field);
+      setSortOrder('asc');
+    }
+  };
+
+  const getSortIcon = (field) => {
+    if (sortBy !== field) return '↕️';
+    return sortOrder === 'asc' ? '↑' : '↓';
+  };
+
+  const filteredItems = filteredAndSortedItems();
+
   return (
     <div className="ItemMng-container">
       <div className="ItemMng-header">
@@ -380,6 +474,107 @@ const ItemsManage = () => {
         <div className="ItemMng-error">
           <span>{error}</span>
           <button className="ItemMng-errorClose" onClick={() => setError('')}>×</button>
+        </div>
+      )}
+
+      <div className="ItemMng-filtersBar">
+        <div className="ItemMng-searchBox">
+          <input
+            type="text"
+            placeholder="Search products..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="ItemMng-searchInput"
+          />
+          <span className="ItemMng-searchIcon">🔍</span>
+        </div>
+        
+        <button 
+          className="ItemMng-filterToggle"
+          onClick={() => setShowFilters(!showFilters)}
+        >
+          {showFilters ? 'Hide Filters ▲' : 'Show Filters ▼'}
+        </button>
+        
+        {(searchTerm || filterCategory || filterStock || filterFeatured) && (
+          <button className="ItemMng-clearFilters" onClick={clearFilters}>
+            Clear All Filters
+          </button>
+        )}
+      </div>
+
+      {showFilters && (
+        <div className="ItemMng-filtersPanel">
+          <div className="ItemMng-filterGroup">
+            <label className="ItemMng-filterLabel">Category</label>
+            <select
+              value={filterCategory}
+              onChange={(e) => setFilterCategory(e.target.value)}
+              className="ItemMng-filterSelect"
+            >
+              <option value="">All Categories</option>
+              {mainCategories.map(cat => (
+                <option key={cat.id} value={cat.id}>{cat.name}</option>
+              ))}
+            </select>
+          </div>
+
+          <div className="ItemMng-filterGroup">
+            <label className="ItemMng-filterLabel">Stock Status</label>
+            <select
+              value={filterStock}
+              onChange={(e) => setFilterStock(e.target.value)}
+              className="ItemMng-filterSelect"
+            >
+              <option value="">All Stock</option>
+              <option value="inStock">In Stock</option>
+              <option value="outOfStock">Out of Stock</option>
+              <option value="lowStock">Low Stock (≤10)</option>
+            </select>
+          </div>
+
+          <div className="ItemMng-filterGroup">
+            <label className="ItemMng-filterLabel">Featured</label>
+            <select
+              value={filterFeatured}
+              onChange={(e) => setFilterFeatured(e.target.value)}
+              className="ItemMng-filterSelect"
+            >
+              <option value="">All Products</option>
+              <option value="true">Featured Only</option>
+              <option value="false">Non-Featured Only</option>
+            </select>
+          </div>
+
+          <div className="ItemMng-filterGroup">
+            <label className="ItemMng-filterLabel">Sort By</label>
+            <div className="ItemMng-sortButtons">
+              <button
+                className={`ItemMng-sortBtn ${sortBy === 'name' ? 'active' : ''}`}
+                onClick={() => handleSort('name')}
+              >
+                Name {getSortIcon('name')}
+              </button>
+              <button
+                className={`ItemMng-sortBtn ${sortBy === 'price' ? 'active' : ''}`}
+                onClick={() => handleSort('price')}
+              >
+                Price {getSortIcon('price')}
+              </button>
+              <button
+                className={`ItemMng-sortBtn ${sortBy === 'stock' ? 'active' : ''}`}
+                onClick={() => handleSort('stock')}
+              >
+                Stock {getSortIcon('stock')}
+              </button>
+              <button
+                className={`ItemMng-sortBtn ${sortBy === 'discount' ? 'active' : ''}`}
+                onClick={() => handleSort('discount')}
+              >
+                Discount {getSortIcon('discount')}
+              </button>
+            </div>
+          </div>
         </div>
       )}
 
@@ -647,126 +842,139 @@ const ItemsManage = () => {
       {loading ? (
         <div className="ItemMng-loading">Loading products...</div>
       ) : (
-        <div className="ItemMng-tableContainer">
-          <table className="ItemMng-table">
-            <thead>
-              <tr>
-                <th>Image</th>
-                <th>Name</th>
-                <th>Category</th>
-                <th>Price</th>
-                <th>Stock</th>
-                <th>Discount</th>
-                <th>Status</th>
-                <th>Colors</th>
-                <th>Sizes</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {items.length > 0 ? (
-                items.map(item => (
-                  <tr key={item._id}>
-                    <td>
-                      <img 
-                        src={getImageUrl(item.image)} 
-                        alt={item.name}
-                        className="ItemMng-tableImage"
-                      />
-                    </td>
-                    <td className="ItemMng-tableCell">
-                      <div className="ItemMng-productName">{item.name}</div>
-                      {item.description && (
-                        <div className="ItemMng-productDescription">{item.description.substring(0, 50)}...</div>
-                      )}
-                    </td>
-                    <td>
-                      <span className="ItemMng-categoryBadge">
-                        {mainCategories.find(c => c.id === item.category)?.name || item.category}
-                      </span>
-                    </td>
-                    <td className="ItemMng-priceCell">
-                      <div className="ItemMng-currentPrice">Rs. {formatPrice(item.discountedPrice || item.price)}</div>
-                      {item.discount > 0 && (
-                        <div className="ItemMng-originalPrice">Rs. {formatPrice(item.price)}</div>
-                      )}
-                      <div className="ItemMng-unit">/{item.unit}</div>
-                    </td>
-                    <td>
-                      <span className={`ItemMng-stockBadge ${item.inStock ? 'ItemMng-inStock' : 'ItemMng-outOfStock'}`}>
-                        {item.stock} {item.inStock ? 'in stock' : 'out of stock'}
-                      </span>
-                    </td>
-                    <td>
-                      {item.discount > 0 ? (
-                        <span className="ItemMng-discountBadge">{item.discount}% OFF</span>
-                      ) : (
-                        <span className="ItemMng-noDiscount">-</span>
-                      )}
-                    </td>
-                    <td>
-                      {item.featured && (
-                        <span className="ItemMng-featuredBadge">Featured</span>
-                      )}
-                    </td>
-                    <td>
-                      {item.colors && item.colors.length > 0 ? (
-                        <div className="ItemMng-colorBadges">
-                          {item.colors.slice(0, 3).map(color => (
-                            <span key={color} className="ItemMng-colorBadge">
-                              {colorOptions.find(c => c.id === color)?.name || color}
-                            </span>
-                          ))}
-                          {item.colors.length > 3 && (
-                            <span className="ItemMng-moreBadge">+{item.colors.length - 3}</span>
-                          )}
+        <>
+          <div className="ItemMng-resultsInfo">
+            Showing {filteredItems.length} of {items.length} products
+          </div>
+          <div className="ItemMng-tableContainer">
+            <table className="ItemMng-table">
+              <thead>
+                <tr>
+                  <th>Image</th>
+                  <th onClick={() => handleSort('name')} className="ItemMng-sortableHeader">
+                    Name {getSortIcon('name')}
+                  </th>
+                  <th>Category</th>
+                  <th onClick={() => handleSort('price')} className="ItemMng-sortableHeader">
+                    Price {getSortIcon('price')}
+                  </th>
+                  <th onClick={() => handleSort('stock')} className="ItemMng-sortableHeader">
+                    Stock {getSortIcon('stock')}
+                  </th>
+                  <th onClick={() => handleSort('discount')} className="ItemMng-sortableHeader">
+                    Discount {getSortIcon('discount')}
+                  </th>
+                  <th>Status</th>
+                  <th>Colors</th>
+                  <th>Sizes</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredItems.length > 0 ? (
+                  filteredItems.map(item => (
+                    <tr key={item._id}>
+                      <td>
+                        <img 
+                          src={getImageUrl(item.image)} 
+                          alt={item.name}
+                          className="ItemMng-tableImage"
+                        />
+                      </td>
+                      <td className="ItemMng-tableCell">
+                        <div className="ItemMng-productName">{item.name}</div>
+                        {item.description && (
+                          <div className="ItemMng-productDescription">{item.description.substring(0, 50)}...</div>
+                        )}
+                      </td>
+                      <td>
+                        <span className="ItemMng-categoryBadge">
+                          {mainCategories.find(c => c.id === item.category)?.name || item.category}
+                        </span>
+                      </td>
+                      <td className="ItemMng-priceCell">
+                        <div className="ItemMng-currentPrice">Rs. {formatPrice(item.discountedPrice || item.price)}</div>
+                        {item.discount > 0 && (
+                          <div className="ItemMng-originalPrice">Rs. {formatPrice(item.price)}</div>
+                        )}
+                        <div className="ItemMng-unit">/{item.unit}</div>
+                      </td>
+                      <td>
+                        <span className={`ItemMng-stockBadge ${item.inStock ? 'ItemMng-inStock' : 'ItemMng-outOfStock'}`}>
+                          {item.stock} {item.inStock ? 'in stock' : 'out of stock'}
+                        </span>
+                      </td>
+                      <td>
+                        {item.discount > 0 ? (
+                          <span className="ItemMng-discountBadge">{item.discount}% OFF</span>
+                        ) : (
+                          <span className="ItemMng-noDiscount">-</span>
+                        )}
+                      </td>
+                      <td>
+                        {item.featured && (
+                          <span className="ItemMng-featuredBadge">Featured</span>
+                        )}
+                      </td>
+                      <td>
+                        {item.colors && item.colors.length > 0 ? (
+                          <div className="ItemMng-colorBadges">
+                            {item.colors.slice(0, 3).map(color => (
+                              <span key={color} className="ItemMng-colorBadge">
+                                {colorOptions.find(c => c.id === color)?.name || color}
+                              </span>
+                            ))}
+                            {item.colors.length > 3 && (
+                              <span className="ItemMng-moreBadge">+{item.colors.length - 3}</span>
+                            )}
+                          </div>
+                        ) : (
+                          <span className="ItemMng-noData">-</span>
+                        )}
+                      </td>
+                      <td>
+                        {item.sizes && item.sizes.length > 0 ? (
+                          <div className="ItemMng-sizeBadges">
+                            {item.sizes.slice(0, 3).map(size => (
+                              <span key={size} className="ItemMng-sizeBadge">{size}</span>
+                            ))}
+                            {item.sizes.length > 3 && (
+                              <span className="ItemMng-moreBadge">+{item.sizes.length - 3}</span>
+                            )}
+                          </div>
+                        ) : (
+                          <span className="ItemMng-noData">-</span>
+                        )}
+                      </td>
+                      <td>
+                        <div className="ItemMng-actionButtons">
+                          <button
+                            className="ItemMng-editButton"
+                            onClick={() => handleEdit(item)}
+                          >
+                            Edit
+                          </button>
+                          <button
+                            className="ItemMng-deleteButton"
+                            onClick={() => setDeleteConfirm(item)}
+                          >
+                            Delete
+                          </button>
                         </div>
-                      ) : (
-                        <span className="ItemMng-noData">-</span>
-                      )}
-                    </td>
-                    <td>
-                      {item.sizes && item.sizes.length > 0 ? (
-                        <div className="ItemMng-sizeBadges">
-                          {item.sizes.slice(0, 3).map(size => (
-                            <span key={size} className="ItemMng-sizeBadge">{size}</span>
-                          ))}
-                          {item.sizes.length > 3 && (
-                            <span className="ItemMng-moreBadge">+{item.sizes.length - 3}</span>
-                          )}
-                        </div>
-                      ) : (
-                        <span className="ItemMng-noData">-</span>
-                      )}
-                    </td>
-                    <td>
-                      <div className="ItemMng-actionButtons">
-                        <button
-                          className="ItemMng-editButton"
-                          onClick={() => handleEdit(item)}
-                        >
-                          Edit
-                        </button>
-                        <button
-                          className="ItemMng-deleteButton"
-                          onClick={() => setDeleteConfirm(item)}
-                        >
-                          Delete
-                        </button>
-                      </div>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="10" className="ItemMng-noData">
+                      No products found matching your filters.
                     </td>
                   </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="10" className="ItemMng-noData">
-                    No products found. Click "Add New Product" to create one.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </>
       )}
     </div>
   );

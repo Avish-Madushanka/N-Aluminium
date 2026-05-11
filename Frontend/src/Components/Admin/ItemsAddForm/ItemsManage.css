@@ -103,6 +103,159 @@
   transform: scale(1.1);
 }
 
+.ItemMng-filtersBar {
+  background: white;
+  padding: 20px;
+  border-radius: 15px;
+  margin-bottom: 20px;
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  flex-wrap: wrap;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.ItemMng-searchBox {
+  flex: 1;
+  position: relative;
+  min-width: 250px;
+}
+
+.ItemMng-searchInput {
+  width: 100%;
+  padding: 12px 15px 12px 45px;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  font-size: 14px;
+  transition: all 0.3s;
+}
+
+.ItemMng-searchInput:focus {
+  outline: none;
+  border-color: #4CAF50;
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+}
+
+.ItemMng-searchIcon {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 18px;
+  color: #999;
+}
+
+.ItemMng-filterToggle {
+  padding: 10px 20px;
+  background: #f5f5f5;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.ItemMng-filterToggle:hover {
+  background: #e0e0e0;
+  border-color: #ccc;
+}
+
+.ItemMng-clearFilters {
+  padding: 10px 20px;
+  background: #ffebee;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #f44336;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.ItemMng-clearFilters:hover {
+  background: #ffcdd2;
+  transform: translateY(-2px);
+}
+
+.ItemMng-filtersPanel {
+  background: white;
+  padding: 20px;
+  border-radius: 15px;
+  margin-bottom: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  animation: slideDown 0.3s ease-out;
+}
+
+.ItemMng-filterGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ItemMng-filterLabel {
+  font-weight: 600;
+  color: #333;
+  font-size: 14px;
+}
+
+.ItemMng-filterSelect {
+  padding: 10px 12px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 14px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.ItemMng-filterSelect:focus {
+  outline: none;
+  border-color: #4CAF50;
+}
+
+.ItemMng-sortButtons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.ItemMng-sortBtn {
+  padding: 8px 15px;
+  background: #f5f5f5;
+  border: 2px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.ItemMng-sortBtn:hover {
+  background: #e0e0e0;
+}
+
+.ItemMng-sortBtn.active {
+  background: #4CAF50;
+  border-color: #4CAF50;
+  color: white;
+}
+
+.ItemMng-resultsInfo {
+  background: #e3f2fd;
+  padding: 10px 15px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  font-size: 14px;
+  color: #1976d2;
+  font-weight: 500;
+}
+
 .ItemMng-modalOverlay {
   position: fixed;
   top: 0;
@@ -565,6 +718,16 @@
   background: #f8f9fa;
 }
 
+.ItemMng-sortableHeader {
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.3s;
+}
+
+.ItemMng-sortableHeader:hover {
+  background: #e9ecef;
+}
+
 .ItemMng-tableImage {
   width: 60px;
   height: 60px;
@@ -719,6 +882,42 @@
   font-size: 16px;
 }
 
+.ItemMng-colorBadges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.ItemMng-colorBadge {
+  background: #f5f5f5;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 11px;
+  color: #666;
+}
+
+.ItemMng-sizeBadges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.ItemMng-sizeBadge {
+  background: #f5f5f5;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 11px;
+  color: #666;
+}
+
+.ItemMng-moreBadge {
+  background: #e0e0e0;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 11px;
+  color: #666;
+}
+
 @keyframes slideDown {
   from {
     opacity: 0;
@@ -788,6 +987,19 @@
   .ItemMng-addButton {
     width: 100%;
     max-width: 250px;
+  }
+
+  .ItemMng-filtersBar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .ItemMng-searchBox {
+    width: 100%;
+  }
+
+  .ItemMng-filtersPanel {
+    grid-template-columns: 1fr;
   }
 
   .ItemMng-formGrid {
@@ -886,6 +1098,17 @@
     padding: 10px 20px;
   }
 
+  .ItemMng-sortButtons {
+    flex-wrap: wrap;
+  }
+
+  .ItemMng-sortBtn {
+    flex: 1;
+    min-width: 70px;
+    font-size: 11px;
+    padding: 6px 10px;
+  }
+
   .ItemMng-modalHeader h2 {
     font-size: 18px;
   }
@@ -933,6 +1156,10 @@
     font-size: 13px;
   }
 
+  .ItemMng-resultsInfo {
+    font-size: 12px;
+  }
+
   .ItemMng-confirmModal {
     padding: 20px;
     width: 92%;
@@ -970,6 +1197,12 @@
   .ItemMng-addButton {
     font-size: 13px;
     padding: 8px 16px;
+  }
+
+  .ItemMng-filterToggle,
+  .ItemMng-clearFilters {
+    font-size: 12px;
+    padding: 8px 15px;
   }
 
   .ItemMng-form {
