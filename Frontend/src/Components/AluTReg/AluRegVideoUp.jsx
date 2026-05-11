@@ -1,5 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
+import axios from 'axios';
 import './AluRegVideoUp.css';
+
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5003/api';
 
 const getYouTubeId = (url = '') => {
   try {
@@ -26,71 +29,18 @@ const getYouTubeThumbnail = (url = '') => {
 };
 
 export default function AluRegVideoUp() {
-  const [videos] = useState([
-    {
-      id: 1,
-      title: 'Acousticlive show at terraces',
-      duration: '03:38',
-      thumbnail: 'https://images.unsplash.com/photo-1524368535928-5b5e00ddc76b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80',
-      videoUrl: 'https://www.youtube.com/live/9i2g6fVNocU?si=6cdFLyRN6EKSfhqk',
-      color: '#ff6b6b',
-    },
-    {
-      id: 2,
-      title: 'Bring it all over videoclip',
-      duration: '02:49',
-      thumbnail: 'https://images.unsplash.com/photo-1485846234645-a62644f84728?ixlib=rb-4.0.3&auto=format&fit=crop&w=1159&q=80',
-      videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
-      color: '#4ecdc4',
-    },
-    {
-      id: 3,
-      title: 'Keep moving!',
-      duration: '02:14',
-      thumbnail: 'https://images.unsplash.com/photo-1536240474400-95dad987e40e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1169&q=80',
-      videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4',
-      color: '#45b7d1',
-    },
-    {
-      id: 4,
-      title: 'ADDICT RUE',
-      duration: '01:24',
-      thumbnail: 'https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?ixlib=rb-4.0.3&auto=format&fit=crop&w=1169&q=80',
-      videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4',
-      color: '#f9ca24',
-    },
-    {
-      id: 5,
-      title: "Theywon'tcatchme",
-      duration: '02:53',
-      thumbnail: 'https://images.unsplash.com/photo-1536240474400-95dad987e40e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1169&q=80',
-      videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4',
-      color: '#a8e6cf',
-    },
-    {
-      id: 6,
-      title: 'Liveperformance',
-      duration: '00:36',
-      thumbnail: 'https://images.unsplash.com/photo-1516280440614-37939bbacd81?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80',
-      videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4',
-      color: '#d4a5a5',
-    },
-    {
-      id: 7,
-      title: 'Fastdancing-videoclipdemo',
-      duration: '02:14',
-      thumbnail: 'https://images.unsplash.com/photo-1545128485-c400e7702796?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80',
-      videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackOnStreetAndDirt.mp4',
-      color: '#9b59b6',
-    },
-  ]);
-
+  const [videos, setVideos] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [showPlayer, setShowPlayer] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-  const [filteredVideos, setFilteredVideos] = useState(videos);
+  const [filteredVideos, setFilteredVideos] = useState([]);
   const [thumbnailError, setThumbnailError] = useState({});
   const videoPlayerRef = useRef(null);
+
+  useEffect(() => {
+    fetchVideos();
+  }, []);
 
   useEffect(() => {
     const filtered = videos.filter((video) =>
@@ -99,10 +49,26 @@ export default function AluRegVideoUp() {
     setFilteredVideos(filtered);
   }, [searchTerm, videos]);
 
+  const fetchVideos = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(`${API_URL}/videos`);
+      if (response.data.success) {
+        setVideos(response.data.data);
+        setFilteredVideos(response.data.data);
+      }
+    } catch (error) {
+      console.error('Fetch videos error:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const resolvedThumbnail = (video) => {
-    if (thumbnailError[video.id]) return null;
+    if (thumbnailError[video._id]) return null;
     if (video.thumbnail) return video.thumbnail;
-    return getYouTubeThumbnail(video.videoUrl) || null;
+    if (isYouTubeUrl(video.videoUrl)) return getYouTubeThumbnail(video.videoUrl);
+    return null;
   };
 
   const handleVideoClick = (video) => {
@@ -120,11 +86,15 @@ export default function AluRegVideoUp() {
     setThumbnailError((prev) => ({ ...prev, [videoId]: true }));
   };
 
+  if (loading) {
+    return <div className="AluRegVideoUp-loading">Loading videos...</div>;
+  }
+
   return (
     <div className="AluRegVideoUp-library">
       <div className="AluRegVideoUp-header">
         <div className="AluRegVideoUp-title-section">
-          <h1 className="AluRegVideoUp-title">Your VideoPress library</h1>
+          <h1 className="AluRegVideoUp-title">Video Library</h1>
           <span className="AluRegVideoUp-count">{videos.length} Videos</span>
         </div>
 
@@ -150,7 +120,6 @@ export default function AluRegVideoUp() {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-          <button className="AluRegVideoUp-filters-btn">Filters</button>
         </div>
       </div>
 
@@ -176,7 +145,7 @@ export default function AluRegVideoUp() {
                 autoPlay
                 controlsList="nodownload"
               >
-                <source src={selectedVideo.videoUrl} type="video/mp4" />
+                <source src={`${API_URL}${selectedVideo.videoUrl}`} type="video/mp4" />
                 Your browser does not support the video tag.
               </video>
             )}
@@ -206,15 +175,11 @@ export default function AluRegVideoUp() {
       <div className="AluRegVideoUp-grid">
         {filteredVideos.map((video) => {
           const thumb = resolvedThumbnail(video);
-          const ytThumb =
-            !thumb && isYouTubeUrl(video.videoUrl)
-              ? getYouTubeThumbnail(video.videoUrl)
-              : null;
-          const bgImage = thumb || ytThumb;
+          const bgImage = thumb || video.thumbnail;
 
           return (
             <div
-              key={video.id}
+              key={video._id}
               className="AluRegVideoUp-card"
               onClick={() => handleVideoClick(video)}
             >
@@ -246,7 +211,7 @@ export default function AluRegVideoUp() {
 
         {filteredVideos.length === 0 && (
           <div className="AluRegVideoUp-no-results">
-            No videos found matching "{searchTerm}"
+            {searchTerm ? `No videos found matching "${searchTerm}"` : 'No videos available'}
           </div>
         )}
       </div>

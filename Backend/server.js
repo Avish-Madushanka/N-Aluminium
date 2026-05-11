@@ -7,6 +7,8 @@ const http = require('http');
 const fs = require('fs');
 
 const connectDB = require('./config/db');
+const videoRoutes = require('./routes/videoRoutes');
+
 
 console.log('[Server Startup] Initializing: Attempting to load route modules...');
 let clientRoutes, bOwnerRoutes, authRoutes, calendarSettingsRoutes,
@@ -310,6 +312,8 @@ mountRoute(app, '/api/buy-and-sell', buyAndSellRoutes);
 mountRoute(app, '/api/glass', glassRoutes);
 mountRoute(app, '/api/alu-quotations', aluQuotationRoutes);
 mountRoute(app, '/api/contact', contactRoutes);
+mountRoute(app, '/api/videos', videoRoutes);
+
 
 if (itemRoutes) {
     mountRoute(app, '/api/items', itemRoutes);

@@ -1,5 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
+import axios from 'axios';
 import './VideoManage.css';
+
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5003/api';
 
 const getYouTubeId = (url = '') => {
   try {
@@ -20,69 +23,20 @@ const getYouTubeThumbnail = (url = '') => {
   return id ? `https://img.youtube.com/vi/${id}/hqdefault.jpg` : null;
 };
 
-export default function VideoManage() {
-  const [videos, setVideos] = useState([
-    {
-      id: 1,
-      title: 'Acousticlive show at terraces',
-      duration: '03:38',
-      thumbnail: 'https://images.unsplash.com/photo-1524368535928-5b5e00ddc76b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80',
-      videoUrl: 'https://www.youtube.com/live/9i2g6fVNocU?si=6cdFLyRN6EKSfhqk',
-      color: '#ff6b6b',
-    },
-    {
-      id: 2,
-      title: 'Bring it all over videoclip',
-      duration: '02:49',
-      thumbnail: 'https://images.unsplash.com/photo-1485846234645-a62644f84728?ixlib=rb-4.0.3&auto=format&fit=crop&w=1159&q=80',
-      videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
-      color: '#4ecdc4',
-    },
-    {
-      id: 3,
-      title: 'Keep moving!',
-      duration: '02:14',
-      thumbnail: 'https://images.unsplash.com/photo-1536240474400-95dad987e40e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1169&q=80',
-      videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4',
-      color: '#45b7d1',
-    },
-    {
-      id: 4,
-      title: 'ADDICT RUE',
-      duration: '01:24',
-      thumbnail: 'https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?ixlib=rb-4.0.3&auto=format&fit=crop&w=1169&q=80',
-      videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4',
-      color: '#f9ca24',
-    },
-    {
-      id: 5,
-      title: "Theywon'tcatchme",
-      duration: '02:53',
-      thumbnail: 'https://images.unsplash.com/photo-1536240474400-95dad987e40e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1169&q=80',
-      videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4',
-      color: '#a8e6cf',
-    },
-    {
-      id: 6,
-      title: 'Liveperformance',
-      duration: '00:36',
-      thumbnail: 'https://images.unsplash.com/photo-1516280440614-37939bbacd81?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80',
-      videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4',
-      color: '#d4a5a5',
-    },
-    {
-      id: 7,
-      title: 'Fastdancing-videoclipdemo',
-      duration: '02:14',
-      thumbnail: 'https://images.unsplash.com/photo-1545128485-c400e7702796?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80',
-      videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackOnStreetAndDirt.mp4',
-      color: '#9b59b6',
-    },
-  ]);
+const formatDuration = (seconds) => {
+  if (!seconds || isNaN(seconds)) return '00:00';
+  const mins = Math.floor(seconds / 60);
+  const secs = Math.floor(seconds % 60);
+  return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+};
 
+export default function VideoManage() {
+  const [videos, setVideos] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
+  const [editingVideo, setEditingVideo] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
-  const [filteredVideos, setFilteredVideos] = useState(videos);
+  const [filteredVideos, setFilteredVideos] = useState([]);
   const [thumbnailError, setThumbnailError] = useState({});
   const [formData, setFormData] = useState({
     title: '',
@@ -92,6 +46,18 @@ export default function VideoManage() {
   });
   
   const fileInputRef = useRef(null);
+  const token = localStorage.getItem('token');
+
+  const axiosConfig = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'multipart/form-data'
+    }
+  };
+
+  useEffect(() => {
+    fetchVideos();
+  }, []);
 
   useEffect(() => {
     const filtered = videos.filter((video) =>
@@ -100,10 +66,26 @@ export default function VideoManage() {
     setFilteredVideos(filtered);
   }, [searchTerm, videos]);
 
+  const fetchVideos = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(`${API_URL}/videos`);
+      if (response.data.success) {
+        setVideos(response.data.data);
+        setFilteredVideos(response.data.data);
+      }
+    } catch (error) {
+      console.error('Fetch videos error:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const resolvedThumbnail = (video) => {
-    if (thumbnailError[video.id]) return null;
+    if (thumbnailError[video._id]) return null;
     if (video.thumbnail) return video.thumbnail;
-    return getYouTubeThumbnail(video.videoUrl) || null;
+    if (isYouTubeUrl(video.videoUrl)) return getYouTubeThumbnail(video.videoUrl);
+    return null;
   };
 
   const handleFormChange = (e) => {
@@ -113,58 +95,57 @@ export default function VideoManage() {
     });
   };
 
-  const handleVideoUpload = (event) => {
-    const files = Array.from(event.target.files);
+  const handleVideoUpload = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
 
-    files.forEach((file) => {
-      if (!file.type.startsWith('video/')) return;
+    if (!file.type.startsWith('video/')) {
+      alert('Please select a valid video file');
+      return;
+    }
 
-      const video = document.createElement('video');
-      video.preload = 'metadata';
+    if (file.size > 100 * 1024 * 1024) {
+      alert('File size must be less than 100MB');
+      return;
+    }
 
-      video.onloadedmetadata = () => {
-        URL.revokeObjectURL(video.src);
-        const duration = formatDuration(video.duration);
-        const videoUrl = URL.createObjectURL(file);
+    const video = document.createElement('video');
+    video.preload = 'metadata';
+    video.onloadedmetadata = () => {
+      URL.revokeObjectURL(video.src);
+      const duration = formatDuration(video.duration);
+      setFormData(prev => ({ ...prev, duration }));
+    };
+    video.src = URL.createObjectURL(file);
 
-        createVideoThumbnail(file, (thumbnailUrl) => {
-          const newVideo = {
-            id: Date.now() + Math.random(),
-            title: file.name.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' '),
-            duration,
-            thumbnail: thumbnailUrl || 'https://images.unsplash.com/photo-1492619375914-88005aa9e8fb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80',
-            videoUrl,
-            color: getRandomColor(),
-          };
-          setVideos((prev) => [...prev, newVideo]);
-        });
-      };
-      video.src = URL.createObjectURL(file);
-    });
+    const videoFormData = new FormData();
+    videoFormData.append('title', formData.title || file.name.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' '));
+    videoFormData.append('videoFile', file);
+    if (formData.duration !== '00:00') videoFormData.append('duration', formData.duration);
+    if (formData.thumbnail) videoFormData.append('thumbnail', formData.thumbnail);
+
+    try {
+      if (editingVideo) {
+        const response = await axios.put(`${API_URL}/videos/${editingVideo._id}`, videoFormData, axiosConfig);
+        if (response.data.success) {
+          await fetchVideos();
+          closeForm();
+        }
+      } else {
+        const response = await axios.post(`${API_URL}/videos`, videoFormData, axiosConfig);
+        if (response.data.success) {
+          await fetchVideos();
+          closeForm();
+        }
+      }
+    } catch (error) {
+      console.error('Upload error:', error);
+      alert(error.response?.data?.message || 'Failed to upload video');
+    }
     event.target.value = '';
   };
 
-  const createVideoThumbnail = (file, callback) => {
-    const video = document.createElement('video');
-    video.preload = 'metadata';
-    video.currentTime = 1;
-
-    video.onloadeddata = () => {
-      const canvas = document.createElement('canvas');
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
-      const ctx = canvas.getContext('2d');
-      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-      canvas.toBlob((blob) => {
-        callback(URL.createObjectURL(blob));
-      }, 'image/jpeg', 0.8);
-      URL.revokeObjectURL(video.src);
-    };
-    video.onerror = () => callback(null);
-    video.src = URL.createObjectURL(file);
-  };
-
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
     
     if (!formData.title || !formData.videoUrl) {
@@ -179,61 +160,72 @@ export default function VideoManage() {
       return;
     }
 
-    let thumbnailUrl = formData.thumbnail;
-    if (!thumbnailUrl && isYouTubeUrl(formData.videoUrl)) {
-      thumbnailUrl = getYouTubeThumbnail(formData.videoUrl);
-    }
-    if (!thumbnailUrl) {
-      thumbnailUrl = 'https://images.unsplash.com/photo-1492619375914-88005aa9e8fb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80';
-    }
+    const videoData = new FormData();
+    videoData.append('title', formData.title);
+    videoData.append('videoUrl', formData.videoUrl);
+    videoData.append('duration', formData.duration);
+    if (formData.thumbnail) videoData.append('thumbnail', formData.thumbnail);
 
-    const newVideo = {
-      id: Date.now() + Math.random(),
-      title: formData.title,
-      duration: formData.duration || '00:00',
-      thumbnail: thumbnailUrl,
-      videoUrl: formData.videoUrl,
-      color: getRandomColor(),
-    };
-
-    if (!isYouTubeUrl(formData.videoUrl) && formData.duration === '00:00') {
-      const tempVideo = document.createElement('video');
-      tempVideo.preload = 'metadata';
-      tempVideo.onloadedmetadata = () => {
-        newVideo.duration = formatDuration(tempVideo.duration);
-        setVideos((prev) => [...prev, newVideo]);
-      };
-      tempVideo.src = formData.videoUrl;
-    } else {
-      setVideos((prev) => [...prev, newVideo]);
+    try {
+      if (editingVideo) {
+        const response = await axios.put(`${API_URL}/videos/${editingVideo._id}`, videoData, axiosConfig);
+        if (response.data.success) {
+          await fetchVideos();
+          closeForm();
+        }
+      } else {
+        const response = await axios.post(`${API_URL}/videos`, videoData, axiosConfig);
+        if (response.data.success) {
+          await fetchVideos();
+          closeForm();
+        }
+      }
+    } catch (error) {
+      console.error('Submit error:', error);
+      alert(error.response?.data?.message || 'Failed to save video');
     }
+  };
 
-    setFormData({ title: '', videoUrl: '', thumbnail: '', duration: '00:00' });
+  const handleEditVideo = (video) => {
+    setEditingVideo(video);
+    setFormData({
+      title: video.title,
+      videoUrl: video.videoUrl,
+      thumbnail: video.thumbnail || '',
+      duration: video.duration,
+    });
+    setShowForm(true);
+  };
+
+  const handleDeleteVideo = async (videoId) => {
+    if (!window.confirm('Are you sure you want to delete this video?')) return;
+    
+    try {
+      const response = await axios.delete(`${API_URL}/videos/${videoId}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      if (response.data.success) {
+        await fetchVideos();
+      }
+    } catch (error) {
+      console.error('Delete error:', error);
+      alert(error.response?.data?.message || 'Failed to delete video');
+    }
+  };
+
+  const closeForm = () => {
     setShowForm(false);
-  };
-
-  const handleDeleteVideo = (videoId, e) => {
-    e.stopPropagation();
-    if (window.confirm('Delete this video?')) {
-      setVideos(videos.filter(video => video.id !== videoId));
-    }
-  };
-
-  const formatDuration = (seconds) => {
-    if (!seconds || isNaN(seconds)) return '00:00';
-    const mins = Math.floor(seconds / 60);
-    const secs = Math.floor(seconds % 60);
-    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-  };
-
-  const getRandomColor = () => {
-    const colors = ['#3498db', '#e74c3c', '#2ecc71', '#f39c12', '#9b59b6', '#1abc9c', '#e67e22'];
-    return colors[Math.floor(Math.random() * colors.length)];
+    setEditingVideo(null);
+    setFormData({ title: '', videoUrl: '', thumbnail: '', duration: '00:00' });
   };
 
   const handleThumbnailError = (videoId) => {
     setThumbnailError((prev) => ({ ...prev, [videoId]: true }));
   };
+
+  if (loading) {
+    return <div className="VideoManage-loading">Loading videos...</div>;
+  }
 
   return (
     <div className="VideoManage-library">
@@ -257,7 +249,6 @@ export default function VideoManage() {
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
-            <button className="VideoManage-filters-btn">Filters</button>
           </div>
           
           <button className="VideoManage-add-btn" onClick={() => setShowForm(true)}>
@@ -272,7 +263,7 @@ export default function VideoManage() {
       {showForm && (
         <div className="VideoManage-form-overlay">
           <div className="VideoManage-form-container">
-            <h2>Add New Video</h2>
+            <h2>{editingVideo ? 'Edit Video' : 'Add New Video'}</h2>
             <form onSubmit={handleFormSubmit}>
               <div className="VideoManage-form-group">
                 <label>Video Title *</label>
@@ -287,13 +278,13 @@ export default function VideoManage() {
               </div>
 
               <div className="VideoManage-form-group">
-                <label>Video URL *</label>
+                <label>Video URL (YouTube or direct MP4) *</label>
                 <input
                   type="url"
                   name="videoUrl"
                   value={formData.videoUrl}
                   onChange={handleFormChange}
-                  placeholder="https://example.com/video.mp4 or YouTube URL"
+                  placeholder="https://youtube.com/... or https://example.com/video.mp4"
                   required
                 />
               </div>
@@ -326,7 +317,7 @@ export default function VideoManage() {
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
                   </svg>
-                  Or Upload Video File
+                  Or Upload Video File (MP4, WebM, up to 100MB)
                   <input
                     type="file"
                     ref={fileInputRef}
@@ -338,8 +329,12 @@ export default function VideoManage() {
               </div>
 
               <div className="VideoManage-form-actions">
-                <button type="submit" className="VideoManage-submit-btn">Add to Library</button>
-                <button type="button" className="VideoManage-cancel-btn" onClick={() => setShowForm(false)}>Cancel</button>
+                <button type="submit" className="VideoManage-submit-btn">
+                  {editingVideo ? 'Update Video' : 'Add to Library'}
+                </button>
+                <button type="button" className="VideoManage-cancel-btn" onClick={closeForm}>
+                  Cancel
+                </button>
               </div>
             </form>
           </div>
@@ -349,11 +344,10 @@ export default function VideoManage() {
       <div className="VideoManage-grid">
         {filteredVideos.map((video) => {
           const thumb = resolvedThumbnail(video);
-          const ytThumb = !thumb && isYouTubeUrl(video.videoUrl) ? getYouTubeThumbnail(video.videoUrl) : null;
-          const bgImage = thumb || ytThumb;
+          const bgImage = thumb || video.thumbnail;
 
           return (
-            <div key={video.id} className="VideoManage-card">
+            <div key={video._id} className="VideoManage-card">
               <div
                 className="VideoManage-thumbnail"
                 style={{
@@ -370,13 +364,20 @@ export default function VideoManage() {
                     </svg>
                   </div>
                 )}
-                {isYouTubeUrl(video.videoUrl) && <span className="VideoManage-yt-badge">YouTube</span>}
+                {video.isYouTube && <span className="VideoManage-yt-badge">YouTube</span>}
                 <span className="VideoManage-duration">{video.duration}</span>
-                <button className="VideoManage-delete-btn" onClick={(e) => handleDeleteVideo(video.id, e)}>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
-                  </svg>
-                </button>
+                <div className="VideoManage-card-actions">
+                  <button className="VideoManage-edit-btn" onClick={() => handleEditVideo(video)}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+                    </svg>
+                  </button>
+                  <button className="VideoManage-delete-btn" onClick={() => handleDeleteVideo(video._id)}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+                    </svg>
+                  </button>
+                </div>
               </div>
               <p className="VideoManage-video-title">{video.title}</p>
             </div>
@@ -384,7 +385,9 @@ export default function VideoManage() {
         })}
 
         {filteredVideos.length === 0 && (
-          <div className="VideoManage-no-results">No videos found matching "{searchTerm}"</div>
+          <div className="VideoManage-no-results">
+            {searchTerm ? `No videos found matching "${searchTerm}"` : 'No videos in library. Click "Add Video" to get started!'}
+          </div>
         )}
       </div>
     </div>

@@ -3,7 +3,17 @@
   max-width: 1400px;
   margin: 0 auto;
   padding: 24px;
-  background: white;
+  padding-top: 50px;
+  min-height: 100vh;
+}
+
+.AluRegVideoUp-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  font-size: 18px;
+  color: #666;
 }
 
 .AluRegVideoUp-header {
@@ -23,7 +33,7 @@
 
 .AluRegVideoUp-title {
   font-size: 28px;
-  font-weight: 500;
+  font-weight: 700;
   margin: 0;
   color: #000;
 }
@@ -70,22 +80,6 @@
 
 .AluRegVideoUp-search-input1::placeholder {
   color: #999;
-}
-
-.AluRegVideoUp-filters-btn {
-  padding: 10px 20px;
-  background: white;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  font-size: 14px;
-  color: #333;
-  cursor: pointer;
-  font-weight: 500;
-  transition: background 0.2s;
-}
-
-.AluRegVideoUp-filters-btn:hover {
-  background: #f5f5f5;
 }
 
 .AluRegVideoUp-player-overlay {
@@ -167,7 +161,7 @@
 }
 
 .AluRegVideoUp-card:hover {
-  transform: scale(1.02);
+  transform: translateY(-4px);
   box-shadow: 0 12px 20px -10px rgba(0,0,0,0.2);
 }
 
@@ -289,34 +283,6 @@
   font-size: 16px;
 }
 
-.AluRegVideoUp-card:nth-child(1) .AluRegVideoUp-thumbnail {
-  background-color: #ff6b6b;
-}
-
-.AluRegVideoUp-card:nth-child(2) .AluRegVideoUp-thumbnail {
-  background-color: #4ecdc4;
-}
-
-.AluRegVideoUp-card:nth-child(3) .AluRegVideoUp-thumbnail {
-  background-color: #45b7d1;
-}
-
-.AluRegVideoUp-card:nth-child(4) .AluRegVideoUp-thumbnail {
-  background-color: #f9ca24;
-}
-
-.AluRegVideoUp-card:nth-child(5) .AluRegVideoUp-thumbnail {
-  background-color: #a8e6cf;
-}
-
-.AluRegVideoUp-card:nth-child(6) .AluRegVideoUp-thumbnail {
-  background-color: #d4a5a5;
-}
-
-.AluRegVideoUp-card:nth-child(7) .AluRegVideoUp-thumbnail {
-  background-color: #9b59b6;
-}
-
 @media (max-width: 1024px) {
   .AluRegVideoUp-grid {
     grid-template-columns: repeat(3, 1fr);
@@ -361,9 +327,5 @@
   
   .AluRegVideoUp-search-section1 {
     flex-direction: column;
-  }
-  
-  .AluRegVideoUp-filters-btn {
-    width: 100%;
   }
 }
