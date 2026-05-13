@@ -6,6 +6,10 @@ import logo from "../../assets/logo.png";
 import axiosInstance from '../../api/axiosInstance';
 import API_ENDPOINTS from '../../apiConfig';
 
+const GOOGLE_MAPS_API_KEY = "AIzaSyDzqpYnSGskutFD2bq3zY906kFXem49_9g";
+const COMPANY_ADDRESS = "426F/18 Shanthi Garden, Medha Mawatha, Alubomulla, Panadura, Sri Lanka";
+const COMPANY_COORDS = { lat: 6.711882, lng: 79.962736 };
+
 const Navbar = ({ isLoggedIn, userInfo, handleLogout, cartItemCount = 0 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -18,6 +22,11 @@ const Navbar = ({ isLoggedIn, userInfo, handleLogout, cartItemCount = 0 }) => {
   const headerRef = useRef(null);
   const mobileMenuRef = useRef(null);
   const notificationRef = useRef(null);
+
+  const handlePanaduraClick = () => {
+    const mapsUrl = `https://www.google.com/maps?q=${COMPANY_COORDS.lat},${COMPANY_COORDS.lng}&zoom=16`;
+    window.open(mapsUrl, '_blank');
+  };
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -204,7 +213,7 @@ const Navbar = ({ isLoggedIn, userInfo, handleLogout, cartItemCount = 0 }) => {
         </div>
 
         <div className="Nav-contact-info">
-          <div className="Nav-contact-item">
+          <div className="Nav-contact-item" onClick={handlePanaduraClick} style={{ cursor: 'pointer' }}>
             <img src={locationIconUrl} alt="Location" className="Nav-contact-icon-img" />
             <span>PANADURA</span>
           </div>
@@ -336,7 +345,7 @@ const Navbar = ({ isLoggedIn, userInfo, handleLogout, cartItemCount = 0 }) => {
           )}
           
           <div className="Nav-mobile-contact">
-            <div className="Nav-mobile-contact-item">
+            <div className="Nav-mobile-contact-item" onClick={handlePanaduraClick} style={{ cursor: 'pointer' }}>
               <img src={locationIconUrl} alt="Location" className="Nav-mobile-contact-icon-img" />
               <span>Panadura</span>
             </div>
