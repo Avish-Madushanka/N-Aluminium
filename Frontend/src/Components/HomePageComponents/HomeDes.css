@@ -3,7 +3,7 @@
 .hmd-adv-section {
   padding: 80px 20px;
   background-color: #f1f4f5;
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Inter', sans-serif;
   display: flex;
   justify-content: center;
 }
@@ -22,7 +22,7 @@
 }
 
 .hmd-adv-main-heading {
-  font-family: 'Bebas Neue', cursive;
+  font-family: 'Inter', sans-serif;
   font-size: 72px;
   color: #2b2b2b;
   margin: 0;
@@ -75,8 +75,8 @@
 }
 
 .hmd-adv-card-title {
-  font-family: 'Bebas Neue', cursive;
-  font-size: 42px;
+  font-family: 'Inter', sans-serif;
+  font-size: 30px;
   margin-bottom: 25px;
   letter-spacing: 1px;
 }
@@ -129,7 +129,7 @@
   color: #2b2b2b;
   text-decoration: none;
   text-align: center;
-  font-family: 'Bebas Neue', cursive;
+  font-family: 'Inter', sans-serif;
   font-size: 20px;
   letter-spacing: 1px;
   cursor: pointer;

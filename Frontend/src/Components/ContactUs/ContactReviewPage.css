@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;500;600;700;800&display=swap');
 
 .Con-root {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Inter', sans-serif;
     background-color: #ffffff;
 }
 
@@ -55,13 +55,13 @@
     font-size: 2.8rem;
     font-weight: 800;
     color: #0f0f0f;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
 
 .Con-intro-sub {
     color: #474747;
-    font-size: 1rem;
-    line-height: 1.8;
+    font-size: 1.2rem;
+    line-height: 1.5;
     max-width: 800px;
     margin: 0 auto;
 }

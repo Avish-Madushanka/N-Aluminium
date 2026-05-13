@@ -34,7 +34,7 @@ function AluTRegMain() {
             Register Now
           </a>
           <a href="/AluRegVideoUp" className="Alu-hero-btn1">
-            Register Now
+            watch tutorial
           </a>
         </div>
 

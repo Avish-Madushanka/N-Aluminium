@@ -36,15 +36,15 @@
 
 .AB-title {
   font-family: 'Playfair Display', serif;
-  font-size: 2.5rem;
+  font-size: 2rem;
   font-weight: 700;
   color: #2c3e50;
   margin-bottom: 20px;
 }
 
 .AB-description {
-  font-family: 'Roboto', sans-serif;
-  font-size: 1.1rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
   color: #555;
   line-height: 1.8;
   text-align: justify;
@@ -171,7 +171,7 @@
   max-width: 1200px;
   margin: 50px auto;
   padding: 20px;
-  font-family: "Poppins", sans-serif;
+  font-family: 'Inter', sans-serif;
   color: #333;
 }
 

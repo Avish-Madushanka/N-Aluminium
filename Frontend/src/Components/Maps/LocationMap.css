@@ -17,12 +17,13 @@
   color: #07111f;
   font-weight: 800;
   letter-spacing: -0.5px;
-  margin-bottom: 12px;
+  margin-bottom: 5px;
   font-family: 'Merriweather', serif;
 }
 
 .locator-subtitle {
-  font-size: 1.1rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 1.2rem;
   color: #222222;
   max-width: 700px;
   margin: 0 auto;
@@ -197,7 +198,7 @@
   font-weight: 700;
   color: #080808;
   margin-bottom: 8px;
-  font-family: 'Merriweather', serif;
+  font-family: 'Inter', sans-serif;
 }
 
 .store-address,

@@ -37,12 +37,6 @@ const HomeDes = () => {
       <div className="hmd-adv-container">
         
         <div className="hmd-adv-header">
-          <div className="hmd-adv-titles">
-            <h2 className="hmd-adv-main-heading">CHOOSE YOUR MOUNTAIN ADVENTURE</h2>
-            <p className="hmd-adv-sub-desc">
-              Discover the most exciting ways to explore the mountains — from extreme rides to climbing and guided tours.
-            </p>
-          </div>
           <Link to="/Service" className="hmd-adv-top-btn">View All Services</Link>
         </div>
 

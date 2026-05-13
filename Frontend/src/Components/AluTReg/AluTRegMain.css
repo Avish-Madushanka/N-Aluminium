@@ -16,6 +16,7 @@
 }
 
 .Alu-hero-subtitle {
+  font-family: 'Inter', sans-serif;
   color: #d30905;
   font-size: 15px;
   font-weight: 700;
@@ -25,19 +26,22 @@
 }
 
 .Alu-hero-title {
+  font-family: 'Inter', sans-serif;
   font-size: 52px;
   font-weight: 800;
   color: #2c3e50;
   line-height: 1.2;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 .Alu-hero-title span {
+  font-family: 'Inter', sans-serif;
   color: #e9120e;
 }
 
 .Alu-hero-description {
   font-size: 17px;
+  font-family: 'Inter', sans-serif;
   color: #475569;
   line-height: 1.6;
   margin-bottom: 35px;
@@ -45,6 +49,7 @@
 }
 
 .Alu-hero-btn {
+  font-family: 'Inter', sans-serif;
   margin-right: 15px;
   display: inline-block;
   padding: 14px 32px;
@@ -145,6 +150,7 @@
 }
 
 .AT4-description {
+  font-family: 'Inter', sans-serif;
     font-size: 1rem;
     line-height: 1.6;
     opacity: 0.9;
