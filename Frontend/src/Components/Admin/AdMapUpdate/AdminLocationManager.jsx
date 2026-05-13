@@ -4,7 +4,7 @@ import { Search, MapPin, Phone, Clock, Info, Edit, Trash2, Plus, X, Check, Alert
 import axiosInstance from '../../../api/axiosInstance';
 import "./LocationMap.css";
 
-const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+const GOOGLE_MAPS_API_KEY = "AIzaSyDzqpYnSGskutFD2bq3zY906kFXem49_9g";
 
 const mapContainerStyle = {
   width: "100%",
@@ -288,7 +288,7 @@ export default function AdminLocationManager() {
       <div className="adshopmap-container error-state">
         <AlertTriangle size={48} color="orange" />
         <h2>Google Maps API Key Missing</h2>
-        <p>Please ensure <code>VITE_GOOGLE_MAPS_API_KEY</code> is set in your frontend <code>.env</code> file.</p>
+        <p>Please ensure the API key is configured correctly.</p>
       </div>
     );
   }

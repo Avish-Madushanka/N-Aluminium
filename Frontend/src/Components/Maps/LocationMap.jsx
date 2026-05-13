@@ -11,7 +11,7 @@ const mapContainerStyle = {
 const KALUTARA_DISTRICT_CENTER = { lat: 6.5853, lng: 79.9607 };
 const KALUTARA_DISTRICT_ZOOM = 10;
 
-const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+const GOOGLE_MAPS_API_KEY = "AIzaSyDzqpYnSGskutFD2bq3zY906kFXem49_9g";
 
 function LocationMap() {
   const [searchTerm, setSearchTerm] = useState("");

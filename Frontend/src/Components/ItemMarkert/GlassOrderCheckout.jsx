@@ -6,7 +6,7 @@ import "./GlassOrderCheckout.css";
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
-const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+const GOOGLE_MAPS_API_KEY = "AIzaSyDzqpYnSGskutFD2bq3zY906kFXem49_9g";
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5003';
 
 const GlassOrderCheckout = () => {
@@ -53,17 +53,35 @@ const GlassOrderCheckout = () => {
   const [currentOrder, setCurrentOrder] = useState(null);
   const [showBillModal, setShowBillModal] = useState(false);
   const [paypalRendered, setPaypalRendered] = useState(false);
+  const [companyCoords, setCompanyCoords] = useState({ lat: 6.6615, lng: 79.9048 });
   
   const mapRef = useRef(null);
   const markerRef = useRef(null);
   const companyMarkerRef = useRef(null);
 
-  const COMPANY_COORDS = { lat: 6.6578, lng: 79.9027 };
   const COMPANY_NAME = "ALUX Panadura";
-  const COMPANY_ADDRESS = "Alubomulla, Panadura, Sri Lanka";
+  const COMPANY_ADDRESS = "426F/18 Shanthi Garden, Medha Mawatha, Alubomulla, Panadura, Sri Lanka";
   const COMPANY_PHONE = "+94 72 104 6048";
   const COMPANY_EMAIL = "donotreply.ALUX@gmail.com";
   const USD_TO_LKR = 300;
+
+  useEffect(() => {
+    const fetchCompanyCoordinates = async () => {
+      try {
+        const geocodeUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(COMPANY_ADDRESS)}&key=${GOOGLE_MAPS_API_KEY}`;
+        const response = await fetch(geocodeUrl);
+        const data = await response.json();
+        if (data.results && data.results.length > 0) {
+          const location = data.results[0].geometry.location;
+          setCompanyCoords({ lat: location.lat, lng: location.lng });
+          console.log("Company coordinates loaded:", location.lat, location.lng);
+        }
+      } catch (error) {
+        console.error("Error geocoding company address:", error);
+      }
+    };
+    fetchCompanyCoordinates();
+  }, []);
 
   useEffect(() => {
     const storedItems = JSON.parse(localStorage.getItem('glassOrderItems') || '[]');
@@ -534,13 +552,14 @@ const GlassOrderCheckout = () => {
             
             calculateDistanceFromCoords(location, result.formatted_address);
           }
+        } else {
+          toast.error("Location not found");
+          setIsCalculatingDistance(false);
         }
       })
       .catch(error => {
         console.error("Error searching location:", error);
         toast.error("Failed to search location");
-      })
-      .finally(() => {
         setIsCalculatingDistance(false);
       });
   };
@@ -548,7 +567,7 @@ const GlassOrderCheckout = () => {
   const calculateDistanceFromCoords = (destinationCoords, address) => {
     setIsCalculatingDistance(true);
     
-    const distanceMatrixUrl = `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${COMPANY_COORDS.lat},${COMPANY_COORDS.lng}&destinations=${destinationCoords.lat},${destinationCoords.lng}&key=${GOOGLE_MAPS_API_KEY}`;
+    const distanceMatrixUrl = `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${companyCoords.lat},${companyCoords.lng}&destinations=${destinationCoords.lat},${destinationCoords.lng}&key=${GOOGLE_MAPS_API_KEY}`;
     
     fetch(distanceMatrixUrl)
       .then(response => response.json())
@@ -573,6 +592,7 @@ const GlassOrderCheckout = () => {
               city: address.split(',')[1] || "",
               postalCode: address.split(',')[2] || ""
             });
+            setIsCalculatingDistance(false);
             return;
           }
         }
@@ -582,7 +602,7 @@ const GlassOrderCheckout = () => {
         console.error("Distance Matrix API error:", error);
         
         const haversineDistance = calculateHaversineDistance(
-          COMPANY_COORDS.lat, COMPANY_COORDS.lng,
+          companyCoords.lat, companyCoords.lng,
           destinationCoords.lat, destinationCoords.lng
         );
         
@@ -648,8 +668,8 @@ const GlassOrderCheckout = () => {
     if (!mapElement) return;
     
     const map = new window.google.maps.Map(mapElement, {
-      center: COMPANY_COORDS,
-      zoom: 12,
+      center: companyCoords,
+      zoom: 16,
       styles: [
         {
           featureType: "poi",
@@ -663,17 +683,17 @@ const GlassOrderCheckout = () => {
     mapRef.current = map;
     
     companyMarkerRef.current = new window.google.maps.Marker({
-      position: COMPANY_COORDS,
+      position: companyCoords,
       map: map,
       icon: {
         url: "https://maps.google.com/mapfiles/ms/icons/blue-dot.png",
         scaledSize: new window.google.maps.Size(40, 40)
       },
-      title: "Our Warehouse - Panadura"
+      title: "ALUX Panadura - Shanthi Garden, Alubomulla"
     });
     
     const infoWindow = new window.google.maps.InfoWindow({
-      content: '<div style="padding: 5px;"><strong>ALUX Panadura</strong><br/>Our Warehouse Location</div>'
+      content: '<div style="padding: 5px;"><strong>ALUX Panadura</strong><br/>426F/18 Shanthi Garden, Medha Mawatha<br/>Alubomulla, Panadura, Sri Lanka</div>'
     });
     
     companyMarkerRef.current.addListener("click", () => {
@@ -695,7 +715,7 @@ const GlassOrderCheckout = () => {
         companyMarkerRef.current = null;
       }
     };
-  }, [showLocationPicker, mapLoaded]);
+  }, [showLocationPicker, mapLoaded, companyCoords]);
 
   const handleManualDistanceChange = (e) => {
     const value = e.target.value;
@@ -818,15 +838,15 @@ const GlassOrderCheckout = () => {
           <div className="GlassCheckout-billInfo">
             <div className="GlassCheckout-billRow">
               <span>Bill Number:</span>
-              <strong>{currentOrder?.billNumber}</strong>
+              <strong>{currentOrder?.billNumber || generateBillNumber()}</strong>
             </div>
             <div className="GlassCheckout-billRow">
               <span>Order ID:</span>
-              <strong>{currentOrder?.orderId}</strong>
+              <strong>{currentOrder?.orderId || 'N/A'}</strong>
             </div>
             <div className="GlassCheckout-billRow">
               <span>Date:</span>
-              <strong>{new Date(currentOrder?.createdAt).toLocaleString()}</strong>
+              <strong>{new Date().toLocaleString()}</strong>
             </div>
             <div className="GlassCheckout-billRow">
               <span>Payment Method:</span>
@@ -978,7 +998,7 @@ const GlassOrderCheckout = () => {
               <h3>Delivery Details</h3>
               {deliveryMethod === "pickup" ? (
                 <div>
-                  <p><strong>Pickup Location:</strong> ALUX Panadura - Alubomulla</p>
+                  <p><strong>Pickup Location:</strong> {COMPANY_ADDRESS}</p>
                   <p><strong>Pickup Date:</strong> {pickupDate}</p>
                   <p><strong>Pickup Time:</strong> {pickupTimeSlot}</p>
                   <p className="GlassCheckout-fragileWarning">⚠️ Fragile item - Handle with care. Please bring payment receipt for verification.</p>
@@ -1064,85 +1084,64 @@ const GlassOrderCheckout = () => {
                 </tr>
               </thead>
               <tbody>
-                {selectedItems.map((item) => (
-                  <tr key={item.id}>
-                    {editingItem && editingItem.id === item.id ? (
-                      <>
+                {selectedItems.map((item) => {
+                  if (editingItem && editingItem.id === item.id) {
+                    return (
+                      <tr key={item.id}>
                         <td>{item.glassType}</td>
                         <td>{item.quality}</td>
                         <td>{item.size}</td>
                         <td>
-                          <input
-                            type="number"
-                            step="0.1"
-                            className="GlassCheckout-editInput"
-                            value={editFormData.widthFt}
-                            onChange={(e) => setEditFormData({...editFormData, widthFt: e.target.value})}
-                            placeholder="W"
-                            style={{width: "50px", marginRight: "3px"}}
-                          />
+                          <input type="number" step="0.1" className="GlassCheckout-editInput" value={editFormData.widthFt} onChange={(e) => setEditFormData({...editFormData, widthFt: e.target.value})} placeholder="W" style={{width: "50px", marginRight: "3px"}} />
                           x
-                          <input
-                            type="number"
-                            step="0.1"
-                            className="GlassCheckout-editInput"
-                            value={editFormData.heightFt}
-                            onChange={(e) => setEditFormData({...editFormData, heightFt: e.target.value})}
-                            placeholder="H"
-                            style={{width: "50px", marginLeft: "3px"}}
-                          />
+                          <input type="number" step="0.1" className="GlassCheckout-editInput" value={editFormData.heightFt} onChange={(e) => setEditFormData({...editFormData, heightFt: e.target.value})} placeholder="H" style={{width: "50px", marginLeft: "3px"}} />
                         </td>
                         <td>{item.areaSqFt.toFixed(2)}</td>
                         <td>
-                          <input
-                            type="number"
-                            className="GlassCheckout-editInput"
-                            value={editFormData.quantity}
-                            onChange={(e) => setEditFormData({...editFormData, quantity: e.target.value})}
-                            style={{width: "50px"}}
-                          />
+                          <input type="number" className="GlassCheckout-editInput" value={editFormData.quantity} onChange={(e) => setEditFormData({...editFormData, quantity: e.target.value})} style={{width: "50px"}} />
                         </td>
                         <td>{item.weight.toFixed(1)}</td>
                         <td>Rs {item.unitPrice.toFixed(2)}</td>
+                        <td>Rs {item.totalPrice.toFixed(2)}</td>
                         <td>
                           <button className="GlassCheckout-saveBtn" onClick={handleUpdateItem}>Save</button>
                           <button className="GlassCheckout-cancelBtn" onClick={handleCancelEdit}>Cancel</button>
                         </td>
-                        <td></td>
-                      </>
-                    ) : (
-                      <>
-                        <td><strong>{item.glassType}</strong></td>
-                        <td>{item.quality}</td>
-                        <td>{item.size}</td>
-                        <td>{item.widthFt}' x {item.heightFt}'</td>
-                        <td>{item.areaSqFt.toFixed(2)}</td>
-                        <td>{item.quantity}</td>
-                        <td>{item.weight.toFixed(1)}</td>
-                        <td>Rs {item.unitPrice.toFixed(2)}</td>
-                        <td className="GlassCheckout-totalPriceCell">Rs {item.totalPrice.toFixed(2)}</td>
-                        <td>
-                          <button className="GlassCheckout-editBtn" onClick={() => handleEditItem(item)}>✏️</button>
-                          <button className="GlassCheckout-deleteBtn" onClick={() => handleDeleteItem(item.id)}>🗑️</button>
-                         </td>
-                      </>
-                    )}
-                  </tr>
-                ))}
+                      </tr>
+                    );
+                  }
+                  return (
+                    <tr key={item.id}>
+                      <td><strong>{item.glassType}</strong></td>
+                      <td>{item.quality}</td>
+                      <td>{item.size}</td>
+                      <td>{item.widthFt}' x {item.heightFt}'</td>
+                      <td>{item.areaSqFt.toFixed(2)}</td>
+                      <td>{item.quantity}</td>
+                      <td>{item.weight.toFixed(1)}</td>
+                      <td>Rs {item.unitPrice.toFixed(2)}</td>
+                      <td className="GlassCheckout-totalPriceCell">Rs {item.totalPrice.toFixed(2)}</td>
+                      <td>
+                        <button className="GlassCheckout-editBtn" onClick={() => handleEditItem(item)}>✏️</button>
+                        <button className="GlassCheckout-deleteBtn" onClick={() => handleDeleteItem(item.id)}>🗑️</button>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
               <tfoot>
                 <tr className="GlassCheckout-tableFooter">
                   <td colSpan="8" className="GlassCheckout-footerLabel"><strong>Total Glass Price:</strong></td>
                   <td className="GlassCheckout-footerValue"><strong>Rs {totalGlassPrice.toFixed(2)}</strong></td>
                   <td></td>
-                 </tr>
+                </tr>
                 <tr className="GlassCheckout-tableFooter">
                   <td colSpan="8" className="GlassCheckout-footerLabel"><strong>Total Weight:</strong></td>
                   <td className="GlassCheckout-footerValue"><strong>{totalWeight.toFixed(1)} kg</strong></td>
                   <td></td>
-                 </tr>
+                </tr>
               </tfoot>
-             </table>
+            </table>
           </div>
         </div>
 
@@ -1150,13 +1149,7 @@ const GlassOrderCheckout = () => {
           <h2 className="GlassCheckout-sectionTitle GlassCheckout-transportTitle">Delivery Options</h2>
           <div className="GlassCheckout-deliveryMethodSelection">
             <label className={`GlassCheckout-deliveryOption ${deliveryMethod === "pickup" ? "GlassCheckout-deliveryOptionActive" : ""}`}>
-              <input
-                type="radio"
-                name="deliveryMethod"
-                value="pickup"
-                checked={deliveryMethod === "pickup"}
-                onChange={() => setDeliveryMethod("pickup")}
-              />
+              <input type="radio" name="deliveryMethod" value="pickup" checked={deliveryMethod === "pickup"} onChange={() => setDeliveryMethod("pickup")} />
               <span className="GlassCheckout-deliveryIcon">🏬</span>
               <div>
                 <strong>Self Pickup</strong>
@@ -1164,13 +1157,7 @@ const GlassOrderCheckout = () => {
               </div>
             </label>
             <label className={`GlassCheckout-deliveryOption ${deliveryMethod === "delivery" ? "GlassCheckout-deliveryOptionActive" : ""}`}>
-              <input
-                type="radio"
-                name="deliveryMethod"
-                value="delivery"
-                checked={deliveryMethod === "delivery"}
-                onChange={() => setDeliveryMethod("delivery")}
-              />
+              <input type="radio" name="deliveryMethod" value="delivery" checked={deliveryMethod === "delivery"} onChange={() => setDeliveryMethod("delivery")} />
               <span className="GlassCheckout-deliveryIcon">🚚</span>
               <div>
                 <strong>Home Delivery</strong>
@@ -1184,33 +1171,15 @@ const GlassOrderCheckout = () => {
             <div className="GlassCheckout-formRow">
               <div className="GlassCheckout-formGroup">
                 <label className="GlassCheckout-formLabel">Full Name *</label>
-                <input
-                  type="text"
-                  className="GlassCheckout-formInput"
-                  value={userInfo.fullName}
-                  onChange={(e) => setUserInfo({...userInfo, fullName: e.target.value})}
-                  placeholder="Enter full name"
-                />
+                <input type="text" className="GlassCheckout-formInput" value={userInfo.fullName} onChange={(e) => setUserInfo({...userInfo, fullName: e.target.value})} placeholder="Enter full name" />
               </div>
               <div className="GlassCheckout-formGroup">
                 <label className="GlassCheckout-formLabel">Email *</label>
-                <input
-                  type="email"
-                  className="GlassCheckout-formInput"
-                  value={userInfo.email}
-                  onChange={(e) => setUserInfo({...userInfo, email: e.target.value})}
-                  placeholder="your@email.com"
-                />
+                <input type="email" className="GlassCheckout-formInput" value={userInfo.email} onChange={(e) => setUserInfo({...userInfo, email: e.target.value})} placeholder="your@email.com" />
               </div>
               <div className="GlassCheckout-formGroup">
                 <label className="GlassCheckout-formLabel">Phone *</label>
-                <input
-                  type="tel"
-                  className="GlassCheckout-formInput"
-                  value={userInfo.phone}
-                  onChange={(e) => setUserInfo({...userInfo, phone: e.target.value})}
-                  placeholder="0712345678"
-                />
+                <input type="tel" className="GlassCheckout-formInput" value={userInfo.phone} onChange={(e) => setUserInfo({...userInfo, phone: e.target.value})} placeholder="0712345678" />
               </div>
             </div>
           </div>
@@ -1219,26 +1188,16 @@ const GlassOrderCheckout = () => {
             <div className="GlassCheckout-pickupSection">
               <h3>Pickup Details</h3>
               <div className="GlassCheckout-locationInfo">
-                <p>📍 <strong>Pickup Location:</strong> ALUX Panadura - Alubomulla, Sri Lanka</p>
+                <p>📍 <strong>Pickup Location:</strong> {COMPANY_ADDRESS}</p>
               </div>
               <div className="GlassCheckout-formRow">
                 <div className="GlassCheckout-formGroup">
                   <label className="GlassCheckout-formLabel">Pickup Date</label>
-                  <input
-                    type="date"
-                    className="GlassCheckout-formInput"
-                    value={pickupDate}
-                    onChange={(e) => setPickupDate(e.target.value)}
-                    min={new Date().toISOString().split("T")[0]}
-                  />
+                  <input type="date" className="GlassCheckout-formInput" value={pickupDate} onChange={(e) => setPickupDate(e.target.value)} min={new Date().toISOString().split("T")[0]} />
                 </div>
                 <div className="GlassCheckout-formGroup">
                   <label className="GlassCheckout-formLabel">Time Slot</label>
-                  <select
-                    className="GlassCheckout-formSelect"
-                    value={pickupTimeSlot}
-                    onChange={(e) => setPickupTimeSlot(e.target.value)}
-                  >
+                  <select className="GlassCheckout-formSelect" value={pickupTimeSlot} onChange={(e) => setPickupTimeSlot(e.target.value)}>
                     <option value="">Select time</option>
                     <option value="09:00-11:00">09:00 AM - 11:00 AM</option>
                     <option value="11:00-13:00">11:00 AM - 01:00 PM</option>
@@ -1257,47 +1216,25 @@ const GlassOrderCheckout = () => {
             <div className="GlassCheckout-lorrySection">
               <h3>Delivery Details</h3>
               <div className="GlassCheckout-locationInfo">
-                <p>🏭 <strong>Shipping From:</strong> ALUX Panadura - Alubomulla, Sri Lanka</p>
+                <p>🏭 <strong>Shipping From:</strong> {COMPANY_ADDRESS}</p>
               </div>
               
               <div className="GlassCheckout-formRow">
                 <div className="GlassCheckout-formGroup">
                   <label className="GlassCheckout-formLabel">Pick Location</label>
-                  <button 
-                    className="GlassCheckout-pickLocationButton"
-                    onClick={() => setShowLocationPicker(true)}
-                  >
-                    🗺️ Pick on Map
-                  </button>
+                  <button className="GlassCheckout-pickLocationButton" onClick={() => setShowLocationPicker(true)}>🗺️ Pick on Map</button>
                 </div>
                 <div className="GlassCheckout-formGroup">
                   <label className="GlassCheckout-formLabel">Distance (km)</label>
-                  <input
-                    type="number"
-                    step="0.1"
-                    className="GlassCheckout-formInput"
-                    value={manualDistance}
-                    onChange={handleManualDistanceChange}
-                    placeholder="Enter distance"
-                  />
+                  <input type="number" step="0.1" className="GlassCheckout-formInput" value={manualDistance} onChange={handleManualDistanceChange} placeholder="Enter distance" />
                 </div>
                 <div className="GlassCheckout-formGroup">
                   <label className="GlassCheckout-formLabel">Delivery Date</label>
-                  <input
-                    type="date"
-                    className="GlassCheckout-formInput"
-                    value={deliveryDate}
-                    onChange={(e) => setDeliveryDate(e.target.value)}
-                    min={new Date().toISOString().split("T")[0]}
-                  />
+                  <input type="date" className="GlassCheckout-formInput" value={deliveryDate} onChange={(e) => setDeliveryDate(e.target.value)} min={new Date().toISOString().split("T")[0]} />
                 </div>
                 <div className="GlassCheckout-formGroup">
                   <label className="GlassCheckout-formLabel">Time Slot</label>
-                  <select
-                    className="GlassCheckout-formSelect"
-                    value={deliveryTimeSlot}
-                    onChange={(e) => setDeliveryTimeSlot(e.target.value)}
-                  >
+                  <select className="GlassCheckout-formSelect" value={deliveryTimeSlot} onChange={(e) => setDeliveryTimeSlot(e.target.value)}>
                     <option value="">Select time</option>
                     <option value="09:00-11:00">09:00 AM - 11:00 AM</option>
                     <option value="11:00-13:00">11:00 AM - 01:00 PM</option>
@@ -1323,19 +1260,11 @@ const GlassOrderCheckout = () => {
 
               <div className="GlassCheckout-checkboxGroup">
                 <label className="GlassCheckout-checkboxLabel">
-                  <input
-                    type="checkbox"
-                    checked={urgentDelivery}
-                    onChange={(e) => setUrgentDelivery(e.target.checked)}
-                  />
+                  <input type="checkbox" checked={urgentDelivery} onChange={(e) => setUrgentDelivery(e.target.checked)} />
                   🚀 Urgent Delivery (+25%)
                 </label>
                 <label className="GlassCheckout-checkboxLabel">
-                  <input
-                    type="checkbox"
-                    checked={insurance}
-                    onChange={(e) => setInsurance(e.target.checked)}
-                  />
+                  <input type="checkbox" checked={insurance} onChange={(e) => setInsurance(e.target.checked)} />
                   🛡️ Insurance (2% of glass value)
                 </label>
               </div>
@@ -1349,38 +1278,15 @@ const GlassOrderCheckout = () => {
           {deliveryMethod && (
             <div className="GlassCheckout-transportCostSummary">
               <h3>Cost Summary</h3>
-              <div className="GlassCheckout-costRow">
-                <span>Glass Total:</span>
-                <span>Rs {totalGlassPrice.toFixed(2)}</span>
-              </div>
-              <div className="GlassCheckout-costRow">
-                <span>Transport Cost:</span>
-                <span>Rs {transportCost.toFixed(2)}</span>
-              </div>
-              {insuranceCost > 0 && (
-                <div className="GlassCheckout-costRow">
-                  <span>Insurance (2%):</span>
-                  <span>Rs {insuranceCost.toFixed(2)}</span>
-                </div>
-              )}
-              <div className="GlassCheckout-costRow GlassCheckout-grandTotalRow">
-                <span>Grand Total:</span>
-                <span>Rs {grandTotalLKR.toFixed(2)}</span>
-              </div>
-              <div className="GlassCheckout-costRow">
-                <span>Amount in USD:</span>
-                <span>${grandTotalUSD.toFixed(2)}</span>
-              </div>
+              <div className="GlassCheckout-costRow"><span>Glass Total:</span><span>Rs {totalGlassPrice.toFixed(2)}</span></div>
+              <div className="GlassCheckout-costRow"><span>Transport Cost:</span><span>Rs {transportCost.toFixed(2)}</span></div>
+              {insuranceCost > 0 && <div className="GlassCheckout-costRow"><span>Insurance (2%):</span><span>Rs {insuranceCost.toFixed(2)}</span></div>}
+              <div className="GlassCheckout-costRow GlassCheckout-grandTotalRow"><span>Grand Total:</span><span>Rs {grandTotalLKR.toFixed(2)}</span></div>
+              <div className="GlassCheckout-costRow"><span>Amount in USD:</span><span>${grandTotalUSD.toFixed(2)}</span></div>
             </div>
           )}
 
-          <button
-            className="GlassCheckout-paymentButton"
-            onClick={handleProceedToPayment}
-            disabled={!deliveryMethod}
-          >
-            Proceed to Payment
-          </button>
+          <button className="GlassCheckout-paymentButton" onClick={handleProceedToPayment} disabled={!deliveryMethod}>Proceed to Payment</button>
         </div>
 
         {showLocationPicker && (
@@ -1393,43 +1299,15 @@ const GlassOrderCheckout = () => {
               <div className="GlassCheckout-modalBody">
                 <div className="GlassCheckout-searchContainer">
                   <div className="GlassCheckout-searchWrapper">
-                    <input
-                      type="text"
-                      placeholder="Search location..."
-                      className="GlassCheckout-searchInput"
-                      value={mapSearchTerm}
-                      onChange={(e) => setMapSearchTerm(e.target.value)}
-                      onKeyPress={(e) => e.key === 'Enter' && searchLocation()}
-                    />
-                    <button 
-                      className="GlassCheckout-searchButton"
-                      onClick={searchLocation}
-                      disabled={isCalculatingDistance}
-                    >
-                      Search
-                    </button>
+                    <input type="text" placeholder="Search location..." className="GlassCheckout-searchInput" value={mapSearchTerm} onChange={(e) => setMapSearchTerm(e.target.value)} onKeyPress={(e) => e.key === 'Enter' && searchLocation()} />
+                    <button className="GlassCheckout-searchButton" onClick={searchLocation} disabled={isCalculatingDistance}>Search</button>
                   </div>
                 </div>
-
-                <div className="GlassCheckout-mapInstructions">
-                  <p>💡 Click on map to select delivery location. Blue marker is our warehouse.</p>
-                </div>
-                
-                {!mapLoaded ? (
-                  <div className="GlassCheckout-mapLoading">
-                    <p>Loading map...</p>
-                  </div>
-                ) : (
-                  <div 
-                    id="location-picker-map" 
-                    className="GlassCheckout-mapContainer"
-                  ></div>
-                )}
+                <div className="GlassCheckout-mapInstructions"><p>💡 Click on map to select delivery location. Blue marker is our warehouse at Shanthi Garden, Alubomulla.</p></div>
+                {!mapLoaded ? <div className="GlassCheckout-mapLoading"><p>Loading map...</p></div> : <div id="location-picker-map" className="GlassCheckout-mapContainer"></div>}
               </div>
               <div className="GlassCheckout-modalFooter">
-                <button className="GlassCheckout-modalCancel" onClick={() => setShowLocationPicker(false)}>
-                  Close
-                </button>
+                <button className="GlassCheckout-modalCancel" onClick={() => setShowLocationPicker(false)}>Close</button>
               </div>
             </div>
           </div>
@@ -1443,92 +1321,36 @@ const GlassOrderCheckout = () => {
                 <button className="GlassCheckout-modalClose" onClick={() => setShowPaymentModal(false)}>×</button>
               </div>
               <div className="GlassCheckout-modalBody">
-                <div className="GlassCheckout-paymentAmount">
-                  <span>Total Amount:</span>
-                  <strong>Rs {grandTotalLKR.toFixed(2)} (${grandTotalUSD.toFixed(2)})</strong>
-                </div>
-                
+                <div className="GlassCheckout-paymentAmount"><span>Total Amount:</span><strong>Rs {grandTotalLKR.toFixed(2)} (${grandTotalUSD.toFixed(2)})</strong></div>
                 <div className="GlassCheckout-paymentMethods">
                   <h3>Select Payment Method</h3>
                   <label className="GlassCheckout-paymentOption">
-                    <input
-                      type="radio"
-                      name="paymentMethod"
-                      value="card"
-                      checked={paymentMethod === "card"}
-                      onChange={(e) => setPaymentMethod(e.target.value)}
-                    />
+                    <input type="radio" name="paymentMethod" value="card" checked={paymentMethod === "card"} onChange={(e) => setPaymentMethod(e.target.value)} />
                     <span className="GlassCheckout-paymentIcon">💳</span>
-                    <div>
-                      <strong>Credit/Debit Card</strong>
-                      <small>Visa, MasterCard, Amex</small>
-                    </div>
+                    <div><strong>Credit/Debit Card</strong><small>Visa, MasterCard, Amex</small></div>
                   </label>
-                  
                   <label className="GlassCheckout-paymentOption">
-                    <input
-                      type="radio"
-                      name="paymentMethod"
-                      value="bank"
-                      checked={paymentMethod === "bank"}
-                      onChange={(e) => setPaymentMethod(e.target.value)}
-                    />
+                    <input type="radio" name="paymentMethod" value="bank" checked={paymentMethod === "bank"} onChange={(e) => setPaymentMethod(e.target.value)} />
                     <span className="GlassCheckout-paymentIcon">🏦</span>
-                    <div>
-                      <strong>Bank Transfer</strong>
-                      <small>Direct bank payment</small>
-                    </div>
+                    <div><strong>Bank Transfer</strong><small>Direct bank payment</small></div>
                   </label>
-                  
                   <label className="GlassCheckout-paymentOption">
-                    <input
-                      type="radio"
-                      name="paymentMethod"
-                      value="cash"
-                      checked={paymentMethod === "cash"}
-                      onChange={(e) => setPaymentMethod(e.target.value)}
-                    />
+                    <input type="radio" name="paymentMethod" value="cash" checked={paymentMethod === "cash"} onChange={(e) => setPaymentMethod(e.target.value)} />
                     <span className="GlassCheckout-paymentIcon">💵</span>
-                    <div>
-                      <strong>Cash on Delivery/Pickup</strong>
-                      <small>Pay when you receive</small>
-                    </div>
+                    <div><strong>Cash on Delivery/Pickup</strong><small>Pay when you receive</small></div>
                   </label>
-
                   <label className="GlassCheckout-paymentOption">
-                    <input
-                      type="radio"
-                      name="paymentMethod"
-                      value="paypal"
-                      checked={paymentMethod === "paypal"}
-                      onChange={(e) => setPaymentMethod(e.target.value)}
-                    />
+                    <input type="radio" name="paymentMethod" value="paypal" checked={paymentMethod === "paypal"} onChange={(e) => setPaymentMethod(e.target.value)} />
                     <span className="GlassCheckout-paymentIcon">🅿️</span>
-                    <div>
-                      <strong>PayPal</strong>
-                      <small>Pay with PayPal account</small>
-                    </div>
+                    <div><strong>PayPal</strong><small>Pay with PayPal account</small></div>
                   </label>
                 </div>
-
-                {paymentMethod === "paypal" && (
-                  <div id="paypal-button-container" className="GlassCheckout-paypalContainer"></div>
-                )}
-                
-                <div className="GlassCheckout-orderSummary">
-                  <h3>Order Summary</h3>
-                  <p>Items: {selectedItems.length} | Weight: {totalWeight.toFixed(1)} kg | {deliveryMethod === "pickup" ? "Self Pickup" : "Home Delivery"}</p>
-                </div>
+                {paymentMethod === "paypal" && <div id="paypal-button-container" className="GlassCheckout-paypalContainer"></div>}
+                <div className="GlassCheckout-orderSummary"><h3>Order Summary</h3><p>Items: {selectedItems.length} | Weight: {totalWeight.toFixed(1)} kg | {deliveryMethod === "pickup" ? "Self Pickup" : "Home Delivery"}</p></div>
               </div>
               <div className="GlassCheckout-modalFooter">
-                <button className="GlassCheckout-modalCancel" onClick={() => {
-                  setShowPaymentModal(false);
-                  setPaymentMethod("");
-                  setPaypalRendered(false);
-                }}>Cancel</button>
-                {paymentMethod !== "paypal" && paymentMethod !== "" && (
-                  <button className="GlassCheckout-modalConfirm" onClick={handlePaymentConfirm}>Confirm & Pay</button>
-                )}
+                <button className="GlassCheckout-modalCancel" onClick={() => { setShowPaymentModal(false); setPaymentMethod(""); setPaypalRendered(false); }}>Cancel</button>
+                {paymentMethod !== "paypal" && paymentMethod !== "" && <button className="GlassCheckout-modalConfirm" onClick={handlePaymentConfirm}>Confirm & Pay</button>}
               </div>
             </div>
           </div>
