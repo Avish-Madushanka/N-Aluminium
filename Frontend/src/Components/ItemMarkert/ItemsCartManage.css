@@ -702,7 +702,7 @@
 
 .ICManage-editBtn {
   padding: 6px 12px;
-  background: #2196F3;
+  background: #055505;
   color: white;
   border: none;
   border-radius: 4px;
@@ -713,7 +713,7 @@
 }
 
 .ICManage-editBtn:hover {
-  background: #1976D2;
+  background: #04860a;
   transform: translateY(-2px);
 }
 
@@ -811,7 +811,7 @@
 
 .ICManage-viewQuotationsBtn {
   padding: 10px 20px;
-  background: #2196F3;
+  background: #227900;
   color: white;
   border: none;
   border-radius: 8px;
@@ -868,7 +868,7 @@
 .ICManage-quotationBtn {
   width: 100%;
   padding: 15px;
-  background: #2196F3;
+  background: #159604;
   color: white;
   border: none;
   border-radius: 8px;
@@ -877,13 +877,11 @@
   cursor: pointer;
   transition: all 0.3s;
   margin: 20px 0 10px;
-  box-shadow: 0 4px 10px rgba(33, 150, 243, 0.3);
 }
 
 .ICManage-quotationBtn:hover:not(:disabled) {
-  background: #1976D2;
+  background: #037a03;
   transform: translateY(-2px);
-  box-shadow: 0 6px 15px rgba(33, 150, 243, 0.4);
 }
 
 .ICManage-quotationBtn:disabled {

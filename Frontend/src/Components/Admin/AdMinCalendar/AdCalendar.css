@@ -2,7 +2,7 @@
   padding: 30px;
   background-color: #ffffff;
   min-height: calc(100vh - 60px);
-  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-family: 'Inter', sans-serif;
   color: #202224;
 }
 

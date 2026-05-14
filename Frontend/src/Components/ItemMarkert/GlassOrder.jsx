@@ -404,19 +404,19 @@ const GlassOrder = () => {
                     onClick={handleAddToCart}
                     disabled={!widthFt || !heightFt || !quantity || widthFt <= 0 || heightFt <= 0 || quantity <= 0}
                   >
-                    🛒 Add to Cart
+                    Add to Cart
                   </button>
                   <button
                     className="GlassMain-checkOrderBtn"
                     onClick={handleCheckOrder}
                   >
-                    ✅ Check Order ({cartCount})
+                    Check Order ({cartCount})
                   </button>
                   <button
                     className="GlassMain-myOrdersBtn"
                     onClick={handleMyOrders}
                   >
-                    📋 My Orders
+                    My Orders
                   </button>
                 </div>
           </div>

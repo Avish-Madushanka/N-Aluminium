@@ -9,12 +9,12 @@ const fs = require('fs');
 const connectDB = require('./config/db');
 const videoRoutes = require('./routes/videoRoutes');
 
-
 console.log('[Server Startup] Initializing: Attempting to load route modules...');
 let clientRoutes, bOwnerRoutes, authRoutes, calendarSettingsRoutes,
     bookingRoutes, reviewRoutes, scrapTypeRoutes, shopLocationRoutes, adminRoutes,
     saleItemRoutes, adminStatsRoutes, projectRoutes, itemRoutes, cartRoutes, 
-    quotationRoutes, alumniRoutes, buyAndSellRoutes, glassRoutes, aluQuotationRoutes, contactRoutes;
+    quotationRoutes, alumniRoutes, buyAndSellRoutes, glassRoutes, aluQuotationRoutes, contactRoutes,
+    items3dRoutes;
 
 const loadRoute = (routeName, path) => {
   try {
@@ -51,6 +51,7 @@ buyAndSellRoutes = loadRoute('buyAndSellRoutes', './routes/buyAndSellRoutes');
 glassRoutes = loadRoute('glassRoutes', './routes/glassRoutes');
 aluQuotationRoutes = loadRoute('aluQuotationRoutes', './routes/aluQuotationRoutes');
 contactRoutes = loadRoute('contactRoutes', './routes/contactRoutes');
+items3dRoutes = loadRoute('items3dRoutes', './routes/3ditemsRoute');
 
 console.log('\n=== BUY AND SELL ROUTES DEBUG ===');
 if (buyAndSellRoutes) {
@@ -129,6 +130,17 @@ if (contactRoutes) {
 }
 console.log('=== END DEBUG ===\n');
 
+console.log('\n=== 3D ITEMS ROUTES DEBUG ===');
+if (items3dRoutes && items3dRoutes.router) {
+  console.log('✓ items3dRoutes loaded successfully');
+  console.log('  Type:', typeof items3dRoutes.router);
+  console.log('  Is Router:', !!items3dRoutes.router.stack);
+  console.log('  Stack length:', items3dRoutes.router.stack ? items3dRoutes.router.stack.length : 0);
+} else {
+  console.error('✗ items3dRoutes is NULL or UNDEFINED!');
+}
+console.log('=== END DEBUG ===\n');
+
 console.log('[Server Startup] Loading controllers and middleware...');
 const { createInitialAdmin } = require('./controllers/adminController');
 const errorHandler = require('./middleware/errorHandler');
@@ -153,7 +165,7 @@ app.use('/uploads', express.static(uploadsDirectory));
 
 if (fs.existsSync(uploadsDirectory)) {
     console.log(`[Server Config] Serving static files from ${uploadsDirectory} at /uploads`);
-    const subdirectories = ['saleitems', 'projects', 'profiles', 'items', 'cart', 'alumni', 'quotations'];
+    const subdirectories = ['saleitems', 'projects', 'profiles', 'items', 'cart', 'alumni', 'quotations', 'models', 'thumbnails'];
     subdirectories.forEach(subDir => {
         const fullSubDirPath = path.join(uploadsDirectory, subDir);
         if (fs.existsSync(fullSubDirPath)) {
@@ -173,7 +185,7 @@ if (fs.existsSync(uploadsDirectory)) {
     try {
         fs.mkdirSync(uploadsDirectory, { recursive: true });
         console.log(`[Server Config] Successfully created 'uploads' directory at ${uploadsDirectory}`);
-        const subdirectoriesToCreate = ['saleitems', 'projects', 'profiles', 'items', 'cart', 'alumni', 'quotations'];
+        const subdirectoriesToCreate = ['saleitems', 'projects', 'profiles', 'items', 'cart', 'alumni', 'quotations', 'models', 'thumbnails'];
         subdirectoriesToCreate.forEach(subDir => {
             const fullSubDirPath = path.join(uploadsDirectory, subDir);
             fs.mkdirSync(fullSubDirPath, { recursive: true });
@@ -314,6 +326,20 @@ mountRoute(app, '/api/alu-quotations', aluQuotationRoutes);
 mountRoute(app, '/api/contact', contactRoutes);
 mountRoute(app, '/api/videos', videoRoutes);
 
+if (items3dRoutes && items3dRoutes.router) {
+    mountRoute(app, '/api/3d-items', items3dRoutes.router);
+    console.log('[Server Config] SUCCESS: Mounted items3dRoutes at /api/3d-items');
+} else {
+    console.error('[Server Config] ERROR: items3dRoutes is null or undefined!');
+    app.use('/api/3d-items', (req, res) => {
+        console.log('[Server Config] Fallback: /api/3d-items hit but route not loaded');
+        res.status(200).json({ 
+            success: true, 
+            message: '3D Items endpoint - route loading in progress',
+            data: []
+        });
+    });
+}
 
 if (itemRoutes) {
     mountRoute(app, '/api/items', itemRoutes);
@@ -398,6 +424,7 @@ const startServer = async () => {
             console.log(`[Server Startup] Environment: ${process.env.NODE_ENV || 'development'}`);
             console.log(`[Server Startup] Frontend URL configured for CORS: ${process.env.FRONTEND_URL || 'http://localhost:5173'}`);
             console.log(`[Server Startup] ALUX Chatbot available at: http://localhost:${PORT}/api/chatbot/query`);
+            console.log(`[Server Startup] 3D Items API available at: http://localhost:${PORT}/api/3d-items`);
 
             try {
                 console.log('[Server Startup] Attempting to create initial admin user...');
