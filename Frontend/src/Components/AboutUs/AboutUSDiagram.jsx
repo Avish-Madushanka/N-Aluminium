@@ -22,7 +22,6 @@ import {
   Legend,
   ComposedChart
 } from "recharts";
-
 import "./AboutUSDiagram.css";
 
 const usageData = [
@@ -86,318 +85,281 @@ const pickupData = [
 ];
 
 const radarData = [
-  { metric: "CO₂", value: 92 },
-  { metric: "Energy", value: 88 },
-  { metric: "Reuse", value: 95 },
-  { metric: "Collection", value: 86 },
-  { metric: "Efficiency", value: 93 },
+  { metric: "CO₂ Reduction", value: 92 },
+  { metric: "Energy Savings", value: 88 },
+  { metric: "Material Reuse", value: 95 },
+  { metric: "Collection Rate", value: 86 },
+  { metric: "Process Efficiency", value: 93 },
   { metric: "Sustainability", value: 97 }
 ];
 
-const COLORS = [
-  "#1B5E3F",
-  "#1565C0",
-  "#E65100",
-  "#6A1B9A",
-  "#C2185B"
-];
+const COLORS = ["#2E7D32", "#1976D2", "#F57C00", "#7B1FA2", "#C2185B"];
 
 const AboutUSDiagram = () => {
   return (
-    <div className="ABDiagram-container">
-
-      <div className="ABDiagram-header">
-        <h1>ALUX Aluminum Recycling Intelligence Dashboard</h1>
-
-        <p className="ABDiagram-subtitle">
-          AI-Powered Recycling Analytics & Forecasting Platform (2020–2030)
-        </p>
-
-        <p className="ABDiagram-description">
-          This intelligent dashboard analyzes aluminum recycling performance,
-          sustainability metrics, environmental impact, smart collection
-          analytics, and AI-driven future predictions for the global circular
-          economy ecosystem.
-        </p>
-      </div>
-
-      <div className="ABDiagram-stats">
-
-        <div className="stat-card">
-          <h2>95.5%</h2>
-          <p>AI Predicted Recycling Efficiency</p>
-        </div>
-
-        <div className="stat-card">
-          <h2>225K</h2>
-          <p>Projected Aluminum Usage</p>
-        </div>
-
-        <div className="stat-card">
-          <h2>215K</h2>
-          <p>Recovered Recyclable Material</p>
-        </div>
-
-        <div className="stat-card">
-          <h2>$2.6</h2>
-          <p>Predicted Scrap Value / KG</p>
-        </div>
-
-      </div>
-
-      <div className="ai-banner">
-        <h3>AI Forecasting Active After 2026</h3>
-        <p>
-          Predictive machine-learning simulations estimate aluminum demand,
-          recycling efficiency, carbon reduction, and smart collection growth
-          between 2027–2030.
-        </p>
-      </div>
-
-      <div className="ABDiagram-grid">
-
-        <div className="ABDiagram-card large">
-          <h3>Material Flow Analysis</h3>
-          <p>
-            Total aluminum usage versus recycled material volume across the
-            global recycling ecosystem.
+    <div className="ab-diagram">
+      {/* Hero Section */}
+      <div className="ab-hero">
+        <div className="ab-hero-content">
+          <div className="ab-badge">AI-POWERED ANALYTICS</div>
+          <h1 className="ab-title">
+            ALUX Aluminum Recycling <span className="ab-highlight">Intelligence</span> Dashboard
+          </h1>
+          <p className="ab-subtitle">
+            Predictive Analytics & Sustainability Forecasting Platform (2020–2030)
           </p>
+          <p className="ab-description">
+            This intelligent dashboard analyzes aluminum recycling performance, sustainability metrics,
+            environmental impact, smart collection analytics, and AI-driven future predictions for the
+            global circular economy ecosystem.
+          </p>
+        </div>
+      </div>
 
-          <ResponsiveContainer width="100%" height={320}>
+      {/* Stats Section */}
+      <div className="ab-stats">
+        <div className="ab-stat-card">
+          <div className="ab-stat-value">95.5%</div>
+          <div className="ab-stat-label">AI Predicted Recycling Efficiency</div>
+          <div className="ab-stat-trend positive">+12.3% vs 2025</div>
+        </div>
+        <div className="ab-stat-card">
+          <div className="ab-stat-value">225K</div>
+          <div className="ab-stat-label">Projected Aluminum Usage (tons)</div>
+          <div className="ab-stat-trend positive">+8.7% YoY</div>
+        </div>
+        <div className="ab-stat-card">
+          <div className="ab-stat-value">215K</div>
+          <div className="ab-stat-label">Recovered Recyclable Material</div>
+          <div className="ab-stat-trend positive">95.6% recovery rate</div>
+        </div>
+        <div className="ab-stat-card">
+          <div className="ab-stat-value">$2.60</div>
+          <div className="ab-stat-label">Predicted Scrap Value / KG</div>
+          <div className="ab-stat-trend positive">+73% growth</div>
+        </div>
+      </div>
+
+      {/* AI Banner */}
+      <div className="ab-ai-banner">
+        <div className="ab-ai-icon">🤖</div>
+        <div className="ab-ai-content">
+          <h3>AI Forecasting Active After 2026</h3>
+          <p>
+            Predictive machine-learning simulations estimate aluminum demand, recycling efficiency,
+            carbon reduction, and smart collection growth between 2027–2030.
+          </p>
+        </div>
+      </div>
+
+      {/* Charts Grid */}
+      <div className="ab-grid">
+        {/* Material Flow Analysis */}
+        <div className="ab-card large">
+          <div className="ab-card-header">
+            <h3>Material Flow Analysis</h3>
+            <p>Total aluminum usage versus recycled material volume across the global recycling ecosystem.</p>
+          </div>
+          <ResponsiveContainer width="100%" height={300}>
             <AreaChart data={usageData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="year" />
-              <YAxis />
-              <Tooltip />
+              <defs>
+                <linearGradient id="usageGradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#1976D2" stopOpacity={0.3} />
+                  <stop offset="95%" stopColor="#1976D2" stopOpacity={0} />
+                </linearGradient>
+                <linearGradient id="recycledGradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#2E7D32" stopOpacity={0.4} />
+                  <stop offset="95%" stopColor="#2E7D32" stopOpacity={0} />
+                </linearGradient>
+              </defs>
+              <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
+              <XAxis dataKey="year" tick={{ fill: "#666" }} />
+              <YAxis tick={{ fill: "#666" }} />
+              <Tooltip contentStyle={{ borderRadius: 8, border: "none", boxShadow: "0 4px 12px rgba(0,0,0,0.1)" }} />
               <Legend />
-
-              <Area
-                type="monotone"
-                dataKey="usage"
-                stroke="#1565C0"
-                fill="#1565C0"
-                fillOpacity={0.25}
-                name="Usage"
-              />
-
-              <Area
-                type="monotone"
-                dataKey="recycled"
-                stroke="#1B5E3F"
-                fill="#1B5E3F"
-                fillOpacity={0.35}
-                name="Recycled"
-              />
+              <Area type="monotone" dataKey="usage" stroke="#1976D2" fill="url(#usageGradient)" name="Total Usage" />
+              <Area type="monotone" dataKey="recycled" stroke="#2E7D32" fill="url(#recycledGradient)" name="Recycled Volume" />
             </AreaChart>
           </ResponsiveContainer>
         </div>
 
-        <div className="ABDiagram-card">
-          <h3>Recycling Efficiency Forecast</h3>
-
-          <ResponsiveContainer width="100%" height={300}>
+        {/* Recycling Efficiency */}
+        <div className="ab-card">
+          <div className="ab-card-header">
+            <h3>Recycling Efficiency Forecast</h3>
+          </div>
+          <ResponsiveContainer width="100%" height={280}>
             <LineChart data={efficiencyData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="year" />
-              <YAxis domain={[40, 100]} />
-              <Tooltip />
-              <Line
-                type="monotone"
-                dataKey="efficiency"
-                stroke="#E65100"
-                strokeWidth={3}
-              />
+              <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
+              <XAxis dataKey="year" tick={{ fill: "#666" }} />
+              <YAxis domain={[40, 100]} tick={{ fill: "#666" }} />
+              <Tooltip contentStyle={{ borderRadius: 8, border: "none" }} />
+              <Line type="monotone" dataKey="efficiency" stroke="#F57C00" strokeWidth={3} dot={{ r: 4, fill: "#F57C00" }} />
             </LineChart>
           </ResponsiveContainer>
         </div>
 
-        <div className="ABDiagram-card">
-          <h3>Scrap Source Distribution</h3>
-
-          <ResponsiveContainer width="100%" height={300}>
+        {/* Source Distribution */}
+        <div className="ab-card">
+          <div className="ab-card-header">
+            <h3>Scrap Source Distribution</h3>
+          </div>
+          <ResponsiveContainer width="100%" height={280}>
             <PieChart>
-              <Pie
-                data={pieData}
-                dataKey="value"
-                outerRadius={90}
-                label
-              >
-                {pieData.map((entry, index) => (
-                  <Cell key={index} fill={COLORS[index]} />
+              <Pie data={pieData} dataKey="value" outerRadius={85} label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}>
+                {pieData.map((_, index) => (
+                  <Cell key={index} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Pie>
-
-              <Tooltip />
+              <Tooltip contentStyle={{ borderRadius: 8, border: "none" }} />
             </PieChart>
           </ResponsiveContainer>
         </div>
 
-        <div className="ABDiagram-card large">
-          <h3>Secondary Material Market Value</h3>
-
-          <ResponsiveContainer width="100%" height={320}>
+        {/* Market Value */}
+        <div className="ab-card large">
+          <div className="ab-card-header">
+            <h3>Secondary Material Market Value</h3>
+          </div>
+          <ResponsiveContainer width="100%" height={300}>
             <BarChart data={marketData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="year" />
-              <YAxis />
-              <Tooltip />
-
-              <Bar
-                dataKey="value"
-                fill="#1565C0"
-                radius={[8, 8, 0, 0]}
-              />
+              <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
+              <XAxis dataKey="year" tick={{ fill: "#666" }} />
+              <YAxis tick={{ fill: "#666" }} />
+              <Tooltip contentStyle={{ borderRadius: 8, border: "none" }} />
+              <Bar dataKey="value" fill="#1976D2" radius={[6, 6, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
 
-        <div className="ABDiagram-card large">
-          <h3>Regional Recycling Performance</h3>
-
-          <ResponsiveContainer width="100%" height={320}>
+        {/* Regional Performance */}
+        <div className="ab-card large">
+          <div className="ab-card-header">
+            <h3>Regional Recycling Performance</h3>
+          </div>
+          <ResponsiveContainer width="100%" height={300}>
             <LineChart data={regionalData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="year" />
-              <YAxis />
-              <Tooltip />
+              <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
+              <XAxis dataKey="year" tick={{ fill: "#666" }} />
+              <YAxis tick={{ fill: "#666" }} />
+              <Tooltip contentStyle={{ borderRadius: 8, border: "none" }} />
               <Legend />
-
-              <Line dataKey="asia" stroke="#C2185B" strokeWidth={3} />
-              <Line dataKey="europe" stroke="#1565C0" strokeWidth={3} />
-              <Line dataKey="america" stroke="#1B5E3F" strokeWidth={3} />
+              <Line dataKey="asia" stroke="#C2185B" strokeWidth={2.5} dot={{ r: 4 }} />
+              <Line dataKey="europe" stroke="#1976D2" strokeWidth={2.5} dot={{ r: 4 }} />
+              <Line dataKey="america" stroke="#2E7D32" strokeWidth={2.5} dot={{ r: 4 }} />
             </LineChart>
           </ResponsiveContainer>
         </div>
 
-        <div className="ABDiagram-card large">
-          <h3>Smart Pickup Analytics</h3>
-
-          <ResponsiveContainer width="100%" height={320}>
+        {/* Smart Pickup */}
+        <div className="ab-card large">
+          <div className="ab-card-header">
+            <h3>Smart Pickup Analytics</h3>
+          </div>
+          <ResponsiveContainer width="100%" height={300}>
             <ComposedChart data={pickupData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="year" />
-              <YAxis />
-              <Tooltip />
+              <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
+              <XAxis dataKey="year" tick={{ fill: "#666" }} />
+              <YAxis tick={{ fill: "#666" }} />
+              <Tooltip contentStyle={{ borderRadius: 8, border: "none" }} />
               <Legend />
-
-              <Bar dataKey="requests" fill="#1565C0" />
-              <Line
-                type="monotone"
-                dataKey="completed"
-                stroke="#1B5E3F"
-                strokeWidth={3}
-              />
+              <Bar dataKey="requests" fill="#1976D2" radius={[4, 4, 0, 0]} name="Pickup Requests" />
+              <Line type="monotone" dataKey="completed" stroke="#2E7D32" strokeWidth={3} dot={{ r: 4 }} name="Completed Pickups" />
             </ComposedChart>
           </ResponsiveContainer>
         </div>
 
-        <div className="ABDiagram-card">
-          <h3>Sustainability Score</h3>
-
-          <ResponsiveContainer width="100%" height={320}>
-            <RadarChart outerRadius={90} data={radarData}>
-              <PolarGrid />
-              <PolarAngleAxis dataKey="metric" />
-              <PolarRadiusAxis />
-              <Radar
-                dataKey="value"
-                stroke="#1B5E3F"
-                fill="#1B5E3F"
-                fillOpacity={0.4}
-              />
+        {/* Sustainability Radar */}
+        <div className="ab-card">
+          <div className="ab-card-header">
+            <h3>Sustainability Scorecard</h3>
+          </div>
+          <ResponsiveContainer width="100%" height={300}>
+            <RadarChart outerRadius={85} data={radarData}>
+              <PolarGrid stroke="#ccc" />
+              <PolarAngleAxis dataKey="metric" tick={{ fill: "#666", fontSize: 11 }} />
+              <PolarRadiusAxis domain={[0, 100]} tick={{ fill: "#666" }} />
+              <Radar dataKey="value" stroke="#2E7D32" fill="#2E7D32" fillOpacity={0.4} />
             </RadarChart>
           </ResponsiveContainer>
         </div>
 
-        <div className="ABDiagram-card">
-          <h3>Environmental Impact</h3>
-
-          <div className="impact-list">
-            <div>
-              <span>CO₂ Reduction</span>
-              <strong>143 Tons</strong>
+        {/* Environmental Impact */}
+        <div className="ab-card">
+          <div className="ab-card-header">
+            <h3>Environmental Impact</h3>
+          </div>
+          <div className="ab-impact-list">
+            <div className="ab-impact-item">
+              <span className="ab-impact-label">🌍 CO₂ Reduction</span>
+              <strong className="ab-impact-value">143 Tons</strong>
             </div>
-
-            <div>
-              <span>Energy Saved</span>
-              <strong>208 MWh</strong>
+            <div className="ab-impact-item">
+              <span className="ab-impact-label">⚡ Energy Saved</span>
+              <strong className="ab-impact-value">208 MWh</strong>
             </div>
-
-            <div>
-              <span>Landfill Reduction</span>
-              <strong>88%</strong>
+            <div className="ab-impact-item">
+              <span className="ab-impact-label">🗑️ Landfill Reduction</span>
+              <strong className="ab-impact-value">88%</strong>
             </div>
-
-            <div>
-              <span>Reuse Efficiency</span>
-              <strong>95%</strong>
+            <div className="ab-impact-item">
+              <span className="ab-impact-label">🔄 Reuse Efficiency</span>
+              <strong className="ab-impact-value">95%</strong>
             </div>
           </div>
         </div>
 
-        <div className="ABDiagram-card full">
-          <h3>AI Recycling Demand Forecast</h3>
-
-          <p>
-            Machine-learning models predict exponential recycling demand growth
-            after 2026 driven by smart-city adoption and sustainability
-            regulations.
-          </p>
-
-          <ResponsiveContainer width="100%" height={350}>
+        {/* AI Forecast */}
+        <div className="ab-card full">
+          <div className="ab-card-header">
+            <h3>🤖 AI Recycling Demand Forecast</h3>
+            <p>
+              Machine-learning models predict exponential recycling demand growth after 2026 driven by
+              smart-city adoption and sustainability regulations.
+            </p>
+          </div>
+          <ResponsiveContainer width="100%" height={320}>
             <AreaChart data={usageData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="year" />
-              <YAxis />
-              <Tooltip />
+              <defs>
+                <linearGradient id="aiUsageGradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#1a237e" stopOpacity={0.2} />
+                  <stop offset="95%" stopColor="#1a237e" stopOpacity={0} />
+                </linearGradient>
+              </defs>
+              <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
+              <XAxis dataKey="year" tick={{ fill: "#666" }} />
+              <YAxis tick={{ fill: "#666" }} />
+              <Tooltip contentStyle={{ borderRadius: 8, border: "none" }} />
               <Legend />
-
-              <Area
-                type="monotone"
-                dataKey="usage"
-                stroke="#0F2B3D"
-                fill="#0F2B3D"
-                fillOpacity={0.15}
-              />
-
-              <Area
-                type="monotone"
-                dataKey="recycled"
-                stroke="#1B5E3F"
-                fill="#1B5E3F"
-                fillOpacity={0.25}
-                strokeDasharray="5 5"
-              />
+              <Area type="monotone" dataKey="usage" stroke="#1a237e" fill="url(#aiUsageGradient)" name="Forecasted Demand" />
+              <Area type="monotone" dataKey="recycled" stroke="#2E7D32" fill="none" strokeDasharray="6 4" name="Projected Recovery" />
             </AreaChart>
           </ResponsiveContainer>
         </div>
-
       </div>
 
-      <div className="ai-insights">
+      {/* Insights Section */}
+      <div className="ab-insights">
         <h2>AI Sustainability Insights</h2>
-
-        <div className="insight-grid">
-
-          <div className="insight-card">
-            AI predicts recycling efficiency may exceed 95% by 2030.
+        <div className="ab-insight-grid">
+          <div className="ab-insight-card">
+            <span className="ab-insight-icon">📈</span>
+            <p>AI predicts recycling efficiency may exceed 95% by 2030.</p>
           </div>
-
-          <div className="insight-card">
-            Household aluminum waste expected to increase by 24%.
+          <div className="ab-insight-card">
+            <span className="ab-insight-icon">🏠</span>
+            <p>Household aluminum waste expected to increase by 24%.</p>
           </div>
-
-          <div className="insight-card">
-            Asia-Pacific projected to dominate global recycling markets.
+          <div className="ab-insight-card">
+            <span className="ab-insight-icon">🌏</span>
+            <p>Asia-Pacific projected to dominate global recycling markets.</p>
           </div>
-
-          <div className="insight-card">
-            Smart pickup systems reduce operational waste significantly.
+          <div className="ab-insight-card">
+            <span className="ab-insight-icon">🚛</span>
+            <p>Smart pickup systems reduce operational waste significantly.</p>
           </div>
-
         </div>
       </div>
-
     </div>
   );
 };
